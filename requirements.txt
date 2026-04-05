@@ -1,0 +1,103 @@
+# HybridRAG V2 — Requirements
+# Date: 2026-04-04
+# Author: Agent6 for Jeremy Randall
+#
+# SECTION 1: APPROVED (GREEN) — No waiver needed
+# SECTION 2: APPLYING (YELLOW) — Waiver in progress, installed
+# SECTION 3: RECOMMENDED (BLUE) — Waiver in progress, not yet installed
+# SECTION 4: NEW WAIVER REQUIRED — Development proceeds with fallbacks
+#
+# Rule: Pin exact versions where approved by revision number.
+# Install warning: DO NOT use pip install sentence-transformers[onnx]
+#   The [onnx] extra pulls CPU-only torch, overwriting CUDA wheel.
+
+# ============================================================
+# SECTION 1: APPROVED (GREEN) — Already cleared
+# ============================================================
+
+# Core Runtime (ships with Python 3.11.9)
+# Python 3.11.9 — PSF-2.0, USA
+# sqlite3 — stdlib, public domain
+
+# AI / Model APIs
+numpy==1.26.4                    # BSD-3, NumFOCUS/USA — vector math
+tiktoken==0.8.0                  # MIT, OpenAI/USA — token counting
+
+# HTTP and Networking
+httpx==0.28.1                    # BSD-3, Encode/UK — HTTP client
+requests==2.32.5                 # Apache 2.0, PSF/USA — HTTP client
+urllib3==2.6.3                   # MIT, PSF/USA — HTTP internals
+cryptography==44.0.2             # Apache 2.0, PyCA/USA — AES encryption
+certifi==2026.1.4                # MPL-2.0, USA — SSL certificates
+
+# Data Validation
+pydantic==2.11.1                 # MIT, Pydantic/USA — config + data validation
+pyyaml==6.0.2                    # MIT, USA — YAML config parsing
+
+# Document Parsers
+pdfplumber==0.11.9               # MIT, USA — PDF text extraction
+pdfminer.six==20251230           # MIT, USA — PDF parsing engine
+pypdf==6.6.2                     # BSD-3, USA — PDF metadata
+pypdfium2==5.3.0                 # Apache 2.0, Google/USA — PDF rendering
+pdf2image==1.17.0                # MIT, USA — PDF to image
+pytesseract==0.3.13              # Apache 2.0, USA — OCR bridge
+python-docx==1.2.0               # MIT, USA — Word .docx reader
+python-pptx==1.0.2               # MIT, USA — PowerPoint reader
+openpyxl==3.1.5                  # MIT, USA — Excel .xlsx reader
+xlsxwriter==3.2.9                # BSD-2, USA — Excel writer
+lxml==6.0.2                      # BSD-3, USA — XML/HTML parsing
+pillow==12.1.0                   # HPND, USA — image processing
+
+# Web Server / API
+fastapi==0.115.0                 # MIT, Tiangolo/USA — REST API
+uvicorn==0.41.0                  # BSD-3, Encode/UK — ASGI server
+starlette==0.38.6                # BSD-3, Encode/UK — ASGI toolkit
+
+# Configuration and Logging
+structlog==24.4.0                # MIT, Germany — structured JSON logging
+rich==13.9.4                     # MIT, UK — console formatting
+tqdm==4.67.3                     # MIT, USA — progress bars
+regex==2026.1.15                 # Apache 2.0, USA — enhanced text processing
+colorama==0.4.6                  # BSD-3, USA — console colors (Windows)
+
+# Credential Storage
+keyring==23.13.1                 # MIT, USA — Windows Credential Manager
+
+# Other Direct Dependencies
+python-multipart==0.0.22         # Apache 2.0, USA — form data parsing
+
+# ============================================================
+# SECTION 2: APPLYING (YELLOW) — Installed, waiver in progress
+# ============================================================
+
+openai==1.109.1                  # MIT, OpenAI/USA — LLM client (PINNED v1.x, NEVER upgrade to 2.x)
+pytest==9.0.2                    # MIT, Germany — test framework
+psutil==7.2.2                    # BSD-3, USA — process monitoring
+
+# ============================================================
+# SECTION 3: RECOMMENDED (BLUE) — Waiver in progress
+# ============================================================
+
+# faiss-cpu==1.9.0               # MIT, Meta AI/USA — backup vector search (V1 fallback)
+# pyarrow>=16.0                  # Apache 2.0, Apache Foundation/USA — LanceDB dependency
+
+# ============================================================
+# SECTION 4: NEW WAIVER REQUIRED — Awaiting approval
+# Development proceeds using fallbacks until approved.
+# ============================================================
+
+# lancedb==0.29.2                # Apache 2.0, LanceDB Inc./USA (SF) — vector + BM25 + metadata store
+                                 # Fallback: faiss-cpu + sqlite3 FTS5
+                                 # Status: BLUE on waiver sheet, waiver requested 2026-04-04
+
+# gliner                         # Apache 2.0, France (NATO ally) — zero-shot NER, 205M params, CPU
+                                 # Fallback: GPT-4o extraction (costlier, zero new deps)
+                                 # Status: NEW waiver requested 2026-04-04
+
+# docling                        # MIT, IBM/USA — table extraction, 258M params, 97.9% accuracy
+                                 # Fallback: openpyxl + pdfplumber (lower accuracy)
+                                 # Status: NEW waiver requested 2026-04-04
+
+# flashrank                      # Apache 2.0, open source — 4MB CPU reranker, sub-20ms
+                                 # Fallback: LanceDB built-in reranking API
+                                 # Status: NEW waiver requested 2026-04-04
