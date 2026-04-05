@@ -67,3 +67,19 @@ All files use: `Intuitive_Title_YYYY-MM-DD` format (e.g., `V2_Design_Proposal_20
 - LanceDB: `data/index/`
 - SQLite entities: `data/index/entities.sqlite3`
 - EmbedEngine output: `data/source/` (nightly landing zone)
+
+## Sprint 4 Status
+
+All four sprints are complete as of 2026-04-05:
+
+- **Sprint 1:** Core tri-store architecture, API server, hybrid search, streaming SSE
+- **Sprint 2:** Entity extraction, quality gate, relationship store, entity normalization
+- **Sprint 3:** Query router (5 query types), context builder, FlashRank reranker, GUI panels
+- **Sprint 4:** Performance tuning, golden eval (25 queries), final documentation, V1 vs V2 comparison
+
+Current state:
+- 25 golden evaluation queries passing against production corpus
+- Performance-tuned stores (LanceDB vector + BM25, SQLite entities + relationships)
+- V1 vs V2 comparison available in `docs/` — demonstrates improvements in accuracy, latency, and entity quality
+- Demo target: May 2, 2026
+- Documentation complete: Setup Guide, Deployment Guide, Operator Guide, Architecture Pseudocode, Repo Rules

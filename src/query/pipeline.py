@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 import time
+from collections import OrderedDict
 from dataclasses import dataclass
 
 from src.config.schema import CRAGConfig
@@ -51,6 +52,8 @@ class QueryPipeline:
         self.context_builder = context_builder
         self.generator = generator
         self.crag_verifier = crag_verifier
+        self._query_cache: OrderedDict[str, QueryResponse] = OrderedDict()
+        self._cache_max = 128
 
     def query(self, query_text: str, top_k: int = 10) -> QueryResponse:
         """
@@ -59,6 +62,13 @@ class QueryPipeline:
         Routes the query, retrieves from appropriate stores,
         builds context, and generates a response.
         """
+        # Check cache for exact query match
+        cache_key = f"{query_text}:{top_k}"
+        if cache_key in self._query_cache:
+            cached = self._query_cache[cache_key]
+            cached.latency_ms = 0  # indicate cache hit
+            return cached
+
         start = time.time()
 
         # Step 1: Classify
@@ -103,6 +113,11 @@ class QueryPipeline:
             )
 
         response.latency_ms = int((time.time() - start) * 1000)
+
+        # Cache the result (evict oldest if at capacity)
+        if len(self._query_cache) >= self._cache_max:
+            self._query_cache.popitem(last=False)
+        self._query_cache[cache_key] = response
 
         return response
 

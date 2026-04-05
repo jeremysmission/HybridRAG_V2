@@ -66,6 +66,10 @@ class RelationshipStore:
         # access from outside the creating thread.
         self._conn = sqlite3.connect(str(self.db_path), check_same_thread=False)
         self._conn.execute("PRAGMA journal_mode=WAL")
+        self._conn.execute("PRAGMA synchronous=NORMAL")
+        self._conn.execute("PRAGMA temp_store=memory")
+        self._conn.execute("PRAGMA cache_size=-64000")  # 64MB
+        self._conn.execute("PRAGMA mmap_size=268435456")  # 256MB
         self._create_tables()
 
     def _create_tables(self) -> None:

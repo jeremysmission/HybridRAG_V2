@@ -12,6 +12,7 @@ Schema:
 
 from __future__ import annotations
 
+import logging
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -19,6 +20,8 @@ from pathlib import Path
 import lancedb
 import numpy as np
 import pyarrow as pa
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -171,6 +174,33 @@ class LanceStore:
             return self._table.count_rows()
         except Exception:
             return 0
+
+    def create_vector_index(self, num_partitions: int | None = None, num_sub_vectors: int | None = None) -> None:
+        """Create IVF_PQ vector index for faster search at scale."""
+        if self._table is None:
+            return
+        rows = self.count()
+        if rows < 10000:  # Not worth indexing below 10K
+            return
+        parts = num_partitions or max(1, rows // 4096)
+        sub_vecs = num_sub_vectors or max(1, 768 // 8)  # 768-dim / 8
+        try:
+            self._table.create_index(
+                metric="cosine",
+                num_partitions=parts,
+                num_sub_vectors=sub_vecs,
+                replace=True,
+            )
+        except Exception as e:
+            logger.warning("Vector index creation failed: %s", e)
+
+    def optimize(self) -> None:
+        """Compact data and clean old versions."""
+        if self._table is not None:
+            try:
+                self._table.optimize()
+            except Exception:
+                pass
 
     def create_fts_index(self) -> None:
         """Create full-text search index on text and enriched_text columns."""
