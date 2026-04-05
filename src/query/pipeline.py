@@ -16,11 +16,13 @@ import logging
 import time
 from dataclasses import dataclass
 
+from src.config.schema import CRAGConfig
 from src.query.query_router import QueryRouter, QueryClassification
 from src.query.vector_retriever import VectorRetriever
 from src.query.entity_retriever import EntityRetriever, StructuredResult
 from src.query.context_builder import ContextBuilder, GeneratorContext
 from src.query.generator import Generator, QueryResponse
+from src.query.crag_verifier import CRAGVerifier
 
 logger = logging.getLogger(__name__)
 
@@ -41,12 +43,14 @@ class QueryPipeline:
         entity_retriever: EntityRetriever | None,
         context_builder: ContextBuilder,
         generator: Generator,
+        crag_verifier: CRAGVerifier | None = None,
     ):
         self.router = router
         self.vector_retriever = vector_retriever
         self.entity_retriever = entity_retriever
         self.context_builder = context_builder
         self.generator = generator
+        self.crag_verifier = crag_verifier
 
     def query(self, query_text: str, top_k: int = 10) -> QueryResponse:
         """
@@ -86,6 +90,17 @@ class QueryPipeline:
         # Step 3: Generate
         response = self.generator.generate(context, query_text)
         response.query_path = classification.query_type
+
+        # Step 4: CRAG verification (SEMANTIC and COMPLEX only)
+        if (
+            self.crag_verifier
+            and self.crag_verifier.should_verify(classification.query_type)
+        ):
+            logger.info("CRAG: verifying %s query response", classification.query_type)
+            response = self.crag_verifier.verify_and_correct(
+                response, context, query_text, top_k=top_k,
+            )
+
         response.latency_ms = int((time.time() - start) * 1000)
 
         return response

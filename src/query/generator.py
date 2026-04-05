@@ -45,6 +45,8 @@ class QueryResponse:
     latency_ms: int
     input_tokens: int = 0
     output_tokens: int = 0
+    crag_verified: bool = False
+    crag_retries: int = 0
 
 
 class Generator:

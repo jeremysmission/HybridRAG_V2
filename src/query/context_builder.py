@@ -52,8 +52,9 @@ class ContextBuilder:
         parts = []
         for i, chunk in enumerate(chunks, 1):
             source_name = chunk.source_path.rsplit("/", 1)[-1].rsplit("\\", 1)[-1]
+            text = chunk.enriched_text if chunk.enriched_text else chunk.text
             parts.append(
-                f"[Source {i}: {source_name}]\n{chunk.text}\n"
+                f"[Source {i}: {source_name}]\n{text}\n"
             )
 
         context_text = "\n---\n".join(parts)

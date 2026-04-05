@@ -30,6 +30,7 @@ from src.query.generator import Generator
 from src.query.query_router import QueryRouter
 from src.query.entity_retriever import EntityRetriever
 from src.query.pipeline import QueryPipeline
+from src.query.crag_verifier import CRAGVerifier
 from src.api.routes import router, init_routes
 
 
@@ -79,6 +80,16 @@ def create_app(config_path: str = "config/config.yaml") -> FastAPI:
         min_confidence=config.extraction.min_confidence,
     )
 
+    # CRAG verifier (optional)
+    crag_verifier = None
+    if config.crag.enabled:
+        crag_verifier = CRAGVerifier(
+            config=config.crag,
+            llm_client=llm_client,
+            vector_retriever=vector_retriever,
+            context_builder=context_builder,
+        )
+
     # Build unified pipeline
     pipeline = QueryPipeline(
         router=query_router,
@@ -86,6 +97,7 @@ def create_app(config_path: str = "config/config.yaml") -> FastAPI:
         entity_retriever=entity_retriever,
         context_builder=context_builder,
         generator=generator,
+        crag_verifier=crag_verifier,
     )
 
     # Wire routes
@@ -96,9 +108,10 @@ def create_app(config_path: str = "config/config.yaml") -> FastAPI:
     entities = entity_store.count_entities()
     rels = relationship_store.count()
     llm_status = "available" if llm_client.available else "NOT configured"
+    crag_status = "enabled" if config.crag.enabled else "disabled"
     print(
         f"V2 server ready: {chunks} chunks, {entities} entities, "
-        f"{rels} relationships, LLM={llm_status}"
+        f"{rels} relationships, LLM={llm_status}, CRAG={crag_status}"
     )
 
     return app

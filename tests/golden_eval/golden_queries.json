@@ -138,5 +138,40 @@
     "expected_facts": ["PO-2024-0506", "AH-900", "Birchwood", "cancelled per director"],
     "expected_confidence": "HIGH",
     "query_type": "TABULAR"
+  },
+  {
+    "id": "GQ-021",
+    "query": "Who is the point of contact for the site where FM-220 filter modules were ordered?",
+    "expected_facts": ["Cedar Ridge", "Patel", "FM-220"],
+    "expected_confidence": "HIGH",
+    "query_type": "COMPLEX"
+  },
+  {
+    "id": "GQ-022",
+    "query": "What was the general condition of the equipment during recent visits?",
+    "expected_facts": ["maintenance", "repair"],
+    "expected_confidence": "PARTIAL",
+    "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-023",
+    "query": "List all unique part numbers referenced across every document in the corpus.",
+    "expected_facts": ["ARC-4471", "FM-220", "AB-115", "PS-800", "WR-4471"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATE"
+  },
+  {
+    "id": "GQ-024",
+    "query": "What is the status of the replacement board at the observatory?",
+    "expected_facts": ["SN-2847", "Riverside"],
+    "expected_confidence": "PARTIAL",
+    "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-025",
+    "query": "What maintenance was performed at Fort Wainwright in 2024?",
+    "expected_facts": [],
+    "expected_confidence": "NOT_FOUND",
+    "query_type": "SEMANTIC"
   }
 ]
