@@ -12,12 +12,6 @@ class QueryRequest(BaseModel):
     top_k: int = Field(default=10, ge=1, le=50, description="Max chunks to retrieve.")
 
 
-class SourceInfo(BaseModel):
-    """Source document reference."""
-
-    path: str
-
-
 class QueryResponseModel(BaseModel):
     """POST /query response body."""
 
@@ -36,4 +30,16 @@ class HealthResponse(BaseModel):
 
     status: str
     chunks_loaded: int
+    entities_loaded: int = 0
+    relationships_loaded: int = 0
     llm_available: bool
+
+
+class EntityStatsResponse(BaseModel):
+    """GET /entities/stats response."""
+
+    total_entities: int
+    total_table_rows: int
+    total_relationships: int
+    entity_types: dict[str, int]
+    predicate_types: dict[str, int]

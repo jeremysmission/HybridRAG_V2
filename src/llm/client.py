@@ -1,21 +1,25 @@
 """
 Unified LLM client — wraps openai SDK v1.x for GPT-4o / GPT-OSS-120B.
 
-Online-only. No offline mode. No Ollama.
-Pinned to openai SDK v1.x — NEVER upgrade to 2.x.
-
 Supports:
-  - Azure OpenAI (primary)
-  - AI Toolbox GPT-OSS endpoints (free tier)
-  - Streaming and non-streaming responses
+  - Azure OpenAI (work/production — api-key auth)
+  - Commercial OpenAI (dev/home — Bearer auth)
+  - Ollama phi4 (free offline — stress tests, no API cost)
+  - Provider auto-detection from URL patterns
+
+Online-only for generation. Ollama path is opt-in for testing.
+Pinned to openai SDK v1.x — NEVER upgrade to 2.x.
 """
 
 from __future__ import annotations
 
+import logging
 import os
 from dataclasses import dataclass
 
-from openai import AzureOpenAI
+from openai import AzureOpenAI, OpenAI
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -28,13 +32,47 @@ class LLMResponse:
     output_tokens: int
 
 
+def _detect_provider(endpoint: str) -> str:
+    """
+    Auto-detect provider from endpoint URL.
+
+    Azure patterns: 'azure', 'cognitiveservices', '/openai/deployments/'
+    OpenAI patterns: 'api.openai.com' or empty (uses SDK default)
+    Ollama patterns: 'localhost', '127.0.0.1' with port 11434
+    """
+    if not endpoint:
+        return "openai"
+
+    lower = endpoint.lower()
+    if any(p in lower for p in ["azure", "cognitiveservices", "/openai/deployments/", "aoai"]):
+        return "azure"
+    if "11434" in lower or "ollama" in lower:
+        return "ollama"
+    return "openai"
+
+
 class LLMClient:
     """
     Unified LLM client for HybridRAG V2.
 
-    Uses openai SDK v1.x AzureOpenAI client.
-    Reads API key from environment or Windows Credential Manager.
+    Provider resolution order:
+      1. Explicit provider_override parameter
+      2. HYBRIDRAG_API_PROVIDER env var
+      3. Auto-detect from endpoint URL
+      4. Default to "openai" if key present without endpoint
+
+    Credential resolution order:
+      1. Constructor parameters (api_base, api_key)
+      2. Environment variables (multiple aliases supported)
+      3. Windows Credential Manager (keyring)
     """
+
+    # Env var aliases (checked in order, first match wins)
+    _KEY_VARS = ["HYBRIDRAG_API_KEY", "AZURE_OPENAI_API_KEY", "OPENAI_API_KEY"]
+    _ENDPOINT_VARS = [
+        "HYBRIDRAG_API_ENDPOINT", "AZURE_OPENAI_ENDPOINT",
+        "OPENAI_API_ENDPOINT", "OPENAI_BASE_URL",
+    ]
 
     def __init__(
         self,
@@ -45,40 +83,107 @@ class LLMClient:
         max_tokens: int = 16384,
         temperature: float = 0.08,
         timeout_seconds: int = 180,
+        provider_override: str = "",
     ):
         self.model = model
         self.deployment = deployment
         self.max_tokens = max_tokens
         self.temperature = temperature
 
-        # Resolve API key from env
-        api_key = os.getenv("AZURE_OPENAI_API_KEY", "") or os.getenv("OPENAI_API_KEY", "")
+        # Resolve credentials
+        api_key = self._resolve_key()
+        resolved_base = self._resolve_endpoint(api_base)
+        provider = provider_override or os.getenv("HYBRIDRAG_API_PROVIDER", "")
+
+        if not provider:
+            provider = _detect_provider(resolved_base)
+
+        self._provider = provider
+        self._client = None
+        self._available = False
+
         if not api_key:
-            # Try keyring (Windows Credential Manager)
-            try:
-                import keyring
-                api_key = keyring.get_password("hybridrag-v2", "azure-openai") or ""
-            except Exception:
-                pass
+            logger.warning("No API key found — LLM client unavailable")
+            return
 
-        resolved_base = api_base or os.getenv("AZURE_OPENAI_ENDPOINT", "")
+        try:
+            if provider == "azure":
+                if not resolved_base:
+                    logger.warning("Azure provider requires endpoint — LLM unavailable")
+                    return
+                self._client = AzureOpenAI(
+                    azure_endpoint=resolved_base,
+                    api_key=api_key,
+                    api_version=api_version,
+                    timeout=timeout_seconds,
+                )
+                self._available = True
+                logger.info("LLM client ready: Azure OpenAI (%s)", deployment)
 
-        if resolved_base and api_key:
-            self._client = AzureOpenAI(
-                azure_endpoint=resolved_base,
-                api_key=api_key,
-                api_version=api_version,
-                timeout=timeout_seconds,
-            )
-            self._available = True
-        else:
+            elif provider == "openai":
+                kwargs = {"api_key": api_key, "timeout": timeout_seconds}
+                if resolved_base:
+                    kwargs["base_url"] = resolved_base
+                self._client = OpenAI(**kwargs)
+                self._available = True
+                logger.info("LLM client ready: OpenAI (%s)", model)
+
+            elif provider == "ollama":
+                # Ollama exposes an OpenAI-compatible API
+                base = resolved_base or "http://localhost:11434/v1"
+                self._client = OpenAI(
+                    base_url=base,
+                    api_key="ollama",  # Ollama ignores API key but SDK requires one
+                    timeout=timeout_seconds,
+                )
+                self._available = True
+                logger.info("LLM client ready: Ollama (%s)", model)
+
+            else:
+                logger.error("Unknown provider: %s", provider)
+
+        except Exception as e:
+            logger.error("LLM client init failed: %s", e)
             self._client = None
             self._available = False
+
+    def _resolve_key(self) -> str:
+        """Resolve API key from env vars or keyring."""
+        for var in self._KEY_VARS:
+            val = os.getenv(var, "")
+            if val:
+                return val
+
+        # Keyring fallback
+        try:
+            import keyring
+            val = keyring.get_password("hybridrag-v2", "azure-openai") or ""
+            if val:
+                return val
+        except Exception:
+            pass
+
+        return ""
+
+    def _resolve_endpoint(self, explicit: str) -> str:
+        """Resolve endpoint from explicit param or env vars."""
+        if explicit:
+            return explicit
+        for var in self._ENDPOINT_VARS:
+            val = os.getenv(var, "")
+            if val:
+                return val
+        return ""
 
     @property
     def available(self) -> bool:
         """Whether the LLM client has valid credentials configured."""
         return self._available
+
+    @property
+    def provider(self) -> str:
+        """Active provider: 'azure', 'openai', or 'ollama'."""
+        return self._provider
 
     def call(
         self,
@@ -86,17 +191,18 @@ class LLMClient:
         system_prompt: str = "",
         temperature: float | None = None,
         max_tokens: int | None = None,
+        response_format: dict | None = None,
     ) -> LLMResponse:
         """
         Make a single LLM call. Returns LLMResponse.
 
         Raises RuntimeError if client is not configured.
+        Handles Azure vs OpenAI parameter differences automatically.
         """
         if not self._available:
             raise RuntimeError(
-                "LLM client not configured. Set AZURE_OPENAI_ENDPOINT and "
-                "AZURE_OPENAI_API_KEY environment variables, or configure "
-                "api_base in config.yaml."
+                "LLM client not configured. Set OPENAI_API_KEY (commercial) or "
+                "AZURE_OPENAI_ENDPOINT + AZURE_OPENAI_API_KEY (Azure)."
             )
 
         messages = []
@@ -104,12 +210,30 @@ class LLMClient:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
 
-        response = self._client.chat.completions.create(
-            model=self.deployment,
-            messages=messages,
-            temperature=temperature if temperature is not None else self.temperature,
-            max_tokens=max_tokens or self.max_tokens,
-        )
+        # Build kwargs — model param differs between Azure (deployment) and OpenAI (model)
+        kwargs = {
+            "messages": messages,
+            "temperature": temperature if temperature is not None else self.temperature,
+            "max_tokens": max_tokens or self.max_tokens,
+        }
+
+        if self._provider == "azure":
+            kwargs["model"] = self.deployment
+        else:
+            kwargs["model"] = self.model
+
+        if response_format:
+            kwargs["response_format"] = response_format
+
+        # Try with max_tokens first, fall back to max_completion_tokens
+        try:
+            response = self._client.chat.completions.create(**kwargs)
+        except Exception as e:
+            if "max_tokens" in str(e) and "max_completion_tokens" in str(e):
+                kwargs["max_completion_tokens"] = kwargs.pop("max_tokens")
+                response = self._client.chat.completions.create(**kwargs)
+            else:
+                raise
 
         choice = response.choices[0]
         usage = response.usage

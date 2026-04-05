@@ -70,7 +70,7 @@ Knocked out Sprint 0 + Sprint 1 in one session (originally planned for Days 1-8)
 
 1. **Push workflow:** local commit → `python sanitize_before_push.py --apply` → push sanitized to remote
 2. **sanitize_before_push.py** is in .gitignore — NEVER push it to remote
-3. **No AI attribution:** No mention of anthropic/claude/agent in code, docs, or git. Use "CoPilot+". Commits by Jeremy only.
+3. **No AI attribution:** No mention of approved vendor/CoPilot+/agent in code, docs, or git. Use "CoPilot+". Commits by Jeremy only.
 4. **extra="forbid"** on both config schemas — catches YAML typos
 5. **Install waiver-pending packages** on dev testbed — don't delay for waivers unless hard no
 

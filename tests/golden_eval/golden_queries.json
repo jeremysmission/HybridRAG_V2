@@ -11,7 +11,7 @@
     "query": "Who is the point of contact for Thule Air Base?",
     "expected_facts": ["SSgt Marcus Webb", "(970) 555-0142"],
     "expected_confidence": "HIGH",
-    "query_type": "ENTITY_LOOKUP"
+    "query_type": "ENTITY"
   },
   {
     "id": "GQ-003",
@@ -25,7 +25,7 @@
     "query": "What parts were consumed during the Thule maintenance visit?",
     "expected_facts": ["ARC-4471", "SEMS3D-0847", "PO-2025-0142"],
     "expected_confidence": "HIGH",
-    "query_type": "AGGREGATION"
+    "query_type": "AGGREGATE"
   },
   {
     "id": "GQ-005",
@@ -46,7 +46,7 @@
     "query": "Who is the field technician for the Riverside radar site?",
     "expected_facts": ["Mike Torres"],
     "expected_confidence": "HIGH",
-    "query_type": "ENTITY_LOOKUP"
+    "query_type": "ENTITY"
   },
   {
     "id": "GQ-008",
@@ -67,6 +67,76 @@
     "query": "When is the next scheduled maintenance at Thule Air Base?",
     "expected_facts": ["2025-06-15"],
     "expected_confidence": "HIGH",
-    "query_type": "ENTITY_LOOKUP"
+    "query_type": "ENTITY"
+  },
+  {
+    "id": "GQ-011",
+    "query": "What is the status of PO-2024-0501?",
+    "expected_facts": ["IN TRANSIT", "FM-220", "Cedar Ridge"],
+    "expected_confidence": "HIGH",
+    "query_type": "TABULAR"
+  },
+  {
+    "id": "GQ-012",
+    "query": "How many filter modules (FM-220) have been ordered across all sites?",
+    "expected_facts": ["FM-220", "Cedar Ridge", "Driftwood", "Hawthorne", "Depot Stock"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATE"
+  },
+  {
+    "id": "GQ-013",
+    "query": "Who requested parts for Cedar Ridge?",
+    "expected_facts": ["Patel", "Ravi"],
+    "expected_confidence": "HIGH",
+    "query_type": "ENTITY"
+  },
+  {
+    "id": "GQ-014",
+    "query": "What parts are currently backordered?",
+    "expected_facts": ["PS-800", "Granite Peak"],
+    "expected_confidence": "HIGH",
+    "query_type": "TABULAR"
+  },
+  {
+    "id": "GQ-015",
+    "query": "List all parts replaced at Riverside Observatory during the March 2024 visit.",
+    "expected_facts": ["WR-4471", "RF Connector", "SN-2901", "SN-2902"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATE"
+  },
+  {
+    "id": "GQ-016",
+    "query": "What is Mike Torres's contact email?",
+    "expected_facts": ["mike.torres@acmeradar.example.com"],
+    "expected_confidence": "HIGH",
+    "query_type": "ENTITY"
+  },
+  {
+    "id": "GQ-017",
+    "query": "Which sites have received AB-115 amplifier cards?",
+    "expected_facts": ["Copper Basin", "Sandpoint"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATE"
+  },
+  {
+    "id": "GQ-018",
+    "query": "What workaround was applied for the CH3 noise issue at Cedar Ridge?",
+    "expected_facts": ["attenuation", "2 steps", "+6dB", "integration time", "4 to 8 sweeps"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-019",
+    "query": "Compare the maintenance issues at Riverside Observatory versus Cedar Ridge.",
+    "expected_facts": ["SN-2847", "noise floor", "CH3", "filter module", "corrosion"],
+    "expected_confidence": "PARTIAL",
+    "query_type": "COMPLEX"
+  },
+  {
+    "id": "GQ-020",
+    "query": "Which purchase orders have been cancelled and why?",
+    "expected_facts": ["PO-2024-0506", "AH-900", "Birchwood", "cancelled per director"],
+    "expected_confidence": "HIGH",
+    "query_type": "TABULAR"
   }
 ]

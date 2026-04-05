@@ -20,10 +20,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from src.config.schema import load_config
 from src.store.lance_store import LanceStore
+from src.store.entity_store import EntityStore
+from src.store.relationship_store import RelationshipStore
 from src.llm.client import LLMClient
+from src.query.embedder import Embedder
 from src.query.vector_retriever import VectorRetriever
 from src.query.context_builder import ContextBuilder
 from src.query.generator import Generator
+from src.query.query_router import QueryRouter
+from src.query.entity_retriever import EntityRetriever
+from src.query.pipeline import QueryPipeline
 from src.api.routes import router, init_routes
 
 
@@ -34,24 +40,23 @@ def create_app(config_path: str = "config/config.yaml") -> FastAPI:
     app = FastAPI(
         title="HybridRAG V2",
         description="Tri-store RAG system for IGS/NEXION documents",
-        version="0.3.0",
+        version="0.4.0",
     )
 
     # Initialize stores
-    store = LanceStore(config.paths.lance_db)
+    lance_store = LanceStore(config.paths.lance_db)
+    entity_store = EntityStore(config.paths.entity_db)
+    relationship_store = RelationshipStore(config.paths.entity_db)
 
     # Initialize embedder (for query embedding)
-    from src.query.embedder import Embedder
-
     embedder = Embedder(
         model_name="nomic-ai/nomic-embed-text-v1.5",
         dim=768,
         device="cuda",
     )
 
-    # Initialize query pipeline
-    retriever = VectorRetriever(store, embedder, top_k=config.retrieval.top_k)
-    context_builder = ContextBuilder(top_k=config.retrieval.top_k)
+    # Initialize LLM client
+    provider = config.llm.provider if config.llm.provider != "auto" else ""
     llm_client = LLMClient(
         api_base=config.llm.api_base,
         api_version=config.llm.api_version,
@@ -60,15 +65,41 @@ def create_app(config_path: str = "config/config.yaml") -> FastAPI:
         max_tokens=config.llm.max_tokens,
         temperature=config.llm.temperature,
         timeout_seconds=config.llm.timeout_seconds,
+        provider_override=provider,
     )
+
+    # Initialize query pipeline components
+    vector_retriever = VectorRetriever(lance_store, embedder, top_k=config.retrieval.top_k)
+    context_builder = ContextBuilder(top_k=config.retrieval.top_k)
     generator = Generator(llm_client)
+    query_router = QueryRouter(llm_client)
+    entity_retriever = EntityRetriever(
+        entity_store=entity_store,
+        relationship_store=relationship_store,
+        min_confidence=config.extraction.min_confidence,
+    )
+
+    # Build unified pipeline
+    pipeline = QueryPipeline(
+        router=query_router,
+        vector_retriever=vector_retriever,
+        entity_retriever=entity_retriever,
+        context_builder=context_builder,
+        generator=generator,
+    )
 
     # Wire routes
-    init_routes(store, retriever, context_builder, generator)
+    init_routes(lance_store, entity_store, relationship_store, pipeline, generator)
     app.include_router(router)
 
-    chunks = store.count()
-    print(f"V2 server ready: {chunks} chunks loaded, LLM={'available' if llm_client.available else 'NOT configured'}")
+    chunks = lance_store.count()
+    entities = entity_store.count_entities()
+    rels = relationship_store.count()
+    llm_status = "available" if llm_client.available else "NOT configured"
+    print(
+        f"V2 server ready: {chunks} chunks, {entities} entities, "
+        f"{rels} relationships, LLM={llm_status}"
+    )
 
     return app
 

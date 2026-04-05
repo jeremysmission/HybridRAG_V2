@@ -59,16 +59,17 @@ class RetrievalConfig(BaseModel):
 
 
 class LLMConfig(BaseModel):
-    """LLM settings for GPT-4o / GPT-OSS-120B."""
+    """LLM settings — supports Azure OpenAI, Commercial OpenAI, and Ollama."""
 
     model: str = Field(default="gpt-4o", description="Primary LLM model name.")
-    deployment: str = Field(default="gpt-4o", description="Azure deployment name.")
+    deployment: str = Field(default="gpt-4o", description="Azure deployment name (Azure only).")
     context_window: int = Field(default=128000, ge=1, description="Model context window in tokens.")
     max_tokens: int = Field(default=16384, ge=1, description="Max output tokens per response.")
     temperature: float = Field(default=0.08, ge=0.0, le=2.0, description="Generation temperature.")
     timeout_seconds: int = Field(default=180, ge=10, description="API call timeout.")
-    api_base: str = Field(default="", description="Azure OpenAI endpoint URL. Required for operation.")
+    api_base: str = Field(default="", description="Endpoint URL. Leave empty for commercial OpenAI (auto).")
     api_version: str = Field(default="2024-10-21", description="Azure OpenAI API version.")
+    provider: str = Field(default="auto", description="'auto', 'azure', 'openai', or 'ollama'.")
 
 
 class ExtractionConfig(BaseModel):

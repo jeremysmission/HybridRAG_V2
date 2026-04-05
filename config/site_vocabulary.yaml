@@ -1,0 +1,71 @@
+# Controlled Site Vocabulary for IGS/NEXION
+# Used by quality gates to normalize entity text.
+# Canonical names map from known variants to the official site name.
+# Date: 2026-04-05
+
+sites:
+  "Thule Air Base":
+    aliases: ["Thule", "Thule AB", "Thule AFB", "THULE", "Pituffik", "Pituffik Space Base"]
+    region: "Greenland"
+    site_code: "THU"
+  "Riverside Observatory":
+    aliases: ["Riverside", "Riverside Obs", "RIVERSIDE", "Riverside CO"]
+    region: "Colorado"
+    site_code: "RIV"
+  "Cedar Ridge":
+    aliases: ["Cedar Ridge", "CedarRidge", "CEDAR RIDGE", "Cedar Ridge Station"]
+    region: "unknown"
+    site_code: "CDR"
+  "Driftwood":
+    aliases: ["Driftwood", "DRIFTWOOD", "Driftwood Station"]
+    region: "unknown"
+    site_code: "DFW"
+  "Sandpoint":
+    aliases: ["Sandpoint", "SANDPOINT", "Sandpoint Station", "Sand Point"]
+    region: "unknown"
+    site_code: "SDP"
+  "Granite Peak":
+    aliases: ["Granite Peak", "GRANITE PEAK", "Granite Pk"]
+    region: "unknown"
+    site_code: "GRP"
+  "Copper Basin":
+    aliases: ["Copper Basin", "COPPER BASIN"]
+    region: "unknown"
+    site_code: "CPB"
+  "Birchwood":
+    aliases: ["Birchwood", "BIRCHWOOD"]
+    region: "unknown"
+    site_code: "BCW"
+  "Hawthorne":
+    aliases: ["Hawthorne", "HAWTHORNE"]
+    region: "unknown"
+    site_code: "HTH"
+
+# Part number normalization patterns
+part_patterns:
+  - pattern: 'ARC-\d{4}'
+    type: "RF Component"
+  - pattern: 'IGSI-\d+'
+    type: "IGS Instrument"
+  - pattern: 'PO-\d{4}-\d{4}'
+    type: "Purchase Order"
+  - pattern: 'SN[\s-]?\d+'
+    type: "Serial Number"
+  - pattern: 'SEMS3D-\d+'
+    type: "SEMS Component"
+  - pattern: 'WR-\d{4}'
+    type: "Weather Radar Part"
+  - pattern: 'AB-\d{3}'
+    type: "Amplifier Board"
+  - pattern: 'FM-\d{3}'
+    type: "Filter Module"
+  - pattern: 'PS-\d{3}'
+    type: "Power Supply"
+  - pattern: 'AH-\d{3}'
+    type: "Antenna Hardware"
+
+# Role normalization
+roles:
+  "POC": ["POC", "Point of Contact", "point of contact", "site contact"]
+  "Field Technician": ["Field Tech", "field technician", "Senior Field Technician", "technician"]
+  "Engineering Lead": ["Eng Lead", "Engineering Lead", "engineering lead"]
