@@ -33,6 +33,7 @@ llm:
 
 extraction:
   min_confidence: 0.7
+  model: "gpt-4o-mini"          # Mini for bulk extraction ($145 vs $2K for full corpus)
   part_patterns:
     - 'ARC-\d{4}'
     - 'IGSI-\d+'

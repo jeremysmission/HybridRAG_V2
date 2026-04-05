@@ -42,16 +42,18 @@ def main():
     entity_store = EntityStore(config.paths.entity_db)
     relationship_store = RelationshipStore(config.paths.entity_db)
 
-    # Initialize LLM
+    # Initialize LLM — use extraction-specific model (mini for cost efficiency)
+    extraction_model = config.extraction.model or config.llm.model
     llm_client = LLMClient(
         api_base=config.llm.api_base,
         api_version=config.llm.api_version,
-        model=config.llm.model,
-        deployment=config.llm.deployment,
+        model=extraction_model,
+        deployment=extraction_model,
         max_tokens=config.llm.max_tokens,
-        temperature=config.llm.temperature,
+        temperature=0,
         timeout_seconds=config.llm.timeout_seconds,
     )
+    print(f"Extraction model: {extraction_model}")
 
     if not llm_client.available:
         print("ERROR: LLM not configured. Set AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_API_KEY.")

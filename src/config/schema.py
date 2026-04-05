@@ -79,6 +79,10 @@ class ExtractionConfig(BaseModel):
         default=0.7, ge=0.0, le=1.0,
         description="Minimum confidence to accept an extracted entity.",
     )
+    model: str = Field(
+        default="gpt-4o-mini",
+        description="Model for bulk entity extraction. Use mini for cost efficiency.",
+    )
     part_patterns: list[str] = Field(
         default=[
             r"ARC-\d{4}",
@@ -90,7 +94,7 @@ class ExtractionConfig(BaseModel):
         description="Regex patterns for valid part numbers.",
     )
     gliner_enabled: bool = Field(default=False, description="Use GLiNER2 for first-pass NER (waiver pending).")
-    gpt4o_extraction: bool = Field(default=True, description="Use GPT-4o for second-pass semantic extraction.")
+    gpt4o_extraction: bool = Field(default=True, description="Use LLM for semantic extraction.")
 
 
 class ServerConfig(BaseModel):
