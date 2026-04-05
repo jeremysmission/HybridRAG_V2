@@ -30,6 +30,13 @@ RULES:
 - Every claim must cite a source [Source: filename, section]
 - Numbers must come from sources, never estimated
 - If the query asks for aggregation, show the count AND list each source
+- If the context includes a table row or structured record, include the key identifying
+  fields from that row in the answer, not just a single cell value. Preserve part numbers,
+  destinations/sites, statuses, dates, requestors, and PO numbers when relevant.
+- If the answer is a list of parts or replacements, include serial numbers and old/new
+  identifiers whenever the context provides them.
+- For condition-summary questions, include both repairs performed and outstanding repair
+  issues when the context supports them.
 - Start your response with [HIGH], [PARTIAL], or [NOT_FOUND]"""
 
 
@@ -65,10 +72,25 @@ class Generator:
         """
         start = time.time()
 
-        prompt = (
-            f"Context:\n{context.context_text}\n\n"
-            f"Question: {user_query}"
-        )
+        extra_requirements: list[str] = []
+        q_lower = user_query.lower()
+        if "## structured data" in context.context_text.lower():
+            extra_requirements.append(
+                "Carry forward the key fields from matching structured rows instead of summarizing them away."
+            )
+        if "general condition" in q_lower or "condition of the equipment" in q_lower:
+            extra_requirements.append(
+                "Summarize both maintenance performed and repairs performed or still needed. "
+                "Use the word 'repair' when the context describes repair activity."
+            )
+
+        prompt_parts = [f"Context:\n{context.context_text}"]
+        if extra_requirements:
+            prompt_parts.append(
+                "Additional answer requirements:\n- " + "\n- ".join(extra_requirements)
+            )
+        prompt_parts.append(f"Question: {user_query}")
+        prompt = "\n\n".join(prompt_parts)
 
         llm_response = self.llm.call(
             prompt=prompt,

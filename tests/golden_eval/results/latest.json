@@ -29,7 +29,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3113,
+    "latency_ms": 3910,
     "error": ""
   },
   {
@@ -60,7 +60,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 2387,
+    "latency_ms": 3003,
     "error": ""
   },
   {
@@ -90,7 +90,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3463,
+    "latency_ms": 3006,
     "error": ""
   },
   {
@@ -123,7 +123,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3179,
+    "latency_ms": 4019,
     "error": ""
   },
   {
@@ -159,7 +159,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 2925,
+    "latency_ms": 3990,
     "error": ""
   },
   {
@@ -192,7 +192,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3245,
+    "latency_ms": 3554,
     "error": ""
   },
   {
@@ -219,15 +219,15 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 2366,
+    "latency_ms": 2813,
     "error": ""
   },
   {
     "query_id": "GQ-008",
     "query": "What is the transmitter output power at Riverside Observatory?",
     "expected_type": "SEMANTIC",
-    "routed_type": "ENTITY",
-    "routing_correct": false,
+    "routed_type": "SEMANTIC",
+    "routing_correct": true,
     "expected_facts": [
       "1.2 kW"
     ],
@@ -246,7 +246,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3152,
+    "latency_ms": 2911,
     "error": ""
   },
   {
@@ -273,7 +273,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 2862,
+    "latency_ms": 2962,
     "error": ""
   },
   {
@@ -300,7 +300,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3434,
+    "latency_ms": 3863,
     "error": ""
   },
   {
@@ -334,7 +334,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 2518,
+    "latency_ms": 2774,
     "error": ""
   },
   {
@@ -373,7 +373,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3323,
+    "latency_ms": 4448,
     "error": ""
   },
   {
@@ -403,7 +403,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3128,
+    "latency_ms": 3811,
     "error": ""
   },
   {
@@ -434,7 +434,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 2818,
+    "latency_ms": 2769,
     "error": ""
   },
   {
@@ -471,7 +471,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 7600,
+    "latency_ms": 3445,
     "error": ""
   },
   {
@@ -498,7 +498,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 2915,
+    "latency_ms": 2463,
     "error": ""
   },
   {
@@ -528,7 +528,7 @@
     "confidence_correct": false,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 4620,
+    "latency_ms": 3400,
     "error": ""
   },
   {
@@ -567,7 +567,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3081,
+    "latency_ms": 3206,
     "error": ""
   },
   {
@@ -606,7 +606,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 9675,
+    "latency_ms": 6069,
     "error": ""
   },
   {
@@ -643,7 +643,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3764,
+    "latency_ms": 3855,
     "error": ""
   },
   {
@@ -676,7 +676,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 2907,
+    "latency_ms": 2894,
     "error": ""
   },
   {
@@ -707,7 +707,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 5249,
+    "latency_ms": 3985,
     "error": ""
   },
   {
@@ -746,7 +746,7 @@
     "confidence_correct": false,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 4866,
+    "latency_ms": 3713,
     "error": ""
   },
   {
@@ -776,7 +776,7 @@
     "confidence_correct": false,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 3222,
+    "latency_ms": 3163,
     "error": ""
   },
   {
@@ -797,7 +797,7 @@
     "confidence_correct": true,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 2656,
+    "latency_ms": 3241,
     "error": ""
   }
 ]

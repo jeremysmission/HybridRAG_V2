@@ -93,9 +93,13 @@ SAMPLE_QUERIES = {
 
 def bench_embedding(config: V2Config, rounds: int) -> dict:
     """Benchmark embedding latency at various batch sizes."""
-    from src.ingest.embedder import Embedder
+    from src.query.embedder import Embedder
 
-    embedder = Embedder()
+    embedder = Embedder(
+        model_name="nomic-ai/nomic-embed-text-v1.5",
+        dim=768,
+        device="cuda",
+    )
     results = {}
 
     for batch_size in [1, 10, 100, 500]:
@@ -103,11 +107,11 @@ def bench_embedding(config: V2Config, rounds: int) -> dict:
         latencies = []
 
         # Warm-up
-        embedder.embed_texts(texts[:1])
+        embedder.embed_batch(texts[:1])
 
         for _ in range(rounds):
             start = time.perf_counter()
-            embedder.embed_texts(texts)
+            embedder.embed_batch(texts)
             elapsed = time.perf_counter() - start
             latencies.append(elapsed)
 
@@ -137,14 +141,18 @@ def bench_gpu_memory(config: V2Config) -> dict:
         print("  torch not installed, skipping GPU memory benchmark.")
         return {"gpu_available": False}
 
-    from src.ingest.embedder import Embedder
+    from src.query.embedder import Embedder
 
     torch.cuda.reset_peak_memory_stats()
     mem_before = torch.cuda.max_memory_allocated() / (1024 ** 2)
 
-    embedder = Embedder()
+    embedder = Embedder(
+        model_name="nomic-ai/nomic-embed-text-v1.5",
+        dim=768,
+        device="cuda",
+    )
     texts = SAMPLE_TEXTS * 50  # 500 texts
-    embedder.embed_texts(texts)
+    embedder.embed_batch(texts)
 
     mem_after = torch.cuda.max_memory_allocated() / (1024 ** 2)
     peak_mb = round(mem_after, 1)
@@ -296,43 +304,15 @@ def bench_sqlite_entities(config: V2Config, rounds: int) -> dict:
 
 def bench_pipeline(config: V2Config, rounds: int) -> dict:
     """Benchmark full query pipeline for each query type."""
-    # Late import — pipeline requires LLM API key
-    from src.query.pipeline import QueryPipeline
-    from src.query.query_router import QueryRouter
-    from src.query.vector_retriever import VectorRetriever
-    from src.query.entity_retriever import EntityRetriever
-    from src.query.context_builder import ContextBuilder
-    from src.query.generator import Generator
-    from src.store.lance_store import LanceStore
-    from src.store.entity_store import EntityStore
-    from src.store.relationship_store import RelationshipStore
+    from scripts.boot import boot_system
 
-    lance = LanceStore(config.paths.lance_db)
-    if lance.count() == 0:
+    system = boot_system(config)
+    if system.lance_store.count() == 0:
         print("  LanceDB empty, skipping pipeline benchmark.")
         return {"store_empty": True}
-
-    entity_store = EntityStore(config.paths.entity_db)
-    rel_store = RelationshipStore(
-        str(Path(config.paths.entity_db).parent / "relationships.sqlite3")
-    )
-
-    router = QueryRouter(config.llm)
-    vector_ret = VectorRetriever(lance)
-    entity_ret = EntityRetriever(entity_store, rel_store)
-    ctx_builder = ContextBuilder(
-        top_k=config.retrieval.top_k,
-        reranker_enabled=config.retrieval.reranker_enabled,
-    )
-    generator = Generator(config.llm)
-
-    pipeline = QueryPipeline(
-        router=router,
-        vector_retriever=vector_ret,
-        entity_retriever=entity_ret,
-        context_builder=ctx_builder,
-        generator=generator,
-    )
+    if system.pipeline is None:
+        print("  LLM unavailable, skipping pipeline benchmark.")
+        return {"llm_available": False}
 
     results = {}
     for qtype, query in SAMPLE_QUERIES.items():
@@ -340,7 +320,7 @@ def bench_pipeline(config: V2Config, rounds: int) -> dict:
         for _ in range(rounds):
             start = time.perf_counter()
             try:
-                pipeline.query(query, top_k=config.retrieval.top_k)
+                system.pipeline.query(query, top_k=config.retrieval.top_k)
             except Exception as e:
                 logger.warning("Pipeline query failed (%s): %s", qtype, e)
                 break
@@ -359,9 +339,9 @@ def bench_pipeline(config: V2Config, rounds: int) -> dict:
             results[f"pipeline_{qtype.lower()}"] = {"error": "all rounds failed"}
             print(f"  pipeline {qtype:<10}: FAILED")
 
-    lance.close()
-    entity_store.close()
-    rel_store.close()
+    system.entity_store.close()
+    system.relationship_store.close()
+    system.lance_store.close()
     return results
 
 
