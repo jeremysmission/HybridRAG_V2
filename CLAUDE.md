@@ -32,7 +32,7 @@ HybridRAG V2 is an online-only, tri-store RAG system for querying IGS/NEXION mil
 5. **NEVER push unsanitized code to remote**
 6. **NEVER push `sanitize_before_push.py` itself to remote** — it contains replacement patterns and is in `.gitignore`
 7. **Git commits: author is Jeremy only** — no Co-Authored-By, no AI attribution
-8. **No mention of anthropic, claude, agent, or AI in any committed code/docs** — use "CoPilot+" when referring to AI assistance
+8. **No mention of approved vendor, CoPilot+, agent, or AI in any committed code/docs** — use "CoPilot+" when referring to AI assistance
 
 ## File Naming Convention
 All files use: `Intuitive_Title_YYYY-MM-DD` format (e.g., `V2_Design_Proposal_2026-04-04.md`)
