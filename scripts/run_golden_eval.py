@@ -371,7 +371,13 @@ def main() -> None:
     )
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = RESULTS_DIR / (args.output or "sprint2_eval.json")
+    if args.output:
+        out_path = Path(args.output)
+        if not out_path.is_absolute():
+            out_path = V2_ROOT / out_path
+    else:
+        out_path = RESULTS_DIR / "sprint3_eval.json"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(asdict(summary), f, indent=2, default=str)
     print(f"\n  Results written to: {out_path}")

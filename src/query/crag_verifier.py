@@ -117,9 +117,9 @@ class CRAGVerifier:
         self,
         config: CRAGConfig,
         llm_client: LLMClient,
-        vector_retriever: VectorRetriever,
-        context_builder: ContextBuilder,
-        generator: Generator,
+        vector_retriever: VectorRetriever | None,
+        context_builder: ContextBuilder | None,
+        generator: Generator | None = None,
     ):
         self.config = config
         self.llm = llm_client
@@ -128,9 +128,7 @@ class CRAGVerifier:
         self.generator = generator
 
     def should_verify(self, query_type: str) -> bool:
-        """Check if this query type should go through CRAG."""
-        if not self.config.enabled:
-            return False
+        """Check whether this query type is eligible for CRAG verification."""
         if query_type in _SKIP_QUERY_TYPES:
             logger.debug(
                 "CRAG skipped for %s query type (structured store lookup)",
@@ -152,6 +150,11 @@ class CRAGVerifier:
         Returns the original or corrected QueryResponse with crag_verified
         and crag_retries fields set.
         """
+        if not getattr(self.config, "enabled", False):
+            response.crag_verified = False
+            response.crag_retries = 0
+            return response
+
         try:
             return self._verify_loop(response, context, query_text, top_k)
         except Exception as e:

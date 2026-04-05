@@ -88,6 +88,7 @@ def create_app(config_path: str = "config/config.yaml") -> FastAPI:
             llm_client=llm_client,
             vector_retriever=vector_retriever,
             context_builder=context_builder,
+            generator=generator,
         )
 
     # Build unified pipeline

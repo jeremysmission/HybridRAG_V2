@@ -94,6 +94,7 @@ class QueryPipeline:
         # Step 4: CRAG verification (SEMANTIC and COMPLEX only)
         if (
             self.crag_verifier
+            and getattr(self.crag_verifier.config, "enabled", False)
             and self.crag_verifier.should_verify(classification.query_type)
         ):
             logger.info("CRAG: verifying %s query response", classification.query_type)

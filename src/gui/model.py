@@ -116,9 +116,13 @@ class GUIModel:
         """Check whether the LLM client appears configured."""
         try:
             if self._llm_client is not None:
-                self.llm_available = True
-            elif self._pipeline is not None and hasattr(self._pipeline, "generator"):
-                self.llm_available = self._pipeline.generator is not None
+                self.llm_available = bool(getattr(self._llm_client, "available", False))
+            elif (
+                self._pipeline is not None
+                and getattr(self._pipeline, "generator", None) is not None
+            ):
+                generator_llm = getattr(self._pipeline.generator, "llm", None)
+                self.llm_available = bool(getattr(generator_llm, "available", False))
             else:
                 self.llm_available = False
         except Exception:

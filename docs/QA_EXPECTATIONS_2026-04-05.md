@@ -196,7 +196,37 @@ When a GUI is present, add the full GUI QA protocol from `docs/QA_GUI_HARNESS_20
 
 ---
 
-## 7. What QA Does NOT Cover (Out of Scope)
+## 7. While QA Is Running: Next-Sprint Prep Protocol
+
+QA time is not idle time. While QA executes tests, the engineering team runs this protocol in parallel:
+
+### Step 1: Re-read Architecture Docs
+- Review `docs/Architecture_Pseudocode_2026-04-04.md` for next sprint's pseudocode
+- Review `docs/Sprint_Plan_2026-04-04.md` for next sprint's slices and exit criteria
+- Identify any gaps between the plan and what was actually built
+
+### Step 2: Web Research (mandatory — never guess)
+- For each slice in the next sprint, web search current best practices (2025-2026)
+- Search for failure modes and pitfalls specific to the techniques being used
+- Search for production implementation patterns (not just theory)
+- Document findings with source links
+
+### Step 3: Game Plan
+- Write out the slice breakdown with estimated effort
+- Identify parallelizable work (what can subagents do simultaneously?)
+- Map dependencies (what blocks what?)
+- List risks and mitigations
+- Identify pre-sprint checklist items (models to pull, creds to set, data to stage)
+
+### Step 4: Capture
+- Save the game plan so the sprint starts immediately when QA passes
+- No re-discovery, no cold starts — the plan is ready to execute
+
+**Rule:** Every sprint QA period must produce a next-sprint game plan. QA and planning happen in parallel, not sequentially.
+
+---
+
+## 8. What QA Does NOT Cover (Out of Scope)
 
 - Production deployment (Azure/GovCloud) — separate ops checklist
 - Security pen testing — separate engagement

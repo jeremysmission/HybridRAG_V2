@@ -115,23 +115,44 @@ def _load_backends(app, config, logger):
         _step("Backend: opening RelationshipStore...")
         try:
             from src.store.relationship_store import RelationshipStore
-            # Relationship store uses same DB as entity store
             rel_path = config.paths.entity_db
             if not os.path.isabs(rel_path):
                 rel_path = os.path.join(_project_root, rel_path)
-            # Use a separate file for relationships
-            rel_path = rel_path.replace(".sqlite3", "_rels.sqlite3")
             relationship_store = RelationshipStore(rel_path)
             logger.info("[OK] RelationshipStore opened (%d relationships)",
                         relationship_store.count())
         except Exception as exc:
             logger.warning("[WARN] RelationshipStore init failed: %s", exc)
 
+        # -- Initialize embedder --
+        _step("Backend: initializing embedder...")
+        embedder = None
+        try:
+            from src.query.embedder import Embedder
+            embedder = Embedder(
+                model_name="nomic-ai/nomic-embed-text-v1.5",
+                dim=768,
+                device="cuda",
+            )
+            logger.info("[OK] Embedder initialized (%s, dim=%d)", embedder.mode, embedder.dim)
+        except Exception as exc:
+            logger.warning("[WARN] Embedder init failed: %s", exc)
+
         # -- Initialize LLM client --
         _step("Backend: initializing LLM client...")
         try:
             from src.llm.client import LLMClient
-            llm_client = LLMClient(config.llm)
+            provider = config.llm.provider if config.llm.provider != "auto" else ""
+            llm_client = LLMClient(
+                api_base=config.llm.api_base,
+                api_version=config.llm.api_version,
+                model=config.llm.model,
+                deployment=config.llm.deployment,
+                max_tokens=config.llm.max_tokens,
+                temperature=config.llm.temperature,
+                timeout_seconds=config.llm.timeout_seconds,
+                provider_override=provider,
+            )
             logger.info("[OK] LLM client initialized (model=%s)", config.llm.model)
         except Exception as exc:
             logger.warning("[WARN] LLM client init failed: %s", exc)
@@ -148,12 +169,18 @@ def _load_backends(app, config, logger):
             from src.query.pipeline import QueryPipeline
 
             router = QueryRouter(llm_client) if llm_client else None
-            vector_retriever = VectorRetriever(lance_store) if lance_store else None
+            vector_retriever = (
+                VectorRetriever(lance_store, embedder, top_k=config.retrieval.top_k)
+                if lance_store and embedder else None
+            )
             entity_retriever = EntityRetriever(
                 entity_store, relationship_store
-            ) if entity_store else None
-            context_builder = ContextBuilder()
-            generator = Generator(llm_client) if llm_client else None
+            ) if entity_store and relationship_store else None
+            context_builder = ContextBuilder(
+                top_k=config.retrieval.top_k,
+                reranker_enabled=config.retrieval.reranker_enabled,
+            )
+            generator = Generator(llm_client) if llm_client and llm_client.available else None
 
             if router and vector_retriever and context_builder and generator:
                 crag_verifier = None
@@ -161,7 +188,11 @@ def _load_backends(app, config, logger):
                     try:
                         from src.query.crag_verifier import CRAGVerifier
                         crag_verifier = CRAGVerifier(
-                            llm_client, config.crag
+                            config=config.crag,
+                            llm_client=llm_client,
+                            vector_retriever=vector_retriever,
+                            context_builder=context_builder,
+                            generator=generator,
                         )
                         logger.info("[OK] CRAG verifier enabled")
                     except Exception as crag_exc:
