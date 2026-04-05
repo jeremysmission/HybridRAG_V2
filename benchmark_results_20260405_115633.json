@@ -1,0 +1,95 @@
+{
+  "config_path": "config/config.yaml",
+  "rounds": 5,
+  "hardware_preset": "beast",
+  "timestamp": "2026-04-05T11:56:22",
+  "embedding": {
+    "embed_batch_1": {
+      "count": 5,
+      "min_ms": 13.886,
+      "max_ms": 19.995,
+      "mean_ms": 17.942,
+      "p50_ms": 18.892,
+      "p95_ms": 19.991,
+      "p99_ms": 19.994,
+      "batch_size": 1,
+      "texts_per_sec": 55.7
+    },
+    "embed_batch_10": {
+      "count": 5,
+      "min_ms": 10.455,
+      "max_ms": 18.047,
+      "mean_ms": 12.742,
+      "p50_ms": 10.727,
+      "p95_ms": 17.193,
+      "p99_ms": 17.876,
+      "batch_size": 10,
+      "texts_per_sec": 784.8
+    },
+    "embed_batch_100": {
+      "count": 5,
+      "min_ms": 19.651,
+      "max_ms": 20.877,
+      "mean_ms": 20.107,
+      "p50_ms": 19.968,
+      "p95_ms": 20.734,
+      "p99_ms": 20.848,
+      "batch_size": 100,
+      "texts_per_sec": 4973.4
+    },
+    "embed_batch_500": {
+      "count": 5,
+      "min_ms": 83.677,
+      "max_ms": 86.871,
+      "mean_ms": 84.571,
+      "p50_ms": 83.733,
+      "p95_ms": 86.475,
+      "p99_ms": 86.792,
+      "batch_size": 500,
+      "texts_per_sec": 5912.2
+    }
+  },
+  "gpu_memory": {
+    "gpu_available": true,
+    "peak_gpu_mb": 850.0,
+    "delta_gpu_mb": 571.3,
+    "batch_size": 500
+  },
+  "lance_search_top10": {
+    "count": 5,
+    "min_ms": 3.583,
+    "max_ms": 4.143,
+    "mean_ms": 3.844,
+    "p50_ms": 3.886,
+    "p95_ms": 4.11,
+    "p99_ms": 4.137,
+    "top_k": 10,
+    "store_rows": 12
+  },
+  "lance_search_top30": {
+    "count": 5,
+    "min_ms": 3.759,
+    "max_ms": 4.549,
+    "mean_ms": 4.065,
+    "p50_ms": 3.994,
+    "p95_ms": 4.48,
+    "p99_ms": 4.536,
+    "top_k": 30,
+    "store_rows": 12
+  },
+  "lance_search_top50": {
+    "count": 5,
+    "min_ms": 3.719,
+    "max_ms": 4.128,
+    "mean_ms": 3.938,
+    "p50_ms": 3.919,
+    "p95_ms": 4.124,
+    "p99_ms": 4.127,
+    "top_k": 50,
+    "store_rows": 12
+  },
+  "entity_count": 0,
+  "pipeline": {
+    "skipped": true
+  }
+}

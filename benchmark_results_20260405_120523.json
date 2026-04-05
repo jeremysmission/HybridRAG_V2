@@ -1,0 +1,135 @@
+{
+  "config_path": "config/config.yaml",
+  "rounds": 5,
+  "hardware_preset": "beast",
+  "timestamp": "2026-04-05T12:05:12",
+  "embedding": {
+    "embed_batch_1": {
+      "count": 5,
+      "min_ms": 10.239,
+      "max_ms": 14.347,
+      "mean_ms": 11.544,
+      "p50_ms": 10.67,
+      "p95_ms": 13.855,
+      "p99_ms": 14.249,
+      "batch_size": 1,
+      "texts_per_sec": 86.6
+    },
+    "embed_batch_10": {
+      "count": 5,
+      "min_ms": 11.164,
+      "max_ms": 19.903,
+      "mean_ms": 14.501,
+      "p50_ms": 13.102,
+      "p95_ms": 19.272,
+      "p99_ms": 19.777,
+      "batch_size": 10,
+      "texts_per_sec": 689.6
+    },
+    "embed_batch_100": {
+      "count": 5,
+      "min_ms": 20.156,
+      "max_ms": 21.634,
+      "mean_ms": 21.164,
+      "p50_ms": 21.378,
+      "p95_ms": 21.619,
+      "p99_ms": 21.631,
+      "batch_size": 100,
+      "texts_per_sec": 4725.0
+    },
+    "embed_batch_500": {
+      "count": 5,
+      "min_ms": 84.3,
+      "max_ms": 86.003,
+      "mean_ms": 84.908,
+      "p50_ms": 84.664,
+      "p95_ms": 85.838,
+      "p99_ms": 85.97,
+      "batch_size": 500,
+      "texts_per_sec": 5888.7
+    }
+  },
+  "gpu_memory": {
+    "gpu_available": true,
+    "peak_gpu_mb": 850.0,
+    "delta_gpu_mb": 571.3,
+    "batch_size": 500
+  },
+  "lance_search_top10": {
+    "count": 5,
+    "min_ms": 3.906,
+    "max_ms": 4.872,
+    "mean_ms": 4.593,
+    "p50_ms": 4.776,
+    "p95_ms": 4.865,
+    "p99_ms": 4.87,
+    "top_k": 10,
+    "store_rows": 12
+  },
+  "lance_search_top30": {
+    "count": 5,
+    "min_ms": 3.87,
+    "max_ms": 5.911,
+    "mean_ms": 5.1,
+    "p50_ms": 5.579,
+    "p95_ms": 5.904,
+    "p99_ms": 5.91,
+    "top_k": 30,
+    "store_rows": 12
+  },
+  "lance_search_top50": {
+    "count": 5,
+    "min_ms": 3.893,
+    "max_ms": 6.45,
+    "mean_ms": 4.597,
+    "p50_ms": 4.063,
+    "p95_ms": 6.075,
+    "p99_ms": 6.375,
+    "top_k": 50,
+    "store_rows": 12
+  },
+  "sqlite_lookup_type": {
+    "count": 5,
+    "min_ms": 0.054,
+    "max_ms": 0.142,
+    "mean_ms": 0.078,
+    "p50_ms": 0.059,
+    "p95_ms": 0.129,
+    "p99_ms": 0.139,
+    "operation": "lookup_by_type",
+    "entity_count": 169
+  },
+  "sqlite_lookup_pattern": {
+    "count": 5,
+    "min_ms": 0.045,
+    "max_ms": 0.084,
+    "mean_ms": 0.059,
+    "p50_ms": 0.051,
+    "p95_ms": 0.081,
+    "p99_ms": 0.083,
+    "operation": "lookup_pattern"
+  },
+  "sqlite_aggregate": {
+    "count": 5,
+    "min_ms": 0.08,
+    "max_ms": 0.142,
+    "mean_ms": 0.095,
+    "p50_ms": 0.083,
+    "p95_ms": 0.131,
+    "p99_ms": 0.14,
+    "operation": "aggregate"
+  },
+  "sqlite_type_summary": {
+    "count": 5,
+    "min_ms": 0.017,
+    "max_ms": 0.031,
+    "mean_ms": 0.02,
+    "p50_ms": 0.017,
+    "p95_ms": 0.029,
+    "p99_ms": 0.031,
+    "operation": "type_summary"
+  },
+  "pipeline": {
+    "skipped": true
+  }
+}

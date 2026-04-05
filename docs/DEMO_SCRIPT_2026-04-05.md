@@ -1,7 +1,7 @@
 # HybridRAG V2 Demo Script
 
 **Author:** Jeremy Randall | HybridRAG_V2 | 2026-04-05 MDT
-**Audience:** defense contractor stakeholders (engineers, program managers, logistics leads)
+**Audience:** enterprise stakeholders (engineers, program managers, logistics leads)
 **Total time:** ~19 minutes (2 + 12 + 2 + 3)
 **System:** HybridRAG V2 — IGS/NEXION Maintenance Knowledge System
 
@@ -248,7 +248,7 @@ Query: "What parts are currently backordered?"
 
 ---
 
-## Wrap-Up: Six Questions Defense Contractor Stakeholders Ask (3 min)
+## Wrap-Up: Six Questions enterprise Stakeholders Ask (3 min)
 
 ### 1. What problem does this solve and for whom?
 

@@ -1,0 +1,49 @@
+{
+  "config_path": "config/config.yaml",
+  "rounds": 5,
+  "hardware_preset": "beast",
+  "timestamp": "2026-04-05T11:54:38",
+  "embedding": {
+    "error": "No module named 'src.ingest.embedder'"
+  },
+  "gpu_memory": {
+    "error": "No module named 'src.ingest.embedder'"
+  },
+  "lance_search_top10": {
+    "count": 5,
+    "min_ms": 3.592,
+    "max_ms": 4.596,
+    "mean_ms": 3.897,
+    "p50_ms": 3.726,
+    "p95_ms": 4.459,
+    "p99_ms": 4.569,
+    "top_k": 10,
+    "store_rows": 12
+  },
+  "lance_search_top30": {
+    "count": 5,
+    "min_ms": 3.765,
+    "max_ms": 4.834,
+    "mean_ms": 4.123,
+    "p50_ms": 4.014,
+    "p95_ms": 4.676,
+    "p99_ms": 4.803,
+    "top_k": 30,
+    "store_rows": 12
+  },
+  "lance_search_top50": {
+    "count": 5,
+    "min_ms": 3.982,
+    "max_ms": 5.694,
+    "mean_ms": 4.732,
+    "p50_ms": 4.689,
+    "p95_ms": 5.591,
+    "p99_ms": 5.673,
+    "top_k": 50,
+    "store_rows": 12
+  },
+  "entity_count": 0,
+  "pipeline": {
+    "skipped": true
+  }
+}
