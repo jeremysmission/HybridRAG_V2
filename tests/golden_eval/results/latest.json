@@ -13,7 +13,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 24
+    "latency_ms": 32
   },
   {
     "query_id": "GQ-002",
@@ -28,7 +28,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 16
+    "latency_ms": 21
   },
   {
     "query_id": "GQ-003",

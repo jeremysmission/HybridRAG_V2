@@ -1,8 +1,8 @@
 """
 Context builder — assembles retrieved chunks into a context string for the LLM.
 
-Slice 0.3: simple assembly of top-K chunks with source citations.
-Sprint 2+ adds: deduplication, parent chunk expansion, quality weighting,
+Sprint 1: FlashRank reranking integrated.
+Sprint 2+ adds: parent chunk expansion, quality weighting,
 structured results (SQL, entity cards, table rows).
 """
 
@@ -11,6 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from src.store.lance_store import ChunkResult
+from src.query.reranker import FlashReranker
 
 
 @dataclass
@@ -26,16 +27,26 @@ class GeneratorContext:
 class ContextBuilder:
     """Assembles retrieved chunks into LLM context."""
 
-    def __init__(self, top_k: int = 10):
+    def __init__(self, top_k: int = 10, reranker_enabled: bool = True):
         self.top_k = top_k
+        self._reranker = None
+        if reranker_enabled:
+            try:
+                self._reranker = FlashReranker()
+            except Exception:
+                pass  # FlashRank not available — skip reranking
 
     def build(self, results: list[ChunkResult], query: str) -> GeneratorContext:
         """
         Build context from retrieval results.
 
+        If reranker is enabled, reranks candidates before selecting top-K.
         Each chunk is formatted with its source path for citation.
         """
-        chunks = results[:self.top_k]
+        if self._reranker and len(results) > self.top_k:
+            chunks = self._reranker.rerank(query, results, top_n=self.top_k)
+        else:
+            chunks = results[:self.top_k]
         sources = list(dict.fromkeys(r.source_path for r in chunks))
 
         parts = []
