@@ -273,7 +273,7 @@ Industry standard: P50 < 3s, P95 < 10s. We meet both with streaming.
 |---|---|---|---|---|---|
 | lancedb | 0.29.2+ | Apache 2.0 | LanceDB Inc./USA (SF) | Vector + BM25 + metadata store | LOW — already BLUE on waiver sheet |
 | gliner | latest | Apache 2.0 | France (academic) | Zero-shot NER, 205M params, CPU | LOW — Apache 2.0, NATO ally |
-| docling | 2.x | MIT | IBM/USA | Table extraction, 258M params | LOW — IBM is defense contractor |
+| docling | 2.x | MIT | IBM/USA | Table extraction, 258M params | LOW — IBM is enterprise |
 | flashrank | latest | Apache 2.0 | Open source | 4MB CPU reranker, sub-20ms | LOW — tiny footprint, no torch |
 
 ### 4.3 LLM Stack (Online Only)
@@ -390,7 +390,7 @@ HybridRAG_V2/
     source/                  # EmbedEngine output landing zone
   requirements.txt
   requirements_approved.txt
-  CLAUDE.md
+  CoPilot+.md
   README.md
 ```
 
@@ -448,7 +448,7 @@ Every waiver has a fallback if denied. All are MIT/Apache 2.0, all USA or NATO a
 
 ### T7: CRAG verification adds latency
 
-**Justification:** Adopted as a Sprint 3 quality layer, not a core architectural dependency. Adds ~300-500ms per query for verification. Retry only triggers on low-confidence responses (estimated <15% of queries). The quality improvement justifies the latency for a defense demo where wrong answers are worse than slow answers.
+**Justification:** Adopted as a Sprint 3 quality layer, not a core architectural dependency. Adds ~300-500ms per query for verification. Retry only triggers on low-confidence responses (estimated <15% of queries). The quality improvement justifies the latency for a production demo where wrong answers are worse than slow answers.
 
 ---
 

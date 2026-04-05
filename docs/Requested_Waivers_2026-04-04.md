@@ -95,7 +95,7 @@ academic research from France (NATO ally), presented at NAACL 2024.
 | Current Status | Not on waiver sheet (NEW request) |
 | Dependencies | torch (BSD-3, already in stack), transformers (Apache 2.0, HuggingFace/USA), safetensors (Apache 2.0, HuggingFace/USA), docling-core (MIT, IBM) |
 | Why Required | The IGS corpus contains extensive structured data in spreadsheets and PDFs: parts received/requested/shipped, maintenance service reports, diagnostics results, logistics trackers. V1's pdfplumber achieves ~32% accuracy on complex tables. Docling achieves 97.9% accuracy. This difference determines whether tabular queries ("Status of PO-2024-0891?") work or fail. |
-| Security | MIT license. IBM is an established US defense contractor with existing FedRAMP authorizations. Granite-Docling-258M model is Apache 2.0. No telemetry. No outbound connections. |
+| Security | MIT license. IBM is an established US enterprise with existing FedRAMP authorizations. Granite-Docling-258M model is Apache 2.0. No telemetry. No outbound connections. |
 | Fallback if Denied | Use openpyxl (already GREEN) for Excel files + pdfplumber (already GREEN) for PDF tables. Lower accuracy on complex/scanned tables but functional for well-formatted spreadsheets. |
 
 **Justification Template:**
@@ -105,7 +105,7 @@ Research (USA). It is used by HybridRAG V2 to extract structured
 table data from PDFs and spreadsheets with 97.9% accuracy on complex
 tables. Uses the Granite-Docling-258M model (Apache 2.0, IBM). Zero
 telemetry, zero outbound network activity. Processes documents
-entirely in-process. IBM is an established US defense contractor with
+entirely in-process. IBM is an established US enterprise with
 existing FedRAMP authorizations. docling has zero known CVEs on the
 NVD.
 ```

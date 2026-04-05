@@ -23,7 +23,7 @@
 **Goal:** Basic semantic query pipeline working against imported V1 index. Prove the repo boots, queries, and answers.
 
 ### Slice 1.1: Repo Bootstrap (Day 1-2)
-- [ ] Initialize git repo, CLAUDE.md, .gitignore
+- [ ] Initialize git repo, CoPilot+.md, .gitignore
 - [ ] Create directory structure (src/, tests/, docs/, scripts/, config/)
 - [ ] Port Pydantic config schema from V1 (simplified: 1 mode, 2 presets)
 - [ ] Write config.yaml (single config, no mode switching)

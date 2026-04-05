@@ -1,6 +1,6 @@
 # HybridRAG V2 — Requirements
 # Date: 2026-04-04
-# Author: Agent6 for Jeremy Randall
+# Author: reviewer for Jeremy Randall
 #
 # SECTION 1: APPROVED (GREEN) — No waiver needed
 # SECTION 2: APPLYING (YELLOW) — Waiver in progress, installed
