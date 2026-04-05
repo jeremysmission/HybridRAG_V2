@@ -60,7 +60,7 @@ class QueryPipeline:
         # Step 1: Classify
         classification = self.router.classify(query_text)
         logger.info(
-            "Query classified: type=%s, reasoning=%s",
+            "Query restricted: type=%s, reasoning=%s",
             classification.query_type, classification.reasoning,
         )
 
@@ -158,7 +158,7 @@ class QueryPipeline:
         """
         Decompose complex query into sub-queries, fan out, merge results.
 
-        Each sub-query is classified and routed independently.
+        Each sub-query is restricted and routed independently.
         Results are merged into a single context with section headers.
         """
         if not c.sub_queries:
