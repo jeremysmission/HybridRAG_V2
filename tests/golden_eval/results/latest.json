@@ -13,7 +13,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 32
+    "latency_ms": 19
   },
   {
     "query_id": "GQ-002",
@@ -28,7 +28,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 21
+    "latency_ms": 32
   },
   {
     "query_id": "GQ-003",
@@ -43,7 +43,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 13
+    "latency_ms": 21
   },
   {
     "query_id": "GQ-004",
@@ -59,7 +59,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 13
+    "latency_ms": 27
   },
   {
     "query_id": "GQ-005",
@@ -76,6 +76,78 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 15
+    "latency_ms": 17
+  },
+  {
+    "query_id": "GQ-006",
+    "query": "Which amplifier board is showing noise issues at Riverside Observatory?",
+    "retrieval_pass": true,
+    "retrieval_facts_found": [
+      "SN-2847",
+      "RX3",
+      "noise floor"
+    ],
+    "retrieval_facts_missing": [],
+    "generation_pass": null,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "confidence": "N/A",
+    "latency_ms": 14
+  },
+  {
+    "query_id": "GQ-007",
+    "query": "Who is the field technician for the Riverside radar site?",
+    "retrieval_pass": true,
+    "retrieval_facts_found": [
+      "Mike Torres"
+    ],
+    "retrieval_facts_missing": [],
+    "generation_pass": null,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "confidence": "N/A",
+    "latency_ms": 14
+  },
+  {
+    "query_id": "GQ-008",
+    "query": "What is the transmitter output power at Riverside Observatory?",
+    "retrieval_pass": true,
+    "retrieval_facts_found": [
+      "1.2 kW"
+    ],
+    "retrieval_facts_missing": [],
+    "generation_pass": null,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "confidence": "N/A",
+    "latency_ms": 17
+  },
+  {
+    "query_id": "GQ-009",
+    "query": "What UPS battery capacity was measured at Thule?",
+    "retrieval_pass": true,
+    "retrieval_facts_found": [
+      "78%"
+    ],
+    "retrieval_facts_missing": [],
+    "generation_pass": null,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "confidence": "N/A",
+    "latency_ms": 14
+  },
+  {
+    "query_id": "GQ-010",
+    "query": "When is the next scheduled maintenance at Thule Air Base?",
+    "retrieval_pass": true,
+    "retrieval_facts_found": [
+      "2025-06-15"
+    ],
+    "retrieval_facts_missing": [],
+    "generation_pass": null,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "confidence": "N/A",
+    "latency_ms": 13
   }
 ]

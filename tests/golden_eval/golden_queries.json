@@ -2,60 +2,71 @@
   {
     "id": "GQ-001",
     "query": "What part was replaced on the transmitter at Thule?",
-    "expected_facts": [
-      "ARC-4471",
-      "RF connector",
-      "transmitter output stage"
-    ],
+    "expected_facts": ["ARC-4471", "RF connector", "transmitter output stage"],
     "expected_confidence": "HIGH",
-    "query_type": "SEMANTIC",
-    "notes": "Tests basic semantic retrieval of a specific maintenance action."
+    "query_type": "SEMANTIC"
   },
   {
     "id": "GQ-002",
     "query": "Who is the point of contact for Thule Air Base?",
-    "expected_facts": [
-      "SSgt Marcus Webb",
-      "(970) 555-0142"
-    ],
+    "expected_facts": ["SSgt Marcus Webb", "(970) 555-0142"],
     "expected_confidence": "HIGH",
-    "query_type": "ENTITY_LOOKUP",
-    "notes": "Tests entity extraction — POC name should be retrievable from the document header."
+    "query_type": "ENTITY_LOOKUP"
   },
   {
     "id": "GQ-003",
     "query": "What was the transmitter output power after the repair?",
-    "expected_facts": [
-      "302W",
-      "nominal"
-    ],
+    "expected_facts": ["302W", "nominal"],
     "expected_confidence": "HIGH",
-    "query_type": "SEMANTIC",
-    "notes": "Tests retrieval of a specific numeric measurement from the inspection section."
+    "query_type": "SEMANTIC"
   },
   {
     "id": "GQ-004",
     "query": "What parts were consumed during the Thule maintenance visit?",
-    "expected_facts": [
-      "ARC-4471",
-      "SEMS3D-0847",
-      "PO-2025-0142"
-    ],
+    "expected_facts": ["ARC-4471", "SEMS3D-0847", "PO-2025-0142"],
     "expected_confidence": "HIGH",
-    "query_type": "AGGREGATION",
-    "notes": "Tests retrieval of a list of items from the parts inventory section."
+    "query_type": "AGGREGATION"
   },
   {
     "id": "GQ-005",
     "query": "Describe the ionosonde calibration procedure at Thule.",
-    "expected_facts": [
-      "GPS-disciplined reference oscillator",
-      "calibration signal generator",
-      "UTC via GPS",
-      "ionogram quality"
-    ],
+    "expected_facts": ["GPS-disciplined reference oscillator", "calibration signal generator", "UTC via GPS", "ionogram quality"],
     "expected_confidence": "HIGH",
-    "query_type": "SEMANTIC",
-    "notes": "Tests retrieval of procedural information from a specific document section."
+    "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-006",
+    "query": "Which amplifier board is showing noise issues at Riverside Observatory?",
+    "expected_facts": ["SN-2847", "RX3", "noise floor"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-007",
+    "query": "Who is the field technician for the Riverside radar site?",
+    "expected_facts": ["Mike Torres"],
+    "expected_confidence": "HIGH",
+    "query_type": "ENTITY_LOOKUP"
+  },
+  {
+    "id": "GQ-008",
+    "query": "What is the transmitter output power at Riverside Observatory?",
+    "expected_facts": ["1.2 kW"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-009",
+    "query": "What UPS battery capacity was measured at Thule?",
+    "expected_facts": ["78%"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-010",
+    "query": "When is the next scheduled maintenance at Thule Air Base?",
+    "expected_facts": ["2025-06-15"],
+    "expected_confidence": "HIGH",
+    "query_type": "ENTITY_LOOKUP"
   }
 ]
