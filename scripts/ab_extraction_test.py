@@ -96,57 +96,55 @@ def sample_chunks(db_path: str, n: int = SAMPLE_SIZE) -> list[ChunkSample]:
     """
     Pull diverse sample from Clone1 index.
 
-    Strategy: equal distribution across text length categories,
-    plus targeted pulls for known-hard content types.
+    Uses rowid-based random sampling (fast) instead of ORDER BY RANDOM()
+    which does a full table scan on 27.6M rows (75GB, minutes to hours).
     """
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
+    # Get max rowid for fast random sampling
+    cur.execute("SELECT MAX(rowid) FROM chunks")
+    max_rowid = cur.fetchone()[0] or 1
+
     samples = []
-    per_category = max(n // len(CATEGORIES), 5)
+    seen_ids = set()
+    attempts = 0
+    max_attempts = n * 20  # avoid infinite loop on sparse tables
 
-    for cat_name, where_clause in CATEGORIES.items():
-        # Random sample from each category
-        cur.execute(f"""
-            SELECT chunk_id, text, source_path, text_length
-            FROM chunks
-            WHERE {where_clause} AND text IS NOT NULL AND length(text) > 50
-            ORDER BY RANDOM()
-            LIMIT ?
-        """, (per_category,))
-
-        for row in cur.fetchall():
-            samples.append(ChunkSample(
-                chunk_id=row["chunk_id"],
-                text=row["text"],
-                source_path=row["source_path"] or "",
-                text_length=row["text_length"],
-                category=cat_name,
-            ))
-
-    # Fill remaining with random sample
-    existing_ids = {s.chunk_id for s in samples}
-    remaining = n - len(samples)
-    if remaining > 0:
+    while len(samples) < n and attempts < max_attempts:
+        attempts += 1
+        # Pick random rowid range and grab one chunk
+        rand_rowid = random.randint(1, max_rowid)
         cur.execute("""
             SELECT chunk_id, text, source_path, text_length
             FROM chunks
-            WHERE text IS NOT NULL AND length(text) > 50
-            ORDER BY RANDOM()
-            LIMIT ?
-        """, (remaining * 3,))  # over-fetch to filter dupes
+            WHERE rowid >= ? AND text IS NOT NULL AND text_length > 50
+            LIMIT 1
+        """, (rand_rowid,))
 
-        for row in cur.fetchall():
-            if row["chunk_id"] not in existing_ids and len(samples) < n:
-                samples.append(ChunkSample(
-                    chunk_id=row["chunk_id"],
-                    text=row["text"],
-                    source_path=row["source_path"] or "",
-                    text_length=row["text_length"],
-                    category="random",
-                ))
-                existing_ids.add(row["chunk_id"])
+        row = cur.fetchone()
+        if row is None:
+            continue
+        if row["chunk_id"] in seen_ids:
+            continue
+
+        seen_ids.add(row["chunk_id"])
+        tl = row["text_length"]
+        if tl < 300:
+            cat = "short"
+        elif tl < 1000:
+            cat = "medium"
+        else:
+            cat = "long"
+
+        samples.append(ChunkSample(
+            chunk_id=row["chunk_id"],
+            text=row["text"],
+            source_path=row["source_path"] or "",
+            text_length=tl,
+            category=cat,
+        ))
 
     conn.close()
     random.shuffle(samples)

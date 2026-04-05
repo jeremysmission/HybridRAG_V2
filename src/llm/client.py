@@ -102,8 +102,8 @@ class LLMClient:
         self._client = None
         self._available = False
 
-        if not api_key:
-            logger.warning("No API key found — LLM client unavailable")
+        if not api_key and provider != "ollama":
+            logger.warning("No API key found -- LLM client unavailable")
             return
 
         try:
