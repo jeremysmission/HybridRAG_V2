@@ -1,7 +1,7 @@
 # HybridRAG V2 Demo Script
 
 **Author:** Jeremy Randall | HybridRAG_V2 | 2026-04-05 MDT
-**Audience:** Defense contractor stakeholders (engineers, program managers, logistics leads at a defense contracting firm)
+**Audience:** enterprise stakeholders (engineers, program managers, logistics leads at a enterprise contracting firm)
 **Total time:** ~19 minutes (2 + 12 + 2 + 3)
 **System:** HybridRAG V2 — IGS/NEXION Maintenance Knowledge System
 
@@ -33,7 +33,7 @@ When that person is unavailable — on leave, moved to another program, or left 
 ### What the system does NOT do:
 
 - Does not generate new procedures or recommendations
-- Does not access classified networks (runs on GovCloud, feeds from authorized sources)
+- Does not access restricted networks (runs on GovCloud, feeds from authorized sources)
 - Does not replace human judgment — it retrieves and summarizes, the operator decides
 - Does not hallucinate answers — if the information is not in the corpus, it says so
 
@@ -236,11 +236,11 @@ Query: "What parts are currently backordered?"
 
 ---
 
-## Wrap-Up: Six Questions Defense Contractor Stakeholders Ask (3 min)
+## Wrap-Up: Six Questions enterprise Stakeholders Ask (3 min)
 
 ### 1. What problem does this solve and for whom?
 
-Instant knowledge retrieval across our entire defense program documentation corpus for engineers, logistics leads, and program managers — eliminating manual search through legacy databases, SharePoint, and file shares.
+Instant knowledge retrieval across our entire enterprise program documentation corpus for engineers, logistics leads, and program managers — eliminating manual search through legacy databases, SharePoint, and file shares.
 
 ### 2. What data does it need and where does it come from?
 
