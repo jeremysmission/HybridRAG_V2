@@ -1,0 +1,22 @@
+0547Z arrived site. winds 35kts gusting 50. had to wait in vehicle 20 min for gust to die down
+0612Z entered bldg. power on, system connected. checked diagnostics - all green. no errors in last 24hrs
+0625Z scheduler running OK, readings look clean. 3 missed reports overnight (wind related?)
+0640Z started Calibration. CH1 OK, CH2 OK, CH3 - FAIL. noise floor 8dB above spec. tried reboot - same
+0715Z pulled CH3 filter module. visually inspected - corrosion on pin 14 (salt air?). board SN 4410
+0722Z installed spare filter module SN 4455. Calibration CH3 now passes. noise floor within 1dB of spec
+0745Z attempted full channel check. CH1-2 passed. CH3 passed with new board. CH4 marginal - flagged for next visit
+0810Z checked schedule - next visit not until September. recommended moving up to July
+0830Z updated config files with new output directories per HQ guidance
+0845Z removed firewall rules that were blocking data uploads
+0900Z all systems operational. signal quality GOOD. departing site
+0915Z locked bldg. drove to airport. flight 1430L
+
+parts used:
+filter module - removed SN 4410 (corroded), installed SN 4455
+gasket - replaced on CH3 access panel (old one cracked)
+desiccant pack - replaced in TX compartment (saturated)
+
+site: Driftwood Relay, Pacific coast
+tech: P. Nakamura, Orion Systems Field Ops
+date: 2024-06-12
+wx: partly cloudy, 82F, winds 35kts gusting 50 early, calming by midday

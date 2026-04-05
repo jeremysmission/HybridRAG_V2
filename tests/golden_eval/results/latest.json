@@ -1,0 +1,81 @@
+[
+  {
+    "query_id": "GQ-001",
+    "query": "What part was replaced on the transmitter at Thule?",
+    "retrieval_pass": true,
+    "retrieval_facts_found": [
+      "ARC-4471",
+      "RF connector",
+      "transmitter output stage"
+    ],
+    "retrieval_facts_missing": [],
+    "generation_pass": null,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "confidence": "N/A",
+    "latency_ms": 24
+  },
+  {
+    "query_id": "GQ-002",
+    "query": "Who is the point of contact for Thule Air Base?",
+    "retrieval_pass": true,
+    "retrieval_facts_found": [
+      "SSgt Marcus Webb",
+      "(970) 555-0142"
+    ],
+    "retrieval_facts_missing": [],
+    "generation_pass": null,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "confidence": "N/A",
+    "latency_ms": 16
+  },
+  {
+    "query_id": "GQ-003",
+    "query": "What was the transmitter output power after the repair?",
+    "retrieval_pass": true,
+    "retrieval_facts_found": [
+      "302W",
+      "nominal"
+    ],
+    "retrieval_facts_missing": [],
+    "generation_pass": null,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "confidence": "N/A",
+    "latency_ms": 13
+  },
+  {
+    "query_id": "GQ-004",
+    "query": "What parts were consumed during the Thule maintenance visit?",
+    "retrieval_pass": true,
+    "retrieval_facts_found": [
+      "ARC-4471",
+      "SEMS3D-0847",
+      "PO-2025-0142"
+    ],
+    "retrieval_facts_missing": [],
+    "generation_pass": null,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "confidence": "N/A",
+    "latency_ms": 13
+  },
+  {
+    "query_id": "GQ-005",
+    "query": "Describe the ionosonde calibration procedure at Thule.",
+    "retrieval_pass": true,
+    "retrieval_facts_found": [
+      "GPS-disciplined reference oscillator",
+      "calibration signal generator",
+      "UTC via GPS",
+      "ionogram quality"
+    ],
+    "retrieval_facts_missing": [],
+    "generation_pass": null,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "confidence": "N/A",
+    "latency_ms": 15
+  }
+]

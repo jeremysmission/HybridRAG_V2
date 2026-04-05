@@ -1,0 +1,42 @@
+[
+  {
+    "id": "T2-001",
+    "query": "What parts did P. Nakamura replace at Driftwood?",
+    "expected_answer_contains": ["filter module", "SN 4410", "SN 4455", "gasket", "desiccant"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATION",
+    "notes": "Stress: data is in messy desktop log format with timestamps and abbreviations."
+  },
+  {
+    "id": "T2-002",
+    "query": "What is the status of PO-2024-0503?",
+    "expected_answer_contains": ["BACKORDERED", "PS-800", "Granite Peak", "TBD"],
+    "expected_confidence": "HIGH",
+    "query_type": "TABULAR",
+    "notes": "Stress: data is in pipe-delimited spreadsheet fragment, not clean table."
+  },
+  {
+    "id": "T2-003",
+    "query": "How many FM-220 filter modules were ordered across all POs?",
+    "expected_answer_contains": ["11"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATION",
+    "notes": "Stress: requires counting across rows 2,3,5,8 (3+2+5+1=11). Tests cross-row aggregation."
+  },
+  {
+    "id": "T2-004",
+    "query": "What workaround did Nakamura recommend for the CH3 noise issue?",
+    "expected_answer_contains": ["attenuation", "6dB", "integration time", "8 sweeps"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "notes": "Stress: answer is buried in RE:RE:RE: email chain. Tests multi-hop through messy email."
+  },
+  {
+    "id": "T2-005",
+    "query": "What was the building condition at Granite Peak?",
+    "expected_answer_contains": ["good condition", "no leaks", "HVAC", "generator"],
+    "expected_confidence": "PARTIAL",
+    "query_type": "SEMANTIC",
+    "notes": "Stress: source is OCR garbage with character substitutions. Tests OCR tolerance."
+  }
+]

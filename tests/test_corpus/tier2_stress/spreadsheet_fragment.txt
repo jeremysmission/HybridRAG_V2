@@ -1,0 +1,10 @@
+[ROW 1] PO Number | Part Number | Description | Qty | Status | Ship Date | ETA | Destination | Requestor
+[ROW 2] PO-2024-0501 | FM-220 | Filter Module 50MHz | 3 | IN TRANSIT | 2024-02-28 | 2024-03-15 | Cedar Ridge | Patel, R.
+[ROW 3] PO-2024-0502 | FM-220 | Filter Module 50MHz | 2 | DELIVERED | 2024-01-15 | 2024-02-01 | Driftwood | Nakamura, P.
+[ROW 4] PO-2024-0503 | PS-800 | DC Power Module 48V | 1 | BACKORDERED | 2024-03-01 | TBD | Granite Peak | Okafor, D.
+[ROW 5] PO-2024-0504 | FM-220 | Filter Module 50MHz | 5 | ORDERED | 2024-03-10 | 2024-04-15 | Depot Stock | Logistics
+[ROW 6] PO-2024-0505 | AB-115 | Amplifier Card Rev B | 4 | IN TRANSIT | 2024-02-20 | 2024-03-08 | Copper Basin | Lindgren, E.
+[ROW 7] PO-2024-0506 | AH-900 | Feed Horn Assembly | 1 | CANCELLED | 2024-01-05 | N/A | Birchwood | Cancelled per director
+[ROW 8] PO-2024-0507 | AB-115 | Amplifier Card Rev B | 2 | DELIVERED | 2024-02-10 | 2024-02-25 | Sandpoint | Morales, C.
+[ROW 9] PO-2024-0508 | FM-220 | Filter Module 50MHz | 1 | DEFECTIVE | 2024-01-20 | 2024-02-05 | Hawthorne | Returned to depot - bent pins
+[ROW 10] PO-2024-0509 | PS-800 | DC Power Module 48V | 2 | ORDERED | 2024-03-15 | 2024-05-01 | Cedar Ridge | Patel, R.

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "T1-001",
+    "query": "Who is the point of contact for the Riverside site?",
+    "expected_answer_contains": ["Mike Torres", "Senior Field Technician"],
+    "expected_confidence": "HIGH",
+    "query_type": "ENTITY_LOOKUP",
+    "notes": "Direct entity lookup. Name and title are explicitly stated."
+  },
+  {
+    "id": "T1-002",
+    "query": "What parts were replaced at Riverside in March 2024?",
+    "expected_answer_contains": ["WR-4471", "RF Connector", "corrosion"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATION",
+    "notes": "Table data. Should find 2 WR-4471 replacements."
+  },
+  {
+    "id": "T1-003",
+    "query": "What is the recommendation for the amplifier board?",
+    "expected_answer_contains": ["SN-2847", "replacement", "next visit", "Q3 2024"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "notes": "Semantic retrieval. Answer is in section 2.1 and section 4."
+  },
+  {
+    "id": "T1-004",
+    "query": "What was the signal quality at Riverside?",
+    "expected_answer_contains": ["GOOD", "95%"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "notes": "Simple factual extraction from section 2.3."
+  },
+  {
+    "id": "T1-005",
+    "query": "How many RF connectors were replaced?",
+    "expected_answer_contains": ["2"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATION",
+    "notes": "Counting query. Should count 2 WR-4471 rows in the table."
+  }
+]

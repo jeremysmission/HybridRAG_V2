@@ -1,0 +1,49 @@
+ACME Weather Radar Maintenance Service Report
+Site: Riverside Observatory, Colorado
+Date: 2024-03-15
+Report ID: MSR-2024-0047
+POC: Mike Torres, Senior Field Technician
+Contact: mike.torres@acmeradar.example.com | (555) 234-5678
+
+1. Summary
+
+Routine maintenance visit to Riverside Observatory radar site, 11-15 March 2024. System operational throughout visit with minor exceptions noted below.
+
+2. Equipment Status
+
+2.1 Receiver Chain
+- RX1 through RX4 operational, no anomalies
+- Amplifier board SN-2847 on RX3 showing intermittent noise floor elevation (+3dB above baseline)
+- Recommendation: schedule replacement of amplifier board SN-2847 during next visit
+
+2.2 Transmitter
+- TX output power within specification (1.2 kW nominal)
+- Antenna alignment verified within 0.5 degree tolerance
+- No arcing or unusual thermal signatures observed
+
+2.3 Data Processing
+- Signal quality: GOOD (95% clean traces over 72-hour observation)
+- Report generation: nominal
+- Data transmission to headquarters: continuous, no gaps
+
+3. Parts Replaced
+
+| Part Number | Description | Action | Old SN | New SN |
+|-------------|-------------|--------|--------|--------|
+| WR-4471 | RF Connector | Replaced (corrosion) | SN-1893 | SN-2901 |
+| WR-4471 | RF Connector | Replaced (preventive) | SN-1894 | SN-2902 |
+| WR-7722 | Power Supply Unit | Tested, no replacement needed | SN-0441 | N/A |
+
+4. Follow-On Actions
+
+- Replace amplifier board SN-2847 on RX3 (next visit, Q3 2024)
+- Verify antenna alignment post-summer (seasonal check)
+- Update firmware to v4.2.1 when released (expected Q2 2024)
+
+5. Weather Conditions
+
+Temperatures ranged from 28F to 41F during visit. Wind speeds 15-25 mph from NNW. No impact on maintenance activities.
+
+End of Report
+Prepared by: Mike Torres
+Reviewed by: Sarah Kim, Engineering Lead

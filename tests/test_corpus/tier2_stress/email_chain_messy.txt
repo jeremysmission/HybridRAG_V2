@@ -1,0 +1,49 @@
+From: Patel, Ravi <ravi.patel@orionsys.example.com>
+Sent: Wednesday, March 6, 2024 3:47 PM
+To: Lindgren, Eva <eva.lindgren@orionsys.example.com>
+Cc: Nakamura, P <p.nakamura@orionsys.example.com>; Supply Chain <supply@orionsys.example.com>
+Subject: RE: RE: RE: Cedar Ridge CH3 filter module - URGENT
+
+Eva,
+
+Still waiting on the AB-115 Rev B cards. Supply says backordered until April. Can we pull one from Sandpoint's spares? They have 2 on shelf per last inventory.
+
+The CH3 is running on the old card with the workaround from Paul's email below but it's marginal. If we lose it before the replacement arrives we're down to 3 channels.
+
+Also — unrelated but the endpoint protection update last Thursday broke the data upload script again. Same issue as November. I disabled the rule manually but someone needs to add it to the exclusion list permanently.
+
+-Ravi
+
+-----Original Message-----
+From: Nakamura, Paul <p.nakamura@orionsys.example.com>
+Sent: Monday, March 4, 2024 9:12 AM
+To: Patel, Ravi <ravi.patel@orionsys.example.com>
+Subject: RE: RE: Cedar Ridge CH3 filter module - URGENT
+
+Ravi,
+
+Workaround for the CH3 noise: bump the attenuation 2 steps (+6dB) and increase the integration time from 4 to 8 sweeps. You'll lose some sensitivity but the noise floor should come back within spec. I used the same trick at Driftwood last month when we had a similar module failure.
+
+Part numbers you need:
+  AB-115 Rev B (amplifier card) - qty 1
+  FM-220 (filter module) - qty 2, the ones on CH3 looked corroded when I was there in January
+
+Put in the PO ASAP, these cards have been on 6-week lead time.
+
+-Paul
+
+-----Original Message-----
+From: Patel, Ravi
+Sent: Friday, March 1, 2024 4:15 PM
+To: Nakamura, Paul; Lindgren, Eva
+Subject: Cedar Ridge CH3 filter module - URGENT
+
+Team,
+
+CH3 at Cedar Ridge failed calibration today. Noise floor 8dB above spec.
+Module is SN-3392. Suspecting corrosion same as the Driftwood failure last year.
+Need a replacement AB-115 Rev B card shipped to site.
+
+Anyone have spares in their kit?
+
+-Ravi

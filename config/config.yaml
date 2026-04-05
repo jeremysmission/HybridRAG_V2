@@ -1,0 +1,49 @@
+# HybridRAG V2 Configuration — Beast Workstation Defaults
+# Date: 2026-04-04
+# Rule: Single config, no modes. Online-only. Pin openai SDK to v1.x.
+
+paths:
+  lance_db: "data/index/lancedb"
+  entity_db: "data/index/entities.sqlite3"
+  embedengine_output: "data/source"
+  site_vocabulary: "config/site_vocabulary.yaml"
+
+retrieval:
+  top_k: 10
+  candidate_pool: 30
+  min_score: 0.1
+  reranker_enabled: true
+  reranker_top_n: 30
+
+llm:
+  model: "gpt-4o"
+  deployment: "gpt-4o"
+  context_window: 128000
+  max_tokens: 16384
+  temperature: 0.08
+  timeout_seconds: 180
+  api_base: ""            # SET THIS: Azure OpenAI endpoint URL
+  api_version: "2024-10-21"
+
+extraction:
+  min_confidence: 0.7
+  part_patterns:
+    - 'ARC-\d{4}'
+    - 'IGSI-\d+'
+    - 'PO-\d{4}-\d{4}'
+    - 'SN \d+'
+    - 'SEMS3D-\d+'
+  gliner_enabled: false   # Waiver pending — flip to true when approved
+  gpt4o_extraction: true
+
+server:
+  host: "127.0.0.1"
+  port: 8000
+
+crag:
+  enabled: false          # Sprint 3+ feature
+  confidence_threshold: 0.8
+  max_retries: 2
+  verifier_model: "gpt-oss-20b"
+
+hardware_preset: "beast"

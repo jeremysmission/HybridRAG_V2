@@ -1,0 +1,61 @@
+[
+  {
+    "id": "GQ-001",
+    "query": "What part was replaced on the transmitter at Thule?",
+    "expected_facts": [
+      "ARC-4471",
+      "RF connector",
+      "transmitter output stage"
+    ],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "notes": "Tests basic semantic retrieval of a specific maintenance action."
+  },
+  {
+    "id": "GQ-002",
+    "query": "Who is the point of contact for Thule Air Base?",
+    "expected_facts": [
+      "SSgt Marcus Webb",
+      "(970) 555-0142"
+    ],
+    "expected_confidence": "HIGH",
+    "query_type": "ENTITY_LOOKUP",
+    "notes": "Tests entity extraction — POC name should be retrievable from the document header."
+  },
+  {
+    "id": "GQ-003",
+    "query": "What was the transmitter output power after the repair?",
+    "expected_facts": [
+      "302W",
+      "nominal"
+    ],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "notes": "Tests retrieval of a specific numeric measurement from the inspection section."
+  },
+  {
+    "id": "GQ-004",
+    "query": "What parts were consumed during the Thule maintenance visit?",
+    "expected_facts": [
+      "ARC-4471",
+      "SEMS3D-0847",
+      "PO-2025-0142"
+    ],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATION",
+    "notes": "Tests retrieval of a list of items from the parts inventory section."
+  },
+  {
+    "id": "GQ-005",
+    "query": "Describe the ionosonde calibration procedure at Thule.",
+    "expected_facts": [
+      "GPS-disciplined reference oscillator",
+      "calibration signal generator",
+      "UTC via GPS",
+      "ionogram quality"
+    ],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "notes": "Tests retrieval of procedural information from a specific document section."
+  }
+]
