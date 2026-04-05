@@ -1,7 +1,7 @@
 # HybridRAG V2 Demo Script
 
 **Author:** Jeremy Randall | HybridRAG_V2 | 2026-04-05 MDT
-**Audience:** enterprise stakeholders (engineers, program managers, logistics leads at a enterprise contracting firm)
+**Audience:** defense contractor stakeholders (engineers, program managers, logistics leads)
 **Total time:** ~19 minutes (2 + 12 + 2 + 3)
 **System:** HybridRAG V2 — IGS/NEXION Maintenance Knowledge System
 
@@ -13,6 +13,8 @@
 
 Engineers spend hours searching through legacy databases, SharePoint, and file shares for maintenance history, parts tracking, and operational procedures. V2 reduces that to seconds with AI-powered retrieval across all document types.
 
+Studies show the average worker spends 1-1.5 hours per day on information retrieval. AI-assisted retrieval reduces that time by 60-70%. This system is built to deliver that reduction for three key roles.
+
 Our current data — maintenance reports, purchase orders, email chains, and spreadsheets — is already being generated across IGS and NEXION programs every year. Today, finding specific information across this corpus requires someone who:
 
 - Knows which document to look in
@@ -20,6 +22,12 @@ Our current data — maintenance reports, purchase orders, email chains, and spr
 - Has the time to manually search
 
 When that person is unavailable — on leave, moved to another program, or left the company — the knowledge goes with them.
+
+### Three Personas
+
+- **Program Manager:** status reports, site assessments, cross-program visibility
+- **Logistics Analyst:** parts ordered vs received, PO status, backorder tracking
+- **Engineer:** failure trends, bit fault patterns, equipment health by site/year
 
 **HybridRAG V2 modernizes our existing legacy data with AI-native retrieval.** We already have the data in legacy systems. V2 makes it searchable, queryable, and actionable without replacing the existing infrastructure. Ask a question in plain English, get an answer with sources, in seconds.
 
@@ -226,6 +234,10 @@ Query: "What parts are currently backordered?"
 | Hallucination rate | 0/25 (no fabricated facts) |
 | Structured data queries | Now possible (was 0% in V1) |
 
+### Corpus Coverage
+
+- We indexed X of Y total files. The remaining files are CAD drawings, encrypted files, and deferred formats — every one hashed and tracked in our skip manifest. Nothing is lost, nothing is forgotten. These formats will be added in the production phase.
+
 ### Cost
 
 | Metric | Value |
@@ -236,7 +248,7 @@ Query: "What parts are currently backordered?"
 
 ---
 
-## Wrap-Up: Six Questions enterprise Stakeholders Ask (3 min)
+## Wrap-Up: Six Questions Defense Contractor Stakeholders Ask (3 min)
 
 ### 1. What problem does this solve and for whom?
 

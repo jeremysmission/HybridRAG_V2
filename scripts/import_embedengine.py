@@ -1,17 +1,20 @@
 """
-Import CorpusForge export into V2 stores.
+Import CorpusForge export into HybridRAG V2 LanceDB store.
 
-Reads chunks.jsonl + vectors.npy from a CorpusForge export directory
-and loads them into the vector store (FAISS + SQLite FTS5).
+Reads chunks.jsonl + vectors.npy + manifest.json from a CorpusForge export
+directory and loads them into the vector store with FTS indexing.
 
 Usage:
-  python scripts/import_embedengine.py --export-dir path/to/export
-  python scripts/import_embedengine.py --export-dir C:/CorpusForge/data/output/latest
+  python scripts/import_embedengine.py --source path/to/export
+  python scripts/import_embedengine.py --source C:/CorpusForge/data/output/latest
+  python scripts/import_embedengine.py --source data/source --dry-run
+  python scripts/import_embedengine.py --source data/source --create-index
 """
 
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
 
 import numpy as np
@@ -23,19 +26,42 @@ from src.config.schema import load_config
 from src.store.lance_store import LanceStore
 
 
-def load_export(export_dir: Path) -> tuple[list[dict], np.ndarray, dict]:
-    """Load chunks, vectors, and manifest from a CorpusForge export."""
-    # If export_dir is a symlink or text file pointing to real dir
-    if export_dir.is_file():
-        real_path = export_dir.read_text(encoding="utf-8-sig").strip()
-        export_dir = Path(real_path)
+DIVIDER = "=" * 55
+
+
+def resolve_export_dir(source: Path) -> Path:
+    """Resolve source path, following text-file redirects if needed."""
+    if source.is_file() and source.suffix not in (".jsonl", ".npy", ".json"):
+        # Text file pointing to real export dir
+        real_path = source.read_text(encoding="utf-8-sig").strip()
+        return Path(real_path)
+    return source
+
+
+def load_export(export_dir: Path) -> tuple[list[dict], np.ndarray, dict, dict | None]:
+    """
+    Load chunks, vectors, manifest, and optional skip_manifest
+    from a CorpusForge export directory.
+
+    Returns:
+        (chunks, vectors, manifest, skip_manifest_or_None)
+    """
+    export_dir = resolve_export_dir(export_dir)
 
     chunks_path = export_dir / "chunks.jsonl"
     vectors_path = export_dir / "vectors.npy"
     manifest_path = export_dir / "manifest.json"
+    skip_manifest_path = export_dir / "skip_manifest.json"
 
+    # Validate required files
+    missing = []
     if not chunks_path.exists():
-        print(f"Error: {chunks_path} not found.", file=sys.stderr)
+        missing.append(str(chunks_path))
+    if not vectors_path.exists():
+        missing.append(str(vectors_path))
+    if missing:
+        for m in missing:
+            print(f"  ERROR: Required file not found: {m}", file=sys.stderr)
         sys.exit(1)
 
     # Load chunks
@@ -49,57 +75,199 @@ def load_export(export_dir: Path) -> tuple[list[dict], np.ndarray, dict]:
     # Load vectors
     vectors = np.load(str(vectors_path))
 
-    # Load manifest
+    if vectors.shape[0] != len(chunks):
+        print(
+            f"  ERROR: Chunk/vector count mismatch — "
+            f"{len(chunks)} chunks vs {vectors.shape[0]} vectors.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    # Load manifest (optional but expected)
     manifest = {}
     if manifest_path.exists():
         with open(manifest_path, encoding="utf-8-sig") as f:
             manifest = json.load(f)
 
-    return chunks, vectors, manifest
+    # Load skip manifest (optional)
+    skip_manifest = None
+    if skip_manifest_path.exists():
+        with open(skip_manifest_path, encoding="utf-8-sig") as f:
+            skip_manifest = json.load(f)
+
+    return chunks, vectors, manifest, skip_manifest
+
+
+def print_export_summary(
+    export_dir: Path,
+    chunks: list[dict],
+    vectors: np.ndarray,
+    manifest: dict,
+    skip_manifest: dict | None,
+) -> None:
+    """Print details about the export being imported."""
+    print(f"  Source:     {export_dir}")
+    print(f"  Chunks:     {len(chunks):,}")
+    print(f"  Vectors:    {vectors.shape[0]:,} x {vectors.shape[1]}d")
+    if manifest:
+        print(f"  Model:      {manifest.get('embedding_model', 'unknown')}")
+        print(f"  Created:    {manifest.get('timestamp', 'unknown')}")
+        if "corpus_name" in manifest:
+            print(f"  Corpus:     {manifest['corpus_name']}")
+
+    # Unique source files in the export
+    source_files = {c.get("source_path", "") for c in chunks}
+    source_files.discard("")
+    if source_files:
+        print(f"  Files:      {len(source_files):,} unique source documents")
+
+    # Skip manifest summary
+    if skip_manifest:
+        skipped = skip_manifest.get("skipped_files", [])
+        count = len(skipped) if isinstance(skipped, list) else skip_manifest.get("count", 0)
+        print(f"  Skipped:    {count} files were skipped during corpus processing")
+        print(f"              -- see skip_manifest.json for details")
+
+
+def run_dry_run(
+    export_dir: Path,
+    chunks: list[dict],
+    vectors: np.ndarray,
+    manifest: dict,
+    skip_manifest: dict | None,
+    config_path: str,
+) -> None:
+    """Show what would be imported without touching the store."""
+    config = load_config(config_path)
+
+    print(DIVIDER)
+    print("  HybridRAG V2 -- Import (DRY RUN)")
+    print(DIVIDER)
+    print_export_summary(export_dir, chunks, vectors, manifest, skip_manifest)
+    print()
+    print(f"  Target DB:  {config.paths.lance_db}")
+    print(f"  Would insert up to {len(chunks):,} chunks (duplicates auto-skipped)")
+    print(DIVIDER)
+    print("  Dry run complete. No data was written.")
+    print(DIVIDER)
+
+
+def run_import(
+    export_dir: Path,
+    chunks: list[dict],
+    vectors: np.ndarray,
+    manifest: dict,
+    skip_manifest: dict | None,
+    config_path: str,
+    create_index: bool,
+) -> None:
+    """Execute the full import into LanceDB."""
+    config = load_config(config_path)
+
+    print(DIVIDER)
+    print("  HybridRAG V2 -- Import CorpusForge Export")
+    print(DIVIDER)
+    print_export_summary(export_dir, chunks, vectors, manifest, skip_manifest)
+    print()
+
+    # Ingest
+    t_start = time.perf_counter()
+
+    store = LanceStore(config.paths.lance_db)
+    before_count = store.count()
+    inserted = store.ingest_chunks(chunks, vectors)
+    t_ingest = time.perf_counter() - t_start
+
+    # FTS index
+    t_fts_start = time.perf_counter()
+    store.create_fts_index()
+    t_fts = time.perf_counter() - t_fts_start
+
+    # Optional vector index
+    t_idx = 0.0
+    if create_index:
+        t_idx_start = time.perf_counter()
+        store.create_vector_index()
+        t_idx = time.perf_counter() - t_idx_start
+
+    after_count = store.count()
+    store.close()
+
+    t_total = time.perf_counter() - t_start
+    duplicates = len(chunks) - inserted
+
+    # Stats
+    print(f"  Target DB:  {config.paths.lance_db}")
+    print(f"  Before:     {before_count:,} chunks in store")
+    print(f"  Inserted:   {inserted:,} new chunks")
+    if duplicates > 0:
+        print(f"  Duplicates: {duplicates:,} skipped (already in store)")
+    print(f"  After:      {after_count:,} chunks in store")
+    print()
+    print(f"  Timing:")
+    print(f"    Ingest:       {t_ingest:6.2f}s")
+    print(f"    FTS index:    {t_fts:6.2f}s")
+    if create_index:
+        print(f"    Vector index: {t_idx:6.2f}s")
+    print(f"    Total:        {t_total:6.2f}s")
+    if inserted > 0 and t_ingest > 0:
+        rate = inserted / t_ingest
+        print(f"    Rate:         {rate:,.0f} chunks/sec")
+
+    print(DIVIDER)
+    print("  Import complete.")
+    print(DIVIDER)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Import CorpusForge export into V2")
+    parser = argparse.ArgumentParser(
+        description="Import CorpusForge export into HybridRAG V2 LanceDB store."
+    )
+    parser.add_argument(
+        "--source",
+        default="data/source",
+        help="Path to CorpusForge export directory (default: data/source).",
+    )
+    # Keep --export-dir as hidden alias for backwards compatibility
     parser.add_argument(
         "--export-dir",
-        required=True,
-        help="Path to CorpusForge export directory (or 'latest' symlink).",
+        dest="source",
+        help=argparse.SUPPRESS,
     )
     parser.add_argument(
         "--config",
         default="config/config.yaml",
-        help="Path to V2 config YAML.",
+        help="Path to V2 config YAML (default: config/config.yaml).",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be imported without writing to the store.",
+    )
+    parser.add_argument(
+        "--create-index",
+        action="store_true",
+        help="Build LanceDB IVF_PQ vector index after import (recommended for >10K chunks).",
     )
     args = parser.parse_args()
 
-    config = load_config(args.config)
-    export_dir = Path(args.export_dir)
+    export_dir = Path(args.source)
+    export_dir = resolve_export_dir(export_dir)
 
-    print("=" * 50)
-    print("  HybridRAG V2 — Import CorpusForge Export")
-    print("=" * 50)
+    if not export_dir.is_dir():
+        print(f"  ERROR: Export directory not found: {export_dir}", file=sys.stderr)
+        sys.exit(1)
 
-    # Load export
-    chunks, vectors, manifest = load_export(export_dir)
-    print(f"  Export:   {export_dir}")
-    print(f"  Chunks:   {len(chunks)}")
-    print(f"  Vectors:  {vectors.shape}")
-    if manifest:
-        print(f"  Model:    {manifest.get('embedding_model', 'unknown')}")
-        print(f"  Created:  {manifest.get('timestamp', 'unknown')}")
+    # Load export data
+    chunks, vectors, manifest, skip_manifest = load_export(export_dir)
 
-    # Import into store
-    store = LanceStore(config.paths.lance_db)
-    inserted = store.ingest_chunks(chunks, vectors)
-    store.create_fts_index()
-    total = store.count()
-    store.close()
-
-    print(f"  Inserted: {inserted} new chunks")
-    print(f"  Total:    {total} chunks in store")
-    print("=" * 50)
-    print("  Import complete.")
-    print("=" * 50)
+    if args.dry_run:
+        run_dry_run(export_dir, chunks, vectors, manifest, skip_manifest, args.config)
+    else:
+        run_import(
+            export_dir, chunks, vectors, manifest, skip_manifest,
+            args.config, args.create_index,
+        )
 
 
 if __name__ == "__main__":
