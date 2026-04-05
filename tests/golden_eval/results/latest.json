@@ -13,7 +13,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 19
+    "latency_ms": 33
   },
   {
     "query_id": "GQ-002",
@@ -28,7 +28,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 32
+    "latency_ms": 29
   },
   {
     "query_id": "GQ-003",
@@ -43,7 +43,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 21
+    "latency_ms": 23
   },
   {
     "query_id": "GQ-004",
@@ -59,7 +59,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 27
+    "latency_ms": 24
   },
   {
     "query_id": "GQ-005",
@@ -76,7 +76,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 17
+    "latency_ms": 28
   },
   {
     "query_id": "GQ-006",
@@ -92,7 +92,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 14
+    "latency_ms": 23
   },
   {
     "query_id": "GQ-007",
@@ -106,7 +106,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 14
+    "latency_ms": 23
   },
   {
     "query_id": "GQ-008",
@@ -120,7 +120,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 17
+    "latency_ms": 23
   },
   {
     "query_id": "GQ-009",
@@ -134,7 +134,7 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 14
+    "latency_ms": 24
   },
   {
     "query_id": "GQ-010",
@@ -148,6 +148,6 @@
     "generation_facts_found": [],
     "generation_facts_missing": [],
     "confidence": "N/A",
-    "latency_ms": 13
+    "latency_ms": 24
   }
 ]
