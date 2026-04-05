@@ -42,21 +42,32 @@ def main():
     entity_store = EntityStore(config.paths.entity_db)
     relationship_store = RelationshipStore(config.paths.entity_db)
 
-    # Initialize LLM — use extraction-specific model (mini for cost efficiency)
+    # Initialize LLM — use extraction-specific model
+    # Auto-detect Ollama when model name looks like a local model (phi4, llama, mistral, etc.)
     extraction_model = config.extraction.model or config.llm.model
+    OLLAMA_MODEL_PATTERNS = ("phi4", "phi3", "llama", "mistral", "qwen", "gemma", "deepseek")
+    is_ollama_model = any(p in extraction_model.lower() for p in OLLAMA_MODEL_PATTERNS)
+    provider_override = "ollama" if is_ollama_model else ""
+
     llm_client = LLMClient(
-        api_base=config.llm.api_base,
+        api_base=config.llm.api_base if not is_ollama_model else "",
         api_version=config.llm.api_version,
         model=extraction_model,
         deployment=extraction_model,
         max_tokens=config.llm.max_tokens,
         temperature=0,
         timeout_seconds=config.llm.timeout_seconds,
+        provider_override=provider_override,
     )
-    print(f"Extraction model: {extraction_model}")
+    print(f"Extraction model: {extraction_model} (provider: {llm_client.provider})")
 
     if not llm_client.available:
-        print("ERROR: LLM not configured. Set AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_API_KEY.")
+        if is_ollama_model:
+            print(f"ERROR: Ollama not reachable for model '{extraction_model}'.")
+            print("  Ensure Ollama is running: ollama serve")
+            print(f"  Ensure model is pulled: ollama pull {extraction_model}")
+        else:
+            print("ERROR: LLM not configured. Set AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_API_KEY.")
         sys.exit(1)
 
     extractor = EntityExtractor(llm_client)

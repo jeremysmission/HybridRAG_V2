@@ -226,7 +226,72 @@ QA time is not idle time. While QA executes tests, the engineering team runs thi
 
 ---
 
-## 8. What QA Does NOT Cover (Out of Scope)
+## 8. Agentic & LLM-Specific QA (2026 Best Practices)
+
+Per current industry guidance (OpenAI eval docs, Anthropic test-and-evaluate), QA applies these additional practices for nondeterministic/agentic systems:
+
+### Stage-Level Testing
+Test each nondeterministic stage separately, not just end-to-end:
+- **Router:** Does it classify correctly? (deterministic grader)
+- **Retrieval:** Are the right chunks returned? (precision/recall)
+- **Context assembly:** Is context well-formed and relevant? (grader)
+- **Generation:** Is the answer factually correct? (multidimensional)
+- **CRAG:** Does it intervene when it should, and stay silent when it shouldn't?
+- **Streaming:** Does event order match spec?
+
+### Multidimensional Eval Criteria
+No single pass/fail. Every generation eval scores:
+- Factual correctness
+- Context use (did it cite retrieved chunks?)
+- Consistency (same answer across reruns?)
+- Latency
+- Cost (tokens consumed)
+- Safety (no prompt leakage, no hallucinated PII)
+
+### Grader Hierarchy
+1. **Deterministic/code-based graders first** — regex fact-check, JSON schema validation, keyword presence
+2. **LLM-as-judge with explicit rubrics** — only where nuance matters, with documented scoring criteria
+3. **Human review** — for demo-critical and domain-critical cases; SME annotation remains gold standard
+
+### Agent Trace QA
+For agentic flows (router → retrieval → generation → CRAG):
+- Decision correctness: Did the system choose the right path?
+- Tool-call correctness: Were the right stores queried?
+- Retry behavior: Did CRAG trigger appropriately?
+- Failure containment: Did errors propagate or get caught?
+- Policy compliance: Did the agent stay within bounds?
+
+### Adversarial Coverage
+Every QA pass must include:
+- Prompt injection attempts in queries
+- Jailbreak-style inputs
+- Malformed corpus artifacts (corrupt chunks, encoding issues)
+- Unsafe tool/data flow (query that tries to access system info)
+
+### Variance as Bug Surface
+- Rerun important evals 3+ times when behavior is stochastic
+- Report variance alongside pass/fail
+- Flag any eval where results change between runs as a stability issue
+
+### A/B Extraction Evaluation
+For model comparison (phi4 vs GPT-4o):
+- Entity count delta per chunk
+- Entity type coverage comparison
+- JSON schema compliance rate
+- Confidence score distribution
+- Hallucination rate (entities not in source text)
+- Cost per chunk (tokens × price)
+- QA team runs analysis independently from extraction team
+
+### Sources
+- OpenAI eval best practices: evaluation-best-practices
+- OpenAI agent safety and trace grading: agent-builder-safety
+- Anthropic eval design: test-and-evaluate/develop-tests
+- Anthropic jailbreak/prompt-injection guidance: strengthen-guardrails/mitigate-jailbreaks
+
+---
+
+## 9. What QA Does NOT Cover (Out of Scope)
 
 - Production deployment (Azure/GovCloud) — separate ops checklist
 - Security pen testing — separate engagement

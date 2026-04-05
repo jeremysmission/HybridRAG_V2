@@ -5,14 +5,14 @@ Reads chunks.jsonl + vectors.npy + manifest.json from a CorpusForge export
 directory and loads them into the vector store with FTS indexing.
 
 Usage:
-  python scripts/import_embedengine.py --source path/to/export
-  python scripts/import_embedengine.py --source C:/CorpusForge/data/output/latest
-  python scripts/import_embedengine.py --source data/source --dry-run
-  python scripts/import_embedengine.py --source data/source --create-index
+  python scripts/import_embedengine.py --source C:/CorpusForge/data/export/export_YYYYMMDD_HHMM
+  python scripts/import_embedengine.py --source path/to/export --dry-run
+  python scripts/import_embedengine.py --source path/to/export --create-index
 """
 
 import argparse
 import json
+import logging
 import sys
 import time
 from pathlib import Path
@@ -72,8 +72,14 @@ def load_export(export_dir: Path) -> tuple[list[dict], np.ndarray, dict, dict | 
             if line:
                 chunks.append(json.loads(line))
 
-    # Load vectors
-    vectors = np.load(str(vectors_path))
+    # Load vectors — memory-map large files to avoid OOM on multi-GB arrays
+    vec_file_bytes = vectors_path.stat().st_size
+    MMAP_THRESHOLD = 500 * 1024 * 1024  # 500 MB
+    if vec_file_bytes > MMAP_THRESHOLD:
+        print(f"  vectors.npy is {vec_file_bytes / (1024**3):.1f} GB — using memory-mapped I/O")
+        vectors = np.load(str(vectors_path), mmap_mode="r")
+    else:
+        vectors = np.load(str(vectors_path))
 
     if vectors.shape[0] != len(chunks):
         print(
@@ -170,11 +176,19 @@ def run_import(
     print_export_summary(export_dir, chunks, vectors, manifest, skip_manifest)
     print()
 
+    # Enable store-level progress logging so batch inserts print progress
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(message)s",
+        stream=sys.stdout,
+    )
+
     # Ingest
     t_start = time.perf_counter()
 
     store = LanceStore(config.paths.lance_db)
     before_count = store.count()
+    print(f"  Inserting {len(chunks):,} chunks in batches of {store.INGEST_BATCH_SIZE:,} ...")
     inserted = store.ingest_chunks(chunks, vectors)
     t_ingest = time.perf_counter() - t_start
 
@@ -225,8 +239,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--source",
-        default="data/source",
-        help="Path to CorpusForge export directory (default: data/source).",
+        required=True,
+        help="Path to CorpusForge export directory (contains chunks.jsonl + vectors.npy).",
     )
     # Keep --export-dir as hidden alias for backwards compatibility
     parser.add_argument(

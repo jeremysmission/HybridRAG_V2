@@ -8,20 +8,31 @@
 # SECTION 4: NEW WAIVER REQUIRED — Development proceeds with fallbacks
 #
 # Rule: Pin exact versions where approved by revision number.
-# Install warning: DO NOT use pip install sentence-transformers[onnx]
-#   The [onnx] extra pulls CPU-only torch, overwriting CUDA wheel.
-# CUDA torch: pip install torch --index-url https://download.pytorch.org/whl/cu128
+#
+# INSTALL ORDER (critical — wrong order silently loses CUDA):
+#   1. pip install torch --index-url https://download.pytorch.org/whl/cu128
+#   2. pip install -r requirements.txt
+#   3. Verify: python -c "import torch; assert torch.cuda.is_available()"
+#
+# KNOWN GOTCHAS (from forum research 2026-04-05):
+#   - DO NOT use pip install sentence-transformers[onnx] — pulls CPU torch
+#   - DO NOT use pip install optimum[onnxruntime] — also pulls CPU torch
+#   - DO NOT manually upgrade pdfminer.six — pdfplumber pins it, upgrading breaks
+#   - DO NOT install both onnxruntime AND onnxruntime-gpu — they conflict
+#   - numpy must stay <2.0 — numpy 2.0 breaks pyarrow C ABI
+#   - flashrank pulls bare onnxruntime (CPU) which is fine — it does not need GPU
+#   - lancedb needs VC++ Redistributable on Windows for pyarrow DLLs
+#   - einops must be installed explicitly — nomic-embed-text needs it at runtime
 
 # ============================================================
 # SECTION 1: APPROVED (GREEN) — Already cleared
 # ============================================================
 
-# Core Runtime (ships with Python 3.11.9)
-# Python 3.11.9 — PSF-2.0, USA
+# Core Runtime (Python 3.12.x required — 3.14 not supported by numpy/onnxruntime)
 # sqlite3 — stdlib, public domain
 
 # AI / Model APIs
-numpy==1.26.4                    # BSD-3, NumFOCUS/USA — vector math
+numpy>=1.26.4,<2.0               # BSD-3, NumFOCUS/USA — pin <2.0 to prevent pyarrow C ABI break
 tiktoken==0.8.0                  # MIT, OpenAI/USA — token counting
 
 # HTTP and Networking
@@ -68,7 +79,7 @@ keyring==23.13.1                 # MIT, USA — Windows Credential Manager
 python-multipart==0.0.22         # Apache 2.0, USA — form data parsing
 
 # Embedding (CUDA path — install torch separately from PyTorch index)
-sentence-transformers==4.1.0     # Apache 2.0, Germany — embedding models
+sentence-transformers==5.3.0     # Apache 2.0, Germany — embedding models (aligned with CorpusForge)
 einops==0.8.1                    # MIT, Korea — required by nomic-embed-text trust_remote_code model
 # torch: Install SEPARATELY: pip install torch --index-url https://download.pytorch.org/whl/cu128
 
@@ -84,18 +95,19 @@ psutil==7.2.2                    # BSD-3, USA — process monitoring
 # SECTION 3: RECOMMENDED (BLUE) ��� Waiver in progress
 # ============================================================
 
-# pyarrow>=16.0                  # Apache 2.0, Apache Foundation/USA — LanceDB dependency
+pyarrow>=16.0,<20.0              # Apache 2.0, Apache Foundation/USA — required by lancedb (transitive)
 
 # ============================================================
 # SECTION 4: NEW WAIVER REQUIRED — Awaiting approval
 # Development proceeds using fallbacks until approved.
 # ============================================================
 
-lancedb==0.30.2                  # Apache 2.0, LanceDB Inc./USA (SF) — vector + BM25 + metadata store
+lancedb>=0.30.1                  # Apache 2.0, LanceDB Inc./USA (SF) — vector + BM25 + metadata store
+                                 # NOTE: 0.30.0 has hybrid search + filter bugs; use >=0.30.1
                                  # Fallback: faiss-cpu + sqlite3 FTS5
                                  # Status: BLUE on waiver sheet, waiver requested 2026-04-04
 
-flashrank                        # Apache 2.0, open source — 4MB CPU reranker, sub-20ms
+flashrank==0.2.9                 # Apache 2.0, open source — 4MB CPU reranker, sub-20ms
                                  # Fallback: LanceDB built-in reranking API
                                  # Status: NEW waiver requested 2026-04-04
 

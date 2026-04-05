@@ -33,7 +33,7 @@ llm:
 
 extraction:
   min_confidence: 0.7
-  model: "gpt-4o-mini"          # Mini for bulk extraction ($145 vs $2K for full corpus)
+  model: "phi4:14b-q4_K_M"      # Free local extraction via Ollama. Alt: "gpt-4o-mini" ($145 API)
   part_patterns:
     - 'ARC-\d{4}'
     - 'IGSI-\d+'

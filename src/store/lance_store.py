@@ -61,46 +61,93 @@ class LanceStore:
         except Exception:
             self._table = None
 
-    def ingest_chunks(self, chunks: list[dict], vectors: np.ndarray) -> int:
+    INGEST_BATCH_SIZE = 1000
+
+    def ingest_chunks(
+        self,
+        chunks: list[dict],
+        vectors: np.ndarray,
+        batch_size: int | None = None,
+    ) -> int:
         """
         Bulk insert chunks with vectors into the store.
+
+        Inserts in batches (default 1000) to limit peak memory and allow
+        progress reporting on large imports.  Vectors can be a memory-mapped
+        array — each batch slice is materialised independently.
 
         Returns number of chunks inserted.
         """
         if len(chunks) == 0:
             return 0
 
-        # Build records for LanceDB
-        vecs_f32 = vectors.astype(np.float32)
-        records = []
-        for i, chunk in enumerate(chunks):
-            records.append({
-                "chunk_id": chunk["chunk_id"],
-                "text": chunk["text"],
-                "enriched_text": chunk.get("enriched_text") or "",
-                "vector": vecs_f32[i].tolist(),
-                "source_path": chunk["source_path"],
-                "chunk_index": chunk.get("chunk_index", 0),
-                "parse_quality": chunk.get("parse_quality", 1.0),
-            })
+        batch_sz = batch_size or self.INGEST_BATCH_SIZE
+        total = len(chunks)
 
-        if self._table is None:
-            self._table = self.db.create_table(self.TABLE_NAME, data=records)
-        else:
-            # Check for existing chunk_ids to avoid duplicates
-            existing_ids = set()
+        # Load existing chunk IDs once for dedup (scan, not search)
+        existing_ids: set[str] = set()
+        if self._table is not None:
             try:
-                existing = self._table.search().select(["chunk_id"]).limit(self._table.count_rows()).to_list()
-                existing_ids = {r["chunk_id"] for r in existing}
+                scanner = self._table.to_lance().scanner(
+                    columns=["chunk_id"],
+                    batch_size=8192,
+                )
+                for batch in scanner.to_batches():
+                    existing_ids.update(batch.column("chunk_id").to_pylist())
             except Exception:
-                pass
+                # Fallback: slower but functional
+                try:
+                    existing = (
+                        self._table.search()
+                        .select(["chunk_id"])
+                        .limit(self._table.count_rows())
+                        .to_list()
+                    )
+                    existing_ids = {r["chunk_id"] for r in existing}
+                except Exception:
+                    pass
 
-            new_records = [r for r in records if r["chunk_id"] not in existing_ids]
-            if new_records:
-                self._table.add(new_records)
-            return len(new_records)
+        inserted_total = 0
 
-        return len(records)
+        for start in range(0, total, batch_sz):
+            end = min(start + batch_sz, total)
+            batch_chunks = chunks[start:end]
+
+            # Materialise this slice of vectors as float32
+            batch_vecs = vectors[start:end].astype(np.float32)
+
+            records = []
+            for i, chunk in enumerate(batch_chunks):
+                cid = chunk["chunk_id"]
+                if cid in existing_ids:
+                    continue
+                records.append({
+                    "chunk_id": cid,
+                    "text": chunk["text"],
+                    "enriched_text": chunk.get("enriched_text") or "",
+                    "vector": batch_vecs[i].tolist(),
+                    "source_path": chunk["source_path"],
+                    "chunk_index": chunk.get("chunk_index", 0),
+                    "parse_quality": chunk.get("parse_quality", 1.0),
+                })
+
+            if not records:
+                continue
+
+            if self._table is None:
+                self._table = self.db.create_table(self.TABLE_NAME, data=records)
+            else:
+                self._table.add(records)
+
+            inserted_total += len(records)
+
+            if total > batch_sz:
+                logger.info(
+                    "  Ingested %s / %s chunks (%d new this batch)",
+                    f"{end:,}", f"{total:,}", len(records),
+                )
+
+        return inserted_total
 
     def hybrid_search(
         self,

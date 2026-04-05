@@ -80,8 +80,8 @@ class ExtractionConfig(BaseModel):
         description="Minimum confidence to accept an extracted entity.",
     )
     model: str = Field(
-        default="gpt-4o-mini",
-        description="Model for bulk entity extraction. Use mini for cost efficiency.",
+        default="phi4:14b-q4_K_M",
+        description="Model for bulk entity extraction. Default: phi4 local ($0). Alt: gpt-4o-mini (API, fast).",
     )
     part_patterns: list[str] = Field(
         default=[

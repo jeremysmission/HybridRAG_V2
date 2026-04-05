@@ -76,7 +76,10 @@ set "PYTHONIOENCODING=utf-8"
 set "NO_PROXY=localhost,127.0.0.1"
 set "no_proxy=localhost,127.0.0.1"
 
-REM Single GPU — emulate Blackwell workstation target
+REM GPU isolation on Beast (dual 3090): set CUDA_VISIBLE_DEVICES before launch.
+REM   CorpusForge = GPU 0 (batch indexing), V2 = GPU 1 (queries).
+REM   Example: set CUDA_VISIBLE_DEVICES=1 && start_gui.bat
+REM On single-GPU work machines: leave unset, defaults to GPU 0.
 if not defined CUDA_VISIBLE_DEVICES set "CUDA_VISIBLE_DEVICES=0"
 
 REM Activate venv
