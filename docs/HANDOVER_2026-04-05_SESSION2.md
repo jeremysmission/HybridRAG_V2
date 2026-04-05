@@ -139,10 +139,74 @@
 
 - Demo target: May 2, 2026 for civilian defense contractors
 - User is visiting family for a few hours
-- User approved: skip Sprint 5 QA, proceed to Sprint 6, QA both together on return
-- User likes parallel agent work, maximum productivity
-- User wants research before action, structured sprints, no dark work
 - AWS agent is working in parallel on GovCloud OSS integration (separate session)
+
+---
+
+## INSTRUCTIONS FOR NEXT AGENT
+
+**User has authorized autonomous work on the next 2 sprints (Sprint 6 + Sprint 7) back-to-back without waiting for QA between them. QA both sprints together when user returns.**
+
+### Autonomous Execution Plan
+
+**Step 1: Read these docs first (mandatory)**
+1. `docs/SPRINT_PLAN_REVISED_2026-04-05.md` — master sprint plan, Sprint 5 status
+2. `docs/SPRINT_6_GAMEPLAN_2026-04-05.md` — Sprint 6 slices, research findings, exit criteria
+3. `docs/PIPELINE_STAGES_AND_THROUGHPUT_2026-04-05.md` — how the 3 stages work, speeds, commands
+4. `docs/HOW_IT_WORKS_TECHNICAL_2026-04-05.md` — full architecture block diagram
+5. `docs/QA_EXPECTATIONS_2026-04-05.md` — QA standards including agentic eval practices
+6. Memory at `C:\Users\jerem\.claude\projects\C--Users-jerem\memory\MEMORY.md`
+
+**Step 2: Check overnight extraction status**
+```
+cd C:\HybridRAG_V2
+.venv\Scripts\python.exe scripts\overnight_extraction.py --status
+```
+GPU 0 should have generated entities overnight. Record the counts.
+
+**Step 3: Execute Sprint 6 (Scale + Prove)**
+Follow slices 6.1-6.12 from SPRINT_6_GAMEPLAN. Key deliverables:
+- Run CorpusForge on 100+ source files (golden + subset from data/source)
+- Import CorpusForge export into V2 LanceDB
+- Build IVF_PQ vector index
+- Run golden eval (25 queries minimum)
+- Build MinHash dedup pipeline
+- Run throughput benchmark
+- Package wheels for work deployment
+- Use parallel subagents wherever possible
+
+**Step 4: Execute Sprint 7 (Demo Hardening)**
+Follow slices 7.1-7.9 from SPRINT_PLAN_REVISED. Key deliverables:
+- V1 vs V2 comparison on shared queries
+- Persona-specific queries (PM, logistics, engineer)
+- Demo rehearsal (10-query flow, timed)
+- Performance polish (P50 < 3s target)
+- Skip-file acknowledgment prepared
+
+**Step 5: Prepare QA bundle for user return**
+When both sprints are coded, prepare:
+- Combined Sprint 5+6+7 QA checklist
+- Per-sprint results summary
+- Issues found and fixed
+- Any blockers requiring user input
+- Sprint 8+9 game plan (next-sprint prep during QA, per codified rule)
+
+### Constraints
+- DO NOT modify config.yaml defaults without documenting why
+- DO NOT push without sanitizing (no AI attribution in repos)
+- DO NOT spend money (no API calls without API key being set)
+- DO NOT modify the overnight extraction script while it's running on GPU 0
+- GPU 1 is available for CorpusForge work
+- Ollama is running with phi4:14b-q4_K_M available
+- Both venvs are set up and verified
+- No OPENAI_API_KEY is set — skip any slices requiring commercial API
+- Web search before implementing anything new
+
+### Codified Process (from QA_EXPECTATIONS)
+- While coding: use parallel subagents, maximize throughput
+- When sprint coding done: write QA checklist
+- While QA would run: do next-sprint prep (web search, game plan)
+- Every sprint needs exit criteria met before moving on (waiver for QA timing only, not quality)
 
 ---
 
