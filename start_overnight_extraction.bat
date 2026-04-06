@@ -4,7 +4,7 @@ setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
 
 REM ================================================================
-REM  Overnight Extraction — Dual GPU Beast Runner
+REM  Overnight Extraction — Dual GPU Workstation Runner
 REM ================================================================
 REM  Runs phi4:14b extraction on Clone1 chunks using both 3090s.
 REM  GPU 0 handles first half, GPU 1 handles second half.
@@ -28,7 +28,7 @@ set "LIMIT=2000"
 set "RESUME="
 
 if not exist "%VENV_PYTHON%" (
-    echo [FAIL] .venv not found. Run tools\setup_beast_2026-04-05.bat first.
+    echo [FAIL] .venv not found. Run tools\setup_workstation_2026-04-06.bat first.
     pause
     exit /b 1
 )

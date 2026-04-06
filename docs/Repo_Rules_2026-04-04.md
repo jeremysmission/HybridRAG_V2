@@ -51,6 +51,7 @@ Code files use standard Python naming (`snake_case.py`).
 ## 4. Sanitization Before Remote Push
 
 **MANDATORY:** Run the sanitization script before every push to any remote repository.
+This includes anything that will be used on workstations or by workstation operators.
 
 ```bash
 # Dry-run first (report only, no changes):
@@ -87,6 +88,8 @@ When writing any `.md`, `.py`, `.yaml`, or other text file:
 6. **Sign documents as** `Jeremy Randall (CoPilot+)` or just `Jeremy Randall`.
 
 The sanitization script is the safety net. These rules are the first line of enterprise.
+Do not treat the script as the sole sanitizer.
+Workstation-bound content must be authored in sanitized form first, then checked by the script as the final catchall.
 
 ### Adding the Sanitization Script to New Repos
 

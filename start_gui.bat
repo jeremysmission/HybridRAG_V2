@@ -76,7 +76,7 @@ set "PYTHONIOENCODING=utf-8"
 set "NO_PROXY=localhost,127.0.0.1"
 set "no_proxy=localhost,127.0.0.1"
 
-REM GPU isolation on Beast (dual 3090): set CUDA_VISIBLE_DEVICES before launch.
+REM GPU isolation on multi-GPU development hosts: set CUDA_VISIBLE_DEVICES before launch.
 REM   CorpusForge = GPU 0 (batch indexing), V2 = GPU 1 (queries).
 REM   Example: set CUDA_VISIBLE_DEVICES=1 && start_gui.bat
 REM On single-GPU work machines: leave unset, defaults to GPU 0.

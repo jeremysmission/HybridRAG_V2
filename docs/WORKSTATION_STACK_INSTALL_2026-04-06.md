@@ -40,6 +40,24 @@ CorpusForge also now checks for:
 
 and warns if they are missing.
 
+## Sanitization Policy
+
+This rule applies to everything that is going to a workstation or any remote repository used by workstation operators.
+
+The sanitization script is not the primary sanitizer.
+It is the final catchall before push.
+
+Required intent:
+
+- write workstation-facing docs and scripts in already-sanitized form
+- avoid banned provenance or internal-process wording in the first draft
+- treat the script as the last-minute backstop, not the only line of enterprise
+
+Operational rule:
+
+- sanitize by authoring choices first
+- run the script immediately before push second
+
 ## Recommended Repo Paths
 
 ### Workstation Laptop
@@ -199,6 +217,11 @@ Official sources:
 Dedicated repair helper:
 
 - `INSTALL_CUDA_TORCH_WORKSTATION.bat`
+
+If `CorpusForge` still cannot reach `download.pytorch.org`, reuse the working torch build from an existing HybridRAG workstation venv:
+
+- `CorpusForge\COPY_TORCH_FROM_EXISTING_HYBRIDRAG.bat`
+- [TORCH_REUSE_FROM_EXISTING_HYBRIDRAG_2026-04-06.md](/C:/CorpusForge/docs/TORCH_REUSE_FROM_EXISTING_HYBRIDRAG_2026-04-06.md)
 
 That script matches the proven HybridRAG3 Blackwell lane:
 

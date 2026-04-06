@@ -1,14 +1,14 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    HybridRAG V2 -- Non-interactive Beast workstation setup.
+    HybridRAG V2 -- Non-interactive workstation setup.
 .DESCRIPTION
     Installs venv, CUDA torch, requirements, and verifies the environment.
-    Designed for Beast (dual 3090, Python 3.12, CUDA 12.8).
+    Designed for workstation installs (Python 3.12, CUDA 12.8 lane when NVIDIA is present).
     NO interactive prompts. Auto-retry on failure. Colored diagnostics.
 .NOTES
-    Author: Jeremy Randall (CoPilot+)
-    Date:   2026-04-05
+    Author: Jeremy Randall
+    Date:   2026-04-06
 #>
 
 # ============================================================
@@ -43,6 +43,13 @@ function Write-Fail  { param([string]$msg) $global:FailCount++; Write-Host "  [F
 function Write-Warn  { param([string]$msg) $global:WarnCount++; Write-Host "  [WARN] $msg" -ForegroundColor Yellow }
 function Write-Info  { param([string]$msg) Write-Host "  [INFO] $msg" -ForegroundColor Gray }
 function Format-Elapsed { $ts = $Stopwatch.Elapsed; return ("{0:D2}m {1:D2}s" -f [int]$ts.TotalMinutes, $ts.Seconds) }
+function Remove-TempFileQuietly {
+    param([string]$Path)
+    try {
+        Remove-Item -LiteralPath $Path -Force -ErrorAction Stop
+    } catch {
+    }
+}
 
 function Write-Utf8NoBomFile {
     param([string]$Path, [string]$Text)
@@ -110,7 +117,7 @@ function Write-TorchInstallGuidance {
     )
 
     Write-Host ""
-    Write-Host "  Torch install guidance for $RepoName:" -ForegroundColor Yellow
+    Write-Host "  Torch install guidance for ${RepoName}:" -ForegroundColor Yellow
     if ($RuntimeInfo) {
         Write-Host "    Python version: $($RuntimeInfo.python_version)" -ForegroundColor Gray
         Write-Host "    Python tag:     $($RuntimeInfo.python_tag)" -ForegroundColor Gray
@@ -315,7 +322,7 @@ if ($LASTEXITCODE -eq 0) {
     Write-Fail "torch CUDA not available: $cudaCheck"
     exit 1
 }
-Remove-Item $verifyPy -Force -ErrorAction SilentlyContinue
+Remove-TempFileQuietly -Path $verifyPy
 
 # ============================================================
 # 9. Verify key imports (V2-specific)
@@ -358,7 +365,7 @@ if ($LASTEXITCODE -eq 0) {
         elseif ($trimmed -match "FAIL:") { Write-Fail $trimmed }
     }
 }
-Remove-Item $importPy -Force -ErrorAction SilentlyContinue
+Remove-TempFileQuietly -Path $importPy
 
 # ============================================================
 # 10. Check Ollama
@@ -416,7 +423,7 @@ if ($LASTEXITCODE -eq 0) {
 } else {
     Write-Fail "Config load failed: $configCheck"
 }
-Remove-Item $cfgPy -Force -ErrorAction SilentlyContinue
+Remove-TempFileQuietly -Path $cfgPy
 
 # ============================================================
 # 14. Verify LanceDB store initializes
@@ -435,7 +442,7 @@ if ($LASTEXITCODE -eq 0) {
 } else {
     Write-Fail "LanceDB init failed: $lanceCheck"
 }
-Remove-Item $lancePy -Force -ErrorAction SilentlyContinue
+Remove-TempFileQuietly -Path $lancePy
 
 # ============================================================
 # 15. Check API key
@@ -474,7 +481,7 @@ if ($LASTEXITCODE -eq 0) {
 } else {
     Write-Fail "Embedding smoke test failed: $smokeResult"
 }
-Remove-Item $smokePy -Force -ErrorAction SilentlyContinue
+Remove-TempFileQuietly -Path $smokePy
 
 # ============================================================
 # 17. Run validate_setup.py
@@ -482,13 +489,43 @@ Remove-Item $smokePy -Force -ErrorAction SilentlyContinue
 Write-Step "Running validate_setup.py"
 $validateScript = Join-Path $ProjectRoot "scripts\validate_setup.py"
 if (Test-Path $validateScript) {
-    $validateResult = & $VenvPython $validateScript 2>&1
-    if ($LASTEXITCODE -eq 0) {
+    $optionalValidateFails = @("Tesseract OCR", "Poppler (pdftoppm)", "API key")
+    $validateResult = & $VenvPython -W ignore::DeprecationWarning $validateScript --json 2>&1
+    $validateText = ($validateResult | Out-String).Trim()
+    $jsonStart = $validateText.IndexOf("{")
+    $jsonEnd = $validateText.LastIndexOf("}")
+
+    if ($jsonStart -ge 0 -and $jsonEnd -ge $jsonStart) {
+        try {
+            $jsonText = $validateText.Substring($jsonStart, $jsonEnd - $jsonStart + 1)
+            $validateJson = $jsonText | ConvertFrom-Json -Depth 6
+            $blockingFails = @($validateJson.checks | Where-Object {
+                $_.level -eq "FAIL" -and $_.label -notin $optionalValidateFails
+            })
+            $nonBlockingFails = @($validateJson.checks | Where-Object {
+                $_.level -eq "FAIL" -and $_.label -in $optionalValidateFails
+            })
+
+            if ($blockingFails.Count -eq 0) {
+                if ($nonBlockingFails.Count -gt 0) {
+                    Write-Warn ("validate_setup.py found non-blocking external prerequisites: {0}" -f (($nonBlockingFails | ForEach-Object { $_.label }) -join ", "))
+                } else {
+                    Write-Ok "validate_setup.py passed"
+                }
+            } else {
+                Write-Fail ("validate_setup.py found blocking issues: {0}" -f (($blockingFails | ForEach-Object { $_.label }) -join ", "))
+            }
+            Write-Info $validateText
+        } catch {
+            Write-Fail "validate_setup.py JSON parse failed"
+            Write-Info $validateText
+        }
+    } elseif ($LASTEXITCODE -eq 0) {
         Write-Ok "validate_setup.py passed"
-        Write-Info ($validateResult | Out-String).Trim()
+        Write-Info $validateText
     } else {
         Write-Fail "validate_setup.py failed"
-        Write-Info ($validateResult | Out-String).Trim()
+        Write-Info $validateText
     }
 } else {
     Write-Warn "validate_setup.py not found at $validateScript -- skipping"
@@ -500,7 +537,7 @@ if (Test-Path $validateScript) {
 $Stopwatch.Stop()
 Write-Host ""
 Write-Host ("=" * 60) -ForegroundColor Cyan
-Write-Host "  HybridRAG V2 Beast Setup Complete -- $(Format-Elapsed)" -ForegroundColor Cyan
+Write-Host "  HybridRAG V2 Workstation Setup Complete -- $(Format-Elapsed)" -ForegroundColor Cyan
 Write-Host ("=" * 60) -ForegroundColor Cyan
 Write-Host "  PASS: $global:PassCount" -ForegroundColor Green
 if ($global:WarnCount -gt 0) { Write-Host "  WARN: $global:WarnCount" -ForegroundColor Yellow }
