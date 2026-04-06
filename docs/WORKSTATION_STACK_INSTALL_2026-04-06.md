@@ -47,8 +47,8 @@ and warns if they are missing.
 Use the same parent you already used for HybridRAG3:
 
 ```text
-C:\Users\randaje\Desktop1\CorpusForge
-C:\Users\randaje\Desktop1\HybridRAG_V2
+{USER_HOME}\Desktop1\CorpusForge
+{USER_HOME}\Desktop1\HybridRAG_V2
 ```
 
 That keeps your operator muscle memory intact.
