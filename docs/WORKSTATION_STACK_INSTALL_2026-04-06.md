@@ -180,6 +180,22 @@ These are still real:
 - local Ollama model pulls can still be blocked by work-network policy
 - if a machine has no NVIDIA GPU, install still works, but it will fall back to CPU torch and be slower
 
+## Torch Failure Note
+
+If the installer fails at `torch==2.7.1` with:
+
+- proxy / certificate errors
+- or `Could not find a version that satisfies the requirement torch==2.7.1 (from versions: none)`
+
+do not assume the version is missing.
+
+Official PyTorch lists `torch==2.7.1` for `cu128`, and the official wheel index includes Windows wheels for `cp310` through `cp313`. On a Python 3.12 64-bit repo venv, that failure usually means the work network blocked `download.pytorch.org`.
+
+Official sources:
+
+- https://pytorch.org/get-started/previous-versions/
+- https://download.pytorch.org/whl/cu128/torch/
+
 ## Recommended First Machine
 
 Follow the HybridRAG3 lesson here too:
