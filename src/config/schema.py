@@ -14,6 +14,8 @@ from typing import Optional
 import yaml
 from pydantic import BaseModel, Field, field_validator, model_validator
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
 
 # ---------------------------------------------------------------------------
 # Sub-models
@@ -157,6 +159,8 @@ def load_config(config_path: str | Path = "config/config.yaml") -> V2Config:
     Falls back to Pydantic defaults for any missing fields.
     """
     path = Path(config_path)
+    if not path.is_absolute():
+        path = PROJECT_ROOT / path
     if path.exists():
         with open(path, encoding="utf-8-sig") as f:
             raw = yaml.safe_load(f) or {}
@@ -164,4 +168,13 @@ def load_config(config_path: str | Path = "config/config.yaml") -> V2Config:
         print(f"[WARN] Config file not found at {path}, using defaults.", file=sys.stderr)
         raw = {}
 
-    return V2Config(**raw)
+    cfg = V2Config(**raw)
+
+    for field_name in ("lance_db", "entity_db", "embedengine_output", "site_vocabulary"):
+        value = getattr(cfg.paths, field_name)
+        resolved = Path(value)
+        if not resolved.is_absolute():
+            resolved = PROJECT_ROOT / resolved
+        setattr(cfg.paths, field_name, str(resolved))
+
+    return cfg

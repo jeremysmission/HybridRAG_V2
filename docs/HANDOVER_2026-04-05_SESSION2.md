@@ -104,7 +104,7 @@
 
 ## Key Rules (from memory, non-negotiable)
 
-- Never mention claude/anthropic/agent/AI in repos — use "CoPilot+" only
+- Never mention CoPilot+/approved vendor/agent/AI in repos — use "CoPilot+" only
 - Never modify global shell config (registry, PATH, profiles)
 - Never commit config.yaml changes without approval
 - Sanitize before push: local commit -> sanitize -> push
@@ -137,7 +137,7 @@
 
 ## User Context
 
-- Demo target: May 2, 2026 for civilian defense contractors
+- Demo target: May 2, 2026 for civilian enterprises
 - User is visiting family for a few hours
 - AWS agent is working in parallel on GovCloud OSS integration (separate session)
 
@@ -155,7 +155,7 @@
 3. `docs/PIPELINE_STAGES_AND_THROUGHPUT_2026-04-05.md` — how the 3 stages work, speeds, commands
 4. `docs/HOW_IT_WORKS_TECHNICAL_2026-04-05.md` — full architecture block diagram
 5. `docs/QA_EXPECTATIONS_2026-04-05.md` — QA standards including agentic eval practices
-6. Memory at `C:\Users\jerem\.claude\projects\C--Users-jerem\memory\MEMORY.md`
+6. Memory at `{USER_HOME}\.CoPilot+\projects\C--Users-{USERNAME}\memory\MEMORY.md`
 
 **Step 2: Check overnight extraction status**
 ```

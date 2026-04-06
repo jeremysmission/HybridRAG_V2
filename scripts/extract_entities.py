@@ -33,6 +33,12 @@ def main():
     parser.add_argument("--batch-size", type=int, default=10, help="Chunks per batch")
     parser.add_argument("--limit", type=int, default=0, help="Max chunks to process (0=all)")
     parser.add_argument("--dry-run", action="store_true", help="Extract but don't insert")
+    parser.add_argument(
+        "--source-pattern",
+        action="append",
+        default=[],
+        help="Only process chunks whose source_path contains this substring. Repeatable.",
+    )
     args = parser.parse_args()
 
     config = load_config(args.config)
@@ -95,6 +101,21 @@ def main():
         ).limit(limit).to_list()
     except Exception as e:
         print(f"ERROR reading chunks: {e}")
+        sys.exit(1)
+
+    if args.source_pattern:
+        patterns = [p.lower() for p in args.source_pattern if p]
+        all_chunks = [
+            chunk for chunk in all_chunks
+            if any(pattern in chunk["source_path"].lower() for pattern in patterns)
+        ]
+        print(
+            f"Filtered to {len(all_chunks)} chunks using source patterns: "
+            f"{', '.join(args.source_pattern)}"
+        )
+
+    if not all_chunks:
+        print("No chunks matched the requested filters.")
         sys.exit(1)
 
     total_entities = 0

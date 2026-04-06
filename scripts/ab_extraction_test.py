@@ -36,7 +36,7 @@ from src.extraction.entity_extractor import EntityExtractor, ENTITY_SCHEMA, EXTR
 # Config
 # ---------------------------------------------------------------------------
 
-DEFAULT_CLONE1_DB = r"C:\Users\jerem\HybridRAG3_Clone1\data\index\hybridrag.sqlite3"
+DEFAULT_CLONE1_DB = r"{USER_HOME}\HybridRAG3_Clone1\data\index\hybridrag.sqlite3"
 SAMPLE_SIZE = 50
 CATEGORIES = {
     "short": "text_length < 300",

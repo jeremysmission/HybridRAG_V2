@@ -47,9 +47,15 @@ def collect_stores(cfg) -> dict:
         from src.store.lance_store import LanceStore
         ls = LanceStore(str(lance_path))
         info["lance_chunks"] = ls.count()
+        info["vector_index_present"] = ls.has_vector_index()
+        info["vector_index_stats"] = ls.vector_index_stats()
+        info["vector_index_ready"] = ls.vector_index_ready()
         ls.close()
     except Exception as exc:
         info["lance_chunks"] = f"error: {exc}"
+        info["vector_index_present"] = False
+        info["vector_index_stats"] = {}
+        info["vector_index_ready"] = None
     info["lance_path"] = str(lance_path)
 
     # Entity store
@@ -176,6 +182,7 @@ def format_text(data: dict) -> str:
         "",
         "Stores:",
         f"  LanceDB:        {s['lance_chunks']} chunks ({s['lance_path']})",
+        f"  Vector index:   {_format_vector_index_status(s)}",
         f"  Entities:       {s['entity_count']} entities, {s['table_row_count']} table rows ({s['entity_path']})",
         f"  Relationships:  {s['relationship_count']} relationships",
         f"  Entity types:   {types_str}",
@@ -213,6 +220,24 @@ def format_text(data: dict) -> str:
         f"  Free space:     {d['free_space']}",
     ]
     return "\n".join(lines)
+
+
+def _format_vector_index_status(store_info: dict) -> str:
+    """Render vector index presence and freshness on one line."""
+    if not store_info.get("vector_index_present"):
+        return "absent"
+    stats = store_info.get("vector_index_stats") or {}
+    ready = store_info.get("vector_index_ready")
+    indexed = stats.get("num_indexed_rows")
+    unindexed = stats.get("num_unindexed_rows")
+    parts = ["ready" if ready else ("stale" if ready is False else "unknown")]
+    if indexed is not None:
+        parts.append(f"{indexed} indexed")
+    if unindexed is not None:
+        parts.append(f"{unindexed} unindexed")
+    if stats.get("index_type"):
+        parts.append(str(stats["index_type"]))
+    return ", ".join(parts)
 
 
 def gather_all(cfg) -> dict:

@@ -372,7 +372,7 @@ def print_report(results: list[QueryResult], show_timing: bool = False) -> int:
 # Pipeline loader
 # ---------------------------------------------------------------------------
 
-def load_pipeline():
+def load_pipeline(config_path: str = "config/config.yaml"):
     """
     Load the HybridRAG V2 query pipeline.
 
@@ -388,7 +388,7 @@ def load_pipeline():
     from src.config.schema import load_config
     from scripts.boot import boot_system
 
-    config = load_config()
+    config = load_config(config_path)
     system = boot_system(config)
     return system.pipeline
 
@@ -411,6 +411,11 @@ def main() -> int:
         action="store_true",
         help="Show detailed per-stage timing breakdown.",
     )
+    parser.add_argument(
+        "--config",
+        default="config/config.yaml",
+        help="Path to config YAML file (default: config/config.yaml).",
+    )
     args = parser.parse_args()
 
     if args.dry_run:
@@ -420,7 +425,7 @@ def main() -> int:
     # Load pipeline
     print("Loading HybridRAG V2 pipeline...")
     try:
-        pipeline = load_pipeline()
+        pipeline = load_pipeline(args.config)
     except Exception as exc:
         print(f"ERROR: Could not load pipeline: {exc}", file=sys.stderr)
         print("Hint: Run 'python scripts/boot.py' first to verify system health.", file=sys.stderr)

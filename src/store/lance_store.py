@@ -13,13 +13,13 @@ Schema:
 from __future__ import annotations
 
 import logging
-import time
+import math
 from dataclasses import dataclass
+from datetime import timedelta
 from pathlib import Path
 
 import lancedb
 import numpy as np
-import pyarrow as pa
 
 logger = logging.getLogger(__name__)
 
@@ -45,18 +45,25 @@ class LanceStore:
     """
 
     TABLE_NAME = "chunks"
+    VECTOR_INDEX_NAME = "vector_idx"
 
     def __init__(self, db_path: str):
         self.db_path = Path(db_path)
         self.db_path.mkdir(parents=True, exist_ok=True)
         self.db = lancedb.connect(str(self.db_path))
         self._table = None
+        self._search_nprobes: int | None = None
+        self._search_refine_factor: int | None = None
         self._try_open_table()
 
     def _try_open_table(self) -> None:
         """Open existing table if it exists."""
         try:
-            if self.TABLE_NAME in self.db.table_names():
+            table_names = self.db.table_names()
+            if hasattr(self.db, "list_tables"):
+                listed = self.db.list_tables()
+                table_names = getattr(listed, "tables", table_names)
+            if self.TABLE_NAME in table_names:
                 self._table = self.db.open_table(self.TABLE_NAME)
         except Exception:
             self._table = None
@@ -154,6 +161,8 @@ class LanceStore:
         query_vector: np.ndarray,
         query_text: str = "",
         top_k: int = 10,
+        nprobes: int | None = None,
+        refine_factor: int | None = None,
     ) -> list[ChunkResult]:
         """
         Run hybrid search: vector kNN + BM25 full-text.
@@ -170,33 +179,40 @@ class LanceStore:
             # Try hybrid search (vector + FTS)
             if query_text.strip():
                 try:
-                    results = (
-                        self._table.search(vec, query_type="hybrid")
-                        .text(query_text)
-                        .limit(top_k)
-                        .to_list()
+                    builder = self._table.search(vec, query_type="hybrid")
+                    builder = self._apply_search_tuning(
+                        builder,
+                        nprobes=nprobes,
+                        refine_factor=refine_factor,
                     )
+                    results = builder.text(query_text).limit(top_k).to_list()
                 except Exception:
                     # FTS index may not exist yet — fall back to vector only
-                    results = (
-                        self._table.search(vec)
-                        .limit(top_k)
-                        .to_list()
+                    builder = self._table.search(vec)
+                    builder = self._apply_search_tuning(
+                        builder,
+                        nprobes=nprobes,
+                        refine_factor=refine_factor,
                     )
+                    results = builder.limit(top_k).to_list()
             else:
-                results = (
-                    self._table.search(vec)
-                    .limit(top_k)
-                    .to_list()
+                builder = self._table.search(vec)
+                builder = self._apply_search_tuning(
+                    builder,
+                    nprobes=nprobes,
+                    refine_factor=refine_factor,
                 )
-        except Exception as e:
+                results = builder.limit(top_k).to_list()
+        except Exception:
             # Fallback: vector-only search
             try:
-                results = (
-                    self._table.search(vec)
-                    .limit(top_k)
-                    .to_list()
+                builder = self._table.search(vec)
+                builder = self._apply_search_tuning(
+                    builder,
+                    nprobes=nprobes,
+                    refine_factor=refine_factor,
                 )
+                results = builder.limit(top_k).to_list()
             except Exception:
                 return []
 
@@ -222,32 +238,149 @@ class LanceStore:
         except Exception:
             return 0
 
-    def create_vector_index(self, num_partitions: int | None = None, num_sub_vectors: int | None = None) -> None:
-        """Create IVF_PQ vector index for faster search at scale."""
+    def configure_search(
+        self,
+        nprobes: int | None = None,
+        refine_factor: int | None = None,
+    ) -> None:
+        """Set default search tuning applied to future vector queries."""
+        self._search_nprobes = nprobes
+        self._search_refine_factor = refine_factor
+
+    def list_indices(self) -> list[dict]:
+        """Return any index metadata exposed by LanceDB."""
+        if self._table is None or not hasattr(self._table, "list_indices"):
+            return []
+        try:
+            raw = self._table.list_indices()
+            return [item if isinstance(item, dict) else {"value": str(item)} for item in raw]
+        except Exception:
+            return []
+
+    def has_vector_index(self) -> bool:
+        """Whether the table currently has a vector index."""
+        return any("vector" in str(item).lower() for item in self.list_indices())
+
+    def vector_index_stats(self) -> dict:
+        """Return best-effort stats for the primary vector index."""
+        if self._table is None or not hasattr(self._table, "index_stats"):
+            return {}
+        try:
+            stats = self._table.index_stats(self.VECTOR_INDEX_NAME)
+        except Exception:
+            return {}
+        if stats is None:
+            return {}
+        return {
+            "name": self.VECTOR_INDEX_NAME,
+            "num_indexed_rows": getattr(stats, "num_indexed_rows", None),
+            "num_unindexed_rows": getattr(stats, "num_unindexed_rows", None),
+            "index_type": getattr(stats, "index_type", None),
+            "distance_type": getattr(stats, "distance_type", None),
+            "num_indices": getattr(stats, "num_indices", None),
+            "loss": getattr(stats, "loss", None),
+        }
+
+    def vector_index_ready(self) -> bool | None:
+        """Whether the primary vector index has no unindexed tail."""
+        stats = self.vector_index_stats()
+        if not stats:
+            return None
+        unindexed = stats.get("num_unindexed_rows")
+        if unindexed is None:
+            return None
+        return int(unindexed) == 0
+
+    def create_vector_index(
+        self,
+        num_partitions: int | None = None,
+        num_sub_vectors: int | None = None,
+        *,
+        index_type: str = "IVF_PQ",
+        metric: str = "cosine",
+        nprobes: int | None = 20,
+        refine_factor: int | None = None,
+        optimize: bool = True,
+    ) -> dict:
+        """Create a tuned vector index and optionally compact old fragments."""
         if self._table is None:
-            return
+            return {"created": False, "reason": "table_missing"}
         rows = self.count()
         if rows < 10000:  # Not worth indexing below 10K
-            return
-        parts = num_partitions or max(1, rows // 4096)
-        sub_vecs = num_sub_vectors or max(1, 768 // 8)  # 768-dim / 8
+            self.configure_search(nprobes=nprobes, refine_factor=refine_factor)
+            return {
+                "created": False,
+                "reason": "too_small",
+                "rows": rows,
+                "nprobes": nprobes,
+                "refine_factor": refine_factor,
+            }
+
+        parts = num_partitions or max(1, int(math.sqrt(rows)))
+        vector_dim = self._vector_dim()
+        sub_vecs = num_sub_vectors or self._default_num_sub_vectors(vector_dim)
+        result = {
+            "created": False,
+            "rows": rows,
+            "index_type": index_type,
+            "metric": metric,
+            "num_partitions": parts,
+            "num_sub_vectors": sub_vecs,
+            "nprobes": nprobes,
+            "refine_factor": refine_factor,
+            "optimized": False,
+            "indices": [],
+        }
+
         try:
             self._table.create_index(
-                metric="cosine",
+                index_type=index_type,
+                metric=metric,
                 num_partitions=parts,
                 num_sub_vectors=sub_vecs,
+                name=self.VECTOR_INDEX_NAME,
                 replace=True,
             )
+            if hasattr(self._table, "wait_for_index"):
+                self._table.wait_for_index([self.VECTOR_INDEX_NAME], timeout=timedelta(minutes=10))
+            result["created"] = True
+            self.configure_search(nprobes=nprobes, refine_factor=refine_factor)
         except Exception as e:
             logger.warning("Vector index creation failed: %s", e)
+            result["error"] = str(e)
+            return result
 
-    def optimize(self) -> None:
-        """Compact data and clean old versions."""
+        if optimize:
+            result["optimized"] = self.optimize()
+
+        result["indices"] = self.list_indices()
+        result["index_stats"] = self.vector_index_stats()
+        result["index_ready"] = self.vector_index_ready()
+        return result
+
+    def optimize(self) -> bool:
+        """Compact data fragments and remove stale table versions when possible."""
         if self._table is not None:
             try:
-                self._table.optimize()
+                self._table.optimize(cleanup_older_than=timedelta(seconds=0))
+                return True
             except Exception:
                 pass
+            optimized = False
+            try:
+                if hasattr(self._table, "compact_files"):
+                    self._table.compact_files()
+                    optimized = True
+            except Exception:
+                pass
+            try:
+                if hasattr(self._table, "cleanup_old_versions"):
+                    self._table.cleanup_old_versions(timedelta(seconds=0))
+                    optimized = True
+            except Exception:
+                pass
+            return optimized
+        return False
 
     def create_fts_index(self) -> None:
         """Create full-text search index on text and enriched_text columns."""
@@ -261,3 +394,47 @@ class LanceStore:
     def close(self) -> None:
         """No-op for LanceDB (embedded, no connection to close)."""
         pass
+
+    def _vector_dim(self) -> int:
+        """Best-effort vector dimensionality for the current table."""
+        if self._table is None:
+            return 768
+        try:
+            vector_field = self._table.schema.field("vector")
+            list_size = getattr(vector_field.type, "list_size", None)
+            if list_size:
+                return int(list_size)
+        except Exception:
+            pass
+        try:
+            sample = self._table.search().select(["vector"]).limit(1).to_list()
+            if sample and sample[0].get("vector"):
+                return len(sample[0]["vector"])
+        except Exception:
+            pass
+        return 768
+
+    def _default_num_sub_vectors(self, vector_dim: int) -> int:
+        """Choose a PQ subdivision that cleanly divides the vector dimension."""
+        for candidate in (96, 64, 48, 32, 24, 16, 8, 4, 2, 1):
+            if vector_dim % candidate == 0:
+                return candidate
+        return max(1, min(96, vector_dim))
+
+    def _apply_search_tuning(
+        self,
+        builder,
+        *,
+        nprobes: int | None,
+        refine_factor: int | None,
+    ):
+        """Apply nprobes/refine settings if the query builder supports them."""
+        tuned_nprobes = nprobes if nprobes is not None else self._search_nprobes
+        tuned_refine = (
+            refine_factor if refine_factor is not None else self._search_refine_factor
+        )
+        if tuned_nprobes is not None and hasattr(builder, "nprobes"):
+            builder = builder.nprobes(tuned_nprobes)
+        if tuned_refine is not None and hasattr(builder, "refine_factor"):
+            builder = builder.refine_factor(tuned_refine)
+        return builder

@@ -9,6 +9,7 @@ Usage:
     python scripts/run_golden_eval.py --retrieval-only      # skip LLM
     python scripts/run_golden_eval.py --query GQ-005        # single query
     python scripts/run_golden_eval.py --compare results/sprint1_eval.json
+    python scripts/run_golden_eval.py --retrieval-only --gate sprint6
 """
 from __future__ import annotations
 import argparse, json, logging, sys, time
@@ -67,6 +68,46 @@ class EvalSummary:
     avg_latency_ms: float
     retrieval_only: bool
     scores: list[dict] = field(default_factory=list)
+
+
+def _resolve_gate_thresholds(
+    total_queries: int,
+    retrieval_only: bool,
+    gate: str,
+    min_retrieval_pass: int | None,
+    min_generation_pass: int | None,
+) -> tuple[str, int, int | None]:
+    """
+    Resolve pass/fail thresholds for the current run.
+
+    Defaults are intentionally pragmatic:
+      - Single-query runs require that one query to pass.
+      - Full 25-query retrieval-only runs default to the Sprint 6 floor (15/25).
+      - All other runs default to strict all-pass unless the caller overrides.
+    """
+    if total_queries <= 0:
+        return "all", 0, None
+
+    if min_retrieval_pass is not None or min_generation_pass is not None:
+        retrieval_floor = min_retrieval_pass if min_retrieval_pass is not None else total_queries
+        generation_floor = min_generation_pass
+        if generation_floor is not None and retrieval_only:
+            generation_floor = None
+        return "custom", min(total_queries, retrieval_floor), generation_floor
+
+    if gate == "auto":
+        if total_queries == 1:
+            gate = "all"
+        elif retrieval_only and total_queries == 25:
+            gate = "sprint6"
+        else:
+            gate = "all"
+
+    if gate == "sprint6":
+        return "sprint6", min(total_queries, 15), None
+    if gate == "sprint7":
+        return "sprint7", min(total_queries, 20), None
+    return "all", total_queries, (None if retrieval_only else total_queries)
 
 
 def _init_pipeline(config: V2Config, retrieval_only: bool):
@@ -305,6 +346,12 @@ def main() -> None:
     parser.add_argument("--config", default=str(V2_ROOT / "config" / "config.yaml"))
     parser.add_argument("--retrieval-only", action="store_true",
                         help="Skip LLM generation (routing + retrieval only, no API cost)")
+    parser.add_argument("--gate", choices=["auto", "all", "sprint6", "sprint7"], default="auto",
+                        help="Pass/fail gate. auto uses the Sprint 6 floor for full 25-query retrieval-only runs and strict all-pass otherwise.")
+    parser.add_argument("--min-retrieval-pass", type=int, default=None,
+                        help="Custom retrieval pass floor for exit status.")
+    parser.add_argument("--min-generation-pass", type=int, default=None,
+                        help="Custom generation pass floor for exit status (ignored in retrieval-only mode).")
     parser.add_argument("--query", type=str, default=None,
                         help="Run a single query by ID (e.g. GQ-001)")
     parser.add_argument("--compare", type=str, default=None,
@@ -356,6 +403,25 @@ def main() -> None:
 
     _print_summary(scores, retrieval_only)
 
+    gate_name, retrieval_floor, generation_floor = _resolve_gate_thresholds(
+        total_queries=len(scores),
+        retrieval_only=retrieval_only,
+        gate=args.gate,
+        min_retrieval_pass=args.min_retrieval_pass,
+        min_generation_pass=args.min_generation_pass,
+    )
+    retrieval_pass_count = sum(1 for s in scores if s.retrieval_pass)
+    generation_pass_count = sum(1 for s in scores if s.generation_pass is True)
+    gate_pass = retrieval_pass_count >= retrieval_floor
+    gate_bits = [f"retrieval>={retrieval_floor}/{len(scores)}"]
+    if generation_floor is not None:
+        gate_pass = gate_pass and generation_pass_count >= generation_floor
+        gate_bits.append(f"generation>={generation_floor}/{len(scores)}")
+    print(
+        f"  Exit gate: {gate_name} ({', '.join(gate_bits)}) -> "
+        f"{'PASS' if gate_pass else 'FAIL'}"
+    )
+
     run_id = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     score_dicts = [asdict(s) for s in scores]
     summary = EvalSummary(
@@ -391,7 +457,7 @@ def main() -> None:
         _print_comparison(summary, args.compare)
 
     store.close()
-    sys.exit(0 if all(s.retrieval_pass for s in scores) else 1)
+    sys.exit(0 if gate_pass else 1)
 
 
 if __name__ == "__main__":

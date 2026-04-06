@@ -259,7 +259,7 @@ C:\HybridRAG_V2\data\source\
 ```
 
 **Testing Resources:**
-- Clone1 index: C:\Users\jerem\HybridRAG3_Clone1\data\index\ (27.6M chunks, 187GB)
+- Clone1 index: {USER_HOME}\HybridRAG3_Clone1\data\index\ (27.6M chunks, 187GB)
 - 400-query golden set: `tests/golden_eval/golden_tuning_400.json`
 - V1 source commits: Clone1 `src/core/indexer.py`, `src/core/embedder.py`
 

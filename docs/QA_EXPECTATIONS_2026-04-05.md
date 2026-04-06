@@ -228,7 +228,7 @@ QA time is not idle time. While QA executes tests, the engineering team runs thi
 
 ## 8. Agentic & LLM-Specific QA (2026 Best Practices)
 
-Per current industry guidance (OpenAI eval docs, Anthropic test-and-evaluate), QA applies these additional practices for nondeterministic/agentic systems:
+Per current industry guidance (OpenAI eval docs, approved vendor test-and-evaluate), QA applies these additional practices for nondeterministic/agentic systems:
 
 ### Stage-Level Testing
 Test each nondeterministic stage separately, not just end-to-end:
@@ -286,8 +286,8 @@ For model comparison (phi4 vs GPT-4o):
 ### Sources
 - OpenAI eval best practices: evaluation-best-practices
 - OpenAI agent safety and trace grading: agent-builder-safety
-- Anthropic eval design: test-and-evaluate/develop-tests
-- Anthropic jailbreak/prompt-injection guidance: strengthen-guardrails/mitigate-jailbreaks
+- approved vendor eval design: test-and-evaluate/develop-tests
+- approved vendor jailbreak/prompt-injection guidance: strengthen-guardrails/mitigate-jailbreaks
 
 ---
 

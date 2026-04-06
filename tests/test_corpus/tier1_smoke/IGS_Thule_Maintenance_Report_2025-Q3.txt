@@ -1,0 +1,31 @@
+Site: Thule Air Base, Greenland
+Date: 2025-03-14
+Report ID: IGS-THULE-Q3-2025
+POC: SSgt Marcus Webb, Site Maintenance NCO
+Contact: (970) 555-0142
+
+1. Summary
+Quarterly maintenance was performed at Thule Air Base on the transmitter, UPS, and ionosonde support equipment.
+The transmitter output stage showed intermittent reflected-power alarms and heat discoloration at the RF connector.
+Technicians replaced part ARC-4471, an RF connector installed on the transmitter output stage.
+The transmitter output power after the repair was measured at 302W nominal.
+
+2. Parts Consumed During Visit
+During the Thule maintenance visit, the parts consumed were ARC-4471 and SEMS3D-0847.
+These consumables were tracked under purchase order PO-2025-0142.
+ARC-4471 was installed as the replacement RF connector.
+SEMS3D-0847 was used as the stainless mounting hardware kit during the connector replacement.
+
+3. Ionosonde Calibration Procedure
+The ionosonde calibration procedure at Thule uses a GPS-disciplined reference oscillator as the timing reference.
+Technicians connect the calibration signal generator, align timing to UTC via GPS, and verify ionogram quality after each adjustment.
+Calibration is not accepted until the ionogram quality returns to nominal trace clarity and frequency alignment.
+
+4. Power System Check
+The UPS battery capacity measured at Thule was 78% of rated capacity.
+The reading is still serviceable but should be watched during the next maintenance cycle.
+
+5. Scheduling And Contacts
+The point of contact for Thule Air Base is SSgt Marcus Webb.
+The next scheduled maintenance at Thule Air Base is 2025-06-15.
+Follow-up questions for the site should be directed to SSgt Marcus Webb at (970) 555-0142.

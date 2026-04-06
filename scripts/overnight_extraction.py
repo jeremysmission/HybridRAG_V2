@@ -46,7 +46,7 @@ from src.store.relationship_store import RelationshipStore
 # Config
 # ---------------------------------------------------------------------------
 
-CLONE1_DB = r"C:\Users\jerem\HybridRAG3_Clone1\data\index\hybridrag.sqlite3"
+CLONE1_DB = r"{USER_HOME}\HybridRAG3_Clone1\data\index\hybridrag.sqlite3"
 PROGRESS_FILE = "data/extraction_progress.json"
 DEFAULT_LIMIT = 2000
 BATCH_LOG_EVERY = 10  # log progress every N chunks

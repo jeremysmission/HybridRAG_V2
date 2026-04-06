@@ -166,6 +166,12 @@ def run_import(
     skip_manifest: dict | None,
     config_path: str,
     create_index: bool,
+    index_type: str,
+    num_partitions: int | None,
+    num_sub_vectors: int | None,
+    nprobes: int | None,
+    refine_factor: int | None,
+    optimize_index: bool,
 ) -> None:
     """Execute the full import into LanceDB."""
     config = load_config(config_path)
@@ -198,13 +204,23 @@ def run_import(
     t_fts = time.perf_counter() - t_fts_start
 
     # Optional vector index
+    index_result: dict | None = None
     t_idx = 0.0
     if create_index:
         t_idx_start = time.perf_counter()
-        store.create_vector_index()
+        index_result = store.create_vector_index(
+            num_partitions=num_partitions,
+            num_sub_vectors=num_sub_vectors,
+            index_type=index_type,
+            nprobes=nprobes,
+            refine_factor=refine_factor,
+            optimize=optimize_index,
+        )
         t_idx = time.perf_counter() - t_idx_start
 
     after_count = store.count()
+    vector_index_stats = store.vector_index_stats()
+    vector_index_ready = store.vector_index_ready()
     store.close()
 
     t_total = time.perf_counter() - t_start
@@ -227,6 +243,47 @@ def run_import(
     if inserted > 0 and t_ingest > 0:
         rate = inserted / t_ingest
         print(f"    Rate:         {rate:,.0f} chunks/sec")
+    if create_index and index_result:
+        print()
+        print("  Vector index:")
+        created = "yes" if index_result.get("created") else "no"
+        print(f"    Created:      {created}")
+        print(f"    Type:         {index_result.get('index_type', index_type)}")
+        if "rows" in index_result:
+            print(f"    Rows:         {index_result['rows']:,}")
+        if "num_partitions" in index_result:
+            print(f"    Partitions:   {index_result['num_partitions']}")
+        if "num_sub_vectors" in index_result:
+            print(f"    PQ subvectors:{index_result['num_sub_vectors']}")
+        if index_result.get("nprobes") is not None:
+            print(f"    nprobes:      {index_result['nprobes']}")
+        if index_result.get("refine_factor") is not None:
+            print(f"    refine:       {index_result['refine_factor']}")
+        print(f"    Optimized:    {'yes' if index_result.get('optimized') else 'no'}")
+        stats = index_result.get("index_stats") or {}
+        if stats.get("num_indexed_rows") is not None:
+            print(f"    Indexed rows: {stats['num_indexed_rows']:,}")
+        if stats.get("num_unindexed_rows") is not None:
+            print(f"    Unindexed:    {stats['num_unindexed_rows']:,}")
+        if index_result.get("index_ready") is not None:
+            print(f"    Ready:        {'yes' if index_result['index_ready'] else 'no'}")
+        if index_result.get("reason"):
+            print(f"    Reason:       {index_result['reason']}")
+        if index_result.get("error"):
+            print(f"    Error:        {index_result['error']}")
+    elif vector_index_stats:
+        print()
+        print("  Vector index status:")
+        if vector_index_stats.get("index_type"):
+            print(f"    Type:         {vector_index_stats['index_type']}")
+        if vector_index_stats.get("num_indexed_rows") is not None:
+            print(f"    Indexed rows: {vector_index_stats['num_indexed_rows']:,}")
+        if vector_index_stats.get("num_unindexed_rows") is not None:
+            print(f"    Unindexed:    {vector_index_stats['num_unindexed_rows']:,}")
+        if vector_index_ready is not None:
+            print(f"    Ready:        {'yes' if vector_index_ready else 'no'}")
+        if not vector_index_ready:
+            print("    Note:         Run optimize/create-index before trusting latency numbers.")
 
     print(DIVIDER)
     print("  Import complete.")
@@ -263,6 +320,40 @@ def main() -> None:
         action="store_true",
         help="Build LanceDB IVF_PQ vector index after import (recommended for >10K chunks).",
     )
+    parser.add_argument(
+        "--index-type",
+        default="IVF_PQ",
+        help="Vector index type to build when --create-index is set (default: IVF_PQ).",
+    )
+    parser.add_argument(
+        "--num-partitions",
+        type=int,
+        default=None,
+        help="Override IVF partition count (default: sqrt(N)).",
+    )
+    parser.add_argument(
+        "--num-sub-vectors",
+        type=int,
+        default=None,
+        help="Override PQ sub-vector count (default: best divisor of vector dim).",
+    )
+    parser.add_argument(
+        "--nprobes",
+        type=int,
+        default=20,
+        help="Default search nprobes to apply after index creation (default: 20).",
+    )
+    parser.add_argument(
+        "--refine-factor",
+        type=int,
+        default=None,
+        help="Optional LanceDB refine factor for indexed search.",
+    )
+    parser.add_argument(
+        "--no-optimize-index",
+        action="store_true",
+        help="Skip LanceDB compaction/cleanup after building the vector index.",
+    )
     args = parser.parse_args()
 
     export_dir = Path(args.source)
@@ -280,7 +371,9 @@ def main() -> None:
     else:
         run_import(
             export_dir, chunks, vectors, manifest, skip_manifest,
-            args.config, args.create_index,
+            args.config, args.create_index, args.index_type,
+            args.num_partitions, args.num_sub_vectors,
+            args.nprobes, args.refine_factor, not args.no_optimize_index,
         )
 
 
