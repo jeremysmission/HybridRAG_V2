@@ -275,7 +275,7 @@ COPY_TORCH_FROM_EXISTING_HYBRIDRAG.bat
 If needed, pass the source venv explicitly:
 
 ```powershell
-COPY_TORCH_FROM_EXISTING_HYBRIDRAG.bat "C:\\Users\\randaje\\Desktop1\\HybridRAG_V2\\.venv"
+COPY_TORCH_FROM_EXISTING_HYBRIDRAG.bat "{USER_HOME}\\Desktop1\\HybridRAG_V2\\.venv"
 ```
 
 ---
