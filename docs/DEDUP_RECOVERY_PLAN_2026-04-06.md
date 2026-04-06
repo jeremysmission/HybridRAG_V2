@@ -78,6 +78,54 @@ If that works, the next rebuild should be much smaller, faster, and cheaper.
 
 ---
 
+## Verified Evidence From The Existing HybridRAG3 Index
+
+This is not just a theory exercise. The existing production-grade HybridRAG3 index provides direct evidence.
+
+### Verified From Local Code And Local Docs
+
+In `HybridRAG3_Educational`, the stored `file_hash` is documented and implemented as:
+
+- `filesize:mtime_ns`
+
+That means it is a **change-detection key**, not a true content fingerprint.
+
+Verified locally from:
+
+- `C:\HybridRAG3_Educational\src\core\indexer.py`
+- `C:\HybridRAG3_Educational\docs\02_architecture\TECHNICAL_THEORY_OF_OPERATION_RevC.md`
+- `C:\HybridRAG3_Educational\docs\03_guides\DESKTOP_AUTHORITY_LAPTOP_DELTA_WORKFLOW_2026-03-30.md`
+
+### Verified From The Live SQLite Index
+
+Direct counts from `C:\HybridRAG3_Educational\data\index\hybridrag.sqlite3`:
+
+- total chunks: `27,607,262`
+- distinct source paths represented in chunks: `187,204`
+- `document_catalog` rows: `187,204`
+
+For `PDF`, `DOC`, and `DOCX` rows in `document_catalog`:
+
+- total `pdf/doc/docx` rows: `72,940`
+- normalized filename-family count: `39,531`
+- multi-file filename families: `25,565`
+- multi-extension filename families: `2,024`
+- rows inside those multi-extension families: `7,476`
+
+This does **not** prove all `7,476` files are duplicates.
+
+It does prove there is a large, real candidate set of cross-format families already visible in the indexed metadata, even without reopening the raw source tree.
+
+### What This Means
+
+The existing HybridRAG3 index validates the core concern:
+
+- the old system did not store a content-level dedup key
+- many `pdf/doc/docx` files already collapse into shared normalized filename families
+- the recovery-stage dedup effort is addressing a real structural gap, not a speculative one
+
+---
+
 ## The Solution
 
 Add a **recovery preprocessing stage** before chunking.
