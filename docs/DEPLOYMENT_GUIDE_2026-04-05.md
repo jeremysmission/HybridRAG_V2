@@ -1,5 +1,7 @@
 # HybridRAG V2 — Deployment Guide
 
+**Workstation note:** for the current work laptop / work desktop lane, use [WORKSTATION_STACK_INSTALL_2026-04-06.md](WORKSTATION_STACK_INSTALL_2026-04-06.md) and `INSTALL_WORKSTATION.bat`. This guide is the generic/manual path.
+
 **Author:** Jeremy Randall (CoPilot+)
 **Date:** 2026-04-05 MDT
 **Audience:** Anyone deploying V2 on a fresh machine for the first time

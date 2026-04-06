@@ -1,5 +1,7 @@
 # HybridRAG V2 — Setup Guide
 
+**Workstation note:** for the current work laptop / work desktop lane, use [WORKSTATION_STACK_INSTALL_2026-04-06.md](WORKSTATION_STACK_INSTALL_2026-04-06.md) and `INSTALL_WORKSTATION.bat`. This guide is the generic/manual path.
+
 **Author:** Jeremy Randall (CoPilot+)
 **Date:** 2026-04-05 MDT
 **Tested on:** Windows 11, Python 3.11.9, CUDA 12.8, dual 3090
