@@ -15,7 +15,7 @@ from __future__ import annotations
 import logging
 import time
 from collections import OrderedDict
-from dataclasses import dataclass
+from dataclasses import replace
 
 from src.config.schema import CRAGConfig
 from src.query.query_router import QueryRouter, QueryClassification
@@ -67,28 +67,18 @@ class QueryPipeline:
         cache_key = f"{query_text}:{top_k}"
         if cache_key in self._query_cache:
             cached = self._query_cache[cache_key]
-            cached.latency_ms = 0  # indicate cache hit
-            return cached
+            return replace(
+                cached,
+                latency_ms=0,
+                stage_timings_ms={"cache_hit": 0, "total": 0},
+            )
 
-        start = time.time()
-
-        # Step 1: Classify
-        classification = self.router.classify(query_text)
-        logger.info(
-            "Query restricted: type=%s, reasoning=%s",
-            classification.query_type, classification.reasoning,
-        )
-
-        # Step 2: Retrieve based on type
-        if classification.query_type == "COMPLEX":
-            context = self._handle_complex(classification, top_k)
-        elif classification.query_type in ("ENTITY", "AGGREGATE", "TABULAR"):
-            context = self._handle_structured(classification, top_k)
-        else:
-            context = self._handle_semantic(classification, top_k)
+        start = time.perf_counter()
+        classification, context, stage_timings = self.retrieve_context(query_text, top_k)
 
         if context is None:
-            elapsed = int((time.time() - start) * 1000)
+            elapsed = int((time.perf_counter() - start) * 1000)
+            stage_timings["total"] = elapsed
             return QueryResponse(
                 answer="[NOT_FOUND] No relevant documents found for this query.",
                 confidence="NOT_FOUND",
@@ -96,24 +86,33 @@ class QueryPipeline:
                 sources=[],
                 chunks_used=0,
                 latency_ms=elapsed,
+                stage_timings_ms=stage_timings,
             )
 
         # Step 3: Generate
+        step_start = time.perf_counter()
         response = self.generator.generate(context, query_text)
+        stage_timings["generation"] = int((time.perf_counter() - step_start) * 1000)
         response.query_path = classification.query_type
 
         # Step 4: CRAG verification (SEMANTIC and COMPLEX only)
+        crag_ms = 0
         if (
             self.crag_verifier
             and getattr(self.crag_verifier.config, "enabled", False)
             and self.crag_verifier.should_verify(classification.query_type)
         ):
             logger.info("CRAG: verifying %s query response", classification.query_type)
+            step_start = time.perf_counter()
             response = self.crag_verifier.verify_and_correct(
                 response, context, query_text, top_k=top_k,
             )
+            crag_ms = int((time.perf_counter() - step_start) * 1000)
+        stage_timings["crag"] = crag_ms
 
-        response.latency_ms = int((time.time() - start) * 1000)
+        response.latency_ms = int((time.perf_counter() - start) * 1000)
+        stage_timings["total"] = response.latency_ms
+        response.stage_timings_ms = stage_timings
 
         # Cache the result (evict oldest if at capacity)
         if len(self._query_cache) >= self._cache_max:
@@ -121,6 +120,31 @@ class QueryPipeline:
         self._query_cache[cache_key] = response
 
         return response
+
+    def retrieve_context(
+        self, query_text: str, top_k: int = 10
+    ) -> tuple[QueryClassification, GeneratorContext | None, dict[str, int]]:
+        """Classify the query and return the exact context used for generation."""
+        stage_timings: dict[str, int] = {}
+
+        step_start = time.perf_counter()
+        classification = self.router.classify(query_text)
+        stage_timings["router"] = int((time.perf_counter() - step_start) * 1000)
+        logger.info(
+            "Query restricted: type=%s, reasoning=%s",
+            classification.query_type, classification.reasoning,
+        )
+
+        step_start = time.perf_counter()
+        if classification.query_type == "COMPLEX":
+            context = self._handle_complex(classification, top_k)
+        elif classification.query_type in ("ENTITY", "AGGREGATE", "TABULAR"):
+            context = self._handle_structured(classification, top_k)
+        else:
+            context = self._handle_semantic(classification, top_k)
+        stage_timings["retrieval"] = int((time.perf_counter() - step_start) * 1000)
+
+        return classification, context, stage_timings
 
     def _handle_semantic(
         self, c: QueryClassification, top_k: int
@@ -199,6 +223,10 @@ class QueryPipeline:
         Each sub-query is restricted and routed independently.
         Results are merged into a single context with section headers.
         """
+        structured_complex = self._handle_complex_structured(c)
+        if structured_complex is not None:
+            return structured_complex
+
         if not c.sub_queries:
             # No decomposition — treat as semantic
             return self._handle_semantic(c, top_k)
@@ -232,6 +260,24 @@ class QueryPipeline:
             context_text="\n---\n".join(parts),
             sources=merged_sources,
             chunk_count=total_chunks,
+            query_text=c.original_query,
+        )
+
+    def _handle_complex_structured(
+        self, c: QueryClassification
+    ) -> GeneratorContext | None:
+        """Resolve high-signal multi-hop structured queries without LLM fan-out."""
+        if not self.entity_retriever:
+            return None
+
+        structured = self.entity_retriever.resolve_site_contacts_for_part(c.original_query)
+        if not structured:
+            return None
+
+        return GeneratorContext(
+            context_text=structured.context_text,
+            sources=structured.sources,
+            chunk_count=structured.result_count,
             query_text=c.original_query,
         )
 

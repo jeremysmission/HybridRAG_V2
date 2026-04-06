@@ -130,11 +130,13 @@ def _init_pipeline(config: V2Config, retrieval_only: bool):
     if not retrieval_only:
         from src.llm.client import LLMClient
         from src.query.generator import Generator
+        provider = config.llm.provider if config.llm.provider != "auto" else ""
         llm_client = LLMClient(
             api_base=config.llm.api_base, api_version=config.llm.api_version,
             model=config.llm.model, deployment=config.llm.deployment,
             max_tokens=config.llm.max_tokens, temperature=config.llm.temperature,
             timeout_seconds=config.llm.timeout_seconds,
+            provider_override=provider,
         )
         if not llm_client.available:
             print("WARN: LLM client unavailable -- falling back to retrieval-only")
@@ -192,29 +194,42 @@ def _run_single_query(qdef, router, retriever, ctx_builder, generator,
     start = time.time()
     error = ""
     try:
-        classification = router.classify(query_text)
-        routed_type = classification.query_type
-        routing_correct = routed_type == expected_type
+        pipeline = None
+        if not retrieval_only and generator:
+            from src.query.pipeline import QueryPipeline
+            pipeline = QueryPipeline(
+                router=router, vector_retriever=retriever,
+                entity_retriever=entity_retriever, context_builder=ctx_builder,
+                generator=generator, crag_verifier=crag_verifier,
+            )
 
-        search_query = classification.expanded_query or query_text
-        results = retriever.search(search_query, top_k=config.retrieval.top_k)
-        context = ctx_builder.build(results, query_text) if results else None
-        context_text = context.context_text if context else ""
-        ret_found, ret_missing = _check_facts(expected_facts, context_text)
-        retrieval_pass = len(ret_missing) == 0
+        if pipeline is not None:
+            classification, context, _ = pipeline.retrieve_context(
+                query_text, top_k=config.retrieval.top_k
+            )
+            routed_type = classification.query_type
+            routing_correct = routed_type == expected_type
+            context_text = context.context_text if context else ""
+            ret_found, ret_missing = _check_facts(expected_facts, context_text)
+            retrieval_pass = len(ret_missing) == 0
+        else:
+            classification = router.classify(query_text)
+            routed_type = classification.query_type
+            routing_correct = routed_type == expected_type
+
+            search_query = classification.expanded_query or query_text
+            results = retriever.search(search_query, top_k=config.retrieval.top_k)
+            context = ctx_builder.build(results, query_text) if results else None
+            context_text = context.context_text if context else ""
+            ret_found, ret_missing = _check_facts(expected_facts, context_text)
+            retrieval_pass = len(ret_missing) == 0
 
         gen_found, gen_missing = [], []
         generation_pass = None
         actual_confidence, crag_triggered, crag_retries = "N/A", False, 0
 
-        if not retrieval_only and generator and context:
+        if pipeline is not None and context:
             try:
-                from src.query.pipeline import QueryPipeline
-                pipeline = QueryPipeline(
-                    router=router, vector_retriever=retriever,
-                    entity_retriever=entity_retriever, context_builder=ctx_builder,
-                    generator=generator, crag_verifier=crag_verifier,
-                )
                 response = pipeline.query(query_text, top_k=config.retrieval.top_k)
                 actual_confidence = response.confidence
                 crag_triggered = response.crag_verified

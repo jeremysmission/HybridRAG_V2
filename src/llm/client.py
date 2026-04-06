@@ -38,7 +38,7 @@ def _detect_provider(endpoint: str) -> str:
 
     Azure patterns: 'azure', 'cognitiveservices', '/openai/deployments/'
     OpenAI patterns: 'api.openai.com' or empty (uses SDK default)
-    Ollama patterns: 'localhost', '127.0.0.1' with port 11434
+    Ollama patterns: 'ollama' or loopback-host OpenAI-compatible URLs
     """
     if not endpoint:
         return "openai"
@@ -46,7 +46,7 @@ def _detect_provider(endpoint: str) -> str:
     lower = endpoint.lower()
     if any(p in lower for p in ["azure", "cognitiveservices", "/openai/deployments/", "aoai"]):
         return "azure"
-    if "11434" in lower or "ollama" in lower:
+    if any(p in lower for p in ["localhost", "127.0.0.1", "0.0.0.0", "11434", "ollama"]):
         return "ollama"
     return "openai"
 

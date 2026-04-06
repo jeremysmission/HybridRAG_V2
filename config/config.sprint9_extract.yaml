@@ -1,0 +1,29 @@
+paths:
+  lance_db: "data/index/sprint6/lancedb"
+  entity_db: "data/index/sprint6/entities.sqlite3"
+
+llm:
+  model: "phi4:14b-q4_K_M"
+  deployment: "phi4:14b-q4_K_M"
+  provider: "ollama"
+  api_base: "http://127.0.0.1:11435/v1"
+  max_tokens: 1024
+  temperature: 0.0
+  timeout_seconds: 240
+
+extraction:
+  model: "phi4:14b-q4_K_M"
+  min_confidence: 0.7
+  part_patterns:
+    - "ARC-\\d{4}"
+    - "WR-\\d{4}"
+    - "AB-\\d{3}"
+    - "FM-\\d{3}"
+    - "PS-\\d{3}"
+    - "IGSI-\\d+"
+    - "PO-\\d{4}-\\d{4}"
+    - "SN[\\s-]?\\d+"
+    - "SEMS3D-\\d+"
+
+server:
+  port: 8004

@@ -34,6 +34,11 @@ def main():
     parser.add_argument("--limit", type=int, default=0, help="Max chunks to process (0=all)")
     parser.add_argument("--dry-run", action="store_true", help="Extract but don't insert")
     parser.add_argument(
+        "--deterministic-tables-only",
+        action="store_true",
+        help="Skip LLM extraction and recover only obvious table rows directly from chunk text.",
+    )
+    parser.add_argument(
         "--source-pattern",
         action="append",
         default=[],
@@ -55,26 +60,34 @@ def main():
     is_ollama_model = any(p in extraction_model.lower() for p in OLLAMA_MODEL_PATTERNS)
     provider_override = "ollama" if is_ollama_model else ""
 
-    llm_client = LLMClient(
-        api_base=config.llm.api_base if not is_ollama_model else "",
-        api_version=config.llm.api_version,
-        model=extraction_model,
-        deployment=extraction_model,
-        max_tokens=config.llm.max_tokens,
-        temperature=0,
-        timeout_seconds=config.llm.timeout_seconds,
-        provider_override=provider_override,
-    )
-    print(f"Extraction model: {extraction_model} (provider: {llm_client.provider})")
+    if args.deterministic_tables_only:
+        llm_client = LLMClient()
+        print("Extraction mode: deterministic tables only (LLM skipped)")
+    else:
+        llm_client = LLMClient(
+            api_base=config.llm.api_base,
+            api_version=config.llm.api_version,
+            model=extraction_model,
+            deployment=extraction_model,
+            max_tokens=config.llm.max_tokens,
+            temperature=0,
+            timeout_seconds=config.llm.timeout_seconds,
+            provider_override=provider_override,
+        )
+        api_base = config.llm.api_base or "(default provider endpoint)"
+        print(
+            f"Extraction model: {extraction_model} "
+            f"(provider: {llm_client.provider}, api_base: {api_base})"
+        )
 
-    if not llm_client.available:
-        if is_ollama_model:
-            print(f"ERROR: Ollama not reachable for model '{extraction_model}'.")
-            print("  Ensure Ollama is running: ollama serve")
-            print(f"  Ensure model is pulled: ollama pull {extraction_model}")
-        else:
-            print("ERROR: LLM not configured. Set AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_API_KEY.")
-        sys.exit(1)
+        if not llm_client.available:
+            if is_ollama_model:
+                print(f"ERROR: Ollama not reachable for model '{extraction_model}'.")
+                print("  Ensure Ollama is running: ollama serve")
+                print(f"  Ensure model is pulled: ollama pull {extraction_model}")
+            else:
+                print("ERROR: LLM not configured. Set AZURE_OPENAI_ENDPOINT and AZURE_OPENAI_API_KEY.")
+            sys.exit(1)
 
     extractor = EntityExtractor(llm_client)
     regex_pre = RegexPreExtractor(part_patterns=config.extraction.part_patterns)
@@ -134,16 +147,21 @@ def main():
             text = chunk["text"]
             source_path = chunk["source_path"]
 
-            # Regex pre-extraction (fast, free)
-            regex_entities = regex_pre.extract(text, chunk_id, source_path)
+            if args.deterministic_tables_only:
+                filtered_entities = []
+                filtered_rels = []
+                result = extractor.extract_from_chunk(text, chunk_id, source_path)
+            else:
+                # Regex pre-extraction (fast, free)
+                regex_entities = regex_pre.extract(text, chunk_id, source_path)
 
-            # GPT-4o extraction (slow, costs tokens)
-            result = extractor.extract_from_chunk(text, chunk_id, source_path)
+                # GPT-4o extraction (slow, costs tokens)
+                result = extractor.extract_from_chunk(text, chunk_id, source_path)
 
-            # Merge regex + LLM entities (LLM wins on dedup via quality gate)
-            all_entities = regex_entities + result.entities
-            filtered_entities = quality_gate.filter_entities(all_entities)
-            filtered_rels = quality_gate.filter_relationships(result.relationships)
+                # Merge regex + LLM entities (LLM wins on dedup via quality gate)
+                all_entities = regex_entities + result.entities
+                filtered_entities = quality_gate.filter_entities(all_entities)
+                filtered_rels = quality_gate.filter_relationships(result.relationships)
 
             if not args.dry_run:
                 entity_store.insert_entities(filtered_entities)

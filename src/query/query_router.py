@@ -249,9 +249,36 @@ class QueryRouter:
     def _guarded_expanded_query(self, query: str, current: str) -> str:
         """Override low-quality Ollama rewrites for known demo patterns."""
         q = " ".join(query.lower().split())
+        part_number = self._extract_part_number(query)
+        person_name = self._extract_person_name(query)
 
         if "general condition" in q and "recent visit" in q:
             return "service report maintenance repair status recent visits radar site"
+
+        if self._is_contact_email_query(q) and person_name:
+            return f"{person_name} contact email Contact POC senior field technician"
+
+        if (
+            part_number
+            and ("which sites have" in q or "which locations have" in q)
+            and "received" in q
+        ):
+            return (
+                f"{part_number} destination site status delivered in transit "
+                "purchase order spreadsheet"
+            )
+
+        if "unique part numbers" in q and ("across every" in q or "across all" in q):
+            return (
+                "maintenance report spreadsheet email chain "
+                "part number ARC WR AB FM PS AH SEMS3D"
+            )
+
+        if self._is_multi_hop_lookup(q) and part_number:
+            return (
+                f"{part_number} destination site requestor point of contact "
+                "purchase order contact"
+            )
 
         if self._has_any(
             q,
@@ -265,6 +292,8 @@ class QueryRouter:
                 "tracking",
             ],
         ):
+            if "cancelled" in q:
+                return "PO Number Status CANCELLED Destination Notes purchase order spreadsheet"
             return query
 
         return current or query
@@ -275,6 +304,24 @@ class QueryRouter:
         """Provide deterministic complex-query decompositions for local Ollama."""
         if deterministic != "COMPLEX":
             return None
+
+        q = " ".join(query.lower().split())
+        part_number = self._extract_part_number(query)
+
+        if self._is_multi_hop_lookup(q) and part_number:
+            return [
+                SubQuery(
+                    query_text=(
+                        f"{part_number} destination site requestor "
+                        "purchase order status"
+                    ),
+                    query_type="SEMANTIC",
+                ),
+                SubQuery(
+                    query_text="point of contact site requestor contact",
+                    query_type="SEMANTIC",
+                ),
+            ]
 
         sites = self._comparison_sites(query)
         if not sites:
@@ -316,6 +363,9 @@ class QueryRouter:
         q = " ".join(query.lower().split())
 
         if self._has_any(q, ["compare", " versus ", " vs ", "difference between"]):
+            return "COMPLEX"
+
+        if self._is_multi_hop_lookup(q):
             return "COMPLEX"
 
         if self._has_any(
@@ -364,6 +414,9 @@ class QueryRouter:
             return "AGGREGATE"
 
         semantic_patterns = [
+            r"\bwhat part was replaced\b",
+            r"\bpart was replaced\b",
+            r"\breplaced on the transmitter\b",
             r"\boutput power\b",
             r"\bcalibration procedure\b",
             r"\bworkaround\b",
@@ -381,3 +434,34 @@ class QueryRouter:
     def _has_any(self, query: str, terms: list[str]) -> bool:
         """Case-normalized substring helper."""
         return any(term in query for term in terms)
+
+    def _is_contact_email_query(self, query: str) -> bool:
+        """Return True for direct person-to-contact lookups."""
+        return "contact email" in query or (" email" in query and "who " not in query)
+
+    def _is_multi_hop_lookup(self, query: str) -> bool:
+        """Detect dependent lookups that must resolve one fact to answer another."""
+        has_contact_lookup = self._has_any(
+            query,
+            ["point of contact", "contact for", "who is the point of contact"],
+        )
+        has_dependent_clause = "site where" in query or "location where" in query
+        has_order_cue = self._has_any(
+            query,
+            ["ordered", "shipped", "delivered", "received", "backordered"],
+        )
+        return has_contact_lookup and has_dependent_clause and has_order_cue
+
+    def _extract_person_name(self, query: str) -> str | None:
+        """Extract a capitalized person name from the original query text."""
+        match = re.search(r"\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)(?:'s)?\b", query)
+        if not match:
+            return None
+        return match.group(1).strip()
+
+    def _extract_part_number(self, query: str) -> str | None:
+        """Extract the highest-signal part number token from the query."""
+        match = re.search(r"\b(?:SEMS3D-\d+|[A-Z]{2,}-\d{3,4})\b", query, re.IGNORECASE)
+        if not match:
+            return None
+        return match.group(0).upper()

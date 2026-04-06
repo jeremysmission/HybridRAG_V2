@@ -265,8 +265,8 @@ def run_query(dq: DemoQuery, pipeline, show_timing: bool = False) -> QueryResult
         result.latency_ms = total_ms
 
         if show_timing:
-            result.stage_times["total"] = total_ms
-            result.stage_times["pipeline_reported"] = response.latency_ms
+            result.stage_times.update(response.stage_timings_ms or {})
+            result.stage_times["wall_clock"] = total_ms
 
         # Check facts
         answer_upper = response.answer.upper()
@@ -298,6 +298,44 @@ def run_query(dq: DemoQuery, pipeline, show_timing: bool = False) -> QueryResult
         result.passed = False
 
     return result
+
+
+def _percentile(values: list[int], pct: float) -> int:
+    """Simple percentile helper for integer millisecond values."""
+    if not values:
+        return 0
+    ordered = sorted(values)
+    idx = round((pct / 100.0) * (len(ordered) - 1))
+    return int(ordered[idx])
+
+
+def print_timing_summary(results: list[QueryResult]) -> None:
+    """Print aggregate stage timings across the current rehearsal run."""
+    stages = ("router", "retrieval", "generation", "crag", "total", "wall_clock")
+    stage_values: dict[str, list[int]] = {stage: [] for stage in stages}
+
+    for result in results:
+        if result.error:
+            continue
+        for stage in stages:
+            if stage in result.stage_times:
+                stage_values[stage].append(int(result.stage_times[stage]))
+
+    if not any(stage_values.values()):
+        return
+
+    print("  Timing Summary")
+    for stage in stages:
+        values = stage_values[stage]
+        if not values:
+            continue
+        avg = sum(values) / len(values)
+        print(
+            f"    {stage:<10} avg={avg:>7.0f} ms  "
+            f"p50={_percentile(values, 50):>7} ms  "
+            f"p95={_percentile(values, 95):>7} ms"
+        )
+    print()
 
 
 # ---------------------------------------------------------------------------
@@ -361,6 +399,10 @@ def print_report(results: list[QueryResult], show_timing: bool = False) -> int:
         print("  REHEARSAL PASSED — all demo queries verified.")
     else:
         print("  REHEARSAL FAILED — fix failing queries before demo.")
+
+    if show_timing:
+        print()
+        print_timing_summary(results)
 
     print("-" * 72)
     print()

@@ -186,19 +186,26 @@ class EntityExtractor:
 
         Uses GPT-4o structured outputs for guaranteed valid JSON.
         """
-        if not self.llm.available:
-            logger.warning("LLM not available — skipping extraction for %s", chunk_id)
-            return ExtractionResult([], [], [])
-
         if not text.strip():
             return ExtractionResult([], [], [])
 
-        try:
-            raw = self._call_extraction(text)
-            return self._parse_result(raw, chunk_id, source_path)
-        except Exception as e:
-            logger.error("Extraction failed for chunk %s: %s", chunk_id, e)
-            return ExtractionResult([], [], [])
+        result = ExtractionResult([], [], [])
+        if self.llm.available:
+            try:
+                raw = self._call_extraction(text)
+                result = self._parse_result(raw, chunk_id, source_path)
+            except Exception as e:
+                logger.error("Extraction failed for chunk %s: %s", chunk_id, e)
+        else:
+            logger.warning("LLM not available — deterministic table extraction only for %s", chunk_id)
+        deterministic_rows = self._extract_deterministic_table_rows(
+            text=text,
+            chunk_id=chunk_id,
+            source_path=source_path,
+        )
+        if deterministic_rows:
+            result.table_rows = self._merge_table_rows(result.table_rows, deterministic_rows)
+        return result
 
     def extract_batch(
         self,
@@ -300,6 +307,169 @@ class EntityExtractor:
             input_tokens=getattr(self, "_last_input_tokens", 0),
             output_tokens=getattr(self, "_last_output_tokens", 0),
         )
+
+    def _extract_deterministic_table_rows(
+        self,
+        text: str,
+        chunk_id: str,
+        source_path: str,
+    ) -> list[TableRow]:
+        """Parse obvious table layouts directly from the chunk text."""
+        rows = []
+        rows.extend(self._extract_markdown_tables(text, chunk_id, source_path))
+        rows.extend(self._extract_bracket_row_tables(text, chunk_id, source_path))
+        return rows
+
+    def _extract_markdown_tables(
+        self,
+        text: str,
+        chunk_id: str,
+        source_path: str,
+    ) -> list[TableRow]:
+        """Extract standard markdown pipe tables."""
+        lines = [line.rstrip() for line in text.splitlines()]
+        rows: list[TableRow] = []
+        table_index = 0
+        i = 0
+
+        while i < len(lines) - 1:
+            header_line = lines[i].strip()
+            separator_line = lines[i + 1].strip()
+            if not self._looks_like_pipe_row(header_line) or not self._is_markdown_separator(
+                separator_line
+            ):
+                i += 1
+                continue
+
+            headers = self._split_pipe_row(header_line)
+            if not headers:
+                i += 1
+                continue
+
+            table_id = f"{chunk_id}_mdtable_{table_index}"
+            table_index += 1
+            row_index = 0
+            j = i + 2
+            while j < len(lines):
+                candidate = lines[j].strip()
+                if not self._looks_like_pipe_row(candidate) or self._is_markdown_separator(
+                    candidate
+                ):
+                    break
+                values = self._split_pipe_row(candidate)
+                if len(values) == len(headers):
+                    rows.append(
+                        TableRow(
+                            source_path=source_path,
+                            table_id=table_id,
+                            row_index=row_index,
+                            headers=json.dumps(headers),
+                            values=json.dumps(values),
+                            chunk_id=chunk_id,
+                        )
+                    )
+                    row_index += 1
+                j += 1
+            i = j
+
+        return rows
+
+    def _extract_bracket_row_tables(
+        self,
+        text: str,
+        chunk_id: str,
+        source_path: str,
+    ) -> list[TableRow]:
+        """Extract `[ROW n] value | value | ...` spreadsheet fragments."""
+        row_re = re.compile(r"^\[ROW\s+(\d+)\]\s*(.+)$", re.IGNORECASE)
+        lines = [line.strip() for line in text.splitlines()]
+        rows: list[TableRow] = []
+        current_headers: list[str] | None = None
+        table_index = 0
+        row_index = 0
+
+        for line in lines:
+            match = row_re.match(line)
+            if not match:
+                continue
+
+            logical_row = int(match.group(1))
+            cells = [cell.strip() for cell in match.group(2).split("|")]
+            if self._looks_like_header_row(logical_row, cells):
+                current_headers = cells
+                row_index = 0
+                table_index += 1
+                continue
+
+            if not current_headers or len(cells) != len(current_headers):
+                continue
+
+            table_id = f"{chunk_id}_rowtable_{table_index}"
+            rows.append(
+                TableRow(
+                    source_path=source_path,
+                    table_id=table_id,
+                    row_index=row_index,
+                    headers=json.dumps(current_headers),
+                    values=json.dumps(cells),
+                    chunk_id=chunk_id,
+                )
+            )
+            row_index += 1
+
+        return rows
+
+    def _merge_table_rows(
+        self,
+        llm_rows: list[TableRow],
+        deterministic_rows: list[TableRow],
+    ) -> list[TableRow]:
+        """Deduplicate table rows while preferring deterministic captures."""
+        merged: dict[tuple[str, int, str], TableRow] = {}
+        for row in llm_rows + deterministic_rows:
+            key = (row.table_id, row.row_index, row.values)
+            merged[key] = row
+        return list(merged.values())
+
+    def _looks_like_pipe_row(self, line: str) -> bool:
+        """Return True when a line resembles a pipe-delimited row."""
+        return line.startswith("|") and line.endswith("|") and line.count("|") >= 2
+
+    def _is_markdown_separator(self, line: str) -> bool:
+        """Return True for markdown table separator rows."""
+        if "|" not in line:
+            return False
+        cells = [cell.strip() for cell in line.strip("|").split("|")]
+        return bool(cells) and all(cells) and all(set(cell) <= {"-", ":"} for cell in cells)
+
+    def _split_pipe_row(self, line: str) -> list[str]:
+        """Split a pipe-delimited row into trimmed cell values."""
+        return [cell.strip() for cell in line.strip("|").split("|")]
+
+    def _looks_like_header_row(self, logical_row: int, cells: list[str]) -> bool:
+        """Detect header rows in `[ROW n]` spreadsheet fragments."""
+        if logical_row == 1:
+            return True
+
+        header_tokens = {
+            "po number",
+            "po",
+            "part number",
+            "description",
+            "qty",
+            "quantity",
+            "status",
+            "ship date",
+            "eta",
+            "destination",
+            "site",
+            "requestor",
+            "notes",
+            "order date",
+            "delivery date",
+        }
+        lowered = {cell.strip().lower() for cell in cells}
+        return bool(lowered & header_tokens)
 
 
 class RegexPreExtractor:
