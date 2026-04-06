@@ -136,7 +136,11 @@ def query_stream(request: QueryRequest):
             latency_ms = int((time.time() - start) * 1000)
             done = {
                 "type": "done",
-                "confidence": _generator._parse_confidence(full_text),
+                "confidence": _generator._normalize_confidence(
+                    _generator._parse_confidence(full_text),
+                    full_text,
+                    request.query,
+                ),
                 "query_path": classification.query_type,
                 "latency_ms": latency_ms,
             }
