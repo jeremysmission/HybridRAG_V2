@@ -76,6 +76,23 @@ Minimum expectations:
 
 Do not use blind shotgun install methods for workstation setup.
 
+## Porting Guardrail
+
+When code is copied or ported from another repo, do not assume parser coverage, allowlists, placeholder parsers, or deferred-format behavior are still correct.
+
+Required before trusting a ported ingest or indexing path:
+
+- diff parser registry coverage against the active discovery filter or allowlist
+- identify which formats are:
+  - fully parsed
+  - placeholder-only
+  - hashed-only / deferred
+  - unsupported
+- confirm deferred formats are operator-visible and written into skip accounting
+- document inherited deferrals before production use
+
+Silent format loss is a production bug, not an acceptable limitation.
+
 ## Dependency Policy
 
 - New packages should stay within the approved license and sourcing constraints already documented for the project
