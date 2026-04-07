@@ -107,6 +107,11 @@ Goal:
   - hash-skipped by profile
   - unsupported
 
+Status:
+
+- started
+- operator matrix added in `CorpusForge/docs/FORMAT_COVERAGE_AND_DEFER_POLICY_2026-04-07.md`
+
 ---
 
 ## Exit Criteria
