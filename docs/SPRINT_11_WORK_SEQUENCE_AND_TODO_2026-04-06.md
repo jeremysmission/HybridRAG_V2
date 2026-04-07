@@ -155,9 +155,11 @@ This sprint is complete only when:
 
 ## Exact Work Order
 
-## Phase 0: Get The Workstation Ready
+## Phase 0: Get The Source Folder And Start Recovery Dedup
 
-This is setup only. Do this first so the actual recovery run is not delayed later.
+This is now the immediate main action.
+
+If the full source folder is available tomorrow, start the recovery dedup run on the high-capacity local machine immediately. Do not wait for workstation installs to become perfect before beginning this step.
 
 ### Step 0.1: Pull latest repos
 
@@ -166,7 +168,34 @@ Pull:
 - `CorpusForge`
 - `HybridRAG_V2`
 
-### Step 0.2: Install CorpusForge
+### Step 0.2: Confirm CorpusForge is runnable on the high-capacity local machine
+
+This machine is the first real recovery runner.
+
+### Step 0.3: Start the recovery dedup pass as soon as the source tree is available
+
+Preferred operator path:
+
+```text
+start_corpusforge.bat --dedup
+```
+
+CLI path:
+
+```powershell
+cd C:\CorpusForge
+.\.venv\Scripts\python.exe scripts\build_document_dedup_index.py --input <SOURCE_FOLDER>
+```
+
+---
+
+## Parallel Enablement Thread: Recover The Workstations
+
+This thread still matters because the assembly-line plan assumes working `CorpusForge` and `HybridRAG_V2` installs on the workstations.
+
+The workstations become the background preprocessors, shard helpers, and local extraction lanes after recovery dedup and rebuild are underway.
+
+### Step P.1: Install CorpusForge
 
 Run:
 
@@ -182,7 +211,7 @@ COPY_TORCH_FROM_EXISTING_HYBRIDRAG.bat
 
 Then continue with the remaining install steps.
 
-### Step 0.3: Install HybridRAG V2
+### Step P.2: Install HybridRAG V2
 
 Run:
 
@@ -201,21 +230,6 @@ This is the main sprint action.
 ### Goal
 
 Process the source tree and build a canonical file list before any rebuild.
-
-### Preferred Operator Path
-
-Run the GUI:
-
-```text
-start_corpusforge.bat --dedup
-```
-
-### CLI Path
-
-```powershell
-cd C:\CorpusForge
-.\.venv\Scripts\python.exe scripts\build_document_dedup_index.py --input <SOURCE_FOLDER>
-```
 
 ### What This Produces
 
@@ -356,6 +370,14 @@ They are the safe staging work:
 
 The AWS side should be designed as controlled parallel processing, not a giant dump of all chunks at once.
 
+The target operating mode for a while is an assembly line:
+
+- dedup and rebuild create the reduced corpus
+- shard packaging keeps a ready queue
+- local lanes process their assigned tiers continuously
+- AWS is continuously fed with validated shard manifests
+- merge/import keeps consuming finished shards in parallel
+
 ### Correct Pattern
 
 1. small smoke batch
@@ -408,16 +430,18 @@ Only increase if:
 ### First Priority
 
 1. Pull latest `CorpusForge` and `HybridRAG_V2`
-2. Confirm both install cleanly on the work machine
-3. Run the recovery dedup pass on the real source tree or a meaningful slice
-4. Review duplicate samples
-5. Freeze `canonical_files.txt`
+2. Get the source folder onto the high-capacity local machine
+3. Start the recovery dedup pass on the real source tree or a meaningful slice
+4. Keep workstation install recovery moving in parallel
+5. Review duplicate samples
+6. Freeze `canonical_files.txt`
 
 ### Second Priority
 
-6. Generate duplicate-review samples and canonical-choice rules from existing dedup outputs
-7. Audit the populated structured store and document immediate useful commands/reporting
-8. Prepare the rebuild run from the canonical file list
+7. Generate duplicate-review samples and canonical-choice rules from existing dedup outputs
+8. Audit the populated structured store and document immediate useful commands/reporting
+9. Prepare the rebuild run from the canonical file list
+10. Keep AWS staging and shard packaging ready so the later flow behaves like an assembly line instead of a stop/start batch
 9. Build into a fresh output path
 10. Import into a fresh V2 index path
 11. Record before/after metrics
