@@ -71,6 +71,12 @@ Goal:
 - define the operator workflow for backfilling deferred/unsupported files into `file_state`
 - confirm that legacy skipped files no longer poison restart discovery time
 
+Status:
+
+- started
+- `CorpusForge` now has a `--dry-run` mode on `scripts/backfill_skipped_file_state.py`
+- operator runbook added in `CorpusForge/docs/LEGACY_SKIP_STATE_AUDIT_2026-04-07.md`
+
 ### 12.2 Document-Level Dedup Review Path
 
 Goal:
