@@ -40,6 +40,23 @@ CorpusForge also now checks for:
 
 and warns if they are missing.
 
+## Proven Workstation Lessons Carried Forward
+
+These are the prior workstation bring-up patterns worth preserving:
+
+- detect workstation proxy settings before package bootstrap
+- write proxy-aware repo-local `.venv\pip.ini` instead of depending on shell memory
+- install `pip-system-certs` in each repo `.venv`, not once globally
+- install large dependency groups in smaller retryable steps on work networks
+- verify the actual torch/CUDA result, not just whether pip completed
+- keep `NO_PROXY=127.0.0.1,localhost` for local-only services
+
+Practical meaning:
+
+- a working install in one repo does not prove another repo is healthy
+- `pip-system-certs` and torch must exist in the exact repo `.venv` being used
+- the workstation installer should be safe to rerun as a repair tool
+
 ## Sanitization Policy
 
 This rule applies to everything that is going to a workstation or any remote repository used by workstation operators.
@@ -182,13 +199,16 @@ The old failure mode was:
 - tracked machine-specific config paths
 - work-machine installs missing pip trust/cert hardening
 - mismatched CUDA torch lanes
+- relying on session-only proxy state instead of repo-local pip configuration
 
 The V2/Forge workstation lane now avoids those mistakes by:
 
 - keeping config paths repo-relative by default
 - installing CUDA torch from the PyTorch CUDA index
 - baking trusted-host settings into `.venv\pip.ini`
+- baking the detected proxy into `.venv\pip.ini` when present
 - using the workstation installer instead of manual piecemeal pip commands
+- requiring explicit CUDA verification instead of trusting a package install message
 
 ## Remaining Reality Checks
 
