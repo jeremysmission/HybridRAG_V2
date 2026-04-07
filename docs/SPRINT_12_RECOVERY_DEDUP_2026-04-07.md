@@ -84,6 +84,12 @@ Goal:
 - rely on the document-level review tooling first
 - explicitly avoid depending on chunk-level review as the primary human review lane until it is improved
 
+Status:
+
+- started
+- operator runbook added in `CorpusForge/docs/DOCUMENT_LEVEL_DEDUP_REVIEW_WORKFLOW_2026-04-07.md`
+- chunk-level review remains supporting evidence only
+
 ### 12.3 Canonical List Readiness
 
 Goal:
