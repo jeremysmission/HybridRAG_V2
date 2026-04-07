@@ -97,6 +97,33 @@ Create a new preprocessing stage in CorpusForge that builds a canonical source l
 | 11.11 | Recovery QA bundle: duplicate samples, false-positive audit, operator commands | TODO |
 | 11.12 | Freeze the rebuild input list for the next corpus rebuild | TODO |
 
+### Parallel Workstreams During Install / Operator Delays
+
+These can proceed in parallel while workstation install issues are being repaired because they do not depend on the installer thread:
+
+1. **Dedup pilot and review tooling**
+   - generate human-reviewable duplicate samples from existing dedup outputs
+   - codify canonical-choice review rules
+   - prepare the duplicate-review operator checklist
+   - directly advances slices `11.8` through `11.11`
+
+2. **Structured-store exploitation of overnight outputs**
+   - inspect the current structured store and existing export artifacts
+   - report usable counts, coverage, and immediate commands for import/eval work
+   - prepare operator guidance for what can be done right now with already-produced outputs
+
+### Verified Overnight Asset
+
+The immediate usable overnight asset is the populated structured store, not a clearly enriched export package.
+
+Verified current counts in `C:\HybridRAG_V2\data\index\entities.sqlite3`:
+
+- `entities`: `20,450`
+- `relationships`: `4,683`
+- `extracted_tables`: `3,397`
+
+The export packages spot-checked on `2026-04-06` did not show nontrivial `enriched_text`, so the near-term leverage is structured-store use and audit, not enriched-text retrieval testing.
+
 ### Exit Criteria
 
 - Recovery stage produces:
@@ -209,10 +236,11 @@ Make the recovery path safe for repeated use by a non-programmer operator.
 
 1. Build canonical source list
 2. Review duplicate samples
-3. Rebuild from canonical list
-4. Re-import into fresh V2 index
-5. Re-run QA on the rebuilt corpus
-6. Only then return to latency and polish work
+3. Use the populated structured store and overnight outputs for immediate non-blocking reporting and operator leverage
+4. Rebuild from canonical list
+5. Re-import into fresh V2 index
+6. Re-run QA on the rebuilt corpus
+7. Only then return to latency and polish work
 
 ---
 

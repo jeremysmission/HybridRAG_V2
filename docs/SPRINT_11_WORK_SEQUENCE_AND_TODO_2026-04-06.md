@@ -34,7 +34,7 @@ That means too much duplicate content survived into:
 So the next big win is not tuning the current inflated index.  
 The next big win is building a **canonical source list** and rebuilding from that.
 
-### The Two Tracks
+### The Two Primary Tracks
 
 **Track A: Recovery**
 - one-time cleanup and rebuild preparation
@@ -42,13 +42,25 @@ The next big win is building a **canonical source list** and rebuilding from tha
 - create canonical file list
 - rebuild from the cleaned source set
 
-**Track B: Production Staging**
-- prepare the batch-processing path for AWS
-- do not depend on the final endpoint being live yet
-- design for controlled parallel batch submission, result collection, and rate-limit measurement
+**Track B: Immediate Sidecar Progress**
+- dedup pilot/review tooling from existing outputs
+- structured-store exploitation from overnight outputs
+- use the time productively even while workstation install issues are being repaired
 
 Track A is the immediate main effort.  
-Track B is worthwhile in parallel because it will be needed later anyway.
+Track B is worthwhile in parallel because it does not depend on the installer thread and turns existing artifacts into usable progress.
+
+### Deferred Supporting Track
+
+**AWS batch production staging** still matters, but it is no longer the first sidecar priority while recovery and installer repair are active.
+
+It remains:
+
+- request/response schema work
+- controlled parallel batch submission design
+- S3 staging
+- result collection
+- rate-limit measurement
 
 ---
 
@@ -112,6 +124,20 @@ Already available:
 - `docs\WORKSTATION_STACK_INSTALL_2026-04-06.md`
 - `C:\CorpusForge\docs\WORKSTATION_SETUP_2026-04-06.md`
 - `C:\CorpusForge\docs\TORCH_REUSE_FROM_EXISTING_HYBRIDRAG_2026-04-06.md`
+
+### Verified Immediate Overnight Asset
+
+The most useful overnight output available right now is the populated structured store in:
+
+- `C:\HybridRAG_V2\data\index\entities.sqlite3`
+
+Verified current counts:
+
+- `entities`: `20,450`
+- `relationships`: `4,683`
+- `extracted_tables`: `3,397`
+
+This means the immediate sidecar work should focus on auditing and exploiting the structured store, not assuming the latest export package already contains useful enriched text.
 
 ---
 
@@ -296,7 +322,7 @@ This allows a clean before/after comparison without risking the current working 
 
 ## Phase 6: Prepare For The AWS Batch Path
 
-This can happen in parallel with recovery planning, but it is not the first blocking step.
+This can happen after the immediate sidecar work, but it is not the first blocking step.
 
 ### Goal
 
@@ -389,16 +415,18 @@ Only increase if:
 
 ### Second Priority
 
-6. Prepare the rebuild run from the canonical file list
-7. Build into a fresh output path
-8. Import into a fresh V2 index path
-9. Record before/after metrics
+6. Generate duplicate-review samples and canonical-choice rules from existing dedup outputs
+7. Audit the populated structured store and document immediate useful commands/reporting
+8. Prepare the rebuild run from the canonical file list
+9. Build into a fresh output path
+10. Import into a fresh V2 index path
+11. Record before/after metrics
 
 ### Third Priority
 
-10. Stage AWS batch packaging and manifests
-11. Define the request/response schema
-12. Prepare `10 -> 50 -> 100` batch tests for when the endpoint is ready
+12. Stage AWS batch packaging and manifests
+13. Define the request/response schema
+14. Prepare `10 -> 50 -> 100` batch tests for when the endpoint is ready
 
 ---
 
@@ -419,4 +447,3 @@ At the end of this sprint, we should have:
 - [DEDUP_RECOVERY_PLAN_2026-04-06.md](/C:/HybridRAG_V2/docs/DEDUP_RECOVERY_PLAN_2026-04-06.md)
 - [SPRINT_11_14_GAMEPLAN_2026-04-06.md](/C:/HybridRAG_V2/docs/SPRINT_11_14_GAMEPLAN_2026-04-06.md)
 - [WORKSTATION_STACK_INSTALL_2026-04-06.md](/C:/HybridRAG_V2/docs/WORKSTATION_STACK_INSTALL_2026-04-06.md)
-
