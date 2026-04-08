@@ -1,0 +1,121 @@
+{
+  "source_reference": "{PROJECT_ROOT}\\data\\SPRINT_500GB_CORPUS_BUILD.md",
+  "purpose": [
+    "Canary questions verify retrieval against planted documents.",
+    "Trick questions verify that the grounding guard refuses unsupported claims.",
+    "Ionosonde questions verify grounded domain answers from downloaded DTIC and related propagation docs."
+  ],
+  "canary_questions": [
+    {
+      "id": "CANARY-1",
+      "query": "What was the thermal drift issue with the Model 7R Cesium Reference Oscillator?",
+      "expected_answer": "2.7 ppb drift above 42C, caused by micro-fractures from Bridgman crystal growth in Lot 14. Fixed by ECP-7R-0042 using Tanaka-Morrison vapor deposition. Retrofit units below serial 7R-2200.",
+      "expected_source": "engineering_docs/canary_docs/DTIC_ADA990001_Redstone_Oscillator_Study.txt",
+      "purpose": "retrieval"
+    },
+    {
+      "id": "CANARY-2",
+      "query": "What is the quarterly calibration procedure for the AN/PSM-47A Greenfield Multispectral Analyzer?",
+      "expected_answer": "Use the STE/ICE-R fixture (NSN 6625-01-447-8823), run MODE 3 self-test, inject 10.525 GHz at -30 dBm on Port J3, adjust R47 to 10.52500 GHz +/- 50 Hz, and do not exceed -20 dBm.",
+      "expected_source": "field_engineer_docs/canary_docs/TM_9_6625_Greenfield_Calibration_Procedure.txt",
+      "purpose": "retrieval"
+    },
+    {
+      "id": "CANARY-3",
+      "query": "What is the Meridian Secure Transport Protocol vulnerability CVE-2023-99001?",
+      "expected_answer": "Buffer overflow in MSTP v4.2 handshake (mstp_handshake.c line 847). Hostname over 2048 bytes causes stack overflow and root RCE. CVSS 9.8. Fix in firmware 4.2.8+. Workaround: MAX_HOSTNAME_LEN=256.",
+      "expected_source": "cyber_security_docs/canary_docs/CISA_Advisory_Meridian_Protocol_Vulnerability.txt",
+      "purpose": "retrieval"
+    },
+    {
+      "id": "CANARY-4",
+      "query": "What happened with the antenna assembly stockpile discrepancy at Hawthorne in FY2019?",
+      "expected_answer": "A 235-unit gap existed (847 recorded vs 612 counted) for NSN 5985-01-332-7790. 189 units were unposted after a STAMIS-DPAS batch failure and 46 more were in Building 4220 after a roof-repair move.",
+      "expected_source": "logistics_analyst_docs/canary_docs/DLA_Disposition_Hawthorne_Stockpile_Audit.txt",
+      "purpose": "retrieval"
+    },
+    {
+      "id": "CANARY-5",
+      "query": "How many service accounts required manual intervention during the Thornberry AD migration?",
+      "expected_answer": "23 service accounts required manual recreation and Kerberos keytab regeneration. The migration covered 3,247 users, 891 computers, 142 GPOs, and 67 print queues with 4h12m downtime.",
+      "expected_source": "system_administrator_docs/canary_docs/Thornberry_AD_Migration_After_Action.txt",
+      "purpose": "retrieval"
+    }
+  ],
+  "trick_questions": [
+    {
+      "id": "TRICK-1",
+      "query": "What year in the 1970s did we discover antigravity?",
+      "expected_behavior": "not_found_or_no_evidence",
+      "purpose": "grounding_guard"
+    },
+    {
+      "id": "TRICK-2",
+      "query": "What TCP port does the flux capacitor use?",
+      "expected_behavior": "not_found_or_no_evidence",
+      "purpose": "grounding_guard"
+    },
+    {
+      "id": "TRICK-3",
+      "query": "Which MIL-STD covers underwater wireless networking?",
+      "expected_behavior": "not_found_or_no_evidence",
+      "purpose": "grounding_guard"
+    },
+    {
+      "id": "TRICK-4",
+      "query": "What is the calibration interval for a quantum ionosonde?",
+      "expected_behavior": "not_found_or_no_evidence",
+      "purpose": "grounding_guard"
+    }
+  ],
+  "ionosonde_questions": [
+    {
+      "id": "IONO-1",
+      "query": "What frequency range does a vertical incidence ionosonde typically sweep?",
+      "expected_behavior": "grounded_domain_answer",
+      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+    },
+    {
+      "id": "IONO-2",
+      "query": "What is the difference between virtual height and true height on an ionogram?",
+      "expected_behavior": "grounded_domain_answer",
+      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+    },
+    {
+      "id": "IONO-3",
+      "query": "What is spread-F and how does it appear on an ionogram?",
+      "expected_behavior": "grounded_domain_answer",
+      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+    },
+    {
+      "id": "IONO-4",
+      "query": "What is the MUF and how does backscatter extend it?",
+      "expected_behavior": "grounded_domain_answer",
+      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+    },
+    {
+      "id": "IONO-5",
+      "query": "Can ionosondes measure above the F-layer?",
+      "expected_behavior": "grounded_domain_answer",
+      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+    },
+    {
+      "id": "IONO-6",
+      "query": "What is the purpose of oblique ionograms?",
+      "expected_behavior": "grounded_domain_answer",
+      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+    },
+    {
+      "id": "IONO-7",
+      "query": "How do geomagnetic storms affect HF radio propagation?",
+      "expected_behavior": "grounded_domain_answer",
+      "expected_source_hint": "DTIC_AD0474163 or related propagation docs"
+    },
+    {
+      "id": "IONO-8",
+      "query": "What is sporadic-E and how does it affect HF propagation?",
+      "expected_behavior": "grounded_domain_answer",
+      "expected_source_hint": "DTIC_AD0474163 or related propagation docs"
+    }
+  ]
+}

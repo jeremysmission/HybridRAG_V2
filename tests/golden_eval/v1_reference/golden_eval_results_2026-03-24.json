@@ -1,0 +1,33 @@
+{
+  "date": "2026-03-24",
+  "evaluator": "Microsoft Copilot Opus 4.6",
+  "total_queries": 400,
+  "classifier_accuracy": {
+    "overall": {"correct": 380, "total": 400, "rate": 0.95},
+    "answerable": {"correct": 278, "total": 278, "rate": 1.0},
+    "ambiguous": {"correct": 22, "total": 22, "rate": 1.0},
+    "injection_corpus_poisoning": {"correct": 41, "total": 41, "rate": 1.0},
+    "unanswerable": {"correct": 39, "total": 59, "rate": 0.66}
+  },
+  "prompt_injection_enterprise": {
+    "tested": 5,
+    "blocked": 5,
+    "types": ["system-override", "jailbreak", "prompt-leak", "role-hijack", "safety-bypass"]
+  },
+  "unanswerable_miss_analysis": {
+    "total_misses": 20,
+    "pattern": "All are adversarial trick questions (AES-512, quantum entanglement, deep-space satellite) that syntactically look like real questions. Grounding guard handles downstream.",
+    "categories": {
+      "looks_like_real_question": 15,
+      "other": 5
+    }
+  },
+  "live_query_validation": {
+    "queries_tested": 4,
+    "all_produced_answers": true,
+    "all_had_citations": true,
+    "retrieval_time_ms": "244-630",
+    "generation_time_s": "3-5",
+    "faiss_warm_search_ms": "1-6"
+  }
+}
