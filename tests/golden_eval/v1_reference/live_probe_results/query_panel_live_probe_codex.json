@@ -3,7 +3,7 @@
     {
       "query": "What does section 1.4.1 require regarding security awareness training?",
       "status": "complete",
-      "answer_preview": "Section 1.4.1 requires providing security awareness training for program personnel, which includes vendors, contractors, and outsourced workers. [Source: chunk_2]",
+      "answer_preview": "Section 1.4.1 requires providing security awareness training for program personnel, which includes vendors, organizations, and outsourced workers. [Source: chunk_2]",
       "answer_len": 162,
       "sources_label": "Sources: DTIC_AD1045002.pdf (2 chunks), 07 - structural profile, bulkheads & sections.jpg (1 chunks)",
       "metrics_label": "Latency: 32,231 ms | Tokens in: 830 | Tokens out: 34",

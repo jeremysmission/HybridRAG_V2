@@ -14,8 +14,8 @@
     {
       "query": "What does section 1.4.1 require regarding security awareness training?",
       "status": "complete",
-      "answer": "Section 1.4.1 requires providing security awareness training for program personnel, which includes vendors, contractors, and outsourced workers [Source: chunk_1].",
-      "answer_preview": "Section 1.4.1 requires providing security awareness training for program personnel, which includes vendors, contractors, and outsourced workers [Source: chunk_1].",
+      "answer": "Section 1.4.1 requires providing security awareness training for program personnel, which includes vendors, organizations, and outsourced workers [Source: chunk_1].",
+      "answer_preview": "Section 1.4.1 requires providing security awareness training for program personnel, which includes vendors, organizations, and outsourced workers [Source: chunk_1].",
       "sources_label": "Sources: DTIC_AD1045002.pdf (2 chunks), 07 - structural profile, bulkheads & sections.jpg (1 chunks)",
       "metrics_label": "Latency: 44,966 ms | Tokens in: 1931 | Tokens out: 32",
       "network_label": "Grounding: 100% verified\nTransparency: Answer is based on retrieved source documents and passed grounding verification.",
@@ -43,7 +43,7 @@
       ]
     },
     {
-      "query": "According to NIST SP 800-14, what three types of security policy should organizations have?",
+      "query": "According to security standard SP 800-14, what three types of security policy should organizations have?",
       "status": "complete",
       "answer": "Some documents were found but the evidence quality is insufficient for a reliable answer. Please try a more specific question or check source documents.",
       "answer_preview": "Some documents were found but the evidence quality is insufficient for a reliable answer. Please try a more specific question or check source documents.",
