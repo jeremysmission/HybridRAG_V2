@@ -1,8 +1,16 @@
 # Agent instruction files — never push to remote
 CLAUDE.md
 
-# Production data — never commit
+# Production/simulation data — never commit
 ProductionSource/
+
+# Zip archives, screenshots, images — never push
+*.zip
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
 
 # Python
 __pycache__/
@@ -28,6 +36,9 @@ env/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Machine-specific config overrides (workers, GPU, paths)
+config/config.local.yaml
 
 # Data (large files - do not commit)
 data/
