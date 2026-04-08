@@ -37,7 +37,7 @@ The entity store contains a mix of V1 and V2 data. This is expected and acceptab
 
 V1 entities have paths like:
 ```
-C:\Users\randaje\Documents\HybridRAG3\data\source\verified\IGS\! Site Visits\...
+{USER_HOME}\Documents\HybridRAG3\data\source\verified\IGS\! Site Visits\...
 ```
 
 These are real IGS maintenance documents extracted during overnight phi4 runs on the original V1 corpus (Clone1 copy).
