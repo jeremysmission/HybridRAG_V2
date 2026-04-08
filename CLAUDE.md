@@ -1,4 +1,4 @@
-# HybridRAG V2 — CLAUDE.md
+# HybridRAG V2 — CoPilot+.md
 
 Auto-loaded rules for all agents working in this repo.
 
@@ -54,8 +54,8 @@ HybridRAG V2 is a tri-store retrieval and answer system for IGS/NEXION maintenan
 - **Never amend published commits** — create new commits
 - **Never force-push** main/master without explicit approval
 - **Commit messages:** concise, describe the "why" not the "what"
-- **No AI attribution** — use "CoPilot+" only, commits by Jeremy Randall only. Never mention claude/anthropic/agent/AI in code or commits.
-- **Sign all war room posts:** `Signed: Agent N (Role) | HybridRAG_V2 | YYYY-MM-DD | [Time MDT]`
+- **No AI attribution** — use "CoPilot+" only, commits by Jeremy Randall only. Never mention CoPilot+/approved vendor/agent/AI in code or commits.
+- **Sign all review board posts:** `Signed: Agent N (Role) | HybridRAG_V2 | YYYY-MM-DD | [Time MDT]`
 
 ---
 
