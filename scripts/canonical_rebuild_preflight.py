@@ -200,7 +200,7 @@ def run_preflight(export_dir: Path) -> dict:
 def print_report(report: dict) -> None:
     """Print a human-readable preflight report."""
     print(DIVIDER)
-    print("  HybridRAG V2 — Canonical Rebuild Preflight")
+    print("  HybridRAG V2 -- Canonical Rebuild Preflight")
     print(DIVIDER)
     print(f"  Export: {report['export_dir']}")
     print(f"  Time:   {report['timestamp']}")
@@ -216,7 +216,7 @@ def print_report(report: dict) -> None:
             print(f"  Chunks:     {check['valid_chunks']:,} valid, {check['parse_errors']} parse errors")
         elif name == "vectors":
             if "error" in check:
-                print(f"  Vectors:    ERROR — {check['error']}")
+                print(f"  Vectors:    ERROR -- {check['error']}")
             else:
                 print(f"  Vectors:    {check['shape'][0]:,} x {check['shape'][1]}d ({check['dtype']})")
         elif name == "count_alignment":
@@ -247,11 +247,11 @@ def print_report(report: dict) -> None:
     print()
     verdict = report["verdict"]
     if verdict == "PASS":
-        print(f"  VERDICT: PASS — export is ready for canonical rebuild")
+        print(f"  VERDICT: PASS -- export is ready for canonical rebuild")
     elif verdict == "WARN":
-        print(f"  VERDICT: WARN — export usable but review warnings above")
+        print(f"  VERDICT: WARN -- export usable but review warnings above")
     else:
-        print(f"  VERDICT: FAIL — do not proceed with import")
+        print(f"  VERDICT: FAIL -- do not proceed with import")
     print(DIVIDER)
 
 

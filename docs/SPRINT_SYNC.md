@@ -1,8 +1,8 @@
 # Unified Sprint Plan — CorpusForge + HybridRAG V2
 
-**Last Updated:** 2026-04-07 | **Updated By:** Agent 3 (QA) — Forge S2 status corrected, V2 S12 READY FOR QA
+**Last Updated:** 2026-04-07 | **Updated By:** Agent 1 (Forge Coder) — Forge S2 all slices DONE, READY FOR QA
 **Demo Target:** 2026-05-02
-**Update Rule:** Every agent updates ALL 3 copies at end of sprint session (review board + both repos)
+**Update Rule:** Every agent updates ALL 3 copies at end of sprint session (war room + both repos)
 
 ---
 
@@ -15,7 +15,7 @@
 | Agent 3 | QA + Planning + Cross-Repo | Read-only both + V1 docs | None | ACTIVE |
 
 **Copies of this file (keep all 3 in sync):**
-- `{USER_HOME}\AgentTeam\war_rooms\HybridRAG3_Educational\SPRINT_SYNC.md` (canonical)
+- `C:\Users\jerem\AgentTeam\war_rooms\HybridRAG3_Educational\SPRINT_SYNC.md` (canonical)
 - `C:\CorpusForge\docs\SPRINT_SYNC.md`
 - `C:\HybridRAG_V2\docs\SPRINT_SYNC.md`
 
@@ -33,14 +33,14 @@
 
 ## Week 1: April 7-11 — Unblock Both Pipelines
 
-### Forge Sprint 2: Unblock Chunking + Config Formats + GUI Settings (ACTIVE)
+### Forge Sprint 2: Unblock Chunking + Config Formats + GUI Settings (READY FOR QA)
 
 | Slice | Repo | Priority | What | Status | Owner |
 |-------|------|----------|------|--------|-------|
 | 2.1 | Forge | P0 | Diagnose + fix chunking pipeline failure | DONE (lazy init shipped) | Agent 1 |
 | 2.2 | Forge | P0 | Move 11 hardcoded placeholder formats to config/skip_list.yaml | DONE (config-driven) | Agent 1 |
 | 2.3 | Forge | P1 | GUI settings panel: workers (1-32), enrichment toggle, extraction toggle, OCR mode, chunk size/overlap | DONE (commit babb163) | Agent 1 |
-| 2.4 | Forge | P0 | End-to-end chunk export proof (100+ files, verify chunks.jsonl + vectors.npy) | TODO | Agent 1 |
+| 2.4 | Forge | P0 | End-to-end chunk export proof (100+ files, verify chunks.jsonl + vectors.npy) | DONE (198 files, 17695 chunks, vectors match) | Agent 1 |
 | 2.5 | Forge | P1 | Filter pdfmeta.json junk from chunks (pattern-based skip in skip_list.yaml) | DONE (17 OCR patterns, commit 8b33f8e) | Agent 1 |
 | 2.6 | Forge | P1 | config.local.yaml support (machine-specific overrides, gitignored) | DONE (commit 6cf1e7f) | Agent 1 |
 
@@ -83,15 +83,15 @@
 
 **Exit Criteria:** Enriched chunks measurably improve retrieval, entities extracted, run report operational.
 
-### V2 Sprint 13: Canonical Rebuild on Forge Output (GATE-1: blocked until Forge S2 green)
+### V2 Sprint 13: Canonical Rebuild on Forge Output (READY FOR QA)
 
 | Slice | Repo | Priority | What | Status | Owner |
 |-------|------|----------|------|--------|-------|
-| 13.1 | V2 | P0 | Import rebuilt CorpusForge export into fresh LanceDB store | TODO | Agent 2 |
-| 13.2 | V2 | P0 | Rebuild entity + relationship SQLite stores from fresh import | TODO | Agent 2 |
-| 13.3 | V2 | P0 | Run golden eval on rebuilt data — baseline accuracy | TODO | Agent 2 |
-| 13.4 | V2 | P1 | Integration test: Forge export → V2 import → query → verify results | TODO | Agent 2 |
-| 13.5 | V2 | P1 | Dedup format preference: define canonical format order (.docx > .pdf > .txt), auto-resolve low_risk families | TODO | Agent 2 |
+| 13.1 | V2 | P0 | Import rebuilt CorpusForge export into fresh LanceDB store | DONE | Agent 2 |
+| 13.2 | V2 | P0 | Rebuild entity + relationship SQLite stores from fresh import | DEFERRED (S14) | Agent 2 |
+| 13.3 | V2 | P0 | Run golden eval on rebuilt data -- baseline accuracy | DONE (20/25) | Agent 2 |
+| 13.4 | V2 | P1 | Integration test: Forge export -> V2 import -> query -> verify results | DONE (7/7) | Agent 2 |
+| 13.5 | V2 | P1 | Dedup format preference: define canonical format order (.docx > .pdf > .txt), auto-resolve low_risk families | DEFERRED (S14) | Agent 2 |
 
 **Exit Criteria:** Fresh store populated from Forge output, golden eval baselined, integration test passing.
 

@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-04-07T21:50:07.066631",
+  "source": "C:\\CorpusForge\\data\\output\\export_20260407_2141",
+  "preflight_verdict": "PASS",
+  "import_stats": {
+    "before": 12,
+    "inserted": 17695,
+    "duplicates": 0,
+    "after": 17707,
+    "ingest_seconds": 0.76,
+    "rate_chunks_per_sec": 23250
+  },
+  "index_result": {
+    "created": true,
+    "rows": 17707,
+    "index_type": "IVF_PQ",
+    "metric": "cosine",
+    "num_partitions": 133,
+    "num_sub_vectors": 96,
+    "nprobes": 20,
+    "refine_factor": null,
+    "optimized": true,
+    "indices": [
+      {
+        "value": "Index(IvfPq, columns=[\"vector\"], name=\"vector_idx\")"
+      }
+    ],
+    "index_stats": {
+      "name": "vector_idx",
+      "num_indexed_rows": 17707,
+      "num_unindexed_rows": 0,
+      "index_type": "IVF_PQ",
+      "distance_type": "cosine",
+      "num_indices": 1,
+      "loss": 0.0
+    },
+    "index_ready": true
+  },
+  "eval_returncode": null,
+  "total_seconds": 12.11
+}

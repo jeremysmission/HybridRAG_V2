@@ -1,5 +1,5 @@
 """
-Sprint 13 canonical rebuild: orchestrate Forge export → V2 store rebuild.
+Sprint 13 canonical rebuild: orchestrate Forge export -> V2 store rebuild.
 
 Runs preflight validation, imports into a fresh LanceDB store, builds
 indexes, and optionally runs golden eval to verify the rebuild.
@@ -49,7 +49,7 @@ def step_preflight(source: Path) -> dict:
     report = run_preflight(source)
     print_report(report)
     if report["verdict"] == "FAIL":
-        print("  Preflight FAILED — aborting rebuild.", file=sys.stderr)
+        print("  Preflight FAILED -- aborting rebuild.", file=sys.stderr)
         sys.exit(1)
     return report
 
@@ -58,12 +58,12 @@ def step_backup_existing(lance_db_path: str) -> str | None:
     """Back up existing LanceDB store if it exists."""
     db_path = Path(lance_db_path)
     if not db_path.exists():
-        print(f"  No existing store at {db_path} — skip backup")
+        print(f"  No existing store at {db_path} -- skip backup")
         return None
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     backup_path = db_path.parent / f"{db_path.name}_backup_{timestamp}"
-    print(f"  Backing up {db_path} → {backup_path}")
+    print(f"  Backing up {db_path} -> {backup_path}")
     shutil.copytree(str(db_path), str(backup_path))
     print(f"  Backup complete: {backup_path}")
     return str(backup_path)
@@ -120,7 +120,7 @@ def step_vector_index(config_path: str) -> dict:
     count = store.count()
 
     if count < 1000:
-        print(f"  Only {count:,} chunks — skipping vector index (< 1000 threshold)")
+        print(f"  Only {count:,} chunks -- skipping vector index (< 1000 threshold)")
         store.close()
         return {"skipped": True, "reason": "below_threshold", "count": count}
 
@@ -153,7 +153,7 @@ def step_golden_eval() -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Canonical rebuild: Forge export → V2 store → verify."
+        description="Canonical rebuild: Forge export -> V2 store -> verify."
     )
     parser.add_argument(
         "--source", required=True,
@@ -177,7 +177,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--strict", action="store_true",
-        help="Strict mode — reject import on any chunk validation failure.",
+        help="Strict mode -- reject import on any chunk validation failure.",
     )
     args = parser.parse_args()
 
@@ -185,7 +185,7 @@ def main() -> None:
     t_total_start = time.perf_counter()
 
     print(DIVIDER)
-    print("  HybridRAG V2 — Canonical Rebuild")
+    print("  HybridRAG V2 -- Canonical Rebuild")
     print(DIVIDER)
     print(f"  Source:  {source}")
     print(f"  Config:  {args.config}")

@@ -43,8 +43,15 @@ def validate_manifest(manifest: dict, vectors: np.ndarray) -> list[str]:
     """
     issues = []
 
-    # Schema version gate
+    # Schema version gate — support both "schema_version" (int) and "version" (str like "1.0")
     schema_ver = manifest.get("schema_version")
+    if schema_ver is None:
+        ver_str = manifest.get("version")
+        if ver_str is not None:
+            try:
+                schema_ver = int(float(ver_str))
+            except (ValueError, TypeError):
+                pass
     if schema_ver is not None and schema_ver < MIN_SCHEMA_VERSION:
         issues.append(
             f"REJECT: manifest schema_version={schema_ver} < minimum {MIN_SCHEMA_VERSION}"
