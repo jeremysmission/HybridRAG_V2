@@ -71,6 +71,8 @@ class Embedder:
 
     def _init_model(self) -> None:
         """Initialize sentence-transformers model with CUDA or ONNX fallback."""
+        self._apply_cpu_reservation()
+
         if self.requested_device == "cuda":
             if self._try_init_cuda():
                 return
@@ -83,6 +85,39 @@ class Embedder:
             "Install sentence-transformers + torch (CUDA) or onnxruntime (CPU). "
             "CorpusForge requires a local embedding backend — no Ollama fallback."
         )
+
+    @staticmethod
+    def _apply_cpu_reservation():
+        """Reserve 2 CPU cores for user — affinity + priority + thread cap."""
+        cpu_count = os.cpu_count() or 8
+        reserved = 2
+        max_threads = max(cpu_count - reserved, 1)
+
+        try:
+            import psutil
+            p = psutil.Process()
+            available_cores = list(range(reserved, cpu_count))
+            if available_cores:
+                p.cpu_affinity(available_cores)
+        except Exception:
+            pass
+
+        try:
+            import psutil
+            p = psutil.Process()
+            p.nice(getattr(psutil, "BELOW_NORMAL_PRIORITY_CLASS", 10))
+        except Exception:
+            pass
+
+        try:
+            import torch
+            torch.set_num_threads(max_threads)
+        except Exception:
+            pass
+        os.environ.setdefault("OMP_NUM_THREADS", str(max_threads))
+        os.environ.setdefault("MKL_NUM_THREADS", str(max_threads))
+        logger.info("CPU reservation: %d/%d threads, cores 0-%d reserved for user",
+                     max_threads, cpu_count, reserved - 1)
 
     def _try_init_cuda(self) -> bool:
         """Try loading model on CUDA via sentence-transformers."""
