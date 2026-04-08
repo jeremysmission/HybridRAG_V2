@@ -25,7 +25,7 @@
 
 ### Smoke Test
 - [ ] Run golden eval: `python scripts/run_golden_eval.py --retrieval-only` -- expect 25/25
-- [ ] Start API: `python -m src.api.server` -- should show port 8000
+- [ ] Start API: `python -m src.api.server` -- takes ~30s to load embedding model, then shows port 8000
 - [ ] Quick query: `curl -X POST localhost:8000/query -H "Content-Type: application/json" -d "{\"query\": \"What is the transmitter power at Riverside?\"}"`
 
 ---

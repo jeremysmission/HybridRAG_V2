@@ -1,13 +1,13 @@
 {
-  "run_id": "20260408_051133",
-  "timestamp": "2026-04-08T05:11:33.794628+00:00",
-  "total_queries": 25,
-  "routing_correct": 24,
-  "retrieval_pass": 25,
+  "run_id": "20260408_065724",
+  "timestamp": "2026-04-08T06:57:24.536400+00:00",
+  "total_queries": 30,
+  "routing_correct": 28,
+  "retrieval_pass": 30,
   "generation_pass": 0,
   "confidence_correct": 0,
   "crag_triggered": 0,
-  "avg_latency_ms": 28.96,
+  "avg_latency_ms": 48.93333333333333,
   "retrieval_only": true,
   "scores": [
     {
@@ -36,7 +36,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 27,
+      "latency_ms": 198,
       "error": ""
     },
     {
@@ -63,7 +63,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 38,
+      "latency_ms": 385,
       "error": ""
     },
     {
@@ -90,7 +90,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 16,
+      "latency_ms": 21,
       "error": ""
     },
     {
@@ -119,7 +119,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 64,
+      "latency_ms": 86,
       "error": ""
     },
     {
@@ -150,7 +150,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 31,
+      "latency_ms": 19,
       "error": ""
     },
     {
@@ -179,7 +179,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 22,
+      "latency_ms": 20,
       "error": ""
     },
     {
@@ -204,7 +204,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 24,
+      "latency_ms": 26,
       "error": ""
     },
     {
@@ -229,7 +229,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 16,
       "error": ""
     },
     {
@@ -254,7 +254,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 25,
+      "latency_ms": 18,
       "error": ""
     },
     {
@@ -279,7 +279,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 25,
+      "latency_ms": 28,
       "error": ""
     },
     {
@@ -308,7 +308,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 21,
+      "latency_ms": 109,
       "error": ""
     },
     {
@@ -341,7 +341,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 28,
+      "latency_ms": 69,
       "error": ""
     },
     {
@@ -368,7 +368,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 26,
+      "latency_ms": 22,
       "error": ""
     },
     {
@@ -426,7 +426,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 68,
+      "latency_ms": 75,
       "error": ""
     },
     {
@@ -451,7 +451,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 32,
+      "latency_ms": 34,
       "error": ""
     },
     {
@@ -478,7 +478,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 23,
+      "latency_ms": 27,
       "error": ""
     },
     {
@@ -511,7 +511,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 26,
+      "latency_ms": 19,
       "error": ""
     },
     {
@@ -544,7 +544,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 27,
+      "latency_ms": 20,
       "error": ""
     },
     {
@@ -575,7 +575,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 18,
+      "latency_ms": 24,
       "error": ""
     },
     {
@@ -604,7 +604,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 32,
+      "latency_ms": 17,
       "error": ""
     },
     {
@@ -631,7 +631,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 16,
+      "latency_ms": 21,
       "error": ""
     },
     {
@@ -664,7 +664,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 51,
+      "latency_ms": 53,
       "error": ""
     },
     {
@@ -691,7 +691,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 27,
+      "latency_ms": 20,
       "error": ""
     },
     {
@@ -712,7 +712,116 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
+      "latency_ms": 18,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-026",
+      "query": "",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [],
+      "retrieval_facts_found": [],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [],
+      "generation_facts_missing": [],
+      "generation_pass": null,
+      "expected_confidence": "NOT_FOUND",
+      "actual_confidence": "N/A",
+      "confidence_correct": null,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 24,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-027",
+      "query": "Riverside Observatory transmitter \u2014 \u00e9quipement et r\u00e9paration \u2014 \u4fee\u7406\u72b6\u614b\u306f\uff1f",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [],
+      "retrieval_facts_found": [],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [],
+      "generation_facts_missing": [],
+      "generation_pass": null,
+      "expected_confidence": "PARTIAL",
+      "actual_confidence": "N/A",
+      "confidence_correct": null,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 18,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-028",
+      "query": "Give me every single detail about every maintenance visit to every site including all parts replaced all serial numbers all technician names all dates all purchase orders all status updates all contact information all equipment conditions all calibration procedures all workarounds applied and all follow-up actions scheduled across the entire corpus with full provenance and source citations for each fact.",
+      "expected_type": "SEMANTIC",
+      "routed_type": "TABULAR",
+      "routing_correct": false,
+      "expected_facts": [],
+      "retrieval_facts_found": [],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [],
+      "generation_facts_missing": [],
+      "generation_pass": null,
+      "expected_confidence": "PARTIAL",
+      "actual_confidence": "N/A",
+      "confidence_correct": null,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 22,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-029",
+      "query": "Who is Torres?",
+      "expected_type": "ENTITY",
+      "routed_type": "ENTITY",
+      "routing_correct": true,
+      "expected_facts": [
+        "Mike Torres"
+      ],
+      "retrieval_facts_found": [
+        "Mike Torres"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [],
+      "generation_facts_missing": [],
+      "generation_pass": null,
+      "expected_confidence": "PARTIAL",
+      "actual_confidence": "N/A",
+      "confidence_correct": null,
+      "crag_triggered": false,
+      "crag_retries": 0,
       "latency_ms": 20,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-030",
+      "query": "What is the status of the parts at the site?",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [],
+      "retrieval_facts_found": [],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [],
+      "generation_facts_missing": [],
+      "generation_pass": null,
+      "expected_confidence": "PARTIAL",
+      "actual_confidence": "N/A",
+      "confidence_correct": null,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 17,
       "error": ""
     }
   ]

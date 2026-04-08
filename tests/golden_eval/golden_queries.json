@@ -173,5 +173,40 @@
     "expected_facts": [],
     "expected_confidence": "NOT_FOUND",
     "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-026",
+    "query": "",
+    "expected_facts": [],
+    "expected_confidence": "NOT_FOUND",
+    "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-027",
+    "query": "Riverside Observatory transmitter \u2014 \u00e9quipement et r\u00e9paration \u2014 \u4fee\u7406\u72b6\u614b\u306f\uff1f",
+    "expected_facts": [],
+    "expected_confidence": "PARTIAL",
+    "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-028",
+    "query": "Give me every single detail about every maintenance visit to every site including all parts replaced all serial numbers all technician names all dates all purchase orders all status updates all contact information all equipment conditions all calibration procedures all workarounds applied and all follow-up actions scheduled across the entire corpus with full provenance and source citations for each fact.",
+    "expected_facts": [],
+    "expected_confidence": "PARTIAL",
+    "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-029",
+    "query": "Who is Torres?",
+    "expected_facts": ["Mike Torres"],
+    "expected_confidence": "PARTIAL",
+    "query_type": "ENTITY"
+  },
+  {
+    "id": "GQ-030",
+    "query": "What is the status of the parts at the site?",
+    "expected_facts": [],
+    "expected_confidence": "PARTIAL",
+    "query_type": "SEMANTIC"
   }
 ]

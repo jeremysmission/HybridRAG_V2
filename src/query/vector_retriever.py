@@ -47,6 +47,11 @@ class VectorRetriever:
         Embeds the query, runs hybrid search (vector + BM25).
         """
         k = top_k or self.top_k
+        # Sanitize: strip control chars and limit length to prevent tokenizer errors
+        query = "".join(ch for ch in query if ch.isprintable() or ch in ("\n", "\t"))
+        query = query[:4096]
+        if not query.strip():
+            return []
         query_vector = self.embedder.embed_query(query)
         results = self.store.hybrid_search(
             query_vector=query_vector,
