@@ -38,7 +38,7 @@ class PathsConfig(BaseModel):
     )
     site_vocabulary: str = Field(
         default="config/site_vocabulary.yaml",
-        description="Controlled vocabulary YAML for IGS site normalization.",
+        description="Controlled vocabulary YAML for enterprise program site normalization.",
     )
 
 

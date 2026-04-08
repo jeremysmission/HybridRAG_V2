@@ -184,7 +184,7 @@ class TestRegexPreExtractor:
         POC: TSgt Torres
         Part#: ARC-4471
         Date: 2025-06-15
-        Contact: torres@igs.mil
+        Contact: torres@enterprise.mil
         PO: PO-2025-0142"""
         entities = regex_extractor.extract(text, "c1", "doc.txt")
         types = {e.entity_type for e in entities}

@@ -391,7 +391,7 @@ PROBE_DOMAINS: List[ProbeDomain] = [
         domain_id="space_ionosphere",
         display_name="Space / Ionosphere Testing",
         source_text=(
-            "The digital ionosonde transmits swept pulses from 1 to "
+            "The digital sensor system transmits swept pulses from 1 to "
             "20 MHz at 100 watts peak power. Ionogram cadence is one "
             "sounding every 5 minutes with 500 frequency steps per "
             "sweep. The system measures virtual height from 80 to "
@@ -404,7 +404,7 @@ PROBE_DOMAINS: List[ProbeDomain] = [
             "to the central processing facility every 15 minutes."
         ),
         should_pass=[
-            ("The ionosonde sweeps from 1 to 20 MHz.",
+            ("The sensor system sweeps from 1 to 20 MHz.",
              "Frequency range directly stated"),
             ("Virtual height is measured from 80 to 800 km.",
              "Height range directly stated"),
@@ -412,7 +412,7 @@ PROBE_DOMAINS: List[ProbeDomain] = [
              "Cadence directly stated"),
         ],
         should_fail=[
-            ("The ionosonde transmits at 10 kilowatts peak power.",
+            ("The sensor system transmits at 10 kilowatts peak power.",
              "CONTRADICTED", "Source says 100 watts -- 100x overstatement"),
             ("Height resolution is 0.5 km using interferometric techniques.",
              "CONTRADICTED", "Source says 5 km, no interferometry mentioned"),
@@ -420,7 +420,7 @@ PROBE_DOMAINS: List[ProbeDomain] = [
              "trained on 2 million ionograms from the GIRO database "
              "achieving 99.2% accuracy against manual scaling.",
              "UNSUPPORTED", "Fabricated ML approach and accuracy claim"),
-            ("The system detected a previously unknown ionospheric "
+            ("The system detected a previously unknown atmospheric "
              "layer at 45 km altitude during the 2023 solar maximum "
              "event, published in Nature Geoscience.",
              "UNSUPPORTED", "Fabricated discovery and publication -- "

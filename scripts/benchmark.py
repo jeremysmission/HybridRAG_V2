@@ -66,7 +66,7 @@ def compute_stats(latencies: list[float]) -> dict:
 # ---------------------------------------------------------------------------
 
 SAMPLE_TEXTS = [
-    "The ionosonde at Thule recorded a foF2 of 8.2 MHz during the storm.",
+    "The sensor system at Thule recorded a foF2 of 8.2 MHz during the storm.",
     "SSgt Marcus Webb is the primary point of contact for site maintenance.",
     "Part ARC-1234 was replaced at Cedar Ridge on 2025-11-15.",
     "The quarterly maintenance report shows 47 unscheduled repairs.",
@@ -79,7 +79,7 @@ SAMPLE_TEXTS = [
 ]
 
 SAMPLE_QUERIES = {
-    "SEMANTIC": "What were the ionospheric conditions during the storm?",
+    "SEMANTIC": "What were the atmospheric conditions during the storm?",
     "ENTITY": "Who is the POC for Thule?",
     "AGGREGATE": "How many unscheduled repairs occurred last quarter?",
     "TABULAR": "Show the maintenance schedule for Arctic sites.",

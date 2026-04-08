@@ -77,7 +77,7 @@
 ### Slice 2.2: Quality Gates + Normalization (Day 2-4)
 - [ ] Implement `ingest/quality_gate.py` — confidence thresholds (reject < 0.7)
 - [ ] Implement `ingest/entity_normalizer.py` — controlled vocabulary matching
-- [ ] Build site vocabulary (25 IGS sites with known aliases)
+- [ ] Build site vocabulary (25 enterprise program sites with known aliases)
 - [ ] Build part number pattern validator (ARC-NNNN, IGSI-NNNN, PO-YYYY-NNNN)
 - [ ] Build person name deduplication (separate phone/email from name)
 - [ ] Implement `scripts/audit_extraction.py` — quality report

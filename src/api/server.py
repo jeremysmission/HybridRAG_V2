@@ -40,7 +40,7 @@ def create_app(config_path: str = "config/config.yaml") -> FastAPI:
 
     app = FastAPI(
         title="HybridRAG V2",
-        description="Tri-store RAG system for IGS/NEXION documents",
+        description="Tri-store RAG system for enterprise program documents",
         version="0.4.0",
     )
 

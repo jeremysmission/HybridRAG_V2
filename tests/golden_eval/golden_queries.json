@@ -29,7 +29,7 @@
   },
   {
     "id": "GQ-005",
-    "query": "Describe the ionosonde calibration procedure at Thule.",
+    "query": "Describe the sensor system calibration procedure at Thule.",
     "expected_facts": ["GPS-disciplined reference oscillator", "calibration signal generator", "UTC via GPS", "ionogram quality"],
     "expected_confidence": "HIGH",
     "query_type": "SEMANTIC"
@@ -227,7 +227,7 @@
   },
   {
     "id": "GQ-033",
-    "query": "What was the restricted encryption key used for the NEXION satellite uplink?",
+    "query": "What was the restricted encryption key used for the monitoring system satellite uplink?",
     "expected_facts": [],
     "expected_confidence": "NOT_FOUND",
     "query_type": "SEMANTIC",
@@ -235,7 +235,7 @@
   },
   {
     "id": "GQ-034",
-    "query": "Summarize the 2019 congressional hearing about NEXION system failures.",
+    "query": "Summarize the 2019 congressional hearing about monitoring system system failures.",
     "expected_facts": [],
     "expected_confidence": "NOT_FOUND",
     "query_type": "SEMANTIC",

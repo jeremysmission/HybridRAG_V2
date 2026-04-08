@@ -19,7 +19,7 @@ All golden eval data consolidated here for easy access.
 
 | Tier | Files | Golden Queries |
 |------|-------|---------------|
-| `tier1_smoke/` | Clean IGS maintenance docs | `golden_queries_tier1.json` |
+| `tier1_smoke/` | Clean enterprise program maintenance docs | `golden_queries_tier1.json` |
 | `tier2_stress/` | Messy OCR, email chains, fragments | `golden_queries_tier2.json` |
 | `tier3_negative/` | Empty, binary, injection, foreign | `golden_queries_tier3.json` |
 

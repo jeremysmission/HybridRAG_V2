@@ -6,7 +6,7 @@ Auto-loaded rules for all agents working in this repo.
 
 ## Project
 
-HybridRAG V2 is a tri-store retrieval and answer system for IGS/NEXION maintenance documents. It consumes pre-built chunks from CorpusForge and serves semantic, entity, aggregation, and tabular queries.
+HybridRAG V2 is a tri-store retrieval and answer system for enterprise maintenance documents. It consumes pre-built chunks from CorpusForge and serves semantic, entity, aggregation, and tabular queries.
 
 - **Repo:** C:\HybridRAG_V2
 - **Venv:** `.venv` (Python 3.11+, torch CUDA cu128)

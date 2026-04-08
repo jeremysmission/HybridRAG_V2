@@ -1,3 +1,9 @@
+# Agent instruction files — never push to remote
+CLAUDE.md
+
+# Production data — never commit
+ProductionSource/
+
 # Python
 __pycache__/
 *.py[cod]

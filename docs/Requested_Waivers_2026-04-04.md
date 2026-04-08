@@ -63,7 +63,7 @@ file-based.
 | Server Required | No — in-process inference |
 | Current Status | Not on waiver sheet (NEW request) |
 | Dependencies | torch (BSD-3, already in stack for EmbedEngine CUDA), transformers (Apache 2.0, Hugging Face/USA) |
-| Why Required | V1 attempted entity extraction using regex/heuristic methods. The result: service_events table with 1,902 rows but zero populated part numbers, zero failure modes, and garbage site names. GLiNER performs zero-shot NER without fine-tuning, handling the 67+ file formats and inconsistent naming conventions in the IGS corpus. It handles 80% of entity extraction at zero API cost, with GPT-4o handling the remaining 20% of complex extractions. |
+| Why Required | V1 attempted entity extraction using regex/heuristic methods. The result: service_events table with 1,902 rows but zero populated part numbers, zero failure modes, and garbage site names. GLiNER performs zero-shot NER without fine-tuning, handling the 67+ file formats and inconsistent naming conventions in the enterprise program corpus. It handles 80% of entity extraction at zero API cost, with GPT-4o handling the remaining 20% of complex extractions. |
 | Security | Apache 2.0 license. France is a NATO ally. Model weights are fully auditable. No telemetry. No network calls during inference. |
 | Fallback if Denied | Use GPT-4o for all entity extraction. Higher cost (~$935 vs ~$200 for hybrid approach) but zero new dependencies for the extraction pipeline. |
 
@@ -94,7 +94,7 @@ academic research from France (NATO ally), presented at NAACL 2024.
 | Server Required | No — in-process inference |
 | Current Status | Not on waiver sheet (NEW request) |
 | Dependencies | torch (BSD-3, already in stack), transformers (Apache 2.0, HuggingFace/USA), safetensors (Apache 2.0, HuggingFace/USA), docling-core (MIT, IBM) |
-| Why Required | The IGS corpus contains extensive structured data in spreadsheets and PDFs: parts received/requested/shipped, maintenance service reports, diagnostics results, logistics trackers. V1's pdfplumber achieves ~32% accuracy on complex tables. Docling achieves 97.9% accuracy. This difference determines whether tabular queries ("Status of PO-2024-0891?") work or fail. |
+| Why Required | The enterprise program corpus contains extensive structured data in spreadsheets and PDFs: parts received/requested/shipped, maintenance service reports, diagnostics results, logistics trackers. V1's pdfplumber achieves ~32% accuracy on complex tables. Docling achieves 97.9% accuracy. This difference determines whether tabular queries ("Status of PO-2024-0891?") work or fail. |
 | Security | MIT license. IBM is an established US enterprise with existing FedRAMP authorizations. Granite-Docling-258M model is Apache 2.0. No telemetry. No outbound connections. |
 | Fallback if Denied | Use openpyxl (already GREEN) for Excel files + pdfplumber (already GREEN) for PDF tables. Lower accuracy on complex/scanned tables but functional for well-formatted spreadsheets. |
 

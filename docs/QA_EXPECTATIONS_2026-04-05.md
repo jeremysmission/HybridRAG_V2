@@ -68,7 +68,7 @@ Every sprint QA must cover all five. No exceptions, no "we'll test that later."
 **Rule:** Every tier must be tested. A sprint that only tests tier 1 has not been QA'd.
 
 ### Pillar 4: Real Data Pass
-**Proves:** System works on actual production IGS documents, not just synthetic test files.
+**Proves:** System works on actual production enterprise program documents, not just synthetic test files.
 
 | Check | Expected |
 |-------|----------|

@@ -322,7 +322,7 @@ Input: RawEntity(text, type, confidence, extractor)
     |
     v
 [Type-Specific Validation]
-    SITE: match against controlled vocabulary (25 known IGS sites + aliases)
+    SITE: match against controlled vocabulary (25 known enterprise program sites + aliases)
           "Pre-Site Survey To Thule AB" --> "Thule" (match on alias)
           "Briefing Slides" --> REJECT (no site match)
     PART_NUMBER: validate against known patterns (ARC-\d{4}, IGSI-\d+, PO-\d{4}-\d{4})
@@ -426,7 +426,7 @@ AWS GovCloud:
   - OpenSearch Managed (replaces LanceDB) — kNN + BM25, FedRAMP High
   - SageMaker Serverless (replaces local embedder) — nomic-embed-text
   - Lambda (replaces local FastAPI) — query + ingest functions
-  - S3 (replaces local filesystem) — igs-rag-index bucket
+  - S3 (replaces local filesystem) — enterprise program-rag-index bucket
   - AI Toolbox GPT-OSS (same) — LLM endpoint
   - Cost: ~$65-90/month
 ```

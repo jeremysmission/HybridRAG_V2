@@ -112,7 +112,7 @@ ENTITY_SCHEMA = {
     },
 }
 
-EXTRACTION_SYSTEM_PROMPT = """You are an entity extraction engine for IGS/NEXION military maintenance documents.
+EXTRACTION_SYSTEM_PROMPT = """You are an entity extraction engine for enterprise program military maintenance documents.
 
 Extract ALL entities and relationships from the provided text chunk.
 

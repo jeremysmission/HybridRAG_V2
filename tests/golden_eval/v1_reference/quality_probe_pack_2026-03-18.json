@@ -3,7 +3,7 @@
   "purpose": [
     "Canary questions verify retrieval against planted documents.",
     "Trick questions verify that the grounding guard refuses unsupported claims.",
-    "Ionosonde questions verify grounded domain answers from downloaded DTIC and related propagation docs."
+    "sensor system questions verify grounded domain answers from downloaded DTIC and related propagation docs."
   ],
   "canary_questions": [
     {
@@ -63,7 +63,7 @@
     },
     {
       "id": "TRICK-4",
-      "query": "What is the calibration interval for a quantum ionosonde?",
+      "query": "What is the calibration interval for a quantum sensor system?",
       "expected_behavior": "not_found_or_no_evidence",
       "purpose": "grounding_guard"
     }
@@ -71,39 +71,39 @@
   "ionosonde_questions": [
     {
       "id": "IONO-1",
-      "query": "What frequency range does a vertical incidence ionosonde typically sweep?",
+      "query": "What frequency range does a vertical incidence sensor system typically sweep?",
       "expected_behavior": "grounded_domain_answer",
-      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+      "expected_source_hint": "DTIC_AD0474163 or related sensor system docs"
     },
     {
       "id": "IONO-2",
       "query": "What is the difference between virtual height and true height on an ionogram?",
       "expected_behavior": "grounded_domain_answer",
-      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+      "expected_source_hint": "DTIC_AD0474163 or related sensor system docs"
     },
     {
       "id": "IONO-3",
       "query": "What is spread-F and how does it appear on an ionogram?",
       "expected_behavior": "grounded_domain_answer",
-      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+      "expected_source_hint": "DTIC_AD0474163 or related sensor system docs"
     },
     {
       "id": "IONO-4",
       "query": "What is the MUF and how does backscatter extend it?",
       "expected_behavior": "grounded_domain_answer",
-      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+      "expected_source_hint": "DTIC_AD0474163 or related sensor system docs"
     },
     {
       "id": "IONO-5",
       "query": "Can ionosondes measure above the F-layer?",
       "expected_behavior": "grounded_domain_answer",
-      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+      "expected_source_hint": "DTIC_AD0474163 or related sensor system docs"
     },
     {
       "id": "IONO-6",
       "query": "What is the purpose of oblique ionograms?",
       "expected_behavior": "grounded_domain_answer",
-      "expected_source_hint": "DTIC_AD0474163 or related ionosonde docs"
+      "expected_source_hint": "DTIC_AD0474163 or related sensor system docs"
     },
     {
       "id": "IONO-7",

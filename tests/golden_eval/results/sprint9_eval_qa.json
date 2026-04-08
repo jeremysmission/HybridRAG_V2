@@ -139,7 +139,7 @@
     },
     {
       "query_id": "GQ-005",
-      "query": "Describe the ionosonde calibration procedure at Thule.",
+      "query": "Describe the sensor system calibration procedure at Thule.",
       "expected_type": "SEMANTIC",
       "routed_type": "SEMANTIC",
       "routing_correct": true,

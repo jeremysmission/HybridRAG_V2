@@ -74,7 +74,7 @@
   },
   {
     "id": "dps4d_004",
-    "question": "What is the operating frequency range of the DPS-4D ionosonde?",
+    "question": "What is the operating frequency range of the DPS-4D sensor system?",
     "expected_answer": "0.5 MHz to 30 MHz",
     "category": "technical_spec",
     "difficulty": "easy",

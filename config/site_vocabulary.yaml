@@ -1,4 +1,4 @@
-# Controlled Site Vocabulary for IGS/NEXION
+# Controlled Site Vocabulary for enterprise program
 # Used by quality gates to normalize entity text.
 # Canonical names map from known variants to the official site name.
 # Date: 2026-04-05
@@ -46,7 +46,7 @@ part_patterns:
   - pattern: 'ARC-\d{4}'
     type: "RF Component"
   - pattern: 'IGSI-\d+'
-    type: "IGS Instrument"
+    type: "enterprise program Instrument"
   - pattern: 'PO-\d{4}-\d{4}'
     type: "Purchase Order"
   - pattern: 'SN[\s-]?\d+'

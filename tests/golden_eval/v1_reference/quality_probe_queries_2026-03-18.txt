@@ -6,8 +6,8 @@ How many service accounts required manual intervention during the Thornberry AD 
 What year in the 1970s did we discover antigravity?
 What TCP port does the flux capacitor use?
 Which MIL-STD covers underwater wireless networking?
-What is the calibration interval for a quantum ionosonde?
-What frequency range does a vertical incidence ionosonde typically sweep?
+What is the calibration interval for a quantum sensor system?
+What frequency range does a vertical incidence sensor system typically sweep?
 What is the difference between virtual height and true height on an ionogram?
 What is spread-F and how does it appear on an ionogram?
 What is the MUF and how does backscatter extend it?

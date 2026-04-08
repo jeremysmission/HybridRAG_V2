@@ -289,7 +289,7 @@ class QualityGate:
         return ValidatedEntity(**entity.dict(), normalized_text=entity.text)
 
     def normalize_site(self, raw: str) -> str | None:
-        """Match raw text against controlled vocabulary of 25 IGS sites."""
+        """Match raw text against controlled vocabulary of 25 enterprise program sites."""
         raw_lower = raw.lower()
         for canonical, aliases in self.site_vocab.items():
             if any(alias in raw_lower for alias in aliases):
@@ -356,7 +356,7 @@ class QueryRouter:
 
     ROUTER_PROMPT = """
     You are a query classifier for a technical document search system about
-    military radar/ionosonde maintenance and operations (IGS/NEXION systems).
+    military radar/sensor system maintenance and operations (enterprise program systems).
 
     Classify the query and generate a retrieval plan.
 
@@ -442,7 +442,7 @@ class Generator:
     """LLM generation with graduated confidence and citations."""
 
     GENERATOR_PROMPT = """
-    You are a technical document assistant for IGS/NEXION military systems.
+    You are a technical document assistant for enterprise program military systems.
     Answer based ONLY on the provided context.
 
     CONFIDENCE LEVELS (required in every response):

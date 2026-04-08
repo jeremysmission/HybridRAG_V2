@@ -265,8 +265,8 @@ def _build_document_where(filters: dict[str, Any]) -> tuple[str, list[Any]]:
     if location_clauses:
         clauses.append("(" + " OR ".join(location_clauses) + ")")
 
-    if "nexion" in str(filters.get("normalized_question", "")):
-        clauses.append("LOWER(system_name) LIKE '%nexion%'")
+    if "monitoring system" in str(filters.get("normalized_question", "")):
+        clauses.append("LOWER(system_name) LIKE '%monitoring system%'")
 
     return " AND ".join(clauses), params
 

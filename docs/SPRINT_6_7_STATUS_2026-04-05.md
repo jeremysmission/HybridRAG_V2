@@ -77,7 +77,7 @@
 
 - `What is the transmitter output power at Riverside Observatory?`
 - `What workaround was applied for the CH3 noise issue?`
-- `Describe the ionosonde calibration procedure at Thule.`
+- `Describe the sensor system calibration procedure at Thule.`
 
 ## V1 vs V2 Comparison Material Ready
 

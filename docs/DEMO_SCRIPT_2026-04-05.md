@@ -3,7 +3,7 @@
 **Author:** Jeremy Randall | HybridRAG_V2 | 2026-04-05 MDT
 **Audience:** enterprise stakeholders (engineers, program managers, logistics leads)
 **Total time:** ~19 minutes (2 + 12 + 2 + 3)
-**System:** HybridRAG V2 — IGS/NEXION Maintenance Knowledge System
+**System:** HybridRAG V2 — enterprise program Maintenance Knowledge System
 
 ---
 
@@ -15,7 +15,7 @@ Engineers spend hours searching through legacy databases, SharePoint, and file s
 
 Studies show the average worker spends 1-1.5 hours per day on information retrieval. AI-assisted retrieval reduces that time by 60-70%. This system is built to deliver that reduction for three key roles.
 
-Our current data — maintenance reports, purchase orders, email chains, and spreadsheets — is already being generated across IGS and NEXION programs every year. Today, finding specific information across this corpus requires someone who:
+Our current data — maintenance reports, purchase orders, email chains, and spreadsheets — is already being generated across enterprise program and monitoring system programs every year. Today, finding specific information across this corpus requires someone who:
 
 - Knows which document to look in
 - Knows the tribal knowledge (site names, part numbers, people)
@@ -33,7 +33,7 @@ When that person is unavailable — on leave, moved to another program, or left 
 
 ### What the system does:
 
-- Answers factual questions about IGS/NEXION maintenance, parts, and personnel
+- Answers factual questions about enterprise program maintenance, parts, and personnel
 - Cites every claim back to a specific source document and section
 - Handles structured data (tables, purchase orders) and unstructured data (reports, emails)
 - Tells you when it does NOT know something (graduated confidence)
@@ -47,7 +47,7 @@ When that person is unavailable — on leave, moved to another program, or left 
 
 ### Scope:
 
-- ~700GB corpus of mission-derived documentation (IGS/NEXION maintenance and logistics)
+- ~700GB corpus of mission-derived documentation (enterprise program maintenance and logistics)
 - 27.6 million indexed chunks across 100K+ documents
 - 32 file format parsers (PDF, DOCX, XLSX, email, plain text, etc.)
 

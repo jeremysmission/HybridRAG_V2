@@ -31,13 +31,13 @@ All evidence was gathered from independent testing on the production 27.6M-chunk
 | Query | V1 Returns | The Problem |
 |---|---|---|
 | "maintenance service report 2025" | JIRA CSV metadata rows mentioning MSRs | Finds the tracker, not the tracked items. Cannot count reports. |
-| "Nexion part failure" | Contingency plan prose: "A NEXION unit may experience failure" | Returns the concept of failure, not actual failure instances |
+| "monitoring system part failure" | Contingency plan prose: "A monitoring system unit may experience failure" | Returns the concept of failure, not actual failure instances |
 | "point of contact Thule" | Scorecard spreadsheet fragments mentioning Thule | Never extracts the actual POC name |
 | "how many service reports filed" | Red Hat Satellite admin docs about vacuumdb | Complete miss — BM25 matched "reports" + "filed" in unrelated IT docs |
-| "parts shipped received logistics" | Weekly hours variance spreadsheets with "NEXION LOGISTICS" job codes | Adjacent data, not actual parts tracking |
+| "parts shipped received logistics" | Weekly hours variance spreadsheets with "monitoring system LOGISTICS" job codes | Adjacent data, not actual parts tracking |
 | "Learmonth site visit" | Items-needed checklist for visits | Correct topic but cannot aggregate across visits |
 | "antenna calibration alignment" | Trip report mentioning antenna pad alignment | Returns one instance, cannot compare across sites |
-| "ionogram quality degraded" | NEXION Configuration Procedures doc | Returns configuration guidance, not quality incidents |
+| "ionogram quality degraded" | monitoring system Configuration Procedures doc | Returns configuration guidance, not quality incidents |
 
 ### 2.2 V1 Structured Table Analysis (The Garbage Data Finding)
 
@@ -63,7 +63,7 @@ All evidence was gathered from independent testing on the production 27.6M-chunk
 - FTS5 keyword search latency: 12-24 seconds on 27.6M chunks (measured during testing)
 - FAISS vector search: 2-5ms warm queries (proven in V1)
 - 54% of files are `_1` suffix duplicates (measured during index analysis)
-- Corpus spans 13+ years, 25+ IGS/NEXION sites, 67+ file formats
+- Corpus spans 13+ years, 25+ enterprise program sites, 67+ file formats
 
 ### 2.4 Debate Insights Incorporated
 
@@ -408,7 +408,7 @@ HybridRAG_V2/
 | nomic-embed-text (EmbedEngine) | SageMaker Serverless endpoint | Same model |
 | FastAPI | Lambda + API Gateway | Same route structure |
 | GPT-OSS-120B (AI Toolbox) | AI Toolbox (same) | Already provisioned |
-| Local filesystem | S3 `igs-rag-index` bucket | Already provisioned |
+| Local filesystem | S3 `enterprise program-rag-index` bucket | Already provisioned |
 
 **Cloud cost estimate:** ~$65-90/mo (same as V1 estimate). V2 adds capability, not cost.
 
@@ -432,7 +432,7 @@ Every waiver has a fallback if denied. All are MIT/Apache 2.0, all USA or NATO a
 
 ### T3: Entity normalization requires building controlled vocabularies
 
-**Justification:** The site list is known (25 IGS sites). Part number patterns are known (ARC-NNNN, IGSI-NNNN, PO-YYYY-NNNN). These are simple lookup tables, not ML models. The alternative — no normalization — is what V1 did, and the result is "Pre-Site Survey To Thule AB" as a site name. The vocabulary build is a one-time effort measured in hours, not weeks.
+**Justification:** The site list is known (25 enterprise program sites). Part number patterns are known (ARC-NNNN, IGSI-NNNN, PO-YYYY-NNNN). These are simple lookup tables, not ML models. The alternative — no normalization — is what V1 did, and the result is "Pre-Site Survey To Thule AB" as a site name. The vocabulary build is a one-time effort measured in hours, not weeks.
 
 ### T4: Quality gates reject some real entities (false negatives)
 

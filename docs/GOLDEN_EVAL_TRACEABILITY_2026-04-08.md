@@ -34,7 +34,7 @@ These files are NOT the source for golden eval queries. They are persona-coverag
 
 ## Traceability Gap
 
-**Finding:** Golden eval queries do not trace to the `role_corpus_golden/` files. This is by design -- the golden queries were authored against the 5 simpler test documents that contain the IGS maintenance scenario facts (Thule, Riverside, Cedar Ridge sites, specific parts, POs, contacts).
+**Finding:** Golden eval queries do not trace to the `role_corpus_golden/` files. This is by design -- the golden queries were authored against the 5 simpler test documents that contain the enterprise program maintenance scenario facts (Thule, Riverside, Cedar Ridge sites, specific parts, POs, contacts).
 
 **Action:** No change needed for demo. The golden eval proves the query pipeline works. The role_corpus_golden files prove format diversity. Both are valid testing vectors but serve different purposes.
 

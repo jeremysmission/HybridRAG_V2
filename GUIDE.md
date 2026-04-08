@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-HybridRAG V2 is a tri-store retrieval and answer system for IGS and NEXION maintenance and operations documents. It consumes pre-built chunks from the ingest pipeline and supports semantic, entity, aggregation, and tabular query paths.
+HybridRAG V2 is a tri-store retrieval and answer system for enterprise program and monitoring system maintenance and operations documents. It consumes pre-built chunks from the ingest pipeline and supports semantic, entity, aggregation, and tabular query paths.
 
 ## Core Architecture
 

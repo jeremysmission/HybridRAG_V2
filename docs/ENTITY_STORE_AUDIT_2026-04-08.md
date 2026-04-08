@@ -37,14 +37,14 @@ The entity store contains a mix of V1 and V2 data. This is expected and acceptab
 
 V1 entities have paths like:
 ```
-{USER_HOME}\Documents\HybridRAG3\data\source\verified\IGS\! Site Visits\...
+{USER_HOME}\Documents\HybridRAG3\data\source\verified\enterprise program\! Site Visits\...
 ```
 
-These are real IGS maintenance documents extracted during overnight phi4 runs on the original V1 corpus (Clone1 copy).
+These are real enterprise program maintenance documents extracted during overnight phi4 runs on the original V1 corpus (Clone1 copy).
 
 ## Why This Is Acceptable for Demo
 
-1. **V1 entities are real data** -- they were extracted from genuine IGS/NEXION maintenance documents
+1. **V1 entities are real data** -- they were extracted from genuine enterprise program maintenance documents
 2. **The entity store schema is the same** -- V1 and V2 entities use identical types (PERSON, PART, SITE, etc.)
 3. **Golden eval passes 25/25** -- the entity retriever serves correct answers from both V1 and V2 entities
 4. **The 234 golden entities are V2-native** -- demo queries trace to these curated files

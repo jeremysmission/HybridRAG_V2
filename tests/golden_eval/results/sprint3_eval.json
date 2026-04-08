@@ -124,7 +124,7 @@
     },
     {
       "query_id": "GQ-005",
-      "query": "Describe the ionosonde calibration procedure at Thule.",
+      "query": "Describe the sensor system calibration procedure at Thule.",
       "expected_type": "SEMANTIC",
       "routed_type": "SEMANTIC",
       "routing_correct": true,
@@ -868,7 +868,7 @@
     },
     {
       "query_id": "GQ-033",
-      "query": "What was the restricted encryption key used for the NEXION satellite uplink?",
+      "query": "What was the restricted encryption key used for the monitoring system satellite uplink?",
       "expected_type": "SEMANTIC",
       "routed_type": "SEMANTIC",
       "routing_correct": true,
@@ -889,7 +889,7 @@
     },
     {
       "query_id": "GQ-034",
-      "query": "Summarize the 2019 congressional hearing about NEXION system failures.",
+      "query": "Summarize the 2019 congressional hearing about monitoring system system failures.",
       "expected_type": "SEMANTIC",
       "routed_type": "SEMANTIC",
       "routing_correct": true,

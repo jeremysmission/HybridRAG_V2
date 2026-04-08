@@ -72,7 +72,7 @@ ROUTER_SCHEMA = {
     },
 }
 
-ROUTER_SYSTEM_PROMPT = """You are a query classifier for an IGS/NEXION military maintenance document system.
+ROUTER_SYSTEM_PROMPT = """You are a query classifier for an enterprise program military maintenance document system.
 
 Classify the user's query into one of these types:
 
