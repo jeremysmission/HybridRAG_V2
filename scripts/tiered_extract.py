@@ -32,7 +32,12 @@ sys.path.insert(0, str(V2_ROOT))
 from src.config.schema import load_config
 from src.store.lance_store import LanceStore
 from src.store.entity_store import EntityStore, Entity
-from src.extraction.entity_extractor import RegexPreExtractor
+from src.extraction.entity_extractor import (
+    RegexPreExtractor,
+    EventBlockParser,
+    RegexRelationshipExtractor,
+)
+from src.store.relationship_store import RelationshipStore, Relationship
 
 DIVIDER = "=" * 60
 
@@ -61,27 +66,38 @@ def run_tier1(
     chunks: list[dict],
     part_patterns: list[str],
     max_concurrent: int,
-) -> list[Entity]:
-    """Tier 1: Regex extraction on all chunks. Threaded."""
+) -> tuple[list[Entity], list[Relationship]]:
+    """Tier 1: Regex + event block + relationship extraction. Threaded."""
     extractor = RegexPreExtractor(part_patterns=part_patterns)
+    event_parser = EventBlockParser(part_patterns=part_patterns)
+    rel_extractor = RegexRelationshipExtractor()
     all_entities: list[Entity] = []
+    all_rels: list[Relationship] = []
 
-    def extract_one(chunk: dict) -> list[Entity]:
-        return extractor.extract(
-            text=chunk["text"],
-            chunk_id=chunk["chunk_id"],
-            source_path=chunk["source_path"],
-        )
+    def extract_one(chunk: dict) -> tuple[list[Entity], list[Relationship]]:
+        text = chunk["text"]
+        cid = chunk["chunk_id"]
+        src = chunk["source_path"]
+
+        entities = extractor.extract(text=text, chunk_id=cid, source_path=src)
+        block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
+        co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
+
+        entities.extend(block_entities)
+        block_rels.extend(co_rels)
+        return entities, block_rels
 
     with ThreadPoolExecutor(max_workers=max_concurrent) as pool:
         futures = {pool.submit(extract_one, c): c for c in chunks}
         for future in as_completed(futures):
             try:
-                all_entities.extend(future.result())
-            except Exception as e:
+                ents, rels = future.result()
+                all_entities.extend(ents)
+                all_rels.extend(rels)
+            except Exception:
                 pass  # skip errors silently for regex
 
-    return all_entities
+    return all_entities, all_rels
 
 
 def run_tier2_gliner(
@@ -179,12 +195,16 @@ def main() -> None:
     config = load_config(args.config)
     store = LanceStore(str(V2_ROOT / config.paths.lance_db))
     entity_store = EntityStore(str(V2_ROOT / config.paths.entity_db))
+    rel_store = RelationshipStore(str(V2_ROOT / config.paths.entity_db).replace(
+        "entities.sqlite3", "relationships.sqlite3"
+    ))
 
     print(DIVIDER)
     print("  HybridRAG V2 -- Tiered Entity Extraction")
     print(DIVIDER)
     print(f"  Store:       {store.count():,} chunks")
     print(f"  Entities:    {entity_store.count_entities():,} existing")
+    print(f"  Rels:        {rel_store.count():,} existing")
     print(f"  Max tier:    {args.tier}")
     print(f"  Limit:       {args.limit or 'all'}")
     print(f"  Threads:     {config.extraction.max_concurrent}")
@@ -196,13 +216,13 @@ def main() -> None:
     print(f"  Loaded:      {len(chunks):,} chunks ({time.perf_counter()-t0:.1f}s)")
     print()
 
-    # --- Tier 1: Regex ---
-    print("  [TIER 1] Regex extraction ...")
+    # --- Tier 1: Regex + Event Blocks + Relationships ---
+    print("  [TIER 1] Regex + event block + relationship extraction ...")
     t1_start = time.perf_counter()
-    tier1_entities = run_tier1(chunks, config.extraction.part_patterns, config.extraction.max_concurrent)
+    tier1_entities, tier1_rels = run_tier1(chunks, config.extraction.part_patterns, config.extraction.max_concurrent)
     t1_elapsed = time.perf_counter() - t1_start
 
-    # Dedup by (chunk_id, entity_type, text)
+    # Dedup entities by (chunk_id, entity_type, text)
     seen = set()
     unique_t1 = []
     for e in tier1_entities:
@@ -211,15 +231,27 @@ def main() -> None:
             seen.add(key)
             unique_t1.append(e)
 
+    # Dedup relationships by (subject, predicate, object, chunk_id)
+    seen_rels = set()
+    unique_rels = []
+    for r in tier1_rels:
+        key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
+        if key not in seen_rels:
+            seen_rels.add(key)
+            unique_rels.append(r)
+
     tier1_chunk_ids = {e.chunk_id for e in unique_t1}
     from collections import Counter
     t1_types = Counter(e.entity_type for e in unique_t1)
+    t1_preds = Counter(r.predicate for r in unique_rels)
     print(f"  [TIER 1] {len(unique_t1):,} entities from {len(tier1_chunk_ids):,} chunks ({t1_elapsed:.2f}s)")
     print(f"           Types: {dict(t1_types)}")
+    print(f"           Rels:  {len(unique_rels):,} -- {dict(t1_preds)}")
     print(f"           Rate: {len(chunks)/max(t1_elapsed, 0.001):,.0f} chunks/sec")
     print()
 
     all_entities = list(unique_t1)
+    all_rels = list(unique_rels)
 
     # --- Tier 2: GLiNER ---
     if args.tier >= 2:
@@ -255,22 +287,33 @@ def main() -> None:
 
     # --- Store ---
     if not args.dry_run and all_entities:
-        before = entity_store.count_entities()
-        inserted = entity_store.insert_entities(all_entities)
-        after = entity_store.count_entities()
-        print(f"  Stored:      {inserted:,} new entities (before={before:,}, after={after:,})")
-    elif args.dry_run:
-        print(f"  DRY RUN:     would insert up to {len(all_entities):,} entities")
+        before_e = entity_store.count_entities()
+        inserted_e = entity_store.insert_entities(all_entities)
+        after_e = entity_store.count_entities()
+        print(f"  Entities:    {inserted_e:,} new (before={before_e:,}, after={after_e:,})")
+
+    if not args.dry_run and all_rels:
+        before_r = rel_store.count()
+        inserted_r = rel_store.insert_relationships(all_rels)
+        after_r = rel_store.count()
+        print(f"  Rels:        {inserted_r:,} new (before={before_r:,}, after={after_r:,})")
+
+    if args.dry_run:
+        print(f"  DRY RUN:     would insert up to {len(all_entities):,} entities, {len(all_rels):,} rels")
 
     total_types = Counter(e.entity_type for e in all_entities)
+    total_preds = Counter(r.predicate for r in all_rels)
     print()
     print(DIVIDER)
-    print(f"  Total entities: {len(all_entities):,}")
-    print(f"  Type breakdown: {dict(total_types)}")
-    print(f"  Total time:     {time.perf_counter()-t0:.1f}s")
+    print(f"  Total entities:      {len(all_entities):,}")
+    print(f"  Entity breakdown:    {dict(total_types)}")
+    print(f"  Total relationships: {len(all_rels):,}")
+    print(f"  Rel breakdown:       {dict(total_preds)}")
+    print(f"  Total time:          {time.perf_counter()-t0:.1f}s")
     print(DIVIDER)
 
     store.close()
+    rel_store.close()
 
 
 if __name__ == "__main__":

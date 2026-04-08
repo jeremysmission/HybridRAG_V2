@@ -615,3 +615,398 @@ class RegexPreExtractor:
         start = max(0, pos - window)
         end = min(len(text), pos + window)
         return text[start:end].strip()
+
+
+# ---------------------------------------------------------------------------
+# Event block parsing (ported from V1 service_event_extractor.py)
+# ---------------------------------------------------------------------------
+
+_NUMBERED_BLOCK_RE = re.compile(r"(?m)^\s*(?=\d+\.\s+)")
+_FIELD_VALUE_BROAD_RE = re.compile(
+    r"^\s*(?:\d+\.\s+)?(?P<label>[A-Za-z][A-Za-z0-9 /#()_-]{1,40}):\s*(?P<value>.*)$",
+    re.MULTILINE,
+)
+_QTY_RE = re.compile(r"\bqty(?:uantity)?\s*[:=]?\s*(\d+)\b", re.IGNORECASE)
+
+_EVENT_LABELS: dict[str, str] = {
+    "part#": "part_number",
+    "part": "part_number",
+    "component": "component_name",
+    "description": "part_description",
+    "part description": "part_description",
+    "action": "action_raw",
+    "failure mode": "failure_mode",
+    "condition": "failure_mode",
+    "condition found": "failure_mode",
+    "downtime": "downtime_raw",
+    "new unit": "new_unit_serial",
+    "failed unit": "failed_unit_serial",
+    "installed": "installed_serial",
+    "removed": "removed_serial",
+    "installed part#": "installed_part_number",
+    "removed part#": "removed_part_number",
+}
+
+_ACTION_SYNONYMS: list[tuple[str, tuple[str, ...]]] = [
+    ("replaced", ("replace", "replaced", "swap", "swapped", "replacement")),
+    ("installed", ("install", "installed", "installation")),
+    ("removed", ("remove", "removed", "uninstalled")),
+    ("repaired", ("repair", "repaired", "fixed", "restored")),
+    ("inspected", ("inspect", "inspected", "checked", "tested", "verified")),
+    ("adjusted", ("adjust", "adjusted", "aligned", "calibrated", "tuned")),
+    ("upgraded", ("upgrade", "upgraded", "updated")),
+]
+
+_EVENT_BLOCK_MARKERS = (
+    "Part#", "Component:", "Action:", "Failure Mode:",
+    "Condition:", "New Unit:", "Failed Unit:", "Removed:",
+)
+_EVENT_FALLBACK_MARKERS = (
+    "Part#", "Component:", "Failure Mode:", "Action:",
+    "RESOLUTION:", "CORRECTIVE ACTION",
+)
+
+
+def _normalize_whitespace(value: str) -> str:
+    """Collapse repeated whitespace."""
+    return re.sub(r"\s+", " ", str(value or "")).strip()
+
+
+def _normalize_action_type(action_raw: str, **serials: str) -> str:
+    """Classify action text into a compact type."""
+    lowered = re.sub(r"[^a-z0-9]+", " ", str(action_raw or "").lower()).strip()
+    for action_type, synonyms in _ACTION_SYNONYMS:
+        if any(tok in lowered for tok in synonyms):
+            return action_type
+    if serials.get("new_unit_serial") and (
+        serials.get("removed_serial") or serials.get("failed_unit_serial")
+    ):
+        return "replaced"
+    if serials.get("new_unit_serial") or serials.get("installed_serial"):
+        return "installed"
+    if serials.get("removed_serial") or serials.get("failed_unit_serial"):
+        return "removed"
+    return "other"
+
+
+def _is_power_text(text: str) -> tuple[bool, bool]:
+    """Detect power/lightning events."""
+    normalized = _normalize_whitespace(text).lower()
+    is_lightning = "lightning" in normalized
+    is_power = is_lightning or any(
+        tok in normalized
+        for tok in ("power surge", "power event", "brownout",
+                    "power outage", "voltage transient", "strike damage")
+    )
+    return is_power, is_lightning
+
+
+class EventBlockParser:
+    """
+    Parse maintenance event blocks from chunk text (V1 pattern).
+
+    Splits numbered maintenance items (e.g. "1. Part#: ARC-4471 ...")
+    and extracts structured fields: part numbers, serials, actions,
+    failure modes. Produces Entity and Relationship objects directly.
+    """
+
+    def __init__(self, part_patterns: list[str] | None = None):
+        self._serial_re = re.compile(r"\bSN[-: ]?[A-Za-z0-9-]+\b", re.IGNORECASE)
+        self._part_patterns = [re.compile(p) for p in (part_patterns or [])]
+
+    def parse(
+        self, text: str, chunk_id: str, source_path: str,
+    ) -> tuple[list[Entity], list[Relationship]]:
+        """Parse event blocks from text. Returns (entities, relationships)."""
+        blocks = self._iter_event_blocks(text)
+        if not blocks:
+            return [], []
+
+        all_entities: list[Entity] = []
+        all_rels: list[Relationship] = []
+
+        for block in blocks:
+            fields = self._extract_field_map(block)
+            if not fields:
+                continue
+
+            part_number = _normalize_whitespace(fields.get("part_number", "")).upper()
+            component = _normalize_whitespace(fields.get("component_name", ""))
+            action_raw = _normalize_whitespace(fields.get("action_raw", ""))
+            failure_mode = _normalize_whitespace(fields.get("failure_mode", ""))
+            new_serial = self._extract_serial(fields.get("new_unit_serial", ""))
+            failed_serial = self._extract_serial(fields.get("failed_unit_serial", ""))
+            installed_serial = self._extract_serial(fields.get("installed_serial", ""))
+            removed_serial = self._extract_serial(fields.get("removed_serial", ""))
+            installed_part = _normalize_whitespace(fields.get("installed_part_number", "")).upper()
+            removed_part = _normalize_whitespace(fields.get("removed_part_number", "")).upper()
+
+            action_type = _normalize_action_type(
+                action_raw,
+                new_unit_serial=new_serial,
+                removed_serial=removed_serial,
+                failed_unit_serial=failed_serial,
+                installed_serial=installed_serial,
+            )
+
+            ctx = block[:160].strip()
+
+            # Emit part entity
+            if part_number:
+                all_entities.append(Entity(
+                    entity_type="PART", text=part_number, raw_text=part_number,
+                    confidence=1.0, chunk_id=chunk_id,
+                    source_path=source_path, context=ctx,
+                ))
+
+            # Emit component as PART
+            if component and component.upper() != part_number:
+                all_entities.append(Entity(
+                    entity_type="PART", text=component, raw_text=component,
+                    confidence=0.85, chunk_id=chunk_id,
+                    source_path=source_path, context=ctx,
+                ))
+
+            # Emit installed/removed parts
+            for p in (installed_part, removed_part):
+                if p and p != part_number:
+                    all_entities.append(Entity(
+                        entity_type="PART", text=p, raw_text=p,
+                        confidence=0.95, chunk_id=chunk_id,
+                        source_path=source_path, context=ctx,
+                    ))
+
+            # Emit serial numbers
+            for sn in (new_serial, failed_serial, installed_serial, removed_serial):
+                if sn:
+                    all_entities.append(Entity(
+                        entity_type="PART", text=sn.upper(), raw_text=sn,
+                        confidence=0.95, chunk_id=chunk_id,
+                        source_path=source_path, context=ctx,
+                    ))
+
+            # Emit failure mode
+            if failure_mode:
+                all_entities.append(Entity(
+                    entity_type="PART", text=failure_mode, raw_text=failure_mode,
+                    confidence=0.8, chunk_id=chunk_id,
+                    source_path=source_path, context=ctx,
+                ))
+
+            # Power/lightning classification
+            is_power, is_lightning = _is_power_text(block)
+
+            # --- Relationships ---
+            target_part = part_number or component
+
+            # REPLACED_AT / INSTALLED_AT / action relationships
+            if target_part and action_type == "replaced":
+                if installed_part or new_serial:
+                    replacement = installed_part or new_serial.upper()
+                    all_rels.append(Relationship(
+                        subject_type="PART", subject_text=replacement,
+                        predicate="REPLACED_AT",
+                        object_type="PART", object_text=target_part,
+                        confidence=0.95, source_path=source_path,
+                        chunk_id=chunk_id, context=ctx,
+                    ))
+                if removed_part or removed_serial:
+                    removed = removed_part or removed_serial.upper()
+                    all_rels.append(Relationship(
+                        subject_type="PART", subject_text=removed,
+                        predicate="REPLACED_AT",
+                        object_type="PART", object_text=target_part,
+                        confidence=0.95, source_path=source_path,
+                        chunk_id=chunk_id, context=ctx,
+                    ))
+
+            if target_part and failure_mode:
+                all_rels.append(Relationship(
+                    subject_type="PART", subject_text=target_part,
+                    predicate="FAILED_AT",
+                    object_type="PART", object_text=failure_mode,
+                    confidence=0.85, source_path=source_path,
+                    chunk_id=chunk_id, context=ctx,
+                ))
+
+        return all_entities, all_rels
+
+    def _iter_event_blocks(self, text: str) -> list[str]:
+        """Split chunk into per-item event blocks (V1 pattern)."""
+        raw = str(text or "")
+        segments = [s.strip() for s in _NUMBERED_BLOCK_RE.split(raw) if s.strip()]
+        blocks = [
+            s for s in segments
+            if any(marker in s for marker in _EVENT_BLOCK_MARKERS)
+        ]
+        if blocks:
+            return blocks
+        if any(marker in raw for marker in _EVENT_FALLBACK_MARKERS):
+            return [raw]
+        return []
+
+    def _extract_field_map(self, block_text: str) -> dict[str, str]:
+        """Extract labeled fields from a block."""
+        fields: dict[str, str] = {}
+        for match in _FIELD_VALUE_BROAD_RE.finditer(str(block_text or "")):
+            label = _normalize_whitespace(match.group("label")).lower()
+            target = _EVENT_LABELS.get(label)
+            if not target:
+                continue
+            value = _normalize_whitespace(match.group("value"))
+            if value and not fields.get(target):
+                fields[target] = value
+        return fields
+
+    def _extract_serial(self, value: str) -> str:
+        """Clean serial from field value."""
+        match = self._serial_re.search(str(value or ""))
+        if match:
+            return _normalize_whitespace(match.group(0))
+        return _normalize_whitespace(value)
+
+
+# ---------------------------------------------------------------------------
+# Regex-based relationship extraction (co-occurrence patterns)
+# ---------------------------------------------------------------------------
+
+class RegexRelationshipExtractor:
+    """
+    Extract relationships from co-occurring entities within chunks.
+
+    Detects patterns like:
+      - "POC: X" + "Site: Y" in same chunk -> PERSON POC_FOR SITE
+      - "Part#: X replaced at Site: Y" -> PART REPLACED_AT SITE
+      - "PO-XXXX for Site: Y" -> PO ORDERED_FOR SITE
+      - "Technician: X at Site: Y" -> PERSON WORKS_AT SITE
+    """
+
+    def __init__(self):
+        # Field-label patterns for entity co-occurrence
+        self._poc_re = re.compile(
+            r"^\s*(?:Point of Contact|POC)\s*:\s*(?P<name>.+)$",
+            re.MULTILINE | re.IGNORECASE,
+        )
+        self._site_re = re.compile(
+            r"^\s*(?:Site|Location)\s*:\s*(?P<site>.+)$",
+            re.MULTILINE | re.IGNORECASE,
+        )
+        self._tech_re = re.compile(
+            r"^\s*(?:Technician|Engineer)\s*:\s*(?P<name>.+)$",
+            re.MULTILINE | re.IGNORECASE,
+        )
+        self._part_re = re.compile(
+            r"^\s*(?:Part#|Part|Component)\s*:\s*(?P<part>.+)$",
+            re.MULTILINE | re.IGNORECASE,
+        )
+        self._po_re = re.compile(r"PO-\d{4}-\d{4}")
+        self._action_re = re.compile(
+            r"^\s*Action\s*:\s*(?P<action>.+)$",
+            re.MULTILINE | re.IGNORECASE,
+        )
+
+    def extract(
+        self, text: str, chunk_id: str, source_path: str,
+    ) -> list[Relationship]:
+        """Extract relationships from field co-occurrence in text."""
+        rels: list[Relationship] = []
+        ctx = text[:160].strip()
+
+        # Extract field values
+        poc_match = self._poc_re.search(text)
+        site_match = self._site_re.search(text)
+        tech_match = self._tech_re.search(text)
+        part_match = self._part_re.search(text)
+        po_match = self._po_re.search(text)
+        action_match = self._action_re.search(text)
+
+        poc_name = poc_match.group("name").strip() if poc_match else ""
+        site_name = site_match.group("site").strip() if site_match else ""
+        tech_name = tech_match.group("name").strip() if tech_match else ""
+        part_text = part_match.group("part").strip().upper() if part_match else ""
+        po_text = po_match.group().upper() if po_match else ""
+        action_text = action_match.group("action").strip() if action_match else ""
+
+        action_type = _normalize_action_type(action_text) if action_text else ""
+
+        # POC -> Site
+        if poc_name and site_name:
+            rels.append(Relationship(
+                subject_type="PERSON", subject_text=poc_name,
+                predicate="POC_FOR",
+                object_type="SITE", object_text=site_name,
+                confidence=0.95, source_path=source_path,
+                chunk_id=chunk_id, context=ctx,
+            ))
+
+        # Technician -> Site
+        if tech_name and site_name:
+            rels.append(Relationship(
+                subject_type="PERSON", subject_text=tech_name,
+                predicate="WORKS_AT",
+                object_type="SITE", object_text=site_name,
+                confidence=0.9, source_path=source_path,
+                chunk_id=chunk_id, context=ctx,
+            ))
+
+        # Part -> Site (action-based)
+        if part_text and site_name:
+            predicate = "CONSUMED_AT"
+            if action_type == "replaced":
+                predicate = "REPLACED_AT"
+            elif action_type == "installed":
+                predicate = "INSTALLED_AT"
+            elif action_type in ("inspected", "adjusted"):
+                predicate = "TESTED_AT"
+            elif action_type == "removed":
+                predicate = "REPLACED_AT"
+
+            rels.append(Relationship(
+                subject_type="PART", subject_text=part_text,
+                predicate=predicate,
+                object_type="SITE", object_text=site_name,
+                confidence=0.9, source_path=source_path,
+                chunk_id=chunk_id, context=ctx,
+            ))
+
+        # PO -> Site
+        if po_text and site_name:
+            rels.append(Relationship(
+                subject_type="PO", subject_text=po_text,
+                predicate="ORDERED_FOR",
+                object_type="SITE", object_text=site_name,
+                confidence=0.9, source_path=source_path,
+                chunk_id=chunk_id, context=ctx,
+            ))
+
+        # Part failure at site
+        if part_text and site_name and action_type in ("replaced", "removed", "repaired"):
+            rels.append(Relationship(
+                subject_type="PART", subject_text=part_text,
+                predicate="FAILED_AT",
+                object_type="SITE", object_text=site_name,
+                confidence=0.8, source_path=source_path,
+                chunk_id=chunk_id, context=ctx,
+            ))
+
+        # PO -> Part
+        if po_text and part_text:
+            rels.append(Relationship(
+                subject_type="PO", subject_text=po_text,
+                predicate="ORDERED_FOR",
+                object_type="PART", object_text=part_text,
+                confidence=0.85, source_path=source_path,
+                chunk_id=chunk_id, context=ctx,
+            ))
+
+        # POC -> maintains site
+        if poc_name and site_name:
+            rels.append(Relationship(
+                subject_type="PERSON", subject_text=poc_name,
+                predicate="MAINTAINED_BY",
+                object_type="SITE", object_text=site_name,
+                confidence=0.8, source_path=source_path,
+                chunk_id=chunk_id, context=ctx,
+            ))
+
+        return rels
