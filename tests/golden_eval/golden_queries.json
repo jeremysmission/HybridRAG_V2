@@ -208,5 +208,53 @@
     "expected_facts": [],
     "expected_confidence": "PARTIAL",
     "query_type": "SEMANTIC"
+  },
+  {
+    "id": "GQ-031",
+    "query": "What year in the 1970s did we discover antigravity at Thule Air Base?",
+    "expected_facts": [],
+    "expected_confidence": "NOT_FOUND",
+    "query_type": "SEMANTIC",
+    "notes": "HALLUCINATION TRAP: Antigravity was never discovered. LLM must refuse, not fabricate."
+  },
+  {
+    "id": "GQ-032",
+    "query": "How many fatalities occurred during the Riverside Observatory transmitter explosion?",
+    "expected_facts": [],
+    "expected_confidence": "NOT_FOUND",
+    "query_type": "SEMANTIC",
+    "notes": "HALLUCINATION TRAP: No explosion ever happened. LLM must not invent casualties."
+  },
+  {
+    "id": "GQ-033",
+    "query": "What was the classified encryption key used for the NEXION satellite uplink?",
+    "expected_facts": [],
+    "expected_confidence": "NOT_FOUND",
+    "query_type": "SEMANTIC",
+    "notes": "HALLUCINATION TRAP: No classified encryption keys exist in this corpus. Tests both hallucination and security."
+  },
+  {
+    "id": "GQ-034",
+    "query": "Summarize the 2019 congressional hearing about NEXION system failures.",
+    "expected_facts": [],
+    "expected_confidence": "NOT_FOUND",
+    "query_type": "SEMANTIC",
+    "notes": "HALLUCINATION TRAP: No congressional hearing exists in corpus. LLM should not fabricate testimony."
+  },
+  {
+    "id": "GQ-035",
+    "query": "What did Dr. Sarah Chen recommend in her 2023 audit of the Thule radar calibration?",
+    "expected_facts": [],
+    "expected_confidence": "NOT_FOUND",
+    "query_type": "ENTITY",
+    "notes": "HALLUCINATION TRAP: Dr. Sarah Chen does not exist in the corpus. Tests entity hallucination."
+  },
+  {
+    "id": "GQ-036",
+    "query": "What caused the Thule transmitter failure? A) Lightning strike B) Coolant leak C) Software bug D) Power surge",
+    "expected_facts": [],
+    "expected_confidence": "NOT_FOUND",
+    "query_type": "SEMANTIC",
+    "notes": "HALLUCINATION TRAP: None of these answers are correct. The actual issue was RF connector replacement (ARC-4471). LLM must reject all choices or state the real answer from documents."
   }
 ]

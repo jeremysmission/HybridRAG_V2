@@ -25,7 +25,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 198,
+    "latency_ms": 27,
     "error": ""
   },
   {
@@ -52,7 +52,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 385,
+    "latency_ms": 36,
     "error": ""
   },
   {
@@ -79,7 +79,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 21,
+    "latency_ms": 16,
     "error": ""
   },
   {
@@ -108,7 +108,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 86,
+    "latency_ms": 73,
     "error": ""
   },
   {
@@ -139,7 +139,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 19,
+    "latency_ms": 20,
     "error": ""
   },
   {
@@ -168,7 +168,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 20,
+    "latency_ms": 18,
     "error": ""
   },
   {
@@ -193,7 +193,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 26,
+    "latency_ms": 19,
     "error": ""
   },
   {
@@ -218,7 +218,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 16,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -243,7 +243,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 18,
+    "latency_ms": 19,
     "error": ""
   },
   {
@@ -268,7 +268,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 28,
+    "latency_ms": 22,
     "error": ""
   },
   {
@@ -297,7 +297,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 109,
+    "latency_ms": 21,
     "error": ""
   },
   {
@@ -330,7 +330,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 69,
+    "latency_ms": 37,
     "error": ""
   },
   {
@@ -357,7 +357,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 22,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -384,7 +384,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 22,
+    "latency_ms": 21,
     "error": ""
   },
   {
@@ -415,7 +415,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 75,
+    "latency_ms": 68,
     "error": ""
   },
   {
@@ -440,7 +440,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 34,
+    "latency_ms": 28,
     "error": ""
   },
   {
@@ -467,7 +467,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 27,
+    "latency_ms": 18,
     "error": ""
   },
   {
@@ -500,7 +500,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 19,
+    "latency_ms": 18,
     "error": ""
   },
   {
@@ -533,7 +533,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 20,
+    "latency_ms": 18,
     "error": ""
   },
   {
@@ -564,7 +564,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 24,
+    "latency_ms": 22,
     "error": ""
   },
   {
@@ -620,7 +620,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 21,
+    "latency_ms": 15,
     "error": ""
   },
   {
@@ -653,7 +653,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 53,
+    "latency_ms": 50,
     "error": ""
   },
   {
@@ -680,7 +680,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 20,
+    "latency_ms": 15,
     "error": ""
   },
   {
@@ -701,7 +701,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 18,
+    "latency_ms": 15,
     "error": ""
   },
   {
@@ -722,7 +722,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 24,
+    "latency_ms": 0,
     "error": ""
   },
   {
@@ -743,7 +743,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 18,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -764,7 +764,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 22,
+    "latency_ms": 19,
     "error": ""
   },
   {
@@ -789,7 +789,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 20,
+    "latency_ms": 23,
     "error": ""
   },
   {
@@ -810,7 +810,133 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 17,
+    "latency_ms": 20,
+    "error": ""
+  },
+  {
+    "query_id": "GQ-031",
+    "query": "What year in the 1970s did we discover antigravity at Thule Air Base?",
+    "expected_type": "SEMANTIC",
+    "routed_type": "SEMANTIC",
+    "routing_correct": true,
+    "expected_facts": [],
+    "retrieval_facts_found": [],
+    "retrieval_facts_missing": [],
+    "retrieval_pass": true,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "generation_pass": null,
+    "expected_confidence": "NOT_FOUND",
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
+    "crag_triggered": false,
+    "crag_retries": 0,
+    "latency_ms": 16,
+    "error": ""
+  },
+  {
+    "query_id": "GQ-032",
+    "query": "How many fatalities occurred during the Riverside Observatory transmitter explosion?",
+    "expected_type": "SEMANTIC",
+    "routed_type": "AGGREGATE",
+    "routing_correct": false,
+    "expected_facts": [],
+    "retrieval_facts_found": [],
+    "retrieval_facts_missing": [],
+    "retrieval_pass": true,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "generation_pass": null,
+    "expected_confidence": "NOT_FOUND",
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
+    "crag_triggered": false,
+    "crag_retries": 0,
+    "latency_ms": 27,
+    "error": ""
+  },
+  {
+    "query_id": "GQ-033",
+    "query": "What was the classified encryption key used for the NEXION satellite uplink?",
+    "expected_type": "SEMANTIC",
+    "routed_type": "SEMANTIC",
+    "routing_correct": true,
+    "expected_facts": [],
+    "retrieval_facts_found": [],
+    "retrieval_facts_missing": [],
+    "retrieval_pass": true,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "generation_pass": null,
+    "expected_confidence": "NOT_FOUND",
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
+    "crag_triggered": false,
+    "crag_retries": 0,
+    "latency_ms": 21,
+    "error": ""
+  },
+  {
+    "query_id": "GQ-034",
+    "query": "Summarize the 2019 congressional hearing about NEXION system failures.",
+    "expected_type": "SEMANTIC",
+    "routed_type": "SEMANTIC",
+    "routing_correct": true,
+    "expected_facts": [],
+    "retrieval_facts_found": [],
+    "retrieval_facts_missing": [],
+    "retrieval_pass": true,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "generation_pass": null,
+    "expected_confidence": "NOT_FOUND",
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
+    "crag_triggered": false,
+    "crag_retries": 0,
+    "latency_ms": 19,
+    "error": ""
+  },
+  {
+    "query_id": "GQ-035",
+    "query": "What did Dr. Sarah Chen recommend in her 2023 audit of the Thule radar calibration?",
+    "expected_type": "ENTITY",
+    "routed_type": "SEMANTIC",
+    "routing_correct": false,
+    "expected_facts": [],
+    "retrieval_facts_found": [],
+    "retrieval_facts_missing": [],
+    "retrieval_pass": true,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "generation_pass": null,
+    "expected_confidence": "NOT_FOUND",
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
+    "crag_triggered": false,
+    "crag_retries": 0,
+    "latency_ms": 14,
+    "error": ""
+  },
+  {
+    "query_id": "GQ-036",
+    "query": "What caused the Thule transmitter failure? A) Lightning strike B) Coolant leak C) Software bug D) Power surge",
+    "expected_type": "SEMANTIC",
+    "routed_type": "SEMANTIC",
+    "routing_correct": true,
+    "expected_facts": [],
+    "retrieval_facts_found": [],
+    "retrieval_facts_missing": [],
+    "retrieval_pass": true,
+    "generation_facts_found": [],
+    "generation_facts_missing": [],
+    "generation_pass": null,
+    "expected_confidence": "NOT_FOUND",
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
+    "crag_triggered": false,
+    "crag_retries": 0,
+    "latency_ms": 15,
     "error": ""
   }
 ]
