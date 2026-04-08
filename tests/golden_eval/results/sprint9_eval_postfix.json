@@ -1,0 +1,812 @@
+{
+  "run_id": "20260406_063519",
+  "timestamp": "2026-04-06T06:35:19.153133+00:00",
+  "total_queries": 25,
+  "routing_correct": 24,
+  "retrieval_pass": 20,
+  "generation_pass": 20,
+  "confidence_correct": 19,
+  "crag_triggered": 0,
+  "avg_latency_ms": 14792.88,
+  "retrieval_only": false,
+  "scores": [
+    {
+      "query_id": "GQ-001",
+      "query": "What part was replaced on the transmitter at Thule?",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [
+        "ARC-4471",
+        "RF connector",
+        "transmitter output stage"
+      ],
+      "retrieval_facts_found": [
+        "ARC-4471",
+        "RF connector",
+        "transmitter output stage"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "ARC-4471",
+        "RF connector",
+        "transmitter output stage"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 16324,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-002",
+      "query": "Who is the point of contact for Thule Air Base?",
+      "expected_type": "ENTITY",
+      "routed_type": "ENTITY",
+      "routing_correct": true,
+      "expected_facts": [
+        "SSgt Marcus Webb",
+        "(970) 555-0142"
+      ],
+      "retrieval_facts_found": [
+        "SSgt Marcus Webb",
+        "(970) 555-0142"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "SSgt Marcus Webb"
+      ],
+      "generation_facts_missing": [
+        "(970) 555-0142"
+      ],
+      "generation_pass": false,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 14493,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-003",
+      "query": "What was the transmitter output power after the repair?",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [
+        "302W",
+        "nominal"
+      ],
+      "retrieval_facts_found": [
+        "302W",
+        "nominal"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "302W",
+        "nominal"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 11882,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-004",
+      "query": "What parts were consumed during the Thule maintenance visit?",
+      "expected_type": "AGGREGATE",
+      "routed_type": "AGGREGATE",
+      "routing_correct": true,
+      "expected_facts": [
+        "ARC-4471",
+        "SEMS3D-0847",
+        "PO-2025-0142"
+      ],
+      "retrieval_facts_found": [
+        "ARC-4471",
+        "SEMS3D-0847",
+        "PO-2025-0142"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "ARC-4471",
+        "SEMS3D-0847",
+        "PO-2025-0142"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 13785,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-005",
+      "query": "Describe the ionosonde calibration procedure at Thule.",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [
+        "GPS-disciplined reference oscillator",
+        "calibration signal generator",
+        "UTC via GPS",
+        "ionogram quality"
+      ],
+      "retrieval_facts_found": [
+        "GPS-disciplined reference oscillator",
+        "calibration signal generator",
+        "UTC via GPS",
+        "ionogram quality"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "GPS-disciplined reference oscillator",
+        "calibration signal generator",
+        "UTC via GPS",
+        "ionogram quality"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 11868,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-006",
+      "query": "Which amplifier board is showing noise issues at Riverside Observatory?",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [
+        "SN-2847",
+        "RX3",
+        "noise floor"
+      ],
+      "retrieval_facts_found": [
+        "SN-2847",
+        "RX3",
+        "noise floor"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "SN-2847",
+        "RX3",
+        "noise floor"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 16771,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-007",
+      "query": "Who is the field technician for the Riverside radar site?",
+      "expected_type": "ENTITY",
+      "routed_type": "ENTITY",
+      "routing_correct": true,
+      "expected_facts": [
+        "Mike Torres"
+      ],
+      "retrieval_facts_found": [
+        "Mike Torres"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "Mike Torres"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 12103,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-008",
+      "query": "What is the transmitter output power at Riverside Observatory?",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [
+        "1.2 kW"
+      ],
+      "retrieval_facts_found": [
+        "1.2 kW"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "1.2 kW"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 14854,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-009",
+      "query": "What UPS battery capacity was measured at Thule?",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [
+        "78%"
+      ],
+      "retrieval_facts_found": [
+        "78%"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "78%"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 12871,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-010",
+      "query": "When is the next scheduled maintenance at Thule Air Base?",
+      "expected_type": "ENTITY",
+      "routed_type": "ENTITY",
+      "routing_correct": true,
+      "expected_facts": [
+        "2025-06-15"
+      ],
+      "retrieval_facts_found": [
+        "2025-06-15"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "2025-06-15"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 13337,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-011",
+      "query": "What is the status of PO-2024-0501?",
+      "expected_type": "TABULAR",
+      "routed_type": "TABULAR",
+      "routing_correct": true,
+      "expected_facts": [
+        "IN TRANSIT",
+        "FM-220",
+        "Cedar Ridge"
+      ],
+      "retrieval_facts_found": [
+        "IN TRANSIT",
+        "FM-220",
+        "Cedar Ridge"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "IN TRANSIT",
+        "FM-220",
+        "Cedar Ridge"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 13802,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-012",
+      "query": "How many filter modules (FM-220) have been ordered across all sites?",
+      "expected_type": "AGGREGATE",
+      "routed_type": "AGGREGATE",
+      "routing_correct": true,
+      "expected_facts": [
+        "FM-220",
+        "Cedar Ridge",
+        "Driftwood",
+        "Hawthorne",
+        "Depot Stock"
+      ],
+      "retrieval_facts_found": [
+        "FM-220",
+        "Cedar Ridge",
+        "Driftwood",
+        "Hawthorne",
+        "Depot Stock"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "FM-220",
+        "Cedar Ridge",
+        "Driftwood",
+        "Hawthorne",
+        "Depot Stock"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "PARTIAL",
+      "confidence_correct": false,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 15149,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-013",
+      "query": "Who requested parts for Cedar Ridge?",
+      "expected_type": "ENTITY",
+      "routed_type": "ENTITY",
+      "routing_correct": true,
+      "expected_facts": [
+        "Patel",
+        "Ravi"
+      ],
+      "retrieval_facts_found": [
+        "Patel",
+        "Ravi"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "Patel",
+        "Ravi"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "PARTIAL",
+      "confidence_correct": false,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 13324,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-014",
+      "query": "What parts are currently backordered?",
+      "expected_type": "TABULAR",
+      "routed_type": "TABULAR",
+      "routing_correct": true,
+      "expected_facts": [
+        "PS-800",
+        "Granite Peak"
+      ],
+      "retrieval_facts_found": [
+        "PS-800",
+        "Granite Peak"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "PS-800",
+        "Granite Peak"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 14304,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-015",
+      "query": "List all parts replaced at Riverside Observatory during the March 2024 visit.",
+      "expected_type": "AGGREGATE",
+      "routed_type": "AGGREGATE",
+      "routing_correct": true,
+      "expected_facts": [
+        "WR-4471",
+        "RF Connector",
+        "SN-2901",
+        "SN-2902"
+      ],
+      "retrieval_facts_found": [
+        "WR-4471",
+        "RF Connector",
+        "SN-2901",
+        "SN-2902"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "WR-4471",
+        "RF Connector",
+        "SN-2901",
+        "SN-2902"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 14737,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-016",
+      "query": "What is Mike Torres's contact email?",
+      "expected_type": "ENTITY",
+      "routed_type": "ENTITY",
+      "routing_correct": true,
+      "expected_facts": [
+        "mike.torres@acmeradar.example.com"
+      ],
+      "retrieval_facts_found": [],
+      "retrieval_facts_missing": [
+        "mike.torres@acmeradar.example.com"
+      ],
+      "retrieval_pass": false,
+      "generation_facts_found": [],
+      "generation_facts_missing": [
+        "mike.torres@acmeradar.example.com"
+      ],
+      "generation_pass": false,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "NOT_FOUND",
+      "confidence_correct": false,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 12952,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-017",
+      "query": "Which sites have received AB-115 amplifier cards?",
+      "expected_type": "AGGREGATE",
+      "routed_type": "AGGREGATE",
+      "routing_correct": true,
+      "expected_facts": [
+        "Copper Basin",
+        "Sandpoint"
+      ],
+      "retrieval_facts_found": [
+        "Sandpoint"
+      ],
+      "retrieval_facts_missing": [
+        "Copper Basin"
+      ],
+      "retrieval_pass": false,
+      "generation_facts_found": [],
+      "generation_facts_missing": [
+        "Copper Basin",
+        "Sandpoint"
+      ],
+      "generation_pass": false,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "NOT_FOUND",
+      "confidence_correct": false,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 14724,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-018",
+      "query": "What workaround was applied for the CH3 noise issue at Cedar Ridge?",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [
+        "attenuation",
+        "2 steps",
+        "+6dB",
+        "integration time",
+        "4 to 8 sweeps"
+      ],
+      "retrieval_facts_found": [
+        "attenuation",
+        "2 steps",
+        "+6dB",
+        "integration time",
+        "4 to 8 sweeps"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "attenuation",
+        "2 steps",
+        "+6dB",
+        "integration time",
+        "4 to 8 sweeps"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 13098,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-019",
+      "query": "Compare the maintenance issues at Riverside Observatory versus Cedar Ridge.",
+      "expected_type": "COMPLEX",
+      "routed_type": "COMPLEX",
+      "routing_correct": true,
+      "expected_facts": [
+        "SN-2847",
+        "noise floor",
+        "CH3",
+        "filter module",
+        "corrosion"
+      ],
+      "retrieval_facts_found": [
+        "SN-2847",
+        "noise floor",
+        "filter module"
+      ],
+      "retrieval_facts_missing": [
+        "CH3",
+        "corrosion"
+      ],
+      "retrieval_pass": false,
+      "generation_facts_found": [
+        "SN-2847",
+        "noise floor",
+        "CH3",
+        "filter module",
+        "corrosion"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "PARTIAL",
+      "actual_confidence": "PARTIAL",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 21608,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-020",
+      "query": "Which purchase orders have been cancelled and why?",
+      "expected_type": "TABULAR",
+      "routed_type": "TABULAR",
+      "routing_correct": true,
+      "expected_facts": [
+        "PO-2024-0506",
+        "AH-900",
+        "Birchwood",
+        "cancelled per director"
+      ],
+      "retrieval_facts_found": [],
+      "retrieval_facts_missing": [
+        "PO-2024-0506",
+        "AH-900",
+        "Birchwood",
+        "cancelled per director"
+      ],
+      "retrieval_pass": false,
+      "generation_facts_found": [],
+      "generation_facts_missing": [
+        "PO-2024-0506",
+        "AH-900",
+        "Birchwood",
+        "cancelled per director"
+      ],
+      "generation_pass": false,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "NOT_FOUND",
+      "confidence_correct": false,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 17034,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-021",
+      "query": "Who is the point of contact for the site where FM-220 filter modules were ordered?",
+      "expected_type": "COMPLEX",
+      "routed_type": "ENTITY",
+      "routing_correct": false,
+      "expected_facts": [
+        "Cedar Ridge",
+        "Patel",
+        "FM-220"
+      ],
+      "retrieval_facts_found": [
+        "Cedar Ridge",
+        "Patel",
+        "FM-220"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "Cedar Ridge",
+        "Patel",
+        "FM-220"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "HIGH",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 17835,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-022",
+      "query": "What was the general condition of the equipment during recent visits?",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [
+        "maintenance",
+        "repair"
+      ],
+      "retrieval_facts_found": [
+        "maintenance",
+        "repair"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "maintenance",
+        "repair"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "PARTIAL",
+      "actual_confidence": "PARTIAL",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 22127,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-023",
+      "query": "List all unique part numbers referenced across every document in the corpus.",
+      "expected_type": "AGGREGATE",
+      "routed_type": "AGGREGATE",
+      "routing_correct": true,
+      "expected_facts": [
+        "ARC-4471",
+        "FM-220",
+        "AB-115",
+        "PS-800",
+        "WR-4471"
+      ],
+      "retrieval_facts_found": [],
+      "retrieval_facts_missing": [
+        "ARC-4471",
+        "FM-220",
+        "AB-115",
+        "PS-800",
+        "WR-4471"
+      ],
+      "retrieval_pass": false,
+      "generation_facts_found": [],
+      "generation_facts_missing": [
+        "ARC-4471",
+        "FM-220",
+        "AB-115",
+        "PS-800",
+        "WR-4471"
+      ],
+      "generation_pass": false,
+      "expected_confidence": "HIGH",
+      "actual_confidence": "NOT_FOUND",
+      "confidence_correct": false,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 11916,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-024",
+      "query": "What is the status of the replacement board at the observatory?",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [
+        "SN-2847",
+        "Riverside"
+      ],
+      "retrieval_facts_found": [
+        "SN-2847",
+        "Riverside"
+      ],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [
+        "SN-2847",
+        "Riverside"
+      ],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "PARTIAL",
+      "actual_confidence": "PARTIAL",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 13311,
+      "error": ""
+    },
+    {
+      "query_id": "GQ-025",
+      "query": "What maintenance was performed at Fort Wainwright in 2024?",
+      "expected_type": "SEMANTIC",
+      "routed_type": "SEMANTIC",
+      "routing_correct": true,
+      "expected_facts": [],
+      "retrieval_facts_found": [],
+      "retrieval_facts_missing": [],
+      "retrieval_pass": true,
+      "generation_facts_found": [],
+      "generation_facts_missing": [],
+      "generation_pass": true,
+      "expected_confidence": "NOT_FOUND",
+      "actual_confidence": "NOT_FOUND",
+      "confidence_correct": true,
+      "crag_triggered": false,
+      "crag_retries": 0,
+      "latency_ms": 15613,
+      "error": ""
+    }
+  ]
+}

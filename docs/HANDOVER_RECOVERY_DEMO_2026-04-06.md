@@ -164,11 +164,24 @@ Workstation desktop:
 
 ---
 
-## Next Four Sprints
+## Next Sprint Sequence
 
-These are the next four sprints to get the real-data path back to a demo-ready state.
+The immediate next sprint changed after the workstation AWS probe attempt exposed a more basic blocker: `CorpusForge` itself must be operator-trustworthy for chunk generation before the recovery rebuild can be staged cleanly from work machines.
 
-### Sprint 11: Recovery Dedup
+### Sprint 11: Forge GPU Operator Readiness
+
+Goal:
+
+- make `CorpusForge` stable and operator-meaningful for workstation chunk/export generation
+
+Key outputs:
+
+- repo-root config path hardening
+- GUI/CLI preflight visibility for deferred and unsupported formats
+- controlled workstation export proof
+- trustworthy `skip_manifest.json` accounting for deferred drawing formats
+
+### Sprint 12: Recovery Dedup
 
 Goal:
 
@@ -186,7 +199,7 @@ Key warning:
 - use the document-level review path first
 - do not rely on chunk-level review as final human-review tooling yet
 
-### Sprint 12: Canonical Rebuild
+### Sprint 13: Canonical Rebuild
 
 Goal:
 
@@ -202,7 +215,7 @@ Key outputs:
   - index size
   - import time
 
-### Sprint 13: Structured Promotion On The Rebuilt Corpus
+### Sprint 14: Structured Promotion On The Rebuilt Corpus
 
 Goal:
 
@@ -214,7 +227,7 @@ Key outputs:
 - re-run of eval and demo rehearsal on the rebuilt path
 - confirmation that dedup did not remove required business content
 
-### Sprint 14: Operator Hardening Back To Demo
+### Sprint 15: Operator Hardening Back To Demo
 
 Goal:
 
@@ -234,7 +247,7 @@ Key outputs:
 
 ## Immediate Priorities For The Next Pass
 
-1. Confirm workstation laptop `CorpusForge` is fully green.
+1. Finish `CorpusForge` workstation chunk/export proof.
 2. Repair and verify workstation desktop installs.
 3. Backup source to the primary local machine.
 4. Start recovery dedup on the primary local machine.

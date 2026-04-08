@@ -73,9 +73,10 @@ Goal:
 
 Status:
 
-- started
+- **DONE** (V2 side)
 - `CorpusForge` now has a `--dry-run` mode on `scripts/backfill_skipped_file_state.py`
 - operator runbook added in `CorpusForge/docs/LEGACY_SKIP_STATE_AUDIT_2026-04-07.md`
+- V2 import is agnostic to file state — imports whatever chunks.jsonl contains; backfilled files are accepted as valid chunks
 
 ### 12.2 Document-Level Dedup Review Path
 
@@ -86,9 +87,10 @@ Goal:
 
 Status:
 
-- started
+- **DONE** (V2 side)
 - operator runbook added in `CorpusForge/docs/DOCUMENT_LEVEL_DEDUP_REVIEW_WORKFLOW_2026-04-07.md`
 - chunk-level review remains supporting evidence only
+- V2 deduplicates by chunk_id at insert time — document-level dedup is CorpusForge's responsibility upstream
 
 ### 12.3 Canonical List Readiness
 
@@ -96,6 +98,16 @@ Goal:
 
 - produce a clean `canonical_files.txt` output path
 - document how it becomes the input to the rebuild sprint
+
+Status:
+
+- **DONE** (V2 side)
+- `run_pipeline.py --input-list` now reports duplicate entries and missing paths explicitly
+- `--strict-input-list` now exists for fail-fast rebuild preflight
+- operator handoff added in `CorpusForge/docs/CANONICAL_LIST_REBUILD_HANDOFF_2026-04-07.md`
+- V2 `import_embedengine.py` now validates: manifest schema_version, vector_dim cross-check, required chunk fields (chunk_id, text, source_path)
+- `--strict` flag added for fail-fast rebuild preflight
+- 15 unit tests covering validation (all passing)
 
 ### 12.4 Deferred/Placeholder Risk Disclosure
 
@@ -109,8 +121,10 @@ Goal:
 
 Status:
 
-- started
+- **DONE** (V2 side)
 - operator matrix added in `CorpusForge/docs/FORMAT_COVERAGE_AND_DEFER_POLICY_2026-04-07.md`
+- V2 import now displays per-reason breakdown of skipped files from skip_manifest.json
+- Deferred format families shown with file counts during import summary
 
 ---
 

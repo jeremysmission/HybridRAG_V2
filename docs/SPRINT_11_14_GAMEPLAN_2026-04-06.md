@@ -26,7 +26,21 @@ The new immediate priority is a **recovery preprocessing stage** ahead of re-chu
 
 ## Current Decision
 
-**Sprint 11 becomes a Recovery Dedup sprint.**
+**The immediate next sprint becomes Forge GPU / operator readiness.**
+
+The AWS probe attempt surfaced a more basic blocker:
+
+- `CorpusForge` still needed operator-safe chunk/export behavior
+- drawing-heavy corpora needed clearer deferred-format accounting
+- workstation chunk generation needed to stop depending on perfect shell conditions
+
+So the order changes to:
+
+1. Forge GPU / operator readiness
+2. Recovery dedup
+3. Canonical rebuild
+4. Structured promotion
+5. Operator hardening
 
 The goal is not to debate whether the current index is usable. It is.  
 The goal is to stop rebuilding the next large index from a bloated source set.
@@ -74,7 +88,29 @@ That is the industry-shaped version of this problem, and it fits the current arc
 
 ---
 
-## Sprint 11: Recovery Dedup Stage
+## Sprint 11: Forge GPU Operator Readiness
+
+### Goal
+
+Make `CorpusForge` reliable for workstation chunk generation, controlled exports, and honest accounting of deferred drawing/CAD formats.
+
+### Key Slices
+
+1. repo-root config path normalization
+2. GUI output-path hardening
+3. operator-visible deferred-format accounting
+4. controlled workstation export proof
+5. clearer guidance on supported vs deferred drawing types
+
+### Exit Criteria
+
+- workstation chunk/export run is reliable
+- deferred drawing formats are visible and written into skip accounting
+- operator no longer has to guess whether Forge ignored files or intentionally deferred them
+
+---
+
+## Sprint 12: Recovery Dedup Stage
 
 ### Goal
 
@@ -160,7 +196,7 @@ This opens the dedicated recovery GUI instead of the normal pipeline monitor.
 
 ---
 
-## Sprint 12: Canonical Rebuild
+## Sprint 13: Canonical Rebuild
 
 ### Goal
 
@@ -188,7 +224,7 @@ Re-chunk and re-embed from the canonical file list instead of the raw source tre
 
 ---
 
-## Sprint 13: Structured Promotion On The Rebuilt Corpus
+## Sprint 14: Structured Promotion On The Rebuilt Corpus
 
 ### Goal
 
@@ -209,7 +245,7 @@ Apply the structured-extraction work to the smaller rebuilt corpus so extraction
 
 ---
 
-## Sprint 14: Operator Hardening
+## Sprint 15: Operator Hardening
 
 ### Goal
 

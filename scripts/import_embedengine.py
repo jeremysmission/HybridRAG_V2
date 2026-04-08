@@ -28,6 +28,62 @@ from src.store.lance_store import LanceStore
 
 DIVIDER = "=" * 55
 
+# Required fields in every chunk — import rejects chunks missing any of these
+REQUIRED_CHUNK_FIELDS = ("chunk_id", "text", "source_path")
+
+# Minimum manifest schema version that V2 can consume
+MIN_SCHEMA_VERSION = 1
+
+
+def validate_manifest(manifest: dict, vectors: np.ndarray) -> list[str]:
+    """
+    Validate manifest metadata against the loaded export.
+
+    Returns a list of warning/error strings. Empty list = all good.
+    """
+    issues = []
+
+    # Schema version gate
+    schema_ver = manifest.get("schema_version")
+    if schema_ver is not None and schema_ver < MIN_SCHEMA_VERSION:
+        issues.append(
+            f"REJECT: manifest schema_version={schema_ver} < minimum {MIN_SCHEMA_VERSION}"
+        )
+
+    # Vector dimension cross-check
+    manifest_dim = manifest.get("vector_dim")
+    if manifest_dim is not None and manifest_dim != vectors.shape[1]:
+        issues.append(
+            f"REJECT: manifest vector_dim={manifest_dim} but vectors.npy has dim={vectors.shape[1]}"
+        )
+
+    # Chunk count cross-check (warning, not rejection — partial exports exist)
+    manifest_count = manifest.get("chunk_count")
+    if manifest_count is not None and manifest_count != vectors.shape[0]:
+        issues.append(
+            f"WARNING: manifest chunk_count={manifest_count} but vectors.npy has {vectors.shape[0]} rows"
+        )
+
+    return issues
+
+
+def validate_chunks(chunks: list[dict]) -> tuple[list[dict], list[dict]]:
+    """
+    Validate each chunk has required fields with non-empty values.
+
+    Returns:
+        (valid_chunks, rejected_chunks)
+    """
+    valid = []
+    rejected = []
+    for i, chunk in enumerate(chunks):
+        missing = [f for f in REQUIRED_CHUNK_FIELDS if not chunk.get(f)]
+        if missing:
+            rejected.append({"index": i, "chunk": chunk, "missing": missing})
+        else:
+            valid.append(chunk)
+    return valid, rejected
+
 
 def resolve_export_dir(source: Path) -> Path:
     """Resolve source path, following text-file redirects if needed."""
@@ -38,7 +94,7 @@ def resolve_export_dir(source: Path) -> Path:
     return source
 
 
-def load_export(export_dir: Path) -> tuple[list[dict], np.ndarray, dict, dict | None]:
+def load_export(export_dir: Path, strict: bool = False) -> tuple[list[dict], np.ndarray, dict, dict | None]:
     """
     Load chunks, vectors, manifest, and optional skip_manifest
     from a CorpusForge export directory.
@@ -95,6 +151,51 @@ def load_export(export_dir: Path) -> tuple[list[dict], np.ndarray, dict, dict | 
         with open(manifest_path, encoding="utf-8-sig") as f:
             manifest = json.load(f)
 
+    # --- Manifest validation ---
+    manifest_issues = validate_manifest(manifest, vectors)
+    rejections = [i for i in manifest_issues if i.startswith("REJECT")]
+    warnings = [i for i in manifest_issues if i.startswith("WARNING")]
+    for w in warnings:
+        print(f"  {w}", file=sys.stderr)
+    if rejections:
+        for r in rejections:
+            print(f"  {r}", file=sys.stderr)
+        print("  Import aborted due to manifest validation failure.", file=sys.stderr)
+        sys.exit(1)
+
+    # --- Chunk field validation ---
+    valid_chunks, rejected_chunks = validate_chunks(chunks)
+    if rejected_chunks:
+        print(
+            f"  WARNING: {len(rejected_chunks)} chunks rejected — missing required fields",
+            file=sys.stderr,
+        )
+        # Write rejection log for operator review
+        reject_log = export_dir / "import_rejected_chunks.jsonl"
+        with open(reject_log, "w", encoding="utf-8") as rf:
+            for entry in rejected_chunks:
+                rf.write(json.dumps({
+                    "index": entry["index"],
+                    "chunk_id": entry["chunk"].get("chunk_id", "MISSING"),
+                    "missing_fields": entry["missing"],
+                    "source_path": entry["chunk"].get("source_path", "MISSING"),
+                }, ensure_ascii=False) + "\n")
+        print(f"  Rejection log: {reject_log}", file=sys.stderr)
+
+        if strict:
+            print(
+                f"  STRICT MODE: aborting import — {len(rejected_chunks)} chunks failed validation.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        # Rebuild vectors to match valid-only chunks
+        valid_indices = [i for i in range(len(chunks)) if not any(
+            r["index"] == i for r in rejected_chunks
+        )]
+        vectors = np.array(vectors[valid_indices])
+        chunks = valid_chunks
+
     # Load skip manifest (optional)
     skip_manifest = None
     if skip_manifest_path.exists():
@@ -127,12 +228,33 @@ def print_export_summary(
     if source_files:
         print(f"  Files:      {len(source_files):,} unique source documents")
 
-    # Skip manifest summary
+    # Skip manifest summary — operator-visible deferred/placeholder disclosure
     if skip_manifest:
         skipped = skip_manifest.get("skipped_files", [])
         count = len(skipped) if isinstance(skipped, list) else skip_manifest.get("count", 0)
         print(f"  Skipped:    {count} files were skipped during corpus processing")
-        print(f"              -- see skip_manifest.json for details")
+
+        # Break down by skip reason if available
+        if isinstance(skipped, list) and skipped:
+            reason_counts: dict[str, int] = {}
+            for entry in skipped:
+                reason = entry.get("reason", "unknown") if isinstance(entry, dict) else "unknown"
+                reason_counts[reason] = reason_counts.get(reason, 0) + 1
+            for reason, cnt in sorted(reason_counts.items(), key=lambda x: -x[1]):
+                print(f"              {reason}: {cnt}")
+
+        # Deferred format families
+        deferred = skip_manifest.get("deferred_formats", [])
+        if deferred:
+            print(f"  Deferred:   {len(deferred)} format families deferred (not yet parseable)")
+            for fmt in deferred[:10]:
+                ext = fmt.get("extension", fmt) if isinstance(fmt, dict) else fmt
+                cnt = fmt.get("count", "?") if isinstance(fmt, dict) else "?"
+                print(f"              .{ext}: {cnt} files")
+            if len(deferred) > 10:
+                print(f"              ... and {len(deferred) - 10} more")
+
+        print(f"              -- see skip_manifest.json for full details")
 
 
 def run_dry_run(
@@ -354,6 +476,11 @@ def main() -> None:
         action="store_true",
         help="Skip LanceDB compaction/cleanup after building the vector index.",
     )
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Reject the entire import if ANY chunk fails field validation.",
+    )
     args = parser.parse_args()
 
     export_dir = Path(args.source)
@@ -364,7 +491,7 @@ def main() -> None:
         sys.exit(1)
 
     # Load export data
-    chunks, vectors, manifest, skip_manifest = load_export(export_dir)
+    chunks, vectors, manifest, skip_manifest = load_export(export_dir, strict=args.strict)
 
     if args.dry_run:
         run_dry_run(export_dir, chunks, vectors, manifest, skip_manifest, args.config)

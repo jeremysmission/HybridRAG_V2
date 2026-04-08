@@ -133,7 +133,7 @@ python -m pip show torch
 ### 20. Forge fallback: copy torch from working HybridRAG_V2
 
 ```powershell
-COPY_TORCH_FROM_EXISTING_HYBRIDRAG.bat "C:\Users\randaje\Desktop1\HybridRAG_V2\.venv"
+COPY_TORCH_FROM_EXISTING_HYBRIDRAG.bat "{USER_HOME}\Desktop1\HybridRAG_V2\.venv"
 ```
 
 ---
