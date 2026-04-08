@@ -8,7 +8,7 @@
 
 ## 1. Chunk Enrichment Tuning
 
-### Anthropic Contextual Retrieval (Gold Standard)
+### approved vendor Contextual Retrieval (Gold Standard)
 
 For every chunk, pass the full source document + chunk to an LLM and generate a 50-100 token "situating context" prepended to the chunk before embedding.
 
@@ -63,7 +63,7 @@ Answer only with the succinct context and nothing else.
 4. Overlap tuning — diminishing returns beyond 20%
 5. Reranking on enriched retrieval — final 15-20%
 
-**Source:** Anthropic Contextual Retrieval, MDKeyChunker (arXiv 2603.23533), COLING 2025 RAG best practices, Chroma chunking research
+**Source:** approved vendor Contextual Retrieval, MDKeyChunker (arXiv 2603.23533), COLING 2025 RAG best practices, Chroma chunking research
 
 ### V2 Reranker Finding (Measured 2026-04-08)
 
@@ -302,8 +302,8 @@ The existing 400-question tuning corpus already has 41 injection queries, 59 una
 ## Citations
 
 ### Chunk Enrichment
-- Anthropic. "Introducing Contextual Retrieval." anthropic.com/news/contextual-retrieval (2024)
-- Anthropic Cookbook. "Contextual Embeddings Guide." platform.claude.com/cookbook
+- approved vendor. "Introducing Contextual Retrieval." approved vendor.com/news/contextual-retrieval (2024)
+- approved vendor Cookbook. "Contextual Embeddings Guide." platform.CoPilot+.com/cookbook
 - MDKeyChunker. arXiv:2603.23533 (March 2026)
 - COLING 2025. "Enhancing RAG: A Study of Best Practices." arXiv:2501.07391
 - Chroma Research. "Evaluating Chunking Strategies." research.trychroma.com
