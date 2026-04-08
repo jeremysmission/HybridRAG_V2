@@ -868,7 +868,7 @@
     },
     {
       "query_id": "GQ-033",
-      "query": "What was the classified encryption key used for the NEXION satellite uplink?",
+      "query": "What was the restricted encryption key used for the NEXION satellite uplink?",
       "expected_type": "SEMANTIC",
       "routed_type": "SEMANTIC",
       "routing_correct": true,
