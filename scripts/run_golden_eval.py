@@ -169,6 +169,22 @@ def _init_pipeline(config: V2Config, retrieval_only: bool):
                 except Exception as e:
                     logger.warning("CRAG verifier init failed: %s", e)
 
+    # Always initialize entity retriever when entity DB exists
+    if entity_retriever is None:
+        entity_db_path = V2_ROOT / config.paths.entity_db
+        if entity_db_path.exists():
+            try:
+                from src.store.entity_store import EntityStore
+                from src.store.relationship_store import RelationshipStore
+                from src.query.entity_retriever import EntityRetriever
+                entity_retriever = EntityRetriever(
+                    EntityStore(str(entity_db_path)),
+                    RelationshipStore(str(entity_db_path)),
+                )
+                print("  Entity store loaded")
+            except Exception as e:
+                logger.warning("Entity store init failed: %s", e)
+
     if router is None:
         from src.llm.client import LLMClient
         router = QueryRouter(LLMClient())  # no creds -> rule-based fallback
@@ -221,6 +237,18 @@ def _run_single_query(qdef, router, retriever, ctx_builder, generator,
             results = retriever.search(search_query, top_k=config.retrieval.top_k)
             context = ctx_builder.build(results, query_text) if results else None
             context_text = context.context_text if context else ""
+
+            # Merge entity store results for structured query types
+            if (
+                entity_retriever
+                and routed_type in ("ENTITY", "AGGREGATE", "TABULAR")
+            ):
+                structured = entity_retriever.search(classification)
+                if structured and structured.context_text:
+                    context_text = (
+                        f"{structured.context_text}\n\n---\n\n{context_text}"
+                    )
+
             ret_found, ret_missing = _check_facts(expected_facts, context_text)
             retrieval_pass = len(ret_missing) == 0
 

@@ -182,14 +182,25 @@ class QueryRouter:
         """
         Rule-based fallback when LLM is unavailable.
 
-        Uses keyword heuristics for basic routing.
+        Uses keyword heuristics for basic routing and entity filter extraction.
         """
         qtype = self._deterministic_type(query) or "SEMANTIC"
+
+        # Extract entity filters for structured query types
+        entity_type = ""
+        text_pattern = ""
+        site_filter = ""
+
+        if qtype in ("ENTITY", "AGGREGATE", "TABULAR"):
+            entity_type, text_pattern, site_filter = self._extract_fallback_filters(query, qtype)
 
         return QueryClassification(
             query_type=qtype,
             original_query=query,
             expanded_query=query,
+            entity_type=entity_type,
+            text_pattern=text_pattern,
+            site_filter=site_filter,
             reasoning="fallback: rule-based classification (LLM unavailable)",
         )
 
@@ -357,6 +368,77 @@ class QueryRouter:
             f"{site} noise floor filter module amplifier board repair corrosion "
             "maintenance issue"
         )
+
+    def _extract_fallback_filters(
+        self, query: str, qtype: str
+    ) -> tuple[str, str, str]:
+        """
+        Extract entity_type, text_pattern, site_filter from query for fallback routing.
+
+        Returns (entity_type, text_pattern, site_filter).
+        """
+        q = query.lower()
+        entity_type = ""
+        text_pattern = ""
+        site_filter = ""
+
+        # Extract person name (e.g. "Mike Torres")
+        person = self._extract_person_name(query)
+        # Extract part number (e.g. "AB-115", "ARC-4471")
+        part = self._extract_part_number(query)
+        # Extract PO number
+        po_match = re.search(r"\bPO-\d{4}-\d{3,6}\b", query, re.IGNORECASE)
+        po = po_match.group(0).upper() if po_match else None
+        # Extract site name
+        site_match = re.search(
+            r"\b(Thule|Riverside|Cedar Ridge|Copper Basin|Sandpoint|Birchwood|"
+            r"Fort Wainwright|Clear AFS)\b",
+            query, re.IGNORECASE,
+        )
+        site = site_match.group(0) if site_match else None
+
+        if qtype == "ENTITY":
+            if "email" in q or "contact" in q:
+                entity_type = "CONTACT"
+                if person:
+                    text_pattern = person
+            elif "technician" in q or "who is" in q:
+                entity_type = "PERSON"
+                if person:
+                    text_pattern = person
+                elif site:
+                    site_filter = site
+            elif "maintenance" in q and "next" in q:
+                entity_type = "DATE"
+                if site:
+                    site_filter = site
+            elif part:
+                entity_type = "PART"
+                text_pattern = part
+
+        elif qtype == "AGGREGATE":
+            if part:
+                text_pattern = part
+                entity_type = "PART"
+            elif "parts" in q and ("consumed" in q or "replaced" in q):
+                entity_type = "PART"
+                if site:
+                    site_filter = site
+            elif "unique part numbers" in q:
+                entity_type = "PART"
+
+        elif qtype == "TABULAR":
+            if po:
+                text_pattern = po
+            elif "cancelled" in q:
+                text_pattern = "CANCELLED"
+            elif "backordered" in q:
+                text_pattern = "BACKORDERED"
+
+        if site and not site_filter:
+            site_filter = site
+
+        return entity_type, text_pattern, site_filter
 
     def _deterministic_type(self, query: str) -> str | None:
         """Return a strong-signal routing decision when intent is obvious."""
