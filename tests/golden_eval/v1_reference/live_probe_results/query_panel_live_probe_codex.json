@@ -1,0 +1,38 @@
+{
+  "queries": [
+    {
+      "query": "What does section 1.4.1 require regarding security awareness training?",
+      "status": "complete",
+      "answer_preview": "Section 1.4.1 requires providing security awareness training for program personnel, which includes vendors, contractors, and outsourced workers. [Source: chunk_2]",
+      "answer_len": 162,
+      "sources_label": "Sources: DTIC_AD1045002.pdf (2 chunks), 07 - structural profile, bulkheads & sections.jpg (1 chunks)",
+      "metrics_label": "Latency: 32,231 ms | Tokens in: 830 | Tokens out: 34",
+      "network_label": "Grounding: 100% verified\nTransparency: Answer is based on retrieved source documents and passed grounding verification.",
+      "grounding_label": "",
+      "trace_id": "8907c79c90c64b37a382a01fcf62e450",
+      "decision_path": "guarded_stream_answer"
+    },
+    {
+      "query": "What folders appear in the file list around RouterOS?",
+      "status": "complete",
+      "answer_preview": "[General Knowledge] The provided context does not contain specific information about a \"file list\" related to RouterOS or any mention of directories named after routers. The chunks given are discussing Gopher servers, image metadata files with various extensions and properties (such as size_bytes), but none directly relate to the query regarding folders around RouterOS. [UNVERIFIED] If you have more context that includes details on Folder lists for a specific software like RouterOS, please provide it so I can give an accurate answer. Otherwise, based solely on general knowledge: [General Knowledge] In typical scenarios involving routers and networking devices such as those running RouterOS (a Linux-based operating system), folders or directories might include configuration files (.conf), log files (/var/log/routeros/ for example), firmware updates (/firmware/upgrades/, etc.), user management data, security settings, routing tables, interface configurations, network statistics, VPN profiles, and more. However, without specific context related to RouterOS file lists around routers or a particular software environment that includes such listings as part of its standard output (like th",
+      "answer_len": 1469,
+      "sources_label": "Sources: rfc1037.txt (1 chunks), rfc1436.txt (1 chunks), 005-HILDNER-TAPP-Buildings-DanteTelescopeHouse-1991-1996-BlueMood-ExcerptHenryTrucksPainterp146.png (1 chunks), 05 - inboard profile.jpg (1 chunks), 07 - structural profile, bulkheads & sections.jpg (1 chunks)",
+      "metrics_label": "Latency: 26,710 ms | Tokens in: 927 | Tokens out: 261",
+      "network_label": "Grounding: MIXED (includes open knowledge)\nTransparency: The grounding guard found unsupported claims; unverified parts are flagged.",
+      "grounding_label": "",
+      "trace_id": "0020d4ddcf344decbbc744254d6784de",
+      "decision_path": "guarded_stream_answer_transparent"
+    }
+  ],
+  "boot": {
+    "config_mode": "offline",
+    "offline_btn_state": "normal",
+    "online_btn_state": "disabled",
+    "gate": "Gate: OFFLINE | Policy: Localhost Only",
+    "model": "Active Model (offline): phi4-mini",
+    "backend": "Backend Health: Ollama Ready"
+  },
+  "ask_ready": true,
+  "messageboxes": []
+}

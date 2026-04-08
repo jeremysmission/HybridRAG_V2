@@ -1,0 +1,154 @@
+{
+  "timestamp": "20260329_032124",
+  "config_filename": "config.yaml",
+  "engine": "grounded",
+  "modes": [
+    "offline"
+  ],
+  "warmups": {
+    "offline": {
+      "elapsed_ms": 299028.7,
+      "error": ""
+    }
+  },
+  "queries": [
+    {
+      "query": "What is the filter capacitor part number?",
+      "modes": [
+        {
+          "mode": "offline",
+          "query": "What is the filter capacitor part number?",
+          "router": {
+            "mode": "offline",
+            "selected_backend": "ollama",
+            "ollama_model": "phi4:14b-q4_K_M",
+            "api_model": "gpt-4o",
+            "api_deployment": "gpt-4o",
+            "api_has_endpoint": true,
+            "api_has_key": true,
+            "router_has_api": false,
+            "router_api_ready": false,
+            "router_has_ollama": true,
+            "router_has_vllm": false
+          },
+          "readiness": {
+            "mode": "offline",
+            "ollama_ready": true,
+            "ollama_error": "",
+            "online_ready": true,
+            "api_has_key": true,
+            "api_has_endpoint": true,
+            "can_invoke_llm": true
+          },
+          "manual_pipeline": {
+            "retrieval_settings": {
+              "top_k": 5,
+              "min_score": 0.03,
+              "hybrid_search": true,
+              "reranker_enabled": true,
+              "reranker_top_n": 30,
+              "offline_top_k": null
+            },
+            "source_path_flags": {
+              "expected_source_root": "C:\\HybridRAG3_Educational\\data\\source",
+              "suspicious_count": 0,
+              "suspicious_sources": []
+            },
+            "structured_query": true,
+            "candidate_k": 30,
+            "min_score_applied": 0.05,
+            "counts": {
+              "raw_hits": 85,
+              "post_rerank_hits": 85,
+              "post_filter_hits": 47,
+              "final_hits": 5
+            },
+            "timings_ms": {
+              "search": 6962.77,
+              "rerank": 56370.93,
+              "post_filter_finalize": 63.72,
+              "context_build": 0.07,
+              "trim": 0.27
+            },
+            "budget": {
+              "context_window": 4096,
+              "output_budget": 512,
+              "prompt_overhead_tokens": 1322,
+              "max_context_tokens": 2774,
+              "max_context_chars": 11096,
+              "trimmed_context_chars": 5848
+            },
+            "context": {
+              "chars_before_trim": 5848,
+              "chars_after_trim": 5848,
+              "trimmed": false
+            },
+            "sources": [
+              {
+                "path": "C:\\HybridRAG3_Educational\\data\\source\\_throughput_test_fresh\\DPS4D_Technical_Manual_Summary.txt",
+                "chunks": 3,
+                "avg_relevance": 1.0033071490701015,
+                "access_tags": [
+                  "shared"
+                ],
+                "access_tag_source": "default_document_tags"
+              },
+              {
+                "path": "C:\\HybridRAG3_Educational\\data\\source\\field_engineer_docs\\TM 9-2320-360-24P.pdf",
+                "chunks": 2,
+                "avg_relevance": 1.0083071490701014,
+                "access_tags": [
+                  "shared"
+                ],
+                "access_tag_source": "default_document_tags"
+              }
+            ],
+            "hits": [
+              {
+                "rank": 1,
+                "score": 1.0233,
+                "source_path": "C:\\HybridRAG3_Educational\\data\\source\\_throughput_test_fresh\\DPS4D_Technical_Manual_Summary.txt",
+                "chunk_index": 1,
+                "preview": "e: 100 Hz nominal - Pulse Width: 66.7 microseconds (complementary coded) - Peak Transmit Power: 500 Watts - Receiver Sensitivity: -130 dBm - Height Range: 80 km to 800 km - Height Resolution: 2.5 km  Chapter 4: Maintenance Schedule - Daily:"
+              },
+              {
+                "rank": 2,
+                "score": 1.0233,
+                "source_path": "C:\\HybridRAG3_Educational\\data\\source\\field_engineer_docs\\TM 9-2320-360-24P.pdf",
+                "chunk_index": 179,
+                "preview": "[SECTION] 54 26 PAFZZ 5910-01-369-8008 35510 101136 .CAPACITOR INCLUDES SLEEVE EA 1 54 27XAFZZ --- 35510 XA101136 ..SLEEVE EA 1 54 28 PAFZZ 3110-00-425-1801 60380 DB-50426 .BEARING, ROLLER EA 1 54 29PFFZZ 3040-01-337-4157 35510 71260 .HOUSI"
+              },
+              {
+                "rank": 3,
+                "score": 0.9933,
+                "source_path": "C:\\HybridRAG3_Educational\\data\\source\\_throughput_test_fresh\\DPS4D_Technical_Manual_Summary.txt",
+                "chunk_index": -1,
+                "preview": "Nexion DPS-4D Ionosonde Technical Manual Summary  Chapter 1: System Overview The Nexion DPS-4D is a digital portable sounder manufactured by Lowell Digisonde International. It is used for vertical incidence ionospheric sounding. The system "
+              },
+              {
+                "rank": 4,
+                "score": 0.9933,
+                "source_path": "C:\\HybridRAG3_Educational\\data\\source\\_throughput_test_fresh\\DPS4D_Technical_Manual_Summary.txt",
+                "chunk_index": 2,
+                "preview": "ng module, replace if lock failures exceed 5 per day - Part# NX-ANT-DEL: Delta antenna element, inspect for corrosion quarterly - Part# NX-PWR-500: Power supply module, 500W rated, MTBF 80,000 hours  Chapter 6: Troubleshooting If the ionogr"
+              },
+              {
+                "rank": 5,
+                "score": 0.9933,
+                "source_path": "C:\\HybridRAG3_Educational\\data\\source\\field_engineer_docs\\TM 9-2320-360-24P.pdf",
+                "chunk_index": 178,
+                "preview": "[SECTION] 54 11 PAOZZ 5310-00-775-5139 35510 2434 .LO CKWASHER EA 4 54 12 PAOZZ 5310-01-106-9929 35510 2313 .NUT, HEX 10-32 EA 7 54 13 PAFZZ 5940-01-336-7060 35510 78994 .STUD, TERMINAL EA 3 54 14 PAOZZ 5310-01-024-3109 35510 2364 .NUT, HEX"
+              }
+            ],
+            "prompt_builder": "grounded",
+            "prompt_preview": "You are a precise technical assistant.\nUse the provided context first. If context is missing or partial, you may use general domain knowledge to provide a useful answer.\nWhen you use knowledge not explicitly present in context, mark that sentence with prefix: [General Knowledge].\nVERBATIM VALUES: When citing specific measurements, temperatures, tolerances, part numbers, or technical values from the context, reproduce the notation exactly as it appears in the source text. Do not add degree symbols, reformat units, or paraphrase numeric values.\nDo not fabricate source citations.\n\nGROUNDING GUIDE"
+          },
+          "end_to_end": {
+            "attempted": false,
+            "skipped_reason": "invoke_llm disabled"
+          }
+        }
+      ]
+    }
+  ]
+}

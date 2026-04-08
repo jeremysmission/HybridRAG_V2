@@ -1,0 +1,113 @@
+{
+  "generated_at": "2026-03-20T22:12:54.134785-06:00",
+  "mode": "offline",
+  "stance": {
+    "grounding_bias": 9,
+    "open_knowledge": false
+  },
+  "workspace": "C:\\HybridRAG3_Educational",
+  "gate": "Gate: OFFLINE | Policy: Localhost Only",
+  "backend": "Backend Health: Ollama Ready",
+  "active_model": "Active Model (offline): phi4-mini",
+  "messageboxes": [],
+  "results": [
+    {
+      "query": "What does section 1.4.1 require regarding security awareness training?",
+      "status": "complete",
+      "answer": "Based on the provided context documents: - Section [Source: chunk_2] requires providing security awareness training for program personnel. - This includes vendors, contractors, outsourced workers (Exact: \"including vendors, contractors, and outsources workers.\"). The specific requirements of section 1.4.1 regarding who should receive this type of training are not fully detailed in the provided context documents; therefore: Not present in provided documents: The exact details or scope beyond including certain groups such as vendors, contractors, outsourced workers for security awareness training under Section 1.4.1. Answer: Section [Source: chunk_2] section 1.4.1 requires providing security awareness training to program personnel which includes but is not limited to: - Vendors - Contractors - Outsourced Workers (Exact: \"including vendors, contractors, and outsources workers.\")",
+      "answer_preview": "Based on the provided context documents: - Section [Source: chunk_2] requires providing security awareness training for program personnel. - This includes vendors, contractors, outsourced workers (Exact: \"including vendors, contractors, and outsources workers.\"). The specific requirements of section 1.4.1 regarding who should receive this type of training are not fully detailed in the provided context documents; therefore: Not present in provided documents: The exact details or scope beyond incl",
+      "sources_label": "Sources: DTIC_AD1045002.pdf (2 chunks), 07 - structural profile, bulkheads & sections.jpg (1 chunks)",
+      "metrics_label": "Latency: 44,309 ms | Tokens in: 1923 | Tokens out: 174",
+      "network_label": "Grounding: 100% verified\nTransparency: Answer is based on retrieved source documents and passed grounding verification.",
+      "trace_id": "aa55152058a54248918bf76c3be07e04",
+      "decision_path": "guarded_stream_answer",
+      "trace_sources": [
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\cyber_security_docs\\DTIC_AD1045002.pdf",
+          "chunks": 2,
+          "avg_relevance": 0.6196717957262592,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        },
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\autocad_docs\\07 - structural profile, bulkheads & sections.jpg",
+          "chunks": 1,
+          "avg_relevance": 0.3197727272727272,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        }
+      ]
+    },
+    {
+      "query": "According to NIST SP 800-14, what three types of security policy should organizations have?",
+      "status": "complete",
+      "answer": "Some documents were found but the evidence quality is insufficient for a reliable answer. Please try a more specific question or check source documents.",
+      "answer_preview": "Some documents were found but the evidence quality is insufficient for a reliable answer. Please try a more specific question or check source documents.",
+      "sources_label": "Sources: rfc2196.txt (1 chunks)",
+      "metrics_label": "Latency: 39,012 ms | Tokens in: 0 | Tokens out: 0",
+      "network_label": "Grounding: BLOCKED (score n/a)\nTransparency: The answer was withheld because the retrieved evidence was not reliable enough.",
+      "trace_id": "c339dc6a5c8f436eb44300de17dba183",
+      "decision_path": "retrieval_gate_blocked",
+      "trace_sources": [
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\system_administrator_docs\\rfc_standards\\rfc2196.txt",
+          "chunks": 1,
+          "avg_relevance": 0.6175340689145602,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        }
+      ]
+    },
+    {
+      "query": "Thanks",
+      "status": "complete",
+      "answer": "I found relevant documents but cannot provide a fully verified answer. The available evidence does not sufficiently support a complete response. Please refine your question or check the source documents directly.",
+      "answer_preview": "I found relevant documents but cannot provide a fully verified answer. The available evidence does not sufficiently support a complete response. Please refine your question or check the source documents directly.",
+      "sources_label": "Sources: pg22.txt (3 chunks)",
+      "metrics_label": "Latency: 42,231 ms | Tokens in: 2096 | Tokens out: 133",
+      "network_label": "Grounding: BLOCKED (score 33%)\nTransparency: The answer was withheld because the retrieved evidence was not reliable enough.",
+      "trace_id": "c0dc0ff2a04f402db0960d7940a40d24",
+      "decision_path": "guarded_stream_answer_blocked",
+      "trace_sources": [
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\program_management_docs\\gutenberg_books\\pg22.txt",
+          "chunks": 3,
+          "avg_relevance": 0.685727818016913,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        }
+      ]
+    },
+    {
+      "query": "According to the filelist.txt source, which entries come after Linux?",
+      "status": "complete",
+      "answer": "The requested information was not found in the provided documents.",
+      "answer_preview": "The requested information was not found in the provided documents.",
+      "sources_label": "Sources: rfc1580.txt (5 chunks)",
+      "metrics_label": "Latency: 41,533 ms | Tokens in: 2533 | Tokens out: 12",
+      "network_label": "Grounding: 100% verified\nTransparency: Answer is based on retrieved source documents and passed grounding verification.",
+      "trace_id": "04053b05648145719164fcdcf49ce804",
+      "decision_path": "guarded_stream_answer",
+      "trace_sources": [
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\system_administrator_docs\\rfc_standards\\rfc1580.txt",
+          "chunks": 5,
+          "avg_relevance": 0.6729497034442675,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        }
+      ]
+    }
+  ],
+  "elapsed_s": 180.13
+}

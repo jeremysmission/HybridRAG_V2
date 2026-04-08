@@ -1,0 +1,17 @@
+What was the thermal drift issue with the Model 7R Cesium Reference Oscillator?
+What is the quarterly calibration procedure for the AN/PSM-47A Greenfield Multispectral Analyzer?
+What is the Meridian Secure Transport Protocol vulnerability CVE-2023-99001?
+What happened with the antenna assembly stockpile discrepancy at Hawthorne in FY2019?
+How many service accounts required manual intervention during the Thornberry AD migration?
+What year in the 1970s did we discover antigravity?
+What TCP port does the flux capacitor use?
+Which MIL-STD covers underwater wireless networking?
+What is the calibration interval for a quantum ionosonde?
+What frequency range does a vertical incidence ionosonde typically sweep?
+What is the difference between virtual height and true height on an ionogram?
+What is spread-F and how does it appear on an ionogram?
+What is the MUF and how does backscatter extend it?
+Can ionosondes measure above the F-layer?
+What is the purpose of oblique ionograms?
+How do geomagnetic storms affect HF radio propagation?
+What is sporadic-E and how does it affect HF propagation?

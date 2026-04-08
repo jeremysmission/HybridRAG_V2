@@ -1,0 +1,17 @@
+{
+  "switch_ok": true,
+  "ask_ready": true,
+  "started": true,
+  "finished": true,
+  "settled": true,
+  "mode": "online",
+  "gate": "Gate: ONLINE | Policy: Whitelist Only",
+  "query": "What does section 1.4.1 require regarding security awareness training?",
+  "answer_preview": "Section 1.4.1 requires providing security awareness training for program personnel, which includes vendors, contractors, and outsourced workers [Source: chunk_1].",
+  "answer_len": 162,
+  "sources": "Sources: DTIC_AD1045002.pdf (2 chunks), 07 - structural profile, bulkheads & sections.jpg (1 chunks)",
+  "metrics": "Latency: 34,124 ms | Tokens in: 1931 | Tokens out: 32",
+  "network": "Grounding: 100% verified\nTransparency: Answer is based on retrieved source documents and passed grounding verification.",
+  "trace_id": "4622ab6657c24493bf8ffb9585109a42",
+  "decision_path": "guarded_stream_answer"
+}

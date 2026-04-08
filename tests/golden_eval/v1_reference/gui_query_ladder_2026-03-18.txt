@@ -1,0 +1,11 @@
+# Tier 1: Easy grounded positive from the currently indexed live corpus
+According to the SR-71 Blackbird document, which engine became available in January?
+
+# Tier 2: Canary retrieval check. Should refuse until the live index actually contains the canary doc.
+What was the thermal drift issue with the Model 7R Cesium Reference Oscillator?
+
+# Tier 3: Grounded domain reasoning check. Run after DTIC_AD0474163 appears in the live index.
+What is the difference between virtual height and true height on an ionogram?
+
+# Tier 4: Grounding-guard refusal check.
+What TCP port does the flux capacitor use?

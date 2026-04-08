@@ -1,0 +1,158 @@
+{
+  "generated_at": "2026-03-20T22:09:39.322803-06:00",
+  "mode": "online",
+  "stance": {
+    "grounding_bias": 9,
+    "open_knowledge": false
+  },
+  "workspace": "C:\\HybridRAG3_Educational",
+  "gate": "Gate: ONLINE | Policy: Whitelist Only",
+  "backend": "Backend Health: Application Programming Interface (API) Ready",
+  "active_model": "Active Model (online): gpt-4o",
+  "messageboxes": [],
+  "results": [
+    {
+      "query": "What does section 1.4.1 require regarding security awareness training?",
+      "status": "complete",
+      "answer": "Section 1.4.1 requires providing security awareness training for program personnel, which includes vendors, contractors, and outsourced workers [Source: chunk_1].",
+      "answer_preview": "Section 1.4.1 requires providing security awareness training for program personnel, which includes vendors, contractors, and outsourced workers [Source: chunk_1].",
+      "sources_label": "Sources: DTIC_AD1045002.pdf (2 chunks), 07 - structural profile, bulkheads & sections.jpg (1 chunks)",
+      "metrics_label": "Latency: 44,966 ms | Tokens in: 1931 | Tokens out: 32",
+      "network_label": "Grounding: 100% verified\nTransparency: Answer is based on retrieved source documents and passed grounding verification.",
+      "trace_id": "9d69e767499a4903bd305806b7839925",
+      "decision_path": "guarded_stream_answer",
+      "trace_sources": [
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\cyber_security_docs\\DTIC_AD1045002.pdf",
+          "chunks": 2,
+          "avg_relevance": 0.6196717957262592,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        },
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\autocad_docs\\07 - structural profile, bulkheads & sections.jpg",
+          "chunks": 1,
+          "avg_relevance": 0.3002464788732394,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        }
+      ]
+    },
+    {
+      "query": "According to NIST SP 800-14, what three types of security policy should organizations have?",
+      "status": "complete",
+      "answer": "Some documents were found but the evidence quality is insufficient for a reliable answer. Please try a more specific question or check source documents.",
+      "answer_preview": "Some documents were found but the evidence quality is insufficient for a reliable answer. Please try a more specific question or check source documents.",
+      "sources_label": "Sources: rfc2196.txt (1 chunks)",
+      "metrics_label": "Latency: 36,505 ms | Tokens in: 0 | Tokens out: 0",
+      "network_label": "Grounding: BLOCKED (score n/a)\nTransparency: The answer was withheld because the retrieved evidence was not reliable enough.",
+      "trace_id": "d808b066e73741048d60348c17870f38",
+      "decision_path": "retrieval_gate_blocked",
+      "trace_sources": [
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\system_administrator_docs\\rfc_standards\\rfc2196.txt",
+          "chunks": 1,
+          "avg_relevance": 0.6175340689145602,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        }
+      ]
+    },
+    {
+      "query": "Thanks",
+      "status": "complete",
+      "answer": "I found relevant documents but cannot provide a fully verified answer. The available evidence does not sufficiently support a complete response. Please refine your question or check the source documents directly.",
+      "answer_preview": "I found relevant documents but cannot provide a fully verified answer. The available evidence does not sufficiently support a complete response. Please refine your question or check the source documents directly.",
+      "sources_label": "Sources: pg22.txt (3 chunks), pg100.txt (1 chunks), pg1513.txt (1 chunks), rfc2006.txt (1 chunks)",
+      "metrics_label": "Latency: 101,493 ms | Tokens in: 2835 | Tokens out: 19",
+      "network_label": "Grounding: BLOCKED (score n/a)\nTransparency: The answer was withheld because the retrieved evidence was not reliable enough.",
+      "trace_id": "0aaac691144c4adc8d0f9609d1c70ec2",
+      "decision_path": "guarded_stream_answer_blocked",
+      "trace_sources": [
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\program_management_docs\\gutenberg_books\\pg22.txt",
+          "chunks": 3,
+          "avg_relevance": 0.685727818016913,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        },
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\program_management_docs\\gutenberg_books\\pg100.txt",
+          "chunks": 1,
+          "avg_relevance": 0.6603542262796404,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        },
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\program_management_docs\\gutenberg_books\\pg1513.txt",
+          "chunks": 1,
+          "avg_relevance": 0.6564539705251646,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        },
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\system_administrator_docs\\rfc_standards\\rfc2006.txt",
+          "chunks": 1,
+          "avg_relevance": 0.6526419255461839,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        }
+      ]
+    },
+    {
+      "query": "According to the filelist.txt source, which entries come after Linux?",
+      "status": "complete",
+      "answer": "I found relevant documents but cannot provide a fully verified answer. The available evidence does not sufficiently support a complete response. Please refine your question or check the source documents directly.",
+      "answer_preview": "I found relevant documents but cannot provide a fully verified answer. The available evidence does not sufficiently support a complete response. Please refine your question or check the source documents directly.",
+      "sources_label": "Sources: rfc1580.txt (8 chunks), FILES.txt (1 chunks), FILES.txt (1 chunks)",
+      "metrics_label": "Latency: 55,215 ms | Tokens in: 3931 | Tokens out: 19",
+      "network_label": "Grounding: BLOCKED (score n/a)\nTransparency: The answer was withheld because the retrieved evidence was not reliable enough.",
+      "trace_id": "60e0387adc4c448e938770619a84db8b",
+      "decision_path": "guarded_stream_answer_blocked",
+      "trace_sources": [
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\system_administrator_docs\\rfc_standards\\rfc1580.txt",
+          "chunks": 8,
+          "avg_relevance": 0.7117355484172002,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        },
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\program_management_docs\\ai_business_startup\\multiagent\\FILES.txt",
+          "chunks": 1,
+          "avg_relevance": 0.6119661015555973,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        },
+        {
+          "path": "C:\\HybridRAG3_Educational\\data\\source\\system_administrator_docs\\FILES.txt",
+          "chunks": 1,
+          "avg_relevance": 0.6074274110794068,
+          "access_tags": [
+            "shared"
+          ],
+          "access_tag_source": "default_document_tags"
+        }
+      ]
+    }
+  ],
+  "elapsed_s": 250.52
+}
