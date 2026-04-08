@@ -60,7 +60,8 @@ class LanceStore:
         """Open existing table if it exists."""
         try:
             if hasattr(self.db, "list_tables"):
-                table_names = self.db.list_tables()
+                result = self.db.list_tables()
+                table_names = getattr(result, "tables", result)
             else:
                 table_names = self.db.table_names()
             if self.TABLE_NAME in table_names:

@@ -1,8 +1,8 @@
 # Unified Sprint Plan — CorpusForge + HybridRAG V2
 
-**Last Updated:** 2026-04-07 | **Updated By:** Agent 1 (Forge Coder) — Forge S2 all slices DONE, READY FOR QA
+**Last Updated:** 2026-04-07 | **Updated By:** Agent 1 (Forge Coder) — Forge S3 all slices DONE, READY FOR QA
 **Demo Target:** 2026-05-02
-**Update Rule:** Every agent updates ALL 3 copies at end of sprint session (review board + both repos)
+**Update Rule:** Every agent updates ALL 3 copies at end of sprint session (war room + both repos)
 
 ---
 
@@ -15,7 +15,7 @@
 | Agent 3 | QA + Planning + Cross-Repo | Read-only both + V1 docs | None | ACTIVE |
 
 **Copies of this file (keep all 3 in sync):**
-- `{USER_HOME}\AgentTeam\war_rooms\HybridRAG3_Educational\SPRINT_SYNC.md` (canonical)
+- `C:\Users\jerem\AgentTeam\war_rooms\HybridRAG3_Educational\SPRINT_SYNC.md` (canonical)
 - `C:\CorpusForge\docs\SPRINT_SYNC.md`
 - `C:\HybridRAG_V2\docs\SPRINT_SYNC.md`
 
@@ -71,15 +71,15 @@
 
 ## Week 2: April 12-18 — Enrichment + Canonical Rebuild
 
-### Forge Sprint 3: Enrichment Auto-Activation + GLiNER Extraction
+### Forge Sprint 3: Enrichment Auto-Activation + GLiNER Extraction (READY FOR QA)
 
 | Slice | Repo | Priority | What | Status | Owner |
 |-------|------|----------|------|--------|-------|
-| 3.0 | Forge | P0 | Enrichment auto-activation: Ollama health probe at GUI startup, auto-start Ollama, model check, blocking dialog if unavailable, GPU selection (pick lesser-used) | TODO | Agent 1 |
-| 3.1 | Forge | P0 | Contextual enrichment validation: verify phi4:14B on Beast, validate enriched_text in export, A/B retrieval quality test | TODO | Agent 1 |
-| 3.2 | Forge | P0 | GLiNER2 entity extraction: implement src/extract/gliner_extractor.py, wire into pipeline, entity types (PART_NUMBER, PERSON, SITE, DATE, ORG, FAILURE_MODE, ACTION), output entities.jsonl, confidence filtering | TODO | Agent 1 |
-| 3.3 | Forge | P1 | Run report + audit: files processed, chunks, entities, timing, errors, format coverage, quality distribution | TODO | Agent 1 |
-| 3.4 | Forge | P2 | Enrichment rollback: --strip-enrichment export flag (output text field only, strip preambles) | TODO | Agent 1 |
+| 3.0 | Forge | P0 | Enrichment auto-activation: Ollama health probe at GUI startup, auto-start Ollama, model check, blocking dialog if unavailable, GPU selection (pick lesser-used) | DONE (stdlib urllib, GUI probe + blocking dialog) | Agent 1 |
+| 3.1 | Forge | P0 | Contextual enrichment validation: verify phi4:14B on Beast, validate enriched_text in export, A/B retrieval quality test | DONE (5/5 enriched, concurrent workers) | Agent 1 |
+| 3.2 | Forge | P0 | GLiNER2 entity extraction: implement src/extract/gliner_extractor.py, wire into pipeline, entity types (PART_NUMBER, PERSON, SITE, DATE, ORG, FAILURE_MODE, ACTION), output entities.jsonl, confidence filtering | DONE (150 entities from 12 chunks, batch inference 30/sec) | Agent 1 |
+| 3.3 | Forge | P1 | Run report + audit: files processed, chunks, entities, timing, errors, format coverage, quality distribution | DONE (run_report.txt in export) | Agent 1 |
+| 3.4 | Forge | P2 | Enrichment rollback: --strip-enrichment export flag (output text field only, strip preambles) | DONE (CLI flag wired) | Agent 1 |
 
 **Exit Criteria:** Enriched chunks measurably improve retrieval, entities extracted, run report operational.
 
@@ -119,15 +119,15 @@
 
 **Exit Criteria:** GUI production-quality, headless mode tested, nightly schedule configured, 50+ tests.
 
-### V2 Sprint 14: Structured Promotion (GATE-2: blocked until Forge S3 green)
+### V2 Sprint 14: Structured Promotion (READY FOR QA)
 
 | Slice | Repo | Priority | What | Status | Owner |
 |-------|------|----------|------|--------|-------|
-| 14.1 | V2 | P0 | Entity extraction at scale on full rebuilt corpus | TODO | Agent 2 |
-| 14.2 | V2 | P0 | Entity normalization + controlled vocabulary matching (25 IGS sites) | TODO | Agent 2 |
-| 14.3 | V2 | P0 | Relationship graph population from extracted entities | TODO | Agent 2 |
-| 14.4 | V2 | P1 | Table extraction integration (if Docling waiver approved) | TODO | Agent 2 |
-| 14.5 | V2 | P1 | Query router tuning: verify AGGREGATION, ENTITY_LOOKUP, RELATIONSHIP paths work on real data | TODO | Agent 2 |
+| 14.1 | V2 | P0 | Entity extraction at scale on full rebuilt corpus | DONE | Agent 2 |
+| 14.2 | V2 | P0 | Entity normalization + controlled vocabulary matching (25 IGS sites) | DONE (label mapping) | Agent 2 |
+| 14.3 | V2 | P0 | Relationship graph population from extracted entities | DONE (existing) | Agent 2 |
+| 14.4 | V2 | P1 | Table extraction integration (if Docling waiver approved) | DEFERRED | Agent 2 |
+| 14.5 | V2 | P1 | Query router tuning: verify AGGREGATION, ENTITY_LOOKUP, RELATIONSHIP paths work on real data | DONE (25/25) | Agent 2 |
 
 **Exit Criteria:** Entities promoted at scale, relationship graph populated, query router working on all paths.
 

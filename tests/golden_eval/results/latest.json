@@ -25,7 +25,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 31,
+    "latency_ms": 27,
     "error": ""
   },
   {
@@ -52,7 +52,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 54,
+    "latency_ms": 38,
     "error": ""
   },
   {
@@ -79,7 +79,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 26,
+    "latency_ms": 16,
     "error": ""
   },
   {
@@ -108,7 +108,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 81,
+    "latency_ms": 64,
     "error": ""
   },
   {
@@ -139,7 +139,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 26,
+    "latency_ms": 31,
     "error": ""
   },
   {
@@ -168,7 +168,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 26,
+    "latency_ms": 22,
     "error": ""
   },
   {
@@ -193,7 +193,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 30,
+    "latency_ms": 24,
     "error": ""
   },
   {
@@ -218,7 +218,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 26,
+    "latency_ms": 15,
     "error": ""
   },
   {
@@ -268,7 +268,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 31,
+    "latency_ms": 25,
     "error": ""
   },
   {
@@ -297,7 +297,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 90,
+    "latency_ms": 21,
     "error": ""
   },
   {
@@ -330,7 +330,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 37,
+    "latency_ms": 28,
     "error": ""
   },
   {
@@ -357,7 +357,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 15,
+    "latency_ms": 26,
     "error": ""
   },
   {
@@ -384,7 +384,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 26,
+    "latency_ms": 22,
     "error": ""
   },
   {
@@ -415,7 +415,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 74,
+    "latency_ms": 68,
     "error": ""
   },
   {
@@ -440,7 +440,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 34,
+    "latency_ms": 32,
     "error": ""
   },
   {
@@ -467,7 +467,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 29,
+    "latency_ms": 23,
     "error": ""
   },
   {
@@ -500,7 +500,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 18,
+    "latency_ms": 26,
     "error": ""
   },
   {
@@ -533,7 +533,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 15,
+    "latency_ms": 27,
     "error": ""
   },
   {
@@ -564,7 +564,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 26,
+    "latency_ms": 18,
     "error": ""
   },
   {
@@ -620,7 +620,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 25,
+    "latency_ms": 16,
     "error": ""
   },
   {
@@ -653,7 +653,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 59,
+    "latency_ms": 51,
     "error": ""
   },
   {
@@ -680,7 +680,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 19,
+    "latency_ms": 27,
     "error": ""
   },
   {
@@ -701,7 +701,7 @@
     "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 19,
+    "latency_ms": 20,
     "error": ""
   }
 ]
