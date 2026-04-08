@@ -65,6 +65,21 @@ Answer only with the succinct context and nothing else.
 
 **Source:** Anthropic Contextual Retrieval, MDKeyChunker (arXiv 2603.23533), COLING 2025 RAG best practices, Chroma chunking research
 
+### V2 Reranker Finding (Measured 2026-04-08)
+
+**The reranker provides zero accuracy improvement on the current V2 corpus.**
+
+| Config | Accuracy | P50 | P95 | Avg |
+|--------|----------|-----|-----|-----|
+| WITH reranker | 25/25 | 22ms | 56ms | 34ms |
+| NO reranker | 25/25 | 19ms | 57ms | 25ms |
+
+**Why:** With the entity store handling 60% of queries (ENTITY/AGGREGATE/TABULAR) via direct lookup, only SEMANTIC queries (40%) even reach the reranker. On a 17K-chunk corpus with a strong embedding model (nomic 768d), the vector top-10 are already well-ranked.
+
+**V1 lesson:** Reranker was prohibitively slow on V1 and was disabled. V2 FlashRank is fast (~9ms overhead) but still provides no accuracy gain at current scale.
+
+**Recommendation:** Keep reranker config toggle (`reranker_enabled: true/false`) for future scale. At 100K+ chunks, reranker value increases as vector top-10 quality degrades. For demo, reranker can be disabled for faster queries.
+
 ---
 
 ## 2. Entity Extraction Tuning
