@@ -90,7 +90,7 @@ As of the current handover:
 - a live extraction run was started on `2026-04-06 20:35` local time
 - command path: `scripts\overnight_extraction.py`
 - explicit source DB:
-  - `C:\Users\jerem\HybridRAG3_Clone1\data\index\hybridrag.sqlite3`
+  - `{USER_HOME}\HybridRAG3_Clone1\data\index\hybridrag.sqlite3`
 - progress moved from `2000` to `2030` extracted chunks during the current session
 - writes to:
   - `C:\HybridRAG_V2\data\index\entities.sqlite3`
