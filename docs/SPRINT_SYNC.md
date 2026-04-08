@@ -1,8 +1,8 @@
 # Unified Sprint Plan — CorpusForge + HybridRAG V2
 
-**Last Updated:** 2026-04-07 | **Updated By:** Agent 2 (V2 Coder) — Sprint 12 READY FOR QA
+**Last Updated:** 2026-04-07 | **Updated By:** Agent 3 (QA) — Forge S2 status corrected, V2 S12 READY FOR QA
 **Demo Target:** 2026-05-02
-**Update Rule:** Every agent updates ALL 3 copies at end of sprint session (review board + both repos)
+**Update Rule:** Every agent updates ALL 3 copies at end of sprint session (war room + both repos)
 
 ---
 
@@ -15,7 +15,7 @@
 | Agent 3 | QA + Planning + Cross-Repo | Read-only both + V1 docs | None | ACTIVE |
 
 **Copies of this file (keep all 3 in sync):**
-- `{USER_HOME}\AgentTeam\war_rooms\HybridRAG3_Educational\SPRINT_SYNC.md` (canonical)
+- `C:\Users\jerem\AgentTeam\war_rooms\HybridRAG3_Educational\SPRINT_SYNC.md` (canonical)
 - `C:\CorpusForge\docs\SPRINT_SYNC.md`
 - `C:\HybridRAG_V2\docs\SPRINT_SYNC.md`
 
@@ -39,10 +39,10 @@
 |-------|------|----------|------|--------|-------|
 | 2.1 | Forge | P0 | Diagnose + fix chunking pipeline failure | DONE (lazy init shipped) | Agent 1 |
 | 2.2 | Forge | P0 | Move 11 hardcoded placeholder formats to config/skip_list.yaml | DONE (config-driven) | Agent 1 |
-| 2.3 | Forge | P1 | GUI settings panel: workers (1-32), enrichment toggle, extraction toggle, OCR mode, chunk size/overlap | TODO | Agent 1 |
+| 2.3 | Forge | P1 | GUI settings panel: workers (1-32), enrichment toggle, extraction toggle, OCR mode, chunk size/overlap | DONE (commit babb163) | Agent 1 |
 | 2.4 | Forge | P0 | End-to-end chunk export proof (100+ files, verify chunks.jsonl + vectors.npy) | TODO | Agent 1 |
-| 2.5 | Forge | P1 | Filter pdfmeta.json junk from chunks (pattern-based skip in skip_list.yaml) | TODO | Agent 1 |
-| 2.6 | Forge | P1 | config.local.yaml support (machine-specific overrides, gitignored) | TODO | Agent 1 |
+| 2.5 | Forge | P1 | Filter pdfmeta.json junk from chunks (pattern-based skip in skip_list.yaml) | DONE (17 OCR patterns, commit 8b33f8e) | Agent 1 |
+| 2.6 | Forge | P1 | config.local.yaml support (machine-specific overrides, gitignored) | DONE (commit 6cf1e7f) | Agent 1 |
 
 **Exit Criteria:** Pipeline runs E2E, all format skips in config, GUI has settings panel, clean chunks exported.
 

@@ -1,13 +1,13 @@
 {
-  "run_id": "20260405_175447",
-  "timestamp": "2026-04-05T17:54:47.902357+00:00",
+  "run_id": "20260408_032819",
+  "timestamp": "2026-04-08T03:28:19.221843+00:00",
   "total_queries": 25,
-  "routing_correct": 20,
+  "routing_correct": 24,
   "retrieval_pass": 25,
   "generation_pass": 0,
   "confidence_correct": 0,
   "crag_triggered": 0,
-  "avg_latency_ms": 19.76,
+  "avg_latency_ms": 20.8,
   "retrieval_only": true,
   "scores": [
     {
@@ -36,7 +36,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 31,
+      "latency_ms": 101,
       "error": ""
     },
     {
@@ -63,7 +63,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 20,
       "error": ""
     },
     {
@@ -90,15 +90,15 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 18,
       "error": ""
     },
     {
       "query_id": "GQ-004",
       "query": "What parts were consumed during the Thule maintenance visit?",
       "expected_type": "AGGREGATE",
-      "routed_type": "SEMANTIC",
-      "routing_correct": false,
+      "routed_type": "AGGREGATE",
+      "routing_correct": true,
       "expected_facts": [
         "ARC-4471",
         "SEMS3D-0847",
@@ -119,7 +119,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 16,
+      "latency_ms": 17,
       "error": ""
     },
     {
@@ -150,7 +150,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 31,
+      "latency_ms": 20,
       "error": ""
     },
     {
@@ -179,7 +179,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 17,
       "error": ""
     },
     {
@@ -204,7 +204,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 12,
       "error": ""
     },
     {
@@ -229,7 +229,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 16,
+      "latency_ms": 13,
       "error": ""
     },
     {
@@ -254,15 +254,15 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 20,
+      "latency_ms": 17,
       "error": ""
     },
     {
       "query_id": "GQ-010",
       "query": "When is the next scheduled maintenance at Thule Air Base?",
       "expected_type": "ENTITY",
-      "routed_type": "SEMANTIC",
-      "routing_correct": false,
+      "routed_type": "ENTITY",
+      "routing_correct": true,
       "expected_facts": [
         "2025-06-15"
       ],
@@ -308,7 +308,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 11,
+      "latency_ms": 16,
       "error": ""
     },
     {
@@ -341,7 +341,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 47,
+      "latency_ms": 45,
       "error": ""
     },
     {
@@ -368,7 +368,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 13,
       "error": ""
     },
     {
@@ -395,7 +395,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 31,
+      "latency_ms": 13,
       "error": ""
     },
     {
@@ -426,7 +426,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 17,
       "error": ""
     },
     {
@@ -451,15 +451,15 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 31,
+      "latency_ms": 17,
       "error": ""
     },
     {
       "query_id": "GQ-017",
       "query": "Which sites have received AB-115 amplifier cards?",
       "expected_type": "AGGREGATE",
-      "routed_type": "SEMANTIC",
-      "routing_correct": false,
+      "routed_type": "AGGREGATE",
+      "routing_correct": true,
       "expected_facts": [
         "Copper Basin",
         "Sandpoint"
@@ -478,7 +478,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 31,
+      "latency_ms": 17,
       "error": ""
     },
     {
@@ -511,7 +511,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 18,
       "error": ""
     },
     {
@@ -544,7 +544,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 17,
       "error": ""
     },
     {
@@ -575,15 +575,15 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 17,
       "error": ""
     },
     {
       "query_id": "GQ-021",
       "query": "Who is the point of contact for the site where FM-220 filter modules were ordered?",
       "expected_type": "COMPLEX",
-      "routed_type": "ENTITY",
-      "routing_correct": false,
+      "routed_type": "COMPLEX",
+      "routing_correct": true,
       "expected_facts": [
         "Cedar Ridge",
         "Patel",
@@ -604,7 +604,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 16,
+      "latency_ms": 19,
       "error": ""
     },
     {
@@ -631,7 +631,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 15,
+      "latency_ms": 17,
       "error": ""
     },
     {
@@ -691,7 +691,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 16,
+      "latency_ms": 14,
       "error": ""
     },
     {
@@ -712,7 +712,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 16,
+      "latency_ms": 14,
       "error": ""
     }
   ]

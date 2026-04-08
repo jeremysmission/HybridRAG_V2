@@ -17,19 +17,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "ARC-4471",
-      "RF connector",
-      "transmitter output stage"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 16824,
+    "latency_ms": 101,
     "error": ""
   },
   {
@@ -48,18 +44,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "SSgt Marcus Webb",
-      "(970) 555-0142"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 14024,
+    "latency_ms": 20,
     "error": ""
   },
   {
@@ -78,18 +71,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "302W",
-      "nominal"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 11823,
+    "latency_ms": 18,
     "error": ""
   },
   {
@@ -110,19 +100,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "ARC-4471",
-      "SEMS3D-0847",
-      "PO-2025-0142"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 13861,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -145,20 +131,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "GPS-disciplined reference oscillator",
-      "calibration signal generator",
-      "UTC via GPS",
-      "ionogram quality"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 11816,
+    "latency_ms": 20,
     "error": ""
   },
   {
@@ -179,19 +160,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "SN-2847",
-      "RX3",
-      "noise floor"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 16626,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -208,17 +185,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "Mike Torres"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 12184,
+    "latency_ms": 12,
     "error": ""
   },
   {
@@ -235,17 +210,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "1.2 kW"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 14396,
+    "latency_ms": 13,
     "error": ""
   },
   {
@@ -262,17 +235,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "78%"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 13256,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -289,17 +260,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "2025-06-15"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 13401,
+    "latency_ms": 15,
     "error": ""
   },
   {
@@ -320,19 +289,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "IN TRANSIT",
-      "FM-220",
-      "Cedar Ridge"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 14021,
+    "latency_ms": 16,
     "error": ""
   },
   {
@@ -357,29 +322,23 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "FM-220",
-      "Cedar Ridge",
-      "Driftwood",
-      "Hawthorne",
-      "Depot Stock"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 15215,
+    "latency_ms": 45,
     "error": ""
   },
   {
     "query_id": "GQ-013",
     "query": "Who requested parts for Cedar Ridge?",
     "expected_type": "ENTITY",
-    "routed_type": "ENTITY",
-    "routing_correct": true,
+    "routed_type": "SEMANTIC",
+    "routing_correct": false,
     "expected_facts": [
       "Patel",
       "Ravi"
@@ -390,18 +349,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "Patel",
-      "Ravi"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 13392,
+    "latency_ms": 13,
     "error": ""
   },
   {
@@ -420,18 +376,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "PS-800",
-      "Granite Peak"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 15530,
+    "latency_ms": 13,
     "error": ""
   },
   {
@@ -454,20 +407,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "WR-4471",
-      "RF Connector",
-      "SN-2901",
-      "SN-2902"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 15250,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -484,17 +432,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "mike.torres@acmeradar.example.com"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 11793,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -513,18 +459,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "Copper Basin",
-      "Sandpoint"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 16237,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -549,21 +492,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "attenuation",
-      "2 steps",
-      "+6dB",
-      "integration time",
-      "4 to 8 sweeps"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 13131,
+    "latency_ms": 18,
     "error": ""
   },
   {
@@ -588,21 +525,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "SN-2847",
-      "noise floor",
-      "CH3",
-      "filter module",
-      "corrosion"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "PARTIAL",
-    "actual_confidence": "PARTIAL",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 21672,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -625,20 +556,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "PO-2024-0506",
-      "AH-900",
-      "Birchwood",
-      "cancelled per director"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 17962,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -659,19 +585,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "Cedar Ridge",
-      "Patel",
-      "FM-220"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 17820,
+    "latency_ms": 19,
     "error": ""
   },
   {
@@ -690,18 +612,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "maintenance",
-      "repair"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "PARTIAL",
-    "actual_confidence": "PARTIAL",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 22411,
+    "latency_ms": 17,
     "error": ""
   },
   {
@@ -726,21 +645,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "ARC-4471",
-      "FM-220",
-      "AB-115",
-      "PS-800",
-      "WR-4471"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "HIGH",
-    "actual_confidence": "HIGH",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 17286,
+    "latency_ms": 16,
     "error": ""
   },
   {
@@ -759,18 +672,15 @@
     ],
     "retrieval_facts_missing": [],
     "retrieval_pass": true,
-    "generation_facts_found": [
-      "SN-2847",
-      "Riverside"
-    ],
+    "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "PARTIAL",
-    "actual_confidence": "PARTIAL",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 13404,
+    "latency_ms": 14,
     "error": ""
   },
   {
@@ -785,13 +695,13 @@
     "retrieval_pass": true,
     "generation_facts_found": [],
     "generation_facts_missing": [],
-    "generation_pass": true,
+    "generation_pass": null,
     "expected_confidence": "NOT_FOUND",
-    "actual_confidence": "NOT_FOUND",
-    "confidence_correct": true,
+    "actual_confidence": "N/A",
+    "confidence_correct": null,
     "crag_triggered": false,
     "crag_retries": 0,
-    "latency_ms": 15710,
+    "latency_ms": 14,
     "error": ""
   }
 ]
