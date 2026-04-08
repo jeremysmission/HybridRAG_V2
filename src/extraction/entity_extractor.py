@@ -474,10 +474,11 @@ class EntityExtractor:
 
 class RegexPreExtractor:
     """
-    Fast regex-based pre-extraction for known patterns.
+    Tier 1: Fast regex-based pre-extraction for known patterns.
 
-    Runs before GPT-4o to catch obvious entities cheaply.
-    Results are merged with LLM extraction (LLM wins on conflicts).
+    Runs on every chunk at near-zero cost. Handles 60-70% of entity types:
+    parts, POs, dates, emails, phones, serial numbers, report IDs.
+    Results feed the same entity store as GLiNER (Tier 2) and LLM (Tier 3).
     """
 
     def __init__(self, part_patterns: list[str] | None = None):
@@ -490,6 +491,20 @@ class RegexPreExtractor:
             r"|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\s+\d{1,2},?\s+\d{4}\b"
         )
         self._po_re = re.compile(r"PO-\d{4}-\d{4}")
+        # V1-ported patterns
+        self._serial_re = re.compile(r"\bSN[-: ]?[A-Za-z0-9-]+\b", re.IGNORECASE)
+        self._report_id_re = re.compile(r"\b(?:FSR|UMR|IR|ASV|RTS)-[A-Za-z0-9_-]+\b", re.IGNORECASE)
+        # Field-label extraction (V1 service_event_extractor pattern)
+        self._field_value_re = re.compile(
+            r"^\s*(?P<label>(?:Site|Location|Point of Contact|POC|Technician|Engineer)"
+            r")\s*:\s*(?P<value>.+)$",
+            re.MULTILINE | re.IGNORECASE,
+        )
+        self._field_label_map = {
+            "site": "SITE", "location": "SITE",
+            "point of contact": "PERSON", "poc": "PERSON",
+            "technician": "PERSON", "engineer": "PERSON",
+        }
 
     def extract(
         self, text: str, chunk_id: str, source_path: str
@@ -552,6 +567,46 @@ class RegexPreExtractor:
                 source_path=source_path,
                 context=self._surrounding(text, match.start()),
             ))
+
+        # Serial numbers (V1 pattern)
+        for match in self._serial_re.finditer(text):
+            entities.append(Entity(
+                entity_type="PART",
+                text=match.group().upper(),
+                raw_text=match.group(),
+                confidence=0.95,
+                chunk_id=chunk_id,
+                source_path=source_path,
+                context=self._surrounding(text, match.start()),
+            ))
+
+        # Report IDs (FSR, UMR, IR, ASV, RTS)
+        for match in self._report_id_re.finditer(text):
+            entities.append(Entity(
+                entity_type="PO",
+                text=match.group().upper(),
+                raw_text=match.group(),
+                confidence=0.9,
+                chunk_id=chunk_id,
+                source_path=source_path,
+                context=self._surrounding(text, match.start()),
+            ))
+
+        # Field-label extraction (Site: X, POC: Y, etc.)
+        for match in self._field_value_re.finditer(text):
+            label = match.group("label").strip().lower()
+            value = match.group("value").strip()
+            entity_type = self._field_label_map.get(label)
+            if entity_type and value and len(value) > 1:
+                entities.append(Entity(
+                    entity_type=entity_type,
+                    text=value,
+                    raw_text=value,
+                    confidence=0.9,
+                    chunk_id=chunk_id,
+                    source_path=source_path,
+                    context=self._surrounding(text, match.start()),
+                ))
 
         return entities
 

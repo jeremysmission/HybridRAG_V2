@@ -90,13 +90,23 @@ class ExtractionConfig(BaseModel):
             r"ARC-\d{4}",
             r"IGSI-\d+",
             r"PO-\d{4}-\d{4}",
-            r"SN \d+",
+            r"SN[-: ]?\d+",
             r"SEMS3D-\d+",
+            r"[A-Z]{2,}-\d{3,4}",
+            r"WR-\d{4}",
+            r"FM-\d{3}",
+            r"AB-\d{3}",
+            r"PS-\d{3}",
+            r"AH-\d{3}",
         ],
         description="Regex patterns for valid part numbers.",
     )
     gliner_enabled: bool = Field(default=False, description="Use GLiNER2 for first-pass NER (waiver pending).")
+    gliner_device: str = Field(default="cuda:1", description="Device for GLiNER model. Use cuda:1 on Beast.")
+    gliner_model: str = Field(default="urchade/gliner_medium-v2.1", description="GLiNER model name.")
+    gliner_min_chunk_len: int = Field(default=50, description="Skip chunks shorter than this for GLiNER.")
     gpt4o_extraction: bool = Field(default=True, description="Use LLM for semantic extraction.")
+    max_concurrent: int = Field(default=16, ge=1, le=64, description="Max concurrent extraction threads.")
 
 
 class ServerConfig(BaseModel):
