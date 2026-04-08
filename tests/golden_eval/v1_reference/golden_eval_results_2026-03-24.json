@@ -1,6 +1,6 @@
 {
   "date": "2026-03-24",
-  "evaluator": "Microsoft Copilot Opus 4.6",
+  "evaluator": "Microsoft Copilot CoPilot+",
   "total_queries": 400,
   "classifier_accuracy": {
     "overall": {"correct": 380, "total": 400, "rate": 0.95},
