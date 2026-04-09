@@ -1,13 +1,13 @@
 {
-  "run_id": "20260408_120137",
-  "timestamp": "2026-04-08T12:01:37.003661+00:00",
+  "run_id": "20260409_002127",
+  "timestamp": "2026-04-09T00:21:27.041027+00:00",
   "total_queries": 36,
   "routing_correct": 32,
   "retrieval_pass": 36,
   "generation_pass": 0,
   "confidence_correct": 0,
   "crag_triggered": 0,
-  "avg_latency_ms": 75.16666666666667,
+  "avg_latency_ms": 41.19444444444444,
   "retrieval_only": true,
   "scores": [
     {
@@ -36,7 +36,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 160,
+      "latency_ms": 42,
       "error": ""
     },
     {
@@ -63,7 +63,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 188,
+      "latency_ms": 322,
       "error": ""
     },
     {
@@ -90,7 +90,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 31,
+      "latency_ms": 20,
       "error": ""
     },
     {
@@ -119,7 +119,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 289,
+      "latency_ms": 258,
       "error": ""
     },
     {
@@ -150,7 +150,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 56,
+      "latency_ms": 23,
       "error": ""
     },
     {
@@ -179,7 +179,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 41,
+      "latency_ms": 19,
       "error": ""
     },
     {
@@ -204,7 +204,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 50,
+      "latency_ms": 23,
       "error": ""
     },
     {
@@ -229,7 +229,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 34,
+      "latency_ms": 19,
       "error": ""
     },
     {
@@ -254,7 +254,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 32,
+      "latency_ms": 18,
       "error": ""
     },
     {
@@ -279,7 +279,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 44,
+      "latency_ms": 24,
       "error": ""
     },
     {
@@ -308,7 +308,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 35,
+      "latency_ms": 54,
       "error": ""
     },
     {
@@ -341,7 +341,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 100,
+      "latency_ms": 55,
       "error": ""
     },
     {
@@ -368,7 +368,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 36,
+      "latency_ms": 21,
       "error": ""
     },
     {
@@ -395,7 +395,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 52,
+      "latency_ms": 23,
       "error": ""
     },
     {
@@ -426,7 +426,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 204,
+      "latency_ms": 76,
       "error": ""
     },
     {
@@ -451,7 +451,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 171,
+      "latency_ms": 65,
       "error": ""
     },
     {
@@ -478,7 +478,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 50,
+      "latency_ms": 25,
       "error": ""
     },
     {
@@ -511,7 +511,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 35,
+      "latency_ms": 18,
       "error": ""
     },
     {
@@ -544,7 +544,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 49,
+      "latency_ms": 18,
       "error": ""
     },
     {
@@ -575,7 +575,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 46,
+      "latency_ms": 25,
       "error": ""
     },
     {
@@ -604,7 +604,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 39,
+      "latency_ms": 19,
       "error": ""
     },
     {
@@ -631,7 +631,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 48,
+      "latency_ms": 18,
       "error": ""
     },
     {
@@ -664,7 +664,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 156,
+      "latency_ms": 59,
       "error": ""
     },
     {
@@ -691,7 +691,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 46,
+      "latency_ms": 17,
       "error": ""
     },
     {
@@ -712,7 +712,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 42,
+      "latency_ms": 20,
       "error": ""
     },
     {
@@ -733,7 +733,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "error": ""
     },
     {
@@ -754,7 +754,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 41,
+      "latency_ms": 22,
       "error": ""
     },
     {
@@ -775,7 +775,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 149,
+      "latency_ms": 22,
       "error": ""
     },
     {
@@ -800,7 +800,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 50,
+      "latency_ms": 25,
       "error": ""
     },
     {
@@ -821,7 +821,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 40,
+      "latency_ms": 18,
       "error": ""
     },
     {
@@ -842,7 +842,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 55,
+      "latency_ms": 18,
       "error": ""
     },
     {
@@ -863,7 +863,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 66,
+      "latency_ms": 26,
       "error": ""
     },
     {
@@ -884,7 +884,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 74,
+      "latency_ms": 20,
       "error": ""
     },
     {
@@ -905,7 +905,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 64,
+      "latency_ms": 17,
       "error": ""
     },
     {
@@ -926,7 +926,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 70,
+      "latency_ms": 17,
       "error": ""
     },
     {
@@ -947,7 +947,7 @@
       "confidence_correct": null,
       "crag_triggered": false,
       "crag_retries": 0,
-      "latency_ms": 62,
+      "latency_ms": 17,
       "error": ""
     }
   ]

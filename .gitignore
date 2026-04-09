@@ -1,5 +1,6 @@
 # Agent instruction files — never push to remote
 CLAUDE.md
+CoPilot+.md
 
 # Production/simulation data — never commit
 ProductionSource/

@@ -184,12 +184,12 @@
 
 | Slice | Repo | Priority | What | Status | Owner |
 |-------|------|----------|------|--------|-------|
-| 6.1 | Forge | P0 | Bulk transfer/downloader — port V1's bulk_transfer_v2.py to src/download/syncer.py. Atomic copy, SHA-256 verify, progress bar, resume-on-failure, 700GB+ capable. Wire into GUI as Transfer panel with live progress (files copied, bytes, current file, ETA). | TODO | Agent 1 |
-| 6.2 | Forge | P0 | Fix deduplicator — src/download/deduplicator.py exists (113 lines) but doesn't work. Diagnose, fix, test with real files. Must work before 700GB pull can be processed. | TODO | Agent 1 |
-| 6.3 | Forge | P0 | GUI progress feedback — Every long-running process (transfer, dedup, parse, embed, extract) must update GUI live stats every 5 seconds minimum. If any phase goes 10+ seconds without visible update, operator assumes frozen. Add heartbeat logging to all pipeline stages. | TODO | Agent 1 |
-| 6.4 | Both | P0 | Sanitizer fix — Add patterns: enterprise program→"enterprise program", monitoring system→"monitoring system", sensor system→"sensor system", atmospheric→"atmospheric". Add CoPilot+.md + ProductionSource/ to .gitignore. Run --apply on all tracked files. Push clean. 30+ files in V2 need cleaning. | TODO | Agent 1 + Agent 2 |
-| 6.5 | Forge | P0 | Dedup-only GUI mode — Dedicated button/mode for running dedup pass only (no embed/enrich/extract). Must show active progress: files scanned, duplicates found, current file, elapsed, ETA. | TODO | Agent 1 |
-| 6.6 | Forge | P0 | Production corpus ingest — Run full pipeline on 700GB source data: transfer → dedup → chunk → embed → extract → export. Per-persona coverage report. | TODO | Agent 1 |
+| 6.1 | Forge | P0 | Bulk transfer syncer + GUI Transfer panel + CLI run_transfer.py | DONE (2026-04-08) | Agent 1 |
+| 6.2 | Forge | P0 | Deduplicator fixed: mtime tolerance, _N suffix, progress callback, 15 tests | DONE (2026-04-08) | Agent 1 |
+| 6.3 | Forge | P0 | GUI progress: all stages emit on_stage_progress every 5s, CLI heartbeat | DONE (2026-04-08) | Agent 1 |
+| 6.4 | Forge | P0 | Sanitizer: 6 patterns added, .gitignore updated, 126 files clean. V2 needs Agent 2 | DONE (Forge, 2026-04-08) | Agent 1 |
+| 6.5 | Forge | P0 | Dedup-only GUI panel with scanned/dupes/current/elapsed/ETA | DONE (2026-04-08) | Agent 1 |
+| 6.6 | Forge | P0 | Production corpus ingest (blocked on QA of 6.1-6.5) | TODO | Agent 1 |
 
 **Exit Criteria:** Operator can transfer 700GB, dedup it, see live progress at every stage, and produce clean exports for V2. Zero program-specific terms on remote.
 
