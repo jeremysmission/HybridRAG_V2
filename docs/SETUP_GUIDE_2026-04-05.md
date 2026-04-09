@@ -4,23 +4,24 @@
 
 **Author:** Jeremy Randall (CoPilot+)
 **Date:** 2026-04-05 MDT
-**Tested on:** Windows 11, Python 3.11.9, CUDA 12.8, dual 3090
+**Tested on:** Windows 11, Python 3.12.x, CUDA 12.8, dual 3090
+**Updated:** 2026-04-08 — Python version, Ollama note, troubleshooting
 
 ---
 
 ## Prerequisites (install these first)
 
-1. **Python 3.11.9** — [python.org](https://python.org) — Add to PATH during install
+1. **Python 3.12.x** — [python.org](https://python.org) — Add to PATH during install. Python 3.14 is NOT supported.
 2. **Git** — [git-scm.com](https://git-scm.com)
-3. **Ollama** — [ollama.com/download](https://ollama.com/download) — for embedding model
-4. **Tesseract OCR** — [github.com/UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki) — for scanned PDFs
+3. **Ollama** — [ollama.com/download](https://ollama.com/download) — for local stress testing with phi4 (NOT required for production queries)
+4. **Tesseract OCR** — [github.com/UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki) — for scanned PDF OCR in CorpusForge (not used by V2 directly)
 5. **NVIDIA CUDA Toolkit 12.8** — [developer.nvidia.com](https://developer.nvidia.com/cuda-downloads) — for GPU embedding
 
 ---
 
 ## Step 1: Clone and Create Virtual Environment
 
-**Python version:** 3.11 or 3.12 required. Python 3.14 is NOT supported (dependency compatibility issues). If your system default is 3.14, use `py -3.12` explicitly.
+**Python version:** 3.12 required. Python 3.14 is NOT supported (dependency compatibility issues). If your system default is 3.14, use `py -3.12` explicitly.
 
 ```bash
 git clone <repo-url> C:\HybridRAG_V2
@@ -36,7 +37,7 @@ python -m venv .venv
 .venv\Scripts\activate        # Windows CMD
 # or: source .venv/bin/activate  # Git Bash / WSL
 
-# Verify version (must be 3.11.x or 3.12.x)
+# Verify version (must be 3.12.x)
 python --version
 ```
 

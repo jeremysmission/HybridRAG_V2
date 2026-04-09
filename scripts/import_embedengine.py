@@ -101,6 +101,77 @@ def resolve_export_dir(source: Path) -> Path:
     return source
 
 
+def _matches_any_glob(source_path: str, patterns: list[str]) -> bool:
+    """Return True if any glob pattern matches the source_path basename
+    or any path component (case-insensitive). Used by the temporary
+    --exclude-source-glob fallback for the Sprint 6.6 archive leak.
+    """
+    if not patterns:
+        return False
+    import fnmatch
+    sp = source_path.replace("\\", "/").lower()
+    base = sp.rsplit("/", 1)[-1]
+    for pat in patterns:
+        p = pat.lower()
+        if fnmatch.fnmatch(base, p):
+            return True
+        if fnmatch.fnmatch(sp, p):
+            return True
+        # also match anywhere in the path components
+        for component in sp.split("/"):
+            if fnmatch.fnmatch(component, p):
+                return True
+    return False
+
+
+def apply_exclude_source_globs(
+    chunks: list[dict],
+    vectors: np.ndarray,
+    exclude_globs: list[str],
+) -> tuple[list[dict], np.ndarray, int]:
+    """
+    TEMPORARY MORNING FALLBACK (Sprint 6.6, 2026-04-09)
+
+    Drop any chunk whose ``source_path`` matches one of the supplied glob
+    patterns. Designed as the operator-controlled safety net for the
+    CorpusForge archive-defer leak: until a clean rerun is verified,
+    operators can pass ``--exclude-source-glob "*.SAO.zip"`` /
+    ``"*.RSF.zip"`` to exclude leaked ionogram chunks at import time.
+
+    The corresponding rows are removed from ``vectors`` so the chunk and
+    vector arrays stay aligned.
+
+    Returns:
+        (kept_chunks, kept_vectors, excluded_count)
+
+    REMOVAL CONDITION: retire this filter once the archive_parser fix is
+    verified by a clean rerun and the SAO leak is confirmed at zero in
+    the new export.
+    """
+    if not exclude_globs:
+        return chunks, vectors, 0
+
+    keep_indices: list[int] = []
+    excluded = 0
+    for i, c in enumerate(chunks):
+        sp = c.get("source_path", "")
+        if _matches_any_glob(sp, exclude_globs):
+            excluded += 1
+        else:
+            keep_indices.append(i)
+
+    if excluded == 0:
+        return chunks, vectors, 0
+
+    kept_chunks = [chunks[i] for i in keep_indices]
+    if isinstance(vectors, np.memmap):
+        # Materialize from memmap into a regular array.
+        kept_vectors = np.array(vectors[keep_indices])
+    else:
+        kept_vectors = vectors[keep_indices]
+    return kept_chunks, kept_vectors, excluded
+
+
 def load_export(export_dir: Path, strict: bool = False) -> tuple[list[dict], np.ndarray, dict, dict | None]:
     """
     Load chunks, vectors, manifest, and optional skip_manifest
@@ -229,6 +300,29 @@ def print_export_summary(
         if "corpus_name" in manifest:
             print(f"  Corpus:     {manifest['corpus_name']}")
 
+    # Sprint 6.6 morning fallback: surface active import-side filters in
+    # the operator-visible summary so a filtered import does not look the
+    # same as an unfiltered one.
+    filters = (manifest or {}).get("import_filters") or {}
+    if filters:
+        print(f"  Filters:    --exclude-source-glob (TEMPORARY Sprint 6.6 fallback)")
+        for g in filters.get("exclude_source_globs", []):
+            print(f"              - {g}")
+        pre = filters.get("pre_filter_chunk_count")
+        post = filters.get("post_filter_chunk_count")
+        excl = filters.get("excluded_chunk_count")
+        if pre is not None and post is not None and excl is not None:
+            print(
+                f"              {excl:,} excluded, {post:,} kept "
+                f"({pre:,} -> {post:,})"
+            )
+        reason = filters.get("filter_reason")
+        if reason:
+            print(f"              reason: {reason}")
+        retire = filters.get("retire_when")
+        if retire:
+            print(f"              retire when: {retire}")
+
     # Unique source files in the export
     source_files = {c.get("source_path", "") for c in chunks}
     source_files.discard("")
@@ -264,6 +358,60 @@ def print_export_summary(
         print(f"              -- see skip_manifest.json for full details")
 
 
+def write_import_report(
+    export_dir: Path,
+    chunks: list[dict],
+    vectors: np.ndarray,
+    manifest: dict,
+    mode: str,
+    target_db: str | Path | None,
+) -> Path:
+    """Write a durable record of this import (or dry-run) into the export
+    directory itself, so later operators can prove from an artifact which
+    filters were active at import time and what got into V2.
+
+    Filename: ``import_report_<timestamp>_<mode>.json``
+
+    Includes:
+        - timestamp + mode (dry_run or import)
+        - target LanceDB path
+        - source export path
+        - final chunk + vector counts after any filtering
+        - import_filters block (the Sprint 6.6 morning fallback record)
+        - manifest fingerprint (model, original timestamp, original count)
+    """
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    report_path = export_dir / f"import_report_{timestamp}_{mode}.json"
+
+    filters = (manifest or {}).get("import_filters") or {}
+    report = {
+        "import_report_version": "1.0",
+        "timestamp": datetime.now().isoformat(),
+        "mode": mode,
+        "source_export_dir": str(export_dir),
+        "target_db": str(target_db) if target_db is not None else None,
+        "final_chunk_count": len(chunks),
+        "final_vector_count": int(vectors.shape[0]),
+        "vector_dim": int(vectors.shape[1]) if vectors.ndim == 2 else 0,
+        "import_filters": filters,
+        "source_manifest_fingerprint": {
+            "embedding_model": (manifest or {}).get("embedding_model"),
+            "original_timestamp": (manifest or {}).get("timestamp"),
+            "original_chunk_count": (manifest or {}).get("chunk_count"),
+        },
+    }
+    try:
+        with open(report_path, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(report, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+        print(f"  Import report written: {report_path}")
+    except OSError as exc:
+        # Don't let a report-write failure abort the import.
+        print(f"  WARNING: failed to write import report at {report_path}: {exc}", file=sys.stderr)
+    return report_path
+
+
 def run_dry_run(
     export_dir: Path,
     chunks: list[dict],
@@ -282,6 +430,10 @@ def run_dry_run(
     print()
     print(f"  Target DB:  {config.paths.lance_db}")
     print(f"  Would insert up to {len(chunks):,} chunks (duplicates auto-skipped)")
+    write_import_report(
+        export_dir, chunks, vectors, manifest,
+        mode="dry_run", target_db=config.paths.lance_db,
+    )
     print(DIVIDER)
     print("  Dry run complete. No data was written.")
     print(DIVIDER)
@@ -414,6 +566,10 @@ def run_import(
         if not vector_index_ready:
             print("    Note:         Run optimize/create-index before trusting latency numbers.")
 
+    write_import_report(
+        export_dir, chunks, vectors, manifest,
+        mode="import", target_db=config.paths.lance_db,
+    )
     print(DIVIDER)
     print("  Import complete.")
     print(DIVIDER)
@@ -488,6 +644,20 @@ def main() -> None:
         action="store_true",
         help="Reject the entire import if ANY chunk fails field validation.",
     )
+    parser.add_argument(
+        "--exclude-source-glob",
+        action="append",
+        default=[],
+        metavar="GLOB",
+        help=(
+            "TEMPORARY (Sprint 6.6 morning fallback): drop any chunk whose "
+            "source_path matches GLOB before import. Repeatable. Example: "
+            "--exclude-source-glob '*.SAO.zip' --exclude-source-glob '*.RSF.zip'. "
+            "Use to filter the CorpusForge archive-defer leak from the Run 5 "
+            "non-canonical export until a clean rerun lands. RETIRE this flag "
+            "once a clean rerun is verified."
+        ),
+    )
     args = parser.parse_args()
 
     export_dir = Path(args.source)
@@ -499,6 +669,50 @@ def main() -> None:
 
     # Load export data
     chunks, vectors, manifest, skip_manifest = load_export(export_dir, strict=args.strict)
+
+    # ------------------------------------------------------------------
+    # Sprint 6.6 morning fallback: --exclude-source-glob filter.
+    # Visible at startup (before any import work) and at end (excluded
+    # count is recorded in the manifest section of the import report).
+    # ------------------------------------------------------------------
+    exclude_globs = list(args.exclude_source_glob or [])
+    pre_filter_count = len(chunks)
+    if exclude_globs:
+        print("=" * 70)
+        print("  TEMPORARY IMPORT FILTER ACTIVE (Sprint 6.6 morning fallback)")
+        print("=" * 70)
+        print("  Excluding chunks whose source_path matches any of:")
+        for g in exclude_globs:
+            print(f"    - {g}")
+        print(
+            "  Reason: CorpusForge archive-defer leak in Run 5 export. "
+            "Retire this filter once a clean rerun is verified."
+        )
+        print("=" * 70)
+        chunks, vectors, excluded_count = apply_exclude_source_globs(
+            chunks, vectors, exclude_globs,
+        )
+        print(
+            f"  Filter result: {excluded_count} chunks excluded, "
+            f"{len(chunks)} kept ({pre_filter_count} -> {len(chunks)})."
+        )
+        print("=" * 70)
+        # Mutate the manifest dict so it propagates into any downstream
+        # report writer that copies manifest fields verbatim.
+        manifest.setdefault("import_filters", {})
+        manifest["import_filters"]["exclude_source_globs"] = exclude_globs
+        manifest["import_filters"]["pre_filter_chunk_count"] = pre_filter_count
+        manifest["import_filters"]["post_filter_chunk_count"] = len(chunks)
+        manifest["import_filters"]["excluded_chunk_count"] = excluded_count
+        manifest["import_filters"]["filter_reason"] = (
+            "Sprint 6.6 morning fallback: CorpusForge archive-defer leak"
+        )
+        manifest["import_filters"]["retire_when"] = (
+            "After clean rerun confirms zero archive-leaked chunks"
+        )
+    else:
+        # Make the absence of a filter equally visible.
+        print("  No --exclude-source-glob filter active.")
 
     if args.dry_run:
         run_dry_run(export_dir, chunks, vectors, manifest, skip_manifest, args.config)
