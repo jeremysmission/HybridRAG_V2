@@ -87,37 +87,79 @@ class Embedder:
         )
 
     @staticmethod
-    def _apply_cpu_reservation():
-        """Reserve 2 CPU cores for user — affinity + priority + thread cap."""
-        cpu_count = os.cpu_count() or 8
-        reserved = 2
+    def _apply_cpu_reservation(reserved: int = 2) -> dict[str, str]:
+        """Reserve CPU cores for OS/user responsiveness.
+
+        3-layer approach: affinity, priority, thread cap. Each layer
+        degrades independently. Returns a dict of layer -> status for
+        accurate operational logging.
+        """
+        cpu_count = os.cpu_count()
+        if cpu_count is None:
+            cpu_count = 1
         max_threads = max(cpu_count - reserved, 1)
 
+        status: dict[str, str] = {
+            "affinity": "SKIPPED",
+            "priority": "SKIPPED",
+            "thread_cap": "SKIPPED",
+        }
+
+        # Layer 1 + 2: affinity and priority (both need psutil)
         try:
             import psutil
-            p = psutil.Process()
-            available_cores = list(range(reserved, cpu_count))
-            if available_cores:
-                p.cpu_affinity(available_cores)
-        except Exception:
-            pass
+            proc = psutil.Process()
 
-        try:
-            import psutil
-            p = psutil.Process()
-            p.nice(getattr(psutil, "BELOW_NORMAL_PRIORITY_CLASS", 10))
-        except Exception:
-            pass
+            # Layer 1: CPU affinity — pin to cores reserved..N-1
+            allowed_cores = list(range(reserved, cpu_count))
+            if allowed_cores:
+                try:
+                    proc.cpu_affinity(allowed_cores)
+                    status["affinity"] = "OK"
+                except Exception as exc:
+                    status["affinity"] = f"FAILED ({type(exc).__name__})"
+                    logger.debug("cpu_reservation_affinity_failed: %s", exc)
+            else:
+                status["affinity"] = "SKIPPED (not enough cores)"
 
+            # Layer 2: Process priority — below-normal so OS tasks preempt
+            try:
+                proc.nice(getattr(psutil, "BELOW_NORMAL_PRIORITY_CLASS", 10))
+                status["priority"] = "OK"
+            except Exception as exc:
+                status["priority"] = f"FAILED ({type(exc).__name__})"
+                logger.debug("cpu_reservation_priority_failed: %s", exc)
+
+        except ImportError:
+            status["affinity"] = "SKIPPED (psutil missing)"
+            status["priority"] = "SKIPPED (psutil missing)"
+            logger.debug("cpu_reservation_psutil_missing: affinity + priority skipped")
+
+        # Layer 3: Thread cap — limit torch and OpenMP/MKL threads
         try:
             import torch
             torch.set_num_threads(max_threads)
-        except Exception:
-            pass
+            status["thread_cap"] = "OK"
+        except ImportError:
+            status["thread_cap"] = "OK (no torch)"
+        except Exception as exc:
+            status["thread_cap"] = f"FAILED ({type(exc).__name__})"
+            logger.debug("cpu_reservation_thread_cap_failed: %s", exc)
+
+        # OpenMP/MKL env vars — these are thread-pool tuning parameters for
+        # ONNX Runtime and NumPy/SciPy MKL, not application config values.
+        # Intentionally set here to match the thread cap. Distinct from the
+        # "config env poisoning" anti-pattern flagged in P1 issues.
         os.environ.setdefault("OMP_NUM_THREADS", str(max_threads))
         os.environ.setdefault("MKL_NUM_THREADS", str(max_threads))
-        logger.info("CPU reservation: %d/%d threads, cores 0-%d reserved for user",
-                     max_threads, cpu_count, reserved - 1)
+
+        logger.info(
+            "CPU reservation: threads=%d/%d, affinity=%s, priority=%s, thread_cap=%s",
+            max_threads, cpu_count,
+            status["affinity"], status["priority"], status["thread_cap"],
+        )
+
+        return status
 
     def _try_init_cuda(self) -> bool:
         """Try loading model on CUDA via sentence-transformers."""
