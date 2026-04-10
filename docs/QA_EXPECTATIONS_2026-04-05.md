@@ -116,7 +116,7 @@ Every sprint QA produces a report. Copy this template:
 # Sprint [N] QA Report
 Date: YYYY-MM-DD
 Tester: [name]
-Hardware: [Beast single GPU / laptop / other]
+Hardware: [primary workstation single GPU / laptop / other]
 API: [commercial OpenAI / Azure / none]
 
 ## Environment

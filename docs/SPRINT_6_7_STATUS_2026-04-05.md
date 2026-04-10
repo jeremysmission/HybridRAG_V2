@@ -2,7 +2,7 @@
 
 **Author:** CoPilot+
 **Date:** 2026-04-05 MDT
-**Scope:** Autonomous Sprint 6 execution plus Sprint 7 hardening work completed or blocked in the current Beast session
+**Scope:** Autonomous Sprint 6 execution plus Sprint 7 hardening work completed or blocked in the current primary workstation session
 
 ---
 

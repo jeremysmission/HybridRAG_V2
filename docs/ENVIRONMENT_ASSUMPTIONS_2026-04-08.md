@@ -45,7 +45,7 @@
 |------|------|---------------|
 | LanceDB store | `data/index/lancedb/` | 17,707 chunks, IVF_PQ index |
 | Entity store | `data/index/entities.sqlite3` | 40,981 entities, 9,497 relationships |
-| Config | `config/config.yaml` | Default beast preset |
+| Config | `config/config.yaml` | Default primary workstation preset |
 | Golden queries | `tests/golden_eval/golden_queries.json` | 25 queries |
 
 ### 6. Network
@@ -82,7 +82,7 @@ C:\HybridRAG_V2\
 ## Environment Variable Cheatsheet
 
 ```bash
-# Home / Beast workstation
+# Home / primary workstation workstation
 set OPENAI_API_KEY=sk-...
 set CUDA_VISIBLE_DEVICES=0
 

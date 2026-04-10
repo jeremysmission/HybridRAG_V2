@@ -118,9 +118,9 @@ Every new repo (HybridRAG_V2, EmbedEngine, etc.) must include:
   - **Tier 2 (stress):** Messy, real-world files — OCR garbage, email chains, fragmented data (`tests/test_corpus/tier2_stress/`)
   - **Tier 3 (negative):** Files the system must NOT let through — empty, binary, injections, foreign language (`tests/test_corpus/tier3_negative/`)
 - Every new test must exercise all three tiers. No shortcuts.
-- **Real hardware testing (MANDATORY):** Every sprint QA must include a "Beast hardware pass" — real GPU embedding, real corpus data, real API calls on the dual-3090 workstation. Virtual/mocked tests are necessary but insufficient. Mark tests as hardware-verified vs virtual-only.
-- **QA uses real data whenever possible:** Don't just QA against the small test corpus. When Beast is available, import and test against real production enterprise program documents (or a representative subset of the 700GB corpus). Synthetic tests prove code compiles — real data proves it works.
-- **Single-GPU to emulate Blackwell workstations:** Beast has dual 3090s but work machines run single Blackwell GPUs. Always QA with `CUDA_VISIBLE_DEVICES=0` to constrain to one GPU. This catches memory pressure, batch sizing, and concurrency issues that dual-GPU hides.
+- **Real hardware testing (MANDATORY):** Every sprint QA must include a "primary workstation hardware pass" — real GPU embedding, real corpus data, real API calls on the development workstation. Virtual/mocked tests are necessary but insufficient. Mark tests as hardware-verified vs virtual-only.
+- **QA uses real data whenever possible:** Don't just QA against the small test corpus. When primary workstation is available, import and test against real production enterprise program documents (or a representative subset of the 700GB corpus). Synthetic tests prove code compiles — real data proves it works.
+- **Single-GPU to emulate Blackwell workstations:** the development workstation may have more local GPU headroom than work machines. Always QA with `CUDA_VISIBLE_DEVICES=0` to constrain to one GPU. This catches memory pressure, batch sizing, and concurrency issues that otherwise stay hidden.
 
 ## 7. Documentation
 

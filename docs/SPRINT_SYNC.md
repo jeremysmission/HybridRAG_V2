@@ -1,6 +1,6 @@
 # Unified Sprint Plan — CorpusForge + HybridRAG V2
 
-**Last Updated:** 2026-04-09 | **Updated By:** CoPilot+ — morning dry-run validated on 53-file sample (Path A controlled + Path B fast + incremental skip). Doc/setup/sanitization/install lanes QA-passed. Production signoff pending real 1000-file or full corpus run.
+**Last Updated:** 2026-04-09 | **Updated By:** reviewer — mirrored Forge corpus-adaptation profiling status into V2, including the checked-in export-analysis generator, the evidence packet, and CA.1 ready-for-QA state.
 **Demo Target:** 2026-05-02
 **Update Rule:** Every agent updates ALL 3 copies at end of sprint session (review board + both repos)
 
@@ -95,7 +95,7 @@
 | Slice | Repo | Priority | What | Status | Owner |
 |-------|------|----------|------|--------|-------|
 | 3.0 | Forge | P0 | Enrichment auto-activation: Ollama health probe at GUI startup, auto-start Ollama, model check, blocking dialog if unavailable, GPU selection (pick lesser-used) | DONE (stdlib urllib, GUI probe + blocking dialog) | reviewer |
-| 3.1 | Forge | P0 | Contextual enrichment validation: verify phi4:14B on Beast, validate enriched_text in export, A/B retrieval quality test | DONE (5/5 enriched, concurrent workers) | reviewer |
+| 3.1 | Forge | P0 | Contextual enrichment validation: verify phi4:14B on primary workstation, validate enriched_text in export, A/B retrieval quality test | DONE (5/5 enriched, concurrent workers) | reviewer |
 | 3.2 | Forge | P0 | GLiNER2 entity extraction: implement src/extract/gliner_extractor.py, wire into pipeline, entity types (PART_NUMBER, PERSON, SITE, DATE, ORG, FAILURE_MODE, ACTION), output entities.jsonl, confidence filtering | DONE (150 entities from 12 chunks, batch inference 30/sec) | reviewer |
 | 3.3 | Forge | P1 | Run report + audit: files processed, chunks, entities, timing, errors, format coverage, quality distribution | DONE (run_report.txt in export) | reviewer |
 | 3.4 | Forge | P2 | Enrichment rollback: --strip-enrichment export flag (output text field only, strip preambles) | DONE (CLI flag wired) | reviewer |
@@ -167,7 +167,7 @@
 | Slice | Repo | Priority | What | Status | Owner |
 |-------|------|----------|------|--------|-------|
 | 5.1 | Forge | P0 | Run pipeline against full 420K file corpus | DONE (field_engineer 6316 files → 312K chunks, golden 14/14, full 109K in progress) | reviewer |
-| 5.2 | Forge | P0 | Performance tuning: batch sizes for Beast dual-3090, SQLite WAL, memory profiling — target incremental nightly < 90min | DONE (embed 15610 chunks/sec CUDA, GPU 95-100%, parse bottleneck identified) | reviewer |
+| 5.2 | Forge | P0 | Performance tuning: batch sizes for the development workstation GPU path, SQLite WAL, memory profiling — target incremental nightly < 90min | DONE (embed 15610 chunks/sec CUDA, GPU 95-100%, parse bottleneck identified) | reviewer |
 | 5.3 | Forge | P0 | Demo prep: verify V2 demo queries work against Forge data, operator documentation | DONE (OPERATOR_QUICKSTART.md) | reviewer |
 
 **Exit Criteria:** Full corpus processed, incremental nightly < 90min, operator docs complete.
@@ -233,6 +233,16 @@
 
 **Exit Criteria:** Operator can transfer 700GB, dedup it, see live progress at every stage, and produce clean exports for V2. Zero program-specific terms on remote.
 
+### Forge Nightly Delta Scheduling Lane (READY FOR QA)
+
+| Slice | Repo | Priority | What | Status | Owner |
+|-------|------|----------|------|--------|-------|
+| ND.1 | Forge | P0 | Source-side delta tracking with persisted resume state and canary accounting | DONE (`C:\CorpusForge\src\download\delta_tracker.py`; source file state uses `hashed` -> `mirrored` in `transfer_state_db`) | reviewer |
+| ND.2 | Forge | P0 | Nightly delta orchestration: scan source, mirror delta only, write manifests/input-list, then run the normal pipeline on the mirrored subset | DONE (`C:\CorpusForge\scripts\run_nightly_delta.py`; clean stop via signal or `stop_file`; exported chunks preserve original source provenance) | reviewer |
+| ND.3 | Forge | P1 | Workstation scheduled-task helper | DONE (`C:\CorpusForge\scripts\install_nightly_delta_task.py`; XML emitted successfully, task installation intentionally not executed in the proof lane) | reviewer |
+| ND.4 | Forge | P1 | Config wiring and operator proof | DONE (`C:\CorpusForge\config\config.yaml` + `C:\CorpusForge\src\config\schema.py`; single active `nightly_delta` block; proof root `C:\CorpusForge\data\nightly_delta_proof_20260409` showed pass 1 `2 delta/2 chunks`, pass 2 `1 changed/1 chunk`, pass 3 `0 delta`) | reviewer |
+| ND.5 | Forge | P1 | Validation and operator evidence | DONE (focused pytest lane plus automated GUI regression passed; no GUI files changed in this lane, so full Tier A-D plus non-author human smash was not triggered; OCR tools absent, so lane is text-first only) | reviewer |
+
 ### V2 Sprint 16: Clean Import + Sanitization
 
 **Execution Note:** reviewer completed the accepted-export proof in `C:\HybridRAG_V2_Dev`; promotion to the main V2 store still waits for explicit approval after QA and remediation.
@@ -246,6 +256,20 @@
 | 16.5 | V2 | P0 | Golden eval — subset now, production target 20/25 after 16.4 full run | READY FOR QA IN V2_Dev (retrieval-only eval `11/36`, routing `32/36`, avg `81 ms`; direct corpus-native probes positive; promotion hold recommended pending relationship coverage, entity-noise cleanup, and eval alignment) | reviewer |
 
 **Exit Criteria:** Zero program-specific terms on remote. Clean V2 store from production corpus. 20/25 golden eval on real data.
+
+### V2 Sprint 16B: Mainline Staging/Import Automation (NEW)
+
+**Added:** 2026-04-09 | **Owner:** reviewer | **Purpose:** make nightly Forge handoff import flow explicit, artifact-backed, and QA-friendly on mainline V2.
+
+| Slice | Repo | Priority | What | Status | Owner |
+|-------|------|----------|------|--------|-------|
+| 16B.1 | V2 | P0 | Add staging orchestrator around import path with explicit source selection, deterministic `latest` helper, and durable stage artifacts | DONE (`scripts/stage_forge_import.py`) | reviewer |
+| 16B.2 | V2 | P0 | Add canary subset + delta validation support so nightly handoff can be smoke-tested before full write | DONE (canary export + `delta_validation.json` + ledger) | reviewer |
+| 16B.3 | V2 | P0 | Keep fallback safety visible: explicit import-side filters and planned command artifact, no hidden defaults | DONE (recorded in `source_selection.json`, `planned_import_command.txt`, `stage_result.json`) | reviewer |
+| 16B.4 | V2 | P1 | Publish operator runbook for morning handoff path (plan -> canary dry-run -> full import) | DONE (`docs/V2_STAGING_IMPORT_RUNBOOK_2026-04-09.md`) | reviewer |
+| 16B.5 | V2 | P1 | Add focused tests for deterministic selection, canary subset integrity, and delta calculations | DONE (`tests/test_stage_forge_import.py`) | reviewer |
+
+**Exit Criteria:** Operator can stage nightly Forge exports with explicit artifacts, run canary/delta checks, and execute full import with visible safeguards.
 
 ---
 
@@ -298,15 +322,44 @@
 
 | Slice | Repo | Priority | What | Status | Owner |
 |-------|------|----------|------|--------|-------|
-| 8.1 | Beast | P0 | Clone CorpusForge: `git clone C:\CorpusForge C:\CorpusForge_Dev`. Rebuild venv from scratch (`python -m venv .venv && pip install -r requirements.txt`). Do NOT copy .venv. Verify CUDA: `python -c "import torch; print(torch.cuda.is_available())"`. | TODO | reviewer |
-| 8.2 | Beast | P0 | Clone HybridRAG V2: `git clone C:\HybridRAG_V2 C:\HybridRAG_V2_Dev`. Rebuild venv from scratch. Verify CUDA + all imports work. | TODO | reviewer |
-| 8.3 | Beast | P0 | Create config.local.yaml for each clone: separate output_dir (avoid conflicts with main repo), separate GPU assignment (clone gets GPU 1, main gets GPU 0). Point Forge_Dev source_dirs at `C:\CorpusForge\ProductionSource`. | TODO | reviewer |
-| 8.4 | Beast | P0 | Verify clone isolation: run pipeline in Forge_Dev, confirm output goes to clone's output dir, confirm main repo is untouched. Run pytest in both clones. | TODO | reviewer |
-| 8.5 | Beast | P1 | Document clone workflow: how to pull updates from main, how to sync findings back, rules (never push from clone, code changes in main only). | TODO | reviewer |
+| 8.1 | primary workstation | P0 | Clone CorpusForge: `git clone C:\CorpusForge C:\CorpusForge_Dev`. Rebuild venv from scratch (`python -m venv .venv && pip install -r requirements.txt`). Do NOT copy .venv. Verify CUDA: `python -c "import torch; print(torch.cuda.is_available())"`. | TODO | reviewer |
+| 8.2 | primary workstation | P0 | Clone HybridRAG V2: `git clone C:\HybridRAG_V2 C:\HybridRAG_V2_Dev`. Rebuild venv from scratch. Verify CUDA + all imports work. | TODO | reviewer |
+| 8.3 | primary workstation | P0 | Create config.local.yaml for each clone: separate output_dir (avoid conflicts with main repo), separate GPU assignment (clone gets GPU 1, main gets GPU 0). Point Forge_Dev source_dirs at `C:\CorpusForge\ProductionSource`. | TODO | reviewer |
+| 8.4 | primary workstation | P0 | Verify clone isolation: run pipeline in Forge_Dev, confirm output goes to clone's output dir, confirm main repo is untouched. Run pytest in both clones. | TODO | reviewer |
+| 8.5 | primary workstation | P1 | Document clone workflow: how to pull updates from main, how to sync findings back, rules (never push from clone, code changes in main only). | TODO | reviewer |
 
-**Exit Criteria:** Both clone repos functional with independent venvs, configs, and output dirs. Main repos untouched by clone activity.
+**Clone Exit Criteria:** Both clone repos functional with independent venvs, configs, and output dirs. Main repos untouched by clone activity.
 
-**Rules for clones:**
+## Docs / Sanitizer / Test-Plan Lane (2026-04-09)
+
+| Slice | Repo | Priority | What | Status | Owner |
+|-------|------|----------|------|--------|-------|
+| 7G.1 | Both | P1 | Remove the workstation nickname from remote-bound theory docs, sprint boards, and handover; add sanitizer parity rule so the nickname does not reappear in tracked docs | DONE | reviewer |
+| 7G.2 | Forge | P1 | Restore Source-to-V2 assembly-line guide with worker override, hash continuity, and human-vs-automatic flow | DONE | reviewer |
+| 7G.3 | Forge | P1 | Rewrite the golden/canary plan around the real 53-file dry run, the Sprint 7 1000-file subset, the current clean export, the V2 import handoff, and the hashed-state resume check | DONE | reviewer |
+| 7G.4 | Forge | P1 | Correct operator/runtime docs so `config/config.yaml` is the live runtime config and GUI Save Settings target; retire mainline `config.local` guidance | DONE | reviewer |
+| 7G.5 | Forge | P2 | Call out that low GPU during parse is expected because parse is mostly CPU/I/O/OCR bound, then fold tonight's docs-lane details into the handover | DONE | reviewer |
+| 7G.6 | Both | P2 | Run sanitizer verification after the doc refresh and confirm the workstation nickname does not regress in remote-bound docs or sprint boards | DONE (2026-04-09; final V2 `CHANGELOG.md` sanitizer hit removed, both repo dry-runs clean) | reviewer |
+
+**Docs Lane Exit Criteria:** Remote-bound docs and synced sprint boards stay sanitize-clean; CorpusForge docs reflect `config/config.yaml` as the live runtime config; the canary/golden plan names the real data subsets, current clean export, V2 import path, and hashed-resume expectation; handover captures tonight's docs lane.
+
+---
+
+## Parallel Recovery / Adaptation Queue (2026-04-09)
+
+**Added:** 2026-04-09 | **Purpose:** connect Forge-side corpus adaptation work to V2 routing, retrieval, and GPU-use planning.
+
+| Slice | Repo | Priority | What | Status | Owner |
+|-------|------|----------|------|--------|-------|
+| CA.1 | Forge | P0 | Corpus adaptation profiling: run the new profiler on the local sample tree now, then on the next real Forge export artifacts (`manifest.json`, `run_report.txt`, `skip_manifest.json`, `chunks.jsonl`, failure list/log`). Write evidence note with generic document-family findings only. Artifact: `C:\CorpusForge\docs\CORPUS_ADAPTATION_EVIDENCE_2026-04-09.md`. | READY FOR QA | reviewer |
+| CA.2 | Forge | P0 | Family-aware skip/defer hardening: convert high-confidence profiler findings into visible skip/defer candidates for OCR sidecars, derivative junk, encrypted-PDF naming cues, and archive-duplicate reporting where precision justifies it. Add tests only when a runtime rule is promoted. | READY FOR QA (2026-04-09; Forge artifacts at `C:\CorpusForge\docs\SKIP_DEFER_HARDENING_2026-04-09.md`, `C:\CorpusForge\docs\SKIP_DEFER_HARDENING_2026-04-09_live_config_smoke.txt`, and `C:\CorpusForge\docs\SKIP_DEFER_HARDENING_2026-04-09_proof.json`) | reviewer |
+| CA.3 | V2 | P1 | Family-aware query-routing plan: map generic document families into query classification, retrieval weighting, metadata usage, and table-vs-narrative handling. Planning/doc lane first unless a very small safe code improvement is obvious. Artifact: `docs/FAMILY_AWARE_QUERY_ROUTING_PLAN_2026-04-09.md`. | READY FOR QA | reviewer |
+| CA.4 | Both | P1 | GPU execution guidance plan: define which stages should use one GPU, an additional local GPU, or CPU-only paths across Forge and V2; distinguish proven paths from experiments. | READY TO ASSIGN | reviewer |
+| CA.QA | Both | P0 | QA adaptation planning/runtime lanes as they land. Runtime-changing lanes require targeted tests and proof artifacts; GUI changes still require full harness plus non-author smash. | READY | reviewer |
+
+**Queue Artifacts:** `C:\CorpusForge\docs\CORPUS_ADAPTATION_PLAN_2026-04-09.md`, `C:\CorpusForge\docs\DOCUMENT_FAMILY_MATRIX_2026-04-09.md`, and V2 follow-on planning docs such as `docs/FAMILY_AWARE_QUERY_ROUTING_PLAN_2026-04-09.md`.
+
+**Clone Rules (carry forward):**
 - Clones are for testing/development ONLY — never push from a clone
 - All code changes happen in main repo, then `git pull` into clone
 - Each clone gets its own config.local.yaml (different output dirs, GPU assignment)

@@ -158,7 +158,7 @@ The configuration file is at `config/config.yaml`. Here is what each section con
 | `extraction` | Confidence threshold and part number patterns for entity extraction | `min_confidence` (default 0.7) — lower = more entities but more noise |
 | `server` | Host and port for the API server | Change `port` if 8000 is already in use |
 | `crag` | Corrective RAG (experimental, disabled by default) | Leave `enabled: false` unless testing CRAG |
-| `hardware_preset` | `beast` or `laptop` — adjusts batch sizes | Set to `laptop` on machines with less than 16GB VRAM |
+| `hardware_preset` | `primary workstation` or `laptop` — adjusts batch sizes | Set to `laptop` on machines with less than 16GB VRAM |
 
 For most deployments, the defaults work without changes.
 

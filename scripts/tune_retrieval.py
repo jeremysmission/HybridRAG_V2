@@ -12,7 +12,7 @@ Designed to run overnight unattended:
 
 Output: results/tune_retrieval_YYYYMMDD_HHMMSS.json + leaderboard to stdout.
 
-Time estimates (Beast, 17K chunks, 30 queries):
+Time estimates (primary workstation, 17K chunks, 30 queries):
   --quick (12 configs, 1 round):  ~2 min
   default (72 configs, 3 rounds): ~45 min
   400-Q full (72 configs, 3 rounds, 400 questions): ~10 hours (overnight)

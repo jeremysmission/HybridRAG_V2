@@ -55,7 +55,7 @@
 
 - GPT-4o: user-facing queries ONLY (demo day). Never bulk extraction.
 - GPT-4o-mini / GPT-4.1 Nano: bulk extraction at work if budget approved.
-- phi4:14b: free local extraction for dev/testing on Beast. Quality validation via A/B test.
+- phi4:14b: free local extraction for dev/testing on primary workstation. Quality validation via A/B test.
 - Batch API: always use batch (50% off) for bulk work. Never real-time for extraction.
 - Tiered approach: regex + GLiNER handle 60-80% of entities for free, LLM only for hard cases.
 

@@ -41,7 +41,7 @@ Push 5,000+ files through CorpusForge → V2, prove golden eval on real data, de
 - Content-hash for idempotency and natural dedup
 
 ### Work Machine Deployment
-- `pip download -r requirements.txt -d ./wheels` on Beast → offline install at work
+- `pip download -r requirements.txt -d ./wheels` on primary workstation → offline install at work
 - Zip `~/.ollama/models` to transfer phi4 without re-download
 - Match Python minor version exactly
 - Blackwell needs CUDA 12.8+ and matching torch build
@@ -76,7 +76,7 @@ Push 5,000+ files through CorpusForge → V2, prove golden eval on real data, de
 4. P50 latency measured and documented
 5. Dedup reduces chunk count by measurable % vs raw
 6. Work machine runs both repos from deployment guide alone
-7. Throughput benchmark: sustained >30 chunks/sec on Beast
+7. Throughput benchmark: sustained >30 chunks/sec on primary workstation
 
 ## QA Checklist (for QA team)
 

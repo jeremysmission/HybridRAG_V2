@@ -21,13 +21,13 @@
 - Pipeline rewritten with 8-worker ThreadPoolExecutor (ported from V1)
 - GUI progress callback wired (update_current_file)
 - CRLF bat files fixed
-- Setup script: `tools/setup_beast_2026-04-05.bat` (14 steps, verified PASS)
+- Setup script: `tools/setup_workstation_2026-04-05.bat` (14 steps, verified PASS)
 - Verification scripts: verify_cuda_embedding.py, verify_parallel_pipeline.py, benchmark_pipeline.py
 - requirements.txt: einops added, numpy<2.0, install order docs
 - Venv created and verified: 26 PASS, 0 FAIL
 
 **HybridRAG V2 (C:\HybridRAG_V2) @ 476eb6c:**
-- Setup script: `tools/setup_beast_2026-04-05.bat` (18 steps, verified PASS)
+- Setup script: `tools/setup_workstation_2026-04-05.bat` (18 steps, verified PASS)
 - A/B extraction test: `scripts/ab_extraction_test.py` (phi4 tested: 9/10 success, 48 entities, 2.6 chunks/min)
 - Overnight extraction: `scripts/overnight_extraction.py` + `start_overnight_extraction.bat`
 - import_embedengine.py hardened: batch inserts (1000/batch), mmap large vectors, --source required
@@ -56,7 +56,7 @@
 - V1 parallel pipeline: 60-200 chunks/sec proven (ported to CorpusForge)
 
 ### Memories Saved
-- project_beast_dev_only.md — Beast=dev, work=production
+- project_dev_workstation_only.md — primary workstation=dev, work=production
 - project_extraction_long_pole.md — extraction is critical path
 - project_dedup_strategy_needed.md — 99.7% duplication in V1
 - project_v1_parsing_lessons.md — OCR/PDF/encoding edge cases
@@ -72,7 +72,7 @@
 
 | Track | Status |
 |-------|--------|
-| A: CorpusForge on Beast | Setup verified (26 PASS). Pipeline coded. GUI not yet tested on real files. |
+| A: CorpusForge on primary workstation | Setup verified (26 PASS). Pipeline coded. GUI not yet tested on real files. |
 | B: V2 Pipeline | Import hardened. First real query NOT YET DONE (needs CorpusForge export first). |
 | C: phi4 Validation | A/B test ran (phi4 only, 9/10 success). GPT-4o comparison not yet run (needs API key set). |
 | D: Clone1 Learning | Dedup analysis done (99.7% dupes). Parsing/chunking analysis deferred. |
@@ -111,7 +111,7 @@
 - PS 5.1: never embed Python in here-strings, use temp file + WriteAllText pattern
 - All bat files must have CRLF line endings
 - All PS files must be ASCII-only (no em-dashes or Unicode)
-- Beast = dev only, work = production
+- primary workstation = dev only, work = production
 - GPU isolation: hardcode GPU 0, temp set GPU 1 when needed
 - Research before implementing — web search, never guess
 - phi4 for stress tests, GPT-4o for accuracy/demo only

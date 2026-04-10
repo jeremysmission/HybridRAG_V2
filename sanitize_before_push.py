@@ -57,6 +57,7 @@ TEXT_REPLACEMENTS = [
 
     # Agent references -> team review
     (r"\bAgent\s*[1-6]\b", "reviewer"),
+    (r"\bBeast\b", "primary workstation"),
     (r"\b6-agent debate\b", "design review"),
     (r"\bagent debate\b", "design review"),
     (r"\bwar room\b", "review board"),
@@ -69,7 +70,8 @@ TEXT_REPLACEMENTS = [
     (r"\bIGS/NEXION\b", "enterprise program"),
     (r"\bIGS[/ ]NEXION\b", "enterprise program"),
     (r"\bNEXION\b", "monitoring system"),
-    (r"\bIGS\b", "enterprise program"),
+    # Keep path segments like ".../IGS" intact in live config/schema strings.
+    (r"(?<![./\\\\])\bIGS\b(?![/\\\\])", "enterprise program"),
     (r"\bionospheric\b", "atmospheric"),
     (r"\bIonospheric\b", "Atmospheric"),
     (r"\bionosonde\b", "sensor system"),

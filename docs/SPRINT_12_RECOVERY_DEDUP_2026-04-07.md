@@ -23,7 +23,7 @@ The next major risk is historical ingest drift:
 - parser/defer policy drift across repos may have hidden duplicate families
 - the real source backup will be large enough that restart cost matters
 - the duplicate-review path is only fully trustworthy at the document level right now
-- Beast is still generating structured extraction outputs that may remain useful during recovery and must not be discarded casually
+- primary workstation is still generating structured extraction outputs that may remain useful during recovery and must not be discarded casually
 
 So Sprint 12 starts before the full source backup lands by hardening the dedup lane around those risks.
 
@@ -39,7 +39,7 @@ That means:
 - dedup reporting is clear enough for operator review
 - the first full backup run can produce `canonical_files.txt` without silent accounting drift
 - duplicate-family review starts at the document level, not the weaker chunk-level review path
-- current Beast outputs are treated as reusable sidecar data unless a later step explicitly supersedes them
+- current primary workstation outputs are treated as reusable sidecar data unless a later step explicitly supersedes them
 
 ---
 

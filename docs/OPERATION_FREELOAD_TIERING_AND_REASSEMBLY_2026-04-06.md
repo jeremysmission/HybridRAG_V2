@@ -93,7 +93,7 @@ These are the practical local candidates currently worth testing:
   - plausible Tier 2 candidate
   - source: https://ollama.com/library/llama3.1:8b
 
-### Beast-only candidates
+### primary workstation-only candidates
 
 If local-only execution is acceptable and exported artifacts stay machine-neutral:
 
@@ -138,7 +138,7 @@ Sources:
 - https://docs.ollama.com/faq
 - https://docs.ollama.com/context-length
 
-## Practical Implication For Beast
+## Practical Implication For primary workstation
 
 Do not assume:
 

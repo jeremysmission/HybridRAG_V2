@@ -114,10 +114,10 @@ YOUR DOCUMENTS
 
 ## Two Machines
 
-- **Beast** (your home computer) — Development and testing. Proves the system works. Has two GPUs.
+- **primary workstation** (your home computer) — Development and testing. Proves the system works. Has two GPUs.
 - **Work desktop** — Production. Processes the real 700GB of documents. Runs 24/7. Has better GPUs.
 
-You build and test on Beast. When it works, you deploy to work and process the real data.
+You build and test on primary workstation. When it works, you deploy to work and process the real data.
 
 ---
 

@@ -156,7 +156,7 @@
 
 ### Slice 4.1: Full Corpus Validation (Day 1-3)
 - [ ] Run full extraction on production corpus (if not completed in Sprint 2)
-- [ ] Validate extraction quality on work data (not Beast test data)
+- [ ] Validate extraction quality on work data (not primary workstation test data)
 - [ ] Tune: confidence thresholds, retrieval depths, RRF weights, reranking top-N
 - [ ] Build index audit report ("what did we extract?")
 - [ ] Identify and fix any corpus-specific edge cases
@@ -166,7 +166,7 @@
 - [ ] Target: P50 < 3s, P95 < 10s
 - [ ] Optimize LanceDB index settings for 27.6M chunks
 - [ ] Optimize SQLite indexes for entity/aggregation queries
-- [ ] Memory profiling on Beast and laptop
+- [ ] Memory profiling on primary workstation and laptop
 
 ### Slice 4.3: Demo Prep (Day 5-7)
 - [ ] Prepare 10 demo queries covering all failure classes

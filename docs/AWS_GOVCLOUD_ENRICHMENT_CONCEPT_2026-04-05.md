@@ -8,14 +8,14 @@
 
 ## Concept
 
-Leverage AWS GovCloud AI Toolkit's free GPT-OSS models (20B and 120B) for the computationally expensive enrichment and entity extraction steps. Embed locally on Beast with CUDA for free. Total processing cost: $0.
+Leverage AWS GovCloud AI Toolkit's free GPT-OSS models (20B and 120B) for the computationally expensive enrichment and entity extraction steps. Embed locally on primary workstation with CUDA for free. Total processing cost: $0.
 
 ---
 
 ## Architecture
 
 ```
-LOCAL (Beast)                    AWS GOVCLOUD
+LOCAL (primary workstation)                    AWS GOVCLOUD
 =============                    ============
 
 Raw chunks                       S3 Bucket
@@ -83,7 +83,7 @@ This combines enrichment (Stage 1 context preambles) and extraction (Stage 3 ent
 | Method | Enrichment | Extraction | Embedding | Total |
 |--------|-----------|------------|-----------|-------|
 | **AWS GovCloud OSS** | $0 (GPT-OSS free) | $0 (GPT-OSS free) | $0 (local CUDA) | **$0** |
-| Local phi4 (Beast) | $0 (electricity only) | $0 (electricity only) | $0 (local CUDA) | ~$75 electricity |
+| Local phi4 (primary workstation) | $0 (electricity only) | $0 (electricity only) | $0 (local CUDA) | ~$75 electricity |
 | GPT-4.1 Nano batch | N/A | ~$10-30 | $0 (local CUDA) | $10-30 |
 | GPT-4o-mini batch | N/A | ~$50-100 | $0 (local CUDA) | $50-100 |
 
@@ -123,7 +123,7 @@ This combines enrichment (Stage 1 context preambles) and extraction (Stage 3 ent
 - Upload raw chunks to S3
 - Process through GPT-OSS
 - Download enriched chunks + entities
-- Embed locally on Beast
+- Embed locally on primary workstation
 - Import into LanceDB + SQLite
 - Run queries against the imported data
 - Verify: answers reference enriched context, entities searchable

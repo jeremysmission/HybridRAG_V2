@@ -1,13 +1,13 @@
 """
-Overnight Beast Extraction — dual-GPU phi4 background runner.
+Overnight local Extraction — local phi4 background runner.
 
 Pulls chunks from Clone1 index (read-only), runs phi4 extraction via Ollama,
 inserts entities + relationships into V2 SQLite stores.
 
-Designed to run unattended overnight on Beast while you sleep.
+Designed to run unattended overnight on the local development workstation.
 Two modes:
   - Single GPU (default): one Ollama stream on GPU 0
-  - Dual GPU: two processes, split chunks, merge results
+  - Split local mode: two processes, split chunks, merge results
 
 Usage:
   python scripts/overnight_extraction.py
@@ -128,7 +128,7 @@ def print_status(progress_path: str):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Overnight Beast extraction runner")
+    parser = argparse.ArgumentParser(description="Overnight local extraction runner")
     parser.add_argument("--config", default="config/config.yaml")
     parser.add_argument("--clone1-db", default=CLONE1_DB)
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT,

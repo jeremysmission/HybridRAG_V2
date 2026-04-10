@@ -47,11 +47,11 @@ extraction:
     - 'PS-\d{3}'
     - 'AH-\d{3}'
   gliner_enabled: false        # Flip to true for Tier 2
-  gliner_device: "cuda:1"     # GPU 1 on Beast (GPU 0 for embedding)
+  gliner_device: "cuda:1"     # GPU 1 on primary workstation (GPU 0 for embedding)
   gliner_model: "urchade/gliner_medium-v2.1"
   gliner_min_chunk_len: 50    # Skip chunks < 50 chars for GLiNER
   gpt4o_extraction: true
-  max_concurrent: 16           # Beast has 16 threads
+  max_concurrent: 16           # primary workstation has 16 threads
 
 server:
   host: "127.0.0.1"
@@ -63,4 +63,4 @@ crag:
   max_retries: 2
   verifier_model: "gpt-oss-20b"
 
-hardware_preset: "beast"
+hardware_preset: "primary workstation"

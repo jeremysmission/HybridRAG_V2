@@ -11,7 +11,7 @@ Usage:
     .venv\\Scripts\\python.exe scripts/tiered_extract.py --tier 1 --limit 1000 # first 1000 chunks
     .venv\\Scripts\\python.exe scripts/tiered_extract.py --tier 2 --benchmark  # CPU vs GPU on 1000
 
-Time estimates (Beast, 49K chunks):
+Time estimates (primary workstation, 49K chunks):
     Tier 1 only:   ~2 seconds
     Tier 1 + 2:    ~5 minutes (GLiNER on GPU, filtered subset)
     Tier 1 + 2 + 3: hours (LLM on flagged items only)

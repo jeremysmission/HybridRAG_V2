@@ -155,7 +155,7 @@ The repo did not use formal release tags or semantic versions during the initial
 | `2026-04-07T07:54:44-06:00` | `7586052` | Update dedup sprint coverage status |
 | `2026-04-07T21:05:01-06:00` | `8001953` | Sprint 12: harden import pipeline, close recovery dedup |
 | `2026-04-07T21:05:29-06:00` | `d56418b` | Sanitize before push |
-| `2026-04-07T21:29:04-06:00` | `f615604` | Add CLAUDE.md, Sprint 13 rebuild scripts, golden eval 25/25 |
+| `2026-04-07T21:29:04-06:00` | `f615604` | Add CoPilot+.md, Sprint 13 rebuild scripts, golden eval 25/25 |
 | `2026-04-07T21:29:27-06:00` | `3790eba` | Sanitize before push |
 | `2026-04-07T21:52:55-06:00` | `66e9433` | Sprint 13: canonical rebuild from Forge S2 export, 20/25 golden eval |
 | `2026-04-07T21:53:07-06:00` | `0da26db` | Sanitize before push |
@@ -184,5 +184,5 @@ The repo did not use formal release tags or semantic versions during the initial
 | `2026-04-08T12:19:54-06:00` | `172d729` | fix: sanitize 44 files — remove program-specific terms from remote |
 | `2026-04-08T12:50:55-06:00` | `5357471` | fix: remove zip from tracking, add image/zip patterns to .gitignore |
 | `2026-04-08T18:55:08-06:00` | `ae050d4` | fix: CPU reservation — per-layer status logging + 13 unit tests |
-| `2026-04-08T19:16:03-06:00` | `91e016f` | fix: remove CLAUDE.md from tracking, pin gliner, sync sprint status |
+| `2026-04-08T19:16:03-06:00` | `91e016f` | fix: remove CoPilot+.md from tracking, pin gliner, sync sprint status |
 | `2026-04-09T07:32:08-06:00` | `592f64f` | Add import fallback audit trail and updated operator docs |

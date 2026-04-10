@@ -2,7 +2,7 @@
 HybridRAG V2 configuration schema.
 
 Single config, no modes. Validated once at boot, immutable after.
-Two hardware presets (beast, laptop) — selected in config.yaml.
+Two hardware presets (primary workstation, laptop) — selected in config.yaml.
 """
 
 from __future__ import annotations
@@ -102,7 +102,7 @@ class ExtractionConfig(BaseModel):
         description="Regex patterns for valid part numbers.",
     )
     gliner_enabled: bool = Field(default=False, description="Use GLiNER2 for first-pass NER (waiver pending).")
-    gliner_device: str = Field(default="cuda:1", description="Device for GLiNER model. Use cuda:1 on Beast.")
+    gliner_device: str = Field(default="cuda:1", description="Device for GLiNER model. Use cuda:1 on primary workstation.")
     gliner_model: str = Field(default="urchade/gliner_medium-v2.1", description="GLiNER model name.")
     gliner_min_chunk_len: int = Field(default=50, description="Skip chunks shorter than this for GLiNER.")
     gpt4o_extraction: bool = Field(default=True, description="Use LLM for semantic extraction.")
@@ -136,7 +136,7 @@ class V2Config(BaseModel):
     """
     HybridRAG V2 top-level configuration.
 
-    Single config, no modes. hardware_preset selects beast or laptop defaults.
+    Single config, no modes. hardware_preset selects primary workstation or laptop defaults.
     """
 
     model_config = {"extra": "forbid"}
@@ -147,12 +147,12 @@ class V2Config(BaseModel):
     extraction: ExtractionConfig = Field(default_factory=ExtractionConfig)
     server: ServerConfig = Field(default_factory=ServerConfig)
     crag: CRAGConfig = Field(default_factory=CRAGConfig)
-    hardware_preset: str = Field(default="beast", description="'beast' or 'laptop'.")
+    hardware_preset: str = Field(default="primary workstation", description="'primary workstation' or 'laptop'.")
 
     @field_validator("hardware_preset")
     @classmethod
     def validate_preset(cls, v: str) -> str:
-        allowed = {"beast", "laptop"}
+        allowed = {"primary workstation", "laptop"}
         if v not in allowed:
             raise ValueError(f"hardware_preset must be one of {allowed}, got '{v}'")
         return v

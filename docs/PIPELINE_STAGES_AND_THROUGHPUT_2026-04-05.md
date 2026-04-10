@@ -29,7 +29,7 @@ Data flows through three distinct stages. Each has different bottlenecks, parall
 - Enrichment (phi4 context preambles) is optional and slow — disable for bulk runs, enable for quality.
 - OOM backoff: if GPU runs out of memory, batch size halves automatically and retries.
 
-**GPU assignment on Beast:** GPU 0 (default). For 2x throughput, clone repo and run second instance on GPU 1.
+**GPU assignment on the local development workstation:** keep one heavy workload per visible CUDA device, and treat any parallel local run as an experiment rather than a production assumption.
 
 ---
 
@@ -63,15 +63,15 @@ Data flows through three distinct stages. Each has different bottlenecks, parall
 **Where:** C:\HybridRAG_V2
 **Scripts:**
 - `scripts/extract_entities.py` — production extraction from V2 LanceDB chunks
-- `scripts/overnight_extraction.py` — dev/test extraction from Clone1 chunks on Beast
+- `scripts/overnight_extraction.py` — dev/test extraction from Clone1 chunks on primary workstation
 - `scripts/ab_extraction_test.py` — quality comparison (phi4 vs GPT-4o)
 **Launcher:** `start_overnight_extraction.bat` (one-click overnight)
 
 | Method | Parallelism | Speed | Cost | Use case |
 |--------|-------------|-------|------|----------|
-| phi4 via Ollama (Beast) | Single-stream per GPU | **2.6 chunks/min** | $0 | Dev/test data overnight |
-| phi4 via SGLang (Beast) | Continuous batching | ~10-20 chunks/min (est.) | $0 | Fast dev data (Sprint 6) |
-| Dual GPU Ollama (Beast) | 2 streams, 2 GPUs | ~5 chunks/min | $0 | 2x overnight throughput |
+| phi4 via Ollama (primary workstation) | Single-stream per GPU | **2.6 chunks/min** | $0 | Dev/test data overnight |
+| phi4 via SGLang (primary workstation) | Continuous batching | ~10-20 chunks/min (est.) | $0 | Fast dev data (Sprint 6) |
+| Parallel local Ollama (experimental) | Split local streams | ~5 chunks/min | $0 | Local experimentation only |
 | GPT-4.1 Nano batch API | Massively parallel | 100+ chunks/min | ~$10-30 | Production at work |
 | GPT-4o-mini batch API | Massively parallel | 100+ chunks/min | ~$50-100 | Production fallback |
 
@@ -89,13 +89,13 @@ Data flows through three distinct stages. Each has different bottlenecks, parall
 - Ollama is single-stream — parallel workers DON'T help. Need SGLang or API for parallelism.
 - GPT-4o is for user-facing queries ONLY. Never use for bulk extraction.
 - Progress saves every 10 chunks. Safe to Ctrl+C and resume with `--resume`.
-- Overnight on Beast: ~2000 chunks = ~13 hours = ~10,000+ entities by morning.
+- Overnight on primary workstation: ~2000 chunks = ~13 hours = ~10,000+ entities by morning.
 
-**GPU assignment on Beast:** GPU 0 (default). Second instance on GPU 1 needs separate Ollama on port 11435.
+**Local experimentation note:** if you intentionally run a second local extraction process, keep it isolated and give it a separate Ollama port.
 
 ---
 
-## Throughput Summary (Beast Hardware: Dual 3090)
+## Throughput Summary (Local Development Workstation)
 
 | Operation | Tool | Speed | GPU |
 |-----------|------|-------|-----|
@@ -130,7 +130,7 @@ Data flows through three distinct stages. Each has different bottlenecks, parall
 
 | Method | 300K chunks | Budget OK? |
 |--------|-------------|------------|
-| phi4 local (Beast) | $0 (electricity ~$75) | Yes |
+| phi4 local (primary workstation) | $0 (electricity ~$75) | Yes |
 | Tiered (regex+GLiNER+Nano) | $10-30 | Yes |
 | GPT-4.1 Nano batch only | ~$35 | Yes |
 | GPT-4o-mini batch only | ~$56 | Borderline |
@@ -154,7 +154,7 @@ start_corpusforge.bat                    # GUI
 cd C:\HybridRAG_V2
 .venv\Scripts\python scripts/import_embedengine.py --source <export_dir>
 
-# V2: overnight extraction on Beast
+# V2: overnight extraction on primary workstation
 start_overnight_extraction.bat           # default 2000 chunks
 start_overnight_extraction.bat 5000      # more chunks
 start_overnight_extraction.bat resume    # pick up where stopped

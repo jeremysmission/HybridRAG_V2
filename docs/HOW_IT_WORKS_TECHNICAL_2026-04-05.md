@@ -166,7 +166,7 @@ Two independent repos form a producer-consumer pipeline:
 | Method | Technology | Speed | Cost | Status |
 |--------|-----------|-------|------|--------|
 | Regex pre-extraction | Python re module | Instant | $0 | Active |
-| phi4:14b via Ollama | Ollama HTTP → CUDA | 2.6 chunks/min | $0 | Active (Beast dev) |
+| phi4:14b via Ollama | Ollama HTTP → CUDA | 2.6 chunks/min | $0 | Active (primary workstation dev) |
 | phi4:14b via SGLang | SGLang direct CUDA | ~10-20 chunks/min (est.) | $0 | Planned (Sprint 6) |
 | GLiNER zero-shot NER | 500M param model, CUDA | 2,400-7,500 chunks/sec | $0 | Waiver pending |
 | GPT-4o structured output | OpenAI API | Fast (parallel) | $2.50/1M in | Active (quality baseline) |
@@ -205,14 +205,14 @@ Entities link back to chunks via chunk_id. Queries can go:
 
 ---
 
-## GPU Assignment (Beast: Dual RTX 3090)
+## GPU Assignment (Local Development Workstation)
 
-| GPU | Default Use | VRAM Used | VRAM Free |
-|-----|------------|-----------|-----------|
-| GPU 0 | CorpusForge embedding OR phi4 extraction | 10-14 GB | 10-14 GB |
-| GPU 1 | Available for second instance | 0 GB | 24 GB |
+| Device | Default Use | Guidance |
+|--------|-------------|----------|
+| Visible CUDA device | CorpusForge embedding OR phi4 extraction | One heavy workload at a time |
+| Additional visible device (if available) | Separate local experiment only | Keep isolated from the primary run |
 
-**Rule:** One repo per GPU. No sharing. Set `CUDA_VISIBLE_DEVICES=0` or `=1` before launching. Hardcode GPU 0, temporarily set GPU 1 when needed.
+**Rule:** One heavy repo workload per visible CUDA device. Keep `CUDA_VISIBLE_DEVICES` explicit before launch and avoid implicit device sharing.
 
 **Work desktop:** Single GPU. Both repos use GPU 0 (never run simultaneously).
 

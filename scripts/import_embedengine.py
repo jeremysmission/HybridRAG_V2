@@ -419,7 +419,7 @@ def run_dry_run(
     manifest: dict,
     skip_manifest: dict | None,
     config_path: str,
-) -> None:
+) -> dict[str, object]:
     """Show what would be imported without touching the store."""
     config = load_config(config_path)
 
@@ -430,13 +430,19 @@ def run_dry_run(
     print()
     print(f"  Target DB:  {config.paths.lance_db}")
     print(f"  Would insert up to {len(chunks):,} chunks (duplicates auto-skipped)")
-    write_import_report(
+    report_path = write_import_report(
         export_dir, chunks, vectors, manifest,
         mode="dry_run", target_db=config.paths.lance_db,
     )
     print(DIVIDER)
     print("  Dry run complete. No data was written.")
     print(DIVIDER)
+    return {
+        "mode": "dry_run",
+        "target_db": config.paths.lance_db,
+        "planned_chunks": len(chunks),
+        "report_path": str(report_path),
+    }
 
 
 def run_import(
@@ -453,7 +459,7 @@ def run_import(
     nprobes: int | None,
     refine_factor: int | None,
     optimize_index: bool,
-) -> None:
+) -> dict[str, object]:
     """Execute the full import into LanceDB."""
     config = load_config(config_path)
 
@@ -566,13 +572,29 @@ def run_import(
         if not vector_index_ready:
             print("    Note:         Run optimize/create-index before trusting latency numbers.")
 
-    write_import_report(
+    report_path = write_import_report(
         export_dir, chunks, vectors, manifest,
         mode="import", target_db=config.paths.lance_db,
     )
     print(DIVIDER)
     print("  Import complete.")
     print(DIVIDER)
+    return {
+        "mode": "import",
+        "target_db": config.paths.lance_db,
+        "before_count": before_count,
+        "inserted": inserted,
+        "duplicates": duplicates,
+        "after_count": after_count,
+        "ingest_seconds": round(t_ingest, 3),
+        "fts_seconds": round(t_fts, 3),
+        "total_seconds": round(t_total, 3),
+        "vector_index_enabled": create_index,
+        "vector_index_result": index_result if index_result else {},
+        "vector_index_stats": vector_index_stats if vector_index_stats else {},
+        "vector_index_ready": vector_index_ready,
+        "report_path": str(report_path),
+    }
 
 
 def main() -> None:

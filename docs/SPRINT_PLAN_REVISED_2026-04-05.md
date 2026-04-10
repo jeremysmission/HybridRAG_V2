@@ -4,7 +4,7 @@
 **Date:** 2026-04-05 MDT
 **Demo Target:** 2026-05-02
 
-**Architecture Rule:** Beast = dev/prove architecture only. Production data processing on work machines.
+**Architecture Rule:** primary workstation = dev/prove architecture only. Production data processing on work machines.
 **Cost Rule:** phi4:14b ($0 local) for bulk extraction. GPT-4o-mini ($0.207/1M) as fallback. GPT-4o for user-facing queries only.
 **Throughput Rule:** CUDA-only embedding. CPU/Ollama HTTP fallback kills speed (45x slower). Verify CUDA stays active.
 **Parallel Rule:** CorpusForge and V2 work streams run in parallel wherever possible. QA each sprint.
@@ -22,16 +22,16 @@
 
 ---
 
-## Sprint 5: Beast Setup + Pipeline Proof (CURRENT)
+## Sprint 5: primary workstation Setup + Pipeline Proof (CURRENT)
 
-**Goal:** Both repos running on Beast with real data, CUDA verified, parallel pipeline proven.
+**Goal:** Both repos running on primary workstation with real data, CUDA verified, parallel pipeline proven.
 **Two parallel tracks: CorpusForge (CF) and HybridRAG V2 (V2).**
 
-### Track A: CorpusForge on Beast
+### Track A: CorpusForge on primary workstation
 
 | Slice | Work | Status | Depends on |
 |-------|------|--------|------------|
-| 5A.1 | Create CorpusForge venv on Beast (py -3.12, torch cu128, requirements.txt) | TODO | Beast access |
+| 5A.1 | Create CorpusForge venv on primary workstation (py -3.12, torch cu128, requirements.txt) | TODO | primary workstation access |
 | 5A.2 | Fix CorpusForge launcher (CRLF bat, QA blocker) | DONE | |
 | 5A.3 | Port parallel 8-worker pipeline from V1 to CorpusForge pipeline.py | DONE | |
 | 5A.4 | CorpusForge GUI — human visual pass via start_corpusforge.bat | TODO | 5A.1 |
@@ -55,7 +55,7 @@
 
 | Slice | Work | Status | Depends on |
 |-------|------|--------|------------|
-| 5C.1 | Install Ollama on Beast | TODO | Beast access |
+| 5C.1 | Install Ollama on primary workstation | TODO | primary workstation access |
 | 5C.2 | Pull phi4:14b-q4_K_M (~8GB download) | TODO | 5C.1 |
 | 5C.3 | Quick smoke test: single extraction call, verify JSON output | TODO | 5C.2 |
 | 5C.4 | Run A/B test: 50 chunks from Clone1, phi4 vs GPT-4o side by side | TODO | 5C.2 + API key |
@@ -75,7 +75,7 @@
 
 | Slice | Work | Status | Depends on |
 |-------|------|--------|------------|
-| 5E.1 | Verify env vars on Beast: CUDA_VISIBLE_DEVICES pinned per repo (no GPU sharing), PYTHONUTF8=1 | TODO | |
+| 5E.1 | Verify env vars on primary workstation: CUDA_VISIBLE_DEVICES pinned per repo (no GPU sharing), PYTHONUTF8=1 | TODO | |
 | 5E.2 | Verify API key: OPENAI_API_KEY set and working (commercial, for A/B test) | TODO | |
 | 5E.3 | Verify CorpusForge config/config.yaml: paths, embed device=cuda, workers=8 | TODO | 5A.1 |
 | 5E.4 | Verify V2 config/config.yaml: paths, llm.provider=auto, extraction.model=phi4 | TODO | |
@@ -85,7 +85,7 @@
 | 5E.8 | Verify Ollama serves on localhost:11434 after install | TODO | 5C.1 |
 
 **Sprint 5 Exit Criteria:**
-1. CorpusForge processes 100+ files on Beast with CUDA embedding at >30 chunks/sec
+1. CorpusForge processes 100+ files on primary workstation with CUDA embedding at >30 chunks/sec
 2. V2 imports CorpusForge export and answers a real query with source citations
 3. phi4 extraction quality validated (approved or rejected with data)
 4. Parallel 8-worker pipeline verified faster than sequential
@@ -193,7 +193,7 @@
 NOW ────────────────────────────────────────────────────── May 2
   │
   ├── Sprint 5 (4 parallel tracks, ~3-4 days)
-  │   ├─ Track A: CorpusForge on Beast (venv, CUDA, parallel pipeline)
+  │   ├─ Track A: CorpusForge on primary workstation (venv, CUDA, parallel pipeline)
   │   ├─ Track B: V2 import + first query
   │   ├─ Track C: phi4 A/B validation ← GATES WORK EXTRACTION
   │   └─ Track D: Clone1 structure learning

@@ -1,15 +1,15 @@
 # Demo Day Checklist — 2026-05-02
 
 **Author:** Jeremy Randall (CoPilot+)
-**System:** HybridRAG V2 on Beast (dual 3090, 64GB RAM)
+**System:** HybridRAG V2 on the local development workstation (64GB RAM)
 
 ---
 
 ## Pre-Demo (30 min before)
 
 ### Hardware
-- [ ] Check GPU: `nvidia-smi` -- both 3090s visible, < 2GB used
-- [ ] Check disk: `df -h /c/HybridRAG_V2` -- > 10GB free
+- [ ] Check GPU: `nvidia-smi` -- expected CUDA device visible, low baseline VRAM use
+- [ ] Check disk: `Get-PSDrive C | Select-Object Used, Free` -- > 10GB free
 - [ ] Close unnecessary apps (browser, Slack, etc.)
 
 ### Environment

@@ -4,6 +4,10 @@
 
 HybridRAG V2 is a tri-store retrieval and answer system for enterprise program and monitoring system maintenance and operations documents. It consumes pre-built chunks from the ingest pipeline and supports semantic, entity, aggregation, and tabular query paths.
 
+## Daily Workflow
+
+For the current multi-agent, dual-GPU daily operating model, see [DAILY_WORKFLOW_2026-04-08.md](./DAILY_WORKFLOW_2026-04-08.md).
+
 ## Core Architecture
 
 - **Store 1:** LanceDB for vector search, BM25 hybrid search, and metadata filtering

@@ -99,7 +99,7 @@ class V2Config(BaseModel):
     llm: LLM
     paths: Paths
     extraction: ExtractionQuality
-    hardware_preset: str = "beast"   # "beast" or "laptop"
+    hardware_preset: str = "primary workstation"   # "primary workstation" or "laptop"
 ```
 
 ### 2.2 LanceDB Store (`src/store/lance_store.py`)

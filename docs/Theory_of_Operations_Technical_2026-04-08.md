@@ -253,7 +253,7 @@ Confidence >= 0.7 required. Type-specific validation (site vocabulary matching, 
 
 ### 6.1 Local Deployment (Primary)
 
-- Beast workstation: dual GPU, runs CorpusForge nightly + V2 query daytime
+- Primary workstation: local development workstation, runs CorpusForge nightly + V2 query daytime
 - Laptop: no GPU, receives index export via file share, query app only
 
 ### 6.2 Cloud Deployment (Fallback)

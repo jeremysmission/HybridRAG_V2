@@ -323,7 +323,7 @@ HybridRAG_V2/
       schema.py              # Pydantic config validation (load once, immutable)
       config.yaml            # Single config, no modes
       presets/
-        beast.yaml           # Beast workstation overrides
+        primary workstation.yaml           # primary workstation workstation overrides
         laptop.yaml          # Laptop overrides
     ingest/
       __init__.py
