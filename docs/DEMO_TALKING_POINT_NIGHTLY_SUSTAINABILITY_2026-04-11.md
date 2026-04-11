@@ -2,7 +2,7 @@
 
 **Date:** 2026-04-11
 **Author:** Jeremy Randall (CoPilot+)
-**Audience:** Civilian defense contractors, program managers, logistics leads
+**Audience:** Civilian enterprises, program managers, logistics leads
 
 ---
 
@@ -40,7 +40,7 @@ Peak months (bulk deliveries) reach 50-100 files/day. These are rare — 2-3 tim
 
 - A standard workstation with a single GPU can sustain nightly updates indefinitely
 - No cloud API calls, no token costs, no data egress
-- The system is self-contained — suitable for classified or air-gapped networks
+- The system is self-contained — suitable for restricted or offline networks
 - Bulk delivery months (rare, 2-3x/year) can optionally use the organization's existing AI endpoints for faster processing, then return to offline mode
 
 ## How the initial build works differently

@@ -20,7 +20,7 @@
 
 | Component | Spec |
 |-----------|------|
-| Machine | Beast (personal dev workstation) |
+| Machine | primary workstation (personal dev workstation) |
 | RAM | 64 GB |
 | Storage source | USB 3.2 NVMe external SSD (E:) — **this was the bottleneck** |
 | Storage target | C: 2TB NVMe (internal) |
@@ -63,7 +63,7 @@ A local copy was made during this run to `C:\HybridRAG_V2\data\forge_exports\` (
 
 | Corpus Size | Import Time | Index Build | Total | Source |
 |-------------|------------|-------------|-------|--------|
-| 242,650 chunks (Run 6) | ~13 sec | ~59 sec | ~72 sec | Agent2 measurement |
+| 242,650 chunks (Run 6) | ~13 sec | ~59 sec | ~72 sec | reviewer measurement |
 | 10,435,593 chunks (full) | ~2+ hours | ~15-30 min | ~2.5-3 hours | This benchmark |
 
 Scaling is roughly linear for inserts but sub-linear for index build (IVF_PQ gets more efficient with larger datasets in relative terms).

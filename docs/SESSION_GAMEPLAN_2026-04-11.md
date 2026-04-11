@@ -8,16 +8,16 @@
 
 | Machine | GPU | Role | Status |
 |---------|-----|------|--------|
-| Beast (here) | Dual RTX 3090 (24GB each), 64GB RAM | Dev/lab — validate architecture, tune, extract | ACTIVE |
+| primary workstation (here) | Dual RTX 3090 (24GB each), 64GB RAM | Dev/lab — validate architecture, tune, extract | ACTIVE |
 | Workstation Desktop | RTX A4000 (20GB), 64GB RAM | Clean production runs, 24-48h unattended, AWS access | AVAILABLE (10 min drive) |
 | Workstation Laptop | RTX 3000 Pro, 64GB RAM | V2 query testing, code review, AWS access | BESIDE USER |
 | AWS SageMaker | OSS-20B + OSS-120B (GovCloud) | Tier 3 heavy extraction, 150K TPM / 5M TPH | NEEDS WIRING |
 
-### Beast GPU Assignment
+### primary workstation GPU Assignment
 
 - **GPU 0:** High overhead from desktop processes (browser, VPN, Ollama, etc). Measured 1.64x slower than GPU 1 on identical embed workloads. Use for lighter/non-latency-critical work.
 - **GPU 1:** Clean, low baseline VRAM. Use for all fast/heavy GPU work (embedding, GLiNER, extraction).
-- Evidence: `C:\Users\jerem\overnight_gpu\lane1\` and `C:\Users\jerem\overnight_gpu\lane2\` benchmark reports.
+- Evidence: `{USER_HOME}\overnight_gpu\lane1\` and `{USER_HOME}\overnight_gpu\lane2\` benchmark reports.
 
 ### Agent Capacity
 
@@ -26,7 +26,7 @@
 - Each agent signs every post with agent name
 - GPU-backed lanes go to GPU 1 unless specifically isolated
 
-### Backup Repos on Beast
+### Backup Repos on primary workstation
 
 - `C:\HybridRAG3_Educational` — V1 legacy, prior art for GUI/admin/scheduling patterns
 - `C:\CorpusForge` — primary Forge repo
@@ -42,12 +42,12 @@
 
 ## Contamination Rule
 
-- Beast = lab only. No Beast artifacts go to work machines as-is.
+- primary workstation = lab only. No primary workstation artifacts go to work machines as-is.
 - Only push code/config/docs to remote. Work machines reproduce clean runs from their own source.
 
 ## Task Status (check task list for live state)
 
-### P0 — Import & Extract (Beast)
+### P0 — Import & Extract (primary workstation)
 
 1. **Import 10.4M into V2 LanceDB** — IN PROGRESS
    - Command: `.venv/Scripts/python.exe scripts/import_embedengine.py --source "E:/CorpusIndexEmbeddingsOnly/export_20260411_0720" --create-index`
@@ -62,7 +62,7 @@
    - Command: `CUDA_VISIBLE_DEVICES=1 .venv/Scripts/python.exe scripts/tiered_extract.py --tier 2`
    - Expected: ~1-2 hours background
 
-### P1 — Retrieval Quality (Beast foreground)
+### P1 — Retrieval Quality (primary workstation foreground)
 
 4. **Refresh golden eval queries** — BLOCKED on #1
 5. **Test retrieval quality with real queries** — BLOCKED on #1, #4
@@ -87,7 +87,7 @@
 - Tiered extraction strategy: `C:\HybridRAG_V2\docs\REGEX_PREEXTRACTION_ASSESSMENT_2026-04-08.md`
 - Tiered plan: `C:\HybridRAG_V2\docs\OPERATION_FREELOAD_TIERING_AND_REASSEMBLY_2026-04-06.md`
 - Field mining playbook: `C:\CorpusForge\docs\FIELD_MINING_PLAYBOOK_2026-04-09.md`
-- Corpus metadata captures: `C:\Users\jerem\corpus_metadata_capture_2026-04-10\`
+- Corpus metadata captures: `{USER_HOME}\corpus_metadata_capture_2026-04-10\`
 - Pipeline throughput guide: `C:\HybridRAG_V2\docs\PIPELINE_STAGES_AND_THROUGHPUT_2026-04-05.md`
 
 Signed: CoPilot+ | Coordinator | 2026-04-11 MDT
