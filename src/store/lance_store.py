@@ -384,13 +384,17 @@ class LanceStore:
         return False
 
     def create_fts_index(self) -> None:
-        """Create full-text search index on text and enriched_text columns."""
+        """Create full-text search index on text column.
+
+        LanceDB 0.30+ requires single-column FTS indexes.
+        """
         if self._table is None:
             return
         try:
-            self._table.create_fts_index(["text", "enriched_text"], replace=True)
-        except Exception:
-            pass  # FTS index creation is best-effort
+            self._table.create_fts_index("text", replace=True)
+            logger.info("FTS index created on 'text' column")
+        except Exception as e:
+            logger.warning("FTS index creation failed: %s", e)
 
     def close(self) -> None:
         """No-op for LanceDB (embedded, no connection to close)."""

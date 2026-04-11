@@ -8,71 +8,81 @@
 
 ## Purpose
 
-This query pack is organized around the 5 real demo personas, not topic buckets. Each block contains 5 queries and maps to one user role that will actually exercise the system during the demo.
+This pack is organized around the 5 real demo personas. Each persona block contains 5 queries, and each query maps to a real production corpus family and a specific routing type.
 
-The pack is grounded in real production corpus families and identifiers from the HybridRAG V2 production import. The goal is traceability from demo user intent to corpus families, not synthetic fixture coverage.
-
----
-
-## Persona Coverage
-
-| Persona | Query IDs | Primary Intent |
-|---------|-----------|----------------|
-| Program Manager | PQ-001 through PQ-005 | Contract status, CDRL deliverables, schedule milestones, cost tracking, staffing/TO status |
-| Logistics Lead | PQ-006 through PQ-010 | Parts inventory, PO tracking, shipment status, calibration schedules, EEMS records |
-| Field Engineer | PQ-011 through PQ-015 | Repair procedures, failure modes, equipment manuals, site visit reports, maintenance actions |
-| Network Admin / Cybersecurity | PQ-016 through PQ-020 | ACAS scan results, STIG checklists, RMF package status, POA&M tracking, network configuration docs |
-| Aggregation / Cross-role | PQ-021 through PQ-025 | Cross-family questions that require combining results across multiple document families |
+The traceability goal is simple: every `PQ-###` in the JSON pack must be traceable to the exact question text, type, and corpus family shown below.
 
 ---
 
-## Query Block Mapping
+## Query-Type Distribution
+
+| Type | Count |
+|------|-------|
+| SEMANTIC | 5 |
+| ENTITY | 4 |
+| TABULAR | 6 |
+| AGGREGATE | 4 |
+| COMPLEX | 6 |
+
+---
+
+## Persona Maps
 
 ### Program Manager
 
-- `PQ-001` traces to follow-on contract planning, Sources Sought, and RFI materials.
-- `PQ-002` traces to the CDRL tree and deliverable status folders.
-- `PQ-003` traces to PMR schedule-performance and milestone briefing materials.
-- `PQ-004` traces to FEP, ITD Actuals, and CEAC financial artifacts.
-- `PQ-005` traces to PMR status briefs and suborganization slides that capture staffing or task-order context.
+| ID | Type | Query | Corpus family |
+|----|------|-------|---------------|
+| PQ-001 | TABULAR | Which CDRL deliverables in A001, A009, and A031 have the latest status updates? | CDRLs - 1.5 enterprise program CDRLS |
+| PQ-002 | SEMANTIC | What schedule milestones and slips are shown in the latest PMR and Integrated Master Schedule? | Program Management - 6.0 PMR + CDRL A031 IMS |
+| PQ-003 | TABULAR | How do the current FEP actuals compare to the funding plan and LDI burn-rate by OY3? | Program Management - 1.0 FEP + LDI budget/hours spreadsheets |
+| PQ-004 | ENTITY | What is the latest PMR briefing file name for the enterprise program program? | Program Management - 6.0 PMR |
+| PQ-005 | COMPLEX | What staffing, suborganization, and budget risks are flagged across the latest PM brief and variance reports? | Follow-on materials + PMR/SubK Slides + Weekly Variance Reports + FEP |
 
 ### Logistics Lead
 
-- `PQ-006` traces to procurement spreadsheets with open purchase order and vendor fields.
-- `PQ-007` traces to the spares inventory workbook and related parts references.
-- `PQ-008` traces to shipment, hand-carry, and packing-list documents for OCONUS movement.
-- `PQ-009` traces to yearly calibration folders and the calibration reference PDF.
-- `PQ-010` traces to EEMS, jurisdiction, classification, and JCR material.
+| ID | Type | Query | Corpus family |
+|----|------|-------|---------------|
+| PQ-006 | TABULAR | What purchase orders are currently open and which vendors or CLINs are still outstanding? | Logistics / Procurement - open purchases |
+| PQ-007 | ENTITY | Which site is named on the latest hand-carry packing list? | Logistics / Shipments - hand-carry packing list |
+| PQ-008 | TABULAR | What parts are on the recommended spares list and what are their part numbers, quantities, and OEMs? | Logistics / Parts - Recommended Spares Parts List |
+| PQ-009 | SEMANTIC | Which equipment is due for calibration next, and what do the calibration audit folders show? | Logistics / Calibration - yearly folders and calibration PDF |
+| PQ-010 | COMPLEX | Which OCONUS shipments also required customs or export-control paperwork, and what did they contain? | Shipments + Disposition + EEMS + DD250 records |
 
 ### Field Engineer
 
-- `PQ-011` traces to Thule installation documents and site engineering artifacts.
-- `PQ-012` traces to site outage analysis and root-cause writeups.
-- `PQ-013` traces to COTS manuals and hardware maintenance references.
-- `PQ-014` traces to Guam and Alpena site visit reports and site-selection records.
-- `PQ-015` traces to the Part Failure Tracker and related maintenance records.
+| ID | Type | Query | Corpus family |
+|----|------|-------|---------------|
+| PQ-011 | AGGREGATE | What parts have the highest failure rates across all sites based on the Part Failure Tracker and corrective action folders? | Part Failure Tracker + A001 CAP folders + Failure Summary DID |
+| PQ-012 | AGGREGATE | What Maintenance Service Reports have been filed across all monitoring system sites, and what maintenance actions and part replacements do they document? | CDRL A002 MSR folders |
+| PQ-013 | SEMANTIC | What site outages have been caused by power failures, UPS issues, or environmental damage, and what were the return-to-service procedures? | Site Outages Analysis + power-repair artifacts |
+| PQ-014 | ENTITY | Which site is associated with the latest Awase Okinawa installation package? | Awase Okinawa install folders + A006/A007 artifacts |
+| PQ-015 | COMPLEX | What installation acceptance tests were performed at the Awase Okinawa install, and what does the Site Installation Plan say about the phases? | Awase install folders + A003 SIP + A006/A007 artifacts |
 
 ### Network Admin / Cybersecurity
 
-- `PQ-016` traces to ACAS scan artifacts and scan guidance references.
-- `PQ-017` traces to the STIG review spreadsheet and waiver or finding records.
-- `PQ-018` traces to ATO and RMF package-change artifacts.
-- `PQ-019` traces to the IAVM tracker and POA&M-style remediation status.
-- `PQ-020` traces to the monitoring system authorization boundary PDF and network diagram folder.
+| ID | Type | Query | Corpus family |
+|----|------|-------|---------------|
+| PQ-016 | SEMANTIC | What ACAS scan results, SCAP scan results, and STIG review findings are documented for ISTO and monitoring system systems? | A027 DAA Accreditation Support Data + STIG review + CT&E-ST&E folders |
+| PQ-017 | ENTITY | What system name is listed on the latest RMF Security Plan? | A027 RMF Security Plan / Security Authorization Package |
+| PQ-018 | SEMANTIC | What security events and cyber incidents have been documented, including the Fairford Russian event and the Alpena PPTP buffer overflow? | Security Events archive |
+| PQ-019 | TABULAR | What ATO re-authorization packages have been submitted and what system changes triggered them? | ATO-ATC package changes + A027 authorization artifacts |
+| PQ-020 | COMPLEX | What monthly continuous monitoring audit results are documented for 2024, and what cybersecurity directives are active? | Monthly audits archive + directive set |
 
 ### Aggregation / Cross-role
 
-- `PQ-021` requires consolidation across procurement and site folders to count open POs and recurring vendors.
-- `PQ-022` spans PM, logistics, and engineering deliverables due in the same quarter.
-- `PQ-023` spans outage history across site visits and maintenance records.
-- `PQ-024` joins site visit records with shipments, calibration actions, and deliverables.
-- `PQ-025` correlates failures, part replacements, and corrective actions across time and across document families.
+| ID | Type | Query | Corpus family |
+|----|------|-------|---------------|
+| PQ-021 | AGGREGATE | How many monitoring system and ISTO sites are there, where are they located, and which ones have had installations or maintenance visits in the last three years? | monitoring system Sites + ISTO sites + Site Visits + MSR folders |
+| PQ-022 | COMPLEX | Which sites have had Corrective Action Plans filed, what incident numbers and failure types were involved, and what parts were consumed? | A001 CAP folders + Part Failure Tracker + MSRs + spares lists |
+| PQ-023 | TABULAR | How many open purchase orders exist across all procurement records, what parts have been received versus outstanding, and what is the total CLIN coverage? | Procurement open/received folders + iBuy GL lists + A014 BOM |
+| PQ-024 | AGGREGATE | Summarize all shipment activity, parts disposition, and calibration actions across fiscal years 2022 through 2026. | Shipments + Disposition + Calibration + AssetSmart snapshots |
+| PQ-025 | COMPLEX | Give me a cross-program risk summary: what CDRLs are overdue, what ATO packages are pending, what cybersecurity directives remain active, and what parts have recurring failures? | CDRLs + ATO packages + directives + Part Failure Tracker + PMR + FEP |
 
 ---
 
 ## Traceability Notes
 
-The query pack keeps the same JSON field structure as the previous pack:
+The JSON pack keeps the existing field structure:
 
 - `id`
 - `query`
@@ -83,18 +93,18 @@ The query pack keeps the same JSON field structure as the previous pack:
 - `document_family`
 - `production_rationale`
 
-The only structural change is the intentional reorganization around the 5 demo personas. That change is required so QA can validate the pack against the actual people who will demo the system, rather than against topic buckets.
+The key correction is that the traceability now mirrors the JSON exactly, query by query, instead of describing a different conceptual mapping.
 
 ---
 
 ## Acceptance Rule
 
-The pack is considered aligned when:
+The pack is aligned when:
 
 - Every persona block contains exactly 5 queries.
-- Each query maps to a real production corpus family.
-- Aggregation queries require evidence across more than one family.
-- The rationale document explains the persona mapping without relying on synthetic fixtures.
+- The query-type distribution includes semantic, entity, tabular, aggregate, and complex coverage.
+- Every query traces to a real production corpus family.
+- The markdown matches the JSON IDs, query text, and type assignments exactly.
 
 ---
 
