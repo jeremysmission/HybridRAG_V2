@@ -302,13 +302,11 @@ class ImportExtractRunner:
             self._set_stat("chunks_total", chunk_count)
             self._log(f"Store has {chunk_count:,} chunks")
 
-            # Load chunks
-            from scripts.tiered_extract import load_chunks
-            all_chunks = load_chunks(store)
-            total_chunks = len(all_chunks)
-            self._log(f"Loaded {total_chunks:,} chunks for extraction")
+            # Stream chunks in batches (10M+ safe — never loads all into RAM)
+            from scripts.tiered_extract import iter_chunk_batches
+            total_chunks = chunk_count
 
-            # Tier 1 extraction with progress
+            # Tier 1 extraction with streaming progress
             extractor = RegexPreExtractor(part_patterns=config.extraction.part_patterns)
             event_parser = EventBlockParser(part_patterns=config.extraction.part_patterns)
             rel_extractor = RegexRelationshipExtractor()
@@ -317,39 +315,53 @@ class ImportExtractRunner:
             all_rels: list = []
             seen_entities: set = set()
             seen_rels: set = set()
+            chunks_processed = 0
+            all_chunks_for_tier2: list = [] if max_tier >= 2 else None
 
             t1_start = time.perf_counter()
-            progress_interval = max(1, total_chunks // 100)
 
-            for idx, chunk in enumerate(all_chunks):
+            for batch in iter_chunk_batches(store, batch_size=10000):
                 if self._stop_event.is_set():
-                    self._log(f"Stop requested at chunk {idx:,} / {total_chunks:,}")
+                    self._log(f"Stop requested at chunk {chunks_processed:,} / {total_chunks:,}")
                     break
 
-                text = chunk["text"]
-                cid = chunk["chunk_id"]
-                src = chunk["source_path"]
+                for chunk in batch:
+                    text = chunk["text"]
+                    cid = chunk["chunk_id"]
+                    src = chunk["source_path"]
 
-                entities = extractor.extract(text=text, chunk_id=cid, source_path=src)
-                block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
-                co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
+                    entities = extractor.extract(text=text, chunk_id=cid, source_path=src)
+                    block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
+                    co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
 
-                for e in entities + block_entities:
-                    key = (e.chunk_id, e.entity_type, e.text)
-                    if key not in seen_entities:
-                        seen_entities.add(key)
-                        all_entities.append(e)
+                    for e in entities + block_entities:
+                        key = (e.chunk_id, e.entity_type, e.text)
+                        if key not in seen_entities:
+                            seen_entities.add(key)
+                            all_entities.append(e)
 
-                for r in block_rels + co_rels:
-                    key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
-                    if key not in seen_rels:
-                        seen_rels.add(key)
-                        all_rels.append(r)
+                    for r in block_rels + co_rels:
+                        key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
+                        if key not in seen_rels:
+                            seen_rels.add(key)
+                            all_rels.append(r)
 
-                if (idx + 1) % progress_interval == 0 or idx == total_chunks - 1:
-                    self._set_progress(idx + 1, total_chunks)
-                    self._set_stat("chunks_processed", idx + 1)
-                    self._set_stat("tier1_entities", len(all_entities))
+                # Keep chunks for Tier 2 if needed
+                if all_chunks_for_tier2 is not None:
+                    all_chunks_for_tier2.extend(batch)
+
+                chunks_processed += len(batch)
+                self._set_progress(chunks_processed, total_chunks)
+                self._set_stat("chunks_processed", chunks_processed)
+                self._set_stat("tier1_entities", len(all_entities))
+                self._set_stat("tier1_relationships", len(all_rels))
+                elapsed_t1 = time.perf_counter() - t1_start
+                rate = chunks_processed / max(elapsed_t1, 0.001)
+                self._log(
+                    f"Tier 1: {chunks_processed:,} / {total_chunks:,} "
+                    f"({rate:,.0f} chunks/sec, {len(all_entities):,} entities, "
+                    f"{len(all_rels):,} rels)"
+                )
 
             t1_elapsed = time.perf_counter() - t1_start
             t1_types = Counter(e.entity_type for e in all_entities)
@@ -409,11 +421,17 @@ class ImportExtractRunner:
                     free, total_vram = torch.cuda.mem_get_info(gpu_idx)
                     self._set_stat("gpu_status", f"{name} ({free / 1e9:.1f} / {total_vram / 1e9:.1f} GB)")
 
+                # Use chunks collected during Tier 1 streaming, or reload if needed
+                if not all_chunks_for_tier2:
+                    self._log("Re-loading chunks for Tier 2 (not collected during Tier 1)...")
+                    from scripts.tiered_extract import load_chunks as _load_chunks
+                    all_chunks_for_tier2 = _load_chunks(store)
+
                 # Filter chunks
                 min_chunk_len = config.extraction.gliner_min_chunk_len
-                filtered = [c for c in all_chunks if len(c["text"].strip()) >= min_chunk_len
+                filtered = [c for c in all_chunks_for_tier2 if len(c["text"].strip()) >= min_chunk_len
                             and sum(1 for ch in c["text"] if ch.isalpha()) / max(len(c["text"]), 1) >= 0.3]
-                self._log(f"Tier 2 filter: {total_chunks:,} → {len(filtered):,} chunks")
+                self._log(f"Tier 2 filter: {len(all_chunks_for_tier2):,} → {len(filtered):,} chunks")
 
                 # Load model
                 self._log(f"Loading GLiNER model: {config.extraction.gliner_model} on {resolved_device}")
@@ -628,6 +646,7 @@ class ImportExtractGUI:
             ("chunks_total", "Chunks Total:"),
             ("chunks_processed", "Processed:"),
             ("tier1_entities", "Tier 1 Entities:"),
+            ("tier1_relationships", "Tier 1 Rels:"),
             ("tier2_entities", "Tier 2 Entities:"),
         ]
         right_stats = [

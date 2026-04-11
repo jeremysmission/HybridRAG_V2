@@ -43,7 +43,11 @@ DIVIDER = "=" * 60
 
 
 def load_chunks(store: LanceStore, limit: int = 0) -> list[dict]:
-    """Load chunks from LanceDB for extraction."""
+    """Load chunks from LanceDB for extraction.
+
+    WARNING: This loads ALL chunks into memory. For 10M+ corpora, use
+    iter_chunk_batches() instead to stream in batches.
+    """
     tbl = store._table
     if tbl is None:
         return []
@@ -60,6 +64,44 @@ def load_chunks(store: LanceStore, limit: int = 0) -> list[dict]:
             "source_path": str(result.column("source_path")[i]),
         })
     return chunks
+
+
+def iter_chunk_batches(store: LanceStore, batch_size: int = 10000, limit: int = 0):
+    """Stream chunks from LanceDB in batches without loading all into memory.
+
+    Yields lists of chunk dicts, each up to batch_size.
+    Total memory: ~batch_size * avg_chunk_size instead of entire corpus.
+    """
+    tbl = store._table
+    if tbl is None:
+        return
+    columns = ["chunk_id", "text", "source_path"]
+    try:
+        scanner = tbl.to_lance().scanner(
+            columns=columns,
+            batch_size=batch_size,
+        )
+        yielded = 0
+        for arrow_batch in scanner.to_batches():
+            chunks = []
+            for i in range(arrow_batch.num_rows):
+                chunks.append({
+                    "chunk_id": str(arrow_batch.column("chunk_id")[i]),
+                    "text": str(arrow_batch.column("text")[i]),
+                    "source_path": str(arrow_batch.column("source_path")[i]),
+                })
+            if limit > 0 and yielded + len(chunks) > limit:
+                chunks = chunks[:limit - yielded]
+            if chunks:
+                yield chunks
+                yielded += len(chunks)
+            if limit > 0 and yielded >= limit:
+                return
+    except Exception:
+        # Fallback to search-based loading if lance scanner not available
+        all_chunks = load_chunks(store, limit=limit)
+        for i in range(0, len(all_chunks), batch_size):
+            yield all_chunks[i:i + batch_size]
 
 
 def run_tier1(
@@ -229,35 +271,60 @@ def main() -> None:
     print(f"  Threads:     {config.extraction.max_concurrent}")
     print(f"  Dry run:     {args.dry_run}")
 
-    # Load chunks
-    t0 = time.perf_counter()
-    chunks = load_chunks(store, limit=args.limit)
-    print(f"  Loaded:      {len(chunks):,} chunks ({time.perf_counter()-t0:.1f}s)")
+    # --- Tier 1: Regex + Event Blocks + Relationships (streaming) ---
+    total_chunks = store.count()
+    if args.limit > 0:
+        total_chunks = min(total_chunks, args.limit)
+    print(f"  Total:       {total_chunks:,} chunks")
     print()
 
-    # --- Tier 1: Regex + Event Blocks + Relationships ---
-    print("  [TIER 1] Regex + event block + relationship extraction ...")
+    print("  [TIER 1] Regex + event block + relationship extraction (streaming)...")
     t1_start = time.perf_counter()
-    tier1_entities, tier1_rels = run_tier1(chunks, config.extraction.part_patterns, config.extraction.max_concurrent)
-    t1_elapsed = time.perf_counter() - t1_start
 
-    # Dedup entities by (chunk_id, entity_type, text)
+    extractor = RegexPreExtractor(part_patterns=config.extraction.part_patterns)
+    event_parser = EventBlockParser(part_patterns=config.extraction.part_patterns)
+    rel_extractor = RegexRelationshipExtractor()
+
     seen = set()
     unique_t1 = []
-    for e in tier1_entities:
-        key = (e.chunk_id, e.entity_type, e.text)
-        if key not in seen:
-            seen.add(key)
-            unique_t1.append(e)
-
-    # Dedup relationships by (subject, predicate, object, chunk_id)
     seen_rels = set()
     unique_rels = []
-    for r in tier1_rels:
-        key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
-        if key not in seen_rels:
-            seen_rels.add(key)
-            unique_rels.append(r)
+    chunks_processed = 0
+    all_chunks_for_tier2 = [] if args.tier >= 2 else None
+
+    for batch in iter_chunk_batches(store, batch_size=10000, limit=args.limit):
+        for chunk in batch:
+            text = chunk["text"]
+            cid = chunk["chunk_id"]
+            src = chunk["source_path"]
+
+            entities = extractor.extract(text=text, chunk_id=cid, source_path=src)
+            block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
+            co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
+
+            for e in entities + block_entities:
+                key = (e.chunk_id, e.entity_type, e.text)
+                if key not in seen:
+                    seen.add(key)
+                    unique_t1.append(e)
+
+            for r in block_rels + co_rels:
+                key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
+                if key not in seen_rels:
+                    seen_rels.add(key)
+                    unique_rels.append(r)
+
+        chunks_processed += len(batch)
+        elapsed = time.perf_counter() - t1_start
+        rate = chunks_processed / max(elapsed, 0.001)
+        print(f"  Tier 1: {chunks_processed:,} / {total_chunks:,} chunks "
+              f"({rate:,.0f} chunks/sec, {len(unique_t1):,} entities, {len(unique_rels):,} rels)")
+
+        # Keep chunks in memory only if Tier 2 needs them
+        if all_chunks_for_tier2 is not None:
+            all_chunks_for_tier2.extend(batch)
+
+    t1_elapsed = time.perf_counter() - t1_start
 
     tier1_chunk_ids = {e.chunk_id for e in unique_t1}
     from collections import Counter
@@ -266,7 +333,7 @@ def main() -> None:
     print(f"  [TIER 1] {len(unique_t1):,} entities from {len(tier1_chunk_ids):,} chunks ({t1_elapsed:.2f}s)")
     print(f"           Types: {dict(t1_types)}")
     print(f"           Rels:  {len(unique_rels):,} -- {dict(t1_preds)}")
-    print(f"           Rate: {len(chunks)/max(t1_elapsed, 0.001):,.0f} chunks/sec")
+    print(f"           Rate: {chunks_processed/max(t1_elapsed, 0.001):,.0f} chunks/sec")
     print()
 
     all_entities = list(unique_t1)
@@ -274,10 +341,13 @@ def main() -> None:
 
     # --- Tier 2: GLiNER ---
     if args.tier >= 2:
-        print("  [TIER 2] GLiNER extraction ...")
+        if all_chunks_for_tier2 is None or len(all_chunks_for_tier2) == 0:
+            print("  [TIER 2] No chunks available for GLiNER (streaming mode). Re-loading for Tier 2...")
+            all_chunks_for_tier2 = load_chunks(store, limit=args.limit)
+        print(f"  [TIER 2] GLiNER extraction on {len(all_chunks_for_tier2):,} chunks...")
         t2_start = time.perf_counter()
         tier2_entities = run_tier2_gliner(
-            chunks=chunks,
+            chunks=all_chunks_for_tier2,
             tier1_chunk_ids=tier1_chunk_ids,
             device=config.extraction.gliner_device,
             model_name=config.extraction.gliner_model,
