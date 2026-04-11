@@ -130,16 +130,35 @@ def run_tier2_gliner(
 
     print(f"  Tier 2 filter: {len(chunks)} -> {len(filtered)} chunks ({len(chunks)-len(filtered)} skipped)")
 
-    # Load GLiNER
-    print(f"  Loading GLiNER model: {model_name} on {device}")
-    model = GLiNER.from_pretrained(model_name)
+    # Load GLiNER with GPU auto-detection
+    import torch
+    resolved_device = device
     if "cuda" in device:
-        import torch
-        if torch.cuda.is_available():
-            model = model.to(device)
-            print(f"  GLiNER on {device}: {torch.cuda.get_device_name(int(device.split(':')[1]))}")
-        else:
-            print(f"  CUDA not available, falling back to CPU")
+        if not torch.cuda.is_available():
+            print(f"  ERROR: CUDA requested ({device}) but not available. Aborting Tier 2.")
+            print(f"  GLiNER on CPU is too slow for production. Fix CUDA or skip Tier 2.")
+            return []
+        # Auto-resolve: if cuda:1 requested but only 1 GPU, fall back to cuda:0
+        requested_idx = int(device.split(":")[1]) if ":" in device else 0
+        if requested_idx >= torch.cuda.device_count():
+            resolved_device = "cuda:0"
+            print(f"  NOTE: {device} not available (only {torch.cuda.device_count()} GPU(s)). Using {resolved_device}.")
+        # Pick the GPU with more free memory if no specific index was forced
+        elif torch.cuda.device_count() > 1 and device == "cuda:1":
+            free_0 = torch.cuda.mem_get_info(0)[0]
+            free_1 = torch.cuda.mem_get_info(1)[0]
+            if free_0 > free_1 * 1.5:
+                resolved_device = "cuda:0"
+                print(f"  NOTE: GPU 0 has significantly more free VRAM ({free_0/1e9:.1f}GB vs {free_1/1e9:.1f}GB). Using {resolved_device}.")
+
+    print(f"  Loading GLiNER model: {model_name} on {resolved_device}")
+    model = GLiNER.from_pretrained(model_name)
+    if "cuda" in resolved_device:
+        gpu_idx = int(resolved_device.split(":")[1]) if ":" in resolved_device else 0
+        model = model.to(resolved_device)
+        print(f"  GLiNER on {resolved_device}: {torch.cuda.get_device_name(gpu_idx)}")
+        free, total = torch.cuda.mem_get_info(gpu_idx)
+        print(f"  VRAM after model load: {free/1e9:.1f}GB free / {total/1e9:.1f}GB total")
 
     labels = ["PERSON", "ORGANIZATION", "SITE", "FAILURE_MODE", "DATE"]
     label_map = {
