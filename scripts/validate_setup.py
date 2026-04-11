@@ -212,10 +212,16 @@ def check_api_credentials():
     if not found_key:
         try:
             import keyring
-            val = keyring.get_password("hybridrag-v2", "azure-openai") or ""
-            if val:
-                found_key = val
-                found_key_name = "keyring(hybridrag-v2)"
+            for service, username, label in [
+                ("hybridrag-v2", "azure-openai", "keyring(hybridrag-v2)"),
+                ("hybridrag", "azure_api_key", "keyring(hybridrag)"),
+                ("azure_api_key@hybridrag", "azure_api_key", "keyring(azure_api_key@hybridrag)"),
+            ]:
+                val = keyring.get_password(service, username) or ""
+                if val:
+                    found_key = val
+                    found_key_name = label
+                    break
         except Exception:
             pass
 
@@ -235,6 +241,16 @@ def check_api_credentials():
             if val:
                 endpoint = val
                 break
+        if endpoint is None:
+            try:
+                import keyring
+                endpoint = (
+                    keyring.get_password("hybridrag", "azure_endpoint")
+                    or keyring.get_password("azure_endpoint@hybridrag", "azure_endpoint")
+                    or None
+                )
+            except Exception:
+                endpoint = None
         if endpoint:
             record(PASS, "Azure endpoint", f"set ({endpoint[:30]}...)"
                    if len(endpoint) > 30 else f"set ({endpoint})")

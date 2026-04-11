@@ -1,6 +1,6 @@
 # Unified Sprint Plan — CorpusForge + HybridRAG V2
 
-**Last Updated:** 2026-04-09 | **Updated By:** reviewer — mirrored Forge corpus-adaptation profiling status into V2, including the checked-in export-analysis generator, the evidence packet, and CA.1 ready-for-QA state.
+**Last Updated:** 2026-04-10 | **Updated By:** reviewer — Sprint 9.4 nightly delta / scheduler / admin plan packet posted, board synced, and targeted design-lane verification completed (`tests/test_nightly_delta.py`, `tests/test_stage_forge_import.py`).
 **Demo Target:** 2026-05-02
 **Update Rule:** Every agent updates ALL 3 copies at end of sprint session (review board + both repos)
 
@@ -364,6 +364,22 @@
 - All code changes happen in main repo, then `git pull` into clone
 - Each clone gets its own config.local.yaml (different output dirs, GPU assignment)
 - Venv MUST be rebuilt from scratch — copied venvs break on Windows (hardcoded paths)
+
+---
+
+## Sprint 9 (2026-04-10): review board Lanes
+
+**Added:** 2026-04-10 | **Purpose:** recover from the lost 700GB long-run payload, convert the captured corpus metadata into retrieval value, and keep the four-lane team moving from a single coordinator board.
+
+| Slice | Repo | Priority | What | Status | Owner |
+|-------|------|----------|------|--------|-------|
+| 9.1 | Forge | P0 | Durability / chunk checkpointing: persist parse/chunk output during long runs, resume after stop/crash before export, and keep export safety guarantees intact. | ASSIGNED | reviewer |
+| 9.2 | Forge | P1 | Runtime config simplification / operator clarity: inventory remaining config files, enforce `config/config.yaml` as the live runtime path, and retire/quarantine stale operator-facing config confusion. | ASSIGNED | reviewer |
+| 9.3 | Both | P1 | Retrieval metadata schema: convert captured corpus structure into implementation-ready metadata fields and ranking/filter rules for DM, logistics, cybersecurity, archive, and future V3 linkage. Artifacts: `C:\CorpusForge\docs\RETRIEVAL_METADATA_SCHEMA_SPRINT9_2026-04-10.md`, `C:\HybridRAG_V2\docs\RETRIEVAL_METADATA_SCHEMA_SPRINT9_2026-04-10.md`, and bounded probe packet `C:\HybridRAG_V2\docs\RETRIEVAL_METADATA_GPU_PROBE_2026-04-10.{md,json}`. | READY FOR QA (GPU addendum) | reviewer |
+| 9.4 | Both | P1 | Nightly delta / scheduler / admin-panel plan: implementation-ready slices for unattended delta copy + Forge pipeline + V2 staging/import, with stop/pause/resume expectations, V1 prior art references, canary strategy, and plan doc at `C:\CorpusForge\docs\NIGHTLY_DELTA_SCHEDULER_ADMIN_PLAN_2026-04-10.md`. | READY FOR QA (design lane only; main packet `docs/NIGHTLY_DELTA_SCHEDULER_ADMIN_PLAN_2026-04-10.md`, handoff `docs/LANE4_NIGHTLY_DELTA_HANDOFF_2026-04-10.md`, targeted tests passed: Forge `tests/test_nightly_delta.py`, V2 `tests/test_stage_forge_import.py`) | reviewer |
+| 9.QA | Both | P0 | QA lane for Sprint 9. Runtime-changing work still requires targeted tests and proof artifacts; GUI/runtime operator claims still require harness coverage and non-author validation before signoff. | READY | QA |
+
+**Sprint 9 Board:** `C:\CorpusForge\___WAR_ROOM_BOARD_2026_04_10.md`
 
 ---
 

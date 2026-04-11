@@ -1,0 +1,133 @@
+{
+  "store_chunks": 242650,
+  "source_export": "C:\\CorpusForge\\data\\production_output\\export_20260409_0720",
+  "queries": [
+    {
+      "query": "What parts were ordered in PO-2024?",
+      "latency_ms": 33.0,
+      "top_score": 0.5706,
+      "top_source": "ufc_1_300_08.pdf",
+      "top_preview": "ock  26.  Enter the date at the time of signature.  This is the Placed-in-Service Date.  The date mu",
+      "hit_count": 5
+    },
+    {
+      "query": "Show me all packing lists for Ascension Island",
+      "latency_ms": 16.3,
+      "top_score": 0.4472,
+      "top_source": "welcome.html",
+      "top_preview": "Ascension Island",
+      "hit_count": 5
+    },
+    {
+      "query": "Which parts are backordered?",
+      "latency_ms": 17.6,
+      "top_score": 0.6145,
+      "top_source": "Spares Photos Explanations.docx",
+      "top_preview": "[SECTION] 1 each, Network Card, NMC, PCE-1G-01, SN: 2623ATTCP 87D600400  1 each, Fan, CPU, AUB0912VH",
+      "hit_count": 5
+    },
+    {
+      "query": "Describe the last site visit to Eglin",
+      "latency_ms": 17.4,
+      "top_score": 0.6025,
+      "top_source": "Trip Report (0024) (Eglin Site Survey) 27 Apr - 1 May 09_Corrected Copy.doc",
+      "top_preview": "(SOW) for the allied support requirements for installation of the monitoring system at Eglin AFB. The following",
+      "hit_count": 5
+    },
+    {
+      "query": "What maintenance was performed at Ascension Island?",
+      "latency_ms": 16.8,
+      "top_score": 0.3871,
+      "top_source": "welcome.html",
+      "top_preview": "Ascension Island",
+      "hit_count": 5
+    },
+    {
+      "query": "What ACAS vulnerabilities were found?",
+      "latency_ms": 17.8,
+      "top_score": 0.5887,
+      "top_source": "SCINDA-Diego Garcia STE Report 28 jan 14 (Signed).docx",
+      "top_preview": "a broad range of frequencies.  The SSAEM receivers and software will utilize the SCINDA site infrast",
+      "hit_count": 5
+    },
+    {
+      "query": "Show the latest STIG compliance report",
+      "latency_ms": 15.1,
+      "top_score": 0.6806,
+      "top_source": "Alpena_Desktop_Log_Last_17Aug17.txt",
+      "top_preview": "******************************* 2017.08.09 at 1615Z: Shutting down to take post-STIG image on Flyawa",
+      "hit_count": 5
+    },
+    {
+      "query": "What is the GPS antenna installation procedure?",
+      "latency_ms": 16.0,
+      "top_score": 0.4647,
+      "top_source": "Diego Garcia SCINDA Installation Trip Report_28May14_Final.docx",
+      "top_preview": "side of bldg. 301.  The grounding for the GPS antenna was completed by running the ground wire to a ",
+      "hit_count": 5
+    },
+    {
+      "query": "Show the RF cable routing diagram",
+      "latency_ms": 16.3,
+      "top_score": 0.5711,
+      "top_source": "Cable Test Data Sheets_NEXION_Draft_03-16-2009.doc",
+      "top_preview": "TEST SECTION:   RF Cable Installation TEST DATA SHEET | | |Procedure Step                 |Expected ",
+      "hit_count": 5
+    },
+    {
+      "query": "List all sites that had maintenance visits in 2021",
+      "latency_ms": 16.0,
+      "top_score": 0.6075,
+      "top_source": "Copy of SEMS3D-40528 Alpena monitoring system MSR CDRL A001 (9 Jun 2021).docx",
+      "top_preview": "the building.  ANNUAL SERVICE VISIT (ASV)  This section of the MSR provides an overview of the susta",
+      "hit_count": 5
+    },
+    {
+      "query": "How many purchase orders were issued last quarter?",
+      "latency_ms": 16.5,
+      "top_score": 0.7075,
+      "top_source": "DD Form 1149 1of1 TCN FB25008283X501XXX (2018-09-17)(Pg 1 & 2).pdf",
+      "top_preview": "[SECTION] 51  52  53  54  55  56  57  58  59  60  61  62  63  64  65 66  67  68  69  70  71  72  73 ",
+      "hit_count": 5
+    },
+    {
+      "query": "Who is Richard Brown?",
+      "latency_ms": 15.7,
+      "top_score": 0.8712,
+      "top_source": "ufc_1_300_08.pdf",
+      "top_preview": "egated representative.    RPIR Data Element: Facility Number    4-1.11.1 10.b. REAL PROPERTY UNIQUE ",
+      "hit_count": 5
+    },
+    {
+      "query": "What files are in the Curacao trip report?",
+      "latency_ms": 17.5,
+      "top_score": 0.538,
+      "top_source": "Jeremy Randall BCD Travel Receipt Communication Attachment - SXDVDR - January 7 2024 (005).pdf",
+      "top_preview": "download the app and take it with you. By way of accessing and/or utilizing any of our services, you",
+      "hit_count": 5
+    },
+    {
+      "query": "Show emails about shipment delays",
+      "latency_ms": 18.6,
+      "top_score": 0.6983,
+      "top_source": "Ascension monitoring system Desktop Diary 1703Z3Nov15.txt",
+      "top_preview": "t after a 39 minute delay. It is unknown if the delays are being caused by low bandwidth or by misdi",
+      "hit_count": 5
+    },
+    {
+      "query": "What is the recipe for chocolate cake?",
+      "latency_ms": 17.0,
+      "top_score": 0.889,
+      "top_source": "TM10_5411_207_24p.pdf",
+      "top_preview": "The Commercial and Government Entity Code (CAGEC) is a 5-digit numeric code used to identify the man",
+      "hit_count": 5
+    }
+  ],
+  "latency_summary": {
+    "min_ms": 15.1,
+    "p50_ms": 16.8,
+    "p95_ms": 33.0,
+    "max_ms": 33.0,
+    "avg_ms": 17.8
+  }
+}

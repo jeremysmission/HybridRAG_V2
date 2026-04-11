@@ -73,6 +73,15 @@ class LLMClient:
         "HYBRIDRAG_API_ENDPOINT", "AZURE_OPENAI_ENDPOINT",
         "OPENAI_API_ENDPOINT", "OPENAI_BASE_URL",
     ]
+    _KEYRING_KEY_CANDIDATES = [
+        ("hybridrag-v2", "azure-openai"),
+        ("hybridrag", "azure_api_key"),
+        ("azure_api_key@hybridrag", "azure_api_key"),
+    ]
+    _KEYRING_ENDPOINT_CANDIDATES = [
+        ("hybridrag", "azure_endpoint"),
+        ("azure_endpoint@hybridrag", "azure_endpoint"),
+    ]
 
     def __init__(
         self,
@@ -157,9 +166,14 @@ class LLMClient:
         # Keyring fallback
         try:
             import keyring
-            val = keyring.get_password("hybridrag-v2", "azure-openai") or ""
-            if val:
-                return val
+            for service, username in self._KEYRING_KEY_CANDIDATES:
+                val = keyring.get_password(service, username) or ""
+                if val:
+                    logger.info(
+                        "LLM client key resolved from Windows Credential Manager: %s/%s",
+                        service, username,
+                    )
+                    return val
         except Exception:
             pass
 
@@ -173,6 +187,18 @@ class LLMClient:
             val = os.getenv(var, "")
             if val:
                 return val
+        try:
+            import keyring
+            for service, username in self._KEYRING_ENDPOINT_CANDIDATES:
+                val = keyring.get_password(service, username) or ""
+                if val:
+                    logger.info(
+                        "LLM client endpoint resolved from Windows Credential Manager: %s/%s",
+                        service, username,
+                    )
+                    return val
+        except Exception:
+            pass
         return ""
 
     @property

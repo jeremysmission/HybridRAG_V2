@@ -1,0 +1,204 @@
+{
+  "probe": "sprint9_3_bounded_gpu_retrieval_probe",
+  "timestamp": "2026-04-10T12:45:06",
+  "device": "cuda:1",
+  "device_count": 2,
+  "model": "nomic-ai/nomic-embed-text-v1.5",
+  "sample_size": 1074,
+  "sample_by_family": {
+    "dm_authority": 160,
+    "logistics": 220,
+    "cyber": 34,
+    "archive": 220,
+    "visual": 220,
+    "other": 220
+  },
+  "weights": {
+    "dm_authority_boost": 1.25,
+    "deliverable_boost": 0.75,
+    "logistics_boost": 0.55,
+    "cyber_boost": 0.75,
+    "archive_penalty": -0.9,
+    "archive_penalty_historical": -0.25,
+    "visual_penalty": -0.65
+  },
+  "domains": {
+    "logistics": {
+      "queries": [
+        {
+          "query": "Find purchase order and CLIN records with vendor and acquisition date.",
+          "baseline_top10_target_hits": 10,
+          "weighted_top10_target_hits": 10,
+          "baseline_top10_archive_hits": 0,
+          "weighted_top10_archive_hits": 0,
+          "baseline_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx"
+          ],
+          "weighted_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx"
+          ]
+        },
+        {
+          "query": "Show shipment DD250 entries with part numbers and serial numbers.",
+          "baseline_top10_target_hits": 8,
+          "weighted_top10_target_hits": 8,
+          "baseline_top10_archive_hits": 1,
+          "weighted_top10_archive_hits": 0,
+          "baseline_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx"
+          ],
+          "weighted_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_Corrected Copy.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13).pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx"
+          ]
+        },
+        {
+          "query": "List procurement requests and purchase order status for logistics items.",
+          "baseline_top10_target_hits": 10,
+          "weighted_top10_target_hits": 10,
+          "baseline_top10_archive_hits": 0,
+          "weighted_top10_archive_hits": 0,
+          "baseline_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx"
+          ],
+          "weighted_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx"
+          ]
+        }
+      ],
+      "avg_top10_target_hits_baseline": 9.33,
+      "avg_top10_target_hits_weighted": 9.33,
+      "avg_top10_archive_hits_baseline": 0.33,
+      "avg_top10_archive_hits_weighted": 0.0
+    },
+    "cyber": {
+      "queries": [
+        {
+          "query": "Summarize ACAS findings by severity and remediation status.",
+          "baseline_top10_target_hits": 0,
+          "weighted_top10_target_hits": 0,
+          "baseline_top10_archive_hits": 3,
+          "weighted_top10_archive_hits": 0,
+          "baseline_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)\\1_Site Selection\\Location Documents\\2013-Alpena Hazard Mitigation 2-Environment.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\Aztec Anchor Repair SOW R1.doc",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\Aztec Anchor Repair SOW.doc"
+          ],
+          "weighted_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13).pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_Corrected Copy.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)\\1_Site Selection\\Location Documents\\2013-Alpena Hazard Mitigation 2-Environment.pdf"
+          ]
+        },
+        {
+          "query": "Which STIG waiver items remain open with RMF implications?",
+          "baseline_top10_target_hits": 4,
+          "weighted_top10_target_hits": 1,
+          "baseline_top10_archive_hits": 3,
+          "weighted_top10_archive_hits": 0,
+          "baseline_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Awase (Okinawa JP)\\2025-05-01 thru 05-15 (ASV)(CF-FS)\\Travel Approval Forms\\AirfareWaiver_Seagren.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\Aztec Anchor Repair SOW R1.doc",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Azores\\2024-06-05 thru 06-16 (Lajes Azores-Install)(EC-JD)\\Receipts\\jdettler\\AirfareWaiver-b3bf6fba-19c5-4959-8afe-531364505627.pdf"
+          ],
+          "weighted_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_Corrected Copy.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13).pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)\\1_Site Selection\\Reports\\Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO).doc"
+          ]
+        },
+        {
+          "query": "List cybersecurity findings tied to CCI or IAVM references.",
+          "baseline_top10_target_hits": 0,
+          "weighted_top10_target_hits": 2,
+          "baseline_top10_archive_hits": 9,
+          "weighted_top10_archive_hits": 0,
+          "baseline_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\Aztec Anchor Repair SOW R1.doc",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\Aztec Anchor Repair SOW.doc",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\Aztec Anchor Repair SOW R1.doc"
+          ],
+          "weighted_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13).pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_Corrected Copy.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)\\1_Site Selection\\Reports\\Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO).pdf"
+          ]
+        }
+      ],
+      "avg_top10_target_hits_baseline": 1.33,
+      "avg_top10_target_hits_weighted": 1.0,
+      "avg_top10_archive_hits_baseline": 5.0,
+      "avg_top10_archive_hits_weighted": 0.0
+    },
+    "dm_authority": {
+      "queries": [
+        {
+          "query": "Find authoritative CDRL deliverable references for data accession records.",
+          "baseline_top10_target_hits": 0,
+          "weighted_top10_target_hits": 3,
+          "baseline_top10_archive_hits": 5,
+          "weighted_top10_archive_hits": 0,
+          "baseline_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\TSSI Anchor Repair SOW.doc",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)\\EEMS\\NG Packing List-ASI (HANDCARRY)_1.xlsx"
+          ],
+          "weighted_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_Corrected Copy.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13).pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)\\1_Site Selection\\Reports\\Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO).pdf"
+          ]
+        },
+        {
+          "query": "What DM restricted deliverable revision is current for software delivery?",
+          "baseline_top10_target_hits": 0,
+          "weighted_top10_target_hits": 4,
+          "baseline_top10_archive_hits": 7,
+          "weighted_top10_archive_hits": 0,
+          "baseline_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)\\1_Site Selection\\Location Documents\\CH-02.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)\\1_Site Selection\\Location Documents\\CH-02.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\TSSI Anchor Repair SOW.doc"
+          ],
+          "weighted_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)\\1_Site Selection\\Reports\\Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO).pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_Corrected Copy.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13).pdf"
+          ]
+        },
+        {
+          "query": "Return customer deliverable remarks and revision signals for formal artifacts.",
+          "baseline_top10_target_hits": 2,
+          "weighted_top10_target_hits": 10,
+          "baseline_top10_archive_hits": 6,
+          "weighted_top10_archive_hits": 0,
+          "baseline_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\Aztec Anchor Repair SOW.doc",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\TSSI Anchor Repair SOW.doc",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2019-10-13 thru 10-30 (NEXION_ASV-RTS)(ISTO-ASV)(Seagren-Womelsdorff)\\Ascension Anchor Repair SOW-TSSI\\Archive\\TSSI Anchor Repair SOW Rough Draft 1.doc"
+          ],
+          "weighted_top3_source_paths": [
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_Corrected Copy.pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13).pdf",
+            "ProductionSource\\verified\\source\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)\\2013 July\\Reports\\Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13).pdf"
+          ]
+        }
+      ],
+      "avg_top10_target_hits_baseline": 0.67,
+      "avg_top10_target_hits_weighted": 5.67,
+      "avg_top10_archive_hits_baseline": 6.0,
+      "avg_top10_archive_hits_weighted": 0.0
+    }
+  }
+}
