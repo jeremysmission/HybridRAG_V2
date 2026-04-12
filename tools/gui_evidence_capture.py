@@ -4,7 +4,7 @@ Lane 9.2 targeted GUI evidence capture for HybridRAG V2.
 This is not a general GUI harness. It captures code-driven evidence for:
   - launch_gui resolving config/config.yaml
   - simplified Query / Entities / Settings surface
-  - read-only Settings panel wording and runtime count refresh
+  - read-only Settings panel contract and runtime count refresh
 """
 
 from __future__ import annotations
@@ -218,9 +218,17 @@ def capture_gui_checks(output_dir: Path, visible: bool) -> tuple[list[dict], lis
     doc_text = inspect.getdoc(SettingsPanel) or ""
     wording = "config/config.yaml and restarting."
     checks.append({
-        "name": "settings_guidance_wording",
+        "name": "settings_guidance_source_contract",
         "passed": wording in doc_text,
-        "details": {"required_phrase": wording, "docstring_present": bool(doc_text)},
+        "details": {
+            "required_phrase": wording,
+            "docstring_present": bool(doc_text),
+            "rendered_guidance_present": wording in rendered_texts,
+            "scope_note": (
+                "Source-level check only. This validates the SettingsPanel "
+                "implementation guidance contract, not operator-visible widget text."
+            ),
+        },
     })
 
     before_counts = panel._counts_label.cget("text")
