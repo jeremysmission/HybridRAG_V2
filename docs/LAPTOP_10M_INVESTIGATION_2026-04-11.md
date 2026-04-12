@@ -1,9 +1,9 @@
 # Laptop LanceDB 10,000,000 chunk investigation
 
 **Date:** 2026-04-11 MDT
-**Agent:** Agent 1
+**Agent:** reviewer
 **Trigger:** Laptop's `C:\HybridRAG_V2\data\index\lancedb` landed at exactly
-10,000,000 chunks instead of the canonical 10,435,593 Beast has.
+10,000,000 chunks instead of the canonical 10,435,593 primary workstation has.
 
 ## What I searched
 
@@ -18,7 +18,7 @@ A full sweep across V2 code, V2 config, and the installed lancedb wheel:
   no Python-side row/byte caps.
 - Byte-level constants (`10 * 1024^3`, `10_737_418_240`, pyarrow int32
   buffer limits, max_rows_per_file, max_bytes_per_fragment) — zero matches.
-- Beast's on-disk fragment layout: **18 fragments, 41.6 GB data, largest
+- primary workstation's on-disk fragment layout: **18 fragments, 41.6 GB data, largest
   4.58 GB, avg 2.3 GB, ~4 KB per chunk.** 10M chunks on this ratio would
   occupy ~40 GB, not 10 GB, so the "10 GB cap" hypothesis fails the
   per-chunk math.
@@ -41,7 +41,7 @@ plausible non-code causes are:
    `optimize()`'s `cleanup_older_than=timedelta(seconds=0)` — theoretical,
    but would need to coincidentally land at exactly 10M.
 
-None of these are code bugs that I can fix at the source from Beast.
+None of these are code bugs that I can fix at the source from primary workstation.
 
 ## The durable fix
 
@@ -53,8 +53,17 @@ that runs a cheap `count_rows()` check after every ingest and asserts:
 - `manifest.chunk_count == attempted` — when a CorpusForge manifest
   is supplied, its count matches what actually got handed to the
   store.
-- `inserted + duplicates == attempted` — the arithmetic identity that
-  must hold on every clean ingest.
+- `0 <= inserted <= attempted` — sanity check on the ingest-return
+  value. A negative `inserted` means the caller handed back an
+  invalid counter; `inserted > attempted` means the caller
+  over-counted. Both surface as separate issue lines.
+
+Note: `duplicates` is a derived field (`attempted - inserted`), not an
+independently enforced invariant. Round 2 QA caught an earlier version
+of this doc that overstated rule 3 as `inserted + duplicates ==
+attempted`; that identity holds by construction of `duplicates` and
+wouldn't catch a new bug class. The actual rule 3 is the bounds check
+above.
 
 Both the CLI (`scripts/import_embedengine.py`) and GUI
 (`scripts/import_extract_gui.py`) import paths call this helper and
@@ -74,4 +83,4 @@ days later as "why is Tier 1 reporting 10,000,000 / 10,000,000".
   after a botched write. Worth reviewing separately — not in scope
   for this commit, per strict-scope discipline.
 
-Signed: Agent 1 | HybridRAG_V2 | 2026-04-11 MDT
+Signed: reviewer | HybridRAG_V2 | 2026-04-11 MDT
