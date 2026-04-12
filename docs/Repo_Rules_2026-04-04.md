@@ -6,6 +6,16 @@
 
 ---
 
+## 0. Read First — Agent Research Standing Orders
+
+**All agents:** before implementing anything non-trivial, read
+[`docs/AGENT_RESEARCH_STANDING_ORDERS.md`](AGENT_RESEARCH_STANDING_ORDERS.md)
+— bias toward recency, cite sources, verify library APIs against current
+docs before committing to a design. Default assumption is that your
+training data is stale.
+
+---
+
 ## 1. Code Rules
 
 - **500 lines max per class** (comments/docstrings excluded). Keeps code AI-reviewable, portable, and modular.
