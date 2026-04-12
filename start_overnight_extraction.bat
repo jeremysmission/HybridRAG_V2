@@ -1,19 +1,33 @@
 @echo off
-title HybridRAG V2 — Overnight Extraction (Dual GPU)
+title HybridRAG V2 - Clone1 / phi4 Overnight Extraction
 setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
 
 REM ================================================================
-REM  Overnight Extraction — Dual GPU Workstation Runner
+REM  Clone1 / phi4 Overnight Extraction  -- NOT V2 tiered_extract
 REM ================================================================
-REM  Runs phi4:14b extraction on Clone1 chunks using both 3090s.
-REM  GPU 0 handles first half, GPU 1 handles second half.
-REM  Leave running overnight — resume with --resume flag.
+REM  READ THIS FIRST:
+REM    This launcher runs the Clone1 / Ollama-phi4 overnight pipeline.
+REM    It reads chunks from a HybridRAG3_Clone1 SQLite index (default:
+REM    %USERPROFILE%\HybridRAG3_Clone1\data\index\hybridrag.sqlite3)
+REM    and runs phi4:14b extraction via a local Ollama server.
 REM
-REM  Pre-reqs:
+REM    This is NOT the V2 LanceStore Tier 1 + Tier 2 (GLiNER) pipeline.
+REM    If you want V2 tiered extraction, do one of these instead:
+REM
+REM      .venv\Scripts\python.exe scripts\tiered_extract.py --tier 1
+REM      .venv\Scripts\python.exe scripts\tiered_extract.py --tier 2
+REM      start_gui.bat  (then Skip Import -> Max Tier 1/2)
+REM
+REM    Tier 1 (regex) is safe unattended. Tier 2 (GLiNER/GPU) has a
+REM    known open issue -- do not walk away from an unbounded Tier 2
+REM    run until that is fixed.
+REM
+REM  Pre-reqs for THIS pipeline (Clone1 / phi4):
 REM    - Ollama running (ollama serve)
 REM    - phi4:14b-q4_K_M pulled
-REM    - V2 venv set up
+REM    - V2 venv set up (see INSTALL_WORKSTATION.bat)
+REM    - A populated Clone1 SQLite index reachable from this machine
 REM
 REM  Usage:
 REM    start_overnight_extraction.bat           (default 2000 chunks)

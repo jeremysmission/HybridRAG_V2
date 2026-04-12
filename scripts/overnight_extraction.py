@@ -1,10 +1,21 @@
 """
-Overnight local Extraction — local phi4 background runner.
+Clone1 / phi4 Overnight Extraction -- NOT the V2 LanceStore tiering path.
 
-Pulls chunks from Clone1 index (read-only), runs phi4 extraction via Ollama,
-inserts entities + relationships into V2 SQLite stores.
+IMPORTANT -- read this before running:
+  This script is the Clone1 / Ollama-phi4 background runner. It pulls chunks
+  from a HybridRAG3_Clone1 SQLite index (read-only) and runs phi4 LLM
+  extraction via a local Ollama server, then writes entities and
+  relationships into the V2 SQLite stores.
 
-Designed to run unattended overnight on the local development workstation.
+  This is NOT the same pipeline as ``scripts/tiered_extract.py``. If you
+  want the V2 Tier 1 (regex) + Tier 2 (GLiNER) extraction pipeline that
+  reads from the V2 LanceStore, use::
+
+      .venv\\Scripts\\python.exe scripts\\tiered_extract.py --tier 1
+      .venv\\Scripts\\python.exe scripts\\tiered_extract.py --tier 2   # GLiNER (GPU)
+
+  or the GUI: ``start_gui.bat`` -> Skip Import -> Max Tier 1/2.
+
 Two modes:
   - Single GPU (default): one Ollama stream on GPU 0
   - Split local mode: two processes, split chunks, merge results
@@ -14,6 +25,7 @@ Usage:
   python scripts/overnight_extraction.py --limit 1000 --gpu 0
   python scripts/overnight_extraction.py --limit 5000 --resume
   python scripts/overnight_extraction.py --status
+  python scripts/overnight_extraction.py --clone1-db C:\\path\\to\\hybridrag.sqlite3
 
 Output:
   - Entities + relationships in data/index/entities.sqlite3
@@ -46,7 +58,21 @@ from src.store.relationship_store import RelationshipStore
 # Config
 # ---------------------------------------------------------------------------
 
-CLONE1_DB = r"{USER_HOME}\HybridRAG3_Clone1\data\index\hybridrag.sqlite3"
+def _default_clone1_db() -> str:
+    """Resolve the default Clone1 SQLite path from the operator's home dir.
+
+    Historical note: an earlier revision of this file used a raw-string
+    literal ``r"{USER_HOME}\\HybridRAG3_Clone1\\..."`` that was never
+    substituted by any templating step, so the script would hard-fail at
+    startup on every machine with "Clone1 DB not found at {USER_HOME}\\...".
+    Use ``Path.home()`` so the default resolves correctly on any Windows
+    user profile, and let ``--clone1-db`` override it when the Clone1 index
+    lives somewhere else.
+    """
+    return str(Path.home() / "HybridRAG3_Clone1" / "data" / "index" / "hybridrag.sqlite3")
+
+
+CLONE1_DB = _default_clone1_db()
 PROGRESS_FILE = "data/extraction_progress.json"
 DEFAULT_LIMIT = 2000
 BATCH_LOG_EVERY = 10  # log progress every N chunks
@@ -158,6 +184,22 @@ def main():
     # Verify Clone1 exists
     if not Path(args.clone1_db).exists():
         print(f"ERROR: Clone1 DB not found at {args.clone1_db}")
+        print()
+        print("This script is the Clone1 / Ollama-phi4 overnight pipeline. It needs a")
+        print("HybridRAG3_Clone1 SQLite index to read chunks from. If you do not have")
+        print("Clone1 on this machine, you probably want a DIFFERENT pipeline:")
+        print()
+        print("  V2 Tier 1 (regex, safe unattended):")
+        print("    .venv\\Scripts\\python.exe scripts\\tiered_extract.py --tier 1")
+        print()
+        print("  V2 Tier 2 (GLiNER GPU; do NOT run unattended while the known Tier 2")
+        print("  CUDA issue is open):")
+        print("    .venv\\Scripts\\python.exe scripts\\tiered_extract.py --tier 2")
+        print()
+        print("  GUI walk-away: start_gui.bat  ->  Skip Import  ->  Max Tier 1")
+        print()
+        print("Otherwise, point --clone1-db at an existing Clone1 index, for example:")
+        print("  python scripts/overnight_extraction.py --clone1-db C:\\path\\to\\hybridrag.sqlite3")
         sys.exit(1)
 
     # Sample chunks
