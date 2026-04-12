@@ -527,6 +527,40 @@ if ($verifyExit -eq 0) {
 } else {
     Write-Warn "verify_install.py reported failures -- attempting one-pass recovery"
     & $VenvPip install -r $reqFile @TrustedHosts 2>&1 | Out-Null
+
+    # Torch CUDA integrity re-check after recovery-path pip install.
+    # verify_install.py only checks that torch IMPORTS; it does NOT verify
+    # torch.cuda.is_available() or the +cu128 lane (see
+    # scripts\verify_install.py:79 / CRITICAL_IMPORTS). The recovery
+    # `pip install -r requirements.txt` can pull a CPU-only or older torch
+    # wheel transitively (gliner / sentence-transformers / huggingface-hub)
+    # and silently clobber the cu128 build that Section 6 installed. Detect
+    # that here BEFORE re-running verify_install.py so auto-repair fires on
+    # the exact failure mode CoPilot+ QA flagged on commit 0987126.
+    if ($RequireCuda) {
+        & $VenvPython -c "import sys, torch; sys.exit(0 if (torch.cuda.is_available() and '+cu128' in torch.__version__) else 1)" 2>$null
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warn "Recovery pip install dropped CUDA torch -- auto-repairing cu128 lane"
+            $cudaRepair = Invoke-WithRetry -Label "torch cu128 recovery auto-repair" -Action {
+                & $VenvPip install "torch==2.7.1" --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps @TrustedHosts --quiet 2>&1 | Out-Null
+            }
+            if (-not $cudaRepair) {
+                Write-Fail "torch cu128 auto-repair failed after 3 attempts"
+                Write-TorchInstallGuidance -RepoName "HybridRAG V2" -RuntimeInfo $RuntimeInfo -CudaExpected
+                exit 1
+            }
+            & $VenvPython -c "import sys, torch; sys.exit(0 if (torch.cuda.is_available() and '+cu128' in torch.__version__) else 1)" 2>$null
+            if ($LASTEXITCODE -ne 0) {
+                Write-Fail "torch still not cu128 / CUDA-capable after recovery auto-repair"
+                Write-Info "Diagnose with: .venv\Scripts\python.exe -c ""import torch; print(torch.__version__, torch.cuda.is_available())"""
+                exit 1
+            }
+            Write-Ok "torch cu128 lane restored after recovery-path auto-repair"
+        } else {
+            Write-Ok "torch cu128 lane preserved through recovery pip install"
+        }
+    }
+
     $verifyOutput2 = & $VenvPython $verifyScript 2>&1
     $verifyExit2 = $LASTEXITCODE
     $verifyText2 = ($verifyOutput2 | Out-String).TrimEnd()
