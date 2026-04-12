@@ -151,8 +151,17 @@ class ImportExtractRunner:
             from src.config.schema import load_config
             config = load_config(config_path)
 
-            source_path = Path(source).resolve()
-            self._set_stat("source_path", str(source_path))
+            # When Skip Import is on, the source folder is intentionally
+            # unused — show the existing LanceDB path in the stat panel
+            # instead of resolving an empty Path() to the cwd, which
+            # produced misleading stats during the laptop testing session.
+            if skip_import:
+                lance_db_display = str(Path(config.paths.lance_db))
+                self._set_stat("source_path", f"(skipped — using {lance_db_display})")
+                self._log(f"Import phase skipped — using existing LanceDB at {lance_db_display}")
+            else:
+                source_path = Path(source).resolve()
+                self._set_stat("source_path", str(source_path))
 
             if not skip_import:
                 # ---- IMPORT PHASE ----
@@ -864,11 +873,32 @@ class ImportExtractGUI:
         source = self._source_var.get().strip()
         skip_import = self._skip_import_var.get()
 
-        if not skip_import and not source:
-            self.append_log("ERROR: Select a source export folder first.", "ERROR")
-            return
-
-        if not skip_import:
+        # Skip Import path: source folder is explicitly not needed, because
+        # we read chunks from the already-populated LanceDB. Fire an
+        # operator-visible confirmation so the user knows their checkbox
+        # was honored and understands why no folder was required.
+        if skip_import:
+            if source:
+                self.append_log(
+                    f"Skip Import is checked — ignoring source folder '{source}' "
+                    f"and reading from the existing LanceDB store.",
+                    "INFO",
+                )
+            else:
+                self.append_log(
+                    "Skip Import is checked — reading from the existing LanceDB store.",
+                    "INFO",
+                )
+        else:
+            # Non-skip path: source folder is required and must contain
+            # a valid CorpusForge export (chunks.jsonl + vectors.npy).
+            if not source:
+                self.append_log(
+                    "ERROR: Select a source export folder first, "
+                    "or check 'Skip Import' if the LanceDB is already populated.",
+                    "ERROR",
+                )
+                return
             source_path = Path(source)
             if not source_path.is_dir():
                 self.append_log(f"ERROR: Not a directory: {source}", "ERROR")
@@ -876,7 +906,10 @@ class ImportExtractGUI:
             chunks_file = source_path / "chunks.jsonl"
             vectors_file = source_path / "vectors.npy"
             if not chunks_file.exists() or not vectors_file.exists():
-                self.append_log("ERROR: Missing chunks.jsonl or vectors.npy in export folder.", "ERROR")
+                self.append_log(
+                    "ERROR: Missing chunks.jsonl or vectors.npy in export folder.",
+                    "ERROR",
+                )
                 return
 
         # Lock UI

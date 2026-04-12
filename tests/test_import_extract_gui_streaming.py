@@ -513,3 +513,204 @@ class TestGuiUpdates:
         assert len(fake_gui.progress_history) >= 2
         assert fake_gui.progress_history[0] == (0, 0)  # phase reset
         assert fake_gui.progress_history[-1][0] == 50
+
+
+# ---------------------------------------------------------------------------
+# ImportExtractGUI._on_start() validation — Skip Import interaction
+# ---------------------------------------------------------------------------
+#
+# Regression tests for the "Skip Import blocks on empty source folder"
+# papercut reported during laptop testing on 2026-04-11. The
+# _on_start() validation must:
+#
+#   - Allow Start when Skip Import is checked, regardless of source.
+#   - Allow Start when Skip Import is checked AND source is non-empty
+#     (source is ignored with an info log).
+#   - Block Start with a clear error when Skip Import is unchecked AND
+#     source is empty.
+#   - Block Start with a missing-file error when Skip Import is
+#     unchecked AND source points at a folder without chunks.jsonl or
+#     vectors.npy.
+#
+# These tests instantiate the real ImportExtractGUI with a real Tk root
+# (withdrawn, no mainloop) so we exercise the genuine StringVar /
+# BooleanVar / ttk.Checkbutton bindings rather than a stub. The runner
+# thread is mocked so tests don't actually start a background pipeline.
+
+
+@pytest.fixture
+def real_gui_root():
+    """Real Tk root for headless validation tests.
+
+    Withdraws the window so no on-screen flash, destroys on teardown.
+    Some Tk styles error out on Windows if `Tk()` can't init a display —
+    we skip the whole class in that unlikely case.
+    """
+    import tkinter as tk
+
+    try:
+        root = tk.Tk()
+    except tk.TclError as e:  # pragma: no cover - only hits on broken displays
+        pytest.skip(f"Tk not available in this environment: {e}")
+    root.withdraw()
+    yield root
+    try:
+        root.destroy()
+    except Exception:
+        pass
+
+
+class TestOnStartSkipImport:
+    """Guard the Skip Import checkbox / source folder validation."""
+
+    def _build_gui(self, root, monkeypatch):
+        """Instantiate ImportExtractGUI with the runner's start method
+        stubbed so _on_start can't spawn a background thread."""
+        from scripts.import_extract_gui import ImportExtractGUI, ImportExtractRunner
+
+        started_calls: list[tuple] = []
+
+        def fake_start(self, source, max_tier, config_path, skip_import):
+            started_calls.append((source, max_tier, config_path, skip_import))
+            # Mimic what start() normally does to keep GUI state sane
+            self._stop_event = self._stop_event if hasattr(self, "_stop_event") else None
+
+        monkeypatch.setattr(ImportExtractRunner, "start", fake_start)
+
+        gui = ImportExtractGUI(root)
+        # Capture every log line the validation path writes
+        logs: list[tuple[str, str]] = []
+        orig_append = gui.append_log
+
+        def capture_log(msg, level="INFO"):
+            logs.append((level, msg))
+            # Don't re-run the real widget call — avoids write after destroy
+            # races and lets us drive the test purely through BooleanVars.
+
+        monkeypatch.setattr(gui, "append_log", capture_log)
+
+        return gui, logs, started_calls
+
+    def test_skip_import_with_empty_source_allows_start(self, real_gui_root, monkeypatch):
+        gui, logs, started_calls = self._build_gui(real_gui_root, monkeypatch)
+        gui._source_var.set("")
+        gui._skip_import_var.set(True)
+
+        gui._on_start()
+
+        # No error, at least one INFO log mentioning skip_import being honored
+        assert not any(level == "ERROR" for level, _ in logs), (
+            f"Skip Import + empty source should NOT error, got logs: {logs}"
+        )
+        assert any("Skip Import" in msg for _, msg in logs), (
+            f"Expected visible skip-import confirmation, got: {logs}"
+        )
+        # Runner was asked to start
+        assert len(started_calls) == 1
+        src, _, _, skip = started_calls[0]
+        assert src == ""
+        assert skip is True
+
+    def test_skip_import_with_filled_source_ignores_folder(
+        self, real_gui_root, tmp_path, monkeypatch
+    ):
+        gui, logs, started_calls = self._build_gui(real_gui_root, monkeypatch)
+        gui._source_var.set(str(tmp_path))
+        gui._skip_import_var.set(True)
+
+        gui._on_start()
+
+        # The folder does NOT have chunks.jsonl or vectors.npy, but we
+        # should NOT error because Skip Import is checked.
+        assert not any(level == "ERROR" for level, _ in logs), (
+            f"Skip Import should ignore folder validation, got: {logs}"
+        )
+        assert any("ignoring source folder" in msg for _, msg in logs), (
+            f"Expected 'ignoring source folder' log, got: {logs}"
+        )
+        assert len(started_calls) == 1
+
+    def test_no_skip_import_empty_source_blocks_with_clear_error(
+        self, real_gui_root, monkeypatch
+    ):
+        gui, logs, started_calls = self._build_gui(real_gui_root, monkeypatch)
+        gui._source_var.set("")
+        gui._skip_import_var.set(False)
+
+        gui._on_start()
+
+        # Must error and must NOT start the runner
+        errors = [msg for level, msg in logs if level == "ERROR"]
+        assert errors, f"Expected error for empty source + no skip, got: {logs}"
+        assert any("Select a source export folder" in e for e in errors)
+        # Error message also hints at the Skip Import alternative — UX polish
+        assert any("Skip Import" in e for e in errors), (
+            "Error should mention Skip Import as the alternative for operators "
+            f"who already have a populated store, got: {errors}"
+        )
+        assert started_calls == []
+
+    def test_no_skip_import_missing_export_files_blocks(
+        self, real_gui_root, tmp_path, monkeypatch
+    ):
+        gui, logs, started_calls = self._build_gui(real_gui_root, monkeypatch)
+        # Empty directory — no chunks.jsonl, no vectors.npy
+        gui._source_var.set(str(tmp_path))
+        gui._skip_import_var.set(False)
+
+        gui._on_start()
+
+        errors = [msg for level, msg in logs if level == "ERROR"]
+        assert errors
+        assert any(
+            "chunks.jsonl" in e or "vectors.npy" in e for e in errors
+        ), f"Expected missing-file error, got: {errors}"
+        assert started_calls == []
+
+    def test_no_skip_import_not_a_directory_blocks(
+        self, real_gui_root, tmp_path, monkeypatch
+    ):
+        gui, logs, started_calls = self._build_gui(real_gui_root, monkeypatch)
+        # Point at a file, not a directory
+        fake_file = tmp_path / "not_a_dir.txt"
+        fake_file.write_text("", encoding="utf-8")
+        gui._source_var.set(str(fake_file))
+        gui._skip_import_var.set(False)
+
+        gui._on_start()
+
+        errors = [msg for level, msg in logs if level == "ERROR"]
+        assert any("Not a directory" in e for e in errors), (
+            f"Expected 'Not a directory' error, got: {errors}"
+        )
+        assert started_calls == []
+
+
+# ---------------------------------------------------------------------------
+# Runner: _run() Skip Import path must not Path("").resolve() the source
+# ---------------------------------------------------------------------------
+
+
+class TestRunnerSkipImportStats:
+    """When skip_import=True, the runner must NOT call Path(source).resolve()
+    on an empty source (which resolves to cwd and leaks a misleading path
+    into the source_path stat). Instead it must set a 'skipped' stat and
+    log that the import phase is being bypassed.
+    """
+
+    def test_skip_import_sets_skipped_stat(self, tmp_path, fake_gui, monkeypatch):
+        _build_real_store(tmp_path, n_chunks=20, prose_ratio=1.0).close()
+
+        runner = ImportExtractRunner(fake_gui)
+        _invoke_run(
+            runner, tmp_path, max_tier=1, monkeypatch=monkeypatch,
+        )
+
+        stat = fake_gui.stats.get("source_path", "")
+        assert "skipped" in stat.lower(), (
+            f"Expected source_path stat to show 'skipped' marker when "
+            f"skip_import=True, got: {stat!r}"
+        )
+        assert any("Import phase skipped" in msg for _, msg in fake_gui.log_lines), (
+            "Expected an operator-visible log line confirming the skip"
+        )
