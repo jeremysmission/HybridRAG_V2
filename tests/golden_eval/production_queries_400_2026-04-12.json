@@ -8180,5 +8180,1328 @@
     },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned 12 dated 2024 PM rollups; --like '%A009%' returned 4 dated 2024 CDRL deliverables. The two families overlap in time but not 1:1."
+  },
+  {
+    "query_id": "PQ-446",
+    "user_input": "Show me the IGSI-2431 enterprise program Systems Engineering Management Plan from 2024-08-28.",
+    "reference": "47QFRA22F0009_IGSI-2431_enterprise program_Systems_Engineering_Management_Plan_2024-08-28.pdf under 1.0 enterprise program DM - Restricted/OASIS/A013 - System Engineering Plan (SEMP)/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A013 - System Engineering Plan (SEMP)/47QFRA22F0009_IGSI-2431_enterprise program_Systems_Engineering_Management_Plan_2024-08-28.pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A013 - System Engineering Plan (SEMP)/47QFRA22F0009_IGSI-2431%2024-08-28%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated A013 SEMP deliverable. Filename embeds contract + IGSI + date.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2431"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ],
+      "DATE": [
+        "2024-08-28"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A013%' returned IGSI-2431 dated 2024-08-28."
+  },
+  {
+    "query_id": "PQ-447",
+    "user_input": "Show me the IGSCC-126 Systems Engineering Plan delivered under contract FA881525FB002.",
+    "reference": "FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.pdf and .docx, both under 1.0 enterprise program DM - Restricted/IGSCC/A013 - System Engineering Plan (SEMP)/. A 2025-09-26 dated PDF variant also exists in the same folder.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/IGSCC/A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.pdf",
+      "1.0 enterprise program DM - Restricted/IGSCC/A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.docx",
+      "1.0 enterprise program DM - Restricted/IGSCC/A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_2025-09-26.pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated%"
+    ],
+    "difficulty": "easy",
+    "rationale": "A013 SEMP under the new FA881525FB002 contract. Both PDF and DOCX variants exist for the same deliverable.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSCC-126"
+      ],
+      "CONTRACT": [
+        "FA881525FB002"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A013%' returned IGSCC-126 SEMP in three formats/dates under FA881525FB002."
+  },
+  {
+    "query_id": "PQ-448",
+    "user_input": "Where is the original IGSI-66 enterprise program Systems Engineering Management Plan filed?",
+    "reference": "Deliverables Report IGSI-66 enterprise program Systems Engineering Management Plan (A013).pdf under 1.0 enterprise program DM - Restricted/OASIS/A013 - System Engineering Plan (SEMP)/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A013 - System Engineering Plan (SEMP)/Deliverables Report IGSI-66 enterprise program Systems Engineering Management Plan (A013).pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A013 - System Engineering Plan (SEMP)/Deliverables Report IGSI-66%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Older A013 deliverable lookup. Original Deliverables-Report-style filename.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-66"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A013%' returned the IGSI-66 SEMP deliverable."
+  },
+  {
+    "query_id": "PQ-449",
+    "user_input": "How many distinct A013 SEMP deliverable variants are filed across the OASIS, IGSCC, and 1.5 enterprise program CDRLS trees?",
+    "reference": "Three distinct A013 SEMP deliverables across trees: IGSI-66 (legacy, under OASIS), IGSI-2431 (47QFRA22F0009, OASIS, 2024-08-28), IGSCC-126 (FA881525FB002, present in both IGSCC tree and 1.5 enterprise program CDRLS tree, with 'Updated' and dated 2025-09-26 variants).",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A013 - System Engineering Plan (SEMP)/Deliverables Report IGSI-66 enterprise program Systems Engineering Management Plan (A013).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A013 - System Engineering Plan (SEMP)/47QFRA22F0009_IGSI-2431_enterprise program_Systems_Engineering_Management_Plan_2024-08-28.pdf",
+      "1.0 enterprise program DM - Restricted/IGSCC/A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.pdf",
+      "1.5 enterprise program CDRLS/A013 - System Engineering Management Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.docx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A013 - System Engineering%SEMP%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-tree narrow enumeration. Confirmed: IGSI-66 (OASIS, original), IGSI-2431 (OASIS, 2024-08-28), IGSCC-126 (IGSCC + 1.5 CDRLS, FA881525FB002).",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-66",
+        "IGSI-2431",
+        "IGSCC-126"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A013%' returned three distinct A013 SEMP IGSI/IGSCC IDs across OASIS, IGSCC, and 1.5 CDRLS subtrees."
+  },
+  {
+    "query_id": "PQ-450",
+    "user_input": "What is the difference between the OASIS and IGSCC trees for A013 SEMP deliverables?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%OASIS/A013%",
+      "%IGSCC/A013%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-tree conceptual question. OASIS holds the older 47QFRA22F0009 deliverables; IGSCC holds the newer FA881525FB002 deliverables. Tests SEMANTIC routing without escalating to COMPLEX.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A013%' showed two distinct A013 trees: OASIS (47QFRA22F0009 era) and IGSCC (FA881525FB002 era)."
+  },
+  {
+    "query_id": "PQ-451",
+    "user_input": "Show me the IGSI-1803 Lajes monitoring system Installation Acceptance Test Plan and Procedures from 2024-04-18.",
+    "reference": "47QFRA22F0009_IGSI-1803_Installation_Acceptance_Test_Plan_Procedures_Lajes-monitoring system_2024-04-18.pdf under 1.0 enterprise program DM - Restricted/OASIS/A006 - Installation and Modification Acceptance Test Plan and Procedures/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A006 - Installation and Modification Acceptance Test Plan and Procedures/47QFRA22F0009_IGSI-1803_Installation_Acceptance_Test_Plan_Procedures_Lajes-monitoring system_2024-04-18.pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A006 - Installation and Modification Acceptance Test Plan%IGSI-1803%Lajes%2024-04-18%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated A006 IATP deliverable for Lajes site. Filename encodes contract + IGSI + site + date.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-1803"
+      ],
+      "SITE": [
+        "Lajes"
+      ],
+      "DATE": [
+        "2024-04-18"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' returned IGSI-1803 Lajes IATP dated 2024-04-18."
+  },
+  {
+    "query_id": "PQ-452",
+    "user_input": "Where is the IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan filed?",
+    "reference": "Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).pdf under 1.0 enterprise program DM - Restricted/OASIS/A006 - Installation and Modification Acceptance Test Plan and Procedures/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A006 - Installation and Modification Acceptance Test Plan and Procedures/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A006 - Installation and Modification Acceptance Test Plan%IGSI-103%Okinawa%"
+    ],
+    "difficulty": "easy",
+    "rationale": "A006 deliverable lookup for Okinawa site. Original Deliverables-Report-style filename.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-103"
+      ],
+      "SITE": [
+        "Okinawa"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' returned the IGSI-103 Okinawa IATP deliverable."
+  },
+  {
+    "query_id": "PQ-453",
+    "user_input": "Show me the IGSI-662 legacy monitoring system UDL Modification Test Plan signed by Govt.",
+    "reference": "IGSI-662 UDL Modification Test Plan-Govt_signed.pdf under 1.5 enterprise program CDRLS/A006 - Installation Acceptance Test Plan Procedures/Deliverables Report IGSI-662 legacy monitoring system UDL Modification Test Plan/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A006 - Installation Acceptance Test Plan Procedures/Deliverables Report IGSI-662 legacy monitoring system UDL Modification Test Plan/IGSI-662 UDL Modification Test Plan-Govt_signed.pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A006 - Installation Acceptance Test Plan Procedures%IGSI-662%UDL Modification%Govt_signed%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single signed A006 modification test plan deliverable. Tests retrieval of signature-state-tagged filenames.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-662"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' returned the IGSI-662 UDL Modification Govt_signed PDF."
+  },
+  {
+    "query_id": "PQ-454",
+    "user_input": "Where are the Wake Island Spectrum Analysis A006 deliverables stored?",
+    "reference": "At least three confirmed: SEMS3D-35857 (DRAFT), SEMS3D-36315 (Final), and an Old Versions zip variant. All under 1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/SEMS3D-35857 Wake Island monitoring system Spectrum Analysis (CDRL A006) DRAFT.pdf",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/SEMS3D-36315 Wake Island Spectrum Analysis (CDRL A006)-Final.pdf",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/Old Versions/Wake Island monitoring system Spectrum Analysis (CDRL A006) v5 GCdocx.zip"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A006 - Spectrum Analysis/Wake Spectrum Analysis%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Folder-scoped enumeration of a site-specific A006 sub-family. Confirmed: SEMS3D-35857 (DRAFT) and SEMS3D-36315 (Final), plus an Old Versions zip.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Wake"
+      ],
+      "INCIDENT_ID": [
+        "SEMS3D-35857",
+        "SEMS3D-36315"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' returned 3 distinct Wake Island Spectrum Analysis A006 artifacts."
+  },
+  {
+    "query_id": "PQ-455",
+    "user_input": "What is the relationship between A006 (Installation Acceptance Test Plan) and A007 (Installation Acceptance Test Report) deliverables?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A006 - Installation%Test Plan%",
+      "%A007 - Installation%Test Report%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-CDRL conceptual question on the test plan / test report pairing. Tests SEMANTIC routing on a comparative two-family question.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' and --like '%A007%' returned paired plan/report deliverables for the same sites (e.g., Okinawa)."
+  },
+  {
+    "query_id": "PQ-456",
+    "user_input": "What does the A013 SEMP family typically include?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A013 - System Engineering%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Format / scope semantic question about an A-numbered CDRL family. Tests SEMANTIC routing on a single-family question.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A013%' returned three IGSI/IGSCC SEMP deliverables under 1.0 enterprise program DM - Restricted and 1.5 enterprise program CDRLS subtrees."
+  },
+  {
+    "query_id": "PQ-457",
+    "user_input": "Show me the 2026-01-22 Ascension outgoing shipment packing list.",
+    "reference": "NG Packing List - Ascension (Outgoing).xlsx under 5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_01_22 - Ascension (Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_01_22 - Ascension (Mil-Air)/NG Packing List - Ascension (Outgoing).xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2026 - Shipments/Ascension/2026_01_22 - Ascension (Mil-Air)%NG Packing List - Ascension (Outgoing)%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated outgoing shipment packing list. Folder name encodes date, site, and air channel.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Ascension"
+      ],
+      "DATE": [
+        "2026-01-22"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%2026 - Shipments%' returned the 2026-01-22 Ascension outgoing packing list."
+  },
+  {
+    "query_id": "PQ-458",
+    "user_input": "Show me the 2026-03-09 Ascension return shipment packing list.",
+    "reference": "NG Packing List - Ascension (Return).xlsx under 5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_03_09 - Ascension Return (Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_03_09 - Ascension Return (Mil-Air)/NG Packing List - Ascension (Return).xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2026 - Shipments/Ascension/2026_03_09 - Ascension Return%NG Packing List - Ascension (Return)%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Return-leg companion to PQ-457. Tests retrieval distinguishes outgoing vs return for the same site within ~6 weeks.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Ascension"
+      ],
+      "DATE": [
+        "2026-03-09"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%2026 - Shipments%' returned the 2026-03-09 Ascension return packing list."
+  },
+  {
+    "query_id": "PQ-459",
+    "user_input": "Show me the 2026-03-25 Azores Mil-Air shipment packing list.",
+    "reference": "NG Packing List - Azores 3.25.26.xlsx under 5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_25 - Azores (Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_25 - Azores (Mil-Air)/NG Packing List - Azores 3.25.26.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2026 - Shipments/Azores/2026_03_25 - Azores (Mil-Air)%NG Packing List - Azores 3.25.26%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated Azores shipment. Filename encodes date in M.D.YY shorthand.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Azores"
+      ],
+      "DATE": [
+        "2026-03-25"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%2026 - Shipments%' returned the 2026-03-25 Azores Mil-Air packing list."
+  },
+  {
+    "query_id": "PQ-460",
+    "user_input": "Which Azores shipments were filed in March 2026?",
+    "reference": "Two confirmed: 2026-03-10 Azores (Mil-Air) and 2026-03-25 Azores (Mil-Air), both with NG Packing List xlsx files. Both under 5.0 Logistics/Shipments/2026 - Shipments/Azores/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_10 - Azores (Mil-Air)/NG Packing List - Azores 3.10.26.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_25 - Azores (Mil-Air)/NG Packing List - Azores 3.25.26.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2026 - Shipments/Azores/2026_03_%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow site+month enumeration. Confirmed via folder mining: 2026-03-10 and 2026-03-25 Mil-Air shipments.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Azores"
+      ],
+      "DATE": [
+        "2026-03"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%2026 - Shipments%' returned 2 distinct March 2026 Azores Mil-Air shipment packing lists."
+  },
+  {
+    "query_id": "PQ-461",
+    "user_input": "Which Guam shipments were filed in January 2026?",
+    "reference": "At least three confirmed Guam Com-Air shipments: 2026-01-09 (NEXION TOOLKIT.xlsx), 2026-01-20 (NG Packing List - Guam.xlsx), 2026-01-28 (Final NG Packing List - Guam 1.28.26.xlsx). All under 5.0 Logistics/Shipments/2026 - Shipments/Guam/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Guam/2026_01_09 - Guam (NG Com-Air)/monitoring system TOOLKIT.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Guam/2026_01_20 - Guam (NG Com-Air)/NG Packing List - Guam.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Guam/2026_01_28 - Guam (NG Com-Air)/Final NG Packing List - Guam 1.28.26.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2026 - Shipments/Guam/2026_01_%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow site+month enumeration. Confirmed: 2026-01-09, 2026-01-20, and 2026-01-28 NG Com-Air shipments.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Guam"
+      ],
+      "DATE": [
+        "2026-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%2026 - Shipments%' returned 3 distinct January 2026 Guam Com-Air shipment files."
+  },
+  {
+    "query_id": "PQ-462",
+    "user_input": "Show me the 2026-02-09 Guam return shipment packing list.",
+    "reference": "Final NG Packing List - Return Guam 1-26-26.xlsx under 5.0 Logistics/Shipments/2026 - Shipments/Guam/2026_02_09 - Guam Return (NG Com-Air)/. Note the date drift -- the filename has 1-26-26 but the folder has 2026_02_09.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Guam/2026_02_09 - Guam Return (NG Com-Air)/Final NG Packing List - Return Guam 1-26-26.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2026 - Shipments/Guam/2026_02_09 - Guam Return%Final NG Packing List - Return Guam 1-26-26%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Return-leg shipment with a date drift quirk: filename says 1-26-26 but folder says 2026_02_09. Tests retrieval tolerates internal/external date mismatch.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Guam"
+      ],
+      "DATE": [
+        "2026-02-09"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%2026 - Shipments%' returned the 2026-02-09 Guam Return packing list with a 1-26-26 filename date drift."
+  },
+  {
+    "query_id": "PQ-463",
+    "user_input": "Where are the LDI Repair Equipment 3rd shipment packing lists stored?",
+    "reference": "Two near-duplicate files: NG Packing List - LDI Equipment Repair 3rd Shipment.xlsx and NG Packing List - LDI Equipment Repair 3rd Shipment_1.xlsx, both under 5.0 Logistics/Shipments/2026 - Shipments/Misc/LDI Repair Equipment/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Misc/LDI Repair Equipment/NG Packing List - LDI Equipment Repair 3rd Shipment.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Misc/LDI Repair Equipment/NG Packing List - LDI Equipment Repair 3rd Shipment_1.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2026 - Shipments/Misc/LDI Repair Equipment%3rd Shipment%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Misc-folder shipment lookup. Two near-duplicate xlsx variants exist with the same name except for an _1 suffix.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%2026 - Shipments%' returned both 3rd Shipment packing list xlsx variants."
+  },
+  {
+    "query_id": "PQ-464",
+    "user_input": "Show me the IGSI-721 Misawa monitoring system Installation Acceptance Test Report signed test procedures.",
+    "reference": "Signed Misawa Test Procedures.pdf under 1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-721 Installation Acceptance Test Report Misawa monitoring system (A007)/_Attach/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-721 Installation Acceptance Test Report Misawa monitoring system (A007)/_Attach/Signed Misawa Test Procedures.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A007 - Installation Acceptance Test Report%IGSI-721%Misawa monitoring system%Signed Misawa Test Procedures%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single signed test procedures attachment from a Misawa A007 deliverable.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-721"
+      ],
+      "SITE": [
+        "Misawa"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A007%' returned the IGSI-721 Misawa Signed Test Procedures attachment."
+  },
+  {
+    "query_id": "PQ-465",
+    "user_input": "Show me the IGSI-105 Awase Okinawa monitoring system installation acceptance test plan signed PDF.",
+    "reference": "InstallationAcceptanceTestPlanandProceduresmonitoring systemSigned.pdf (camelcase, no spaces) under 1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-105 Installation Acceptance Test Report AWASE Okinawa JP - monitoring system/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-105 Installation Acceptance Test Report AWASE Okinawa JP - monitoring system/InstallationAcceptanceTestPlanandProceduresmonitoring systemSigned.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A007 - Installation Acceptance Test Report%IGSI-105%AWASE%InstallationAcceptanceTestPlanandProceduresNEXIONSigned%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Signed test plan attachment from the IGSI-105 Awase A007 deliverable. Filename has no spaces (camelcase).",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-105"
+      ],
+      "SITE": [
+        "Awase"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A007%' returned the IGSI-105 AWASE Signed test plan PDF."
+  },
+  {
+    "query_id": "PQ-466",
+    "user_input": "Where is the IGSI-445 Niger legacy monitoring system Acceptance Test Plans and Procedures filed?",
+    "reference": "Niger legacy monitoring system Acceptance Test Plans and Procedures.pdf under 1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-445 Installation Acceptance Test Report Niger legacy monitoring system/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-445 Installation Acceptance Test Report Niger legacy monitoring system/Niger legacy monitoring system Acceptance Test Plans and Procedures.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A007 - Installation Acceptance Test Report%IGSI-445%Niger ISTO%Acceptance Test Plans and Procedures%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single A007 deliverable for Niger site under the legacy monitoring system tree.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-445"
+      ],
+      "SITE": [
+        "Niger"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A007%' returned the IGSI-445 Niger legacy monitoring system test plan PDF."
+  },
+  {
+    "query_id": "PQ-467",
+    "user_input": "Show me the IGSI-813 American Samoa Acceptance Test SSC-SZGGS response email.",
+    "reference": "Email - American Samoa Acceptance Test SSC-SZGGS Response.pdf under 1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-813 Installation Acceptance Test Report American Samoa - legacy monitoring system (A007)/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-813 Installation Acceptance Test Report American Samoa - legacy monitoring system (A007)/Email - American Samoa Acceptance Test SSC-SZGGS Response.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A007%IGSI-813%American Samoa%SSC-SZGGS Response%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Email PDF attachment from a 2018-era Acceptance Test deliverable. Tests retrieval of email-as-PDF artifacts.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-813"
+      ],
+      "SITE": [
+        "American Samoa"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A007%' returned the IGSI-813 American Samoa SSC-SZGGS Response PDF."
+  },
+  {
+    "query_id": "PQ-468",
+    "user_input": "Which sites are represented in the A007 Installation Acceptance Test Report deliverables?",
+    "reference": "At least four sites confirmed: Misawa (IGSI-721), Awase Okinawa JP (IGSI-105), Niger (IGSI-445), and American Samoa (IGSI-813). All under 1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/. The OASIS sibling tree also holds an IGSI-445 PDF variant.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-721 Installation Acceptance Test Report Misawa monitoring system (A007)/_Attach/Signed Misawa Test Procedures.pdf",
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-105 Installation Acceptance Test Report AWASE Okinawa JP - monitoring system/InstallationAcceptanceTestPlanandProceduresmonitoring systemSigned.pdf",
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-445 Installation Acceptance Test Report Niger legacy monitoring system/Niger legacy monitoring system Acceptance Test Plans and Procedures.pdf",
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-813 Installation Acceptance Test Report American Samoa - legacy monitoring system (A007)/Email - American Samoa Acceptance Test SSC-SZGGS Response.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A007 - Installation Acceptance Test Report%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Site enumeration across the A007 family. Confirmed: Misawa, Awase Okinawa, Niger, American Samoa via folder mining.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Misawa",
+        "Awase",
+        "Niger",
+        "American Samoa"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A007%' returned 4 distinct site-specific A007 deliverables."
+  },
+  {
+    "query_id": "PQ-469",
+    "user_input": "Walk me through the IGSI-105 Awase Acceptance Test Report archive structure.",
+    "reference": "The Awase IGSI-105 A007 folder Archive subfolder contains the matching A006 IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (.docx variant), cross-filing the test plan inside the test report deliverable.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-105 Installation Acceptance Test Report Awase Okinawa JP - monitoring system (A007)/Archive/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A007%IGSI-105%Awase Okinawa JP - monitoring system (A007)/Archive%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrative recall on a deliverable's archive structure. The Awase A007 folder cross-references the matching A006 IGSI-103 Okinawa test plan.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Awase"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A007%' returned the IGSI-103 A006 cross-filed under the IGSI-105 A007 Archive folder."
+  },
+  {
+    "query_id": "PQ-470",
+    "user_input": "Show me the Wake Island Spectrum Analysis A006 Final PDF.",
+    "reference": "SEMS3D-36315 Wake Island Spectrum Analysis (CDRL A006)-Final.pdf under 1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/SEMS3D-36315 Wake Island Spectrum Analysis (CDRL A006)-Final.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%SEMS3D-36315 Wake Island Spectrum Analysis (CDRL A006)-Final%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single Final-state spectrum analysis deliverable. Filename has -Final suffix.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "SEMS3D-36315"
+      ],
+      "SITE": [
+        "Wake"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' returned SEMS3D-36315 Wake Spectrum Analysis Final PDF."
+  },
+  {
+    "query_id": "PQ-471",
+    "user_input": "Show me the Wake Island Spectrum Analysis A006 DRAFT PDF.",
+    "reference": "SEMS3D-35857 Wake Island monitoring system Spectrum Analysis (CDRL A006) DRAFT.pdf under 1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/SEMS3D-35857 Wake Island monitoring system Spectrum Analysis (CDRL A006) DRAFT.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%SEMS3D-35857 Wake Island monitoring system Spectrum Analysis (CDRL A006) DRAFT%"
+    ],
+    "difficulty": "easy",
+    "rationale": "DRAFT-state companion to PQ-470. Tests retrieval distinguishes DRAFT vs Final state for the same site.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "SEMS3D-35857"
+      ],
+      "SITE": [
+        "Wake"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' returned SEMS3D-35857 Wake Spectrum Analysis DRAFT PDF."
+  },
+  {
+    "query_id": "PQ-472",
+    "user_input": "What does an A006 Spectrum Analysis deliverable typically capture for a site?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A006 - Spectrum Analysis%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Format / scope semantic question about the A006 Spectrum Analysis sub-family.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' showed Wake Island spectrum analysis deliverables organized by site under SEMS3D/A006 - Spectrum Analysis/."
+  },
+  {
+    "query_id": "PQ-473",
+    "user_input": "What's typically in a CDRL A007 Installation Acceptance Test Report deliverable folder?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A007 - Installation Acceptance Test Report/Deliverables Report%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Format question about A007 deliverable folder layout.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A007%' showed Deliverables Report IGSI-NNN <site> ... folders containing signed test procedures, attachments, and an _Original Large Attachments subfolder."
+  },
+  {
+    "query_id": "PQ-474",
+    "user_input": "How does the A006 IGSI-103 Okinawa test plan relate to the A007 IGSI-105 Awase test report?",
+    "reference": "The IGSI-103 A006 Okinawa Installation Acceptance Test Plan and Procedures (.docx) is cross-filed inside the IGSI-105 A007 Awase Acceptance Test Report Archive folder. This creates a deliberate plan/report linkage where the A006 plan and the A007 report share the same site (Awase = Okinawa JP) but different IGSI deliverable IDs.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A006 - Installation and Modification Acceptance Test Plan and Procedures/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).pdf",
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-105 Installation Acceptance Test Report Awase Okinawa JP - monitoring system (A007)/Archive/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-103%Okinawa%A006%",
+      "%IGSI-105%Awase%A007%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-CDRL pairing question grounded in a real archive cross-filing. The A006 Okinawa test plan was cross-filed inside the A007 Awase deliverable Archive folder.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Okinawa",
+        "Awase"
+      ],
+      "INCIDENT_ID": [
+        "IGSI-103",
+        "IGSI-105"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' and --like '%A007%' returned both the IGSI-103 A006 plan and its A007 IGSI-105 cross-filed copy."
+  },
+  {
+    "query_id": "PQ-475",
+    "user_input": "Show me the 2021-09 ISS scan results from the 2020-05-01 NEXION ATO ISS Change archive.",
+    "reference": "Scan Results ISS 2021-Sep v2.xlsx under 3.0 Cybersecurity/ATO-ATC Package Changes/2020-05-01 monitoring system ATO ISS Change/Archive/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2020-05-01 monitoring system ATO ISS Change/Archive/Scan Results ISS 2021-Sep v2.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%ATO-ATC Package Changes/2020-05-01 NEXION ATO ISS Change/Archive/Scan Results ISS 2021-Sep v2%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Single dated ISS scan result xlsx from a long-running ATO change package. v2 suffix indicates a revised submission.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021-09"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' returned the 2021-Sep v2 ISS Scan Results xlsx."
+  },
+  {
+    "query_id": "PQ-476",
+    "user_input": "Show me the 2021-11-09 ISS ST&E scan results.",
+    "reference": "ISS STE Scan Results ISS 2021-Nov-09.xlsx under 3.0 Cybersecurity/ATO-ATC Package Changes/2020-05-01 monitoring system ATO ISS Change/ST&E Documents/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2020-05-01 monitoring system ATO ISS Change/ST&E Documents/ISS STE Scan Results ISS 2021-Nov-09.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%2020-05-01 NEXION ATO ISS Change/ST&E Documents/ISS STE Scan Results ISS 2021-Nov-09%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated ISS ST&E scan results file. Filename embeds full date.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021-11-09"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' returned the 2021-Nov-09 ISS STE Scan Results xlsx."
+  },
+  {
+    "query_id": "PQ-477",
+    "user_input": "Show me the 2019-08-30 ISTO Security Controls SA spreadsheet from the 2019-06-15 ISTO Re-Authorization package.",
+    "reference": "legacy monitoring system_SecurityControls_SA_2019-Aug-30.xlsx under 3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/SA - System and Services Acquisition/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/SA - System and Services Acquisition/legacy monitoring system_SecurityControls_SA_2019-Aug-30.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%2019-06-15_ISTO_Re-Authorization/Final/SA - System and Services Acquisition/ISTO_SecurityControls_SA_2019-Aug-30%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Per-control-family security controls xlsx from an ATO re-authorization Final folder.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019-08-30"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' returned the SA family security controls xlsx dated 2019-Aug-30."
+  },
+  {
+    "query_id": "PQ-478",
+    "user_input": "Which control families are represented in the 2019-06-15 ISTO Re-Authorization Final folder?",
+    "reference": "At least four control families confirmed in the Final folder: SA (System and Services Acquisition), SC (System and Communications Protection), SI (System and Information Integrity), RA (Risk Assessment). All under 3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/SA - System and Services Acquisition/legacy monitoring system_SecurityControls_SA_2019-Aug-30.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/SC - System and Communcations Protection/legacy monitoring system_SecurityControls_SC_2019-Aug-25.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/SI - System and Information Integrity/legacy monitoring system_SecurityControls_SI_2019-Aug-30.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/RA - Risk Assessment/legacy monitoring system_SecurityControls_RA_2019-Aug-23.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%2019-06-15_ISTO_Re-Authorization/Final/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Folder-scoped control-family enumeration. Confirmed via folder mining: SA (Sys & Services Acquisition), SC (Sys & Comm Protection), SI (Sys & Info Integrity), RA (Risk Assessment).",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' returned 4 distinct control family subfolders under the Final folder."
+  },
+  {
+    "query_id": "PQ-479",
+    "user_input": "Where is the 2019-06-15 ISTO Re-Authorization final ISTO scan results zip stored?",
+    "reference": "legacy monitoring system scan results.zip under 3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/legacy monitoring system scan results.zip"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%2019-06-15_ISTO_Re-Authorization/Final/isto scan results.zip%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single canonical scan results zip from the Re-Authorization Final folder.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' returned the legacy monitoring system scan results.zip in the Re-Authorization Final folder."
+  },
+  {
+    "query_id": "PQ-480",
+    "user_input": "Compare the SI - System and Information Integrity controls between the 2019-06-15 ISTO Re-Authorization Final and Pending Review folders.",
+    "reference": "Two SI controls xlsx files exist for the same package: Pending Review (legacy monitoring system_SecurityControls_SI_2019-Aug-22.xlsx) and Final (legacy monitoring system_SecurityControls_SI_2019-Aug-30.xlsx). Both under 3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Pending Review/SI - System and Information Integrity/legacy monitoring system_SecurityControls_SI_2019-Aug-22.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/SI - System and Information Integrity/legacy monitoring system_SecurityControls_SI_2019-Aug-30.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%2019-06-15_ISTO_Re-Authorization/Final/SI - System and Information Integrity%",
+      "%2019-06-15_ISTO_Re-Authorization/Pending Review/SI - System and Information Integrity%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Two near-duplicate xlsx files: Final 2019-Aug-30 vs Pending Review 2019-Aug-22. Tests TABULAR retrieval across the Pending vs Final review state split.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019-08-22",
+        "2019-08-30"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' returned both Pending Review (2019-Aug-22) and Final (2019-Aug-30) SI controls xlsx for the same Re-Authorization package."
+  },
+  {
+    "query_id": "PQ-481",
+    "user_input": "Show me the 2024 ISTO Reauthorization SCAP scan spreadsheet.",
+    "reference": "SCAP scan.xlsx under 3.0 Cybersecurity/ATO-ATC Package Changes/2024 legacy monitoring system Reauthorization/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2024 legacy monitoring system Reauthorization/SCAP scan.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%ATO-ATC Package Changes/2024 ISTO Reauthorization/SCAP scan%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single SCAP scan xlsx from the 2024 Re-Authorization package. Newer ATO change cycle.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' returned the 2024 legacy monitoring system Reauthorization SCAP scan xlsx."
+  },
+  {
+    "query_id": "PQ-482",
+    "user_input": "How does the 2019-06-15 ISTO Re-Authorization package compare to the 2024 ISTO Reauthorization package?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization%",
+      "%ATO-ATC Package Changes/2024 ISTO Reauthorization%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-package comparison. Five years apart, same system. Tests SEMANTIC routing on a temporal-comparison question.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' returned both the 2019-06-15 (per-control-family Final/Pending split) and 2024 (single SCAP scan) Reauthorization packages."
+  },
+  {
+    "query_id": "PQ-483",
+    "user_input": "What is the typical structure of an ATO-ATC package change folder?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%3.0 Cybersecurity/ATO-ATC Package Changes/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Process / format question about how ATO change packages are organized.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' showed packages organized as 3.0 Cybersecurity/ATO-ATC Package Changes/<YYYY-MM-DD>_<system>_<change-type>/{Final,Pending Review,Archive,ST&E Documents}/<control-family>/<artifact>."
+  },
+  {
+    "query_id": "PQ-484",
+    "user_input": "Cross-reference: how many distinct A013 SEMP deliverables exist under contract 47QFRA22F0009 vs FA881525FB002?",
+    "reference": "Under 47QFRA22F0009: IGSI-2431 (2024-08-28) and the legacy IGSI-66 OASIS deliverable. Under FA881525FB002: IGSCC-126 in three variants (Updated PDF, Updated DOCX, and 2025-09-26 dated PDF).",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A013 - System Engineering Plan (SEMP)/47QFRA22F0009_IGSI-2431_enterprise program_Systems_Engineering_Management_Plan_2024-08-28.pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A013 - System Engineering Plan (SEMP)/Deliverables Report IGSI-66 enterprise program Systems Engineering Management Plan (A013).pdf",
+      "1.0 enterprise program DM - Restricted/IGSCC/A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.pdf",
+      "1.0 enterprise program DM - Restricted/IGSCC/A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_2025-09-26.pdf"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A013 - System Engineering%47QFRA22F0009%",
+      "%A013 - System Engineering%FA881525FB002%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Contract-scoped CDRL enumeration. Confirmed: 47QFRA22F0009 has IGSI-2431 (and the legacy IGSI-66 OASIS variant). FA881525FB002 has IGSCC-126 (in three filename variants).",
+    "expected_anchor_entities": {
+      "CONTRACT": [
+        "47QFRA22F0009",
+        "FA881525FB002"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A013%' returned 2 distinct 47QFRA22F0009 deliverables and 3+ FA881525FB002 IGSCC-126 variants."
+  },
+  {
+    "query_id": "PQ-485",
+    "user_input": "Cross-reference: which 2026 shipments occurred during the same week as the 2026-02-09 Guam return?",
+    "reference": "Two: LDI Repair Equipment 2nd Shipment (2026-02-06, two near-duplicate xlsx variants) and the 2026-02-09 Guam Return packing list. Both within the same calendar week, both under 5.0 Logistics/Shipments/2026 - Shipments/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Misc/LDI Repair Equipment/2026_02_06 - LDI Repair Equipment/NG Packing List - LDI Equipment Repair 2nd Shipment.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Misc/LDI Repair Equipment/2026_02_06 - LDI Repair Equipment/NG Packing List - LDI Equipment Repair 2nd Shipment_1.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Guam/2026_02_09 - Guam Return (NG Com-Air)/Final NG Packing List - Return Guam 1-26-26.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2026 - Shipments/%2026_02_0%",
+      "%2026 - Shipments/%2026_02_1%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Date-window enumeration around a single return shipment. Confirmed: LDI Repair Equipment 2nd Shipment 2026-02-06 and the 2026-02-09 Guam Return occupy the same week.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2026-02-06",
+        "2026-02-09"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%2026 - Shipments%' returned LDI Repair 2026-02-06 (with _1 variant) and Guam Return 2026-02-09 within the same calendar week."
+  },
+  {
+    "query_id": "PQ-486",
+    "user_input": "Cross-reference: which 2026-Q1 shipments are filed across all sites?",
+    "reference": "At least nine confirmed 2026-Q1 shipments: Ascension (2026-01-22 outgoing, 2026-03-09 return), Azores (2026-03-10, 2026-03-25), Guam (2026-01-09, 2026-01-20, 2026-01-28, 2026-02-09 return), and LDI Repair Equipment 2nd Shipment (2026-02-06). All under 5.0 Logistics/Shipments/2026 - Shipments/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_01_22 - Ascension (Mil-Air)/NG Packing List - Ascension (Outgoing).xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_03_09 - Ascension Return (Mil-Air)/NG Packing List - Ascension (Return).xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_10 - Azores (Mil-Air)/NG Packing List - Azores 3.10.26.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_25 - Azores (Mil-Air)/NG Packing List - Azores 3.25.26.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Guam/2026_01_09 - Guam (NG Com-Air)/monitoring system TOOLKIT.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Guam/2026_01_20 - Guam (NG Com-Air)/NG Packing List - Guam.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Guam/2026_01_28 - Guam (NG Com-Air)/Final NG Packing List - Guam 1.28.26.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Guam/2026_02_09 - Guam Return (NG Com-Air)/Final NG Packing List - Return Guam 1-26-26.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Misc/LDI Repair Equipment/2026_02_06 - LDI Repair Equipment/NG Packing List - LDI Equipment Repair 2nd Shipment.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2026 - Shipments/%2026_01_%",
+      "%2026 - Shipments/%2026_02_%",
+      "%2026 - Shipments/%2026_03_%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Quarter-scoped cross-site enumeration. Confirmed: Ascension (2026-01-22 outgoing, 2026-03-09 return), Azores (2026-03-10, 2026-03-25), Guam (2026-01-09, 2026-01-20, 2026-01-28, 2026-02-09 return), Misc LDI Repair Equipment (2026-02-06).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2026-01",
+        "2026-02",
+        "2026-03"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%2026 - Shipments%' returned 9 distinct dated 2026-Q1 shipments across Ascension, Azores, Guam, and Misc."
+  },
+  {
+    "query_id": "PQ-487",
+    "user_input": "Cross-reference: which sites have both a confirmed A006 IATP deliverable and an A007 IATR deliverable?",
+    "reference": "At least one confirmed plan/report site pair: Okinawa (A006 IGSI-103 plan) / Awase Okinawa JP (A007 IGSI-105 report). The A006 plan is cross-filed inside the A007 deliverable Archive folder. Other A007 sites (Misawa IGSI-721, Niger IGSI-445, American Samoa IGSI-813) and other A006 sites (Lajes IGSI-1803) are not paired in the surfaced anchors.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A006 - Installation and Modification Acceptance Test Plan and Procedures/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).pdf",
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-105 Installation Acceptance Test Report Awase Okinawa JP - monitoring system (A007)/Archive/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).docx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A006 - Installation%Test Plan%",
+      "%A007 - Installation Acceptance Test Report%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Site-paired CDRL enumeration. Confirmed cross-pair: Okinawa/Awase (A006 IGSI-103 + A007 IGSI-105 cross-filed). Lajes has A006 IGSI-1803 but no confirmed A007 in surfaced anchors.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Okinawa",
+        "Awase"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' and --like '%A007%' returned the IGSI-103 / IGSI-105 Okinawa-Awase pair as the only fully cross-filed confirmed plan/report pair in surfaced anchors."
+  },
+  {
+    "query_id": "PQ-488",
+    "user_input": "Cross-reference: how many ATO-ATC package change folders exist for the legacy monitoring system across all years?",
+    "reference": "At least two confirmed legacy monitoring system ATO-ATC change packages: 2019-06-15_legacy monitoring system_Re-Authorization (with Final/Pending Review/per-control-family layout) and 2024 legacy monitoring system Reauthorization (with a single SCAP scan xlsx). Both under 3.0 Cybersecurity/ATO-ATC Package Changes/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/legacy monitoring system scan results.zip",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2024 legacy monitoring system Reauthorization/SCAP scan.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%ATO-ATC Package Changes/%ISTO%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Multi-year ATO change folder enumeration for one system. Confirmed via folder mining: 2019-06-15 Re-Authorization, 2024 Reauthorization.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' returned 2 distinct legacy monitoring system ATO change package folders, 2019 and 2024."
+  },
+  {
+    "query_id": "PQ-489",
+    "user_input": "Cross-reference: how does the per-control-family Pending vs Final split work in the 2019-06-15 ISTO Re-Authorization package?",
+    "reference": "The package splits per control family into Pending Review/<family>/<dated xlsx> (typically 2019-Aug-22) and Final/<family>/<dated xlsx> (typically 2019-Aug-23 through 2019-Aug-30). Confirmed control families with both states: SA, SC, SI, RA. The Final folder also contains a top-level legacy monitoring system scan results.zip.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Pending Review/SA - System and Service Acquisition/legacy monitoring system_SecurityControls_SA_2019-Aug-25.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/SA - System and Services Acquisition/legacy monitoring system_SecurityControls_SA_2019-Aug-30.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Pending Review/SI - System and Information Integrity/legacy monitoring system_SecurityControls_SI_2019-Aug-22.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/SI - System and Information Integrity/legacy monitoring system_SecurityControls_SI_2019-Aug-30.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_legacy monitoring system_Re-Authorization/Final/legacy monitoring system scan results.zip"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%2019-06-15_ISTO_Re-Authorization/Final/%",
+      "%2019-06-15_ISTO_Re-Authorization/Pending Review/%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Folder structure enumeration over a two-state package layout. Confirmed: SA, SC, SI, RA each have Pending/Final variants with date drift between submission and final approval.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' returned the Pending vs Final split with multiple control families and a final scan results zip at the Final root."
+  },
+  {
+    "query_id": "PQ-490",
+    "user_input": "Cross-reference: how many distinct A006 / A007 IGSI deliverables exist across both contract eras?",
+    "reference": "At least seven distinct IGSI deliverables across A006 / A007 sites: A006 plans -- IGSI-103 (Okinawa), IGSI-1803 (Lajes 2024-04-18), IGSI-662 (UDL Modification). A007 reports -- IGSI-105 (Awase), IGSI-721 (Misawa), IGSI-445 (Niger), IGSI-813 (American Samoa). Plus SEMS3D-35857 / SEMS3D-36315 Wake Island A006 Spectrum Analysis variants.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A006 - Installation and Modification Acceptance Test Plan and Procedures/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A006 - Installation and Modification Acceptance Test Plan and Procedures/47QFRA22F0009_IGSI-1803_Installation_Acceptance_Test_Plan_Procedures_Lajes-monitoring system_2024-04-18.pdf",
+      "1.5 enterprise program CDRLS/A006 - Installation Acceptance Test Plan Procedures/Deliverables Report IGSI-662 legacy monitoring system UDL Modification Test Plan/IGSI-662 UDL Modification Test Plan-Govt_signed.pdf",
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-105 Installation Acceptance Test Report AWASE Okinawa JP - monitoring system/InstallationAcceptanceTestPlanandProceduresmonitoring systemSigned.pdf",
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-721 Installation Acceptance Test Report Misawa monitoring system (A007)/_Attach/Signed Misawa Test Procedures.pdf",
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-445 Installation Acceptance Test Report Niger legacy monitoring system/Niger legacy monitoring system Acceptance Test Plans and Procedures.pdf",
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/Deliverables Report IGSI-813 Installation Acceptance Test Report American Samoa - legacy monitoring system (A007)/Email - American Samoa Acceptance Test SSC-SZGGS Response.pdf"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A006 - Installation%",
+      "%A007 - Installation Acceptance Test Report%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Family enumeration across A006 (plan) and A007 (report) deliverables. A006 confirmed: IGSI-103 (Okinawa), IGSI-1803 (Lajes), IGSI-662 (UDL Modification). A007 confirmed: IGSI-105 (Awase), IGSI-721 (Misawa), IGSI-445 (Niger), IGSI-813 (American Samoa). Plus the SEMS3D Wake Spectrum Analysis A006 sub-family.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' and --like '%A007%' returned 7+ distinct site/system IGSI deliverables across the two CDRL families."
+  },
+  {
+    "query_id": "PQ-491",
+    "user_input": "Cross-reference: how many distinct A013 SEMP filename variants exist for IGSCC-126?",
+    "reference": "Three confirmed IGSCC-126 variants: Updated PDF, Updated DOCX, and 2025-09-26 dated PDF. The Updated DOCX also appears under 1.5 enterprise program CDRLS/A013 - System Engineering Management Plan (SEMP)/, making four total filesystem-level entries.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/IGSCC/A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.pdf",
+      "1.0 enterprise program DM - Restricted/IGSCC/A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.docx",
+      "1.0 enterprise program DM - Restricted/IGSCC/A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_2025-09-26.pdf",
+      "1.5 enterprise program CDRLS/A013 - System Engineering Management Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.docx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Single-deliverable filename variant enumeration. Tests TABULAR-style aggregation over a near-duplicate file family.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSCC-126"
+      ],
+      "CONTRACT": [
+        "FA881525FB002"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A013%' returned 4 IGSCC-126 filesystem entries across two trees."
+  },
+  {
+    "query_id": "PQ-492",
+    "user_input": "How does the Pending Review / Final split in ATO-ATC change packages relate to the Archive / FinalDocument split in A001 SPR&IP appendix folders?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%ATO-ATC Package Changes%Pending Review%",
+      "%ATO-ATC Package Changes%Final%",
+      "%A001 - Appendix%Archive%",
+      "%A001 - Appendix%FinalDocument%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-tree process question on how the program tracks document lifecycle states. Tests SEMANTIC routing on a comparative two-tree question.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%ATO-ATC%' showed Pending Review / Final / Archive lifecycle states; --like '%A001%' showed Archive / FinalDocument states under SPR&IP appendix folders. Both encode submission lifecycle but in different conventions."
+  },
+  {
+    "query_id": "PQ-493",
+    "user_input": "How does the IGSI-2431 SEMP relate to the IGSI-66 SEMP under contract 47QFRA22F0009?",
+    "reference": null,
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A013 - System Engineering Plan (SEMP)/Deliverables Report IGSI-66 enterprise program Systems Engineering Management Plan (A013).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A013 - System Engineering Plan (SEMP)/47QFRA22F0009_IGSI-2431_enterprise program_Systems_Engineering_Management_Plan_2024-08-28.pdf"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI-2431%",
+      "%Deliverables Report IGSI-66%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Two-deliverable lifecycle question. IGSI-66 is the older Deliverables-Report-style SEMP; IGSI-2431 is the contract-prefix-style 2024-08-28 update.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-66",
+        "IGSI-2431"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A013%' returned both deliverables in the same OASIS/A013 folder, suggesting in-place revision."
+  },
+  {
+    "query_id": "PQ-494",
+    "user_input": "Cross-reference: how does the corpus track Wake Island spectrum analysis revisions?",
+    "reference": "At least three: SEMS3D-35857 (DRAFT), SEMS3D-36315 (Final), plus Old Versions/Wake Island monitoring system Spectrum Analysis (CDRL A006) v5 GCdocx.zip. All under 1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/SEMS3D-35857 Wake Island monitoring system Spectrum Analysis (CDRL A006) DRAFT.pdf",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/SEMS3D-36315 Wake Island Spectrum Analysis (CDRL A006)-Final.pdf",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A006 - Spectrum Analysis/Wake Spectrum Analysis/Old Versions/Wake Island monitoring system Spectrum Analysis (CDRL A006) v5 GCdocx.zip"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A006 - Spectrum Analysis/Wake Spectrum Analysis%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Single-site CDRL revision history. Confirmed: SEMS3D-35857 DRAFT, SEMS3D-36315 Final, plus an Old Versions/v5 zip variant.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Wake"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' returned 3 distinct Wake Spectrum Analysis revisions including DRAFT, Final, and Old Versions zip."
+  },
+  {
+    "query_id": "PQ-495",
+    "user_input": "Cross-reference: which 2024 cybersecurity submissions exist across A027 RMF and ATO-ATC families?",
+    "reference": "At least two: IGSI-2464 AC Plans and Controls (2024-12-20, under 1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/) and the 2024 legacy monitoring system Reauthorization SCAP scan (under 3.0 Cybersecurity/ATO-ATC Package Changes/2024 legacy monitoring system Reauthorization/).",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20.zip",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2024 legacy monitoring system Reauthorization/SCAP scan.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%A027 - RMF Security Plan%2024%",
+      "%ATO-ATC Package Changes%2024%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-tree 2024 cyber enumeration. Confirmed: IGSI-2464 AC Plans and Controls (2024-12-20, A027 RMF) and 2024 legacy monitoring system Reauthorization SCAP scan (ATO-ATC).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' and --like '%ATO-ATC%' returned one A027 deliverable and one ATO change for 2024."
+  },
+  {
+    "query_id": "PQ-496",
+    "user_input": "Cross-reference: how does the corpus organize Acceptance Test Plan / Report deliverables across A006 OASIS, A006 1.5 CDRLS, and A007 1.5 CDRLS trees?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A006 - Installation%",
+      "%A007 - Installation Acceptance Test Report%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-tree process question on Plan/Report file organization. Tests SEMANTIC routing on a multi-tree comparative question.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A006%' and --like '%A007%' returned three distinct trees: OASIS A006 (47QFRA22F0009 era plans), 1.5 CDRLS A006 (newer signed plans like IGSI-662), 1.5 CDRLS A007 (per-site report deliverable folders)."
+  },
+  {
+    "query_id": "PQ-497",
+    "user_input": "How does the recurring monthly cadence of FEP Monthly Actuals compare to the recurring monthly cadence of Cumulative Outages?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%FEP/Reference/%Monthly Actuals%",
+      "%CumulativeOutageFiles%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-tree comparative cadence question. PM-side FEP rollups are monthly; SE-side outage rollups are also monthly but live under z_Archive. Tests SEMANTIC routing on a recurring-family comparison.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned PM-side monthly xlsx files; --like '%CumulativeOutages%' returned SE-side monthly xlsx files under z_Archive/OutageMetrics."
+  },
+  {
+    "query_id": "PQ-498",
+    "user_input": "Cross-reference: how does the corpus track plan/report lifecycle for field engineering deliverables across A001 SPR&IP, A006 IATP, and A007 IATR?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A001 - Appendix%",
+      "%A006 - Installation%",
+      "%A007 - Installation Acceptance Test Report%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-CDRL semantic question on plan / report / appendix lifecycle. Tests SEMANTIC routing on a three-family conceptual question.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A001%', --like '%A006%', and --like '%A007%' returned three distinct field-engineering CDRL families: A001 SPR&IP appendices (per-site Archive/FinalDocument layout), A006 Installation Acceptance Test Plan/Procedures (single PDF), A007 Installation Acceptance Test Report (per-site deliverable folders with attachments)."
+  },
+  {
+    "query_id": "PQ-499",
+    "user_input": "Cross-reference: how many distinct site-keyed CDRL deliverable families show up in folder mining across A001, A006, A007, A009, A027, A031, and A013?",
+    "reference": "Seven A-numbered CDRL families confirmed in surfaced anchors: A001 (SPR&IP appendices, MSR, Inventory, IPT slides), A006 (Installation Acceptance Test Plan/Procedures, Spectrum Analysis), A007 (Installation Acceptance Test Report), A009 (Monthly Status Report), A013 (System Engineering Plan), A027 (Cybersecurity / RMF / ACAS / CT&E), A031 (Integrated Master Schedule). Each family has 2+ confirmed deliverables in the eval corpus queries.",
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A001%",
+      "%A006%",
+      "%A007%",
+      "%A009%",
+      "%A027%",
+      "%A031%",
+      "%A013%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Top-level CDRL family enumeration. Tests cross-family AGGREGATE routing without forcing COMPLEX. Manually defensible: count of A-numbered CDRL families surfaced by folder mining across batches 3-6.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like across all seven A-numbered CDRL prefixes returned at least 2 deliverables per family across batches 3-6."
+  },
+  {
+    "query_id": "PQ-500",
+    "user_input": "How does the corpus differentiate between OASIS-tree deliverables and IGSCC-tree deliverables in the 1.0 enterprise program DM - Restricted subtree?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%1.0 enterprise program DM - Restricted/OASIS%",
+      "%1.0 enterprise program DM - Restricted/IGSCC%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Final closing semantic question. Cross-subtree conceptual question on the OASIS vs IGSCC organizational split inside the same DM tree. Closes the 400-query corpus on a cross-subtree comparison.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A013%' returned A013 deliverables under both OASIS (47QFRA22F0009 era IGSI-66 and IGSI-2431) and IGSCC (FA881525FB002 era IGSCC-126) subtrees of 1.0 enterprise program DM - Restricted, suggesting deliberate contract-era separation."
   }
 ]
