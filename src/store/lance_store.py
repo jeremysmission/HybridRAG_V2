@@ -177,18 +177,23 @@ class LanceStore:
         vec = query_vector.astype(np.float32).flatten().tolist()
 
         try:
-            # Try hybrid search (vector + FTS)
+            # Try hybrid search (vector + FTS) with LanceDB 0.30+ API
             if query_text.strip():
                 try:
-                    builder = self._table.search(vec, query_type="hybrid")
+                    # Correct API: search(query_type="hybrid").vector(vec).text(text)
+                    builder = (
+                        self._table.search(query_type="hybrid")
+                        .vector(vec)
+                        .text(query_text)
+                    )
                     builder = self._apply_search_tuning(
                         builder,
                         nprobes=nprobes,
                         refine_factor=refine_factor,
                     )
-                    results = builder.text(query_text).limit(top_k).to_list()
-                except Exception:
-                    # FTS index may not exist yet — fall back to vector only
+                    results = builder.limit(top_k).to_list()
+                except Exception as e:
+                    logger.warning("Hybrid search failed, falling back to vector-only: %s", e)
                     builder = self._table.search(vec)
                     builder = self._apply_search_tuning(
                         builder,
@@ -204,8 +209,9 @@ class LanceStore:
                     refine_factor=refine_factor,
                 )
                 results = builder.limit(top_k).to_list()
-        except Exception:
+        except Exception as e:
             # Fallback: vector-only search
+            logger.warning("Hybrid search outer failure, falling back to vector-only: %s", e)
             try:
                 builder = self._table.search(vec)
                 builder = self._apply_search_tuning(
