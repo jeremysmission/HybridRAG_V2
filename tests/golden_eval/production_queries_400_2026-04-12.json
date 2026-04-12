@@ -3845,5 +3845,1512 @@
     },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Anchor: folders probe --like '%Thule%' returned three distinct '! Site Visits/(01) Sites/Thule/YYYY-MM-DD thru...' trip folders."
+  },
+  {
+    "query_id": "PQ-271",
+    "user_input": "What is the most recent enterprise program site outage analysis?",
+    "reference": "The current-active outage analysis is enterprise program-Outage-Analysis_2026-03-02.xlsx under 6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/. Older monthly snapshots live in the sibling zArchive subfolder.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/IGS-Outage-Analysis_2026-03-02.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Systems Engineering",
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/IGS-Outage-Analysis%"
+    ],
+    "difficulty": "medium",
+    "rationale": "'Most recent' recency discovery — retrieval must prefer the live folder over zArchive. PM IPT slide pull-up.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2026-03-02"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Engineering%' returned enterprise program-Outage-Analysis_2026-03-02.xlsx in the live folder (4,421 mentions) and multiple 2025 files in zArchive."
+  },
+  {
+    "query_id": "PQ-272",
+    "user_input": "Show me the enterprise program site outage analysis for December 2025.",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Systems Engineering",
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-12-01.xlsx"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single-month outage snapshot. TABULAR smoke test.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-12-01"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe returned enterprise program-Outage-Analysis_2025-12-01.xlsx in zArchive (5,292 mentions)."
+  },
+  {
+    "query_id": "PQ-273",
+    "user_input": "Where is the enterprise program outage analysis for September 2025?",
+    "reference": "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-09-08.xlsx.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-09-08.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Systems Engineering",
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-09%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Path-shaped retrieval into the outage-analysis archive.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-09-08"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned enterprise program-Outage-Analysis_2025-09-08.xlsx (4,847 mentions)."
+  },
+  {
+    "query_id": "PQ-274",
+    "user_input": "Where are the monthly enterprise program outage analysis spreadsheets stored?",
+    "reference": "Under 6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/ — the live snapshot sits at the root, and prior monthly analyses live in the sibling zArchive subfolder.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Systems Engineering",
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Folder-structure discovery question. PM looking for the canonical outage-analysis location.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned the Outage Analysis for IPT Slides live root plus zArchive children."
+  },
+  {
+    "query_id": "PQ-275",
+    "user_input": "How many enterprise program outage analysis snapshots are archived in 2025?",
+    "reference": "Five confirmed in the zArchive folder: 2025-06-05, 2025-09-08, 2025-10-03, 2025-11-06, and 2025-12-01 enterprise program-Outage-Analysis.xlsx.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-06-05.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-09-08.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-10-03.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-11-06.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-12-01.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Systems Engineering",
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow-scope aggregate on confirmed archived files. Manually auditable. Note: mining returned five files but more may exist outside the 40-file probe limit.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-06-05",
+        "2025-09-08",
+        "2025-10-03",
+        "2025-11-06",
+        "2025-12-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Engineering%' returned five 2025-dated enterprise program-Outage-Analysis xlsx files in zArchive."
+  },
+  {
+    "query_id": "PQ-276",
+    "user_input": "Where is James Dettler's FY15 Annual Security Refresher training certificate?",
+    "reference": "10.0 Program Management/4.0 Training/03_Course Completion Certificates/Dettler-James/BAH/Annual Security Refresher/FY15 Annual Security Refresher (NISPOM).pdf.",
+    "reference_contexts": [
+      "10.0 Program Management/4.0 Training/03_Course Completion Certificates/Dettler-James/BAH/Annual Security Refresher/FY15 Annual Security Refresher (NISPOM).pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/4.0 Training/03_Course Completion Certificates/Dettler-James/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Training-record lookup by employee name + training type. Folder structure encodes employer (BAH vs NG) and year.",
+    "expected_anchor_entities": {
+      "PERSON": [
+        "Dettler-James"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Training%' returned 'FY15 Annual Security Refresher (NISPOM).pdf' under Dettler-James/BAH/ (2,433 mentions)."
+  },
+  {
+    "query_id": "PQ-277",
+    "user_input": "Is there a 2021 Controlled Unrestricted Information (sensitive data) training record for Dettler-James?",
+    "reference": "Yes — under 10.0 Program Management/4.0 Training/03_Course Completion Certificates/Dettler-James/NG/Controlled Unrestricted Information (sensitive data) Training/sensitive data Information (2021-12-01)/.",
+    "reference_contexts": [
+      "10.0 Program Management/4.0 Training/03_Course Completion Certificates/Dettler-James/NG/Controlled Unrestricted Information (sensitive data) Training/sensitive data Information (2021-12-01)/"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/4.0 Training/03_Course Completion Certificates/Dettler-James/NG/Controlled Unrestricted Information (sensitive data) Training/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Training existence question with dated folder encoding.",
+    "expected_anchor_entities": {
+      "PERSON": [
+        "Dettler-James"
+      ],
+      "DATE": [
+        "2021-12-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned the sensitive data Training (2021-12-01) subfolder under Dettler-James/NG/ (2,336 mentions on child pdf)."
+  },
+  {
+    "query_id": "PQ-278",
+    "user_input": "Where are the enterprise program course completion certificates filed?",
+    "reference": "Under 10.0 Program Management/4.0 Training/03_Course Completion Certificates/, with per-employee subfolders (e.g., Dettler-James) further split by employer (BAH vs NG) and training type.",
+    "reference_contexts": [
+      "10.0 Program Management/4.0 Training/03_Course Completion Certificates/Dettler-James/"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/4.0 Training/03_Course Completion Certificates/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Folder-structure discovery at a level PMs frequently need during audits.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '10.0 Program Management/4.0 Training/03_Course Completion Certificates/Dettler-James/...' subtree."
+  },
+  {
+    "query_id": "PQ-279",
+    "user_input": "Where is the cumulative outage metrics file for July 2022?",
+    "reference": "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/CumulativeOutagesJul2022.xlsx.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/CumulativeOutagesJul2022.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Systems Engineering",
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Tests retrieval into the deeply nested z_Archive/OutageMetrics/CumulativeOutageFiles tree, which is structurally different from the Outage Analysis for IPT Slides tree.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2022-07"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned CumulativeOutagesJul2022.xlsx (4,594 mentions) in z_Archive/OutageMetrics/CumulativeOutageFiles/."
+  },
+  {
+    "query_id": "PQ-280",
+    "user_input": "Where are the older pre-2024 enterprise program outage metrics archived?",
+    "reference": "Under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/, with per-year subfolders (e.g., 2022/) containing monthly CumulativeOutagesMonYYYY.xlsx snapshots.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesJun2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesMay2022.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Systems Engineering",
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Discovery query across parallel archive trees (Outage Analysis for IPT Slides vs z_Archive/OutageMetrics).",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned CumulativeOutagesJun2022.xlsx and CumulativeOutagesMay2022.xlsx under z_Archive/OutageMetrics/CumulativeOutageFiles/2022/."
+  },
+  {
+    "query_id": "PQ-281",
+    "user_input": "Show me the enterprise program outage analysis for June 2025.",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Systems Engineering",
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-06-05.xlsx"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single-month TABULAR lookup, mid-2025 snapshot.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-06-05"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe returned enterprise program-Outage-Analysis_2025-06-05.xlsx (4,626 mentions)."
+  },
+  {
+    "query_id": "PQ-282",
+    "user_input": "What is the January 2025 monitoring system Security Controls AT deliverable?",
+    "reference": "IGSI-2451-NEXION_Security Controls_AT_2025-Jan.xlsx, filed under 4.0 Configuration_Management - Restricted/CM_IGS-Documents/Contract Deliverable Documents/A027_Plan and Controls/Plan-Controls_AT_Security-Awareness-and-Training/.",
+    "reference_contexts": [
+      "4.0 Configuration_Management - Restricted/CM_IGS-Documents/Contract Deliverable Documents/A027_Plan and Controls/Plan-Controls_AT_Security-Awareness-and-Training/IGSI-2451-NEXION_Security Controls_AT_2025-Jan.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2451%"
+    ],
+    "difficulty": "medium",
+    "rationale": "PM contract-deliverable lookup against the A027 Plan and Controls tree. IGSI-2451 is a structured-identifier anchor.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2451"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Training%' returned IGSI-2451-NEXION_Security Controls_AT_2025-Jan.xlsx (8,046 mentions)."
+  },
+  {
+    "query_id": "PQ-283",
+    "user_input": "Show me the monitoring system packing list for the February 2026 LDI Repair Equipment shipment.",
+    "reference": "2026-02-06, LDI Repair Equipment shipment — packing list NG Packing List - LDI Equipment Repair 2nd Shipment.xlsx (plus a '_1.xlsx' sibling), under 5.0 Logistics/Shipments/2026 - Shipments/Misc/LDI Repair Equipment/2026_02_06 - LDI Repair Equipment/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Misc/LDI Repair Equipment/2026_02_06 - LDI Repair Equipment/NG Packing List - LDI Equipment Repair 2nd Shipment.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Misc/LDI Repair Equipment/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Misc (non-site) shipment lookup. Tests that retrieval handles the 'Misc' subtree and LDI Repair category.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2026-02-06"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned two 2026_02_06 LDI Repair Equipment packing-list files (8,212 and 8,100 mentions)."
+  },
+  {
+    "query_id": "PQ-284",
+    "user_input": "When did the second Azores March 2026 Mil-Air shipment happen?",
+    "reference": "2026-03-25, under 5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_25 - Azores (Mil-Air)/, packing list NG Packing List - Azores 3.25.26.xlsx. A prior 2026-03-10 Azores Mil-Air shipment also exists.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_25 - Azores (Mil-Air)/NG Packing List - Azores 3.25.26.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_25 - Azores (Mil-Air)/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Second-of-month shipment disambiguation. Tests that retrieval does not conflate 2026-03-10 vs 2026-03-25 Azores shipments.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Azores"
+      ],
+      "DATE": [
+        "2026-03-25"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '2026 - Shipments/Azores/2026_03_25 - Azores (Mil-Air)' (8,273 mentions)."
+  },
+  {
+    "query_id": "PQ-285",
+    "user_input": "Show me the December 2025 Wake monitoring system return shipment packing list.",
+    "reference": "2025-12-15, Mil-Air return, packing list NG Packing List_Wake-NEXION_2025-10 (Mil-Air-Return).xlsx under 5.0 Logistics/Shipments/2025 - Shipments/Wake/2025_12_15 - Wake Return (Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Wake/2025_12_15 - Wake Return (Mil-Air)/NG Packing List_Wake-NEXION_2025-10 (Mil-Air-Return).xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Wake/2025_12_15 - Wake Return (Mil-Air)/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Dated return-shipment lookup. Packing-list filename encodes a different month (2025-10) than the folder (2025-12), which tests that retrieval weights folder-level context.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Wake"
+      ],
+      "DATE": [
+        "2025-12-15"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '2025 - Shipments/Wake/2025_12_15 - Wake Return (Mil-Air)' (8,118 mentions)."
+  },
+  {
+    "query_id": "PQ-286",
+    "user_input": "When did the San Vito return shipment happen in December 2025?",
+    "reference": "2025-12-15, Mil-Air return, packing list NG Packing List_San Vito Returning Oct 2025.xlsx under 5.0 Logistics/Shipments/2025 - Shipments/San Vito/2025_12_15 - San Vito Return(Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2025 - Shipments/San Vito/2025_12_15 - San Vito Return(Mil-Air)/NG Packing List_San Vito Returning Oct 2025.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2025 - Shipments/San Vito/2025_12_15%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Italian base return shipment lookup. Same-date coincidence with Wake return (2025-12-15) tests ranking by site token.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "San Vito"
+      ],
+      "DATE": [
+        "2025-12-15"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '2025 - Shipments/San Vito/2025_12_15 - San Vito Return(Mil-Air)' (8,108 mentions)."
+  },
+  {
+    "query_id": "PQ-287",
+    "user_input": "When was the April 2025 Eareckson Mil-Air shipment?",
+    "reference": "2025-04-09, Mil-Air outbound, packing list NG Packing List_Eareckson_2025-04-02.xlsx under 5.0 Logistics/Shipments/2025 - Shipments/Eareckson/2025_04_09 - Eareckson(Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Eareckson/2025_04_09 - Eareckson(Mil-Air)/NG Packing List_Eareckson_2025-04-02.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Eareckson/2025_04_09%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Aleutian site shipment lookup. Eareckson is also referenced as 'Shemya' colloquially — tests name-discipline.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Eareckson"
+      ],
+      "DATE": [
+        "2025-04-09"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '2025 - Shipments/Eareckson/2025_04_09 - Eareckson(Mil-Air)' (8,064 mentions)."
+  },
+  {
+    "query_id": "PQ-288",
+    "user_input": "When did the July 2025 Misawa return shipment happen?",
+    "reference": "2025-07-23, Mil-Air return, packing list NG Packing List return shipment Case 1.xlsx under 5.0 Logistics/Shipments/2025 - Shipments/Misawa/2025_07_23 - Misawa Return (Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Misawa/2025_07_23 - Misawa Return (Mil-Air)/NG Packing List return shipment Case 1.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Misawa/2025_07_23%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Second Misawa 2025 return shipment (a May return already exists from batch 2's PQ-238). Tests temporal disambiguation within one site.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Misawa"
+      ],
+      "DATE": [
+        "2025-07-23"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '2025 - Shipments/Misawa/2025_07_23 - Misawa Return (Mil-Air)' (8,035 mentions)."
+  },
+  {
+    "query_id": "PQ-289",
+    "user_input": "Where is the current monitoring system packing list template stored?",
+    "reference": "At the root of 5.0 Logistics/Shipments/, named NG Packing List - Template_02_04_26.xlsx.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/NG Packing List - Template_02_04_26.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/NG Packing List - Template%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Template-file lookup. Logistics lead reuses this for every new shipment.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'NG Packing List - Template_02_04_26.xlsx' at the Shipments root (8,076 mentions)."
+  },
+  {
+    "query_id": "PQ-290",
+    "user_input": "How many distinct Azores Mil-Air shipments happened in March 2026?",
+    "reference": "Two: 2026-03-10 Azores Mil-Air and 2026-03-25 Azores Mil-Air, both under 5.0 Logistics/Shipments/2026 - Shipments/Azores/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_10 - Azores (Mil-Air)/NG Packing List - Azores 3.10.26.xlsx",
+      "5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03_25 - Azores (Mil-Air)/NG Packing List - Azores 3.25.26.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Azores/2026_03%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow-scope site+month AGGREGATE. Fully enumerable from folder mining.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Azores"
+      ],
+      "DATE": [
+        "2026-03-10",
+        "2026-03-25"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned exactly two Azores 2026-03 shipment folders."
+  },
+  {
+    "query_id": "PQ-291",
+    "user_input": "Show me the May 2025 Okinawa return Mil-Air packing list.",
+    "reference": "2025-05-13, Mil-Air return, packing list NG Packing List_Okinawa_Return.xlsx under 5.0 Logistics/Shipments/2025 - Shipments/Okinawa/2025_05_13 - Okinawa Return(Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Okinawa/2025_05_13 - Okinawa Return(Mil-Air)/NG Packing List_Okinawa_Return.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Okinawa/2025_05_13%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Japan return-shipment lookup. Note: Okinawa = Awase is the installation site but shipment folder uses Okinawa name.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Okinawa"
+      ],
+      "DATE": [
+        "2025-05-13"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '2025 - Shipments/Okinawa/2025_05_13 - Okinawa Return(Mil-Air)' (8,093 mentions)."
+  },
+  {
+    "query_id": "PQ-292",
+    "user_input": "How many Thule shipments happened in July-August 2024?",
+    "reference": "Two confirmed: 2024-07-18 Thule Mil-Air outbound and 2024-08-23 Thule return shipment (with a Hand Carry sibling file under the return folder).",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2024 - Shipments/Thule/2024_07_18 - Thule (Mil-Air)/NG Packing List_Thule-monitoring system ASV_2024-07-17.xlsx",
+      "5.0 Logistics/Shipments/2024 - Shipments/Thule/2024_08_23 - Thule Return Shipment/Thule_Return Ship_2024-08-23.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2024 - Shipments/Thule/2024_0[78]%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-site-visit correlation — these two shipments bracket the 2024-08-13 thru 08-23 Thule ASV (FS-JD) from PQ-244.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2024-07-18",
+        "2024-08-23"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Thule%' returned two 2024-dated Thule shipment folders."
+  },
+  {
+    "query_id": "PQ-293",
+    "user_input": "What was the hand-carry component of the 2024-08-23 Thule return shipment?",
+    "reference": "Recorded in Thule_Return Ship_2024-08-23 Hand Carry.xlsx (sibling file to the main return shipment packing list) under 5.0 Logistics/Shipments/2024 - Shipments/Thule/2024_08_23 - Thule Return Shipment/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2024 - Shipments/Thule/2024_08_23 - Thule Return Shipment/Thule_Return Ship_2024-08-23 Hand Carry.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2024 - Shipments/Thule/2024_08_23 - Thule Return Shipment/%Hand Carry%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Tests that retrieval distinguishes a 'Hand Carry' sibling file from the main packing list in the same folder.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2024-08-23"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'Thule_Return Ship_2024-08-23 Hand Carry.xlsx' (7,498 mentions) as a sibling of the main packing list (7,514 mentions)."
+  },
+  {
+    "query_id": "PQ-294",
+    "user_input": "Show me the January 2026 Ascension outgoing Mil-Air shipment packing list.",
+    "reference": "2026-01-22, outbound Mil-Air, packing list NG Packing List - Ascension (Outgoing).xlsx under 5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_01_22 - Ascension (Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_01_22 - Ascension (Mil-Air)/NG Packing List - Ascension (Outgoing).xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_01_22%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Outbound-vs-return disambiguation (batch 2 PQ-234 uses the 2026-03-09 Ascension return; this covers the earlier outbound).",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Ascension"
+      ],
+      "DATE": [
+        "2026-01-22"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '2026 - Shipments/Ascension/2026_01_22 - Ascension (Mil-Air)' (8,171 mentions)."
+  },
+  {
+    "query_id": "PQ-295",
+    "user_input": "Who was on the September 2022 Curacao ASV-RTS trip?",
+    "reference": "Womelsdorff and Dettler traveled 2022-09-04 thru 2022-09-09 for the Curacao ASV-RTS, per folder ! Site Visits/(01) Sites/Curacao/2022-09-04 thru 09 (ASV-RTS)(Womelsdorff-Dettler)/.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Curacao/2022-09-04 thru 09 (ASV-RTS)(Womelsdorff-Dettler)/Parts List for MSR/IGSI-57 Curacao legacy monitoring system MSR CDRL A002 (Parts Lists).xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Curacao/2022-09-04 thru 09%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Historical ASV-RTS (Annual Site Visit - Return To Service) team lookup. Subfolder contains a Parts List for the IGSI-57 MSR — tests cross-referenceability.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Curacao"
+      ],
+      "DATE": [
+        "2022-09-04"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%A002%' returned 'Curacao/2022-09-04 thru 09 (ASV-RTS)(Womelsdorff-Dettler)/Parts List for MSR/IGSI-57 Curacao legacy monitoring system MSR CDRL A002 (Parts Lists).xlsx' (97 mentions)."
+  },
+  {
+    "query_id": "PQ-296",
+    "user_input": "Where is the IGSI-57 Curacao legacy monitoring system MSR parts list?",
+    "reference": "! Site Visits/(01) Sites/Curacao/2022-09-04 thru 09 (ASV-RTS)(Womelsdorff-Dettler)/Parts List for MSR/IGSI-57 Curacao legacy monitoring system MSR CDRL A002 (Parts Lists).xlsx. This is a cross-filed artifact — the parts list lives in the site visit tree, not in the 1.5 enterprise program CDRLS/A002 tree.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Curacao/2022-09-04 thru 09 (ASV-RTS)(Womelsdorff-Dettler)/Parts List for MSR/IGSI-57 Curacao legacy monitoring system MSR CDRL A002 (Parts Lists).xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "%IGSI-57%Curacao%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-tree artifact retrieval. The IGSI-57 parts list is not under the 1.5 enterprise program CDRLS/A002 tree — it lives under the site visit where it was produced.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-57"
+      ],
+      "SITE": [
+        "Curacao"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned IGSI-57 Curacao legacy monitoring system MSR parts list under the Curacao site visit folder, not under 1.5 enterprise program CDRLS/A002."
+  },
+  {
+    "query_id": "PQ-297",
+    "user_input": "Where is the archived Revision 4 of the Fieldfox cable analyzer work note?",
+    "reference": "19.0_Work_Notes/Field Engineering/Cable Analyzers/Archive/Fieldfox Work Note Rev 4.docx.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/Cable Analyzers/Archive/Fieldfox Work Note Rev 4.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/Cable Analyzers/Archive/%Rev 4%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Archive-revision lookup, pairs with PQ-243's live-rev-5 query.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'Fieldfox Work Note Rev 4.docx' in the Cable Analyzers/Archive subfolder (4 mentions)."
+  },
+  {
+    "query_id": "PQ-298",
+    "user_input": "Where is the legacy monitoring system Autodialer Programming Guide Revision 1 stored?",
+    "reference": "19.0_Work_Notes/Field Engineering/legacy monitoring system/legacy monitoring system Autodialer Programming/legacy monitoring system Autodialer Programming Guide (Rev 1).docx.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/legacy monitoring system/legacy monitoring system Autodialer Programming/legacy monitoring system Autodialer Programming Guide (Rev 1).docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/legacy monitoring system/legacy monitoring system Autodialer Programming/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Tests distinction between the system-agnostic Autodialer guide (from PQ-241) and the legacy monitoring system-specific Rev 1 under the 19.0_Work_Notes/Field Engineering/legacy monitoring system/ subtree.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'legacy monitoring system Autodialer Programming Guide (Rev 1).docx' under 19.0_Work_Notes/Field Engineering/legacy monitoring system/ (6 mentions)."
+  },
+  {
+    "query_id": "PQ-299",
+    "user_input": "Where is the October 7, 2024 revision of the monitoring system ASV procedures?",
+    "reference": "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/monitoring system-ASV-Procedures_Rev-5_7-Oct-2024 - Claire.docx (also a sibling _Claire2.docx copy).",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/monitoring system-ASV-Procedures_Rev-5_7-Oct-2024 - Claire.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/%Rev-5_7-Oct-2024%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Archive-revision lookup. Editor initial 'Claire' is part of the filename and is a retrievable token.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-10-07"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'monitoring system-ASV-Procedures_Rev-5_7-Oct-2024 - Claire.docx' in the _Archive subfolder (4 mentions)."
+  },
+  {
+    "query_id": "PQ-300",
+    "user_input": "Where is the September 23, 2025 draft of the monitoring system ASV procedures?",
+    "reference": "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/monitoring system-ASV-Procedures_9.23.25 - Claire.docx.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/monitoring system-ASV-Procedures_9.23.25 - Claire.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/%9.23.25%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Short-date-format archive lookup. Tests that retrieval handles the MM.DD.YY filename variant used in the monitoring system ASV archive.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-09-23"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'monitoring system-ASV-Procedures_9.23.25 - Claire.docx' in the _Archive subfolder (6 mentions)."
+  },
+  {
+    "query_id": "PQ-301",
+    "user_input": "Where is the USSF ICA document for the Awase site?",
+    "reference": "! Site Visits/(01) Sites/Awase (Okinawa JP)/z_Site Information/_Install Docs as needed/ICA USSF monitoring system.pdf.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Awase (Okinawa JP)/z_Site Information/_Install Docs as needed/ICA USSF monitoring system.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Awase (Okinawa JP)/z_Site Information/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Site-specific install doc. Tests retrieval into the z_Site Information subfolder pattern.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Awase",
+        "Okinawa"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%RMA%' returned 'ICA USSF monitoring system.pdf' under Awase (Okinawa JP)/z_Site Information (3,850 mentions)."
+  },
+  {
+    "query_id": "PQ-302",
+    "user_input": "Was there a combined Thule and Wake CT&E trip in 2019?",
+    "reference": "Yes — 2019-07-11 monitoring system Thule and Wake CT&E trip. Results are filed under 3.0 Cybersecurity/CT&E-ST&E/monitoring system/2019-07-11 monitoring system Thule and Wake/, with separate Thule and Wake scan archives and a combined ACAS-STIG results spreadsheet.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/CT&E-ST&E/monitoring system/2019-07-11 monitoring system Thule and Wake/CTE Scans/Thule Scans/archive/monitoring system Thule and Wake RAW ACAS-STIG Results 2019-07-11.xlsx",
+      "3.0 Cybersecurity/CT&E-ST&E/monitoring system/2019-07-11 monitoring system Thule and Wake/CTE Scans/Wake Scans/archive/monitoring system Thule and Wake RAW ACAS-STIG Results 2019-07-11.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/CT&E-ST&E/monitoring system/2019-07-11 monitoring system Thule and Wake/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Multi-site trip lookup; the same raw results file exists under both Thule Scans and Wake Scans archive subfolders.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule",
+        "Wake"
+      ],
+      "DATE": [
+        "2019-07-11"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Thule%' returned the 2019-07-11 monitoring system Thule and Wake CT&E folder with Thule Scans and Wake Scans subtrees."
+  },
+  {
+    "query_id": "PQ-303",
+    "user_input": "Was there a June 2018 monitoring system Eareckson CT&E visit?",
+    "reference": "Yes — 2018-06-22 monitoring system Eareckson CT&E, with tools/STIGs/ACAS updates bundle filed under 3.0 Cybersecurity/CT&E-ST&E/monitoring system/2018-06-22 monitoring system Eareckson/Tools-STIGs-ACAS-Updates/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/CT&E-ST&E/monitoring system/2018-06-22 monitoring system Eareckson/Tools-STIGs-ACAS-Updates/scc-5.0.2_rhel7_x86_64_bundle/scc-5.0.2_rhel7_x86_64/scc-5.0.2_rhel7_x86_64.tar.gz"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/CT&E-ST&E/monitoring system/2018-06-22 monitoring system Eareckson/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Old site-trip artifact lookup. Contains the SCC 5.0.2 tooling bundle used during the visit.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Eareckson"
+      ],
+      "DATE": [
+        "2018-06-22"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Cybersecurity%' returned the 2018-06-22 monitoring system Eareckson folder with SCC 5.0.2 RHEL 7 bundle (17,942 mentions)."
+  },
+  {
+    "query_id": "PQ-304",
+    "user_input": "Where are the Fieldfox and cable analyzer work notes stored?",
+    "reference": "Under 19.0_Work_Notes/Field Engineering/Cable Analyzers/. The live revisions (Rev 5 final and a DRAFT Rev 5) sit at the root; older revisions archive under Cable Analyzers/Archive/.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/Cable Analyzers/Fieldfox-Work-Note_Rev-5.docx",
+      "19.0_Work_Notes/Field Engineering/Cable Analyzers/DRAFT_Fieldfox Work Note Rev 5.docx",
+      "19.0_Work_Notes/Field Engineering/Cable Analyzers/Archive/Fieldfox Work Note Rev 4.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/Cable Analyzers/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Folder-structure discovery for a FE tool family. Captures both live + archive locations.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned three Fieldfox work note files (Rev 5 live, Rev 5 draft, Rev 4 archive)."
+  },
+  {
+    "query_id": "PQ-305",
+    "user_input": "Is there a monitoring system autodialer programming guide separate from the legacy monitoring system one?",
+    "reference": "Yes — 19.0_Work_Notes/Field Engineering/Autodialer Programming and Verification/monitoring system Autodialer Programming and Verification Guide.docx, a sibling of the legacy monitoring system-specific guide in the same folder.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/Autodialer Programming and Verification/monitoring system Autodialer Programming and Verification Guide.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/Autodialer Programming and Verification/monitoring system%"
+    ],
+    "difficulty": "easy",
+    "rationale": "System-specific distinction. monitoring system and legacy monitoring system each have their own autodialer guide in the same folder.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'monitoring system Autodialer Programming and Verification Guide.docx' as a sibling of the legacy monitoring system guide (8 mentions each)."
+  },
+  {
+    "query_id": "PQ-306",
+    "user_input": "Where is the _Archive subfolder for monitoring system ASV procedures?",
+    "reference": "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/ — contains Rev 5 Oct 7 2024 (Claire), 10.20.25 Claire, 9.23.25 Claire, and other editorial snapshots.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/monitoring system-ASV-Procedures_10.20.25 - Claire.docx",
+      "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/monitoring system-ASV-Procedures_9.23.25 - Claire.docx",
+      "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/monitoring system-ASV-Procedures_Rev-5_7-Oct-2024 - Claire.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/_Archive/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Folder-structure lookup for revision history. Tests that retrieval prefers the _Archive subtree over the live file when the user asks specifically about archives.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned the _Archive subfolder containing multiple revisions of monitoring system-ASV-Procedures (4-6 mentions each)."
+  },
+  {
+    "query_id": "PQ-307",
+    "user_input": "What is deliverable IGSCC-945?",
+    "reference": "IGSCC-945 is the monitoring system Maintenance Service Report for Ascension, submitted 2026-04-02 under contract FA881525FB002, CDRL A002.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Ascension-monitoring system/FA881525FB002_IGSCC-945_MSR_Ascension-NEXION_2026-04-02.docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSCC-945%"
+    ],
+    "difficulty": "easy",
+    "rationale": "A002 MSR deliverable ID lookup. IGSCC-945 is a recent 2026 submission.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSCC-945"
+      ],
+      "SITE": [
+        "Ascension"
+      ],
+      "CONTRACT": [
+        "FA881525FB002"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%A002%' returned 'FA881525FB002_IGSCC-945_MSR_Ascension-NEXION_2026-04-02.docx' (76 mentions)."
+  },
+  {
+    "query_id": "PQ-308",
+    "user_input": "What is deliverable IGSCC-3?",
+    "reference": "IGSCC-3 is the monitoring system Maintenance Service Report for Fairford, submitted 2025-09-15 under contract FA881525FB002, CDRL A002.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Fairford-monitoring system/FA881525FB002_IGSCC-3_MSR_Fairford-NEXION_2025-09-15.docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSCC-3_%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Low-numbered IGSCC ID (IGSCC-3) under the new contract. Tests FTS tokenization of short IDs.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSCC-3"
+      ],
+      "SITE": [
+        "Fairford"
+      ],
+      "CONTRACT": [
+        "FA881525FB002"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'FA881525FB002_IGSCC-3_MSR_Fairford-NEXION_2025-09-15.docx' (66 mentions)."
+  },
+  {
+    "query_id": "PQ-309",
+    "user_input": "What is the March 2026 Guam monitoring system MSR deliverable ID?",
+    "reference": "IGSCC-9 — monitoring system Maintenance Service Report for Guam, submitted 2026-03-05 under contract FA881525FB002, CDRL A002.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Guam-monitoring system/FA881525FB002_IGSCC-9_MSR_Guam-NEXION_2026-03-05.docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSCC-9_MSR%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Reverse direction (site+date → deliverable ID) for the A002 tree.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSCC-9"
+      ],
+      "SITE": [
+        "Guam"
+      ],
+      "DATE": [
+        "2026-03-05"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'FA881525FB002_IGSCC-9_MSR_Guam-NEXION_2026-03-05.docx' (60 mentions)."
+  },
+  {
+    "query_id": "PQ-310",
+    "user_input": "What is the November 2025 Wake monitoring system MSR deliverable?",
+    "reference": "IGSCC-1 — monitoring system Maintenance Service Report for Wake, submitted 2025-11-10 under contract FA881525FB002, CDRL A002.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Wake-monitoring system/FA881525FB002_IGSCC-1_MSR_Wake-NEXION_2025-11-10.docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSCC-1_MSR%"
+    ],
+    "difficulty": "easy",
+    "rationale": "First-IGSCC A002 MSR under the new contract. Single-digit incident ID tests FTS.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSCC-1"
+      ],
+      "SITE": [
+        "Wake"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'FA881525FB002_IGSCC-1_MSR_Wake-NEXION_2025-11-10.docx' (56 mentions)."
+  },
+  {
+    "query_id": "PQ-311",
+    "user_input": "What does deliverable IGSCC-4 cover?",
+    "reference": "IGSCC-4 — monitoring system Maintenance Service Report for Vandenberg, submitted 2025-12-17 under contract FA881525FB002, CDRL A002.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Vandenberg-monitoring system/FA881525FB002_IGSCC-4_MSR_Vandenberg-NEXION_2025-12-17.docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSCC-4_MSR%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Vandenberg CONUS site MSR lookup. Short incident ID anchor.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSCC-4"
+      ],
+      "SITE": [
+        "Vandenberg"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'FA881525FB002_IGSCC-4_MSR_Vandenberg-NEXION_2025-12-17.docx' (50 mentions)."
+  },
+  {
+    "query_id": "PQ-312",
+    "user_input": "What is deliverable IGSI-2512?",
+    "reference": "IGSI-2512 — monitoring system Maintenance Service Report for Lualualei, submitted 2025-05-01 under contract 47QFRA22F0009, CDRL A002.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Lualualei-monitoring system/47QFRA22F0009_IGSI-2512_MSR_Lualualei-NEXION_2025-05-01.docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2512%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Legacy-contract (47QFRA22F0009) MSR lookup. Tests contract-boundary straddling with the newer FA881525FB002 deliverables.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2512"
+      ],
+      "SITE": [
+        "Lualualei"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '47QFRA22F0009_IGSI-2512_MSR_Lualualei-NEXION_2025-05-01.docx' (67 mentions)."
+  },
+  {
+    "query_id": "PQ-313",
+    "user_input": "What is deliverable IGSI-2746 and which contract is it under?",
+    "reference": "IGSI-2746 — monitoring system Maintenance Service Report for Eareckson, submitted 2025-06-09 under contract 47QFRA22F0009, CDRL A002.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Eareckson-monitoring system/47QFRA22F0009_IGSI-2746_MSR_Eareckson-NEXION_2025-06-09.docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2746%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Late-OY1 legacy-contract MSR lookup. Same site as IGSI-737 below.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2746"
+      ],
+      "SITE": [
+        "Eareckson"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '47QFRA22F0009_IGSI-2746_MSR_Eareckson-NEXION_2025-06-09.docx' (52 mentions)."
+  },
+  {
+    "query_id": "PQ-314",
+    "user_input": "Is there an older IGSI-737 MSR for Eareckson?",
+    "reference": "Yes — Deliverables Report IGSI-737 Eareckson-monitoring system MSR (A002).docx, an older submission filed under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Eareckson-monitoring system/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Eareckson-monitoring system/Deliverables Report IGSI-737 Eareckson-monitoring system MSR (A002).docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-737%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Disambiguation test: the Eareckson-monitoring system subfolder holds both a modern 47QFRA22F0009-prefixed MSR and an older IGSI-737 'Deliverables Report' style MSR.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-737"
+      ],
+      "SITE": [
+        "Eareckson"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'Deliverables Report IGSI-737 Eareckson-monitoring system MSR (A002).docx' (51 mentions) alongside the IGSI-2746 file."
+  },
+  {
+    "query_id": "PQ-315",
+    "user_input": "What is deliverable IGSI-1204?",
+    "reference": "IGSI-1204 — legacy monitoring system Maintenance Service Report for Curacao, filed as 'Deliverables Report IGSI-1204 Curacao-legacy monitoring system MSR (A002).docx' under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Curacao-legacy monitoring system/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Curacao-legacy monitoring system/Deliverables Report IGSI-1204 Curacao-legacy monitoring system MSR (A002).docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-1204%"
+    ],
+    "difficulty": "easy",
+    "rationale": "legacy monitoring system (not monitoring system) MSR lookup. Curacao hosts the only legacy monitoring system MSR folder in A002 from the mining probe.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-1204"
+      ],
+      "SITE": [
+        "Curacao"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'Deliverables Report IGSI-1204 Curacao-legacy monitoring system MSR (A002).docx' (53 mentions) — only legacy monitoring system MSR in the probe result set."
+  },
+  {
+    "query_id": "PQ-316",
+    "user_input": "What is the IGSI-1207 Guam monitoring system MSR deliverable?",
+    "reference": "IGSI-1207 — monitoring system Maintenance Service Report for Guam, filed as 'Deliverables Report IGSI-1207 Guam monitoring system MSR (A002).docx' under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Guam-monitoring system/. An older submission than IGSCC-9.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Guam-monitoring system/Deliverables Report IGSI-1207 Guam monitoring system MSR (A002).docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-1207%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Temporal disambiguation within one site: Guam has at least two MSRs (IGSI-1207 older, IGSCC-9 March 2026).",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-1207"
+      ],
+      "SITE": [
+        "Guam"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'Deliverables Report IGSI-1207 Guam monitoring system MSR (A002).docx' (49 mentions)."
+  },
+  {
+    "query_id": "PQ-317",
+    "user_input": "What is deliverable IGSI-61 for Learmonth?",
+    "reference": "IGSI-61 — monitoring system Maintenance Service Report for Learmonth, filed as 'Deliverables Report IGSI-61 Learmonth monitoring system MSR (A002).docx' under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Learmonth-monitoring system/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Learmonth-monitoring system/Deliverables Report IGSI-61 Learmonth monitoring system MSR (A002).docx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-61 %"
+    ],
+    "difficulty": "easy",
+    "rationale": "Two-digit IGSI ID anchor. Australian site MSR lookup.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-61"
+      ],
+      "SITE": [
+        "Learmonth"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'Deliverables Report IGSI-61 Learmonth monitoring system MSR (A002).docx' (47 mentions)."
+  },
+  {
+    "query_id": "PQ-318",
+    "user_input": "Where are the A027 Plan and Controls Security Awareness Training documents stored?",
+    "reference": "Under 4.0 Configuration_Management - Restricted/CM_IGS-Documents/Contract Deliverable Documents/A027_Plan and Controls/Plan-Controls_AT_Security-Awareness-and-Training/. The January 2025 submission is IGSI-2451-NEXION_Security Controls_AT_2025-Jan.xlsx.",
+    "reference_contexts": [
+      "4.0 Configuration_Management - Restricted/CM_IGS-Documents/Contract Deliverable Documents/A027_Plan and Controls/Plan-Controls_AT_Security-Awareness-and-Training/IGSI-2451-NEXION_Security Controls_AT_2025-Jan.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "4.0 Configuration_Management - Restricted/CM_IGS-Documents/Contract Deliverable Documents/A027_Plan and Controls/Plan-Controls_AT_Security-Awareness-and-Training/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Plan-Controls tree discovery. This tree is distinct from the 1.5 enterprise program CDRLS/A027 deliverables tree and must be surfaced correctly.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'Plan-Controls_AT_Security-Awareness-and-Training/IGSI-2451-NEXION_Security Controls_AT_2025-Jan.xlsx'."
+  },
+  {
+    "query_id": "PQ-319",
+    "user_input": "Where is the 2019 legacy monitoring system Re-Authorization ATO package filed?",
+    "reference": "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/, with subfolders for each security standard control family (AT, SI, etc.) under Final, Pending Review, and Completed states.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/Final/AT - Awareness and Training/ISTO_SecurityControls_AT_2019-Aug-02.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/Pending Review/SI - System and Information Integrity/ISTO_SecurityControls_SI_2019-Aug-22.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Dated Re-Authorization package lookup. The Final/Pending/Completed split is a key structural signal.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019-06-15"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Training%' and --like '%RMA%' returned the 2019-06-15_ISTO_Re-Authorization subtree with AT and SI control family subfolders."
+  },
+  {
+    "query_id": "PQ-320",
+    "user_input": "Where is the 2019 monitoring system Re-Authorization ATO package filed?",
+    "reference": "3.0 Cybersecurity/ATO-ATC Package Changes/2019-04-28_NEXION_Re-Authorization/, with Completed-Final, Completed-Pending Review, and subsequent state folders. Contains the AT and SI monitoring system security controls spreadsheets for that submission cycle.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-04-28_NEXION_Re-Authorization/Completed-Final/AT - Awareness and Training/archive/NEXION_SecurityControls_219-02-01.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-04-28_NEXION_Re-Authorization/Completed-Final/SI - Systems and Information Integrity/NEXION_SecurityControls_SI 2019-04-26.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-04-28_NEXION_Re-Authorization/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Companion to PQ-319 on the monitoring system side. Tests that retrieval holds the system distinction (monitoring system vs legacy monitoring system) under sibling folders.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019-04-28"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned the 2019-04-28_NEXION_Re-Authorization subtree."
+  },
+  {
+    "query_id": "PQ-321",
+    "user_input": "Where is the legacy monitoring system Security Controls AT spreadsheet for August 2019?",
+    "reference": "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/Final/AT - Awareness and Training/ISTO_SecurityControls_AT_2019-Aug-02.xlsx.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/Final/AT - Awareness and Training/ISTO_SecurityControls_AT_2019-Aug-02.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/Final/AT - Awareness and Training/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Specific-artifact lookup inside the ATO package. Distinguishes Final vs Pending Review states — the Final version is the canonical.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019-08-02"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'ISTO_SecurityControls_AT_2019-Aug-02.xlsx' in the Final subfolder (8,509 mentions)."
+  },
+  {
+    "query_id": "PQ-322",
+    "user_input": "Where do the SI (System and Information Integrity) security controls artifacts live?",
+    "reference": "Under each ATO-ATC Package Changes Re-Authorization folder's 'SI - System and Information Integrity' (legacy monitoring system) or 'SI - Systems and Information Integrity' (monitoring system) subfolder, with Final / Pending Review / archive splits per submission state.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/Final/SI - System and Information Integrity/ISTO_SecurityControls_SI_2019-Aug-30.xlsx",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-04-28_NEXION_Re-Authorization/Completed-Final/SI - Systems and Information Integrity/NEXION_SecurityControls_SI 2019-04-26.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/%/SI -%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-package discovery; also tests the spelling drift between 'SI - System' (legacy monitoring system) and 'SI - Systems' (monitoring system) subfolder names.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%RMA%' returned the two SI control-family subfolders with their spelling variants."
+  },
+  {
+    "query_id": "PQ-323",
+    "user_input": "How many A002 MSR deliverables have been submitted under contract FA881525FB002?",
+    "reference": "Five confirmed by folder mining: IGSCC-1 (Wake 2025-11-10), IGSCC-3 (Fairford 2025-09-15), IGSCC-4 (Vandenberg 2025-12-17), IGSCC-9 (Guam 2026-03-05), IGSCC-945 (Ascension 2026-04-02). All under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Wake-monitoring system/FA881525FB002_IGSCC-1_MSR_Wake-NEXION_2025-11-10.docx",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Fairford-monitoring system/FA881525FB002_IGSCC-3_MSR_Fairford-NEXION_2025-09-15.docx",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Vandenberg-monitoring system/FA881525FB002_IGSCC-4_MSR_Vandenberg-NEXION_2025-12-17.docx",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Guam-monitoring system/FA881525FB002_IGSCC-9_MSR_Guam-NEXION_2026-03-05.docx",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Ascension-monitoring system/FA881525FB002_IGSCC-945_MSR_Ascension-NEXION_2026-04-02.docx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%FA881525FB002_IGSCC-%_MSR%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Canary-ready narrow aggregate on filename prefixes. More A002 MSRs may exist under this contract beyond the five the 30-file mining probe returned — answer is a floor, not a ceiling.",
+    "expected_anchor_entities": {
+      "CONTRACT": [
+        "FA881525FB002"
+      ],
+      "INCIDENT_ID": [
+        "IGSCC-1",
+        "IGSCC-3",
+        "IGSCC-4",
+        "IGSCC-9",
+        "IGSCC-945"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%A002%' returned five FA881525FB002_IGSCC-prefixed MSR docx files."
+  },
+  {
+    "query_id": "PQ-324",
+    "user_input": "How many A002 MSR deliverables are confirmed under contract 47QFRA22F0009?",
+    "reference": "Two confirmed by folder mining: IGSI-2512 (Lualualei 2025-05-01) and IGSI-2746 (Eareckson 2025-06-09). Both under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Lualualei-monitoring system/47QFRA22F0009_IGSI-2512_MSR_Lualualei-NEXION_2025-05-01.docx",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Eareckson-monitoring system/47QFRA22F0009_IGSI-2746_MSR_Eareckson-NEXION_2025-06-09.docx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI%MSR%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Contract-boundary aggregate on the legacy-contract side. Floor, not ceiling — older deliverables without filename contract prefixes exist alongside these (e.g., IGSI-57, IGSI-61, IGSI-737, IGSI-1204, IGSI-1207).",
+    "expected_anchor_entities": {
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ],
+      "INCIDENT_ID": [
+        "IGSI-2512",
+        "IGSI-2746"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned two 47QFRA22F0009_IGSI-prefixed MSR files."
+  },
+  {
+    "query_id": "PQ-325",
+    "user_input": "Which sites have monitoring system-suffixed A002 MSR subfolders in the CDRL tree?",
+    "reference": "Eight confirmed by folder mining: Ascension-monitoring system, Eareckson-monitoring system, Fairford-monitoring system, Guam-monitoring system, Learmonth-monitoring system, Lualualei-monitoring system, Vandenberg-monitoring system, and Wake-monitoring system. All under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Ascension-monitoring system/",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Eareckson-monitoring system/",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Fairford-monitoring system/",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Guam-monitoring system/",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Learmonth-monitoring system/",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Lualualei-monitoring system/",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Vandenberg-monitoring system/",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Wake-monitoring system/"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/%monitoring system/"
+    ],
+    "difficulty": "medium",
+    "rationale": "Site inventory via folder enumeration. Narrow, enumerable, no Tier 1 dependence. Floor, not ceiling — additional sites may exist beyond the mining probe limit.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Ascension",
+        "Eareckson",
+        "Fairford",
+        "Guam",
+        "Learmonth",
+        "Lualualei",
+        "Vandenberg",
+        "Wake"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%A002%' returned eight distinct {Site}-monitoring system subfolders."
+  },
+  {
+    "query_id": "PQ-326",
+    "user_input": "Which sites have legacy monitoring system-suffixed A002 MSR subfolders?",
+    "reference": "One confirmed by folder mining: Curacao-legacy monitoring system, under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Curacao-legacy monitoring system/, containing 'Deliverables Report IGSI-1204 Curacao-legacy monitoring system MSR (A002).docx'.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Curacao-legacy monitoring system/Deliverables Report IGSI-1204 Curacao-legacy monitoring system MSR (A002).docx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/%legacy monitoring system/"
+    ],
+    "difficulty": "medium",
+    "rationale": "legacy monitoring system-side A002 MSR enumeration. Contrasts the monitoring system-heavy site distribution in PQ-325.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Curacao"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned one Curacao-legacy monitoring system A002 MSR subfolder in the mining result set."
+  },
+  {
+    "query_id": "PQ-327",
+    "user_input": "List the 2025 enterprise program outage analysis spreadsheets archived under 6.0 Systems Engineering.",
+    "reference": "Five archived snapshots in the Outage Analysis for IPT Slides/zArchive subfolder: 2025-06-05, 2025-09-08, 2025-10-03, 2025-11-06, and 2025-12-01 enterprise program-Outage-Analysis.xlsx.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-06-05.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-09-08.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-10-03.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-11-06.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-12-01.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Systems Engineering",
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Overlap with PQ-275 by design — used to canary-test retrieval stability across two phrasings of the same count question.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-06-05",
+        "2025-09-08",
+        "2025-10-03",
+        "2025-11-06",
+        "2025-12-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned the same five 2025 xlsx files."
+  },
+  {
+    "query_id": "PQ-328",
+    "user_input": "Which sites have scheduled 2026 ASV/survey trips in the ! Site Visits folder?",
+    "reference": "Five confirmed by folder mining: Thule (2026-06-18 thru 08-26 FS-JR), Guam (2026-01-19 thru 01-28 Fuierer-Randall), Kirtland (2026-04-06 thru 04-09 Survey, Fuierer-Dettler-Ogburn), Ascension (2026-02-22 thru 03-12 Sepp-Frank), and Azores (2026-MM-DD thru MM-DD Fuierer-Traveler, placeholder-dated).",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Thule/2026-06-18 thru 08-26 (ASV)(FS-JR)/",
+      "! Site Visits/(01) Sites/Guam/2026-01-19 thru 01-28 (ASV)(Fuierer-Randall)/",
+      "! Site Visits/(01) Sites/Kirtland/2026-04-06 thru 04-09 (Survey)(Fuierer-Dettler-Ogburn)/",
+      "! Site Visits/(01) Sites/Ascension/2026-02-22 thru 03-12 (NEXIO&legacy monitoring system-ASV)(Sepp-Frank)/",
+      "! Site Visits/(01) Sites/Azores/2026-MM-DD thru MM-DD (ASV)(Fuierer-Traveler)/"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/%/2026-%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Calendar-year ASV planning lookup across sites. Includes the Azores placeholder-dated folder (MM-DD in folder name), which tests tolerance for incomplete-date patterns.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule",
+        "Guam",
+        "Kirtland",
+        "Ascension",
+        "Azores"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Site Visits%' returned five distinct 2026-dated trip folders across these five sites."
+  },
+  {
+    "query_id": "PQ-329",
+    "user_input": "Which 2022 cumulative outage metrics files are archived?",
+    "reference": "Three confirmed by folder mining: CumulativeOutagesMay2022.xlsx, CumulativeOutagesJun2022.xlsx, and CumulativeOutagesJul2022.xlsx. The first two live under z_Archive/OutageMetrics/CumulativeOutageFiles/2022/, and the July 2022 file lives one level up at z_Archive/OutageMetrics/CumulativeOutageFiles/.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/CumulativeOutagesJul2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesJun2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesMay2022.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Systems Engineering",
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/%2022%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow-scope year count with a structural quirk: Jul2022 is stored at the parent level, not under a 2022/ subfolder. Tests that retrieval tolerates structural asymmetry within one folder family.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2022-05",
+        "2022-06",
+        "2022-07"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned three 2022-dated CumulativeOutages xlsx files across two nesting levels."
+  },
+  {
+    "query_id": "PQ-330",
+    "user_input": "Which A002 MSR deliverables were submitted in 2026 under contract FA881525FB002?",
+    "reference": "Two confirmed: IGSCC-9 (Guam 2026-03-05) and IGSCC-945 (Ascension 2026-04-02). Both under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Guam-monitoring system/FA881525FB002_IGSCC-9_MSR_Guam-NEXION_2026-03-05.docx",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Ascension-monitoring system/FA881525FB002_IGSCC-945_MSR_Ascension-NEXION_2026-04-02.docx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%FA881525FB002_IGSCC-%_MSR_%_2026-%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Year-scoped subset of PQ-323. Canary-ready; deliverables with 2026-MM-DD suffix in filename are directly enumerable.",
+    "expected_anchor_entities": {
+      "CONTRACT": [
+        "FA881525FB002"
+      ],
+      "INCIDENT_ID": [
+        "IGSCC-9",
+        "IGSCC-945"
+      ],
+      "DATE": [
+        "2026-03-05",
+        "2026-04-02"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned two FA881525FB002_IGSCC MSR files with 2026-dated filenames."
   }
 ]
