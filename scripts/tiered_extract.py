@@ -61,6 +61,44 @@ from src.store.relationship_store import RelationshipStore, Relationship
 DIVIDER = "=" * 60
 
 
+def _assert_streaming_api_available() -> None:
+    """Fail fast if the lancedb streaming API needed for bounded-memory
+    chunk iteration is missing from the installed package.
+
+    The Tier 2 memory fix depends on ``lancedb.SearchBuilder.to_batches``,
+    which has been part of ``lancedb`` itself since v0.21 — no optional
+    ``pylance`` / ``lance`` dependency. This check is here so a future
+    version bump or a broken install surfaces the problem with a clear
+    message instead of silently degrading into a corpus-scale
+    materialization via the opt-in fallback path.
+
+    Raises
+    ------
+    RuntimeError
+        If ``lancedb`` is not importable or its query builder does not
+        expose ``to_batches``.
+    """
+    try:
+        import lancedb  # noqa: F401
+        from lancedb.query import LanceQueryBuilder
+    except ImportError as e:
+        raise RuntimeError(
+            "lancedb is required for streaming chunk iteration. "
+            "Install with: pip install 'lancedb>=0.30'"
+        ) from e
+    if not hasattr(LanceQueryBuilder, "to_batches"):
+        raise RuntimeError(
+            "The installed lancedb lacks LanceQueryBuilder.to_batches, "
+            "which is required for bounded-memory streaming. "
+            "Upgrade with: pip install --upgrade 'lancedb>=0.30'"
+        )
+
+
+# Validate at import time so any environment regression trips immediately
+# instead of waiting for the first streaming call.
+_assert_streaming_api_available()
+
+
 def load_chunks(store: LanceStore, limit: int = 0) -> list[dict]:
     """Load chunks from LanceDB for extraction.
 
@@ -85,42 +123,124 @@ def load_chunks(store: LanceStore, limit: int = 0) -> list[dict]:
     return chunks
 
 
-def iter_chunk_batches(store: LanceStore, batch_size: int = 10000, limit: int = 0):
+def iter_chunk_batches(
+    store: LanceStore,
+    batch_size: int = 10000,
+    limit: int = 0,
+    allow_load_fallback: bool = False,
+):
     """Stream chunks from LanceDB in batches without loading all into memory.
 
-    Yields lists of chunk dicts, each up to batch_size.
-    Total memory: ~batch_size * avg_chunk_size instead of entire corpus.
+    Yields lists of chunk dicts, each up to ``batch_size``. Peak memory is
+    roughly ``batch_size * avg_chunk_size`` plus a single Arrow record batch,
+    regardless of corpus size.
+
+    Streaming path
+    --------------
+    Uses the lancedb ``SearchBuilder.to_batches(batch_size)`` API, which
+    returns a ``pyarrow.RecordBatchReader`` — a true streaming iterator
+    that pulls one Arrow record batch at a time from disk. This API is
+    part of ``lancedb`` itself and does NOT require the optional
+    ``pylance`` package.
+
+    Raises
+    ------
+    RuntimeError
+        If the lancedb streaming API is unavailable on this store (e.g.
+        an older lancedb version without ``to_batches``). Callers who
+        know their data is small and can tolerate loading everything into
+        memory must opt in explicitly via ``allow_load_fallback=True``.
+
+    Notes
+    -----
+    This function intentionally does NOT silently fall back to
+    ``load_chunks`` on failure. On the 10.4M chunk production corpus, a
+    silent fallback reintroduces the 57 GB RAM regression the Tier 2
+    streaming rewrite exists to prevent. Fail loud, fix the environment,
+    or opt in with eyes open.
+
+    Round 2 (commit 4e22347) used ``tbl.to_lance().scanner(...)`` which
+    requires the optional ``pylance`` package. On hosts without pylance
+    the call raised and an old silent ``except Exception`` fell through
+    to ``load_chunks`` — producing a "passing" 100K memory test that was
+    actually running the full-load path. QA caught it; this revision
+    removes the silent fallback and switches to the dependency-free
+    ``SearchBuilder.to_batches`` API.
+
+    Parameters
+    ----------
+    store:
+        Open LanceStore to stream from.
+    batch_size:
+        Rows per Arrow record batch yielded.
+    limit:
+        Max chunks to yield total (0 = unlimited). Matches the CLI
+        ``--limit`` flag end-to-end.
+    allow_load_fallback:
+        If True and the streaming API raises, fall back to ``load_chunks``
+        (which materializes the entire result set). Default: False.
+        Only set this to True for small stores (< 100K chunks) where the
+        memory cost is acceptable, e.g. short-lived unit tests.
     """
     tbl = store._table
     if tbl is None:
         return
     columns = ["chunk_id", "text", "source_path"]
+
+    # Decide how many rows the SearchBuilder should surface. LanceDB's
+    # search() always applies a limit; passing store.count() (or --limit)
+    # as the cap is fine because to_batches still streams in batch_size
+    # chunks and never materializes the whole set at once.
+    total_rows = store.count()
+    if limit > 0:
+        total_rows = min(total_rows, limit)
+    if total_rows <= 0:
+        return
+
     try:
-        scanner = tbl.to_lance().scanner(
-            columns=columns,
-            batch_size=batch_size,
+        reader = (
+            tbl.search()
+            .select(columns)
+            .limit(total_rows)
+            .to_batches(batch_size)
         )
-        yielded = 0
-        for arrow_batch in scanner.to_batches():
-            chunks = []
-            for i in range(arrow_batch.num_rows):
-                chunks.append({
-                    "chunk_id": str(arrow_batch.column("chunk_id")[i]),
-                    "text": str(arrow_batch.column("text")[i]),
-                    "source_path": str(arrow_batch.column("source_path")[i]),
-                })
-            if limit > 0 and yielded + len(chunks) > limit:
-                chunks = chunks[:limit - yielded]
-            if chunks:
-                yield chunks
-                yielded += len(chunks)
-            if limit > 0 and yielded >= limit:
-                return
-    except Exception:
-        # Fallback to search-based loading if lance scanner not available
+    except Exception as e:
+        if not allow_load_fallback:
+            raise RuntimeError(
+                "LanceDB streaming API unavailable and "
+                "allow_load_fallback=False. Refusing to silently load the "
+                "full store into memory (Round-3 Tier 2 memory fix — see "
+                f"module docstring). Original error: {e!r}"
+            ) from e
+        # Explicit opt-in path for callers who know their data is small.
         all_chunks = load_chunks(store, limit=limit)
         for i in range(0, len(all_chunks), batch_size):
             yield all_chunks[i:i + batch_size]
+        return
+
+    yielded = 0
+    for arrow_batch in reader:
+        n = arrow_batch.num_rows
+        if n == 0:
+            continue
+        cid_col = arrow_batch.column("chunk_id")
+        text_col = arrow_batch.column("text")
+        src_col = arrow_batch.column("source_path")
+        chunks = [
+            {
+                "chunk_id": str(cid_col[i]),
+                "text": str(text_col[i]),
+                "source_path": str(src_col[i]),
+            }
+            for i in range(n)
+        ]
+        if limit > 0 and yielded + len(chunks) > limit:
+            chunks = chunks[: limit - yielded]
+        if chunks:
+            yield chunks
+            yielded += len(chunks)
+        if limit > 0 and yielded >= limit:
+            return
 
 
 def run_tier1(

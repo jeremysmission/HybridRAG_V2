@@ -1,144 +1,139 @@
 """
 Unit tests for scripts/tiered_extract.py
 
-Focus: the streaming contract between Tier 1 and Tier 2. The production
-bug we are guarding against was an all_chunks_for_tier2 accumulator that
-held the entire corpus in memory between Tier 1 and Tier 2, which drove
-peak RAM past 57 GB on a 64 GB laptop during testing.
+Guards the Tier 2 memory fix. The production bug was an
+``all_chunks_for_tier2`` accumulator that held every chunk in memory
+between Tier 1 and Tier 2, driving peak RSS past 57 GB on a 64 GB host.
 
-These tests do NOT require a real LanceDB store or GLiNER. Everything
-streams through fake objects that mimic the store / model contract the
-production code uses.
+Round 2 (commit 4e22347) swapped in a streaming second pass but kept a
+silent ``except Exception -> load_chunks`` fallback, and the unit tests
+used a mocked store that forced the fallback path rather than exercising
+the real streaming branch. QA caught both gaps.
+
+This revision (Round 3) builds real, tiny ``LanceStore`` instances in
+temp directories and runs the production ``iter_chunk_batches`` /
+``run_tier2_gliner`` code against them. The only mock left is the GLiNER
+model, which is still injected via the ``gliner_model`` kwarg because
+loading the real package in a unit test is too heavy.
 """
 
 from __future__ import annotations
 
+import shutil
 import sys
+import tempfile
+import tracemalloc
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 V2_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(V2_ROOT))
 
+from src.store.lance_store import LanceStore
 from scripts.tiered_extract import (
     _is_tier2_candidate,
+    iter_chunk_batches,
+    load_chunks,
     run_tier2_gliner,
 )
 
 
 # ---------------------------------------------------------------------------
-# Fakes
+# Real tempdir LanceStore fixtures
 # ---------------------------------------------------------------------------
 
-class FakeLanceStore:
-    """Minimal stand-in for LanceStore used by iter_chunk_batches.
+VECTOR_DIM = 8  # tiny vectors — we never actually search, only stream
 
-    iter_chunk_batches reaches for ``store._table.to_lance().scanner(...)``.
-    When that raises, it falls back to ``load_chunks(store, limit=...)``.
-    We make the scanner path raise so the fallback drives the test —
-    the fallback uses ``tbl.search().select(columns).limit(n).to_arrow()``.
+
+def _build_real_store(tmp_path: Path, n_chunks: int, prose_ratio: float = 1.0) -> LanceStore:
+    """Create a real LanceStore in a temp directory with ``n_chunks`` rows.
+
+    ``prose_ratio`` of the rows are long prose (Tier 2 candidates), the rest
+    are short numeric noise (rejected by ``_is_tier2_candidate``). Returns
+    the opened store — caller is responsible for closing.
     """
+    db_path = str(tmp_path / "lancedb")
+    store = LanceStore(db_path)
 
-    def __init__(self, chunks: list[dict]):
-        self._chunks = list(chunks)
-        self._table = _FakeTable(self._chunks)
-        # count() is called by load_chunks to decide how many rows to pull.
-        self._count = len(chunks)
+    chunks: list[dict] = []
+    n_prose = int(n_chunks * prose_ratio)
+    for i in range(n_prose):
+        chunks.append({
+            "chunk_id": f"prose-{i:06d}",
+            "text": (
+                f"The site lead inspected the tower at chunk {i}. "
+                f"Jane Doe filed a report with Acme Corp on site Alpha-{i}."
+            ),
+            "source_path": f"doc-{i}.pdf",
+            "chunk_index": i,
+            "parse_quality": 1.0,
+        })
+    for i in range(n_chunks - n_prose):
+        chunks.append({
+            "chunk_id": f"noise-{i:06d}",
+            "text": "12345 67890 11111 22222 33333",
+            "source_path": f"table-{i}.xlsx",
+            "chunk_index": i,
+            "parse_quality": 0.3,
+        })
 
-    def count(self) -> int:
-        return self._count
+    # Random unit vectors — content doesn't matter since we never search.
+    rng = np.random.default_rng(seed=42)
+    vectors = rng.standard_normal(size=(n_chunks, VECTOR_DIM)).astype(np.float32)
+    vectors /= np.linalg.norm(vectors, axis=1, keepdims=True) + 1e-9
 
-    def close(self) -> None:
-        pass
-
-
-class _FakeTable:
-    def __init__(self, chunks: list[dict]):
-        self._chunks = chunks
-        # Counter: how many times search()/to_arrow() has been called.
-        # Used to assert Tier 2 actually makes a SECOND pass over the store.
-        self.scan_calls = 0
-
-    def to_lance(self):
-        # Force the iter_chunk_batches fallback. The real LanceDB scanner
-        # path would require a real dataset, which we don't want to set up.
-        raise RuntimeError("fake store forces fallback path")
-
-    def search(self):
-        return _FakeSearchBuilder(self)
-
-
-class _FakeSearchBuilder:
-    def __init__(self, table: _FakeTable):
-        self._table = table
-        self._limit = None
-
-    def select(self, columns):
-        return self
-
-    def limit(self, n):
-        self._limit = n
-        return self
-
-    def to_arrow(self):
-        self._table.scan_calls += 1
-        chunks = self._table._chunks
-        if self._limit is not None:
-            chunks = chunks[: self._limit]
-        return _FakeArrow(chunks)
+    store.ingest_chunks(chunks, vectors, batch_size=500)
+    return store
 
 
-class _FakeArrow:
-    """Minimal pyarrow.Table shim — only the columns load_chunks reads."""
-
-    def __init__(self, chunks: list[dict]):
-        self._chunks = chunks
-        self.num_rows = len(chunks)
-
-    def column(self, name: str):
-        return _FakeArrowColumn([c.get(name, "") for c in self._chunks])
+@pytest.fixture
+def tiny_store(tmp_path):
+    """10-chunk store, all prose."""
+    store = _build_real_store(tmp_path, n_chunks=10)
+    yield store
+    store.close()
 
 
-class _FakeArrowColumn:
-    def __init__(self, values):
-        self._values = values
+@pytest.fixture
+def thousand_store(tmp_path):
+    """1000-chunk store, all prose."""
+    store = _build_real_store(tmp_path, n_chunks=1000)
+    yield store
+    store.close()
 
-    def __getitem__(self, i):
-        return _FakeArrowCell(self._values[i])
+
+@pytest.fixture
+def mixed_store(tmp_path):
+    """100 chunks: 70 prose + 30 noise for Tier 2 filter testing."""
+    store = _build_real_store(tmp_path, n_chunks=100, prose_ratio=0.7)
+    yield store
+    store.close()
 
 
-class _FakeArrowCell:
-    def __init__(self, v):
-        self._v = v
-
-    def __str__(self):
-        return str(self._v)
-
+# ---------------------------------------------------------------------------
+# Fake GLiNER model (only remaining mock — real GLiNER is too heavy for unit)
+# ---------------------------------------------------------------------------
 
 class FakeGLiNERModel:
-    """Fake GLiNER model that returns deterministic entities.
-
-    Also records every batch_predict_entities call so the test can
-    verify that pending batches are flushed at the expected cadence.
+    """Records every ``batch_predict_entities`` call so we can assert
+    batches stay bounded and the streaming contract holds.
     """
 
-    def __init__(self, per_text_entities=None):
-        # Fixed payload per call; real GLiNER returns one list per input text.
-        self._payload = per_text_entities or [
-            {"text": "Jane Doe", "label": "PERSON", "score": 0.95}
-        ]
+    def __init__(self):
         self.batch_calls: list[int] = []
-        self.texts_seen: list[str] = []
 
     def batch_predict_entities(self, texts, labels, threshold, flat_ner):
         self.batch_calls.append(len(texts))
-        self.texts_seen.extend(texts)
-        return [list(self._payload) for _ in texts]
+        return [
+            [{"text": "Jane Doe", "label": "PERSON", "score": 0.95}]
+            for _ in texts
+        ]
 
 
 # ---------------------------------------------------------------------------
-# _is_tier2_candidate
+# _is_tier2_candidate — pure function, no store needed
 # ---------------------------------------------------------------------------
 
 class TestIsTier2Candidate:
@@ -147,59 +142,169 @@ class TestIsTier2Candidate:
         assert _is_tier2_candidate(chunk, min_chunk_len=20) is True
 
     def test_rejects_short(self):
-        chunk = {"text": "ok"}
-        assert _is_tier2_candidate(chunk, min_chunk_len=20) is False
+        assert _is_tier2_candidate({"text": "ok"}, min_chunk_len=20) is False
 
     def test_rejects_low_alpha_ratio(self):
-        # Mostly digits and symbols -- GLiNER has nothing to work with.
         chunk = {"text": "12345 67890 11111 22222 33333 44444 55555 66666"}
         assert _is_tier2_candidate(chunk, min_chunk_len=10) is False
 
     def test_rejects_whitespace_only_padding(self):
-        chunk = {"text": " " * 500}
-        assert _is_tier2_candidate(chunk, min_chunk_len=10) is False
+        assert _is_tier2_candidate({"text": " " * 500}, min_chunk_len=10) is False
 
     def test_boundary_alpha_ratio(self):
-        # Exactly 30% alpha -- passes the >= 0.3 check.
-        chunk = {"text": "abc1234567"}  # 3 alpha / 10 chars = 0.30
-        assert _is_tier2_candidate(chunk, min_chunk_len=10) is True
+        # 3 alpha / 10 chars = 0.30 passes the >= 0.3 check.
+        assert _is_tier2_candidate({"text": "abc1234567"}, min_chunk_len=10) is True
 
 
 # ---------------------------------------------------------------------------
-# Streaming contract: run_tier2_gliner
+# iter_chunk_batches — real LanceStore streaming path
+# ---------------------------------------------------------------------------
+
+class TestIterChunkBatchesReal:
+    """Exercise ``iter_chunk_batches`` against a real tempdir LanceStore.
+
+    These tests prove the streaming branch works end-to-end on a genuine
+    lancedb backend, not a mock that happens to fall through to ``load_chunks``.
+    """
+
+    def test_tiny_store_yields_single_batch(self, tiny_store):
+        batches = list(iter_chunk_batches(tiny_store, batch_size=50))
+        assert len(batches) == 1
+        assert len(batches[0]) == 10
+        assert all("chunk_id" in c for c in batches[0])
+        assert all("text" in c for c in batches[0])
+        assert all("source_path" in c for c in batches[0])
+
+    def test_thousand_store_yields_hundred_batches_of_ten(self, thousand_store):
+        batches = list(iter_chunk_batches(thousand_store, batch_size=10))
+        assert len(batches) == 100
+        assert all(len(b) == 10 for b in batches)
+        # Flat count matches the store count.
+        total = sum(len(b) for b in batches)
+        assert total == 1000
+
+    def test_thousand_store_batch_size_sevenish_remainder(self, thousand_store):
+        """Non-divisible batch sizes must produce a remainder batch."""
+        batches = list(iter_chunk_batches(thousand_store, batch_size=7))
+        total = sum(len(b) for b in batches)
+        assert total == 1000
+        # At least one batch smaller than the full batch_size (remainder).
+        assert any(len(b) < 7 for b in batches)
+        # All non-remainder batches at full size.
+        assert max(len(b) for b in batches) == 7
+
+    def test_limit_caps_total_yielded(self, thousand_store):
+        batches = list(iter_chunk_batches(thousand_store, batch_size=10, limit=35))
+        total = sum(len(b) for b in batches)
+        assert total == 35
+
+    def test_limit_smaller_than_batch(self, thousand_store):
+        batches = list(iter_chunk_batches(thousand_store, batch_size=100, limit=5))
+        total = sum(len(b) for b in batches)
+        assert total == 5
+
+    def test_zero_limit_means_unlimited(self, tiny_store):
+        batches = list(iter_chunk_batches(tiny_store, batch_size=100, limit=0))
+        assert sum(len(b) for b in batches) == 10
+
+    def test_streaming_memory_is_bounded(self, thousand_store):
+        """tracemalloc peak must scale with batch_size, not store size.
+
+        We stream 1000 chunks in batches of 20 and record the peak Python
+        allocation during a single batch. With streaming it should stay well
+        below what a full-materialization path would use. We pick a ceiling
+        that's generous enough to survive platform noise but still proves
+        the list is not growing unbounded.
+        """
+        tracemalloc.start()
+        try:
+            tracemalloc.clear_traces()
+            peak_seen_bytes = 0
+            for batch in iter_chunk_batches(thousand_store, batch_size=20):
+                # After each batch, snapshot the current and peak allocation
+                _, peak = tracemalloc.get_traced_memory()
+                peak_seen_bytes = max(peak_seen_bytes, peak)
+                # Simulate the consumer doing work and releasing
+                del batch
+            # The 1000-chunk store is small; streaming should never push
+            # Python allocations above a few MB. 20 MB is a generous ceiling
+            # that catches any accidental "collect into a list first" regression.
+            assert peak_seen_bytes < 20 * 1024 * 1024, (
+                f"tracemalloc peak {peak_seen_bytes / 1e6:.1f} MB exceeds 20 MB ceiling — "
+                f"streaming branch may be accidentally accumulating"
+            )
+        finally:
+            tracemalloc.stop()
+
+    def test_fallback_is_off_by_default_and_raises(self, tiny_store):
+        """When the streaming API raises, the default must propagate the
+        error — no silent ``load_chunks`` fallback.
+
+        We simulate a broken streaming API by monkey-patching the underlying
+        table's ``search`` to raise. With the default
+        ``allow_load_fallback=False`` the generator must raise RuntimeError.
+        """
+        broken_table = tiny_store._table
+
+        class _RaisingBuilder:
+            def select(self, *a, **kw): return self
+            def limit(self, *a, **kw): return self
+            def to_batches(self, *a, **kw):
+                raise RuntimeError("simulated streaming API failure")
+
+        original_search = broken_table.search
+        broken_table.search = lambda *a, **kw: _RaisingBuilder()  # type: ignore[assignment]
+
+        try:
+            with pytest.raises(RuntimeError, match="allow_load_fallback=False"):
+                list(iter_chunk_batches(tiny_store, batch_size=5))
+        finally:
+            broken_table.search = original_search  # type: ignore[assignment]
+
+    def test_fallback_opt_in_uses_load_chunks(self, tiny_store):
+        """``allow_load_fallback=True`` is the only path to the materialize
+        route, and it must actually deliver chunks from ``load_chunks``."""
+        broken_table = tiny_store._table
+
+        class _RaisingBuilder:
+            def select(self, *a, **kw): return self
+            def limit(self, *a, **kw): return self
+            def to_batches(self, *a, **kw):
+                raise RuntimeError("simulated streaming API failure")
+
+        original_search = broken_table.search
+        # Only the FIRST call (from iter_chunk_batches) should raise. The
+        # fallback path calls load_chunks which also uses .search(), so we
+        # need to let subsequent calls through to the real implementation.
+        call_state = {"count": 0}
+
+        def _patched_search(*a, **kw):
+            call_state["count"] += 1
+            if call_state["count"] == 1:
+                return _RaisingBuilder()
+            return original_search(*a, **kw)
+
+        broken_table.search = _patched_search  # type: ignore[assignment]
+
+        try:
+            batches = list(iter_chunk_batches(
+                tiny_store, batch_size=5, allow_load_fallback=True,
+            ))
+            total = sum(len(b) for b in batches)
+            assert total == 10  # all 10 chunks came through the fallback
+        finally:
+            broken_table.search = original_search  # type: ignore[assignment]
+
+
+# ---------------------------------------------------------------------------
+# run_tier2_gliner — real store, fake GLiNER model
 # ---------------------------------------------------------------------------
 
 class TestRunTier2Streaming:
-    """The point of the redesign: Tier 2 re-streams the store instead of
-    accepting a pre-loaded list of chunks. These tests lock that in."""
-
-    def _make_store(self, n_prose: int, n_noise: int) -> FakeLanceStore:
-        chunks = []
-        for i in range(n_prose):
-            chunks.append({
-                "chunk_id": f"prose-{i}",
-                "text": (
-                    f"The site lead inspected the tower at chunk {i}. "
-                    f"Jane Doe filed a report."
-                ),
-                "source_path": f"doc-{i}.pdf",
-            })
-        for i in range(n_noise):
-            chunks.append({
-                "chunk_id": f"noise-{i}",
-                "text": "12345 " * 8,  # rejected by alpha-ratio filter
-                "source_path": f"table-{i}.xlsx",
-            })
-        return FakeLanceStore(chunks)
+    """Tier 2 must stream from a store directly, not accept a chunks list."""
 
     def test_signature_takes_store_not_chunks(self):
-        """run_tier2_gliner must accept a store, not a list of chunks.
-
-        The old signature took a `chunks: list[dict]` which was the
-        memory bug. Lock in the new signature by calling with keyword args.
-        """
         import inspect
-
         sig = inspect.signature(run_tier2_gliner)
         params = list(sig.parameters.keys())
         assert "store" in params
@@ -208,171 +313,125 @@ class TestRunTier2Streaming:
         assert "limit" in params
         assert "gliner_model" in params  # test-injection hook
 
-    def test_runs_over_streaming_store(self):
-        store = self._make_store(n_prose=20, n_noise=10)
+    def test_runs_over_mixed_store(self, mixed_store):
         fake_model = FakeGLiNERModel()
-
         entities = run_tier2_gliner(
-            store=store,
-            tier1_hit_chunk_ids=set(),
-            device="cpu",  # ignored when gliner_model is injected
-            model_name="fake",
-            min_chunk_len=20,
-            min_confidence=0.5,
-            limit=0,
-            stream_batch_size=5,
-            gliner_batch_size=3,
-            progress_every=0,
-            gliner_model=fake_model,
-        )
-
-        # 20 prose chunks all pass the filter, 10 noise chunks all fail it.
-        # Each prose chunk yields one PERSON entity (fake payload).
-        assert len(entities) == 20
-        assert all(e.entity_type == "PERSON" for e in entities)
-        assert all(e.text == "Jane Doe" for e in entities)
-
-        # Model was called in batches of up to gliner_batch_size=3.
-        # 20 candidates / 3 per batch = 6 full batches of 3 + 1 remainder of 2
-        assert sum(fake_model.batch_calls) == 20
-        assert max(fake_model.batch_calls) <= 3
-        assert any(n == 2 for n in fake_model.batch_calls), (
-            f"expected a remainder batch, got {fake_model.batch_calls}"
-        )
-
-    def test_makes_a_second_pass_over_store(self):
-        """Tier 2 must trigger its own store scan — the whole redesign.
-
-        The store's FakeArrow.scan_calls counter starts at 0 when we build
-        it, and Tier 2 calls must drive it above 0. If run_tier2_gliner
-        ever goes back to accepting a pre-loaded list, this will fail.
-        """
-        store = self._make_store(n_prose=5, n_noise=5)
-        assert store._table.scan_calls == 0
-
-        fake_model = FakeGLiNERModel()
-        run_tier2_gliner(
-            store=store,
+            store=mixed_store,
             tier1_hit_chunk_ids=set(),
             device="cpu",
             model_name="fake",
             min_chunk_len=20,
             min_confidence=0.5,
             limit=0,
-            stream_batch_size=10,
+            stream_batch_size=25,
             gliner_batch_size=4,
             progress_every=0,
             gliner_model=fake_model,
         )
+        # 70 prose chunks pass the filter, 30 noise chunks fail.
+        # Each prose chunk yields one PERSON entity from the fake payload.
+        assert len(entities) == 70
+        assert all(e.entity_type == "PERSON" for e in entities)
+        assert sum(fake_model.batch_calls) == 70
 
-        assert store._table.scan_calls >= 1, (
-            "Tier 2 did not re-scan the store — the streaming second-pass "
-            "contract is broken"
-        )
-
-    def test_respects_limit_flag(self):
-        """--limit must cap the Tier 2 scan so we can test on subsets."""
-        store = self._make_store(n_prose=50, n_noise=0)
+    def test_gliner_batches_bounded(self, mixed_store):
+        """No single GLiNER call may exceed ``gliner_batch_size``. A batch
+        equal to the corpus size would indicate a regression to the
+        accumulator pattern.
+        """
         fake_model = FakeGLiNERModel()
-
-        entities = run_tier2_gliner(
-            store=store,
+        run_tier2_gliner(
+            store=mixed_store,
             tier1_hit_chunk_ids=set(),
             device="cpu",
             model_name="fake",
             min_chunk_len=20,
             min_confidence=0.5,
-            limit=15,
-            stream_batch_size=10,
+            limit=0,
+            stream_batch_size=25,
+            gliner_batch_size=4,
+            progress_every=0,
+            gliner_model=fake_model,
+        )
+        assert fake_model.batch_calls, "GLiNER was never called"
+        assert max(fake_model.batch_calls) <= 4
+        assert sum(fake_model.batch_calls) == 70
+
+    def test_respects_limit_flag(self, thousand_store):
+        fake_model = FakeGLiNERModel()
+        entities = run_tier2_gliner(
+            store=thousand_store,
+            tier1_hit_chunk_ids=set(),
+            device="cpu",
+            model_name="fake",
+            min_chunk_len=20,
+            min_confidence=0.5,
+            limit=50,
+            stream_batch_size=25,
             gliner_batch_size=8,
             progress_every=0,
             gliner_model=fake_model,
         )
+        assert len(entities) == 50
+        assert sum(fake_model.batch_calls) == 50
 
-        # Only 15 chunks should have been processed by GLiNER.
-        assert len(entities) == 15
-        assert sum(fake_model.batch_calls) == 15
-
-    def test_handles_empty_store(self):
-        store = FakeLanceStore([])
-        fake_model = FakeGLiNERModel()
-        entities = run_tier2_gliner(
-            store=store,
-            tier1_hit_chunk_ids=set(),
-            device="cpu",
-            model_name="fake",
-            min_chunk_len=20,
-            min_confidence=0.5,
-            limit=0,
-            gliner_model=fake_model,
-        )
-        assert entities == []
-        assert fake_model.batch_calls == []
-
-    def test_no_candidates_means_no_gliner_calls(self):
-        """A store of only filter-rejected chunks must not call GLiNER."""
-        store = self._make_store(n_prose=0, n_noise=25)
-        fake_model = FakeGLiNERModel()
-        entities = run_tier2_gliner(
-            store=store,
-            tier1_hit_chunk_ids=set(),
-            device="cpu",
-            model_name="fake",
-            min_chunk_len=20,
-            min_confidence=0.5,
-            limit=0,
-            stream_batch_size=10,
-            gliner_batch_size=4,
-            progress_every=0,
-            gliner_model=fake_model,
-        )
-        assert entities == []
-        assert fake_model.batch_calls == []
-
-    def test_accumulates_only_entities_not_chunks(self):
-        """The fake model records batch sizes. If the production code ever
-        held the full corpus before calling GLiNER, we'd see a single giant
-        batch instead of multiple small ones. Verify batch sizes are bounded.
-        """
-        store = self._make_store(n_prose=100, n_noise=0)
-        fake_model = FakeGLiNERModel()
-
-        run_tier2_gliner(
-            store=store,
-            tier1_hit_chunk_ids=set(),
-            device="cpu",
-            model_name="fake",
-            min_chunk_len=20,
-            min_confidence=0.5,
-            limit=0,
-            stream_batch_size=10,
-            gliner_batch_size=4,
-            progress_every=0,
-            gliner_model=fake_model,
-        )
-
-        # Every batch must be <= gliner_batch_size. A batch equal to
-        # n_prose would indicate the old accumulator pattern.
-        assert all(n <= 4 for n in fake_model.batch_calls), (
-            f"batch sizes exceeded gliner_batch_size=4: {fake_model.batch_calls}"
-        )
-        assert sum(fake_model.batch_calls) == 100
+    def test_empty_prose_store_produces_nothing(self, tmp_path):
+        store = _build_real_store(tmp_path, n_chunks=20, prose_ratio=0.0)
+        try:
+            fake_model = FakeGLiNERModel()
+            entities = run_tier2_gliner(
+                store=store,
+                tier1_hit_chunk_ids=set(),
+                device="cpu",
+                model_name="fake",
+                min_chunk_len=20,
+                min_confidence=0.5,
+                limit=0,
+                stream_batch_size=10,
+                gliner_batch_size=4,
+                progress_every=0,
+                gliner_model=fake_model,
+            )
+            assert entities == []
+            assert fake_model.batch_calls == []  # no GLiNER calls at all
+        finally:
+            store.close()
 
 
 # ---------------------------------------------------------------------------
-# Smoke test: the script's main() is still parseable
+# Canonical helper exports (locked because the GUI imports them)
 # ---------------------------------------------------------------------------
 
 class TestModuleImports:
     def test_canonical_helpers_exported(self):
-        """The GUI imports _is_tier2_candidate from scripts.tiered_extract.
-
-        Changing the helper location would silently break the GUI, so this
-        test pins it to the CLI module as the single source of truth.
-        """
         from scripts import tiered_extract as te
-
         assert hasattr(te, "_is_tier2_candidate")
         assert hasattr(te, "iter_chunk_batches")
         assert hasattr(te, "run_tier2_gliner")
-        assert hasattr(te, "load_chunks")  # preserved for backward compat
+        assert hasattr(te, "load_chunks")  # preserved for back-compat
+
+    def test_streaming_api_dependency_present(self):
+        """Lock in the lancedb streaming API contract.
+
+        ``iter_chunk_batches`` depends on ``LanceQueryBuilder.to_batches``,
+        which ships with lancedb itself (no optional pylance). This test
+        fails loudly if a future install ends up on an older lancedb or
+        a build that lacks the streaming API.
+        """
+        import lancedb
+        from lancedb.query import LanceQueryBuilder
+
+        assert hasattr(LanceQueryBuilder, "to_batches"), (
+            f"lancedb {lancedb.__version__} does not expose "
+            f"LanceQueryBuilder.to_batches — streaming Tier 1/2 extraction "
+            f"will fall back to load_chunks and OOM at scale. "
+            f"Upgrade: pip install --upgrade 'lancedb>=0.30'"
+        )
+
+    def test_assert_streaming_api_helper_exists(self):
+        """The module-level guard must exist and be callable. It runs at
+        import time but we re-invoke it here to prove it is still a public
+        contract the test suite pins."""
+        from scripts.tiered_extract import _assert_streaming_api_available
+        # Should be a no-op on a healthy install.
+        _assert_streaming_api_available()
