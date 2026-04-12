@@ -335,6 +335,28 @@ def _is_cuda_oom(exc: Exception) -> bool:
     return "out of memory" in message and "cuda" in message
 
 
+def _entity_store_counts(entity_store: EntityStore) -> tuple[int, Counter[str]]:
+    """Return total entity rows plus per-type counts from SQLite."""
+    rows = entity_store._conn.execute(
+        """
+        SELECT entity_type, COUNT(*)
+        FROM entities
+        GROUP BY entity_type
+        """
+    ).fetchall()
+    type_counts = Counter({entity_type: int(count) for entity_type, count in rows})
+    return sum(type_counts.values()), type_counts
+
+
+def _counter_delta(after: Counter[str], before: Counter[str]) -> Counter[str]:
+    """Return positive per-key deltas between two counters."""
+    return Counter({
+        key: count - before.get(key, 0)
+        for key, count in after.items()
+        if count - before.get(key, 0) > 0
+    })
+
+
 def _stream_tier2_gliner(
     store: LanceStore,
     device: str,
@@ -660,12 +682,16 @@ def main() -> None:
     print(f"           Rate: {chunks_processed/max(t1_elapsed, 0.001):,.0f} chunks/sec")
     print()
 
-    total_entity_count = t1_entity_total
-    total_types = Counter(t1_types)
+    total_entity_count = t1_entity_total if args.dry_run else 0
+    total_types = Counter(t1_types) if args.dry_run else Counter()
     if not args.dry_run and unique_t1:
-        before_t1_e = entity_store.count_entities()
+        before_t1_e, before_t1_types = _entity_store_counts(entity_store)
         entity_store.insert_entities(unique_t1)
-        after_t1_e = entity_store.count_entities()
+        after_t1_e, after_t1_types = _entity_store_counts(entity_store)
+        t1_new_count = after_t1_e - before_t1_e
+        t1_new_types = _counter_delta(after_t1_types, before_t1_types)
+        total_entity_count += t1_new_count
+        total_types.update(t1_new_types)
         print(f"  [TIER 1] persisted {after_t1_e - before_t1_e:,} entities (before={before_t1_e:,}, after={after_t1_e:,})")
         print()
 
@@ -695,7 +721,7 @@ def main() -> None:
                 entity_store.insert_entities(tier2_flush_buffer)
                 tier2_flush_buffer.clear()
 
-        before_t2_e = entity_store.count_entities() if not args.dry_run else 0
+        before_t2_e, before_t2_types = _entity_store_counts(entity_store) if not args.dry_run else (0, Counter())
         t2_result = _stream_tier2_gliner(
             store=store,
             device=config.extraction.gliner_device,
@@ -712,11 +738,12 @@ def main() -> None:
 
         t2_raw_count = int(t2_result["raw_count"])
         t2_types = Counter(t2_result["type_counts"])
-        total_entity_count += t2_raw_count
-        total_types.update(t2_types)
         if not args.dry_run:
-            after_t2_e = entity_store.count_entities()
+            after_t2_e, after_t2_types = _entity_store_counts(entity_store)
             t2_new_count = after_t2_e - before_t2_e
+            t2_new_types = _counter_delta(after_t2_types, before_t2_types)
+            total_entity_count += t2_new_count
+            total_types.update(t2_new_types)
 
         print(f"  [TIER 2] {t2_raw_count:,} entities raw, {t2_new_count:,} new after dedup ({t2_elapsed:.1f}s)")
         print(f"           Types: {dict(t2_types)}")
