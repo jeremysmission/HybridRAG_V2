@@ -482,8 +482,34 @@ def run_import(
     store = LanceStore(config.paths.lance_db)
     before_count = store.count()
     print(f"  Inserting {len(chunks):,} chunks in batches of {store.INGEST_BATCH_SIZE:,} ...")
+    attempted = len(chunks)
     inserted = store.ingest_chunks(chunks, vectors)
     t_ingest = time.perf_counter() - t_start
+
+    # Integrity check — catches the laptop 10M class of silent truncation
+    # at the point of ingest. Does not abort the run; surfaces a loud
+    # WARNING so operators see it before the store ships downstream.
+    integrity = store.verify_ingest_completeness(
+        attempted=attempted,
+        before_count=before_count,
+        inserted=inserted,
+        manifest_count=manifest.get("chunk_count") if isinstance(manifest, dict) else None,
+    )
+    if not integrity.ok:
+        print()
+        print("=" * 70, file=sys.stderr)
+        print("  [WARN] INGEST INTEGRITY CHECK FAILED", file=sys.stderr)
+        print("=" * 70, file=sys.stderr)
+        for issue in integrity.issues:
+            print(f"  - {issue}", file=sys.stderr)
+        print("=" * 70, file=sys.stderr)
+        print()
+    else:
+        print(
+            f"  [OK] Ingest integrity: attempted={integrity.attempted:,} "
+            f"inserted={integrity.inserted:,} duplicates={integrity.duplicates:,} "
+            f"net_delta={integrity.net_delta:,}"
+        )
 
     # FTS index
     t_fts_start = time.perf_counter()
@@ -593,6 +619,7 @@ def run_import(
         "vector_index_result": index_result if index_result else {},
         "vector_index_stats": vector_index_stats if vector_index_stats else {},
         "vector_index_ready": vector_index_ready,
+        "ingest_integrity": integrity.to_dict(),
         "report_path": str(report_path),
     }
 

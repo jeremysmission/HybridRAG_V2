@@ -262,6 +262,37 @@ class ImportExtractRunner:
                 store.create_vector_index()
 
                 after_count = store.count()
+
+                # Integrity check — catches laptop 10M class of silent
+                # truncation inside the GUI walk-away runner. Same helper
+                # the CLI import_embedengine.py calls. Surfaces as a loud
+                # WARNING log line that the operator can't miss.
+                integrity = store.verify_ingest_completeness(
+                    attempted=total,
+                    before_count=before_count,
+                    inserted=inserted_total,
+                    manifest_count=(
+                        manifest.get("chunk_count")
+                        if isinstance(manifest, dict) else None
+                    ),
+                )
+                if not integrity.ok:
+                    self._log(
+                        "INGEST INTEGRITY CHECK FAILED -- see details below",
+                        level="WARNING",
+                    )
+                    for issue in integrity.issues:
+                        self._log(f"  {issue}", level="WARNING")
+                    self._set_stat("ingest_integrity", "FAIL")
+                else:
+                    self._log(
+                        f"Ingest integrity OK: attempted={integrity.attempted:,} "
+                        f"inserted={integrity.inserted:,} "
+                        f"duplicates={integrity.duplicates:,} "
+                        f"net_delta={integrity.net_delta:,}"
+                    )
+                    self._set_stat("ingest_integrity", "OK")
+
                 store.close()
 
                 results["import"] = {
@@ -270,6 +301,7 @@ class ImportExtractRunner:
                     "inserted": inserted_total,
                     "duplicates": total - inserted_total,
                     "after": after_count,
+                    "integrity": integrity.to_dict(),
                 }
                 self._log(f"Import complete: {inserted_total:,} new, {total - inserted_total:,} dupes, {after_count:,} total")
 

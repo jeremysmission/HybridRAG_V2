@@ -25,6 +25,79 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
+class IngestIntegrityReport:
+    """Structured result of verify_ingest_completeness().
+
+    Populated after an ingest call so callers can surface mismatches as
+    loud warnings or operator errors instead of silently trusting the
+    post-ingest count.
+
+    Fields
+    ------
+    attempted:
+        ``len(chunks)`` passed to ``ingest_chunks``.
+    before_count:
+        ``store.count()`` observed before the ingest call.
+    after_count:
+        ``store.count()`` observed after the ingest call.
+    inserted:
+        Value returned by ``ingest_chunks`` (new rows it actually added).
+    duplicates:
+        ``attempted - inserted`` — chunks that were already present and
+        got skipped by the dedup filter.
+    net_delta:
+        ``after_count - before_count`` — the table-level delta the store
+        itself reports via ``count_rows()``.
+    expected_delta:
+        Value of ``inserted``. If ``net_delta != expected_delta`` the
+        store did not actually absorb what the ingest function claimed
+        to insert — that's the class of silent truncation the laptop
+        10M incident exposed (see
+        ``docs/LAPTOP_10M_INVESTIGATION_2026-04-11.md``).
+    mismatch:
+        ``net_delta - expected_delta``. Zero on a healthy ingest.
+    manifest_count:
+        Optional — the value of ``manifest.chunk_count`` from the
+        CorpusForge export. When provided and ``attempted !=
+        manifest_count`` the helper also flags the upstream source
+        being smaller than the manifest promised.
+    issues:
+        List of human-readable warning / error strings. Empty list
+        means the ingest passed every integrity check.
+    """
+
+    attempted: int
+    before_count: int
+    after_count: int
+    inserted: int
+    duplicates: int
+    net_delta: int
+    expected_delta: int
+    mismatch: int
+    manifest_count: int | None
+    issues: list[str]
+
+    @property
+    def ok(self) -> bool:
+        return not self.issues
+
+    def to_dict(self) -> dict:
+        return {
+            "attempted": self.attempted,
+            "before_count": self.before_count,
+            "after_count": self.after_count,
+            "inserted": self.inserted,
+            "duplicates": self.duplicates,
+            "net_delta": self.net_delta,
+            "expected_delta": self.expected_delta,
+            "mismatch": self.mismatch,
+            "manifest_count": self.manifest_count,
+            "issues": list(self.issues),
+            "ok": self.ok,
+        }
+
+
+@dataclass
 class ChunkResult:
     """Single search result from the store."""
 
@@ -244,6 +317,112 @@ class LanceStore:
             return self._table.count_rows()
         except Exception:
             return 0
+
+    def verify_ingest_completeness(
+        self,
+        attempted: int,
+        before_count: int,
+        inserted: int,
+        manifest_count: int | None = None,
+    ) -> IngestIntegrityReport:
+        """Check that an ingest actually landed everything it claimed.
+
+        This is the durable safety net added after the laptop 10M
+        incident (2026-04-11): the laptop's LanceStore landed at exactly
+        10,000,000 chunks despite being asked to ingest 10,435,593, and
+        no code path in V2 currently catches that kind of silent
+        truncation at ingest time. See
+        ``docs/LAPTOP_10M_INVESTIGATION_2026-04-11.md`` for the full
+        search and root-cause analysis.
+
+        The check is cheap — a single ``count_rows()`` call — and runs
+        in both the CLI (``scripts/import_embedengine.py``) and GUI
+        (``scripts/import_extract_gui.py``) import paths so no walk-away
+        run can land silently truncated.
+
+        The helper does NOT raise. It returns an
+        ``IngestIntegrityReport`` whose ``issues`` list names every
+        mismatch it found. Callers are responsible for deciding whether
+        to abort or continue — an operator-visible loud WARNING is the
+        current policy; a future hard-fail mode may follow once we've
+        confirmed there are no false positives in production.
+
+        Integrity rules applied:
+
+          - ``net_delta == expected_delta``
+            Table row delta matches the ``inserted`` count the ingest
+            function returned. Catches LanceDB fragment rollback,
+            version-pointer regression, external process kill after
+            an ``add()`` call but before the metadata commit, and disk
+            full that silently drops the final commit.
+
+          - ``manifest_count`` vs ``attempted`` (when manifest_count
+            is supplied)
+            The CorpusForge manifest promised N chunks, but the chunks
+            list handed to ingest_chunks had M. That means the export
+            file itself was truncated upstream of V2 — not a V2 bug,
+            but the operator should know before they trust the store.
+
+          - ``0 <= inserted <= attempted``
+            Sanity check on the ingest-return value. A caller that
+            reports ``inserted > attempted`` has a counter bug; a
+            negative ``inserted`` means the caller handed us a broken
+            return value and we should surface it rather than silently
+            trusting the arithmetic downstream.
+        """
+        after_count = self.count()
+        net_delta = after_count - before_count
+        expected_delta = inserted
+        mismatch = net_delta - expected_delta
+        duplicates = attempted - inserted
+
+        issues: list[str] = []
+
+        # Rule 1: net_delta == expected_delta
+        if mismatch != 0:
+            issues.append(
+                f"INGEST INTEGRITY: store count delta {net_delta:,} "
+                f"does not match ingest-reported inserted {inserted:,} "
+                f"(mismatch = {mismatch:+,}). "
+                f"This is the class of silent truncation the laptop 10M "
+                f"incident exposed — see "
+                f"docs/LAPTOP_10M_INVESTIGATION_2026-04-11.md."
+            )
+
+        # Rule 2: manifest vs attempted
+        if manifest_count is not None and manifest_count != attempted:
+            issues.append(
+                f"INGEST INTEGRITY: CorpusForge manifest.chunk_count="
+                f"{manifest_count:,} but chunks list handed to ingest "
+                f"had {attempted:,} entries "
+                f"(delta = {attempted - manifest_count:+,}). "
+                f"Upstream export may be truncated."
+            )
+
+        # Rule 3: 0 <= inserted <= attempted
+        if inserted < 0:
+            issues.append(
+                f"INGEST INTEGRITY: inserted count is negative "
+                f"({inserted}) — caller returned an invalid value."
+            )
+        if inserted > attempted:
+            issues.append(
+                f"INGEST INTEGRITY: inserted={inserted:,} exceeds "
+                f"attempted={attempted:,}. Counter bug in caller."
+            )
+
+        return IngestIntegrityReport(
+            attempted=attempted,
+            before_count=before_count,
+            after_count=after_count,
+            inserted=inserted,
+            duplicates=duplicates,
+            net_delta=net_delta,
+            expected_delta=expected_delta,
+            mismatch=mismatch,
+            manifest_count=manifest_count,
+            issues=issues,
+        )
 
     def configure_search(
         self,
