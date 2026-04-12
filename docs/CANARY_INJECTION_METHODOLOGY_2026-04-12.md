@@ -202,7 +202,7 @@ Production Use: prohibited
 
 ### Required filename convention
 
-Include `valcanary` in every filename so operators can isolate the pack with simple path or glob filters and so a future CorpusForge include/exclude rule can target it explicitly. This methodology does **not** assume a pre-existing `nightly_delta.canary_globs` path in the local CorpusForge tree.
+Include `valcanary` in every filename so operators can isolate the pack with simple path or glob filters. In the authoritative Forge repo at `C:\CorpusForge`, the active nightly-delta path already includes `nightly_delta.canary_globs` with a broad `*canary*` pattern, so `valcanary_*` would be surfaced by that nightly-delta scan path today. This is config-grounded coverage through the existing broad glob, not a dedicated explicit `valcanary_*` rule.
 
 Example:
 
@@ -215,7 +215,7 @@ valcanary_acas_rollup_q3_2024.pdf
 ### Why this path and naming
 
 - leading underscore keeps the subtree visually separate,
-- `valcanary` is an explicit human-readable filter token for future Forge rules and ad hoc operator filtering,
+- `valcanary` is both a human-readable operator filter token and a match for the current authoritative nightly-delta broad glob `*canary*`,
 - extractor-compatible `PO` / `PART` / `SITE` values are clean in the live store,
 - the visible marker gives operators a searchable proof handle.
 
@@ -989,7 +989,7 @@ But that is an implementation choice, not a requirement for the first pass.
 ### Sprint B — CorpusForge inclusion/exclusion path
 
 - prove `_VALCAN_2026` can be included or omitted cleanly
-- add or document an explicit CorpusForge include/exclude rule for `_VALCAN_2026` / `valcanary_*`
+- document the current nightly-delta broad-glob coverage for `valcanary_*`, and add a dedicated explicit rule only if the team wants narrower/clearer separation than the existing `*canary*` match
 - prove import-side `--exclude-source-glob` safety net
 
 ### Sprint C — Store-side verification
