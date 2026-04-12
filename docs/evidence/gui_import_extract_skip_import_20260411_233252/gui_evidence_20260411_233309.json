@@ -1,0 +1,109 @@
+{
+  "evidence_version": "1.0",
+  "lane": "skip_import_gui",
+  "target_module": "scripts/import_extract_gui.py",
+  "captured_at": "2026-04-11T23:32:52",
+  "repo_root": "C:\\HybridRAG_V2",
+  "scope_note": "Targeted evidence for the Skip Import / source folder validation surface. Does NOT replace the required Tier D non-author human button smash per docs/QA_GUI_HARNESS_2026-04-05.md.",
+  "tier_d_status": "PENDING_NON_AUTHOR",
+  "mode": "headless-withdrawn",
+  "checks": [
+    {
+      "name": "tier_a_skip_empty_source_allowed",
+      "passed": true,
+      "details": {
+        "skip_import": true,
+        "source": "",
+        "runner_started": true,
+        "expected_started": true,
+        "error_lines": []
+      }
+    },
+    {
+      "name": "tier_a_skip_filled_source_ignored",
+      "passed": true,
+      "details": {
+        "skip_import": true,
+        "source": "C:\\WINDOWS\\TEMP\\tmpiv7xgkrs",
+        "runner_started": true,
+        "expected_started": true,
+        "error_lines": []
+      }
+    },
+    {
+      "name": "tier_a_no_skip_empty_source_blocked",
+      "passed": true,
+      "details": {
+        "skip_import": false,
+        "source": "",
+        "runner_started": false,
+        "expected_started": false,
+        "error_lines": [
+          "ERROR: Select a source export folder first, or check 'Skip Import' if the LanceDB is already populated."
+        ]
+      }
+    },
+    {
+      "name": "tier_a_no_skip_missing_export_files_blocked",
+      "passed": true,
+      "details": {
+        "skip_import": false,
+        "source": "C:\\WINDOWS\\TEMP\\tmplwu48u_l",
+        "runner_started": false,
+        "expected_started": false,
+        "error_lines": [
+          "ERROR: Missing chunks.jsonl or vectors.npy in export folder."
+        ]
+      }
+    },
+    {
+      "name": "tier_a_no_skip_not_a_directory_blocked",
+      "passed": true,
+      "details": {
+        "skip_import": false,
+        "source": "C:\\WINDOWS\\TEMP\\tmpy1uzhnwp\\not_a_dir.txt",
+        "runner_started": false,
+        "expected_started": false,
+        "error_lines": [
+          "ERROR: Not a directory: C:\\WINDOWS\\TEMP\\tmpy1uzhnwp\\not_a_dir.txt"
+        ]
+      }
+    },
+    {
+      "name": "tier_a_startup_log_mentions_skip_import",
+      "passed": true,
+      "details": {
+        "log_widget_content_excerpt": "GPU: GPU 0: NVIDIA GeForce RTX 3090 (24.5 / 25.8 GB) | GPU 1: NVIDIA GeForce RTX 3090 (24.5 / 25.8 GB)\nReady. Select a source folder and click Start, or check 'Skip Import' if the LanceDB is already populated.\n\n",
+        "mentions_skip_import": true
+      }
+    },
+    {
+      "name": "tier_b_smart_monkey_zero_crashes",
+      "passed": true,
+      "details": {
+        "rounds": 30,
+        "crashes": 0,
+        "first_crashes": [],
+        "action_mix_seed": 42
+      }
+    },
+    {
+      "name": "tier_c_dumb_monkey_zero_crashes",
+      "passed": true,
+      "details": {
+        "duration_seconds": 15,
+        "rounds": 570069,
+        "crashes": 0,
+        "first_crashes": [],
+        "seed": 1337
+      }
+    }
+  ],
+  "artifacts": [
+    "C:\\HybridRAG_V2\\docs\\evidence\\gui_import_extract_skip_import_20260411_233252\\tier_a_snapshot.txt",
+    "C:\\HybridRAG_V2\\docs\\evidence\\gui_import_extract_skip_import_20260411_233252\\tier_b_log.txt",
+    "C:\\HybridRAG_V2\\docs\\evidence\\gui_import_extract_skip_import_20260411_233252\\tier_c_log.txt"
+  ],
+  "verdict": "PASS",
+  "verdict_note": "Tier A/B/C automated gate. Tier D (non-author human button smash) still required before demo per the QA GUI harness spec."
+}

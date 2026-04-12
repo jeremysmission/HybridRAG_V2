@@ -1,0 +1,35 @@
+Tier B smart monkey actions
+===========================
+
+000 OK  clear_source
+001 OK  toggle_skip
+002 OK  click_start_rapid
+003 OK  set_source_fake
+004 OK  set_source_empty_tmp
+005 OK  clear_source
+006 OK  clear_source
+007 OK  toggle_skip_then_start
+008 OK  toggle_skip
+009 OK  toggle_skip
+010 OK  clear_source
+011 OK  set_source_fake
+012 OK  toggle_skip
+013 OK  set_source_fake
+014 OK  toggle_skip_then_start
+015 OK  set_source_fake
+016 OK  click_start_rapid
+017 OK  toggle_skip
+018 OK  set_source_empty_tmp
+019 OK  toggle_skip_then_start
+020 OK  double_click_start
+021 OK  click_start_rapid
+022 OK  set_source_empty_tmp
+023 OK  set_source_fake
+024 OK  clear_source
+025 OK  clear_source
+026 OK  toggle_skip_then_start
+027 OK  clear_source
+028 OK  double_click_start
+029 OK  double_click_start
+
+Crashes: 0

@@ -712,7 +712,11 @@ class ImportExtractGUI:
         gpu_info = _get_gpu_info()
         self._stat_values["gpu_status"].configure(text=gpu_info)
         self.append_log(f"GPU: {gpu_info}", "INFO")
-        self.append_log("Ready. Select source folder and click Start.", "INFO")
+        self.append_log(
+            "Ready. Select a source folder and click Start, "
+            "or check 'Skip Import' if the LanceDB is already populated.",
+            "INFO",
+        )
 
     def _build_ui(self):
         t = current_theme()

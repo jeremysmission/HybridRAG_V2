@@ -1,0 +1,65 @@
+Tier A: ImportExtractGUI widget tree at startup
+===============================================
+
+log_widget_bytes: 211
+mentions_skip_import: True
+
+Tk
+  TFrame
+    Label text='HybridRAG V2 — Import + Extraction' state='normal'
+    TLabelframe text='Source Export'
+      TFrame
+        Label text='Export Folder:' state='normal'
+        Entry text='PY_VAR20' state='normal'
+        TButton text='Browse...' state='normal'
+    TFrame
+      Label text='Max Tier:' state='normal'
+      TCombobox text='PY_VAR21' state='readonly'
+      TCheckbutton text='Skip Import (LanceDB already populated)' state='normal'
+      TButton text='Start' state='normal'
+      TButton text='Stop Safely' state='disabled'
+    TFrame
+      Label text='IDLE' state='normal'
+      TProgressbar
+      Label text='0 / 0' state='normal'
+    TLabelframe text='Pipeline Status'
+      TFrame
+        TFrame
+          Label text='Source:' state='normal'
+          Label text='--' state='normal'
+        TFrame
+          Label text='Chunks Total:' state='normal'
+          Label text='--' state='normal'
+        TFrame
+          Label text='Processed:' state='normal'
+          Label text='--' state='normal'
+        TFrame
+          Label text='Tier 1 Entities:' state='normal'
+          Label text='--' state='normal'
+        TFrame
+          Label text='Tier 1 Rels:' state='normal'
+          Label text='--' state='normal'
+        TFrame
+          Label text='Tier 2 Entities:' state='normal'
+          Label text='--' state='normal'
+      TFrame
+        TFrame
+          Label text='GPU:' state='normal'
+          Label text='GPU 0: NVIDIA GeForce RTX 3090 (24.5 / 25.8 GB) | GPU 1: NVIDIA GeForce RTX 3090 (24.5 / 25.8 GB)' state='normal'
+        TFrame
+          Label text='Elapsed:' state='normal'
+          Label text='--' state='normal'
+        TFrame
+          Label text='ETA:' state='normal'
+          Label text='--' state='normal'
+        TFrame
+          Label text='Rate:' state='normal'
+          Label text='--' state='normal'
+        TFrame
+          Label text='Detail:' state='normal'
+          Label text='--' state='normal'
+    TLabelframe text='Log'
+      TFrame
+        Text state='disabled'
+        TScrollbar
+    Label state='normal'
