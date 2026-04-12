@@ -8,7 +8,6 @@
     "_source_rationale_doc": "docs/PRODUCTION_EVAL_400_RATIONALE_2026-04-12.md",
     "_note": "Phase 1 delivers 50 new queries (PQ-101 through PQ-150). The existing 25 queries at tests/golden_eval/production_queries_2026-04-11.json (PQ-001 through PQ-025) will be merged into this file in a future pass; do not double-count. Target for full Phase 2+ is 400 total."
   },
-
   {
     "query_id": "PQ-101",
     "user_input": "What is the latest enterprise program weekly hours variance for fiscal year 2024?",
@@ -17,10 +16,18 @@
     "persona": "Program Manager",
     "expected_query_type": "TABULAR",
     "expected_document_family": "Program Management",
-    "expected_source_patterns": ["10.0 Program Management/2.0 Weekly Variance Reports/2024/%enterprise program Weekly Hours Variance%"],
+    "expected_source_patterns": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/%enterprise program Weekly Hours Variance%"
+    ],
     "difficulty": "easy",
     "rationale": "Tests the PM's primary cost/schedule pulse check: direct spreadsheet lookup against a recurring standardized artifact. Real weekly variance reports exist for every Friday in 2024.",
-    "expected_anchor_entities": {"DATE": ["2024-12-31", "2024-12-20", "2024-12-13"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-12-31",
+        "2024-12-20",
+        "2024-12-13"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Entity store contains 15,256 entity hits on 2024-12-31 Weekly Hours Variance.xlsx alone; the artifact family has dozens of dated siblings under 2.0 Weekly Variance Reports/2024/."
   },
@@ -32,10 +39,22 @@
     "persona": "Program Manager",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "Program Management",
-    "expected_source_patterns": ["10.0 Program Management/1.0 FEP/Reference/2024 %Monthly Actuals.xlsx"],
+    "expected_source_patterns": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 %Monthly Actuals.xlsx"
+    ],
     "difficulty": "medium",
     "rationale": "Aggregation across 12 monthly actuals files. Tests whether retrieval can enumerate the full 2024 FEP series without missing months.",
-    "expected_anchor_entities": {"DATE": ["2024 02", "2024 07", "2024 08", "2024 09", "2024 10", "2024 11", "2024 12"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024 02",
+        "2024 07",
+        "2024 08",
+        "2024 09",
+        "2024 10",
+        "2024 11",
+        "2024 12"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Folder listing confirmed via anchor miner: '1.0 FEP/Reference/2024 NN Monthly Actuals.xlsx' exists for each month with 7,886-7,930 entity hits per file."
   },
@@ -43,11 +62,15 @@
     "query_id": "PQ-103",
     "user_input": "Which CDRL is A002 and what maintenance service reports have been submitted under it?",
     "reference": "A002 is the Maintenance Service Report (MSR) CDRL. Submissions are organized by site under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/ with 21 site-specific subfolders covering Alpena through Wake.",
-    "reference_contexts": ["1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/"],
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/"
+    ],
     "persona": "Program Manager",
     "expected_query_type": "ENTITY",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/%"
+    ],
     "difficulty": "easy",
     "rationale": "CDRL code -> deliverable type lookup. Tests that exact identifier 'A002' matches against the folder naming convention.",
     "expected_anchor_entities": {},
@@ -62,7 +85,9 @@
     "persona": "Program Manager",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A031 - Integrated Master Schedule (IMS)/%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A031 - Integrated Master Schedule (IMS)/%"
+    ],
     "difficulty": "easy",
     "rationale": "Tests narrative recall of CDRL structure. A031 is the IMS deliverable folder.",
     "expected_anchor_entities": {},
@@ -77,10 +102,16 @@
     "persona": "Program Manager",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Program Management",
-    "expected_source_patterns": ["10.0 Program Management/6.0 PMR/%IGS_PMR%.pptx"],
+    "expected_source_patterns": [
+      "10.0 Program Management/6.0 PMR/%IGS_PMR%.pptx"
+    ],
     "difficulty": "medium",
     "rationale": "Tests narrative extraction from a PMR briefing deck. PMR PPTX files are the PM's primary status artifact.",
-    "expected_anchor_entities": {"DATE": ["2026"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "2026"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Folder '10.0 Program Management/6.0 PMR/2026/' exists with IGS_PMR_2026_FebR1.pptx; confirmed via PQ-002 source match in production_eval_results_2026-04-11."
   },
@@ -92,10 +123,17 @@
     "persona": "Program Manager",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Program Management",
-    "expected_source_patterns": ["10.0 Program Management/#Follow-On/%"],
+    "expected_source_patterns": [
+      "10.0 Program Management/#Follow-On/%"
+    ],
     "difficulty": "easy",
     "rationale": "Tests contract acquisition workflow retrieval. Real SAM.Gov and NCTA forecast artifacts exist in this folder.",
-    "expected_anchor_entities": {"DATE": ["2025", "2026"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025",
+        "2026"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Folder '10.0 Program Management/#Follow-On/' contains real Sources Sought RFI documents dated December 2025."
   },
@@ -107,7 +145,9 @@
     "persona": "Program Manager",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A%"
+    ],
     "difficulty": "medium",
     "rationale": "Counting query: how many A-numbered CDRL folders exist? Tests enumeration across a structured folder tree.",
     "expected_anchor_entities": {},
@@ -122,7 +162,9 @@
     "persona": "Program Manager",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A050 - Configuration Change Request/%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A050 - Configuration Change Request/%"
+    ],
     "difficulty": "medium",
     "rationale": "Tests retrieval from a CCR-specific CDRL folder. CCRs are PM-tracked change control artifacts.",
     "expected_anchor_entities": {},
@@ -137,7 +179,9 @@
     "persona": "Program Manager",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A008 - Management Plan%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A008 - Management Plan%"
+    ],
     "difficulty": "medium",
     "rationale": "Narrative read of the Management Plan document. Tests that content-level retrieval works against a baseline PM document.",
     "expected_anchor_entities": {},
@@ -152,26 +196,41 @@
     "persona": "Program Manager",
     "expected_query_type": "TABULAR",
     "expected_document_family": "Program Management",
-    "expected_source_patterns": ["10.0 Program Management/LDI/%Budget ORG%"],
+    "expected_source_patterns": [
+      "10.0 Program Management/LDI/%Budget ORG%"
+    ],
     "difficulty": "medium",
     "rationale": "Tests retrieval of the LDI suborganization budget spreadsheets, a sensitive PM view.",
-    "expected_anchor_entities": {"DATE": ["2024", "20240507", "20240110"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024",
+        "20240507",
+        "20240110"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "'Budget ORG 2024 HOURS, 20240507, April to December.xlsx' and sibling files confirmed under 10.0 Program Management/LDI/."
   },
-
   {
     "query_id": "PQ-111",
     "user_input": "What is the packing list for the 2023-12-19 LDI Repair Parts shipment?",
     "reference": "The NG Packing List for LDI Equipment Repair is stored at '5.0 Logistics/Shipments/2023 - Shipments/Misc Shipments/2023_12_19 - LDI Repair Parts/NG Packing List - LDI Equipment Repair.xlsx'.",
-    "reference_contexts": ["5.0 Logistics/Shipments/2023 - Shipments/Misc Shipments/2023_12_19 - LDI Repair Parts/"],
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2023 - Shipments/Misc Shipments/2023_12_19 - LDI Repair Parts/"
+    ],
     "persona": "Logistics Lead",
     "expected_query_type": "ENTITY",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/Shipments/2023 - Shipments/%LDI Repair Parts%"],
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2023 - Shipments/%LDI Repair Parts%"
+    ],
     "difficulty": "easy",
     "rationale": "Direct ENTITY lookup for a dated shipment. Tests that dated shipment folders can be resolved to their packing list.",
-    "expected_anchor_entities": {"DATE": ["2023-12-19"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "2023-12-19"
+      ]
+    },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Folder '5.0 Logistics/Shipments/2023 - Shipments/Misc Shipments/2023_12_19 - LDI Repair Parts/' confirmed via anchor miner with 6,953 entity hits."
   },
@@ -183,10 +242,17 @@
     "persona": "Logistics Lead",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/Parts (Downloaded Information)/legacy monitoring system Parts/Pre-Amplifier%"],
+    "expected_source_patterns": [
+      "5.0 Logistics/Parts (Downloaded Information)/legacy monitoring system Parts/Pre-Amplifier%"
+    ],
     "difficulty": "medium",
     "rationale": "Tests retrieval of real legacy monitoring system parts catalog. P240-260VDG and P240-270VDG are real pre-amplifier part numbers.",
-    "expected_anchor_entities": {"PART": ["P240-260VDG", "P240-270VDG"]},
+    "expected_anchor_entities": {
+      "PART": [
+        "P240-260VDG",
+        "P240-270VDG"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Folder 'legacy monitoring system Parts/Pre-Amplifier (P240-260VDG)(P240-270VDG)/' confirmed; 776 entity hits on specifications PDF."
   },
@@ -194,14 +260,22 @@
     "query_id": "PQ-113",
     "user_input": "What is purchase order 5000585586 and what did it order?",
     "reference": "PO 5000585586 is a monitoring system Sustainment OY2 purchase from Grainger for Pulling Tape destined for Lualualei, value $598.00, paired with Purchase Requisition PR 3000133844.",
-    "reference_contexts": ["5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2%/PO - 5000585586, PR 3000133844 Pulling Tape LLL monitoring system(GRAINGER)($598.00)/"],
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2%/PO - 5000585586, PR 3000133844 Pulling Tape LLL monitoring system(GRAINGER)($598.00)/"
+    ],
     "persona": "Logistics Lead",
     "expected_query_type": "ENTITY",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["%PO - 5000585586%"],
+    "expected_source_patterns": [
+      "%PO - 5000585586%"
+    ],
     "difficulty": "medium",
     "rationale": "Tests exact PO number lookup against real SAP-format PO. Exercises FTS exact-token matching.",
-    "expected_anchor_entities": {"PO": ["5000585586"]},
+    "expected_anchor_entities": {
+      "PO": [
+        "5000585586"
+      ]
+    },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Real PO folder confirmed via anchor miner: '5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5000585586, PR 3000133844 Pulling Tape LLL monitoring system(GRAINGER)($598.00)/NG Packing List - Lualualei parts.xlsx' has 7,842 entity hits."
   },
@@ -213,7 +287,9 @@
     "persona": "Logistics Lead",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/Parts (Downloaded Information)/monitoring system Parts/PVC Parts/%"],
+    "expected_source_patterns": [
+      "5.0 Logistics/Parts (Downloaded Information)/monitoring system Parts/PVC Parts/%"
+    ],
     "difficulty": "easy",
     "rationale": "Tests retrieval of a parts catalog PDF (cantex-products-catalog.pdf).",
     "expected_anchor_entities": {},
@@ -224,14 +300,22 @@
     "query_id": "PQ-115",
     "user_input": "Which Tripp Lite power cord part number is used for legacy monitoring systems?",
     "reference": "The legacy monitoring system Tripp Lite power cord is part number P007-003 (CDW PN 3349509), a 3-foot 5-15P to C12 15A 14 AWG cable.",
-    "reference_contexts": ["5.0 Logistics/Parts (Downloaded Information)/legacy monitoring system Parts/Power Cord (Tripp Lite PN P007-003)%"],
+    "reference_contexts": [
+      "5.0 Logistics/Parts (Downloaded Information)/legacy monitoring system Parts/Power Cord (Tripp Lite PN P007-003)%"
+    ],
     "persona": "Logistics Lead",
     "expected_query_type": "ENTITY",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["%Tripp Lite PN P007-003%"],
+    "expected_source_patterns": [
+      "%Tripp Lite PN P007-003%"
+    ],
     "difficulty": "easy",
     "rationale": "ENTITY lookup for a real Tripp Lite part number embedded in the folder naming convention.",
-    "expected_anchor_entities": {"PART": ["P007-003"]},
+    "expected_anchor_entities": {
+      "PART": [
+        "P007-003"
+      ]
+    },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Folder 'Power Cord (Tripp Lite PN P007-003)(CDW PN 3349509)(3 Foot_5-15P to C12_15A_14 AWG)/' confirmed with 433 entity hits."
   },
@@ -243,10 +327,16 @@
     "persona": "Logistics Lead",
     "expected_query_type": "ENTITY",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["%RSC081004%"],
+    "expected_source_patterns": [
+      "%RSC081004%"
+    ],
     "difficulty": "easy",
     "rationale": "ENTITY lookup for enclosure part RSC081004.",
-    "expected_anchor_entities": {"PART": ["RSC081004"]},
+    "expected_anchor_entities": {
+      "PART": [
+        "RSC081004"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Folder 'legacy monitoring system Parts/All Wx Enclosure (RSC081004)/' confirmed with 405 entity hits."
   },
@@ -258,10 +348,17 @@
     "persona": "Logistics Lead",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["%monitoring system Parts%"],
+    "expected_source_patterns": [
+      "%monitoring system Parts%"
+    ],
     "difficulty": "medium",
     "rationale": "Narrative recall of RF cable types. RG-213 and LMR-400 are canonical HF coax specs and appear in the PART entity list with 18,418 and 18,016 hits respectively.",
-    "expected_anchor_entities": {"PART": ["RG-213", "LMR-400"]},
+    "expected_anchor_entities": {
+      "PART": [
+        "RG-213",
+        "LMR-400"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "PART entities RG-213 (18,418 hits) and LMR-400 (18,016 hits) confirmed via anchor miner."
   },
@@ -273,7 +370,9 @@
     "persona": "Logistics Lead",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/Procurement/%monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)%"],
+    "expected_source_patterns": [
+      "5.0 Logistics/Procurement/%monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)%"
+    ],
     "difficulty": "medium",
     "rationale": "Tests AGGREGATE retrieval across an option-year procurement folder. OY2 runs Aug 24 to Jul 25.",
     "expected_anchor_entities": {},
@@ -288,10 +387,16 @@
     "persona": "Logistics Lead",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/Shipments/2023 - Shipments/Niger/%Niger Parts List%"],
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2023 - Shipments/Niger/%Niger Parts List%"
+    ],
     "difficulty": "medium",
     "rationale": "Tests narrative retrieval for a specific OCONUS return shipment. Niger Tri-Wall Return is a real Mil-Air return shipment.",
-    "expected_anchor_entities": {"SITE": ["Niger"]},
+    "expected_anchor_entities": {
+      "SITE": [
+        "Niger"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Folder '5.0 Logistics/Shipments/2023 - Shipments/Niger/2023_02_08 - Niger Tri-Wall Return(Mil-Air)/Niger Parts List (2022-12-14).xlsx' confirmed with 6,599 entity hits."
   },
@@ -303,7 +408,9 @@
     "persona": "Logistics Lead",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/Parts (Downloaded Information)/monitoring system Parts/Obstruction Lights/%FAA L810%"],
+    "expected_source_patterns": [
+      "5.0 Logistics/Parts (Downloaded Information)/monitoring system Parts/Obstruction Lights/%FAA L810%"
+    ],
     "difficulty": "medium",
     "rationale": "Tests retrieval of a compliance-gated parts document (FAA L810 certification for obstruction lighting).",
     "expected_anchor_entities": {},
@@ -318,10 +425,17 @@
     "persona": "Logistics Lead",
     "expected_query_type": "ENTITY",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["%DD Form250%legacy monitoring system%Niger%", "%DD250%Niger%"],
+    "expected_source_patterns": [
+      "%DD Form250%legacy monitoring system%Niger%",
+      "%DD250%Niger%"
+    ],
     "difficulty": "medium",
     "rationale": "ENTITY lookup for a DD250 government acceptance form. 'DD250' appears 192 times in filenames per logistics capture.",
-    "expected_anchor_entities": {"SITE": ["Niger"]},
+    "expected_anchor_entities": {
+      "SITE": [
+        "Niger"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "File '5.0 Logistics/GFE - Warehouse Property Book/DD Form250c_ISTO_Niger.pdf' confirmed during corpus exploration."
   },
@@ -333,7 +447,9 @@
     "persona": "Logistics Lead",
     "expected_query_type": "TABULAR",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/Parts (Downloaded Information)/Recommended Spares Parts List%.xlsx"],
+    "expected_source_patterns": [
+      "5.0 Logistics/Parts (Downloaded Information)/Recommended Spares Parts List%.xlsx"
+    ],
     "difficulty": "easy",
     "rationale": "TABULAR lookup for a canonical logistics spreadsheet. Real fields are PART NUMBER, MODEL NUMBER, OEM, SUB-SYSTEM, QTY, SERIAL NUMBER.",
     "expected_anchor_entities": {},
@@ -348,10 +464,16 @@
     "persona": "Logistics Lead",
     "expected_query_type": "ENTITY",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/AssetSmart/1A267 S4 Hana Fixes as of 6-30-23.xlsx"],
+    "expected_source_patterns": [
+      "5.0 Logistics/AssetSmart/1A267 S4 Hana Fixes as of 6-30-23.xlsx"
+    ],
     "difficulty": "easy",
     "rationale": "ENTITY lookup for a specific dated spreadsheet in the AssetSmart inventory system.",
-    "expected_anchor_entities": {"DATE": ["6-30-23"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "6-30-23"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "File '1A267 S4 Hana Fixes as of 6-30-23.xlsx' confirmed in '5.0 Logistics/AssetSmart/' folder listing."
   },
@@ -363,10 +485,16 @@
     "persona": "Logistics Lead",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/Calibration/2025/%"],
+    "expected_source_patterns": [
+      "5.0 Logistics/Calibration/2025/%"
+    ],
     "difficulty": "medium",
     "rationale": "AGGREGATE across 2025 calibration folder. Tests yearly enumeration.",
-    "expected_anchor_entities": {"DATE": ["2025"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Folder '5.0 Logistics/Calibration/2025/' confirmed in folder listing with sibling years 2022-2024."
   },
@@ -378,26 +506,37 @@
     "persona": "Logistics Lead",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/EEMS/monitoring system Jurisdiction and Classification Requests/%"],
+    "expected_source_patterns": [
+      "5.0 Logistics/EEMS/monitoring system Jurisdiction and Classification Requests/%"
+    ],
     "difficulty": "medium",
     "rationale": "Tests regulatory/export control retrieval. EEMS jurisdiction requests are real filings.",
     "expected_anchor_entities": {},
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Folder 'EEMS/monitoring system Jurisdiction and Classification Requests/' confirmed in logistics folder listing."
   },
-
   {
     "query_id": "PQ-126",
     "user_input": "What is the Kwajalein legacy monitoring system site operational status and who manages the facility?",
     "reference": "The Kwajalein legacy monitoring system site is located at US Army Kwajalein Atoll (USAKA) and is also referenced with SERCO as an alternate operator designation.",
-    "reference_contexts": ["KWAJALEIN, SYSTEM: legacy monitoring system, LOCATION/MILITARY BASE: US Army Kwajalein Atoll (USAKA)"],
+    "reference_contexts": [
+      "KWAJALEIN, SYSTEM: legacy monitoring system, LOCATION/MILITARY BASE: US Army Kwajalein Atoll (USAKA)"
+    ],
     "persona": "Field Engineer",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "legacy monitoring system Sites",
-    "expected_source_patterns": ["%Kwajalein%legacy monitoring system%", "%USAKA%"],
+    "expected_source_patterns": [
+      "%Kwajalein%legacy monitoring system%",
+      "%USAKA%"
+    ],
     "difficulty": "medium",
     "rationale": "Site-specific narrative retrieval for an OCONUS legacy monitoring system location. Real site with 1,052 SITE entity hits.",
-    "expected_anchor_entities": {"SITE": ["Kwajalein", "USAKA"]},
+    "expected_anchor_entities": {
+      "SITE": [
+        "Kwajalein",
+        "USAKA"
+      ]
+    },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "SITE entity 'KWAJALEIN, SYSTEM: legacy monitoring system, LOCATION/MILITARY BASE: US Army Kwajalein Atoll (USAKA)' has 1,052 hits; top SITE entry in entity store."
   },
@@ -409,10 +548,20 @@
     "persona": "Field Engineer",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "Site Visits",
-    "expected_source_patterns": ["! Site Visits/(01) Sites/Awase (Okinawa JP)/%Install%"],
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Awase (Okinawa JP)/%Install%"
+    ],
     "difficulty": "medium",
     "rationale": "AGGREGATE across 6 phased installation visit folders. Awase had 6 install phases June-September 2023.",
-    "expected_anchor_entities": {"SITE": ["Awase", "Okinawa"], "DATE": ["2023"]},
+    "expected_anchor_entities": {
+      "SITE": [
+        "Awase",
+        "Okinawa"
+      ],
+      "DATE": [
+        "2023"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "6 Awase installation folders confirmed in site visit folder tree from prior corpus exploration (2023-06-19 through 2023-09-09)."
   },
@@ -424,10 +573,16 @@
     "persona": "Field Engineer",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Thule-monitoring system/%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/Thule-monitoring system/%"
+    ],
     "difficulty": "medium",
     "rationale": "Site-scoped MSR retrieval. Thule-monitoring system has its own MSR subfolder under A002.",
-    "expected_anchor_entities": {"SITE": ["Thule"]},
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Thule-monitoring system MSR subfolder confirmed in the A002 MSR site listing from earlier corpus exploration."
   },
@@ -439,7 +594,9 @@
     "persona": "Field Engineer",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Systems Engineering",
-    "expected_source_patterns": ["6.0 Systems_Engineering/3_Site Outages Analysis/%"],
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/%"
+    ],
     "difficulty": "easy",
     "rationale": "Narrative outage retrieval. Real folder '3_Site Outages Analysis' exists under Systems Engineering.",
     "expected_anchor_entities": {},
@@ -450,14 +607,26 @@
     "query_id": "PQ-130",
     "user_input": "What is the Corrective Action Plan for Fairford monitoring system incident IGSI-1811?",
     "reference": "Corrective Action Plan for Fairford monitoring system incident IGSI-1811 was filed on 2024-06-05 under contract 47QFRA22F0009. File: '47QFRA22F0009_IGSI-1811_Corrective_Action_Plan_Fairford-NEXION_2024-06-05.docx'.",
-    "reference_contexts": ["1.5 enterprise program CDRLS/A001 - Corrective Action Plan (CAP)/47QFRA22F0009_IGSI-1811_Corrective_Action_Plan_Fairford-NEXION_2024-06-05.docx"],
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A001 - Corrective Action Plan (CAP)/47QFRA22F0009_IGSI-1811_Corrective_Action_Plan_Fairford-NEXION_2024-06-05.docx"
+    ],
     "persona": "Field Engineer",
     "expected_query_type": "ENTITY",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["%IGSI-1811%", "%Fairford-monitoring system%"],
+    "expected_source_patterns": [
+      "%IGSI-1811%",
+      "%Fairford-monitoring system%"
+    ],
     "difficulty": "easy",
     "rationale": "ENTITY lookup for a real incident number and its CAP document. FTS exact-token match on IGSI-1811.",
-    "expected_anchor_entities": {"SITE": ["Fairford"], "DATE": ["2024-06-05"]},
+    "expected_anchor_entities": {
+      "SITE": [
+        "Fairford"
+      ],
+      "DATE": [
+        "2024-06-05"
+      ]
+    },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "File '47QFRA22F0009_IGSI-1811_Corrective_Action_Plan_Fairford-NEXION_2024-06-05.docx' confirmed in 1.5 enterprise program CDRLS/A001 folder."
   },
@@ -469,7 +638,9 @@
     "persona": "Field Engineer",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Systems Engineering",
-    "expected_source_patterns": ["6.0 Systems_Engineering/85EIS_Spectrum_Analysis/%"],
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/85EIS_Spectrum_Analysis/%"
+    ],
     "difficulty": "easy",
     "rationale": "Tests narrative retrieval of an RF spectrum analysis report.",
     "expected_anchor_entities": {},
@@ -484,10 +655,17 @@
     "persona": "Field Engineer",
     "expected_query_type": "ENTITY",
     "expected_document_family": "SysAdmin",
-    "expected_source_patterns": ["7.0 SysAdmin/Known_Issues_March012022.txt"],
+    "expected_source_patterns": [
+      "7.0 SysAdmin/Known_Issues_March012022.txt"
+    ],
     "difficulty": "easy",
     "rationale": "ENTITY lookup for a dated known-issues text file.",
-    "expected_anchor_entities": {"DATE": ["March012022", "2022-03-01"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "March012022",
+        "2022-03-01"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "File '7.0 SysAdmin/Known_Issues_March012022.txt' confirmed via corpus exploration."
   },
@@ -499,7 +677,9 @@
     "persona": "Field Engineer",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/%"
+    ],
     "difficulty": "medium",
     "rationale": "AGGREGATE across the A007 deliverable folder. Tests enumeration of acceptance test reports.",
     "expected_anchor_entities": {},
@@ -514,7 +694,9 @@
     "persona": "Field Engineer",
     "expected_query_type": "TABULAR",
     "expected_document_family": "Asset Mgmt",
-    "expected_source_patterns": ["4.2 Asset Management/Part Failure Tracker.xlsx"],
+    "expected_source_patterns": [
+      "4.2 Asset Management/Part Failure Tracker.xlsx"
+    ],
     "difficulty": "easy",
     "rationale": "TABULAR lookup against the Part Failure Tracker spreadsheet, the canonical failure record.",
     "expected_anchor_entities": {},
@@ -529,14 +711,15 @@
     "persona": "Field Engineer",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Systems Engineering",
-    "expected_source_patterns": ["6.0 Systems_Engineering/Contingency Plan Report and AAR Template.docx"],
+    "expected_source_patterns": [
+      "6.0 Systems_Engineering/Contingency Plan Report and AAR Template.docx"
+    ],
     "difficulty": "easy",
     "rationale": "Narrative retrieval of recovery procedure templates.",
     "expected_anchor_entities": {},
     "has_ground_truth": false,
     "corpus_grounding_evidence": "File '6.0 Systems_Engineering/Contingency Plan Report and AAR Template.docx' confirmed in earlier corpus exploration."
   },
-
   {
     "query_id": "PQ-136",
     "user_input": "What ACAS scan results are documented for the legacy monitoring systems under CDRL A027?",
@@ -545,7 +728,9 @@
     "persona": "Cybersecurity / Network Admin",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/%"
+    ],
     "difficulty": "easy",
     "rationale": "Direct CDRL folder lookup for ACAS scan results. A027 has dedicated ACAS subfolder.",
     "expected_anchor_entities": {},
@@ -560,7 +745,9 @@
     "persona": "Cybersecurity / Network Admin",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A027%SCAP Scan Results%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A027%SCAP Scan Results%"
+    ],
     "difficulty": "easy",
     "rationale": "SCAP scan retrieval. A027 has a separate SCAP Scan Results folder from ACAS.",
     "expected_anchor_entities": {},
@@ -571,14 +758,22 @@
     "query_id": "PQ-138",
     "user_input": "What is the System Authorization Boundary for monitoring system defined in SEMP?",
     "reference": "The monitoring systems Authorization Boundary is documented in 'monitoring systems Authorization Boundary SEMP 2024-8-28.pdf' under 3.0 Cybersecurity.",
-    "reference_contexts": ["3.0 Cybersecurity/monitoring systems Authorization Boundary SEMP 2024-8-28.pdf"],
+    "reference_contexts": [
+      "3.0 Cybersecurity/monitoring systems Authorization Boundary SEMP 2024-8-28.pdf"
+    ],
     "persona": "Cybersecurity / Network Admin",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Cybersecurity",
-    "expected_source_patterns": ["%monitoring systems Authorization Boundary%"],
+    "expected_source_patterns": [
+      "%monitoring systems Authorization Boundary%"
+    ],
     "difficulty": "easy",
     "rationale": "Tests retrieval of a specific SEMP authorization boundary document.",
-    "expected_anchor_entities": {"DATE": ["2024-8-28"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-8-28"
+      ]
+    },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "File '3.0 Cybersecurity/monitoring systems Authorization Boundary SEMP 2024-8-28.pdf' confirmed during corpus exploration."
   },
@@ -590,7 +785,9 @@
     "persona": "Cybersecurity / Network Admin",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A027%Updated POAM%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A027%Updated POAM%"
+    ],
     "difficulty": "medium",
     "rationale": "POA&M tracking retrieval. A027 has an Updated POAM subfolder.",
     "expected_anchor_entities": {},
@@ -605,10 +802,16 @@
     "persona": "Cybersecurity / Network Admin",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "Cybersecurity",
-    "expected_source_patterns": ["3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2024/August/%"],
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2024/August/%"
+    ],
     "difficulty": "medium",
     "rationale": "Monthly ConMon audit retrieval for a specific month. Real folder structure.",
-    "expected_anchor_entities": {"DATE": ["August 2024"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "August 2024"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Folder 'Monthly Audits-Archive/2024/August/' confirmed in earlier corpus exploration."
   },
@@ -616,14 +819,23 @@
     "query_id": "PQ-141",
     "user_input": "What Apache Log4j directive has been issued for enterprise program systems?",
     "reference": "The Log4j directive is MTO 2021-350-001, filed under 3.0 Cybersecurity/Directives/MTO 2021-350-001 Apache Log4j.",
-    "reference_contexts": ["3.0 Cybersecurity/Directives/MTO 2021-350-001 Apache Log4j/"],
+    "reference_contexts": [
+      "3.0 Cybersecurity/Directives/MTO 2021-350-001 Apache Log4j/"
+    ],
     "persona": "Cybersecurity / Network Admin",
     "expected_query_type": "ENTITY",
     "expected_document_family": "Cybersecurity",
-    "expected_source_patterns": ["%MTO 2021-350-001%", "%Log4j%"],
+    "expected_source_patterns": [
+      "%MTO 2021-350-001%",
+      "%Log4j%"
+    ],
     "difficulty": "easy",
     "rationale": "ENTITY lookup for a real cyber directive. Log4j is a high-profile CVE.",
-    "expected_anchor_entities": {"DATE": ["2021-350"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021-350"
+      ]
+    },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Folder '3.0 Cybersecurity/Directives/MTO 2021-350-001 Apache Log4j' confirmed in corpus exploration."
   },
@@ -635,7 +847,9 @@
     "persona": "Cybersecurity / Network Admin",
     "expected_query_type": "TABULAR",
     "expected_document_family": "Cybersecurity",
-    "expected_source_patterns": ["3.0 Cybersecurity/%STIG_Review%.xlsx"],
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/%STIG_Review%.xlsx"
+    ],
     "difficulty": "medium",
     "rationale": "TABULAR lookup against STIG review spreadsheets.",
     "expected_anchor_entities": {},
@@ -650,10 +864,20 @@
     "persona": "Cybersecurity / Network Admin",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "Cybersecurity",
-    "expected_source_patterns": ["3.0 Cybersecurity/ATO-ATC Package Changes/%legacy monitoring system%"],
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/%legacy monitoring system%"
+    ],
     "difficulty": "medium",
     "rationale": "AGGREGATE across ATO change packages. 18+ packages exist dated 2019-2024.",
-    "expected_anchor_entities": {"DATE": ["2020", "2021", "2022", "2023", "2024"]},
+    "expected_anchor_entities": {
+      "DATE": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "Folder 'ATO-ATC Package Changes' contains 18+ ATO re-authorization subfolders confirmed during corpus exploration."
   },
@@ -665,10 +889,17 @@
     "persona": "Cybersecurity / Network Admin",
     "expected_query_type": "SEMANTIC",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A027 - RMF– Security Plan/%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A027 - RMF– Security Plan/%"
+    ],
     "difficulty": "medium",
     "rationale": "Tests retrieval of security standard CCI control references from the RMF Security Plan.",
-    "expected_anchor_entities": {"PART": ["CCI-0015", "CCI-0017"]},
+    "expected_anchor_entities": {
+      "PART": [
+        "CCI-0015",
+        "CCI-0017"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "CCI-0015 and CCI-0017 appear as top PART entities in compliance subtree with hundreds of hits each."
   },
@@ -680,23 +911,28 @@
     "persona": "Cybersecurity / Network Admin",
     "expected_query_type": "ENTITY",
     "expected_document_family": "Cybersecurity",
-    "expected_source_patterns": ["3.0 Cybersecurity/ISSO/Security Events/Cyber Incident Report Template.docx"],
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ISSO/Security Events/Cyber Incident Report Template.docx"
+    ],
     "difficulty": "easy",
     "rationale": "ENTITY lookup for the incident report template document.",
     "expected_anchor_entities": {},
     "has_ground_truth": false,
     "corpus_grounding_evidence": "File 'Cyber Incident Report Template.docx' confirmed in 'ISSO/Security Events/' folder."
   },
-
   {
     "query_id": "PQ-146",
     "user_input": "How many site-specific Maintenance Service Report folders exist across both legacy monitoring system and monitoring system?",
     "reference": "The A002 Maintenance Service Report (MSR) CDRL folder contains 21 site-specific subfolders covering sites from Alpena through Wake.",
-    "reference_contexts": ["1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/"],
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/"
+    ],
     "persona": "Aggregation / Cross-role",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/%"
+    ],
     "difficulty": "medium",
     "rationale": "Cross-system count. A002 has 21 MSR folders spanning legacy monitoring system and monitoring system sites.",
     "expected_anchor_entities": {},
@@ -711,10 +947,22 @@
     "persona": "Aggregation / Cross-role",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A001 - Corrective Action Plan (CAP)/%2024%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A001 - Corrective Action Plan (CAP)/%2024%"
+    ],
     "difficulty": "hard",
     "rationale": "Cross-site enumeration of 2024 CAPs. Real incident numbers: IGSI-1811 (Fairford), IGSI-2234 (Misawa), IGSI-2529 (Learmonth), IGSI-2783 (Kwajalein).",
-    "expected_anchor_entities": {"SITE": ["Fairford", "Misawa", "Learmonth", "Kwajalein"], "DATE": ["2024"]},
+    "expected_anchor_entities": {
+      "SITE": [
+        "Fairford",
+        "Misawa",
+        "Learmonth",
+        "Kwajalein"
+      ],
+      "DATE": [
+        "2024"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "4 real 2024-dated CAPs confirmed in A001 folder: IGSI-1811, IGSI-2234, IGSI-2529, IGSI-2783."
   },
@@ -726,7 +974,9 @@
     "persona": "Aggregation / Cross-role",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "Logistics",
-    "expected_source_patterns": ["5.0 Logistics/Procurement/001 - Open Purchases/%"],
+    "expected_source_patterns": [
+      "5.0 Logistics/Procurement/001 - Open Purchases/%"
+    ],
     "difficulty": "hard",
     "rationale": "Cross-option-year PO enumeration. Option years: Base Year, OY1, OY2, NEW BASE YR confirmed in folder listing.",
     "expected_anchor_entities": {},
@@ -741,10 +991,22 @@
     "persona": "Aggregation / Cross-role",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "Site Visits",
-    "expected_source_patterns": ["! Site Visits/(01) Sites/%"],
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/%"
+    ],
     "difficulty": "medium",
     "rationale": "Cross-folder site enumeration. 30+ sites under Site Visits/(01) Sites/.",
-    "expected_anchor_entities": {"SITE": ["Thule", "Eglin", "Vandenberg", "Ascension", "Guam", "Awase", "Kwajalein"]},
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule",
+        "Eglin",
+        "Vandenberg",
+        "Ascension",
+        "Guam",
+        "Awase",
+        "Kwajalein"
+      ]
+    },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "30+ site folders confirmed under '! Site Visits/(01) Sites/' including all major OCONUS and CONUS installations."
   },
@@ -752,15 +1014,1391 @@
     "query_id": "PQ-150",
     "user_input": "What is the full set of CDRL deliverables for the enterprise program?",
     "reference": "The enterprise program contract defines 20+ CDRL deliverables under 1.5 enterprise program CDRLS/. Major ones include: A001 Corrective Action Plan, A002 Maintenance Service Report, A003 Site Installation Plan, A004 DD250 Transfer, A006 Installation Acceptance Test Plan, A007 Installation Acceptance Test Report, A008 Program Management Plan, A009 Monthly Status Report, A010 Maintenance Support Plan (SSP), A011 Configuration Audit Report, A012 Configuration Management Plan, A013 System Engineering Management Plan (SEMP), A014 Priced Bill of Materials, A023 Integrated Logistics Support Plan, A027 DAA Accreditation Support Data (ACAS, SCAP, POA&M, RMF Security Plan, etc.), A031 Integrated Master Schedule, A050 Configuration Change Request, A055 Government Property Inventory.",
-    "reference_contexts": ["1.5 enterprise program CDRLS/"],
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/"
+    ],
     "persona": "Aggregation / Cross-role",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "CDRLs",
-    "expected_source_patterns": ["1.5 enterprise program CDRLS/A%"],
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A%"
+    ],
     "difficulty": "medium",
     "rationale": "Full enumeration of CDRL folder tree. Tests whether retrieval can surface the complete deliverable catalog.",
     "expected_anchor_entities": {},
     "has_ground_truth": true,
     "corpus_grounding_evidence": "CDRL folder tree contains 20+ numbered folders confirmed via direct corpus exploration; A027 alone has 9+ subfolders for different RMF artifact types."
+  },
+  {
+    "_comment": "=== PHASE 2A — PQ-151 through PQ-210 (60 more queries) ===",
+    "_phase": "Phase 2A (first batch)",
+    "_authored_by": "reviewer | HybridRAG_V2 | 2026-04-12 MDT",
+    "_mining_adjustment_note": "Phase 2A avoids Tier 1 PO/PART entity columns (98%/90% polluted by security standard controls). Anchors sourced from real folder paths mined via mine_query_anchors.py folders subcommand. See rationale doc Section 12 for details."
+  },
+  {
+    "query_id": "PQ-151",
+    "user_input": "What was the December 2024 enterprise program weekly hours variance trend across the five weekly reports in that month?",
+    "reference": "December 2024 weekly variance reports exist for 2024-11-29, 2024-12-06, 2024-12-13, 2024-12-20, and 2024-12-31 under '10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/'.",
+    "reference_contexts": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%Weekly Variance Reports/2024/2024-12/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Multi-week AGGREGATE on a structured month folder. All five variance files confirmed via folder mining with 14,251-15,256 entity hits each.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-11-29",
+        "2024-12-06",
+        "2024-12-13",
+        "2024-12-20",
+        "2024-12-31"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Folder 2024-12 confirmed with 5 dated variance spreadsheets via mine_query_anchors.py folders subcommand."
+  },
+  {
+    "query_id": "PQ-152",
+    "user_input": "What contract number covers the FA881525FB002 deliverables, and which CDRL reports have been filed under it?",
+    "reference": "FA881525FB002 is the current Air Force contract covering enterprise program deliverables. Multiple A027 DAA Accreditation Support Data (ACAS Scan Results) reports have been filed under this contract including IGSCC-529, IGSCC-531, IGSCC-532, and IGSCC-533 spanning October 2025 through February 2026.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2025/FA881525FB002_%",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2026/FA881525FB002_%"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%FA881525FB002%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Contract-number ENTITY lookup. FA881525FB002 is a real 13-character contract identifier confirmed in 2025 and 2026 ACAS deliverable filenames.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Real filenames confirmed: FA881525FB002_IGSCC-529_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_October-2025.xlsx, IGSCC-531 December-2025, IGSCC-532 January-2026, IGSCC-533 February-2026."
+  },
+  {
+    "query_id": "PQ-153",
+    "user_input": "What deliverables have been filed under the legacy contract 47QFRA22F0009?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Legacy contract AGGREGATE. 47QFRA22F0009 is the prior GSA/FEDSIM contract confirmed across multiple CAPs and deliverable filenames.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Contract 47QFRA22F0009 confirmed in CAP filenames (IGSI-1811 Fairford, IGSI-2234 Misawa, IGSI-2529 Learmonth, IGSI-2783 Kwajalein, IGSI-4013 Alpena) and in the Cybersecurity Assessment Test Report (IGSI-2891 RHEL 8 legacy monitoring system)."
+  },
+  {
+    "query_id": "PQ-154",
+    "user_input": "What FEP monthly actuals are available for 2025 and when do they transition to the new contract?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/1.0 FEP/Reference/2025 %Monthly Actuals.xlsx"
+    ],
+    "difficulty": "medium",
+    "rationale": "Year-over-year financial continuity question. 2025 monthly actuals confirmed starting in January.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025 01"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '2025 01 Monthly Actuals.xlsx' confirmed via folder miner; sibling months follow the standard naming convention."
+  },
+  {
+    "query_id": "PQ-155",
+    "user_input": "What is documented in the enterprise program Weekly Hours Variance report dated 2025-01-10?",
+    "reference": "The 2025-01-10 enterprise program Weekly Hours Variance report is filed under '10.0 Program Management/2.0 Weekly Variance Reports/2025/2025-01-10 enterprise program Weekly Hours Variance.xlsx'. This is the first weekly variance report of the 2025 calendar year.",
+    "reference_contexts": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2025/2025-01-10 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%2025-01-10 enterprise program Weekly Hours Variance%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Exact dated filename ENTITY lookup. 9,369 entity hits confirm this file is parsed and indexed.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-01-10"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "File '2025/2025-01-10 enterprise program Weekly Hours Variance.xlsx' confirmed via folder miner with 9,369 entity hits."
+  },
+  {
+    "query_id": "PQ-156",
+    "user_input": "What monthly status reports have been submitted under CDRL A009 for 2024?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A009 - Monthly Status Report/%2024%"
+    ],
+    "difficulty": "medium",
+    "rationale": "AGGREGATE across monthly status submissions for a specific year. Tests PM compliance tracking.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "CDRL A009 Monthly Status Report folder confirmed in the enterprise program CDRLS tree."
+  },
+  {
+    "query_id": "PQ-157",
+    "user_input": "What is the Configuration Audit Report (CDRL A011) used for and what has been submitted?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A011 - Configuration Audit Report/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrative retrieval of configuration audit deliverables.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "CDRL A011 Configuration Audit Report folder confirmed in the canonical CDRL tree."
+  },
+  {
+    "query_id": "PQ-158",
+    "user_input": "What is in the System Engineering Management Plan (CDRL A013) for the enterprise program?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A013 - System Engineering Management Plan (SEMP)/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "SEMP narrative retrieval. Tests content-level access to a major program planning document.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "CDRL A013 SEMP folder confirmed in the enterprise program CDRLS tree."
+  },
+  {
+    "query_id": "PQ-159",
+    "user_input": "What is the Priced Bill of Materials in CDRL A014 for the enterprise program?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A014 - Priced Bill of Materials/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "TABULAR retrieval against a priced BOM deliverable. Tests structured pricing data access.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "CDRL A014 Priced Bill of Materials folder confirmed in the enterprise program CDRLS tree."
+  },
+  {
+    "query_id": "PQ-160",
+    "user_input": "What is the Integrated Logistics Support Plan (CDRL A023) and what does it cover?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A023 - Integrated Logistics Support Plan (ILS)/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "ILS plan narrative retrieval.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "CDRL A023 ILS folder confirmed in the canonical CDRL tree."
+  },
+  {
+    "query_id": "PQ-161",
+    "user_input": "What has been delivered under CDRL A025 Computer Operation Manual and Software User Manual?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A025 - Computer Operation Manual and Software User Manual%"
+    ],
+    "difficulty": "easy",
+    "rationale": "User manual deliverable enumeration.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "CDRL A025 User Manual folder confirmed in the canonical CDRL tree."
+  },
+  {
+    "query_id": "PQ-162",
+    "user_input": "What additional LDI suborganization hours were requested in the 2024 budget revisions?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/LDI/Copy of Additional Hours.xlsx",
+      "10.0 Program Management/LDI/%Additional Hours%"
+    ],
+    "difficulty": "medium",
+    "rationale": "LDI suborganization change budget TABULAR lookup.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '10.0 Program Management/LDI/Copy of Additional Hours.xlsx' confirmed in folder listing."
+  },
+  {
+    "query_id": "PQ-163",
+    "user_input": "What was shipped to Learmonth in August 2024 and what was its destination type?",
+    "reference": "The Learmonth 2024-08-26 shipment (Comm type) is documented at '5.0 Logistics/Shipments/2024 - Shipments/Learmonth/2024_08_26 - Learmonth (Comm)/NG Packing List - Learmonth 2024.xlsx'.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2024 - Shipments/Learmonth/2024_08_26 - Learmonth (Comm)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2024_08_26 - Learmonth (Comm)%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Dated OCONUS shipment ENTITY lookup. Real Learmonth shipment confirmed via folder mining.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Learmonth"
+      ],
+      "DATE": [
+        "2024-08-26"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Folder '5.0 Logistics/Shipments/2024 - Shipments/Learmonth/2024_08_26 - Learmonth (Comm)/' confirmed with 7,693 entity hits."
+  },
+  {
+    "query_id": "PQ-164",
+    "user_input": "What return shipments from OCONUS sites were processed in 2024?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2024 - Shipments/%Return%"
+    ],
+    "difficulty": "medium",
+    "rationale": "2024 OCONUS return shipment AGGREGATE. Real returns confirmed: Azores 2024-06-14, Djibouti 2024-10-11, Learmonth 2024-09-17, Thule 2024-08-23.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Azores",
+        "Djibouti",
+        "Learmonth",
+        "Thule"
+      ],
+      "DATE": [
+        "2024"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Four 2024 return shipments confirmed via folder mining: Azores Return, Djibouti Return, Learmonth Return, Thule Return Shipment."
+  },
+  {
+    "query_id": "PQ-165",
+    "user_input": "What Thule monitoring system ASV shipment was sent in July 2024 and what was its travel mode?",
+    "reference": "The Thule monitoring system ASV shipment dated 2024-07-18 was sent via Mil-Air and is documented at '5.0 Logistics/Shipments/2024 - Shipments/Thule/2024_07_18 - Thule (Mil-Air)/NG Packing List_Thule-monitoring system ASV_2024-07-17.xlsx'.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2024 - Shipments/Thule/2024_07_18 - Thule (Mil-Air)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2024_07_18 - Thule (Mil-Air)%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Dated ENTITY lookup for a specific Mil-Air shipment.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2024-07-18",
+        "2024-07-17"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Folder confirmed via folder miner with 7,592 entity hits."
+  },
+  {
+    "query_id": "PQ-166",
+    "user_input": "What Ascension Mil-Air shipment was processed in February 2024?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2024_02_07 - Ascension (Mil-Air)%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Dated ENTITY lookup for Ascension shipment.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Ascension"
+      ],
+      "DATE": [
+        "2024-02-07"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '2024 - Shipments/Ascension/2024_02_07 - Ascension (Mil-Air)/' confirmed."
+  },
+  {
+    "query_id": "PQ-167",
+    "user_input": "What hand-carry shipments were sent to Guam in October 2024?",
+    "reference": "The Guam RTS-ASV shipment dated 2024-10-07 through 2024-10-15 was sent as hand-carry and is documented at '5.0 Logistics/Shipments/2024 - Shipments/Guam/2024_10_07 - Guam (Hand Carry)/NG Packing List - Guam RTS-ASV_2024-10-07 thru 15.xlsx'.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2024 - Shipments/Guam/2024_10_07 - Guam (Hand Carry)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2024_10_07 - Guam (Hand Carry)%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Hand-carry ENTITY lookup for Guam ASV.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Guam"
+      ],
+      "DATE": [
+        "2024-10-07",
+        "2024-10-15"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Folder '2024_10_07 - Guam (Hand Carry)/' confirmed with 7,508 entity hits."
+  },
+  {
+    "query_id": "PQ-168",
+    "user_input": "What was the Kwajalein Mil-Air shipment sent in October 2024 associated with?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2024_10_30 - Kwaj (Mil-Air)%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Kwajalein ASV 2024-12 shipment ENTITY lookup.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Kwajalein"
+      ],
+      "DATE": [
+        "2024-10-30"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '2024 - Shipments/Kwaj/2024_10_30 - Kwaj (Mil-Air)/' with 'NEW NG Packing List (Kwaj-ASV_2024-12).xlsx' confirmed."
+  },
+  {
+    "query_id": "PQ-169",
+    "user_input": "What LDI Computer Cards shipment was processed and what equipment did it contain?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%LDI - Computer Cards%"
+    ],
+    "difficulty": "medium",
+    "rationale": "LDI equipment shipment lookup.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '2024 - Shipments/Misc/LDI - Computer Cards/LDI Cards - NG Packing List.xlsx' confirmed with 7,682 hits."
+  },
+  {
+    "query_id": "PQ-170",
+    "user_input": "What LDI Computer Control Modification shipment went out on 2024-05-29?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%LDI - Computer, Control Modification%",
+      "%NG Packing List 05_29_24%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Dated equipment modification shipment lookup.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-05-29"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '2024 - Shipments/Misc/LDI - Computer, Control Modification/NG Packing List 05_29_24.xlsx' confirmed with 7,738 hits."
+  },
+  {
+    "query_id": "PQ-171",
+    "user_input": "What was in the Azores return equipment shipment of 2024-06-14?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2024_06_14 - Azores Return%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Return equipment shipment ENTITY lookup.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Azores"
+      ],
+      "DATE": [
+        "2024-06-14"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '2024 - Shipments/Azores/2024_06_14 - Azores Return (Mil-Air)/' confirmed."
+  },
+  {
+    "query_id": "PQ-172",
+    "user_input": "What was in the Djibouti return shipment of October 2024?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2024_10_11 - Djibouti Return%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Return shipment ENTITY lookup.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Djibouti"
+      ],
+      "DATE": [
+        "2024-10-11"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '2024 - Shipments/Djibouti/2024_10_11 - Djibouti Return (Mil-Air)/' confirmed with 7,549 hits."
+  },
+  {
+    "query_id": "PQ-173",
+    "user_input": "What Thule return shipment was processed on 2024-08-23?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%2024_08_23 - Thule Return Shipment%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Thule ASV return shipment lookup.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2024-08-23"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '2024 - Shipments/Thule/2024_08_23 - Thule Return Shipment/' with two packing list files confirmed."
+  },
+  {
+    "query_id": "PQ-174",
+    "user_input": "What calibration audit records are available for 2024?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Calibration/2024/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Yearly calibration audit retrieval.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "'5.0 Logistics/Calibration/2024/' folder confirmed in earlier exploration."
+  },
+  {
+    "query_id": "PQ-175",
+    "user_input": "What tools and consumable items were in the Thule 2021 ASV EEMS shipment?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%Thule/2021-08-25%EEMS%"
+    ],
+    "difficulty": "medium",
+    "rationale": "EEMS-gated equipment shipment narrative retrieval.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2021-08-25"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '! Site Visits/(01) Sites/Thule/2021-08-25 thru 09-03 (Thule monitoring system ASV)(Nguyen-Womelsdorff)/EEMS/NG Packing List - Tools and Consumable Items.xlsx' confirmed with 2,580 hits."
+  },
+  {
+    "query_id": "PQ-176",
+    "user_input": "What climbing gear and rescue kit was in the Thule 2021 ASV shipment?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%Climbing Gear and Rescue Kit%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Safety-gated equipment list retrieval for high-altitude site work.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File 'Copy of NG Packing Lis - Climbing Gear and Rescue Kitt.xlsx' confirmed under Thule 2021 ASV EEMS folder with 2,513 hits."
+  },
+  {
+    "query_id": "PQ-177",
+    "user_input": "What recommended spares parts list was released on 2018-06-26 and how does it differ from the 2018-06-27 version?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%Recommended Spares Parts List (2018-06-26)%",
+      "%Recommended Spares Parts List (2018-06-27)%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Consecutive-day spreadsheet comparison. Tests retrieval across two dated versions of the same file.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2018-06-26",
+        "2018-06-27"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Both dated spares spreadsheets confirmed in '5.0 Logistics/Parts (Downloaded Information)/' folder listing."
+  },
+  {
+    "query_id": "PQ-178",
+    "user_input": "What happened during the Thule monitoring system ASV visit of 2024-08-13 through 2024-08-23?",
+    "reference": "The 2024 Thule ASV visit is documented at '! Site Visits/(01) Sites/Thule/2024-08-13 thru 08-23 (ASV)(FS-JD)/' with a packing list, travel itinerary, expense reports (Dettler), and a SAR-VAR Pituffik Travel Coordination Guide.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Thule/2024-08-13 thru 08-23 (ASV)(FS-JD)/"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "%Thule/2024-08-13 thru 08-23 (ASV)(FS-JD)%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Dated ASV visit narrative recall. FS-JD is the field engineer initials.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2024-08-13",
+        "2024-08-23"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Folder '2024-08-13 thru 08-23 (ASV)(FS-JD)' confirmed with multiple subfiles: Packing List, AMC Travel Form, Itinerary, Expense Reports, SAR-VAR."
+  },
+  {
+    "query_id": "PQ-179",
+    "user_input": "What ASV visits have been performed at Thule since 2014?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Thule/%ASV%",
+      "! Site Visits/(01) Sites/Thule/%Install%",
+      "! Site Visits/(01) Sites/Thule/%Site Survey%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Multi-year AGGREGATE across Thule visit folders. Real dated visits span 2014-2026.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2014",
+        "2019",
+        "2021",
+        "2024",
+        "2026"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "5 distinct Thule visit folders confirmed spanning 2014-2026 via folder mining."
+  },
+  {
+    "query_id": "PQ-180",
+    "user_input": "What was the Thule 2014 site survey report from BAH?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "%Thule%2014-07-09%Site Survey%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Historical site survey ENTITY lookup. BAH did the initial 2014 survey.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2014-07-09"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '2014-07-09 thru 07-25 (NEXION_Site Survey)(BAH)/1_Thule Site Survey Report July 2014 (Rotation Corrected).pdf' confirmed with 62 entity hits."
+  },
+  {
+    "query_id": "PQ-181",
+    "user_input": "What is in the Pituffik Travel Coordination Guide referenced in the 2024 Thule ASV visit?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "%Pituffik Travel Coordinaiton Guide 20May24.docx%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Travel coordination guide recall. Pituffik is the new name for Thule Air Base.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-05-20"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File 'SAR-VAR/Pituffik Travel Coordinaiton Guide 20May24.docx' confirmed under Thule 2024 ASV folder."
+  },
+  {
+    "query_id": "PQ-182",
+    "user_input": "What does the Thule 2021 Site Inventory and Spares Report show?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "%Thule Site Inventory and Spares Report 2021-Sep-2%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Dated site inventory TABULAR lookup.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2021-09-02"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File 'Thule Site Inventory and Spares Report 2021-Sep-2.xlsx' confirmed in Thule 2021 ASV folder."
+  },
+  {
+    "query_id": "PQ-183",
+    "user_input": "What were the Misawa 2024 CAP findings under incident IGSI-2234?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2234_Corrective_Action_Plan_Misawa-monitoring system%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Specific CAP incident narrative recall.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Misawa"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '47QFRA22F0009_IGSI-2234_Corrective_Action_Plan_Misawa-monitoring system.docx' confirmed in 1.5 enterprise program CDRLS/A001."
+  },
+  {
+    "query_id": "PQ-184",
+    "user_input": "What was the Learmonth CAP filed on 2024-08-16 under incident IGSI-2529?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2529_Corrective_Action_Plan_Learmonth-NEXION_2024-08-16%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Specific dated CAP ENTITY lookup.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Learmonth"
+      ],
+      "DATE": [
+        "2024-08-16"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '47QFRA22F0009_IGSI-2529_Corrective_Action_Plan_Learmonth-NEXION_2024-08-16.docx' confirmed."
+  },
+  {
+    "query_id": "PQ-185",
+    "user_input": "What was the Kwajalein legacy monitoring system CAP filed on 2024-10-25 under incident IGSI-2783?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2783_Corrective-Action-Plan_Kwajalein-ISTO_2024-10-25%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Kwajalein legacy monitoring system dated CAP ENTITY lookup.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Kwajalein"
+      ],
+      "DATE": [
+        "2024-10-25"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '47QFRA22F0009_IGSI-2783_Corrective-Action-Plan_Kwajalein-ISTO_2024-10-25.docx' confirmed in CAP folder."
+  },
+  {
+    "query_id": "PQ-186",
+    "user_input": "What was the Alpena monitoring system CAP filed on 2025-07-14 under incident IGSI-4013?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-4013_Corrective-Action-Plan_Alpena-NEXION_2025-07-14%"
+    ],
+    "difficulty": "easy",
+    "rationale": "2025-dated CAP ENTITY lookup.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Alpena"
+      ],
+      "DATE": [
+        "2025-07-14"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '47QFRA22F0009_IGSI-4013_Corrective-Action-Plan_Alpena-NEXION_2025-07-14.docx' confirmed."
+  },
+  {
+    "query_id": "PQ-187",
+    "user_input": "What installation was performed at Niger for legacy monitoring system and when?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Procurement/002 - Received/Niger legacy monitoring system Installation/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Niger legacy monitoring system installation narrative recall via procurement-side records.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Niger"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '5.0 Logistics/Procurement/002 - Received/Niger legacy monitoring system Installation/' confirmed in procurement tree."
+  },
+  {
+    "query_id": "PQ-188",
+    "user_input": "What installation was performed at Palau for legacy monitoring system?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Procurement/002 - Received/Palau legacy monitoring system Installation/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Palau legacy monitoring system installation narrative recall.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Palau"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '5.0 Logistics/Procurement/002 - Received/Palau legacy monitoring system Installation/' confirmed in procurement tree."
+  },
+  {
+    "query_id": "PQ-189",
+    "user_input": "What installation was performed at American Samoa for legacy monitoring system?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Procurement/002 - Received/American Samoa legacy monitoring system Installation/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "American Samoa legacy monitoring system installation narrative recall.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "American Samoa"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '5.0 Logistics/Procurement/002 - Received/American Samoa legacy monitoring system Installation/' confirmed."
+  },
+  {
+    "query_id": "PQ-190",
+    "user_input": "What does the monitoring system Scan Report from May 2023 (IGSI-965) contain?",
+    "reference": "The monitoring system Scan Report for May 2023 is filed under CDRL A027 as 'Deliverables Report IGSI-965 monitoring system DAA Accreditation Support Data (ACAS Scan Results) (A027)' with file monitoring system Scan Report 2023-May.xlsx.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2023/2023-May/Deliverables Report IGSI-965 monitoring system DAA Accreditation Support Data (ACAS Scan Results) (A027)/"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-965%monitoring system Scan Report 2023-May%"
+    ],
+    "difficulty": "easy",
+    "rationale": "ACAS scan deliverable ENTITY lookup by incident ID.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2023-05"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "File 'monitoring system Scan Report 2023-May.xlsx' in IGSI-965 deliverable folder confirmed with 5,649 entity hits."
+  },
+  {
+    "query_id": "PQ-191",
+    "user_input": "What does the legacy monitoring system Scan Report from May 2023 (IGSI-966) contain?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-966%legacy monitoring system Scan Report 2023-May%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Companion legacy monitoring system ACAS scan deliverable lookup.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2023-05"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File 'legacy monitoring system Scan Report 2023-May.xlsx' in IGSI-966 deliverable folder confirmed with 3,535 entity hits."
+  },
+  {
+    "query_id": "PQ-192",
+    "user_input": "What ACAS scan deliverables have been filed under the new FA881525FB002 contract?",
+    "reference": "Four ACAS scan deliverables have been filed under FA881525FB002: IGSCC-529 (October 2025), IGSCC-531 (December 2025), IGSCC-532 (January 2026), and IGSCC-533 (February 2026), all for monitoring systems.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2025/FA881525FB002_%",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2026/FA881525FB002_%"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%FA881525FB002_IGSCC%ACAS-Scan%"
+    ],
+    "difficulty": "medium",
+    "rationale": "AGGREGATE across new-contract deliverables. Tests cross-year enumeration under a shared contract number.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025",
+        "2026"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Four FA881525FB002 filenames confirmed via folder miner: IGSCC-529 October-2025, IGSCC-531 December-2025, IGSCC-532 January-2026, IGSCC-533 February-2026."
+  },
+  {
+    "query_id": "PQ-193",
+    "user_input": "What was the monitoring system ACAS scan deliverable for July 2025 (IGSI-2553)?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI-2553_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_July-2025%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Legacy-contract dated ACAS deliverable ENTITY lookup.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-07"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '47QFRA22F0009_IGSI-2553_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_July-2025.xlsx' confirmed with 2,545 hits."
+  },
+  {
+    "query_id": "PQ-194",
+    "user_input": "What was the Niger CT&E Report filed on 2022-12-13 under IGSI-481?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-481%CT&E Report Niger%"
+    ],
+    "difficulty": "easy",
+    "rationale": "CT&E Report ENTITY lookup.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Niger"
+      ],
+      "DATE": [
+        "2022-12-13"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File 'Niger CT&E Report 2022-Dec-13.xlsx' in 'Deliverables Report IGSI-481 CT&E Report Niger (A027)' folder confirmed with 3,153 hits."
+  },
+  {
+    "query_id": "PQ-195",
+    "user_input": "What does the legacy monitoring system RHEL 8 Cybersecurity Assessment Test Report (IGSI-2891) cover?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report%"
+    ],
+    "difficulty": "medium",
+    "rationale": "RHEL 8 baseline assessment narrative retrieval.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx' confirmed with 4,528 hits."
+  },
+  {
+    "query_id": "PQ-196",
+    "user_input": "What was the 2020-05-01 monitoring system ATO ISS Change package and what scan results supported it?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2020-05-01 monitoring system ATO ISS Change/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "ATO change package narrative recall with supporting scan evidence.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2020-05-01"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '2020-05-01 monitoring system ATO ISS Change' with 'ISS STE Scan Results ISS 2021-Nov-06.xlsx' (6,063 hits), 2021-Nov-09 sibling, and 2021-Sep v2 (6,146 hits) confirmed."
+  },
+  {
+    "query_id": "PQ-197",
+    "user_input": "What was the 2019-06-15 legacy monitoring system Re-Authorization package contents?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "legacy monitoring system re-authorization narrative recall.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019-06-15"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '2019-06-15_ISTO_Re-Authorization' with 'legacy monitoring system ATO Scan Results-POAM 2019-09-05.xlsx' (4,049 hits) and 'legacy monitoring system scan results.zip' (5,611 hits) confirmed."
+  },
+  {
+    "query_id": "PQ-198",
+    "user_input": "What was the 2021-02-26 legacy monitoring system 2.2.0-2 Software Change and what STIG was referenced?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2021-02-26 legacy monitoring system 2.2.0-2 Software Change/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Specific software change ATO package ENTITY lookup.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021-02-26"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '2021-02-26 legacy monitoring system 2.2.0-2 Software Change' with 'legacy monitoring system SW STIG 2021-Feb-26.xlsx' (2,668 hits) confirmed."
+  },
+  {
+    "query_id": "PQ-199",
+    "user_input": "What is the Kwajalein legacy monitoring system POAM report from 2019-06-25?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%legacy monitoring system KWAJ POAM 2019-06-25%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Kwajalein-specific POAM ENTITY lookup.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Kwajalein"
+      ],
+      "DATE": [
+        "2019-06-25"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File 'legacy monitoring system KWAJ POAM 2019-06-25.xlsx' in '2019-06-25_ISTO Kwajalein Army ATC' folder with 4,014 hits confirmed."
+  },
+  {
+    "query_id": "PQ-200",
+    "user_input": "What was the 2024 legacy monitoring system Reauthorization SCAP scan finding?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/2024 legacy monitoring system Reauthorization/%SCAP scan%"
+    ],
+    "difficulty": "medium",
+    "rationale": "2024 reauthorization SCAP scan narrative retrieval.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '2024 legacy monitoring system Reauthorization/SCAP scan.xlsx' confirmed with 3,839 hits."
+  },
+  {
+    "query_id": "PQ-201",
+    "user_input": "What does the monitoring system Lab ACAS-RHEL7 STIG Results file from 2019-04-23 document?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%monitoring system Lab ACAS-RHEL7 STIG Results 2019-04-23%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Dated STIG scan results TABULAR lookup.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019-04-23"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "File '2019-04-28_NEXION_Re-Authorization/Scans ACAS-STIG/monitoring system Lab ACAS-RHEL7 STIG Results 2019-04-23.xlsx' confirmed with 2,393 hits."
+  },
+  {
+    "query_id": "PQ-202",
+    "user_input": "Which sites have had Corrective Action Plans filed across the legacy 47QFRA22F0009 contract?",
+    "reference": "Five sites have had CAPs filed under legacy contract 47QFRA22F0009: Fairford monitoring system (IGSI-1811 2024-06-05), Misawa monitoring system (IGSI-2234), Learmonth monitoring system (IGSI-2529 2024-08-16), Kwajalein legacy monitoring system (IGSI-2783 2024-10-25), and Alpena monitoring system (IGSI-4013 2025-07-14).",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A001 - Corrective Action Plan (CAP)/47QFRA22F0009_%"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI%_Corrective%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-site enumeration under a specific contract. Tests contract-scoped AGGREGATE retrieval.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Fairford",
+        "Misawa",
+        "Learmonth",
+        "Kwajalein",
+        "Alpena"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "All 5 CAP files confirmed in A001 folder via file listing."
+  },
+  {
+    "query_id": "PQ-203",
+    "user_input": "How many 2024 shipments went to OCONUS sites and which sites were involved?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2024 - Shipments/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "2024 OCONUS shipment AGGREGATE. Confirmed sites: Thule, Ascension, Learmonth, Azores, Djibouti, Kwajalein, Guam.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule",
+        "Ascension",
+        "Learmonth",
+        "Azores",
+        "Djibouti",
+        "Kwajalein",
+        "Guam"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "7 distinct 2024 OCONUS site shipments confirmed via folder mining."
+  },
+  {
+    "query_id": "PQ-204",
+    "user_input": "What is the timeline of all monitoring system ACAS scan deliverables from 2022 through 2026?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2022/%",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2023/%",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2025/%",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2026/%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Multi-year timeline AGGREGATE across two contracts (47QFRA22F0009 and FA881525FB002).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2022-Nov",
+        "2022-Dec",
+        "2023-May",
+        "2025-07",
+        "2025-10",
+        "2025-12",
+        "2026-01",
+        "2026-02"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Year folders 2022, 2023, 2025, 2026 confirmed in A027 ACAS tree with specific dated deliverables."
+  },
+  {
+    "query_id": "PQ-205",
+    "user_input": "How many weekly variance reports have been filed in 2024 and how do they distribute across months?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "AGGREGATE counting across weekly reports. Tests per-year per-month distribution enumeration.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder '2024/' contains monthly subfolders 2024-11 and 2024-12 confirmed with at least 5 dated files each."
+  },
+  {
+    "query_id": "PQ-206",
+    "user_input": "Which sites have had ATO Re-Authorization packages submitted since 2019?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ATO-ATC Package Changes/%Re-Authorization%",
+      "3.0 Cybersecurity/ATO-ATC Package Changes/%Reauthorization%"
+    ],
+    "difficulty": "medium",
+    "rationale": "ATO reauthorization AGGREGATE. Real packages: 2019-04-28 monitoring system, 2019-06-15 legacy monitoring system, 2022-02-03 legacy monitoring system, 2024 legacy monitoring system.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019-04-28",
+        "2019-06-15",
+        "2022-02-03",
+        "2024"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Multiple reauthorization folders confirmed in ATO-ATC Package Changes tree."
+  },
+  {
+    "query_id": "PQ-207",
+    "user_input": "What was the Eareckson DAA Accreditation Support Data (A027) package?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%Eareckson DAA Accreditation Support Data%",
+      "%Eareckson CTE Results 2018-08-08%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Site-specific DAA accreditation package recall with linked CTE results.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Eareckson"
+      ],
+      "DATE": [
+        "2018-08-08"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Folder 'A027 - monitoring system Eareckson DAA Accreditation Support Data' with 'SEMS3D-38473 Eareckson DAA Supporting Data - A027.zip' (2,476 hits) and 'Eareckson CTE Results 2018-08-08.xlsx' (2,454 hits) confirmed."
+  },
+  {
+    "query_id": "PQ-208",
+    "user_input": "Which CDRL A027 subtypes exist and how many artifacts are under each?",
+    "reference": "CDRL A027 DAA Accreditation Support Data has multiple subfolders including: (ACAS Scan Results), (CT&E Plan), (CT&E Report), (Network Diagram), (PPS), (SCAP Scan Results), (System Authorization Boundary), (Updated POAM), plus A027 RMF Security Plan, A027 Security Authorization Package, and A027 Cybersecurity Assessment Test Report.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data%",
+      "1.5 enterprise program CDRLS/A027 - RMF%",
+      "1.5 enterprise program CDRLS/A027 - Security Authorization Package",
+      "1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A027%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Full A027 subtype enumeration. Tests deep CDRL tree walking.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "A027 subfolders confirmed via corpus exploration in Phase 1 and Phase 2A folder mining."
+  },
+  {
+    "query_id": "PQ-209",
+    "user_input": "How many distinct Thule ASV and install events have occurred and what dates span the history?",
+    "reference": "Thule visit history spans 2014-07-09 (Site Survey by BAH) through 2026-06-18 (FS-JR ASV), with major events: 2014-07 Site Survey (BAH), 2019-06-06 Install, 2021-08-25 ASV (Nguyen-Womelsdorff), 2024-08-13 ASV (FS-JD), 2026-06-18 ASV (FS-JR). At least 5 distinct visit events documented.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Thule/"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Thule/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Multi-decade site visit AGGREGATE. Tests long-horizon folder walking.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2014",
+        "2019",
+        "2021",
+        "2024",
+        "2026"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "5 distinct Thule visit folders confirmed via folder mining spanning 2014-2026."
+  },
+  {
+    "query_id": "PQ-210",
+    "user_input": "Which sites appear in both the CDRL A001 Corrective Action Plan folder AND the CDRL A002 Maintenance Service Report folder?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A001 - Corrective Action Plan (CAP)/%",
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-CDRL intersection query. Tests whether retrieval can correlate site tokens across two distinct CDRL subfolders.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Fairford",
+        "Misawa",
+        "Learmonth",
+        "Kwajalein",
+        "Alpena",
+        "Thule",
+        "Eglin",
+        "Vandenberg"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "A001 has 5 dated CAPs confirmed; A002 has 21 site-specific MSR folders confirmed. Intersection sites exist but require retrieval to correlate."
   }
 ]

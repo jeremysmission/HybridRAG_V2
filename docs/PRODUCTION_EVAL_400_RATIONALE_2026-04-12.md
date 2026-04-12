@@ -460,4 +460,120 @@ the coordinator prioritizes.
 
 ---
 
+## 12. Phase 2A Mining Adjustments After Entity Store Pollution Discovery
+
+**Added 2026-04-12 after Phase 1 QA acceptance.** The coordinator filed the
+Phase 1 entity store pollution findings (Section 3) as task #16 for the
+entity extractor owner. Separately, Phase 2A query authoring must adjust
+its anchor mining strategy to avoid relying on the polluted Tier 1 PO/PART
+columns. This section records the new methodology so future agents reading
+this doc understand why Phase 1 and Phase 2 mine differently.
+
+### The problem restated
+
+- Tier 1 `PO` column: 98% security standard/RMF control IDs (IR-4, CA-5, AC-2, etc.),
+  2% real SAP POs embedded in spreadsheet row fragments incorrectly
+  labeled as SITE.
+- Tier 1 `PART` column: 90% security standard SP 800-53 baseline codes
+  (AS-5021, OS-0004, GPOS-0022), 10% real physical parts buried deeper
+  in the count distribution.
+- Tier 1 `SITE` column: cleaner but still carries multi-field
+  spreadsheet-row contamination (e.g., `"KWAJALEIN, SYSTEM: legacy monitoring system,
+  LOCATION/MILITARY BASE: US Army Kwajalein Atoll (USAKA)"`).
+- Tier 1 `PERSON` column: concatenated `name + (phone)` strings.
+
+### Phase 2A anchor sources (in priority order)
+
+1. **Folder paths from `mine_query_anchors.py folders --like '%pattern%'`**
+   are the cleanest anchor source. The real corpus folder structure is
+   not polluted by regex extraction quirks. This is Phase 2A's primary
+   mining path for TABULAR, ENTITY, and AGGREGATE queries.
+
+2. **Real SAP-format PO numbers found in folder names.** Phase 1 mining
+   surfaced several real POs embedded in procurement folder naming
+   conventions like `"PO - 5000585586, PR 3000133844 Pulling Tape LLL
+   monitoring system(GRAINGER)($598.00)"`. Phase 2A extracts more of these by
+   running `mine_query_anchors.py folders --like
+   '%5.0 Logistics/Procurement/002 - Received/%'` and harvesting the
+   SAP POs (pattern `\b[57]\d{9}\b`) from the folder names directly.
+
+3. **Real physical parts from earlier Phase 1 findings.** These were
+   verified against chunk text and should be reused, not re-mined:
+   `RG-213`, `LMR-400`, `P240-260VDG`, `P240-270VDG`, `P007-003`,
+   `RSC081004`. Phase 2A adds more by walking the `5.0 Logistics/Parts
+   (Downloaded Information)/` subtree via folder listing.
+
+4. **Real SITE names** are usable after splitting on comma and taking
+   the leading token. Phase 1 confirmed Kwajalein, Thule, Eglin,
+   Vandenberg, Ascension, Guam, Misawa, Awase, Fairford, Learmonth,
+   Alpena, Djibouti, Ascension, Niger, San Vito, Wake, Lualualei,
+   Curacao, Diego Garcia, Singapore, Eareckson.
+
+5. **Real contract numbers** surfaced in folder names during Phase 2A
+   mining: `47QFRA22F0009` (legacy GSA/FEDSIM contract), `FA881525FB002`
+   (current AF contract). These are 13-digit structured identifiers
+   that FTS can match exactly and are reliable anchors for ENTITY and
+   TABULAR queries about deliverable tracking.
+
+6. **Real incident IDs** with the form `IGSI-NNNN` or `IGSCC-NNN`. Phase 1
+   confirmed 5 CAPs (IGSI-1811, IGSI-2234, IGSI-2529, IGSI-2783,
+   IGSI-4013). Phase 2A mining turned up many more in the
+   CDRL A027 folder tree (IGSI-965, IGSI-966, IGSI-727, IGSI-2553,
+   IGSI-2891, IGSI-965, IGSI-110, IGSI-503, IGSI-481, IGSCC-529,
+   IGSCC-531, IGSCC-532, IGSCC-533). Each maps to a specific deliverable
+   report by contract number, making them ideal ENTITY anchors for
+   compliance queries.
+
+7. **Real dated site visit folders** like `"Thule/2026-06-18 thru
+   08-26 (ASV)(FS-JR)/"`, `"Awase (Okinawa JP)/2023-06-19 thru 07-07
+   (Install 1 - FP)/"`. These carry date + site + visit type + team
+   initials as structured naming — very rich anchor material for
+   Field Engineer queries.
+
+### Anti-patterns avoided in Phase 2A
+
+- **Do NOT** write queries like `"Show me PART number CCI-0015"` —
+  CCI-0015 is a security standard control, not a part.
+- **Do NOT** write queries like `"Who is Annette Parsons"` unless you
+  also acknowledge the regex catches her name concatenated with a phone
+  number, and the answer will be noisy until Tier 2 cleans it up.
+- **Do NOT** anchor on top-N PART or PO entity values without first
+  checking whether they are security standard codes (`_is_nist_control()` in
+  `mine_query_anchors.py` is the canonical filter).
+- **Do NOT** trust the Tier 1 `PO` column for real procurement POs.
+  Use folder paths or FTS chunk search instead.
+
+### Tooling updates in Phase 2A
+
+No new subcommands were added to `scripts/mine_query_anchors.py` in
+Phase 2A. The existing `folders` subcommand proved sufficient because
+the cleanest anchor source (folder paths) is already fully exposed.
+
+A potential Phase 2C tooling enhancement would be a `--fts-only` flag
+on `chunks` that skips vector similarity and uses pure BM25 exact-token
+search against LanceDB. This is useful for extracting real SAP PO
+numbers from chunk text (since SAP POs are 10-digit integers that vector
+similarity struggles with, but FTS handles cleanly). Not implemented in
+Phase 2A because folder-path mining covered enough anchors.
+
+### Phase 2A ground truth strategy
+
+Phase 1 had 8/50 queries with full `reference` ground truth (16%).
+Phase 2A targets 20+/60 (33%) by leveraging the richer anchor pool:
+
+- Every query with a confirmed incident ID (IGSI-NNNN or IGSCC-NNN) can
+  have a ground truth answer composed from the folder name itself
+  (site + date + deliverable type).
+- Every query with a confirmed SAP PO can compose ground truth from the
+  folder naming convention (`"PO XXXXXXXXXX, PR YYYYYYYYYY, item,
+  destination, vendor, amount"`).
+- Every query about a specific contract number (47QFRA22F0009 or
+  FA881525FB002) can compose ground truth naming the contract + period
+  of performance.
+
+The `has_ground_truth: true` flag is set whenever the `reference` field
+is non-null and the answer can be verified from folder-level evidence.
+
+---
+
 Signed: reviewer | HybridRAG_V2 | 2026-04-12 MDT
