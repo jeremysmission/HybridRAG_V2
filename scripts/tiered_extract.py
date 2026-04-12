@@ -744,6 +744,17 @@ def main() -> None:
             t2_new_types = _counter_delta(after_t2_types, before_t2_types)
             total_entity_count += t2_new_count
             total_types.update(t2_new_types)
+        else:
+            # Dry-run totals report raw pre-dedup counts. Tier 1 is already
+            # seeded from t1_entity_total / t1_types (raw regex output) at
+            # the `total_entity_count = t1_entity_total if args.dry_run ...`
+            # init above, so Tier 2 must also contribute its raw counts or
+            # the final DRY RUN summary silently drops everything Tier 2
+            # would have emitted. Keeping both tiers on the same "raw"
+            # footing makes the DRY RUN totals internally consistent with
+            # the "[TIER 2] N entities raw" line printed just below.
+            total_entity_count += t2_raw_count
+            total_types.update(t2_types)
 
         print(f"  [TIER 2] {t2_raw_count:,} entities raw, {t2_new_count:,} new after dedup ({t2_elapsed:.1f}s)")
         print(f"           Types: {dict(t2_types)}")
@@ -761,13 +772,18 @@ def main() -> None:
         print(f"  Rels:        {inserted_r:,} new (before={before_r:,}, after={after_r:,})")
 
     if args.dry_run:
-        print(f"  DRY RUN:     would insert up to {total_entity_count:,} entities, {len(all_rels):,} rels")
+        print(
+            f"  DRY RUN:     would extract up to {total_entity_count:,} raw "
+            f"entities (pre-dedup; Tier 1 + Tier 2 raw), {len(all_rels):,} rels"
+        )
 
     total_preds = Counter(r.predicate for r in all_rels)
+    total_label = "Total entities (raw, pre-dedup)" if args.dry_run else "Total entities (inserted)"
+    breakdown_label = "Entity breakdown (raw)" if args.dry_run else "Entity breakdown (inserted)"
     print()
     print(DIVIDER)
-    print(f"  Total entities:      {total_entity_count:,}")
-    print(f"  Entity breakdown:    {dict(total_types)}")
+    print(f"  {total_label}: {total_entity_count:,}")
+    print(f"  {breakdown_label}: {dict(total_types)}")
     print(f"  Total relationships: {len(all_rels):,}")
     print(f"  Rel breakdown:       {dict(total_preds)}")
     print(f"  Total time:          {time.perf_counter()-t0:.1f}s")
