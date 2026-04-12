@@ -53,15 +53,13 @@ Observed on `entities.sqlite3`:
 
 - `CAN-%` is **not** clean.
 - Existing `PART` entities include real tokens such as `CAN-2005`, `CAN-2004`, `CAN-1210`, `CAN-1209`, and `CAN-1208`.
-- Safer prefixes with **zero current collisions** in the live read-only store include:
-  - `VALPO-%`
-  - `VALPART-%`
-  - `VALSITE-%`
-  - `VAL-%`
-  - `QCAN-%`
-  - `QACAN-%`
+- Safer extractor-compatible identifiers with **zero current collisions** in the live read-only store include:
+  - exact labeled SAP-style PO values `9001000001` through `9001000012`
+  - `QZ-%` part identifiers
+  - exact site names `Validation Alpha Site` through `Validation Echo Site` when emitted through `Site:` or `Location:` labels
+  - `VALCAN*` for document IDs, filenames, and visible markers
 
-**Decision:** do **not** use `CAN-*` as the main synthetic entity namespace. Use `VAL*` or `VALCAN*` instead.
+**Decision:** do **not** use `CAN-*` as the main synthetic entity namespace. Also do **not** assume a collision-clean namespace is automatically extractor-compatible. In the authored pack, `VALCAN` remains the document-level namespace, while primary `PO` / `PART` / `SITE` values are shaped to match the current Tier 1 extractor.
 
 ---
 
@@ -218,7 +216,7 @@ valcanary_acas_rollup_q3_2024.pdf
 
 - leading underscore keeps the subtree visually separate,
 - `valcanary` aligns with current `canary_globs`,
-- `VAL*` entity namespaces are clean in the live store,
+- extractor-compatible `PO` / `PART` / `SITE` values are clean in the live store,
 - the visible marker gives operators a searchable proof handle.
 
 ---
@@ -233,11 +231,11 @@ The canary pack should encode one fixed synthetic world. The documents differ by
 
 | Code | Meaning |
 |---|---|
-| `VALSITE-ALPHA` | synthetic site 1 |
-| `VALSITE-BRAVO` | synthetic site 2 |
-| `VALSITE-CHARLIE` | synthetic site 3 |
-| `VALSITE-DELTA` | synthetic site 4 |
-| `VALSITE-ECHO` | synthetic site 5 |
+| `Validation Alpha Site` | synthetic site 1 |
+| `Validation Bravo Site` | synthetic site 2 |
+| `Validation Charlie Site` | synthetic site 3 |
+| `Validation Delta Site` | synthetic site 4 |
+| `Validation Echo Site` | synthetic site 5 |
 
 #### People
 
@@ -262,24 +260,24 @@ Twelve synthetic POs:
 
 | ID | Status | Site | Quarter | Value |
 |---|---|---|---|---:|
-| `VALPO-9000000001` | OPEN | ALPHA | Q1 2024 | 18,400 |
-| `VALPO-9000000002` | OPEN | BRAVO | Q2 2024 | 72,000 |
-| `VALPO-9000000003` | CLOSED | ALPHA | Q2 2024 | 15,300 |
-| `VALPO-9000000004` | OPEN | CHARLIE | Q2 2024 | 58,700 |
-| `VALPO-9000000005` | CLOSED | DELTA | Q2 2024 | 8,900 |
-| `VALPO-9000000006` | OPEN | ECHO | Q3 2024 | 44,500 |
-| `VALPO-9000000007` | OPEN | BRAVO | Q3 2024 | 63,000 |
-| `VALPO-9000000008` | CLOSED | CHARLIE | Q2 2024 | 91,000 |
-| `VALPO-9000000009` | OPEN | ALPHA | Q4 2024 | 109,000 |
-| `VALPO-9000000010` | CLOSED | ECHO | Q1 2024 | 12,600 |
-| `VALPO-9000000011` | OPEN | DELTA | Q4 2024 | 31,200 |
-| `VALPO-9000000012` | OPEN | CHARLIE | Q2 2024 | 27,800 |
+| `PO 9001000001` | OPEN | Validation Alpha Site | Q1 2024 | 18,400 |
+| `PO 9001000002` | OPEN | Validation Bravo Site | Q2 2024 | 72,000 |
+| `PO 9001000003` | CLOSED | Validation Alpha Site | Q2 2024 | 15,300 |
+| `PO 9001000004` | OPEN | Validation Charlie Site | Q2 2024 | 58,700 |
+| `PO 9001000005` | CLOSED | Validation Delta Site | Q2 2024 | 8,900 |
+| `PO 9001000006` | OPEN | Validation Echo Site | Q3 2024 | 44,500 |
+| `PO 9001000007` | OPEN | Validation Bravo Site | Q3 2024 | 63,000 |
+| `PO 9001000008` | CLOSED | Validation Charlie Site | Q2 2024 | 91,000 |
+| `PO 9001000009` | OPEN | Validation Alpha Site | Q4 2024 | 109,000 |
+| `PO 9001000010` | CLOSED | Validation Echo Site | Q1 2024 | 12,600 |
+| `PO 9001000011` | OPEN | Validation Delta Site | Q4 2024 | 32,200 |
+| `PO 9001000012` | OPEN | Validation Charlie Site | Q2 2024 | 27,800 |
 
 Deterministic canary facts from that table:
 
 - total validation POs = **12**
-- open validation POs = **7**
-- closed validation POs = **5**
+- open validation POs = **8**
+- closed validation POs = **4**
 - Q2 2024 validation POs over $50,000 = **3** (`0002`, `0004`, `0008`)
 - total open validation PO value = **$425,600**
 
@@ -289,22 +287,22 @@ Sixteen synthetic parts:
 
 | ID | Short label |
 |---|---|
-| `VALPART-RG213-001` | coax assembly |
-| `VALPART-LMR400-002` | low-loss coax |
-| `VALPART-UPS48V-003` | UPS module |
-| `VALPART-GPSANT-004` | GPS antenna |
-| `VALPART-KVM-005` | KVM switch |
-| `VALPART-FAN-006` | cooling fan |
-| `VALPART-BATT-007` | battery unit |
-| `VALPART-PSU-008` | power supply |
-| `VALPART-FLT-009` | surge filter |
-| `VALPART-CBL-010` | patch cable |
-| `VALPART-AMP-011` | pre-amplifier |
-| `VALPART-COUPLER-012` | RF coupler |
-| `VALPART-NIC-013` | network card |
-| `VALPART-SFP-014` | optical transceiver |
-| `VALPART-UPSCARD-015` | UPS management card |
-| `VALPART-ROUTER-016` | edge router |
+| `QZ-3001` | coax assembly |
+| `QZ-3002` | low-loss coax |
+| `QZ-3003` | UPS module |
+| `QZ-3004` | GPS antenna |
+| `QZ-3005` | KVM switch |
+| `QZ-3006` | cooling fan |
+| `QZ-3007` | battery unit |
+| `QZ-3008` | power supply |
+| `QZ-3009` | surge filter |
+| `QZ-3010` | patch cable |
+| `QZ-3011` | pre-amplifier |
+| `QZ-3012` | RF coupler |
+| `QZ-3013` | network card |
+| `QZ-3014` | optical transceiver |
+| `QZ-3015` | UPS management card |
+| `QZ-3016` | edge router |
 
 #### Service events
 
@@ -322,11 +320,11 @@ Hard-query deterministic facts:
 - distinct parts failed during those lightning events = **5**
 - sites affected by those lightning events = **3**
 - affected parts =  
-  `VALPART-UPS48V-003`  
-  `VALPART-GPSANT-004`  
-  `VALPART-FAN-006`  
-  `VALPART-FLT-009`  
-  `VALPART-UPSCARD-015`
+  `QZ-3003`  
+  `QZ-3004`  
+  `QZ-3006`  
+  `QZ-3009`  
+  `QZ-3015`
 
 #### Program-management deliverables
 
@@ -359,7 +357,7 @@ Validation cybersecurity facts:
 #### Shipment facts
 
 - shipments total = **9**
-- shipments to `VALSITE-ALPHA` = **4**
+- shipments to `Validation Alpha Site` = **4**
 - OCONUS shipments requiring customs/export packet = **3**
 
 ---
@@ -393,8 +391,8 @@ The pack should contain exactly **40 files**. That is big enough to cover all fi
 
 | Doc ID | Filename | Format | Purpose | Key facts |
 |---|---|---|---|---|
-| VALDOC-012 | `valcanary_po_register_2024.xlsx` | `.xlsx` | canonical PO table | 12 POs, 7 open, open total $425,600 |
-| VALDOC-013 | `valcanary_po_receipts_2024.xlsx` | `.xlsx` | receipt confirmation view | 5 closed POs received |
+| VALDOC-012 | `valcanary_po_register_2024.xlsx` | `.xlsx` | canonical PO table | 12 POs, 8 open, open total $425,600 |
+| VALDOC-013 | `valcanary_po_receipts_2024.xlsx` | `.xlsx` | receipt confirmation view | 4 closed POs received |
 | VALDOC-014 | `valcanary_parts_master_list.xlsx` | `.xlsx` | master parts list | 16 unique part numbers |
 | VALDOC-015 | `valcanary_shipment_manifest_q1_q2_2024.xlsx` | `.xlsx` | shipment counts by site and date | 9 shipments, 4 to ALPHA |
 | VALDOC-016 | `valcanary_customs_export_packet_alpha_bravo.pdf` | `.pdf` | customs/export paperwork proof | 3 OCONUS customs-linked shipments |
@@ -442,10 +440,10 @@ The pack should contain exactly **40 files**. That is big enough to cover all fi
 
 The 40 documents intentionally cover the formats most relevant to current V2 ingest patterns:
 
-- `.xlsx`: 17
+- `.xlsx`: 18
 - `.docx`: 8
 - `.pdf`: 8
-- `.txt`: 7
+- `.txt`: 6
 
 This is close enough to the real corpus shape to test parse, chunk, embed, and retrieval behavior without recreating production noise.
 
@@ -461,7 +459,7 @@ Single-attribute counts or lists against one dominant document family.
 
 Examples:
 
-- “How many shipments were sent to `VALSITE-ALPHA`?”
+- “How many shipments were sent to `Validation Alpha Site`?”
 - “How many calibration records are overdue?”
 
 ### Medium
@@ -509,11 +507,11 @@ This methodology adopts that structure, with one important correction:
 | Persona | Logistics Lead |
 | Difficulty | Easy |
 | Expected query_type | `AGGREGATE` |
-| Expected answer | `7 open validation POs totaling $425,600.` |
+| Expected answer | `8 open validation POs totaling $425,600.` |
 | Ground-truth source | Synthetic canary fact table; primary evidence in `valcanary_po_register_2024.xlsx` plus `valcanary_po_receipts_2024.xlsx`. |
 | V2 query path | Router should classify `AGGREGATE`; primary answer path should be entity-store aggregation over `PO` plus status/value fields, with vector context merged by `pipeline._handle_structured()`. |
 | Demo narration suggestion | `This first question is a validation control. We injected a small synthetic procurement pack with pre-known counts so we can prove the aggregation path is doing arithmetic, not improv.` |
-| Failure recovery plan | If the answer is wrong, switch immediately to the validation table slide or proof artifact showing the 12 POs and 7 open statuses, state that the pipeline failed the control, and do not continue with corpus-wide aggregation claims. |
+| Failure recovery plan | If the answer is wrong, switch immediately to the validation table slide or proof artifact showing the 12 POs and 8 open statuses, state that the pipeline failed the control, and do not continue with corpus-wide aggregation claims. |
 
 ### Query 2 — Canary-backed cross-role hard proof
 
@@ -523,7 +521,7 @@ This methodology adopts that structure, with one important correction:
 | Persona | Aggregation / Cross-role |
 | Difficulty | Hard |
 | Expected query_type | `AGGREGATE` |
-| Expected answer | `5 distinct parts failed during 4 lightning-related service events across 3 validation sites: VALSITE-ALPHA, VALSITE-BRAVO, and VALSITE-CHARLIE.` |
+| Expected answer | `5 distinct parts failed during 4 lightning-related service events across 3 validation sites: Validation Alpha Site, Validation Bravo Site, and Validation Charlie Site.` |
 | Ground-truth source | Synthetic canary fact table; evidence in `valcanary_service_event_tracker_2024.xlsx`, `valcanary_failure_mode_summary_2024.pdf`, and `valcanary_part_failure_to_po_crosswalk.xlsx`. |
 | V2 query path | Router should classify `AGGREGATE`; answer should come from entity-store aggregation and/or table query with vector context merged. Future implementation may need a specific aggregate helper if generic aggregation does not link events to failure modes cleanly. |
 | Demo narration suggestion | `This is the harder control. It crosses date, failure mode, and distinct-part counting. If the system gets this right, we know the structured path is handling more than a single spreadsheet total.` |
@@ -762,7 +760,11 @@ SELECT COUNT(DISTINCT text) AS canary_pos
 FROM entities
 WHERE entity_type = 'PO'
   AND source_path LIKE '%\\_VALCAN_2026\\%'
-  AND text LIKE 'VALPO-%';
+  AND text IN (
+    '9001000001', '9001000002', '9001000003', '9001000004',
+    '9001000005', '9001000006', '9001000007', '9001000008',
+    '9001000009', '9001000010', '9001000011', '9001000012'
+  );
 ```
 
 Expected:
@@ -931,9 +933,9 @@ Run a fixed known-answer query pack against the V2 query pipeline and compare th
 Human-readable tabular output, one line per query:
 
 ```text
-PASS | CAN-001 | AGGREGATE | expected=7 open POs / got=7 | delta=0 | 842 ms
-FAIL | CAN-002 | AGGREGATE | expected=5 distinct parts / got=4 | delta=-1 | 911 ms
-PASS | REAL-001 | AGGREGATE | expected=12 monthly files / got=12 | delta=0 | 603 ms
+PASS | VALCAN-Q001 | AGGREGATE | expected=8 open POs / got=8 | delta=0 | 842 ms
+FAIL | VALCAN-Q002 | AGGREGATE | expected=5 distinct parts / got=4 | delta=-1 | 911 ms
+PASS | REAL-Q003 | AGGREGATE | expected=12 monthly files / got=12 | delta=0 | 603 ms
 ```
 
 ### Exit codes

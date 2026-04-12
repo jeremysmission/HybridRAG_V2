@@ -11,9 +11,9 @@ Validation Site Visit Rollup 2024
 =================================
 
 Validation visit counts by site:
-- VALSITE-ALPHA -> 2 visits (Two lightning service events)
-- VALSITE-BRAVO -> 2 visits (One lightning event and one calibration visit)
-- VALSITE-CHARLIE -> 2 visits (One lightning event and one network remediation visit)
-- VALSITE-DELTA -> 3 visits (One power-quality event and two maintenance visits)
-- VALSITE-ECHO -> 2 visits (One routine visit and one power-quality event)
+- Validation Alpha Site -> 2 visits (Two lightning service events)
+- Validation Bravo Site -> 2 visits (One lightning event and one calibration visit)
+- Validation Charlie Site -> 2 visits (One lightning event and one network remediation visit)
+- Validation Delta Site -> 3 visits (One power-quality event and two maintenance visits)
+- Validation Echo Site -> 2 visits (One routine visit and one power-quality event)
 Total site visits tracked: 11.

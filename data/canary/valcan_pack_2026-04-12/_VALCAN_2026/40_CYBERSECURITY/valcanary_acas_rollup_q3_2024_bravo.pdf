@@ -4,7 +4,7 @@
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 2 0 obj
-<< /Length 1621 >>
+<< /Length 639 >>
 stream
 BT
 /F1 10 Tf
@@ -14,25 +14,13 @@ BT
 T*
 (Canary Namespace: VALCAN-2026) Tj
 T*
-(Canary Document ID: VALDOC-031) Tj
-T*
-(Canary Bundle: 40_CYBERSECURITY) Tj
-T*
-(Synthetic Owner: Jane Canary) Tj
-T*
-(Production Use: prohibited) Tj
-T*
-(Repo Pack Root: data/canary/valcan_pack_2026-04-12/_VALCAN_2026/40_CYBERSECURITY/) Tj
-T*
-(Future Deploy Root: E:\\CorpusTransfr\\verified\\IGS\\_VALCAN_2026\\) Tj
-T*
 () Tj
 T*
 (Validation ACAS Rollup Q3 2024 BRAVO) Tj
 T*
 () Tj
 T*
-(Site: VALSITE-BRAVO) Tj
+(Site: Validation Bravo Site) Tj
 T*
 (Total ACAS findings: 13) Tj
 T*
@@ -47,24 +35,6 @@ T*
 (- VALFIND-ACAS-016 | High | OPEN | Outdated relay package set) Tj
 T*
 (- VALFIND-ACAS-017 | High | OPEN | Unapproved inbound rule remains open) Tj
-T*
-(- VALFIND-ACAS-018 | Medium | OPEN | Log retention below validation baseline) Tj
-T*
-(- VALFIND-ACAS-019 | Medium | OPEN | Local group alignment pending) Tj
-T*
-(- VALFIND-ACAS-020 | Low | CLOSED | Removable media banner updated) Tj
-T*
-(- VALFIND-ACAS-021 | Medium | CLOSED | Service account lockout aligned) Tj
-T*
-(- VALFIND-ACAS-022 | Low | CLOSED | Kernel package cleanup) Tj
-T*
-(- VALFIND-ACAS-023 | Low | CLOSED | Certificate inventory refreshed) Tj
-T*
-(- VALFIND-ACAS-024 | Medium | CLOSED | Host alias cleanup) Tj
-T*
-(- VALFIND-ACAS-025 | Low | CLOSED | Archive permission fix) Tj
-T*
-(- VALFIND-ACAS-026 | Medium | CLOSED | Audit daemon verification complete) Tj
 ET
 endstream
 endobj
@@ -82,11 +52,11 @@ xref
 0000000000 65535 f 
 0000000015 00000 n 
 0000000085 00000 n 
-0000001758 00000 n 
-0000001884 00000 n 
-0000001941 00000 n 
+0000000775 00000 n 
+0000000901 00000 n 
+0000000958 00000 n 
 trailer
 << /Size 6 /Root 5 0 R >>
 startxref
-1990
+1007
 %%EOF

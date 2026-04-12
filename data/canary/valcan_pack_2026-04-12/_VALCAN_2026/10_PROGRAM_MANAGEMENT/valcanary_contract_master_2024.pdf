@@ -4,7 +4,7 @@
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 2 0 obj
-<< /Length 1354 >>
+<< /Length 1075 >>
 stream
 BT
 /F1 10 Tf
@@ -13,18 +13,6 @@ BT
 ([CANARY-VALIDATION-DOCUMENT-DO-NOT-USE-IN-PRODUCTION]) Tj
 T*
 (Canary Namespace: VALCAN-2026) Tj
-T*
-(Canary Document ID: VALDOC-004) Tj
-T*
-(Canary Bundle: 10_PROGRAM_MANAGEMENT) Tj
-T*
-(Synthetic Owner: Jane Canary) Tj
-T*
-(Production Use: prohibited) Tj
-T*
-(Repo Pack Root: data/canary/valcan_pack_2026-04-12/_VALCAN_2026/10_PROGRAM_MANAGEMENT/) Tj
-T*
-(Future Deploy Root: E:\\CorpusTransfr\\verified\\IGS\\_VALCAN_2026\\) Tj
 T*
 () Tj
 T*
@@ -42,17 +30,19 @@ T*
 T*
 (Sites in scope:) Tj
 T*
-(- VALSITE-ALPHA | team Program Sustainment Cell | system HF Terminal | region CONUS) Tj
+(- Validation Alpha Site | team Program Sustainment Cell | system HF Terminal | region CONUS) Tj
 T*
-(- VALSITE-BRAVO | team Logistics Coordination Cell | system Transport Gateway | region OCONUS) Tj
+(- Validation Bravo Site | team Logistics Coordination Cell | system Transport Gateway | region) Tj
 T*
-(- VALSITE-CHARLIE | team Field Service Cell | system Sensor Relay | region OCONUS) Tj
+( OCONUS) Tj
 T*
-(- VALSITE-DELTA | team Maintenance Planning Cell | system Power Conditioning Rack | region ) Tj
+(- Validation Charlie Site | team Field Service Cell | system Sensor Relay | region OCONUS) Tj
 T*
-(CONUS) Tj
+(- Validation Delta Site | team Maintenance Planning Cell | system Power Conditioning Rack | ) Tj
 T*
-(- VALSITE-ECHO | team Cyber Operations Cell | system Remote Enclave | region OCONUS) Tj
+(region CONUS) Tj
+T*
+(- Validation Echo Site | team Cyber Operations Cell | system Remote Enclave | region OCONUS) Tj
 T*
 (Total deliverables tracked: 12) Tj
 T*
@@ -74,11 +64,11 @@ xref
 0000000000 65535 f 
 0000000015 00000 n 
 0000000085 00000 n 
-0000001491 00000 n 
-0000001617 00000 n 
-0000001674 00000 n 
+0000001212 00000 n 
+0000001338 00000 n 
+0000001395 00000 n 
 trailer
 << /Size 6 /Root 5 0 R >>
 startxref
-1723
+1444
 %%EOF

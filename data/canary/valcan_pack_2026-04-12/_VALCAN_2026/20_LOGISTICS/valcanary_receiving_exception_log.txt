@@ -10,6 +10,6 @@ Future Deploy Root: E:\CorpusTransfr\verified\IGS\_VALCAN_2026\
 Validation Receiving Exception Log
 ==================================
 
-Exception 001: VALSHIP-007 experienced a two-day customs hold before final receipt to VALSITE-CHARLIE.
-Exception 002: VALPO-9000000004 remains open pending final antenna acceptance sign-off.
-Exception 003: one fielded crate for VALSITE-BRAVO required manual package labeling correction before closure.
+Exception 001: VALSHIP-007 experienced a two-day customs hold before final receipt to Validation Charlie Site.
+Exception 002: PO 9001000004 remains open pending final antenna acceptance sign-off.
+Exception 003: one fielded crate for Validation Bravo Site required manual package labeling correction before closure.
