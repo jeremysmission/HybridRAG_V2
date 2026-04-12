@@ -10,6 +10,7 @@ Current supported metric lane:
 
 - Retrieval-side non-LLM context metrics on queries that already have `reference_contexts`
 - Readiness analysis for the full corpus, including explicit skip reasons for ineligible rows
+- Execution intentionally uses the local hybrid retrieval path only; it does not call the router, `LLMClient`, or structured retrieval stores
 
 Current required fields for retrieval-side execution:
 
@@ -17,7 +18,7 @@ Current required fields for retrieval-side execution:
 - `user_input` or `query`
 - `reference_contexts`
 
-Current required fields for broader answer-based metrics:
+Current required fields for full Phase 2C readiness / broader answer-based metrics:
 
 - `reference`
 - Generated `response` from the app path
@@ -32,6 +33,11 @@ Current required fields for broader answer-based metrics:
    - skip counts by reason
 3. If `ragas` is installed, attempts retrieval-side non-LLM metrics on the eligible subset
 4. If `ragas` is missing, exits cleanly after reporting the blocker
+
+Current helper for live backfill targeting:
+
+- `python scripts/report_phase2c_backfill_targets.py`
+- This reports the current live counts and recommended Phase 2C targets so the backfill guidance does not go stale when the 400-query corpus changes
 
 ## Still Blocked On Phase 2C
 

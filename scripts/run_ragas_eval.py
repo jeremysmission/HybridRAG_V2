@@ -179,9 +179,14 @@ def analyze_readiness(queries: list[QueryDefinition]) -> list[ReadinessRecord]:
             reasons.append("missing_reference")
 
         eligible_for_retrieval_metrics = (
-            query.has_user_input and bool(query.reference_contexts)
+            query.has_query_id and query.has_user_input and bool(query.reference_contexts)
         )
-        fully_phase2c_enriched = bool(query.reference and query.reference_contexts)
+        fully_phase2c_enriched = bool(
+            query.has_query_id
+            and query.has_user_input
+            and query.reference
+            and query.reference_contexts
+        )
 
         records.append(
             ReadinessRecord(
@@ -333,17 +338,13 @@ def print_dependency_summary(probe: DependencyProbe) -> None:
     print()
 
 
-def _build_pipeline(top_k: int):
+def _build_retrieval_lane(top_k: int):
     sys.path.insert(0, str(REPO_ROOT))
 
     import torch  # noqa: WPS433
 
     from src.config.schema import load_config  # noqa: WPS433
-    from src.llm.client import LLMClient  # noqa: WPS433
-    from src.query.context_builder import ContextBuilder  # noqa: WPS433
     from src.query.embedder import Embedder  # noqa: WPS433
-    from src.query.pipeline import QueryPipeline  # noqa: WPS433
-    from src.query.query_router import QueryRouter  # noqa: WPS433
     from src.query.vector_retriever import VectorRetriever  # noqa: WPS433
     from src.store.lance_store import LanceStore  # noqa: WPS433
 
@@ -357,40 +358,11 @@ def _build_pipeline(top_k: int):
         device=device,
     )
     retriever = VectorRetriever(store, embedder, top_k=top_k)
-    ctx_builder = ContextBuilder(
-        top_k=top_k,
-        reranker_enabled=config.retrieval.reranker_enabled,
-    )
-    llm_client = LLMClient()
-    router = QueryRouter(llm_client)
-
-    entity_retriever = None
-    entity_db_path = REPO_ROOT / config.paths.entity_db
-    if entity_db_path.exists():
-        try:
-            from src.query.entity_retriever import EntityRetriever  # noqa: WPS433
-            from src.store.entity_store import EntityStore  # noqa: WPS433
-            from src.store.relationship_store import RelationshipStore  # noqa: WPS433
-
-            entity_retriever = EntityRetriever(
-                EntityStore(str(entity_db_path)),
-                RelationshipStore(str(entity_db_path)),
-            )
-        except Exception:
-            entity_retriever = None
-
-    pipeline = QueryPipeline(
-        router=router,
-        vector_retriever=retriever,
-        entity_retriever=entity_retriever,
-        context_builder=ctx_builder,
-        generator=None,
-        crag_verifier=None,
-    )
-    return pipeline, {
+    return retriever, {
         "device": device,
         "store_chunks": store.count(),
-        "router_provider": llm_client.provider if llm_client.available else "fallback",
+        "retrieval_mode": "local_hybrid_search_only",
+        "reranker_enabled": bool(config.retrieval.reranker_enabled),
     }
 
 
@@ -430,13 +402,11 @@ def _score_metric(metric: Any, sample: Any, sample_kwargs: dict[str, Any]) -> fl
 
 
 def _retrieved_contexts_from_query(
-    pipeline: Any,
+    retriever: Any,
     query_text: str,
     top_k: int,
 ) -> list[str]:
-    classification, _context, _stage_timings = pipeline.retrieve_context(query_text, top_k=top_k)
-    search_query = classification.expanded_query or query_text
-    raw_results = pipeline.vector_retriever.search(search_query, top_k=top_k)
+    raw_results = retriever.search(query_text, top_k=top_k)
 
     contexts: list[str] = []
     seen: set[str] = set()
@@ -489,14 +459,15 @@ def execute_metrics(
         raise RuntimeError("no_supported_metrics_available")
 
     SingleTurnSample = _load_single_turn_sample_class()
-    pipeline, pipeline_info = _build_pipeline(top_k=top_k)
+    retriever, pipeline_info = _build_retrieval_lane(top_k=top_k)
 
     print("=" * 72)
     print("  EXECUTION CONTEXT")
     print("=" * 72)
     print(f"Store chunks: {pipeline_info['store_chunks']:,}")
     print(f"Embedder device: {pipeline_info['device']}")
-    print(f"Router provider: {pipeline_info['router_provider']}")
+    print(f"Retrieval mode: {pipeline_info['retrieval_mode']}")
+    print(f"Reranker configured in app config: {pipeline_info['reranker_enabled']}")
     print()
 
     metric_values: dict[str, list[float]] = defaultdict(list)
@@ -514,7 +485,7 @@ def execute_metrics(
     for query, _record in eligible_pairs:
         try:
             retrieved_contexts = _retrieved_contexts_from_query(
-                pipeline=pipeline,
+                retriever=retriever,
                 query_text=query.user_input,
                 top_k=top_k,
             )
