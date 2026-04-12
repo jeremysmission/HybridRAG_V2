@@ -1,5 +1,5 @@
 """
-Retrieval Baseline Probe — Agent 1 — 2026-04-11
+Retrieval Baseline Probe — reviewer — 2026-04-11
 
 Tests 25 real production queries against the 10.4M chunk LanceDB store.
 Measures vector search, FTS search, and hybrid search quality + latency.
@@ -59,7 +59,7 @@ QUERIES = [
     {"id": "F02", "cat": "Lookup", "q": "point of contact for site visits", "expect": "SOP/contact doc"},
     {"id": "F03", "cat": "Lookup", "q": "PowerEdge server model and configuration", "expect": "IT/server doc"},
     {"id": "F04", "cat": "Lookup", "q": "software license inventory list", "expect": "software license doc"},
-    {"id": "F05", "cat": "Lookup", "q": "NEXION bill of materials components", "expect": "BOM doc"},
+    {"id": "F05", "cat": "Lookup", "q": "monitoring system bill of materials components", "expect": "BOM doc"},
     # --- Aggregation: Counting / Listing ---
     {"id": "A01", "cat": "Aggregation", "q": "list all purchase orders from 2023", "expect": "multiple PO docs"},
     {"id": "A02", "cat": "Aggregation", "q": "how many unique part numbers in the inventory", "expect": "inventory/parts spreadsheets"},
@@ -127,7 +127,7 @@ def format_result(r, idx):
 
 def main():
     print("=" * 70)
-    print("RETRIEVAL BASELINE PROBE — Agent 1 — 2026-04-11")
+    print("RETRIEVAL BASELINE PROBE — reviewer — 2026-04-11")
     print(f"GPU: CUDA_VISIBLE_DEVICES={os.environ.get('CUDA_VISIBLE_DEVICES', 'not set')}")
     print("=" * 70)
 
@@ -313,7 +313,7 @@ def main():
     md_path = v2_root / "docs" / "RETRIEVAL_BASELINE_PROBE_2026-04-11.md"
     with open(md_path, "w", encoding="utf-8", newline="\n") as f:
         f.write("# Retrieval Baseline Probe — 2026-04-11\n\n")
-        f.write(f"**Agent:** Agent 1 | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT\n\n")
+        f.write(f"**Agent:** reviewer | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT\n\n")
         f.write(f"**Purpose:** Pure vector+FTS retrieval baseline BEFORE entity extraction.\n")
         f.write(f"Measures what the 10.4M chunk store can answer with embeddings alone.\n\n")
         f.write("---\n\n")
@@ -371,7 +371,7 @@ def main():
         f.write("## Observations\n\n")
         f.write("_To be filled after reviewing results._\n\n")
         f.write("---\n\n")
-        f.write("Signed: Agent 1 | HybridRAG_V2 | 2026-04-11 MDT\n")
+        f.write("Signed: reviewer | HybridRAG_V2 | 2026-04-11 MDT\n")
 
     print(f"Report: {md_path}")
     print("\nDone.")

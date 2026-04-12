@@ -28,7 +28,7 @@ Output:
     tier_b_log.txt                  — smart monkey action log
     tier_c_log.txt                  — dumb monkey action log + crashes
 
-Matches Agent 3's tools/gui_evidence_capture.py conventions: same JSON
+Matches reviewer's tools/gui_evidence_capture.py conventions: same JSON
 schema, same evidence directory layout, same ``scope_note`` + Tier D
 opt-out language so the coordinator can audit both harnesses the same
 way.

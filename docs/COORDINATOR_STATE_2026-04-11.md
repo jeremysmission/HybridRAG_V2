@@ -16,7 +16,7 @@
 
 ## Live State
 
-### Beast (here)
+### primary workstation (here)
 - **LanceDB:** `C:\HybridRAG_V2\data\index\lancedb` — 10,435,593 chunks, 44GB
 - **Vector index:** IVF_PQ working
 - **FTS index:** Built (164.8s build time), verified with maintenance/PO-24/ACAS/STIG/shipment/calibration
@@ -45,17 +45,17 @@
 |-------|----------|
 | 10.4M LanceDB import | 44GB on disk, `store.count()` returns 10,435,593 |
 | IVF_PQ vector index | `list_indices()` shows it, queries return results in <20ms |
-| FTS index | Agent 1 V2 probe, 55% → 73% exact-match hit rate |
-| `LanceStore.hybrid_search()` | Agent 1 app-path probe 25/25 identical to raw path |
+| FTS index | reviewer V2 probe, 55% → 73% exact-match hit rate |
+| `LanceStore.hybrid_search()` | reviewer app-path probe 25/25 identical to raw path |
 | `VectorRetriever.search()` | Same, end-to-end verified |
-| Streaming extraction (iter_chunk_batches) | Code pushed, not yet used on Beast Tier 1 (old run) |
+| Streaming extraction (iter_chunk_batches) | Code pushed, not yet used on primary workstation Tier 1 (old run) |
 | GUI import/extraction panel | Pushed, live on laptop via `RUN_IMPORT_AND_EXTRACT_GUI.bat` |
 
 ## Known Issues
 
 | Issue | Severity | Status |
 |-------|----------|--------|
-| 16M CONTACT over-matching (phone regex) | HIGH | Agent 1 getting this task after hybrid QA clears |
+| 16M CONTACT over-matching (phone regex) | HIGH | reviewer getting this task after hybrid QA clears |
 | Only 59 relationships in Tier 1 | Expected | Will improve with Tier 3 LLM extraction via AWS |
 | 4 lookup queries still miss (L01/L02/L03/E05) | Data gap, not code | Tokens don't exist in current corpus — Sprint 6 ingest territory |
 | Aggregation queries fail retrieval alone | Expected | Needs entity store — that's why we're extracting |
@@ -66,19 +66,19 @@
 | Agent | Task | Status |
 |-------|------|--------|
 | QA | Verify hybrid_search commit `957eaab` | Round 2 pending — round 1 caught the API bug |
-| Agent 1 | App-path retrieval probe | DONE — 25/25 identical, ready for QA |
-| Agent 2 | Golden eval queries across 5 personas (PM/Logistics/Field Eng/NetAdmin-Cyber/Aggregation) | In progress |
-| Agent 3 | GUI streaming fix | DONE — committed in `f4727d9` |
+| reviewer | App-path retrieval probe | DONE — 25/25 identical, ready for QA |
+| reviewer | Golden eval queries across 5 personas (PM/Logistics/Field Eng/NetAdmin-Cyber/Aggregation) | In progress |
+| reviewer | GUI streaming fix | DONE — committed in `f4727d9` |
 | AWS Agent | Wire up GovCloud OSS-20B endpoint | In progress — blocked on admin for endpoint URL/auth |
 
 ## Next Actions (When Coordinator Resumes)
 
 1. **Watch for:** QA signoff on `957eaab` hybrid_search fix
 2. **Watch for:** Laptop import completion → tell user to pull latest + rebuild FTS (~3 min)
-3. **Watch for:** Agent 2 returning golden eval queries → review for 5 personas coverage
+3. **Watch for:** reviewer returning golden eval queries → review for 5 personas coverage
 4. **Watch for:** AWS agent hitting blockers with endpoint auth → help debug if needed
-5. **When QA clears:** Hand Agent 1 the phone regex fix task (brief already drafted in conversation history, see `docs/PHONE_REGEX_FIX_BRIEF_2026-04-11.md` if saved)
-6. **After phone fix:** Re-run Tier 1 on Beast, then launch Tier 2 GLiNER on GPU 1
+5. **When QA clears:** Hand reviewer the phone regex fix task (brief already drafted in conversation history, see `docs/PHONE_REGEX_FIX_BRIEF_2026-04-11.md` if saved)
+6. **After phone fix:** Re-run Tier 1 on primary workstation, then launch Tier 2 GLiNER on GPU 1
 7. **Before workstation desktop run:** Ensure all validated code is pushed, re-verify on laptop first
 
 ## Key Reference Files
@@ -98,7 +98,7 @@
 - 20-30 files/day real churn rate (nightly delta sustainable on local workstation)
 - Hybrid retrieval: 73% exact-match hit rate, 23ms P50 query latency
 - $0 infrastructure cost — runs on workstation already in inventory
-- GovCloud + air-gap compatible by design
+- GovCloud + offline compatible by design
 - No LangChain, no vendor lock-in, direct Python with debuggable layers
 
 Signed: CoPilot+ | Coordinator | 2026-04-11 MDT

@@ -1,6 +1,6 @@
 # V2 Demo Readiness Gap Analysis — 2026-04-12
 
-**Author:** Agent 3  
+**Author:** reviewer  
 **Repo:** `C:\HybridRAG_V2`  
 **Scope:** Read-only analysis of current V2 demo readiness for the May 2, 2026 demo  
 **Bottom line:** **Overall rating = RED for the full V2 story.**  
@@ -14,7 +14,7 @@ V2 is no longer in the same category as V1 on raw retrieval. The 10.4M-chunk Lan
 
 The problem is that the May 2 demo is not only about retrieval. The claimed V2 differentiators are structured routing, entity-backed answers, and cross-document aggregation. Those are exactly the areas where the evidence is weakest:
 
-1. **Aggregation credibility is RED.** Current Tier 1 entity data is still badly polluted in the two entity classes most likely to drive procurement and parts-count answers: `PART` and `PO`. The latest crash-recovery snapshot states `PART` is roughly **90% polluted** by NIST/SP 800-53 baseline codes and `PO` is roughly **98% polluted** by security control IDs.
+1. **Aggregation credibility is RED.** Current Tier 1 entity data is still badly polluted in the two entity classes most likely to drive procurement and parts-count answers: `PART` and `PO`. The latest crash-recovery snapshot states `PART` is roughly **90% polluted** by security standard/SP 800-53 baseline codes and `PO` is roughly **98% polluted** by security control IDs.
 2. **Router accuracy is RED.** The first production eval landed **12/25 routing correct (48%)**. That is not a rounding error. It means V2 often gets the right document family despite the router, not because of the router.
 3. **Demo operations are still fragile.** Several operator/demo docs are stale enough to cause self-inflicted failure. Some still expect `17,707` chunks and `40,981` entities. The current corpus is `10,435,593` chunks. If someone grabs the wrong checklist on demo day, the system can look broken even when the code is fine.
 
@@ -129,7 +129,7 @@ The good news:
 
 The bad news:
 
-- `PART` is currently described as **~90% polluted** by NIST/SP 800-53 baseline codes.
+- `PART` is currently described as **~90% polluted** by security standard/SP 800-53 baseline codes.
 - `PO` is currently described as **~98% polluted** by security control IDs.
 - `PERSON` remains thin at **4,788** because Tier 2 GLiNER promotion is not done on the clean store yet.
 - Relationships remain tiny relative to corpus size.
@@ -193,7 +193,7 @@ The router is currently the weakest core reasoning component in the live path.
 
 The production eval reported **12/25 routing correct (48%)**. The bad news is worse than the number alone suggests:
 
-- Many semantic or tabular questions get classified as `COMPLEX`.
+- Many semantic or tabular questions get restricted as `COMPLEX`.
 - Some queries still PASS because downstream retrieval is resilient.
 - The deterministic guard override in `query_router.py` currently applies only when `self.llm.provider == "ollama"`.
 
@@ -413,10 +413,10 @@ The demo needs a constrained, rehearsed operating envelope. “Let’s see what 
 
 | Priority | Fix | Suggested owner | Estimated effort | Why it is must-fix |
 |---|---|---|---|---|
-| 1 | Clean `PART` / `PO` regex pollution and rerun Tier 1 on the primary workstation | Agent 1 + coordinator | 0.5-1 day | Without this, aggregation remains untrustworthy |
-| 2 | Re-run production eval on the cleaned entity store and explicitly separate retrieval PASS from truthful aggregate-answer PASS | Agent 2 | 0.5 day | Needed to avoid repeating V1’s failure mode |
-| 3 | Tune router behavior for the actual provider path in use, not just local Ollama guards | Agent 1 | 0.5 day | Current 48% routing match is too weak for a high-stakes live demo |
-| 4 | Replace stale demo/operator docs with one canonical May 2 packet | Coordinator + Agent 2 | 2-4 hours | Current stale docs are a self-own waiting to happen |
+| 1 | Clean `PART` / `PO` regex pollution and rerun Tier 1 on the primary workstation | reviewer + coordinator | 0.5-1 day | Without this, aggregation remains untrustworthy |
+| 2 | Re-run production eval on the cleaned entity store and explicitly separate retrieval PASS from truthful aggregate-answer PASS | reviewer | 0.5 day | Needed to avoid repeating V1’s failure mode |
+| 3 | Tune router behavior for the actual provider path in use, not just local Ollama guards | reviewer | 0.5 day | Current 48% routing match is too weak for a high-stakes live demo |
+| 4 | Replace stale demo/operator docs with one canonical May 2 packet | Coordinator + reviewer | 2-4 hours | Current stale docs are a self-own waiting to happen |
 | 5 | Designate and verify one authoritative demo machine with pre-demo health checks | Coordinator + operator | 2-4 hours | Prevents “wrong box / wrong store / wrong counts” incidents |
 
 ---
@@ -425,9 +425,9 @@ The demo needs a constrained, rehearsed operating envelope. “Let’s see what 
 
 | Fix | Suggested owner | Estimated effort | Why it helps |
 |---|---|---|---|
-| Finish Tier 2 GLiNER on the clean store and measure PERSON/ORG/SITE lift | Coordinator + Agent 1 | 0.5-1 day | Improves entity lookup credibility |
-| Add a small canary-backed aggregate pack with independently checked answers | Agent 2 | 0.5 day | Lets the team show one or two structured wins safely |
-| Refresh demo narrative with current 10.4M numbers and current latency numbers | Coordinator + Agent 3 | 2-3 hours | Stops stale storytelling drift |
+| Finish Tier 2 GLiNER on the clean store and measure PERSON/ORG/SITE lift | Coordinator + reviewer | 0.5-1 day | Improves entity lookup credibility |
+| Add a small canary-backed aggregate pack with independently checked answers | reviewer | 0.5 day | Lets the team show one or two structured wins safely |
+| Refresh demo narrative with current 10.4M numbers and current latency numbers | Coordinator + reviewer | 2-3 hours | Stops stale storytelling drift |
 | Rehearse explicit recovery scripts for wrong-answer and no-result cases | Coordinator + non-author tester | 1-2 hours | Reduces stage panic |
 | Verify fresh install on the workstation desktop against current mainline and current store expectations | Coordinator | 2-4 hours | De-risks failover machine use |
 
@@ -503,4 +503,4 @@ If the entity cleanup and router tuning land in time, the rating can move from *
 
 That is the honest state tonight.
 
-Signed: Agent 3
+Signed: reviewer

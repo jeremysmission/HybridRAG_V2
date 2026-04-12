@@ -1,9 +1,9 @@
 # Demo-Day Research — Enterprise RAG Demo Patterns For 2025-2026
 
-**Author:** Agent 3  
+**Author:** reviewer  
 **Repo:** `C:\HybridRAG_V2`  
 **Purpose:** Research published demo-day patterns for enterprise RAG systems and convert them into concrete guidance for V2’s May 2 demo  
-**Scope:** Web research plus synthesis for enterprise/non-technical audiences such as program managers, logistics leads, and defense/government stakeholders  
+**Scope:** Web research plus synthesis for enterprise/non-technical audiences such as program managers, logistics leads, and enterprise/government stakeholders  
 **Research posture:** Recency-first, source-linked, and explicit when a recommendation is an inference rather than a direct published rule
 
 ---
@@ -36,7 +36,7 @@ Source note: Used Storylane guidance on backup plans and picking the right demo 
 
 ### Finding 5
 
-For defense/government audiences, the strongest framing for a home-grown or self-hosted RAG is **control, portability, data locality, and procurement realism**. “Free” is not enough. The better message is “no recurring platform tax on the core retrieval plane, auditable components, portable data, and compatibility with disconnected or sovereign deployment patterns.”
+For enterprise/government audiences, the strongest framing for a home-grown or self-hosted RAG is **control, portability, data locality, and procurement realism**. “Free” is not enough. The better message is “no recurring platform tax on the core retrieval plane, auditable components, portable data, and compatibility with disconnected or sovereign deployment patterns.”
 
 Source note: Used GSA OneGov guidance on cost savings, direct OEM relationships, consistent security standards, and reduced acquisition burden `https://www.gsa.gov/buy-through-us/purchasing-programs/multiple-award-schedule/onegov`, White House memo M-25-22 on open/standard APIs, portability, and lock-in protections, and Microsoft Sovereign Cloud positioning on local control and disconnected environments `https://www.microsoft.com/en-us/sovereignty` (checked 2026-04-11).
 
@@ -44,7 +44,7 @@ Source note: Used GSA OneGov guidance on cost savings, direct OEM relationships,
 
 Commercial platform vendors are competing hardest on **managed governance, evaluation, security wrappers, and procurement vehicles**, not only model quality. If V2 is compared to Bedrock, Azure, or Red Hat AI, it should not claim “we beat them.” It should claim “we chose a smaller, more controllable architecture for this corpus and this operating model.”
 
-Source note: Used AWS Bedrock RAG evaluation docs `https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-kb.html`, Microsoft Foundry regional-availability guidance `https://learn.microsoft.com/en-us/azure/foundry/reference/region-support`, Red Hat OpenShift AI docs on secure endpoints and OpenAI-compatible RAG APIs `https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.4`, and GSA’s Anthropic OneGov press release showing commercial AI is also moving on affordability and federal distribution `https://www.gsa.gov/about-us/newsroom/news-releases/gsa-strikes-onegov-deal-with-anthropic-08122025` (checked 2026-04-11).
+Source note: Used AWS Bedrock RAG evaluation docs `https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-kb.html`, Microsoft Foundry regional-availability guidance `https://learn.microsoft.com/en-us/azure/foundry/reference/region-support`, Red Hat OpenShift AI docs on secure endpoints and OpenAI-compatible RAG APIs `https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.4`, and GSA’s approved vendor OneGov press release showing commercial AI is also moving on affordability and federal distribution `https://www.gsa.gov/about-us/newsroom/news-releases/gsa-strikes-onegov-deal-with-approved vendor-08122025` (checked 2026-04-11).
 
 ### Finding 7
 
@@ -233,7 +233,7 @@ Source note: Used OECD’s trustworthy-AI framing and White House M-25-22’s em
 
 ### 3.5 Refusal Is A Feature If It Is Rehearsed
 
-A controlled refusal can actually increase trust with defense/government audiences if:
+A controlled refusal can actually increase trust with enterprise/government audiences if:
 
 - it is clearly bounded
 - it is not the first query
@@ -263,7 +263,7 @@ The official docs and procurement materials show that commercial AI platforms ar
 
 That means a home-grown V2 story should not be “the clouds cannot do this.” They can. The differentiation is control and fit, not pretending the commercial platforms are incapable.
 
-Source note: Used AWS Bedrock evaluation docs `https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-kb.html`, Microsoft Foundry regional-availability guidance `https://learn.microsoft.com/en-us/azure/foundry/reference/region-support`, Red Hat OpenShift AI docs on secure endpoints and OpenAI-compatible RAG APIs `https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.4`, and GSA’s Anthropic OneGov announcement showing commercial AI now has aggressive federal pricing/distribution mechanics `https://www.gsa.gov/about-us/newsroom/news-releases/gsa-strikes-onegov-deal-with-anthropic-08122025` (checked 2026-04-11).
+Source note: Used AWS Bedrock evaluation docs `https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-kb.html`, Microsoft Foundry regional-availability guidance `https://learn.microsoft.com/en-us/azure/foundry/reference/region-support`, Red Hat OpenShift AI docs on secure endpoints and OpenAI-compatible RAG APIs `https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.4`, and GSA’s approved vendor OneGov announcement showing commercial AI now has aggressive federal pricing/distribution mechanics `https://www.gsa.gov/about-us/newsroom/news-releases/gsa-strikes-onegov-deal-with-approved vendor-08122025` (checked 2026-04-11).
 
 ### 4.2 What A Home-Grown / Self-Hosted RAG Should Claim Instead
 
@@ -279,7 +279,7 @@ That is stronger than “free” and more credible than “better than Bedrock/A
 
 Source note: Used White House M-25-22 on open and standard APIs, portability, and lock-in protections, plus GSA OneGov on what federal buyers value in procurement terms `https://www.gsa.gov/buy-through-us/purchasing-programs/multiple-award-schedule/onegov` (checked 2026-04-11).
 
-### 4.3 What Defense / Government Audiences Tend To Respond To
+### 4.3 What enterprise / Government Audiences Tend To Respond To
 
 The current public-sector procurement language is consistent:
 
@@ -291,7 +291,7 @@ The current public-sector procurement language is consistent:
 - ability to evaluate independently
 - clear portability and exit paths
 
-That is exactly why “free” on its own underperforms. A defense/government audience wants to know how they are protected if requirements, vendors, or networks change.
+That is exactly why “free” on its own underperforms. A enterprise/government audience wants to know how they are protected if requirements, vendors, or networks change.
 
 Source note: Used GSA OneGov’s statements on cost savings, direct OEM relationships, consistent security standards, and reduced administrative burden, plus White House M-25-22 on portability, IP rights, evaluation, testing, and vendor-lock protections (checked 2026-04-11).
 
@@ -391,9 +391,9 @@ Source note: Used Great Demo’s value categories for quantifying costs, efficie
 
 ---
 
-## 6. Air-Gap / Classified / Sovereign Deployment Narratives
+## 6. offline / restricted / Sovereign Deployment Narratives
 
-### 6.1 The Standard Market Language Is “Sovereign” And “Disconnected,” Not “Trust Me, It’s Air-Gapped”
+### 6.1 The Standard Market Language Is “Sovereign” And “Disconnected,” Not “Trust Me, It’s offline”
 
 The major platform vendors are all converging on more precise language:
 
@@ -415,7 +415,7 @@ Good version:
 
 Bad version:
 
-- “This is classified-ready.”
+- “This is restricted-ready.”
 - “This already satisfies every sovereign-cloud requirement.”
 
 The first is defensible. The second is a compliance claim.
@@ -429,9 +429,9 @@ Microsoft’s current guidance is a good warning: regional and feature availabil
 
 Source note: Used Microsoft Foundry’s regional-availability guidance and decision checklist `https://learn.microsoft.com/en-us/azure/foundry/reference/region-support` (checked 2026-04-11).
 
-### 6.4 Why This Matters To Defense / Government Audiences
+### 6.4 Why This Matters To enterprise / Government Audiences
 
-Defense/government stakeholders hear “air-gapped” as:
+enterprise/government stakeholders hear “offline” as:
 
 - network boundary
 - operator control
@@ -502,7 +502,7 @@ Source note: Glean + Great Demo + White House M-25-22.
 ### Pattern G
 
 **Use “architecture-compatible with disconnected deployment” language unless a real environment is already proven.**  
-Application to V2: do not let “offline-friendly” drift into “classified-ready” on stage.
+Application to V2: do not let “offline-friendly” drift into “restricted-ready” on stage.
 
 Source note: Microsoft Foundry + Microsoft Sovereignty + Red Hat disconnected-environment materials.
 
@@ -532,7 +532,7 @@ Reason: procurement audiences think in portability, support, security standards,
 
 ### Reject 5
 
-**Reject “air-gapped” as a hand-wave.**  
+**Reject “offline” as a hand-wave.**  
 Reason: the current market language is more precise, and buyers will expect the same precision.
 
 ### Reject 6
@@ -558,7 +558,7 @@ Why research cannot answer it: naming Bedrock/Azure/Red Hat raises the evidence 
 
 ### Question 3
 
-How much should the May 2 demo emphasize offline/GovCloud/classified future-state versus current local workstation proof?
+How much should the May 2 demo emphasize offline/GovCloud/restricted future-state versus current local workstation proof?
 
 Why research cannot answer it: this is partly a political/organizational decision, not just a technical one.
 
@@ -608,4 +608,4 @@ The best published pattern for enterprise RAG demos in 2025-2026 is not a magic-
 
 V2 is actually well-suited to that pattern if the team resists the urge to prove everything at once.
 
-Signed: Agent 3
+Signed: reviewer

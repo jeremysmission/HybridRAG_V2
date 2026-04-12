@@ -1,5 +1,5 @@
 # Retrieval Baseline Probe V2 (post-FTS) - 2026-04-11
-**Agent:** Agent 1 | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT
+**Agent:** reviewer | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT
 **Purpose:** Re-run the 25-query baseline probe now that the FTS (Tantivy)
 index has been built on the live 10.4M store. Compare against the earlier
 vector-only results to measure the FTS fix's impact.
@@ -43,7 +43,7 @@ Queries containing specific identifiers. HIT = exact token found in top-3 source
 | L07 | `XL2200` | miss | miss | HIT | HIT |
 | E05 | `55238` | miss | miss | miss | miss |
 | F03 | `PowerEdge` | HIT | HIT | HIT | HIT |
-| F05 | `NEXION` | HIT | HIT | miss | HIT |
+| F05 | `monitoring system` | HIT | HIT | miss | HIT |
 | A03 | `Alpena` | HIT | HIT | HIT | HIT |
 | C01 | `STIG` | HIT | HIT | HIT | HIT |
 | C02 | `ACAS` | HIT | HIT | HIT | HIT |
@@ -84,14 +84,14 @@ Queries containing specific identifiers. HIT = exact token found in top-3 source
 
 **After — FTS top-3:**
 
-1. `MS-HW-18-00381(NG to Guam)(Guam-ISTO)/Guam ISTO Shipment (2018-07-30).xlsx` (score 18.7979)
-2. `MS-HW-18-00381(NG to Guam)(Guam-ISTO)/Guam ISTO Shipment (2018-07-26).xlsx` (score 18.6793)
+1. `MS-HW-18-00381(NG to Guam)(Guam-legacy monitoring system)/Guam legacy monitoring system Shipment (2018-07-30).xlsx` (score 18.7979)
+2. `MS-HW-18-00381(NG to Guam)(Guam-legacy monitoring system)/Guam legacy monitoring system Shipment (2018-07-26).xlsx` (score 18.6793)
 3. `Archive/AFI 31-101a.doc` (score 17.7549)
 
 **After — Hybrid top-3:**
 
 1. `WX29O1 (SCATS 2018278965417)(HI to NG)(ASV-Install)(2018-10-12)(99.91)/SCATS SA 2018278965417(HI to NG)(DMI OSI).pdf` (d=0)
-2. `MS-HW-18-00381(NG to Guam)(Guam-ISTO)/Guam ISTO Shipment (2018-07-30).xlsx` (d=0)
+2. `MS-HW-18-00381(NG to Guam)(Guam-legacy monitoring system)/Guam legacy monitoring system Shipment (2018-07-30).xlsx` (d=0)
 3. `2018-04-06(WX29)(SCATS SA 2018090998260)(Eglin to NG)(49.20)/SCATS SA 2018090998260 Order-Ship Inquiry (NG to Eglin)(3 Pelican Cases).pdf` (d=0)
 
 _Latency: vector 33.5ms | FTS 14.6ms | hybrid 23.0ms_
@@ -144,18 +144,18 @@ _Latency: vector 65.2ms | FTS 18.3ms | hybrid 25.7ms_
 
 1. `2013-09-27 (BAH to Guam) (Baluns and Resistors)/2013-09-27 (BAH to Guam) (FedEx Delivered).pdf` (d=0.513)
 2. `WX39 (PO 7200753121)(Grainger)($143.33)/Packing Slip 2_PO 7200753121_Rcvd 2018-12-06.pdf` (d=0.5147)
-3. `TO WX28-ISTO Upgrade-Ascension/Ascension Shipment.xlsx` (d=0.5222)
+3. `TO WX28-legacy monitoring system Upgrade-Ascension/Ascension Shipment.xlsx` (d=0.5222)
 
 **After — FTS top-3:**
 
-1. `A001-Site_Procurement_Spreadsheet/SEMS3D-42424 IGS WX29OY4 Procurement Spreadsheet (06012022).pdf` (score 27.5392)
+1. `A001-Site_Procurement_Spreadsheet/SEMS3D-42424 enterprise program WX29OY4 Procurement Spreadsheet (06012022).pdf` (score 27.5392)
 2. `Export_Control/dtr_part_v_515.pdf` (score 26.497)
 3. `2020-01-15 (NG to Curacao)(MS-HW-20-0016)/Shipping Checklist - Curacao.docx` (score 23.9197)
 
 **After — Hybrid top-3:**
 
 1. `2013-09-27 (BAH to Guam) (Baluns and Resistors)/2013-09-27 (BAH to Guam) (FedEx Delivered).pdf` (d=0)
-2. `A001-Site_Procurement_Spreadsheet/SEMS3D-42424 IGS WX29OY4 Procurement Spreadsheet (06012022).pdf` (d=0)
+2. `A001-Site_Procurement_Spreadsheet/SEMS3D-42424 enterprise program WX29OY4 Procurement Spreadsheet (06012022).pdf` (d=0)
 3. `WX39 (PO 7200753121)(Grainger)($143.33)/Packing Slip 2_PO 7200753121_Rcvd 2018-12-06.pdf` (d=0)
 
 _Latency: vector 12.4ms | FTS 12.2ms | hybrid 11.4ms_
@@ -175,20 +175,20 @@ _Latency: vector 12.4ms | FTS 12.2ms | hybrid 11.4ms_
 **After — Vector top-3:**
 
 1. `ISO 9001 Docs (Purchasing) (2014-08-19)/ES_WI-6.1.2 (Preparing SOWs).pdf` (d=0.5578)
-2. `Mod 1/A-1L838 IGS SSC_CSF MOD 1.xlsx` (d=0.5665)
+2. `Mod 1/A-1L838 enterprise program SSC_CSF MOD 1.xlsx` (d=0.5665)
 3. `General Information/DD Form 250 (Material Inspection and Receiving Report) (2000-08).pdf` (d=0.577)
 
 **After — FTS top-3:**
 
 1. `SSC Info/Copy of Monthly Assessment-Dec22.xlsx` (score 24.1474)
-2. `Mod 1/A-1L838 IGS SSC_CSF MOD 1.xlsx` (score 23.001)
+2. `Mod 1/A-1L838 enterprise program SSC_CSF MOD 1.xlsx` (score 23.001)
 3. `SSC Info/Copy of Monthly Assessment-Dec22.xlsx` (score 22.962)
 
 **After — Hybrid top-3:**
 
 1. `ISO 9001 Docs (Purchasing) (2014-08-19)/ES_WI-6.1.2 (Preparing SOWs).pdf` (d=0)
 2. `SSC Info/Copy of Monthly Assessment-Dec22.xlsx` (d=0)
-3. `Mod 1/A-1L838 IGS SSC_CSF MOD 1.xlsx` (d=0)
+3. `Mod 1/A-1L838 enterprise program SSC_CSF MOD 1.xlsx` (d=0)
 
 _Latency: vector 15.4ms | FTS 10.8ms | hybrid 11.1ms_
 
@@ -242,14 +242,14 @@ _Latency: vector 18.0ms | FTS 22.7ms | hybrid 20.6ms_
 
 **After — FTS top-3:**
 
-1. `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (score 44.4885)
-2. `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (score 44.4885)
-3. `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (score 44.4885)
+1. `Searching for File Paths for monitoring system Deliverable Control Log/monitoring system.manifest_20180523.txt` (score 44.4885)
+2. `Searching for File Paths for monitoring system Deliverable Control Log/monitoring system.manifest_20180523.txt` (score 44.4885)
+3. `Searching for File Paths for monitoring system Deliverable Control Log/monitoring system.manifest_20180523.txt` (score 44.4885)
 
 **After — Hybrid top-3:**
 
 1. `2026_01_09 - Guam (NG Com-Air)/CINVMDO-26-003-2 w list.pdf` (d=0)
-2. `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (d=0)
+2. `Searching for File Paths for monitoring system Deliverable Control Log/monitoring system.manifest_20180523.txt` (d=0)
 3. `SP-JC-24-00039/13C493.pdf` (d=0)
 
 _Latency: vector 20.4ms | FTS 11.0ms | hybrid 10.4ms_
@@ -274,14 +274,14 @@ _Latency: vector 20.4ms | FTS 11.0ms | hybrid 10.4ms_
 
 **After — FTS top-3:**
 
-1. `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (score 37.1796)
-2. `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (score 29.3229)
-3. `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (score 24.6688)
+1. `Searching for File Paths for monitoring system Deliverable Control Log/monitoring system.manifest_20180523.txt` (score 37.1796)
+2. `Searching for File Paths for monitoring system Deliverable Control Log/monitoring system.manifest_20180523.txt` (score 29.3229)
+3. `Searching for File Paths for monitoring system Deliverable Control Log/monitoring system.manifest_20180523.txt` (score 24.6688)
 
 **After — Hybrid top-3:**
 
 1. `MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)/NGPackingSlip_Kwajalein_USRP PS_2017-04-06.doc` (d=0)
-2. `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (d=0)
+2. `Searching for File Paths for monitoring system Deliverable Control Log/monitoring system.manifest_20180523.txt` (d=0)
 3. `MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)/NGPackingSlip_Kwajalein_USRP PS_2017-04-14.doc` (d=0)
 
 _Latency: vector 12.8ms | FTS 5.9ms | hybrid 7.6ms_
@@ -308,7 +308,7 @@ _Latency: vector 12.8ms | FTS 5.9ms | hybrid 7.6ms_
 
 1. `NG Property/IGS CFO List.xlsx` (score 20.7088)
 2. `IGS/manifest_20180523.txt` (score 19.7314)
-3. `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (score 19.7314)
+3. `Searching for File Paths for monitoring system Deliverable Control Log/monitoring system.manifest_20180523.txt` (score 19.7314)
 
 **After — Hybrid top-3:**
 
@@ -331,7 +331,7 @@ _Latency: vector 11.7ms | FTS 23.4ms | hybrid 23.7ms_
 **After — Vector top-3:**
 
 1. `Electronics Purchases-Counterfeit Parts Plan/Integrated Logistics (ILS) Plan.doc` (d=0.4076)
-2. `A023 - Integrated Logistics Support Plan (ILS)/Deliverables Report IGSI-1109 IGS Integrated Logistics Support Plan (ILSP) (A023).pdf` (d=0.4212)
+2. `A023 - Integrated Logistics Support Plan (ILS)/Deliverables Report IGSI-1109 enterprise program Integrated Logistics Support Plan (ILSP) (A023).pdf` (d=0.4212)
 3. `06_SEMS_Documents/Integrated Logistics (ILS) Plan - Copy.doc` (d=0.422)
 
 **After — FTS top-3:**
@@ -344,7 +344,7 @@ _Latency: vector 11.7ms | FTS 23.4ms | hybrid 23.7ms_
 
 1. `Electronics Purchases-Counterfeit Parts Plan/Integrated Logistics (ILS) Plan.doc` (d=0)
 2. `JTAGS Plans/JTAGS SEMP.docx` (d=0)
-3. `A023 - Integrated Logistics Support Plan (ILS)/Deliverables Report IGSI-1109 IGS Integrated Logistics Support Plan (ILSP) (A023).pdf` (d=0)
+3. `A023 - Integrated Logistics Support Plan (ILS)/Deliverables Report IGSI-1109 enterprise program Integrated Logistics Support Plan (ILSP) (A023).pdf` (d=0)
 
 _Latency: vector 16.0ms | FTS 10.4ms | hybrid 8.9ms_
 
@@ -416,11 +416,11 @@ _Latency: vector 15.3ms | FTS 10.0ms | hybrid 9.1ms_
 
 **Before (vector-only):**
 
-- Top-1: `Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island NEXION MSR (12-31 May 2018)(A001).pdf` (score 0.474)
+- Top-1: `Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island monitoring system MSR (12-31 May 2018)(A001).pdf` (score 0.474)
 
 **After — Vector top-3:**
 
-1. `Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island NEXION MSR (12-31 May 2018)(A001).pdf` (d=0.474)
+1. `Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island monitoring system MSR (12-31 May 2018)(A001).pdf` (d=0.474)
 2. `SOW-Brice (Site Prep at NRTF Awase)/SOW-Brice_Okinawa-Awase (UNC) 1-19-2023.pdf` (d=0.4828)
 3. `To Be Deleted/IGS SOW Okinawa-Awase (.doc` (d=0.4849)
 
@@ -432,7 +432,7 @@ _Latency: vector 15.3ms | FTS 10.0ms | hybrid 9.1ms_
 
 **After — Hybrid top-3:**
 
-1. `Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island NEXION MSR (12-31 May 2018)(A001).pdf` (d=0)
+1. `Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island monitoring system MSR (12-31 May 2018)(A001).pdf` (d=0)
 2. `02_February/SEMS3D-37979-IGS_IPT_Briefing_Slides .pdf` (d=0)
 3. `SOW-Brice (Site Prep at NRTF Awase)/SOW-Brice_Okinawa-Awase (UNC) 1-19-2023.pdf` (d=0)
 
@@ -446,24 +446,24 @@ _Latency: vector 18.0ms | FTS 16.6ms | hybrid 16.2ms_
 
 **Before (vector-only):**
 
-- Top-1: `ISTO COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf` (score 0.4268)
+- Top-1: `legacy monitoring system COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf` (score 0.4268)
 
 **After — Vector top-3:**
 
-1. `ISTO COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf` (d=0.4268)
+1. `legacy monitoring system COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf` (d=0.4268)
 2. `LDI Manuals/Nexion_Data_Computer_MaintenanceManual_Ver1-0-0.pdf` (d=0.4325)
-3. `NEXION System Manuals/Nexion_Data_Computer_MaintenanceManual_Ver1-0-0.pdf` (d=0.4325)
+3. `monitoring systems Manuals/Nexion_Data_Computer_MaintenanceManual_Ver1-0-0.pdf` (d=0.4325)
 
 **After — FTS top-3:**
 
-1. `A054 - Trouble Shooting Aids and Guides/Deliverables Report IGSI-76 ISTO Troubleshooting Aides and Guides (A054).pdf` (score 26.1681)
+1. `A054 - Trouble Shooting Aids and Guides/Deliverables Report IGSI-76 legacy monitoring system Troubleshooting Aides and Guides (A054).pdf` (score 26.1681)
 2. `Drawings (Switch-Cisco)(Catalyst 3850)(Thule)/b_c3850_hig.pdf` (score 25.8393)
-3. `ISTO (Switch)(Cisco Catalyst 3850 Series)(American Samoa)/b_c3850_hig.pdf` (score 25.8393)
+3. `legacy monitoring system (Switch)(Cisco Catalyst 3850 Series)(American Samoa)/b_c3850_hig.pdf` (score 25.8393)
 
 **After — Hybrid top-3:**
 
-1. `ISTO COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf` (d=0)
-2. `A054 - Trouble Shooting Aids and Guides/Deliverables Report IGSI-76 ISTO Troubleshooting Aides and Guides (A054).pdf` (d=0)
+1. `legacy monitoring system COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf` (d=0)
+2. `A054 - Trouble Shooting Aids and Guides/Deliverables Report IGSI-76 legacy monitoring system Troubleshooting Aides and Guides (A054).pdf` (d=0)
 3. `LDI Manuals/Nexion_Data_Computer_MaintenanceManual_Ver1-0-0.pdf` (d=0)
 
 _Latency: vector 11.7ms | FTS 12.6ms | hybrid 10.0ms_
@@ -476,25 +476,25 @@ _Latency: vector 11.7ms | FTS 12.6ms | hybrid 10.0ms_
 
 **Before (vector-only):**
 
-- Top-1: `Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa NEXION (A006)/Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx` (score 0.4623)
+- Top-1: `Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa monitoring system (A006)/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).docx` (score 0.4623)
 
 **After — Vector top-3:**
 
-1. `Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa NEXION (A006)/Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx` (d=0.4623)
-2. `2023-08-18 thru 09-09 (Install 5 - FP)/(Revised) Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx` (d=0.4623)
-3. `2024.01.14-2024.01.19 (GPS Repair) Pitts/Deliverables Report IGSI-812 Installation Acceptance Test Plan and Procedures - American Samoa ISTO.pdf` (d=0.4698)
+1. `Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa monitoring system (A006)/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).docx` (d=0.4623)
+2. `2023-08-18 thru 09-09 (Install 5 - FP)/(Revised) Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).docx` (d=0.4623)
+3. `2024.01.14-2024.01.19 (GPS Repair) Pitts/Deliverables Report IGSI-812 Installation Acceptance Test Plan and Procedures - American Samoa legacy monitoring system.pdf` (d=0.4698)
 
 **After — FTS top-3:**
 
 1. `A003 - Technical Report - Site Installation Plan (SIP)/Deliverables Report IGSI-747 Final Site Installation Plan (SIP) (A003)- American Samoa.docx` (score 15.9591)
 2. `A003 - Technical Report - Site Installation Plan (SIP)/Deliverables report IGSI-411 Final Site Installation Plan (SIP) (A003)_Niger.docx` (score 15.9445)
-3. `A038_WX52_PCB#2_(AmericanSamoa)/SEMS3D-41527 WX52 IGS Installs Project Change Brief #2 (A038).pdf` (score 15.8049)
+3. `A038_WX52_PCB#2_(AmericanSamoa)/SEMS3D-41527 WX52 enterprise program Installs Project Change Brief #2 (A038).pdf` (score 15.8049)
 
 **After — Hybrid top-3:**
 
-1. `Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa NEXION (A006)/Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx` (d=0)
+1. `Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa monitoring system (A006)/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).docx` (d=0)
 2. `A003 - Technical Report - Site Installation Plan (SIP)/Deliverables Report IGSI-747 Final Site Installation Plan (SIP) (A003)- American Samoa.docx` (d=0)
-3. `2023-08-18 thru 09-09 (Install 5 - FP)/(Revised) Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx` (d=0)
+3. `2023-08-18 thru 09-09 (Install 5 - FP)/(Revised) Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).docx` (d=0)
 
 _Latency: vector 13.2ms | FTS 10.5ms | hybrid 7.6ms_
 
@@ -511,20 +511,20 @@ _Latency: vector 13.2ms | FTS 10.5ms | hybrid 7.6ms_
 **After — Vector top-3:**
 
 1. `004_Drawings/Drawing Types & Requirements (Select the Proper Drawing for Your Application) 978-3-319-06983-8.pdf` (d=0.4994)
-2. `ICD Documents (Drawings)/DOD-STD-00100D.PDF` (d=0.5051)
-3. `ICD Documents (Drawings)/DOD-STD-00100D.PDF` (d=0.5303)
+2. `ICD Documents (Drawings)/industry-STD-00100D.PDF` (d=0.5051)
+3. `ICD Documents (Drawings)/industry-STD-00100D.PDF` (d=0.5303)
 
 **After — FTS top-3:**
 
-1. `ICD Documents (Drawings)/DOD-STD-00100D.PDF` (score 19.524)
+1. `ICD Documents (Drawings)/industry-STD-00100D.PDF` (score 19.524)
 2. `DOCUMENTS LIBRARY/MIL-HDBK-61A(SE) (Configuration Management Guidance) (2001-02-07).pdf` (score 19.4962)
 3. `CM/HDBK61.pdf` (score 19.4962)
 
 **After — Hybrid top-3:**
 
 1. `004_Drawings/Drawing Types & Requirements (Select the Proper Drawing for Your Application) 978-3-319-06983-8.pdf` (d=0)
-2. `ICD Documents (Drawings)/DOD-STD-00100D.PDF` (d=0)
-3. `ICD Documents (Drawings)/DOD-STD-00100D.PDF` (d=0)
+2. `ICD Documents (Drawings)/industry-STD-00100D.PDF` (d=0)
+3. `ICD Documents (Drawings)/industry-STD-00100D.PDF` (d=0)
 
 _Latency: vector 13.0ms | FTS 14.9ms | hybrid 14.4ms_
 
@@ -548,14 +548,14 @@ _Latency: vector 13.0ms | FTS 14.9ms | hybrid 14.4ms_
 
 **After — FTS top-3:**
 
-1. `201811040-B (Guam ISTO As-Builts)/201811040-B Parts List (Rev A) (2021-08-03) (Colored Version).xlsx` (score 22.8943)
+1. `201811040-B (Guam legacy monitoring system As-Builts)/201811040-B Parts List (Rev A) (2021-08-03) (Colored Version).xlsx` (score 22.8943)
 2. `201811060-- Archive (Singapore)/Parts List-Singapore (2020-05-04) (Colored Version)(Minus Various Cables)2.xlsx` (score 22.5013)
 3. `201811060-- Archive/Parts List-Singapore (2020-05-04) (Colored Version)(Minus Various Cables).xlsx` (score 22.5013)
 
 **After — Hybrid top-3:**
 
 1. `Figures/KvmConsoleInterfaces.PNG` (d=0)
-2. `201811040-B (Guam ISTO As-Builts)/201811040-B Parts List (Rev A) (2021-08-03) (Colored Version).xlsx` (d=0)
+2. `201811040-B (Guam legacy monitoring system As-Builts)/201811040-B Parts List (Rev A) (2021-08-03) (Colored Version).xlsx` (d=0)
 3. `LMI Source Data/detailedInventory (002).xlsx` (d=0)
 
 _Latency: vector 11.3ms | FTS 16.1ms | hybrid 14.7ms_
@@ -568,25 +568,25 @@ _Latency: vector 11.3ms | FTS 16.1ms | hybrid 14.7ms_
 
 **Before (vector-only):**
 
-- Top-1: `Site Survey Checklists/ISTO Site Selection Checklist.docx` (score 0.4788)
+- Top-1: `Site Survey Checklists/legacy monitoring system Site Selection Checklist.docx` (score 0.4788)
 
 **After — Vector top-3:**
 
-1. `Site Survey Checklists/ISTO Site Selection Checklist.docx` (d=0.4788)
-2. `Archive/NEXION Site Survey Checklist_Loring_Draft (10 Oct 16)_1.docx` (d=0.4788)
-3. `Site Survey Report/NEXION Site Survey Checklist_Loring_15 Nov 16.docx` (d=0.4788)
+1. `Site Survey Checklists/legacy monitoring system Site Selection Checklist.docx` (d=0.4788)
+2. `Archive/monitoring system Site Survey Checklist_Loring_Draft (10 Oct 16)_1.docx` (d=0.4788)
+3. `Site Survey Report/monitoring system Site Survey Checklist_Loring_15 Nov 16.docx` (d=0.4788)
 
 **After — FTS top-3:**
 
 1. `04_Colombia (TL4)/FCG_Colombia.docx` (score 22.882)
-2. `Wake 2019-10-(08-11) RTS/SEMS3D-39315 Wake Island NEXION MSR (Oct 2019) - CDRL A001.pdf` (score 21.5932)
+2. `Wake 2019-10-(08-11) RTS/SEMS3D-39315 Wake Island monitoring system MSR (Oct 2019) - CDRL A001.pdf` (score 21.5932)
 3. `SAR-VAR/SMO Code Submission_For access to PRSC Installations or Sites.docx` (score 20.9619)
 
 **After — Hybrid top-3:**
 
-1. `Site Survey Checklists/ISTO Site Selection Checklist.docx` (d=0)
+1. `Site Survey Checklists/legacy monitoring system Site Selection Checklist.docx` (d=0)
 2. `04_Colombia (TL4)/FCG_Colombia.docx` (d=0)
-3. `Archive/NEXION Site Survey Checklist_Loring_Draft (10 Oct 16)_1.docx` (d=0)
+3. `Archive/monitoring system Site Survey Checklist_Loring_Draft (10 Oct 16)_1.docx` (d=0)
 
 _Latency: vector 15.1ms | FTS 15.1ms | hybrid 13.7ms_
 
@@ -610,7 +610,7 @@ _Latency: vector 15.1ms | FTS 15.1ms | hybrid 13.7ms_
 
 1. `Server (Dell PowerEdge R450) (PN XXXXXX)/dell-emc-poweredge-15g-portfolio-brochure.pdf` (score 22.8413)
 2. `Server (Dell PowerEdge R450) (PN XXXXXX)/dell-emc-poweredge-15g-portfolio-brochure.pdf` (score 22.5875)
-3. `PO - 5000433063, PR 31433720, C 16099648 Dell Server R740 NEXION(Future Tech)($29,251.00)/DellR740.pdf` (score 21.711)
+3. `PO - 5000433063, PR 31433720, C 16099648 Dell Server R740 monitoring system(Future Tech)($29,251.00)/DellR740.pdf` (score 21.711)
 
 **After — Hybrid top-3:**
 
@@ -630,33 +630,33 @@ _Latency: vector 13.3ms | FTS 8.1ms | hybrid 7.7ms_
 
 **Before (vector-only):**
 
-- Top-1: `archive/ISTO Cybersecurity SOP 2017-08-15.docx` (score 0.5014)
+- Top-1: `archive/legacy monitoring system Cybersecurity SOP 2017-08-15.docx` (score 0.5014)
 
 **After — Vector top-3:**
 
-1. `archive/ISTO Cybersecurity SOP 2017-08-15.docx` (d=0.5014)
-2. `archive/ISTO Cybersecurity SOP 2017-08-14.docx` (d=0.5014)
-3. `archive/ISTO Cybersecurity SOP 2017-08-17.docx` (d=0.5014)
+1. `archive/legacy monitoring system Cybersecurity SOP 2017-08-15.docx` (d=0.5014)
+2. `archive/legacy monitoring system Cybersecurity SOP 2017-08-14.docx` (d=0.5014)
+3. `archive/legacy monitoring system Cybersecurity SOP 2017-08-17.docx` (d=0.5014)
 
 **After — FTS top-3:**
 
-1. `archive/ISTO Cybersecurity SOP 2017-08-15.docx` (score 20.8432)
-2. `archive/ISTO Cybersecurity SOP 2017-08-16.docx` (score 20.8432)
-3. `archive/ISTO Cybersecurity SOP 2017-08-14.docx` (score 20.8432)
+1. `archive/legacy monitoring system Cybersecurity SOP 2017-08-15.docx` (score 20.8432)
+2. `archive/legacy monitoring system Cybersecurity SOP 2017-08-16.docx` (score 20.8432)
+3. `archive/legacy monitoring system Cybersecurity SOP 2017-08-14.docx` (score 20.8432)
 
 **After — Hybrid top-3:**
 
-1. `archive/ISTO Cybersecurity SOP 2017-08-15.docx` (d=0)
-2. `archive/ISTO Cybersecurity SOP 2017-08-14.docx` (d=0)
-3. `archive/ISTO Cybersecurity SOP 2017-08-16.docx` (d=0)
+1. `archive/legacy monitoring system Cybersecurity SOP 2017-08-15.docx` (d=0)
+2. `archive/legacy monitoring system Cybersecurity SOP 2017-08-14.docx` (d=0)
+3. `archive/legacy monitoring system Cybersecurity SOP 2017-08-16.docx` (d=0)
 
 _Latency: vector 14.8ms | FTS 10.2ms | hybrid 10.7ms_
 
 ---
 
-### [F05] Lookup: NEXION bill of materials components
+### [F05] Lookup: monitoring system bill of materials components
 
-**Expected:** BOM doc  |  **Exact token:** `NEXION`
+**Expected:** BOM doc  |  **Exact token:** `monitoring system`
 
 **Before (vector-only):**
 
@@ -670,19 +670,19 @@ _Latency: vector 14.8ms | FTS 10.2ms | hybrid 10.7ms_
 
 **After — FTS top-3:**
 
-1. `_WhatEver/DoD Systems.xls` (score 13.5656)
+1. `_WhatEver/industry Systems.xls` (score 13.5656)
 2. `RFP Dri-Bones Examples/Enclosure 04a - CET 24-430_DRI-BONES_BOE.pdf` (score 12.7487)
 3. `Archive/TO WX28 (1P752.027R1 OS Upgrades BOM Update) (Rcvd 2017-08-30).xlsx` (score 12.7168)
 
 **After — Hybrid top-3:**
 
 1. `Previous Versions/DRAFT_SEMS3D-37587_SPR&IP_(A001) .docx` (d=0)
-2. `_WhatEver/DoD Systems.xls` (d=0)
+2. `_WhatEver/industry Systems.xls` (d=0)
 3. `Peer Reviews/(Nachbar Ventura Edits)SEMS3D-37858_SPRIP_(A001).docx` (d=0)
 
 _Latency: vector 20.4ms | FTS 34.4ms | hybrid 32.8ms_
 
-**Exact-match judgment** for `NEXION`: vector=HIT | FTS=miss | hybrid=HIT
+**Exact-match judgment** for `monitoring system`: vector=HIT | FTS=miss | hybrid=HIT
 
 ---
 
@@ -722,25 +722,25 @@ _Latency: vector 23.6ms | FTS 25.9ms | hybrid 30.3ms_
 
 **Before (vector-only):**
 
-- Top-1: `Removable Disk (E)/DoD Guide to Uniquely Identifying Items.pdf` (score 0.6176)
+- Top-1: `Removable Disk (E)/industry Guide to Uniquely Identifying Items.pdf` (score 0.6176)
 
 **After — Vector top-3:**
 
-1. `Removable Disk (E)/DoD Guide to Uniquely Identifying Items.pdf` (d=0.6176)
-2. `IUID/DoDUIDGuide.pdf` (d=0.6176)
+1. `Removable Disk (E)/industry Guide to Uniquely Identifying Items.pdf` (d=0.6176)
+2. `IUID/industryUIDGuide.pdf` (d=0.6176)
 3. `Sustainment_Tool/inventory-control.xlsx` (d=0.622)
 
 **After — FTS top-3:**
 
 1. `DM/DM_SEMP input v0.2.doc` (score 20.7135)
 2. `JTAGS Plans/ILSP.docx` (score 19.0768)
-3. `_WhatEver/DoD Systems.xls` (score 18.0958)
+3. `_WhatEver/industry Systems.xls` (score 18.0958)
 
 **After — Hybrid top-3:**
 
-1. `Removable Disk (E)/DoD Guide to Uniquely Identifying Items.pdf` (d=0)
+1. `Removable Disk (E)/industry Guide to Uniquely Identifying Items.pdf` (d=0)
 2. `DM/DM_SEMP input v0.2.doc` (d=0)
-3. `IUID/DoDUIDGuide.pdf` (d=0)
+3. `IUID/industryUIDGuide.pdf` (d=0)
 
 _Latency: vector 9.0ms | FTS 27.1ms | hybrid 26.4ms_
 
@@ -784,25 +784,25 @@ _Latency: vector 21.6ms | FTS 11.0ms | hybrid 22.0ms_
 
 **Before (vector-only):**
 
-- Top-1: `Archive/CT&E Plan - ISTO OS Upgrade 2017-12-12.docx` (score 0.4198)
+- Top-1: `Archive/CT&E Plan - legacy monitoring system OS Upgrade 2017-12-12.docx` (score 0.4198)
 
 **After — Vector top-3:**
 
-1. `Archive/CT&E Plan - ISTO OS Upgrade 2017-12-12.docx` (d=0.4198)
-2. `archive/CT&E Plan - NEXION OS Upgrade 2018-03-01.pdf` (d=0.4257)
-3. `A027 - NEXION TOWX28 CT&E Plan OS Upgrade/SEMS3D-36019 CT&E Plan NEXION OS Upgrade (A027) 2018-03-12.pdf` (d=0.4257)
+1. `Archive/CT&E Plan - legacy monitoring system OS Upgrade 2017-12-12.docx` (d=0.4198)
+2. `archive/CT&E Plan - monitoring system OS Upgrade 2018-03-01.pdf` (d=0.4257)
+3. `A027 - monitoring system TOWX28 CT&E Plan OS Upgrade/SEMS3D-36019 CT&E Plan monitoring system OS Upgrade (A027) 2018-03-12.pdf` (d=0.4257)
 
 **After — FTS top-3:**
 
-1. `Procedures/Procedure IGS STIG Viewer 2018-01-23.docx` (score 20.1795)
-2. `NEXION/unclassified_Network_Firewall_V8R2_STIG_062810.zip` (score 19.6919)
+1. `Procedures/Procedure enterprise program STIG Viewer 2018-01-23.docx` (score 20.1795)
+2. `monitoring system/unrestricted_Network_Firewall_V8R2_STIG_062810.zip` (score 19.6919)
 3. `Checklists/McAfee_VirusScan.pdf` (score 19.0894)
 
 **After — Hybrid top-3:**
 
-1. `Archive/CT&E Plan - ISTO OS Upgrade 2017-12-12.docx` (d=0)
-2. `Procedures/Procedure IGS STIG Viewer 2018-01-23.docx` (d=0)
-3. `archive/CT&E Plan - NEXION OS Upgrade 2018-03-01.pdf` (d=0)
+1. `Archive/CT&E Plan - legacy monitoring system OS Upgrade 2017-12-12.docx` (d=0)
+2. `Procedures/Procedure enterprise program STIG Viewer 2018-01-23.docx` (d=0)
+3. `archive/CT&E Plan - monitoring system OS Upgrade 2018-03-01.pdf` (d=0)
 
 _Latency: vector 21.0ms | FTS 17.9ms | hybrid 16.2ms_
 
@@ -858,20 +858,20 @@ alphanumeric codes":
 
 | Query | Token | Vector (before and after) | FTS | Outcome |
 |-------|-------|:------------------------:|:---:|---------|
-| L06 | `1302-126B` | miss | **HIT** | FTS found NEXION manifest chunks containing the exact part number |
+| L06 | `1302-126B` | miss | **HIT** | FTS found monitoring system manifest chunks containing the exact part number |
 | L07 | `XL2200VARM3U` | miss | **HIT** | FTS found APC Smart-UPS battery parts manifest with the model number |
 
-In both cases the FTS top-3 came from `NEXION.manifest_2018*` files — these
+In both cases the FTS top-3 came from `monitoring system.manifest_2018*` files — these
 are filesystem path dumps where alphanumeric tokens survive verbatim, which
 is exactly where BM25 shines and embedding similarity fails.
 
 ### 3. Hybrid strictly dominates FTS-alone
 
 Hybrid fusion caught one case where FTS alone would have regressed against
-vector: **F05 (NEXION bill of materials components)**. FTS pulled "bill of
-materials" keyword matches from unrelated DoD systems spreadsheets; vector
-correctly surfaced NEXION-specific SPR&IP docs. Hybrid's RRF fusion kept
-the NEXION-specific vector hit at rank 1 while interleaving BOM keyword
+vector: **F05 (monitoring system bill of materials components)**. FTS pulled "bill of
+materials" keyword matches from unrelated industry systems spreadsheets; vector
+correctly surfaced monitoring system-specific SPR&IP docs. Hybrid's RRF fusion kept
+the monitoring system-specific vector hit at rank 1 while interleaving BOM keyword
 matches below it.
 
 This is the core case for hybrid as the default: it preserves vector wins
@@ -1005,7 +1005,7 @@ With fresh production corpus:
 
 ---
 
-Signed: Agent 1 | HybridRAG_V2 | 2026-04-11 MDT
+Signed: reviewer | HybridRAG_V2 | 2026-04-11 MDT
 
 
 ---
@@ -1083,4 +1083,4 @@ The **Divergence column (IDENTICAL = list equality)** is the correct metric
 
 ---
 
-Signed: Agent 1 | HybridRAG_V2 | 2026-04-11 MDT (addendum)
+Signed: reviewer | HybridRAG_V2 | 2026-04-11 MDT (addendum)

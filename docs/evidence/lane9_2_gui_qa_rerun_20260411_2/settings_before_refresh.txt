@@ -1,0 +1,100 @@
+Lane 9.2 Settings Snapshot (Before Refresh)
+===========================================
+
+selected_view: settings
+nav_labels: Query, Entities, Settings
+
+Labelframe text='Settings'
+  Frame
+    Canvas state='normal'
+      Frame
+        Label text='Retrieval' state='normal'
+        Frame
+          Label text='Top-K:' state='normal'
+          Label text='10' state='normal'
+        Frame
+          Label text='Candidate Pool:' state='normal'
+          Label text='30' state='normal'
+        Frame
+          Label text='Min Score:' state='normal'
+          Label text='0.1' state='normal'
+        Frame
+          Label text='Reranker Enabled:' state='normal'
+          Label text='Yes' state='normal'
+        Frame
+          Label text='Reranker Top-N:' state='normal'
+          Label text='30' state='normal'
+        Frame
+        Label text='Corrective RAG (CRAG)' state='normal'
+        Frame
+          Label text='Enabled:' state='normal'
+          Label text='No' state='normal'
+        Frame
+          Label text='Confidence Threshold:' state='normal'
+          Label text='0.8' state='normal'
+        Frame
+          Label text='Max Retries:' state='normal'
+          Label text='2' state='normal'
+        Frame
+          Label text='Verifier Model:' state='normal'
+          Label text='gpt-oss-20b' state='normal'
+        Frame
+        Label text='LLM Configuration' state='normal'
+        Frame
+          Label text='Model:' state='normal'
+          Label text='gpt-4o' state='normal'
+        Frame
+          Label text='Provider:' state='normal'
+          Label text='auto' state='normal'
+        Frame
+          Label text='Deployment:' state='normal'
+          Label text='gpt-4o' state='normal'
+        Frame
+          Label text='Context Window:' state='normal'
+          Label text='128,000' state='normal'
+        Frame
+          Label text='Max Tokens:' state='normal'
+          Label text='16,384' state='normal'
+        Frame
+          Label text='Temperature:' state='normal'
+          Label text='0.08' state='normal'
+        Frame
+          Label text='Timeout:' state='normal'
+          Label text='180s' state='normal'
+        Frame
+        Label text='Entity Extraction' state='normal'
+        Frame
+          Label text='Min Confidence:' state='normal'
+          Label text='0.5' state='normal'
+        Frame
+          Label text='GLiNER Enabled:' state='normal'
+          Label text='No' state='normal'
+        Frame
+          Label text='GPT-4o Extraction:' state='normal'
+          Label text='Yes' state='normal'
+        Frame
+          Label text='Part Patterns:' state='normal'
+          Label text='11' state='normal'
+        Frame
+        Label text='File Paths' state='normal'
+        Frame
+          Label text='LanceDB:' state='normal'
+          Label text='C:\\HybridRAG_V2\\data\\index\\lancedb' state='normal'
+        Frame
+          Label text='Entity DB:' state='normal'
+          Label text='C:\\HybridRAG_V2\\data\\index\\entities.sqlite3' state='normal'
+        Frame
+          Label text='Corpus Source:' state='normal'
+          Label text='C:\\HybridRAG_V2\\data\\source' state='normal'
+        Frame
+          Label text='Site Vocabulary:' state='normal'
+          Label text='C:\\HybridRAG_V2\\config\\site_vocabulary.yaml' state='normal'
+        Frame
+        Label text='Hardware' state='normal'
+        Frame
+          Label text='Preset:' state='normal'
+          Label text='primary workstation' state='normal'
+        Frame
+          Button text='Refresh Counts' state='normal'
+          Label state='normal'
+    TScrollbar

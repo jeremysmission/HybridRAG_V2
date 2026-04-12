@@ -1,5 +1,5 @@
 """
-Retrieval App-Path Probe — Agent 1 — 2026-04-11
+Retrieval App-Path Probe — reviewer — 2026-04-11
 
 Runs the same 25 queries through the full V2 application path
 (VectorRetriever -> LanceStore.hybrid_search) and compares against the raw
@@ -75,7 +75,7 @@ def percentile(arr, p):
 
 def main():
     print("=" * 70)
-    print("RETRIEVAL APP-PATH PROBE - Agent 1 - 2026-04-11")
+    print("RETRIEVAL APP-PATH PROBE - reviewer - 2026-04-11")
     print("=" * 70)
 
     # Load raw-path data
@@ -266,7 +266,7 @@ def main():
         )
 
     addendum_lines.append("---\n\n")
-    addendum_lines.append("Signed: Agent 1 | HybridRAG_V2 | 2026-04-11 MDT (addendum)\n")
+    addendum_lines.append("Signed: reviewer | HybridRAG_V2 | 2026-04-11 MDT (addendum)\n")
 
     with open(REPORT_MD, "a", encoding="utf-8", newline="\n") as f:
         f.writelines(addendum_lines)

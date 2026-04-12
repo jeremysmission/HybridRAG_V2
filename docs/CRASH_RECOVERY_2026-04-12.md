@@ -9,7 +9,7 @@
 
 ## Read this first
 
-The project is V2 of a RAG system for a defense/government corpus. Demo day is **May 2, 2026**. V1 was cancelled because aggregation queries didn't work. V2 is **the last chance** — there is no Plan C. The user pays ~10 hrs/week on this; the rest is personal time. Career goal: stretch assignment → AI applications role.
+The project is V2 of a RAG system for a enterprise/government corpus. Demo day is **May 2, 2026**. V1 was cancelled because aggregation queries didn't work. V2 is **the last chance** — there is no Plan C. The user pays ~10 hrs/week on this; the rest is personal time. Career goal: stretch assignment → AI applications role.
 
 **The corpus:** ~700 GB raw source, ~215K unique files after dedup, ~93K successfully parsed, **10,435,593 text chunks** with 768-dim embeddings. Lives at `E:\CorpusTransfr\verified\IGS\` (source) and `E:\CorpusIndexEmbeddingsOnly\export_20260411_0720\` (Forge export).
 
@@ -17,10 +17,10 @@ The project is V2 of a RAG system for a defense/government corpus. Demo day is *
 
 ## Active processes running overnight
 
-**Beast (this machine):**
+**primary workstation (this machine):**
 - **Tier 2 GLiNER extraction** running in background via `scripts/tiered_extract.py --tier 2` on GPU 1
 - Task ID: `b0dgtt808`
-- Output log: `C:\WINDOWS\TEMP\claude\C--Users-jerem\1272f332-a04a-4bee-8713-91d989a97f10\tasks\b0dgtt808.output`
+- Output log: `C:\WINDOWS\TEMP\CoPilot+\C--Users-{USERNAME}\1272f332-a04a-4bee-8713-91d989a97f10\tasks\b0dgtt808.output`
 - Will NOT finish by morning — expect 11-18 hours total, so late morning through afternoon tomorrow
 - Re-streams Tier 1 first (~30 min), then streams Tier 2 GLiNER
 - RAM target <10GB, should be fine
@@ -33,29 +33,29 @@ The project is V2 of a RAG system for a defense/government corpus. Demo day is *
 - Expected to finish overnight
 
 **Agents running (background):**
-- **Agent 1:** Task #16 — investigate and fix NIST regex over-matching (POs matching NIST control IDs, PARTs matching NIST SP 800-53 codes)
-- **Agent 2:** Research sprint on RAG aggregation ground truth patterns, then Phase 2A of 400-query eval corpus
-- **Agent 3:** Dual deliverable — demo-day research patterns + V2 readiness gap analysis (both read-only analysis)
+- **reviewer:** Task #16 — investigate and fix security standard regex over-matching (POs matching security standard control IDs, PARTs matching security standard SP 800-53 codes)
+- **reviewer:** Research sprint on RAG aggregation ground truth patterns, then Phase 2A of 400-query eval corpus
+- **reviewer:** Dual deliverable — demo-day research patterns + V2 readiness gap analysis (both read-only analysis)
 - **AWS agent:** Wiring GovCloud OSS-20B endpoint (unknown status, user owns this track)
 
 ---
 
 ## Critical facts about V2 state
 
-**LanceDB on Beast:** 10,435,593 chunks at `C:\HybridRAG_V2\data\index\lancedb`
-**Entity store on Beast:** 8,017,607 Tier 1 entities at `C:\HybridRAG_V2\data\index\entities.sqlite3` (6.7 GB)
+**LanceDB on primary workstation:** 10,435,593 chunks at `C:\HybridRAG_V2\data\index\lancedb`
+**Entity store on primary workstation:** 8,017,607 Tier 1 entities at `C:\HybridRAG_V2\data\index\entities.sqlite3` (6.7 GB)
 - DATE: 2,713,472
 - CONTACT: 2,540,033 (down from 16.1M after phone regex fix)
-- PART: 2,521,235 ← **~90% polluted with NIST SP 800-53 baseline codes** (Agent 2 discovered)
-- PO: 150,602 ← **~98% polluted with NIST control IDs** (Agent 2 discovered)
+- PART: 2,521,235 ← **~90% polluted with security standard SP 800-53 baseline codes** (reviewer discovered)
+- PO: 150,602 ← **~98% polluted with security standard control IDs** (reviewer discovered)
 - SITE: 87,477
 - PERSON: 4,788
 
-**FTS index on Beast:** Built and working (commit `715fe4b`)
-**IVF_PQ index on Beast:** Built and working (created during import)
-**Hybrid retrieval on Beast:** Verified working end-to-end 25/25 app-path matches (commit `957eaab`)
+**FTS index on primary workstation:** Built and working (commit `715fe4b`)
+**IVF_PQ index on primary workstation:** Built and working (created during import)
+**Hybrid retrieval on primary workstation:** Verified working end-to-end 25/25 app-path matches (commit `957eaab`)
 
-**Backup stores on Beast (safety):**
+**Backup stores on primary workstation (safety):**
 - `C:\HybridRAG_V2\data\index\entities_pre_phonefix_20260411.sqlite3.bak` (18 GB — old over-matched phone data)
 - `C:\HybridRAG_V2\data\index\lancedb_pre_10M_20260411\` (safety copy of LanceDB before 10.4M import)
 
@@ -91,7 +91,7 @@ All on `origin/master`. If local tree is lost, `git pull` recovers everything:
 
 ### First 5 minutes — health checks
 
-1. **Is Beast still alive?**
+1. **Is primary workstation still alive?**
    ```
    powershell -c "Get-Process python* | Format-Table"
    ```
@@ -102,28 +102,28 @@ All on `origin/master`. If local tree is lost, `git pull` recovers everything:
    - Run `.venv\scripts\python -c "from src.store.entity_store import EntityStore; print(EntityStore('data/index/entities.sqlite3').count_entities())"` — should be ~7.5-8M if done
 
 3. **Check overnight agent output:**
-   - Did Agent 1 push a commit for task #16 (NIST regex fix)? `git log origin/master --oneline -10`
-   - Did Agent 2 push commits for research/Phase 2A?
-   - Did Agent 3 push commits for gap analysis?
+   - Did reviewer push a commit for task #16 (security standard regex fix)? `git log origin/master --oneline -10`
+   - Did reviewer push commits for research/Phase 2A?
+   - Did reviewer push commits for gap analysis?
    - QA signoffs: check whatever channel you use for QA feedback
 
 ### First 30 minutes — triage
 
-1. **Read `docs/V2_DEMO_READINESS_GAP_ANALYSIS_2026-04-12.md`** (Agent 3's deliverable, if committed). This gives you the frank state of V2 as of this morning with GREEN/YELLOW/RED ratings on 10 dimensions.
+1. **Read `docs/V2_DEMO_READINESS_GAP_ANALYSIS_2026-04-12.md`** (reviewer's deliverable, if committed). This gives you the frank state of V2 as of this morning with GREEN/YELLOW/RED ratings on 10 dimensions.
 
-2. **Read `docs/RAG_AGGREGATION_EVAL_RESEARCH_2026-04-12.md`** (Agent 2's research sprint, if committed). This tells you what approach to use for demo-day ground truth.
+2. **Read `docs/RAG_AGGREGATION_EVAL_RESEARCH_2026-04-12.md`** (reviewer's research sprint, if committed). This tells you what approach to use for demo-day ground truth.
 
-3. **Read Agent 1's task #16 output** — was the NIST regex fix committed? If yes, the clean Tier 1 re-run becomes a coordinator decision.
+3. **Read reviewer's task #16 output** — was the security standard regex fix committed? If yes, the clean Tier 1 re-run becomes a coordinator decision.
 
-4. **Check Beast Tier 2 progress** — how far through the filtered GLiNER subset? Estimate remaining time.
+4. **Check primary workstation Tier 2 progress** — how far through the filtered GLiNER subset? Estimate remaining time.
 
 ### The critical path to demo day
 
 ```
-Agent 1 task #16 (NIST regex fix) 
-  → Coordinator decision: re-run Tier 1 on Beast (~40 min)
-  → Wait for Tier 2 GLiNER to finish (Beast)
-  → Agent 2 runs production eval against clean store
+reviewer task #16 (security standard regex fix) 
+  → Coordinator decision: re-run Tier 1 on primary workstation (~40 min)
+  → Wait for Tier 2 GLiNER to finish (primary workstation)
+  → reviewer runs production eval against clean store
   → Review eval results, tune router, pick demo queries
   → Rehearse demo queries end-to-end
   → Demo day May 2
@@ -131,12 +131,12 @@ Agent 1 task #16 (NIST regex fix)
 
 ### The aggregation problem (THE biggest risk)
 
-**Status:** aggregation queries currently return polluted counts. PO is 98% NIST IDs, PART is 90% baseline codes. V1 died on this exact class of problem.
+**Status:** aggregation queries currently return polluted counts. PO is 98% security standard IDs, PART is 90% baseline codes. V1 died on this exact class of problem.
 
 **Path to fix:**
-1. Agent 1's task #16 fixes the regex patterns
+1. reviewer's task #16 fixes the regex patterns
 2. Re-run Tier 1 produces honest counts
-3. Agent 2's research (tonight) identifies the right pattern for provable ground truth — likely canary injection or scoped real-data queries
+3. reviewer's research (tonight) identifies the right pattern for provable ground truth — likely canary injection or scoped real-data queries
 4. Task #18 (canary injection, blocked on #16) creates known-good validation records
 5. Demo uses 5 verified aggregation queries, not "plausible-looking" numbers
 
@@ -151,12 +151,12 @@ Agent 1 task #16 (NIST regex fix)
 
 | # | Status | Subject |
 |---|--------|---------|
-| 3 | in_progress | Tier 2 GLiNER on Beast (overnight) |
+| 3 | in_progress | Tier 2 GLiNER on primary workstation (overnight) |
 | 7 | pending | Push validated code (mostly done) |
 | 8 | pending | Prepare workstation desktop for unattended run (blocked on 16) |
 | 9 | pending | Set up AWS OSS-20B endpoint (user-owned) |
-| 16 | NEW | NIST regex over-matching fix (Agent 1) |
-| 17 | in_progress | 400-query RAGAS eval corpus (Agent 2, Phase 1 done) |
+| 16 | NEW | security standard regex over-matching fix (reviewer) |
+| 17 | in_progress | 400-query RAGAS eval corpus (reviewer, Phase 1 done) |
 | 18 | blocked on 16 | Canary injection for aggregation validation |
 
 ---
@@ -165,11 +165,11 @@ Agent 1 task #16 (NIST regex fix)
 
 | Machine | GPU | RAM | Role |
 |---------|-----|-----|------|
-| Beast (here) | Dual RTX 3090 (24 GB each) | 64 GB | Dev/lab, running Tier 2 overnight |
+| primary workstation (here) | Dual RTX 3090 (24 GB each) | 64 GB | Dev/lab, running Tier 2 overnight |
 | Workstation Laptop (beside user) | RTX 3000 Pro (12 GB) | 64 GB | Running walk-away overnight, dev/query testing |
 | Workstation Desktop (10 min drive) | RTX A4000 (20 GB) | 64 GB | Tomorrow: pull latest, run clean production extraction unattended 24-48h |
 
-**GPU assignment on Beast:** GPU 1 is the clean one, GPU 0 has overhead from desktop processes. All heavy work goes to GPU 1.
+**GPU assignment on primary workstation:** GPU 1 is the clean one, GPU 0 has overhead from desktop processes. All heavy work goes to GPU 1.
 
 ---
 
@@ -187,9 +187,9 @@ See `docs/AGENT_RESEARCH_STANDING_ORDERS.md` for the full policy.
 
 ## What NOT to do when recovering
 
-1. **Do NOT kill the Beast Tier 2 process.** It's hours into GLiNER streaming. If it's still running when you wake, let it finish.
-2. **Do NOT wipe the entity store.** The current Beast entity store has honest phone data from the fix, just polluted PO/PART. Task #16 will fix the regex patterns, then a targeted re-run produces clean data.
-3. **Do NOT re-run the full pipeline on Beast** without coordinator review — it's a 30-60 min operation that wastes time if the fix hasn't landed.
+1. **Do NOT kill the primary workstation Tier 2 process.** It's hours into GLiNER streaming. If it's still running when you wake, let it finish.
+2. **Do NOT wipe the entity store.** The current primary workstation entity store has honest phone data from the fix, just polluted PO/PART. Task #16 will fix the regex patterns, then a targeted re-run produces clean data.
+3. **Do NOT re-run the full pipeline on primary workstation** without coordinator review — it's a 30-60 min operation that wastes time if the fix hasn't landed.
 4. **Do NOT re-trigger the laptop walk-away** if it already finished successfully.
 5. **Do NOT try to run the workstation desktop overnight without first pulling latest code and running `scripts/verify_install.py`** — task #14 verification step catches missing dependencies.
 
@@ -197,11 +197,11 @@ See `docs/AGENT_RESEARCH_STANDING_ORDERS.md` for the full policy.
 
 ## If the agent team has gone quiet or stuck
 
-1. **Agent 1** may be blocked on something in the NIST regex research. He knows to cite sources and keep scope tight. If he pushed nothing, check what he last posted and whether he's waiting on clarification.
+1. **reviewer** may be blocked on something in the security standard regex research. He knows to cite sources and keep scope tight. If he pushed nothing, check what he last posted and whether he's waiting on clarification.
 
-2. **Agent 2** has two tracks — research sprint OR Phase 2A query authoring. He was told to research first, so by morning he should have either the research doc done and Phase 2A started, OR still in research.
+2. **reviewer** has two tracks — research sprint OR Phase 2A query authoring. He was told to research first, so by morning he should have either the research doc done and Phase 2A started, OR still in research.
 
-3. **Agent 3** has two deliverables — demo research and gap analysis. Gap analysis is higher priority, so if only one is done, expect that one.
+3. **reviewer** has two deliverables — demo research and gap analysis. Gap analysis is higher priority, so if only one is done, expect that one.
 
 4. **QA** should have cleared anything sent by agents. Check for pending QA items.
 
@@ -213,14 +213,14 @@ See `docs/AGENT_RESEARCH_STANDING_ORDERS.md` for the full policy.
 
 - `docs/SESSION_GAMEPLAN_2026-04-11.md` — original game plan
 - `docs/COORDINATOR_STATE_2026-04-11.md` — live state doc before tonight's work
-- `docs/PRODUCTION_EVAL_400_RATIONALE_2026-04-12.md` — Agent 2's eval rationale + critical entity pollution discovery
-- `docs/LAPTOP_10M_INVESTIGATION_2026-04-11.md` — ingest integrity investigation (Agent 1)
+- `docs/PRODUCTION_EVAL_400_RATIONALE_2026-04-12.md` — reviewer's eval rationale + critical entity pollution discovery
+- `docs/LAPTOP_10M_INVESTIGATION_2026-04-11.md` — ingest integrity investigation (reviewer)
 - `docs/DEMO_TALKING_POINT_NIGHTLY_SUSTAINABILITY_2026-04-11.md` — demo narrative draft
 - `docs/IMPORT_BENCHMARK_10M_2026-04-11.md` — import timing reference
 - `docs/HOW_TO_IMPORT_FORGE_EXPORT_TO_V2_LANCEDB.md` — import operator guide
 - `docs/AGENT_RESEARCH_STANDING_ORDERS.md` — agent research policy
 - `docs/CRITICAL_PYLANCE_INSTALL_REQUIRED_2026-04-11.md` — SUPERSEDED (pylance not needed, `lancedb.SearchBuilder.to_batches` is used instead)
-- `CLAUDE.md` or equivalent — V2 agent entry point
+- `CoPilot+.md` or equivalent — V2 agent entry point
 
 ---
 
@@ -245,16 +245,16 @@ Each requires ground truth. Options from tonight's conversation: canary injectio
 - Scope discipline — don't touch files out of the requested change set
 - Standing order: sanitize before every push
 - Standing order: local commit → sanitize → push
-- Standing order: never attribute work to AI/agents/claude in repo commits — use "Jeremy Randall" or "CoPilot+"
+- Standing order: never attribute work to AI/agents/CoPilot+ in repo commits — use "Jeremy Randall" or "CoPilot+"
 - Do not include time estimates for future work
-- GPU 1 for fast work on Beast (GPU 0 has overhead)
+- GPU 1 for fast work on primary workstation (GPU 0 has overhead)
 - Real hardware testing before push — no shortcuts
 
 **Mission framing:**
 - 3 demo personas: PM, Logistics Lead, Field Engineer
 - Plus: Network Admin / Cyber, Aggregation/Cross-role
-- Civilian defense contractor audience
-- Air-gap / classified deployment compatible
+- Civilian enterprise audience
+- offline / restricted deployment compatible
 - Zero ongoing infrastructure cost claim
 
 ---

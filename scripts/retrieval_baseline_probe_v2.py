@@ -1,5 +1,5 @@
 """
-Retrieval Baseline Probe V2 — Agent 1 — 2026-04-11
+Retrieval Baseline Probe V2 — reviewer — 2026-04-11
 
 Re-runs the original 25-query baseline probe against the 10.4M chunk LanceDB
 store NOW THAT THE FTS INDEX IS BUILT. Compares against the earlier JSON
@@ -46,7 +46,7 @@ EXACT_MATCH_TOKENS = {
     "L07": ["XL2200"],
     "E05": ["55238"],
     "F03": ["PowerEdge"],
-    "F05": ["NEXION"],
+    "F05": ["monitoring system"],
     "A03": ["Alpena"],
     "C01": ["STIG"],
     "C02": ["ACAS"],
@@ -133,7 +133,7 @@ def percentile(arr, p):
 
 def main():
     print("=" * 70)
-    print("RETRIEVAL BASELINE PROBE V2 (post-FTS) - Agent 1 - 2026-04-11")
+    print("RETRIEVAL BASELINE PROBE V2 (post-FTS) - reviewer - 2026-04-11")
     print("=" * 70)
 
     # Load before-data for comparison
@@ -311,7 +311,7 @@ def main():
     # -------------------------------------------------------------------
     md_lines = []
     md_lines.append("# Retrieval Baseline Probe V2 (post-FTS) - 2026-04-11\n")
-    md_lines.append("**Agent:** Agent 1 | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT\n")
+    md_lines.append("**Agent:** reviewer | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT\n")
     md_lines.append("**Purpose:** Re-run the 25-query baseline probe now that the FTS (Tantivy)\n")
     md_lines.append("index has been built on the live 10.4M store. Compare against the earlier\n")
     md_lines.append("vector-only results to measure the FTS fix's impact.\n\n")
@@ -474,7 +474,7 @@ def main():
     md_lines.append("_See analysis pass — filled after comparison._\n\n")
 
     md_lines.append("---\n\n")
-    md_lines.append("Signed: Agent 1 | HybridRAG_V2 | 2026-04-11 MDT\n")
+    md_lines.append("Signed: reviewer | HybridRAG_V2 | 2026-04-11 MDT\n")
 
     with open(REPORT_MD, "w", encoding="utf-8", newline="\n") as f:
         f.writelines(md_lines)

@@ -1,0 +1,134 @@
+{
+  "evidence_version": "1.0",
+  "lane": "9.2",
+  "captured_at": "2026-04-11T20:51:55",
+  "repo_root": "C:\\HybridRAG_V2",
+  "scope_note": "Targeted evidence for Lane 9.2 scope only. This does not replace the required Tier D non-author human button smash.",
+  "mode": "headless-withdrawn",
+  "checks": [
+    {
+      "name": "launch_gui_config_path",
+      "passed": true,
+      "details": {
+        "captured_path": "C:\\HybridRAG_V2\\config\\config.yaml",
+        "expected_path": "C:\\HybridRAG_V2\\config\\config.yaml"
+      }
+    },
+    {
+      "name": "simplified_nav_surface",
+      "passed": true,
+      "details": {
+        "nav_labels": [
+          "Query",
+          "Entities",
+          "Settings"
+        ],
+        "current_view": "query"
+      }
+    },
+    {
+      "name": "settings_panel_read_only",
+      "passed": true,
+      "details": {
+        "interactive_widgets_found": [],
+        "refresh_button_text": "Refresh Counts"
+      }
+    },
+    {
+      "name": "settings_panel_runtime_config_display",
+      "passed": true,
+      "details": {
+        "missing_tokens": [],
+        "checked_tokens": [
+          "Refresh Counts",
+          "gpt-4o",
+          "C:\\HybridRAG_V2\\data\\index\\lancedb",
+          "C:\\HybridRAG_V2\\data\\source"
+        ],
+        "rendered_texts": [
+          "Settings",
+          "Retrieval",
+          "Top-K:",
+          "10",
+          "Candidate Pool:",
+          "30",
+          "Min Score:",
+          "0.1",
+          "Reranker Enabled:",
+          "Yes",
+          "Reranker Top-N:",
+          "30",
+          "Corrective RAG (CRAG)",
+          "Enabled:",
+          "No",
+          "Confidence Threshold:",
+          "0.8",
+          "Max Retries:",
+          "2",
+          "Verifier Model:",
+          "gpt-oss-20b",
+          "LLM Configuration",
+          "Model:",
+          "gpt-4o",
+          "Provider:",
+          "auto",
+          "Deployment:",
+          "gpt-4o",
+          "Context Window:",
+          "128,000",
+          "Max Tokens:",
+          "16,384",
+          "Temperature:",
+          "0.08",
+          "Timeout:",
+          "180s",
+          "Entity Extraction",
+          "Min Confidence:",
+          "0.5",
+          "GLiNER Enabled:",
+          "No",
+          "GPT-4o Extraction:",
+          "Yes",
+          "Part Patterns:",
+          "11",
+          "File Paths",
+          "LanceDB:",
+          "C:\\HybridRAG_V2\\data\\index\\lancedb",
+          "Entity DB:",
+          "C:\\HybridRAG_V2\\data\\index\\entities.sqlite3",
+          "Corpus Source:",
+          "C:\\HybridRAG_V2\\data\\source",
+          "Site Vocabulary:",
+          "C:\\HybridRAG_V2\\config\\site_vocabulary.yaml",
+          "Hardware",
+          "Preset:",
+          "primary workstation",
+          "Refresh Counts"
+        ]
+      }
+    },
+    {
+      "name": "settings_guidance_source_contract",
+      "passed": true,
+      "details": {
+        "required_phrase": "config/config.yaml and restarting.",
+        "docstring_present": true,
+        "rendered_guidance_present": false,
+        "scope_note": "Source-level check only. This validates the SettingsPanel implementation guidance contract, not operator-visible widget text."
+      }
+    },
+    {
+      "name": "refresh_counts_runtime_status",
+      "passed": true,
+      "details": {
+        "before": "",
+        "after": "Chunks: 12,345 | Entities: 678 | Rels: 90"
+      }
+    }
+  ],
+  "artifacts": [
+    "C:\\HybridRAG_V2\\docs\\evidence\\lane9_2_gui_qa_rerun_20260411_2\\settings_before_refresh.txt",
+    "C:\\HybridRAG_V2\\docs\\evidence\\lane9_2_gui_qa_rerun_20260411_2\\settings_after_refresh.txt"
+  ],
+  "verdict": "PASS"
+}

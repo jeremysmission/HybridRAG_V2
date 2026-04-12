@@ -1,6 +1,6 @@
 # Retrieval Baseline Probe — 2026-04-11
 
-**Agent:** Agent 1 | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT
+**Agent:** reviewer | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT
 
 **Purpose:** Pure vector+FTS retrieval baseline BEFORE entity extraction.
 Measures what the 10.4M chunk store can answer with embeddings alone.
@@ -165,9 +165,11 @@ Description: T-Calibration kit...
 | FTS | 0ms | None | - | skipped |
 | Hybrid | 12.0ms | 0.593 | MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)/NGPackingSlip_Kwajalein_USRP PS_2017-04-06.doc | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
 
-**Vector top-1 preview:** rtyWe have found that the original USRP power supplies have been failing. This Spare Power Supply is a new, manufacture...
+**Vector top-1 preview:** rty
+We have found that the original USRP power supplies have been failing. This Spare Power Supply is a new, manufacture...
 
-**Hybrid top-1 preview:** rtyWe have found that the original USRP power supplies have been failing. This Spare Power Supply is a new, manufacture...
+**Hybrid top-1 preview:** rty
+We have found that the original USRP power supplies have been failing. This Spare Power Supply is a new, manufacture...
 
 ---
 
@@ -197,9 +199,13 @@ Description: T-Calibration kit...
 | FTS | 0ms | None | - | skipped |
 | Hybrid | 10.3ms | 0.4076 | Electronics Purchases-Counterfeit Parts Plan/Integrated Logistics (ILS) Plan.doc | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
 
-**Vector top-1 preview:** advanced notice via electronic mail when a piece of test equipment is ready to be calibrated.Calibration RecordsTest E...
+**Vector top-1 preview:** advanced notice via electronic mail when a piece of test equipment is ready to be calibrated.
+Calibration Records
+Test E...
 
-**Hybrid top-1 preview:** advanced notice via electronic mail when a piece of test equipment is ready to be calibrated.Calibration RecordsTest E...
+**Hybrid top-1 preview:** advanced notice via electronic mail when a piece of test equipment is ready to be calibrated.
+Calibration Records
+Test E...
 
 ---
 
@@ -245,9 +251,9 @@ addition to the general procedures discussed here, refe r to the applicabl...
 
 | Mode | Latency | Top-1 Score | Top-1 Source | Error |
 |------|---------|-------------|--------------|-------|
-| Vector | 8.1ms | 0.474 | Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island NEXION MSR (12-31 May 2018)(A001).pdf | - |
+| Vector | 8.1ms | 0.474 | Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island monitoring system MSR (12-31 May 2018)(A001).pdf | - |
 | FTS | 0ms | None | - | skipped |
-| Hybrid | 10.2ms | 0.474 | Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island NEXION MSR (12-31 May 2018)(A001).pdf | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
+| Hybrid | 10.2ms | 0.474 | Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island monitoring system MSR (12-31 May 2018)(A001).pdf | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
 
 **Vector top-1 preview:** tower can be rotated on the pin. New 
 foundations and guy rods can be strategically constructed at the site adjacent to ...
@@ -263,9 +269,9 @@ foundations and guy rods can be strategically constructed at the site adjacent t
 
 | Mode | Latency | Top-1 Score | Top-1 Source | Error |
 |------|---------|-------------|--------------|-------|
-| Vector | 6.0ms | 0.4268 | ISTO COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf | - |
+| Vector | 6.0ms | 0.4268 | legacy monitoring system COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf | - |
 | FTS | 0ms | None | - | skipped |
-| Hybrid | 10.4ms | 0.4268 | ISTO COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
+| Hybrid | 10.4ms | 0.4268 | legacy monitoring system COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
 
 **Vector top-1 preview:** . The indicator shows if power is
 present or if a power fault has occurred.
@@ -285,9 +291,9 @@ Figure 112. AC PSU status indicator
 
 | Mode | Latency | Top-1 Score | Top-1 Source | Error |
 |------|---------|-------------|--------------|-------|
-| Vector | 6.6ms | 0.4623 | Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa NEXION (A006)/Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx | - |
+| Vector | 6.6ms | 0.4623 | Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa monitoring system (A006)/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).docx | - |
 | FTS | 0ms | None | - | skipped |
-| Hybrid | 12.1ms | 0.4623 | Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa NEXION (A006)/Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
+| Hybrid | 12.1ms | 0.4623 | Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa monitoring system (A006)/Deliverables Report IGSI-103 Okinawa monitoring system Installation Acceptance Test Plan and Procedures (A006).docx | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
 
 **Vector top-1 preview:** ment Matrix
 
@@ -351,9 +357,9 @@ KVM Switch (USB) Kyi Switch (VGA) Power {Pin Socket)...
 
 | Mode | Latency | Top-1 Score | Top-1 Source | Error |
 |------|---------|-------------|--------------|-------|
-| Vector | 6.1ms | 0.4788 | Site Survey Checklists/ISTO Site Selection Checklist.docx | - |
+| Vector | 6.1ms | 0.4788 | Site Survey Checklists/legacy monitoring system Site Selection Checklist.docx | - |
 | FTS | 0ms | None | - | skipped |
-| Hybrid | 10.4ms | 0.4788 | Site Survey Checklists/ISTO Site Selection Checklist.docx | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
+| Hybrid | 10.4ms | 0.4788 | Site Survey Checklists/legacy monitoring system Site Selection Checklist.docx | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
 
 **Vector top-1 preview:** Points of Contact...
 
@@ -389,9 +395,9 @@ Broader supp...
 
 | Mode | Latency | Top-1 Score | Top-1 Source | Error |
 |------|---------|-------------|--------------|-------|
-| Vector | 16.3ms | 0.5014 | archive/ISTO Cybersecurity SOP 2017-08-15.docx | - |
+| Vector | 16.3ms | 0.5014 | archive/legacy monitoring system Cybersecurity SOP 2017-08-15.docx | - |
 | FTS | 0ms | None | - | skipped |
-| Hybrid | 11.6ms | 0.5014 | archive/ISTO Cybersecurity SOP 2017-08-15.docx | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
+| Hybrid | 11.6ms | 0.5014 | archive/legacy monitoring system Cybersecurity SOP 2017-08-15.docx | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
 
 **Vector top-1 preview:** ntation in accordance with contract agreements and copyright laws;
 
@@ -403,7 +409,7 @@ b. Tracks the use of software and associated documen...
 
 ---
 
-### [F05] Lookup: NEXION bill of materials components
+### [F05] Lookup: monitoring system bill of materials components
 
 **Expected:** BOM doc
 
@@ -413,9 +419,9 @@ b. Tracks the use of software and associated documen...
 | FTS | 0ms | None | - | skipped |
 | Hybrid | 10.9ms | 0.5194 | Previous Versions/DRAFT_SEMS3D-37587_SPR&IP_(A001) .docx | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
 
-**Vector top-1 preview:** sition of all equipment and materials required to perform the installation of the NEXION.  Any materials required for si...
+**Vector top-1 preview:** sition of all equipment and materials required to perform the installation of the monitoring system.  Any materials required for si...
 
-**Hybrid top-1 preview:** sition of all equipment and materials required to perform the installation of the NEXION.  Any materials required for si...
+**Hybrid top-1 preview:** sition of all equipment and materials required to perform the installation of the monitoring system.  Any materials required for si...
 
 ---
 
@@ -449,9 +455,9 @@ Current Order | McMaster-Car...
 
 | Mode | Latency | Top-1 Score | Top-1 Source | Error |
 |------|---------|-------------|--------------|-------|
-| Vector | 8.0ms | 0.6176 | Removable Disk (E)/DoD Guide to Uniquely Identifying Items.pdf | - |
+| Vector | 8.0ms | 0.6176 | Removable Disk (E)/industry Guide to Uniquely Identifying Items.pdf | - |
 | FTS | 0ms | None | - | skipped |
-| Hybrid | 11.6ms | 0.6176 | Removable Disk (E)/DoD Guide to Uniquely Identifying Items.pdf | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
+| Hybrid | 11.6ms | 0.6176 | Removable Disk (E)/industry Guide to Uniquely Identifying Items.pdf | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
 
 **Vector top-1 preview:** [SECTION] E2.1.12
 .2
@@ -509,9 +515,9 @@ Estimate...
 
 | Mode | Latency | Top-1 Score | Top-1 Source | Error |
 |------|---------|-------------|--------------|-------|
-| Vector | 22.9ms | 0.4198 | Archive/CT&E Plan - ISTO OS Upgrade 2017-12-12.docx | - |
+| Vector | 22.9ms | 0.4198 | Archive/CT&E Plan - legacy monitoring system OS Upgrade 2017-12-12.docx | - |
 | FTS | 0ms | None | - | skipped |
-| Hybrid | 12.7ms | 0.4198 | Archive/CT&E Plan - ISTO OS Upgrade 2017-12-12.docx | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
+| Hybrid | 12.7ms | 0.4198 | Archive/CT&E Plan - legacy monitoring system OS Upgrade 2017-12-12.docx | hybrid failed (lance error: Invalid user input: Cannot perform full text search unless an INVERTED index has been created on at least one column, C:\Users\runneradmin\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\lance-index-4.0.0\src\scalar\inverted\query.rs:821:25), fell back to vector-only |
 
 **Vector top-1 preview:** -12), the RHEL 7 Benchmark is not available; therefore, STIG compliance was achieved via manual checks of the STIG using...
 
@@ -560,7 +566,7 @@ When the query contains a specific identifier (PO number, part number, site name
 | XL2200VARM3U | NO — got a power supply packing slip (related but not exact) |
 | Drawing 55238 | NO — got generic drawing types doc |
 | PowerEdge | YES — got Dell PowerEdge brochure |
-| NEXION | YES — got NEXION installation doc |
+| monitoring system | YES — got monitoring system installation doc |
 | Alpena | YES — got Alpena shipment tracking |
 | STIG | YES — got STIG compliance doc |
 | ACAS | YES — got ACAS scan TTP |
@@ -603,7 +609,7 @@ PO numbers, part numbers, and document identifiers (23-00685, 1302-126B, XL2200V
 - All 10,435,593 rows indexed, 0 unindexed
 
 ### 6. Named Entities Work When They're Prominent
-Queries containing well-known proper nouns (Alpena, NEXION, PowerEdge, STIG, ACAS) DO find relevant results. These terms are semantically distinctive. But program-specific codes (23-00685, 1302-126B) are opaque to the embedder — they carry no semantic signal.
+Queries containing well-known proper nouns (Alpena, monitoring system, PowerEdge, STIG, ACAS) DO find relevant results. These terms are semantically distinctive. But program-specific codes (23-00685, 1302-126B) are opaque to the embedder — they carry no semantic signal.
 
 ## Recommendations
 
@@ -614,4 +620,4 @@ Queries containing well-known proper nouns (Alpena, NEXION, PowerEdge, STIG, ACA
 
 ---
 
-Signed: Agent 1 | HybridRAG_V2 | 2026-04-11 MDT
+Signed: reviewer | HybridRAG_V2 | 2026-04-11 MDT
