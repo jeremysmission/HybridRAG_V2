@@ -154,7 +154,9 @@ def print_status(progress_path: str):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Overnight local extraction runner")
+    parser = argparse.ArgumentParser(
+        description="Clone1 / phi4 overnight extraction runner (not the V2 LanceStore tiered_extract path)"
+    )
     parser.add_argument("--config", default="config/config.yaml")
     parser.add_argument("--clone1-db", default=CLONE1_DB)
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT,

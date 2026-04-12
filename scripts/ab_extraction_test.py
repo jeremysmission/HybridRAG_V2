@@ -399,7 +399,9 @@ def generate_report(results: list[ComparisonResult]) -> dict:
 # ---------------------------------------------------------------------------
 
 def main():
-    parser = argparse.ArgumentParser(description="A/B extraction quality test: phi4 vs GPT-4o")
+    parser = argparse.ArgumentParser(
+        description="Clone1 A/B extraction quality test: phi4 vs GPT-4o (not the V2 LanceStore tiered_extract path)"
+    )
     parser.add_argument("--config", default="config/config.yaml")
     parser.add_argument("--clone1-db", default=DEFAULT_CLONE1_DB, help="Path to Clone1 SQLite index")
     parser.add_argument("--sample-size", type=int, default=SAMPLE_SIZE, help="Number of chunks to sample")

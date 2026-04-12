@@ -59,13 +59,13 @@ Data flows through three distinct stages. Each has different bottlenecks, parall
 
 ### Stage 3: Entity Extraction — Chunks → Entities + Relationships
 
-**What:** Takes chunks (from LanceDB or Clone1 index) and extracts structured entities via LLM.
+**What:** Takes chunks from the V2 LanceDB store for the canonical pipeline, or from a Clone1 SQLite index for dev/test-only local experiments, and extracts structured entities.
 **Where:** C:\HybridRAG_V2
 **Scripts:**
 - `scripts/extract_entities.py` — production extraction from V2 LanceDB chunks
-- `scripts/overnight_extraction.py` — dev/test extraction from Clone1 chunks on primary workstation
-- `scripts/ab_extraction_test.py` — quality comparison (phi4 vs GPT-4o)
-**Launcher:** `start_overnight_extraction.bat` (one-click overnight)
+- `scripts/overnight_extraction.py` — Clone1 / phi4 dev-test extraction, not the canonical V2 LanceStore path
+- `scripts/ab_extraction_test.py` — Clone1 quality comparison (phi4 vs GPT-4o), not the canonical V2 LanceStore path
+**Launcher:** `start_overnight_extraction.bat` (Clone1 / phi4 one-click overnight, not V2 tiered extraction)
 
 | Method | Parallelism | Speed | Cost | Use case |
 |--------|-------------|-------|------|----------|
@@ -154,13 +154,17 @@ start_corpusforge.bat                    # GUI
 cd C:\HybridRAG_V2
 .venv\Scripts\python scripts/import_embedengine.py --source <export_dir>
 
-# V2: overnight extraction on primary workstation
+# V2: canonical tiered extraction from LanceDB
+.venv\Scripts\python scripts/tiered_extract.py --tier 1
+.venv\Scripts\python scripts/tiered_extract.py --tier 2
+
+# Clone1 / phi4 dev-test overnight extraction (not canonical V2)
 start_overnight_extraction.bat           # default 2000 chunks
 start_overnight_extraction.bat 5000      # more chunks
 start_overnight_extraction.bat resume    # pick up where stopped
 start_overnight_extraction.bat status    # check progress
 
-# V2: A/B quality test
+# Clone1 dev-test: A/B quality test
 .venv\Scripts\python scripts/ab_extraction_test.py --sample-size 50
 
 # V2: query (after data is loaded)

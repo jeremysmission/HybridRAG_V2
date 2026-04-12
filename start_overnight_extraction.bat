@@ -42,15 +42,15 @@ set "LIMIT=2000"
 set "RESUME="
 
 if not exist "%VENV_PYTHON%" (
-    echo [FAIL] .venv not found. Run tools\setup_workstation_2026-04-06.bat first.
-    pause
+    echo [FAIL] .venv not found. Run INSTALL_WORKSTATION.bat first.
+    if /I not "%HYBRIDRAG_NO_PAUSE%"=="1" pause
     exit /b 1
 )
 
 REM Parse args
 if /I "%~1"=="status" (
     "%VENV_PYTHON%" "%SCRIPT%" --status
-    pause
+    if /I not "%HYBRIDRAG_NO_PAUSE%"=="1" pause
     exit /b 0
 )
 if /I "%~1"=="resume" (
@@ -61,7 +61,7 @@ if /I "%~1"=="resume" (
 )
 
 echo ================================================================
-echo  HybridRAG V2 — Overnight Extraction
+echo  Clone1 / phi4 Overnight Extraction ^(NOT V2 tiered_extract^)
 echo  Chunks per GPU: %LIMIT%
 echo  Resume mode: %RESUME%
 echo  Press Ctrl+C to stop (progress is saved)
@@ -69,7 +69,7 @@ echo ================================================================
 echo.
 
 REM Single GPU mode (simpler, default)
-echo [INFO] Starting extraction on GPU 0 — %LIMIT% chunks
+echo [INFO] Starting Clone1 / phi4 extraction on GPU 0 — %LIMIT% chunks
 echo [INFO] Progress saves every 10 chunks. Safe to Ctrl+C.
 echo.
 
@@ -82,5 +82,5 @@ set "PYTHONPATH=%CD%"
 echo.
 echo [INFO] Extraction finished. Check progress:
 echo   %VENV_PYTHON% %SCRIPT% --status
-pause
+if /I not "%HYBRIDRAG_NO_PAUSE%"=="1" pause
 exit /b 0
