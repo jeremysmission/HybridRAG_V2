@@ -15,6 +15,25 @@ Time estimates (primary workstation, 49K chunks):
     Tier 1 only:   ~2 seconds
     Tier 1 + 2:    ~5 minutes (GLiNER on GPU, filtered subset)
     Tier 1 + 2 + 3: hours (LLM on flagged items only)
+
+Memory strategy
+---------------
+Both Tier 1 and Tier 2 stream the corpus with ``iter_chunk_batches`` — the
+store is scanned twice (once per tier) instead of holding every chunk in
+RAM between passes.
+
+An earlier version accumulated every chunk into an
+``all_chunks_for_tier2`` list during Tier 1 so Tier 2 could filter and
+process them later. On the 10.4M-chunk corpus that drove peak RAM past
+57 GB on a 64 GB host and made Tier 2 impossible on any laptop or work
+workstation.
+
+Streaming twice costs us a second scan over LanceDB (seconds on primary workstation)
+and gives us a hard memory ceiling that scales with ``batch_size`` and
+the GLiNER model footprint, not with corpus size. The only state kept
+across the Tier 1 and Tier 2 passes is a set of Tier 1 hit chunk IDs
+(``tier1_hit_chunk_ids``) — a few million short strings in the worst
+case, still comfortably under a gigabyte.
 """
 
 from __future__ import annotations
@@ -142,65 +161,130 @@ def run_tier1(
     return all_entities, all_rels
 
 
-def run_tier2_gliner(
-    chunks: list[dict],
-    tier1_chunk_ids: set[str],
-    device: str,
-    model_name: str,
-    min_chunk_len: int,
-    min_confidence: float,
-    max_concurrent: int,
-) -> list[Entity]:
-    """Tier 2: GLiNER on filtered chunks (skip short, numeric, fully extracted)."""
-    try:
-        from gliner import GLiNER
-    except ImportError:
-        print("  GLiNER not installed -- skipping Tier 2")
-        return []
+def _is_tier2_candidate(chunk: dict, min_chunk_len: int) -> bool:
+    """Return True if a chunk is worth sending to GLiNER.
 
-    # Filter: skip short chunks, pure numeric, already well-extracted by T1
-    filtered = []
-    for c in chunks:
-        text = c["text"].strip()
-        if len(text) < min_chunk_len:
-            continue
-        # Skip pure numeric/whitespace
-        alpha_ratio = sum(1 for ch in text if ch.isalpha()) / max(len(text), 1)
-        if alpha_ratio < 0.3:
-            continue
-        filtered.append(c)
+    Filter criteria (cheap, applied during streaming):
+      - Stripped length >= min_chunk_len
+      - Alphabetic-character ratio >= 0.3 (rejects pure numeric / whitespace
+        / symbolic chunks like spreadsheet cell dumps where GLiNER finds
+        nothing useful)
 
-    print(f"  Tier 2 filter: {len(chunks)} -> {len(filtered)} chunks ({len(chunks)-len(filtered)} skipped)")
+    The "already well-covered by Tier 1" concept exists in the task doc
+    but is intentionally not applied here: Tier 1 (PART / PO / DATE /
+    CONTACT) and Tier 2 (PERSON / ORG / SITE / FAILURE_MODE) target
+    disjoint entity types, so a Tier 1 hit is not evidence that Tier 2
+    would be redundant on the same chunk. ``tier1_hit_chunk_ids`` is
+    still passed through ``run_tier2_gliner`` for future use (e.g.
+    confidence boosting) but does not gate candidate selection today.
+    """
+    text = chunk["text"].strip()
+    if len(text) < min_chunk_len:
+        return False
+    alpha_ratio = sum(1 for ch in text if ch.isalpha()) / max(len(text), 1)
+    return alpha_ratio >= 0.3
 
-    # Load GLiNER with GPU auto-detection
+
+def _resolve_gliner_device(device: str) -> str | None:
+    """Pick a CUDA device for GLiNER or return None if Tier 2 must abort."""
     import torch
-    resolved_device = device
+    resolved = device
     if "cuda" in device:
         if not torch.cuda.is_available():
             print(f"  ERROR: CUDA requested ({device}) but not available. Aborting Tier 2.")
-            print(f"  GLiNER on CPU is too slow for production. Fix CUDA or skip Tier 2.")
-            return []
-        # Auto-resolve: if cuda:1 requested but only 1 GPU, fall back to cuda:0
+            print("  GLiNER on CPU is too slow for production. Fix CUDA or skip Tier 2.")
+            return None
         requested_idx = int(device.split(":")[1]) if ":" in device else 0
         if requested_idx >= torch.cuda.device_count():
-            resolved_device = "cuda:0"
-            print(f"  NOTE: {device} not available (only {torch.cuda.device_count()} GPU(s)). Using {resolved_device}.")
-        # Pick the GPU with more free memory if no specific index was forced
+            resolved = "cuda:0"
+            print(f"  NOTE: {device} not available (only {torch.cuda.device_count()} GPU(s)). Using {resolved}.")
         elif torch.cuda.device_count() > 1 and device == "cuda:1":
             free_0 = torch.cuda.mem_get_info(0)[0]
             free_1 = torch.cuda.mem_get_info(1)[0]
             if free_0 > free_1 * 1.5:
-                resolved_device = "cuda:0"
-                print(f"  NOTE: GPU 0 has significantly more free VRAM ({free_0/1e9:.1f}GB vs {free_1/1e9:.1f}GB). Using {resolved_device}.")
+                resolved = "cuda:0"
+                print(f"  NOTE: GPU 0 has significantly more free VRAM ({free_0/1e9:.1f}GB vs {free_1/1e9:.1f}GB). Using {resolved}.")
+    return resolved
 
-    print(f"  Loading GLiNER model: {model_name} on {resolved_device}")
-    model = GLiNER.from_pretrained(model_name)
-    if "cuda" in resolved_device:
-        gpu_idx = int(resolved_device.split(":")[1]) if ":" in resolved_device else 0
-        model = model.to(resolved_device)
-        print(f"  GLiNER on {resolved_device}: {torch.cuda.get_device_name(gpu_idx)}")
-        free, total = torch.cuda.mem_get_info(gpu_idx)
-        print(f"  VRAM after model load: {free/1e9:.1f}GB free / {total/1e9:.1f}GB total")
+
+def run_tier2_gliner(
+    store: LanceStore,
+    tier1_hit_chunk_ids: set[str],
+    device: str,
+    model_name: str,
+    min_chunk_len: int,
+    min_confidence: float,
+    limit: int = 0,
+    stream_batch_size: int = 10000,
+    gliner_batch_size: int = 8,
+    progress_every: int = 500,
+    gliner_model=None,
+) -> list[Entity]:
+    """Tier 2: GLiNER over a fresh streaming pass of the store.
+
+    This function does NOT take a list of pre-loaded chunks. It opens a
+    second streaming pass over ``store`` (respecting ``limit``) and filters
+    candidates inline via ``_is_tier2_candidate``. Only the ``pending``
+    GLiNER batch (<= ``gliner_batch_size``) and the accumulated Entity
+    list live in memory — corpus-size data never does.
+
+    Parameters
+    ----------
+    store:
+        A LanceStore to stream from. Must already be open.
+    tier1_hit_chunk_ids:
+        Set of chunk_ids that produced at least one Tier 1 entity. Passed
+        through but not currently used for filtering (see
+        ``_is_tier2_candidate`` docstring for rationale).
+    device:
+        Requested CUDA device (e.g. ``cuda:1``).
+    model_name:
+        HuggingFace model id for GLiNER.
+    min_chunk_len:
+        Minimum stripped text length to send to GLiNER.
+    min_confidence:
+        GLiNER score threshold.
+    limit:
+        Max chunks to scan (0 = all). Matches the CLI --limit flag.
+    stream_batch_size:
+        Rows pulled per LanceDB scan batch.
+    gliner_batch_size:
+        Candidates per GLiNER forward pass.
+    progress_every:
+        Log cadence in scanned-chunk units.
+    gliner_model:
+        Optional pre-loaded model. When supplied, the function skips
+        the ``GLiNER.from_pretrained(...) / .to(device)`` load path.
+        Used by tests to inject a fake model without importing the real
+        GLiNER package.
+
+    Returns
+    -------
+    list[Entity]: de-duplication happens in the caller against the
+    cross-tier ``seen`` set, so this function does not dedupe itself.
+    """
+    if gliner_model is None:
+        try:
+            from gliner import GLiNER
+        except ImportError:
+            print("  GLiNER not installed -- skipping Tier 2")
+            return []
+
+        resolved_device = _resolve_gliner_device(device)
+        if resolved_device is None:
+            return []
+
+        print(f"  Loading GLiNER model: {model_name} on {resolved_device}")
+        model = GLiNER.from_pretrained(model_name)
+        if "cuda" in resolved_device:
+            import torch
+            gpu_idx = int(resolved_device.split(":")[1]) if ":" in resolved_device else 0
+            model = model.to(resolved_device)
+            print(f"  GLiNER on {resolved_device}: {torch.cuda.get_device_name(gpu_idx)}")
+            free, total = torch.cuda.mem_get_info(gpu_idx)
+            print(f"  VRAM after model load: {free/1e9:.1f}GB free / {total/1e9:.1f}GB total")
+    else:
+        model = gliner_model
 
     labels = ["PERSON", "ORGANIZATION", "SITE", "FAILURE_MODE", "DATE"]
     label_map = {
@@ -212,32 +296,63 @@ def run_tier2_gliner(
     }
 
     all_entities: list[Entity] = []
-    batch_size = 8
+    pending: list[dict] = []
+    scanned = 0
+    candidates = 0
 
-    for i in range(0, len(filtered), batch_size):
-        batch = filtered[i:i + batch_size]
-        texts = [c["text"][:512] for c in batch]  # GLiNER works best on shorter text
+    def flush_pending() -> None:
+        """Run GLiNER on the pending batch and append extracted entities."""
+        if not pending:
+            return
+        texts = [c["text"][:512] for c in pending]  # GLiNER works best on shorter text
         try:
             batch_results = model.batch_predict_entities(
                 texts, labels, threshold=min_confidence, flat_ner=True,
             )
-            for chunk, entities in zip(batch, batch_results):
-                for ent in entities:
-                    v2_type = label_map.get(ent["label"], ent["label"])
-                    all_entities.append(Entity(
-                        entity_type=v2_type,
-                        text=ent["text"].strip(),
-                        raw_text=ent["text"],
-                        confidence=ent["score"],
-                        chunk_id=chunk["chunk_id"],
-                        source_path=chunk["source_path"],
-                        context="",
-                    ))
         except Exception as e:
-            print(f"  GLiNER batch error at {i}: {e}")
+            print(f"  GLiNER batch error at scanned={scanned:,}: {e}")
+            pending.clear()
+            return
+        for chunk, entities in zip(pending, batch_results):
+            for ent in entities:
+                v2_type = label_map.get(ent["label"], ent["label"])
+                all_entities.append(Entity(
+                    entity_type=v2_type,
+                    text=ent["text"].strip(),
+                    raw_text=ent["text"],
+                    confidence=ent["score"],
+                    chunk_id=chunk["chunk_id"],
+                    source_path=chunk["source_path"],
+                    context="",
+                ))
+        pending.clear()
 
-        if (i + batch_size) % 500 == 0:
-            print(f"  GLiNER progress: {min(i+batch_size, len(filtered))}/{len(filtered)} chunks, {len(all_entities)} entities")
+    # Second streaming pass — this is the whole point of the redesign.
+    # iter_chunk_batches yields one list[dict] at a time; we keep only
+    # the current stream batch plus the GLiNER pending batch in memory.
+    for batch in iter_chunk_batches(store, batch_size=stream_batch_size, limit=limit):
+        for chunk in batch:
+            scanned += 1
+            if not _is_tier2_candidate(chunk, min_chunk_len):
+                continue
+            candidates += 1
+            pending.append(chunk)
+            if len(pending) >= gliner_batch_size:
+                flush_pending()
+        # Progress log cadence — per-batch, not per-chunk
+        if progress_every and scanned % progress_every < stream_batch_size:
+            print(
+                f"  GLiNER progress: scanned {scanned:,}, "
+                f"candidates {candidates:,}, entities {len(all_entities):,}"
+            )
+
+    # Drain any remainder
+    flush_pending()
+
+    print(
+        f"  Tier 2 filter: {scanned:,} scanned -> {candidates:,} candidates "
+        f"({scanned - candidates:,} skipped by filter)"
+    )
 
     return all_entities
 
@@ -252,6 +367,8 @@ def main() -> None:
                        help="Benchmark GLiNER CPU vs GPU on 1000 chunks.")
     parser.add_argument("--dry-run", action="store_true", help="Count only, don't write.")
     args = parser.parse_args()
+
+    t0 = time.perf_counter()
 
     config = load_config(args.config)
     store = LanceStore(str(V2_ROOT / config.paths.lance_db))
@@ -285,12 +402,14 @@ def main() -> None:
     event_parser = EventBlockParser(part_patterns=config.extraction.part_patterns)
     rel_extractor = RegexRelationshipExtractor()
 
-    seen = set()
-    unique_t1 = []
-    seen_rels = set()
-    unique_rels = []
+    seen: set = set()
+    unique_t1: list[Entity] = []
+    seen_rels: set = set()
+    unique_rels: list[Relationship] = []
     chunks_processed = 0
-    all_chunks_for_tier2 = [] if args.tier >= 2 else None
+    # Hit-set is all we carry across to Tier 2. Never the chunks themselves —
+    # that's what blew up RAM to 57 GB in the old design (see module docstring).
+    tier1_hit_chunk_ids: set[str] = set()
 
     for batch in iter_chunk_batches(store, batch_size=10000, limit=args.limit):
         for chunk in batch:
@@ -302,11 +421,15 @@ def main() -> None:
             block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
             co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
 
+            chunk_had_hit = False
             for e in entities + block_entities:
                 key = (e.chunk_id, e.entity_type, e.text)
                 if key not in seen:
                     seen.add(key)
                     unique_t1.append(e)
+                    chunk_had_hit = True
+            if chunk_had_hit:
+                tier1_hit_chunk_ids.add(cid)
 
             for r in block_rels + co_rels:
                 key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
@@ -320,17 +443,12 @@ def main() -> None:
         print(f"  Tier 1: {chunks_processed:,} / {total_chunks:,} chunks "
               f"({rate:,.0f} chunks/sec, {len(unique_t1):,} entities, {len(unique_rels):,} rels)")
 
-        # Keep chunks in memory only if Tier 2 needs them
-        if all_chunks_for_tier2 is not None:
-            all_chunks_for_tier2.extend(batch)
-
     t1_elapsed = time.perf_counter() - t1_start
 
-    tier1_chunk_ids = {e.chunk_id for e in unique_t1}
     from collections import Counter
     t1_types = Counter(e.entity_type for e in unique_t1)
     t1_preds = Counter(r.predicate for r in unique_rels)
-    print(f"  [TIER 1] {len(unique_t1):,} entities from {len(tier1_chunk_ids):,} chunks ({t1_elapsed:.2f}s)")
+    print(f"  [TIER 1] {len(unique_t1):,} entities from {len(tier1_hit_chunk_ids):,} chunks ({t1_elapsed:.2f}s)")
     print(f"           Types: {dict(t1_types)}")
     print(f"           Rels:  {len(unique_rels):,} -- {dict(t1_preds)}")
     print(f"           Rate: {chunks_processed/max(t1_elapsed, 0.001):,.0f} chunks/sec")
@@ -339,33 +457,32 @@ def main() -> None:
     all_entities = list(unique_t1)
     all_rels = list(unique_rels)
 
-    # --- Tier 2: GLiNER ---
+    # --- Tier 2: GLiNER (second streaming pass over the store) ---
     if args.tier >= 2:
-        if all_chunks_for_tier2 is None or len(all_chunks_for_tier2) == 0:
-            print("  [TIER 2] No chunks available for GLiNER (streaming mode). Re-loading for Tier 2...")
-            all_chunks_for_tier2 = load_chunks(store, limit=args.limit)
-        print(f"  [TIER 2] GLiNER extraction on {len(all_chunks_for_tier2):,} chunks...")
+        print(f"  [TIER 2] GLiNER extraction via second streaming pass...")
         t2_start = time.perf_counter()
         tier2_entities = run_tier2_gliner(
-            chunks=all_chunks_for_tier2,
-            tier1_chunk_ids=tier1_chunk_ids,
+            store=store,
+            tier1_hit_chunk_ids=tier1_hit_chunk_ids,
             device=config.extraction.gliner_device,
             model_name=config.extraction.gliner_model,
             min_chunk_len=config.extraction.gliner_min_chunk_len,
             min_confidence=config.extraction.min_confidence,
-            max_concurrent=config.extraction.max_concurrent,
+            limit=args.limit,
         )
         t2_elapsed = time.perf_counter() - t2_start
 
-        # Dedup
+        # Dedup against the cross-tier seen set
+        new_t2_count = 0
         for e in tier2_entities:
             key = (e.chunk_id, e.entity_type, e.text)
             if key not in seen:
                 seen.add(key)
                 all_entities.append(e)
+                new_t2_count += 1
 
         t2_types = Counter(e.entity_type for e in tier2_entities)
-        print(f"  [TIER 2] {len(tier2_entities):,} entities ({t2_elapsed:.1f}s)")
+        print(f"  [TIER 2] {len(tier2_entities):,} entities raw, {new_t2_count:,} new after dedup ({t2_elapsed:.1f}s)")
         print(f"           Types: {dict(t2_types)}")
         print()
 
