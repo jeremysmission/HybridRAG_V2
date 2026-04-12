@@ -2385,5 +2385,1465 @@
     },
     "has_ground_truth": false,
     "corpus_grounding_evidence": "A001 has 5 dated CAPs confirmed; A002 has 21 site-specific MSR folders confirmed. Intersection sites exist but require retrieval to correlate."
+  },
+  {
+    "query_id": "PQ-211",
+    "user_input": "What was the enterprise program weekly hours variance for the week ending 2024-11-22?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-11/2024-11-22 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "difficulty": "easy",
+    "rationale": "Dated spreadsheet lookup on a recurring PM artifact. Validates TABULAR retrieval against week-of-year filenames.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-11-22"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: mine_query_anchors.py folders --like '%10.0 Program Management%' hit 2024-11-22 enterprise program Weekly Hours Variance.xlsx with 14,251 entity mentions."
+  },
+  {
+    "query_id": "PQ-212",
+    "user_input": "Show me the enterprise program weekly hours variance report for the week of 2024-11-29.",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-11-29 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "difficulty": "easy",
+    "rationale": "Cross-month variance lookup — file is physically stored under 2024-12 subfolder despite a Nov date. Tests that retrieval does not over-rely on folder-name month tokens.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-11-29"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: mine_query_anchors.py folders --like '%10.0 Program Management%' confirmed 2024-11-29 enterprise program Weekly Hours Variance.xlsx lives in the 2024-12 subfolder (14,430 entity mentions)."
+  },
+  {
+    "query_id": "PQ-213",
+    "user_input": "What does the 2025-01-10 enterprise program Weekly Hours Variance report show?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2025/2025-01-10 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "difficulty": "easy",
+    "rationale": "First January 2025 variance artifact; tests that the 2025 year-folder is reachable from a direct date query.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-01-10"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe confirmed 2025-01-10 enterprise program Weekly Hours Variance.xlsx (9,369 entity mentions)."
+  },
+  {
+    "query_id": "PQ-214",
+    "user_input": "Where do I find the enterprise program FEP monthly actuals reference spreadsheets?",
+    "reference": "10.0 Program Management/1.0 FEP/Reference/ contains the enterprise program FEP monthly actuals spreadsheets, named 'YYYY MM Monthly Actuals.xlsx' — confirmed files exist for 2024-02 through 2025-01.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 02 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2025 01 Monthly Actuals.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/1.0 FEP/Reference/%Monthly Actuals%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Folder-structure discovery question. Validates that retrieval can surface the FEP reference root from a plain-English query without a specific date.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 12 Monthly Actuals.xlsx files (2024-02..2025-01) all under 10.0 Program Management/1.0 FEP/Reference/."
+  },
+  {
+    "query_id": "PQ-215",
+    "user_input": "What is contract 47QFRA22F0009 and what period of performance does it cover?",
+    "reference": "Contract 47QFRA22F0009 is the legacy GSA/FEDSIM enterprise program contract. Folder naming under 5.0 Logistics/Procurement/002 - Received and 1.5 enterprise program CDRLS confirms it covers the monitoring system Sustainment Base Year (1 Aug 22 - 31 Jul 23) and Option Year 1 (1 Aug 23 - 31 Jul 24), through mid-2025 A027 deliverables.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report/A027- Cybersecurity Assessment Test Report-RHEL 8 legacy monitoring system/47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2025/47QFRA22F0009_IGSI-2553_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_July-2025.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%47QFRA22F0009%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Contract identifier lookup. The 13-character structured ID is a stable FTS anchor and real deliverables embed it directly in filenames.",
+    "expected_anchor_entities": {
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%A027%' returned filenames prefixed 47QFRA22F0009_IGSI-2891 (4,528 mentions) and 47QFRA22F0009_IGSI-2553 (2,545 mentions)."
+  },
+  {
+    "query_id": "PQ-216",
+    "user_input": "What deliverables are being submitted under contract FA881525FB002?",
+    "reference": "Contract FA881525FB002 is the current Air Force enterprise program sustainment contract. Confirmed monthly A027 ACAS scan deliverables under it include IGSCC-529 (October 2025 monitoring system), IGSCC-532 (January 2026 monitoring system), and IGSCC-533 (February 2026 monitoring system).",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2025/FA881525FB002_IGSCC-529_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_October-2025.xlsx",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2026/FA881525FB002_IGSCC-532_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_January-2026.xlsx",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2026/FA881525FB002_IGSCC-533_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_February-2026.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%FA881525FB002%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Contract-to-deliverable mapping. Contract IDs are the most stable structured anchor for PM compliance tracking.",
+    "expected_anchor_entities": {
+      "CONTRACT": [
+        "FA881525FB002"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%A027%' returned three FA881525FB002-prefixed files (IGSCC-529/532/533) plus ACAS scan artifacts."
+  },
+  {
+    "query_id": "PQ-217",
+    "user_input": "What is the period of performance for monitoring system Sustainment OY2?",
+    "reference": "monitoring system Sustainment OY2 (Option Year 2) runs 1 Aug 24 through 31 Jul 25, per the 5.0 Logistics/Procurement/002 - Received folder naming convention.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%monitoring system Sustainment OY2%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Contract period of performance embedded directly in the procurement folder name. Tests plain-English lookup of dated contract periods.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folder name '5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)' surfaced by procurement probe."
+  },
+  {
+    "query_id": "PQ-218",
+    "user_input": "When did the monitoring system Sustainment Base Year start and end?",
+    "reference": "monitoring system Sustainment Base Year runs 1 Aug 22 through 31 Jul 23, per the 5.0 Logistics/Procurement/002 - Received folder naming convention.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment Base Year (1 Aug 22 - 31 Jul 23)/"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%monitoring system Sustainment Base Year%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Base year period lookup. Folder-name PoP encoding is stable across the procurement archive.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folder name '5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment Base Year (1 Aug 22 - 31 Jul 23)' surfaced by procurement probe."
+  },
+  {
+    "query_id": "PQ-219",
+    "user_input": "What is the date range for the monitoring system Sustainment New Base Year contract period?",
+    "reference": "monitoring system Sustainment New Base Year runs 1 Aug 25 through 31 Jul 26, per the 5.0 Logistics/Procurement/002 - Received folder naming convention.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%monitoring system Sustainment NEW BASE YR%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Current-period lookup. Used by PMs to anchor invoices, POs, and deliverable counts to the live contract period.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folder name '5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)' surfaced by procurement probe."
+  },
+  {
+    "query_id": "PQ-220",
+    "user_input": "Show me the enterprise program weekly hours variance report for 2024-12-06.",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-06 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "difficulty": "easy",
+    "rationale": "Mid-December variance snapshot. TABULAR smoke test against a recurring weekly artifact.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-12-06"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe confirmed 2024-12-06 enterprise program Weekly Hours Variance.xlsx (14,684 entity mentions)."
+  },
+  {
+    "query_id": "PQ-221",
+    "user_input": "Where are the FEP monthly actuals stored in the program management folder tree?",
+    "reference": "Under 10.0 Program Management/1.0 FEP/Reference/, named 'YYYY MM Monthly Actuals.xlsx' — one file per month, consecutive from 2024-02 onward.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 02 Monthly Actuals.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/1.0 FEP/Reference/%Monthly Actuals%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Tests that retrieval returns a folder-structure answer, not an individual record, for discovery-shaped questions.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 2024 02..2025 01 Monthly Actuals.xlsx under FEP/Reference."
+  },
+  {
+    "query_id": "PQ-222",
+    "user_input": "How many enterprise program weekly hours variance reports are filed under the 2024-12 subfolder?",
+    "reference": "Five: 2024-11-29, 2024-12-06, 2024-12-13, 2024-12-20, and 2024-12-31 enterprise program Weekly Hours Variance.xlsx (the 2024-11-29 report files under 2024-12 because its week crosses the month boundary).",
+    "reference_contexts": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-11-29 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-06 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-13 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-20 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-31 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/%enterprise program Weekly Hours Variance%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow-scope count against a single recurring artifact series. Aggregation is safe here because the count does not depend on the polluted Tier 1 entity columns.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-12-31",
+        "2024-12-20",
+        "2024-12-13",
+        "2024-12-06",
+        "2024-11-29"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned exactly five xlsx files under 2024/2024-12/."
+  },
+  {
+    "query_id": "PQ-223",
+    "user_input": "Show me the purchase order for the DMEA coax crimp kit bought from PBJ for the monitoring system installation.",
+    "reference": "PO 5000631024 (PR 3000173550) — DMEA Coax Crimp Kit monitoring system, vendor PBJ, $808.50, under the DMEA monitoring system Installation period (1 Jul 25 - 31 Dec 25).",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/PO - 5000631024, PR 3000173550 DMEA Coax Crimp Kit monitoring system(PBJ)($808.50)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5000631024%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Real SAP PO, vendor, amount, and part description all encoded in the folder name. ENTITY retrieval against the 10-digit SAP PO should return this folder first.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000631024"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: mine_query_anchors.py folders --like '%Procurement%Received%' returned 'PO - 5000631024, PR 3000173550 DMEA Coax Crimp Kit monitoring system(PBJ)($808.50)' (7,875 mentions)."
+  },
+  {
+    "query_id": "PQ-224",
+    "user_input": "What part was received on PO 5000585586 for Lualualei?",
+    "reference": "PO 5000585586 (PR 3000133844) — Pulling Tape for LLL monitoring system, vendor GRAINGER, $598.00, under monitoring system Sustainment OY2.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5000585586, PR 3000133844 Pulling Tape LLL monitoring system(GRAINGER)($598.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5000585586%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Direct PO number lookup. PO is a 10-digit FTS-friendly anchor.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000585586"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'PO - 5000585586, PR 3000133844 Pulling Tape LLL monitoring system(GRAINGER)($598.00)' (7,842 mentions)."
+  },
+  {
+    "query_id": "PQ-225",
+    "user_input": "Who supplied the FieldFox handheld RF analyzer for the Azores install and what did it cost?",
+    "reference": "PO 5000481348 (PR 3000015553) — Keysight N9913A FieldFox 4 GHz handheld RF analyzer, vendor Newark, $14,714.00, under the Azores monitoring system Install.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/Azores monitoring system Install/PO - 5000481348, PR 3000015553 Field Fox Azores(Newark)($14,714.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5000481348%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Part + vendor + cost are all in the folder name; retrieval must pick up the Keysight N9913A detail from the child PDFs.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000481348"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'PO - 5000481348, PR 3000015553 Field Fox Azores(Newark)($14,714.00)' with child files 'N9913A FieldFox Handheld RF Analyzer, 4 GHz _ Keysight.pdf' (768 mentions)."
+  },
+  {
+    "query_id": "PQ-226",
+    "user_input": "What did we buy from Dell for the Niger legacy monitoring system installation?",
+    "reference": "PO 5000381112 (PR 31417075, contract charge 15978754) — Niger Dell Server, vendor Dell, $8,458.72, under the Niger legacy monitoring system Installation.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/Niger legacy monitoring system Installation/PO - 5000381112, PR - 31417075, C 15978754 Niger Dell Server(Dell)($8,458.72)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5000381112%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Niger-specific procurement with contract charge code. Tests plain-English vendor+site lookup.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000381112"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'PO - 5000381112, PR - 31417075, C 15978754 Niger Dell Server(Dell)($8,458.72)' under Niger legacy monitoring system Installation."
+  },
+  {
+    "query_id": "PQ-227",
+    "user_input": "What work was performed under PO 5000516535 for Guam?",
+    "reference": "PO 5000516535 (PR 3000055109) — Guam ECU Repair by vendor Area51, $2,700.00, under monitoring system Sustainment OY1 (1 Aug 23 - 31 Jul 24).",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY1 (1 Aug 23 - 31 Jul 24)/PO - 5000516535, PR 3000055109 Guam ECU Repair(Area51)($2,700.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5000516535%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Repair-service PO lookup. Tests retrieval against non-parts procurement where the folder name carries the full service description.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000516535"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'PO - 5000516535, PR 3000055109 Guam ECU Repair(Area51)($2,700.00)' under monitoring system Sustainment OY1."
+  },
+  {
+    "query_id": "PQ-228",
+    "user_input": "What was the monitoring system wire assembly purchase order from TCI?",
+    "reference": "PO 5000391156 (PR 31421391, contract charge 16007867) — monitoring system Wire Assembly, vendor TCI, $4,000.00, under monitoring system Sustainment Base Year (1 Aug 22 - 31 Jul 23).",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment Base Year (1 Aug 22 - 31 Jul 23)/PO - 5000391156, PR 31421391, C 16007867 monitoring system Wire Assembly (TCI)($4,000.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5000391156%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Vendor + part + contract-period combination that cleanly maps to one folder.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000391156"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'PO - 5000391156, PR 31421391, C 16007867 monitoring system Wire Assembly (TCI)($4,000.00)' under monitoring system Sustainment Base Year."
+  },
+  {
+    "query_id": "PQ-229",
+    "user_input": "Who supplied the BNC male connectors for monitoring system in OY1?",
+    "reference": "PO 5000474490 (PR 3000009504) — BNC Male Connector Crimp/Solder Attachments for monitoring system, vendor PBJ, $540.00, under monitoring system Sustainment OY1.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY1 (1 Aug 23 - 31 Jul 24)/PO - 5000474490, PR 3000009504 Connectors monitoring system(PBJ)($540.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5000474490%"
+    ],
+    "difficulty": "easy",
+    "rationale": "BNC connector PO with datasheet-naming child file. Part number tokens LMR-195 appear in child filenames.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000474490"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'PO - 5000474490, PR 3000009504 Connectors monitoring system(PBJ)($540.00)' with child 'BNC Male Connector Crimp_Solder Attachm...195, LMR-195, .pdf'."
+  },
+  {
+    "query_id": "PQ-230",
+    "user_input": "Show the PO for the Megger 1000-526 replacement 4-wire lead set.",
+    "reference": "PO 5000470642 (PR 3000008486) — Megger 1000-526 Replacement 4-Wire Lead Set for Model DET4TD2, vendor PBJ, $495.00, under monitoring system Sustainment OY1.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY1 (1 Aug 23 - 31 Jul 24)/PO - 5000470642, PR 3000008486 Megger Wires monitoring system(PBJ)($495.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5000470642%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Tests that retrieval can bridge an operator-typed natural-part-name ('Megger 1000-526') to the structured folder PO.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000470642"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'PO - 5000470642, PR 3000008486 Megger Wires monitoring system(PBJ)($495.00)' with child 'Megger 1000-526 Replacement 4-Wire Lead Set for Model DET4TD2.pdf'."
+  },
+  {
+    "query_id": "PQ-231",
+    "user_input": "What was purchase order 7201021236 used for?",
+    "reference": "PO 7201021236 (customer charge 15911945) — Milwaukee 18V DC cordless drill set for the Okinawa installation, vendor Grainger, $487.67.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/Okinawa Installation/PO - 7201021236, C 15911945 Okinawa Drill Set (Grainger)($487.67)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%7201021236%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Non-5/7xxx SAP pattern (starts with 72) — tests that retrieval does not hardcode the 10-digit leading-5/7 assumption.",
+    "expected_anchor_entities": {
+      "PO": [
+        "7201021236"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'PO - 7201021236, C 15911945 Okinawa Drill Set (Grainger)($487.67)' under Okinawa Installation."
+  },
+  {
+    "query_id": "PQ-232",
+    "user_input": "What is the Micro Precision calibration purchase order under the current sustainment year?",
+    "reference": "PO 5300163657 (PR 3000179491) — Calibration services from Micro Precision, $12,720.00, under monitoring system Sustainment New Base Year (1 Aug 25 - 31 Jul 26).",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/PO - 5300163657, PR 3000179491 Calibration (Micro Precision)($12,720.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5300163657%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Services-not-parts procurement lookup, with quotation attachment in the folder.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5300163657"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'PO - 5300163657, PR 3000179491 Calibration (Micro Precision)($12,720.00)' with child 'PBJ-Q-080625-CS-19 Mar 26.pdf'."
+  },
+  {
+    "query_id": "PQ-233",
+    "user_input": "What is PO 5300168230 and when was it processed?",
+    "reference": "PO 5300168230 (PR 3000187517) — Soldering material cartridge chisels, filed under 5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/, processed document dated 11-24-2025.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300168230, PR 3000187517 Cartridge Chisels/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5300168230%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Tests retrieval into the Open Purchases tree, which is structured differently from 002 - Received.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5300168230"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300168230, PR 3000187517 Cartridge Chisels/' with child 'PO 5300168230 - 11.24.2025 - Lines 1-7 (P).pdf'."
+  },
+  {
+    "query_id": "PQ-234",
+    "user_input": "Show me the monitoring system packing list for the 2026-03-09 Ascension Mil-Air return shipment.",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_03_09 - Ascension Return (Mil-Air)/NG Packing List - Ascension (Return).xlsx"
+    ],
+    "difficulty": "easy",
+    "rationale": "Dated Mil-Air return shipment lookup. Packing list is the canonical artifact type.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Ascension"
+      ],
+      "DATE": [
+        "2026-03-09"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '5.0 Logistics/Shipments/2026 - Shipments/Ascension/2026_03_09 - Ascension Return (Mil-Air)' (8,395 mentions)."
+  },
+  {
+    "query_id": "PQ-235",
+    "user_input": "When did the August 2025 Wake Mil-Air outbound shipment happen?",
+    "reference": "2025-08-19, packing list NG Packing List_Wake-NEXION_2025-10 (Mil-Air).xlsx under 5.0 Logistics/Shipments/2025 - Shipments/Wake/2025_08_19 - Wake (Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Wake/2025_08_19 - Wake (Mil-Air)/NG Packing List_Wake-NEXION_2025-10 (Mil-Air).xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Wake/2025_08_19 - Wake (Mil-Air)/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Shipment lookup by site + month, with date correlating to the structured folder-name prefix.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Wake"
+      ],
+      "DATE": [
+        "2025-08-19"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '2025 - Shipments/Wake/2025_08_19 - Wake (Mil-Air)' (8,101 mentions)."
+  },
+  {
+    "query_id": "PQ-236",
+    "user_input": "Which Fairford shipments occurred in August 2025?",
+    "reference": "Two: 2025-08-25 Fairford outbound (NG Com) and 2025-08-28 Fairford return (Mil-Air Com).",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Fairford/2025_08_25 - Fairford (NG Com)/NG Packing List - Fairford.xlsx",
+      "5.0 Logistics/Shipments/2025 - Shipments/Fairford/2025_08-28 - Fairford Return Shipment (Mil-Air Com)/Return to NG Packing List_Fairford_2025-08.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Fairford/2025_08%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow-scope AGGREGATE over a single site and month. Safe because it counts folders, not polluted Tier 1 entities.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Fairford"
+      ],
+      "DATE": [
+        "2025-08-25",
+        "2025-08-28"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned exactly two Fairford 2025-08 shipment folders (outbound + return)."
+  },
+  {
+    "query_id": "PQ-237",
+    "user_input": "How many LLL (Lualualei) shipments happened in March-April 2025?",
+    "reference": "Two: 2025-03-27 LLL outbound (NG Com) and 2025-04-10 LLL return (NG Com).",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2025 - Shipments/LLL/2025_03_27 - LLL Com(NG)/LLL Packing List.xlsx",
+      "5.0 Logistics/Shipments/2025 - Shipments/LLL/2025_04_10 - LLL Return Com(NG)/LLL Packing List_Return.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2025 - Shipments/LLL/2025_0[34]%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Site-abbreviation (LLL) test. LLL = Lualualei — retrieval should bridge both forms.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Lualualei"
+      ],
+      "DATE": [
+        "2025-03-27",
+        "2025-04-10"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned exactly two LLL shipment folders in 2025_03/2025_04."
+  },
+  {
+    "query_id": "PQ-238",
+    "user_input": "When did the May 2025 Misawa return shipment happen?",
+    "reference": "2025-05-06, Mil-Air return, under 5.0 Logistics/Shipments/2025 - Shipments/Misawa/2025_05_06 - Misawa Return (Mil-Air)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Misawa/2025_05_06 - Misawa Return (Mil-Air)/NG Packing List - Return.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Misawa/2025_05_06%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single-site single-date shipment confirmation. Clean ENTITY-type retrieval.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Misawa"
+      ],
+      "DATE": [
+        "2025-05-06"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '2025 - Shipments/Misawa/2025_05_06 - Misawa Return (Mil-Air)' (8,056 mentions)."
+  },
+  {
+    "query_id": "PQ-239",
+    "user_input": "Where do I find the transmitter oscillator tuning instructions?",
+    "reference": "19.0_Work_Notes/Field Engineering/Oscillator Tuning/ — current version is TransmitterOscillatorTuning_Instructions-Ver_8.pdf.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/Oscillator Tuning/Archive/TransmitterOscillatorTuning_Instructions-Ver_8.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/Oscillator Tuning/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Most-recent-work-note lookup. FE persona's most frequent query shape.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Field Engineering%' returned TransmitterOscillatorTuning_Instructions-Ver_8.pdf (19 mentions)."
+  },
+  {
+    "query_id": "PQ-240",
+    "user_input": "What is the latest revision of the monitoring system ASV procedures document?",
+    "reference": "monitoring system-ASV-Procedures_11.5.25.docx under 19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/. Older revisions (9.23.25, 10.20.25, Rev-5_7-Oct-2024) live in the _Archive subfolder.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/monitoring system-ASV-Procedures_11.5.25.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/monitoring system ASV Procedures/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Revision-discovery query. Tests that retrieval favors the live version over the _Archive versions.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned monitoring system-ASV-Procedures_11.5.25.docx in the live folder and _10.20.25/_9.23.25/_Rev-5_7-Oct-2024 in _Archive."
+  },
+  {
+    "query_id": "PQ-241",
+    "user_input": "Where is the legacy monitoring system autodialer programming and verification guide?",
+    "reference": "19.0_Work_Notes/Field Engineering/Autodialer Programming and Verification/legacy monitoring system Autodialer Programming and Verification Guide.docx. A monitoring system companion guide lives in the same folder.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/Autodialer Programming and Verification/legacy monitoring system Autodialer Programming and Verification Guide.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/Autodialer Programming and Verification/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Program-specific work-note lookup. Checks that legacy monitoring system vs monitoring systems distinction is preserved in retrieval ranking.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned both 'legacy monitoring system Autodialer Programming and Verification Guide.docx' and 'monitoring system Autodialer Programming and Verification Guide.docx' (8 mentions each)."
+  },
+  {
+    "query_id": "PQ-242",
+    "user_input": "Are there work notes for BOMGAR?",
+    "reference": "Yes — 19.0_Work_Notes/Field Engineering/BOMGAR/UPDATE - BOMGAR Work Notes.docx.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/BOMGAR/UPDATE - BOMGAR Work Notes.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/BOMGAR/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Yes/no document existence query. BOMGAR is a remote-support tool and is a reasonable FE lookup.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'UPDATE - BOMGAR Work Notes.docx' (6 mentions)."
+  },
+  {
+    "query_id": "PQ-243",
+    "user_input": "What is the current Fieldfox cable analyzer work note revision?",
+    "reference": "Revision 5 — Fieldfox-Work-Note_Rev-5.docx under 19.0_Work_Notes/Field Engineering/Cable Analyzers/. A DRAFT_Fieldfox Work Note Rev 5.docx also exists alongside the finalized version, with Rev 4 archived.",
+    "reference_contexts": [
+      "19.0_Work_Notes/Field Engineering/Cable Analyzers/Fieldfox-Work-Note_Rev-5.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Field Engineering",
+    "expected_source_patterns": [
+      "19.0_Work_Notes/Field Engineering/Cable Analyzers/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Revision tracking across live + archive folder split. Retrieval should return the Rev 5 live file first.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned Fieldfox-Work-Note_Rev-5.docx alongside DRAFT_Fieldfox Work Note Rev 5.docx and archived Rev 4."
+  },
+  {
+    "query_id": "PQ-244",
+    "user_input": "When did the 2024 Thule ASV trip performed by FS-JD happen?",
+    "reference": "2024-08-13 thru 2024-08-23, Thule monitoring system ASV, team member FS-JD, per folder ! Site Visits/(01) Sites/Thule/2024-08-13 thru 08-23 (ASV)(FS-JD)/.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Thule/2024-08-13 thru 08-23 (ASV)(FS-JD)/Packing List/NG Packing List_Thule-monitoring system ASV_2024-07-17.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Thule/2024-08-13 thru 08-23 (ASV)(FS-JD)/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Team-initials-based lookup. Dated-site-visit folder structure carries date + site + visit type + team initials.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2024-08-13"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Thule%' returned '! Site Visits/(01) Sites/Thule/2024-08-13 thru 08-23 (ASV)(FS-JD)/' (7,549 mentions)."
+  },
+  {
+    "query_id": "PQ-245",
+    "user_input": "Who is assigned to the 2026 Thule ASV trip?",
+    "reference": "FS-JR is assigned to the 2026-06-18 thru 2026-08-26 Thule monitoring system ASV, per folder ! Site Visits/(01) Sites/Thule/2026-06-18 thru 08-26 (ASV)(FS-JR)/.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Thule/2026-06-18 thru 08-26 (ASV)(FS-JR)/Packing List/NG Packing List - Thule-ASV_2026-06 (Outbound).xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Thule/2026-06-18 thru 08-26 (ASV)(FS-JR)/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Forward-looking (future-dated) ASV assignment. FE persona uses this to plan travel.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2026-06-18"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '! Site Visits/(01) Sites/Thule/2026-06-18 thru 08-26 (ASV)(FS-JR)/' (8,125 mentions)."
+  },
+  {
+    "query_id": "PQ-246",
+    "user_input": "Who traveled on the January 2026 Guam ASV?",
+    "reference": "Fuierer and Randall traveled 2026-01-19 thru 2026-01-28 for the Guam ASV, per folder ! Site Visits/(01) Sites/Guam/2026-01-19 thru 01-28 (ASV)(Fuierer-Randall)/.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Guam/2026-01-19 thru 01-28 (ASV)(Fuierer-Randall)/Packing List/"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Guam/2026-01-19 thru 01-28 (ASV)(Fuierer-Randall)/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Team-pair lookup by month + site. Folder name encodes both travelers.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Guam"
+      ],
+      "DATE": [
+        "2026-01-19"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Site Visits%' returned the Fuierer-Randall Guam ASV folder (9,532 mentions on the primary packing list)."
+  },
+  {
+    "query_id": "PQ-247",
+    "user_input": "Who traveled on the May 2025 Misawa ASV?",
+    "reference": "Seagren and Claire traveled 2025-05-01 thru 2025-05-15 for the Misawa ASV, per folder ! Site Visits/(01) Sites/Misawa/2025-05-01 thru 05-15 (ASV)(Seagren-Claire)/.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Misawa/2025-05-01 thru 05-15 (ASV)(Seagren-Claire)/Packing List/NG Packing List - Return.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Misawa/2025-05-01 thru 05-15 (ASV)(Seagren-Claire)/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Site visit team lookup for a prior completed trip. ENTITY query shape.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Misawa"
+      ],
+      "DATE": [
+        "2025-05-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '! Site Visits/(01) Sites/Misawa/2025-05-01 thru 05-15 (ASV)(Seagren-Claire)/' (8,790 mentions)."
+  },
+  {
+    "query_id": "PQ-248",
+    "user_input": "Who traveled for the April 2026 Kirtland site survey?",
+    "reference": "Fuierer, Dettler, and Ogburn traveled 2026-04-06 thru 2026-04-09 for the Kirtland NM site survey, per folder ! Site Visits/(01) Sites/Kirtland/2026-04-06 thru 04-09 (Survey)(Fuierer-Dettler-Ogburn)/.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Kirtland/2026-04-06 thru 04-09 (Survey)(Fuierer-Dettler-Ogburn)/Packing List/NG Packing List - Kirtland, NM.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Kirtland/2026-04-06 thru 04-09 (Survey)(Fuierer-Dettler-Ogburn)/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Three-person team lookup. Visit type is 'Survey' not 'ASV', distinguishing it from the ASV corpus.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Kirtland"
+      ],
+      "DATE": [
+        "2026-04-06"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '! Site Visits/(01) Sites/Kirtland/2026-04-06 thru 04-09 (Survey)(Fuierer-Dettler-Ogburn)/' (8,234 mentions)."
+  },
+  {
+    "query_id": "PQ-249",
+    "user_input": "Who is traveling to Ascension in February-March 2026 for the monitoring system and legacy monitoring system ASV?",
+    "reference": "Sepp and Frank are scheduled 2026-02-22 thru 2026-03-12 for the Ascension monitoring system and legacy monitoring system ASV, per folder ! Site Visits/(01) Sites/Ascension/2026-02-22 thru 03-12 (NEXIO&legacy monitoring system-ASV)(Sepp-Frank)/.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Ascension/2026-02-22 thru 03-12 (NEXIO&legacy monitoring system-ASV)(Sepp-Frank)/Packing List/NG Packing List - Ascension (Return).xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Ascension/2026-02-22 thru 03-12%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Dual-system ASV visit (monitoring system + legacy monitoring system) to a single site. Folder name uses abbreviation 'NEXIO' (typo in real folder).",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Ascension"
+      ],
+      "DATE": [
+        "2026-02-22"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '! Site Visits/(01) Sites/Ascension/2026-02-22 thru 03-12 (NEXIO&legacy monitoring system-ASV)(Sepp-Frank)/' (8,212 mentions). Note: folder name uses 'NEXIO' not 'monitoring system'."
+  },
+  {
+    "query_id": "PQ-250",
+    "user_input": "Who was on the August 2021 Thule monitoring system ASV?",
+    "reference": "Nguyen and Womelsdorff traveled 2021-08-25 thru 2021-09-03 for the Thule monitoring system ASV, per folder ! Site Visits/(01) Sites/Thule/2021-08-25 thru 09-03 (Thule monitoring system ASV)(Nguyen-Womelsdorff)/.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Thule/2021-08-25 thru 09-03 (Thule monitoring system ASV)(Nguyen-Womelsdorff)/EEMS/NG Packing List - Tools and Consumable Items.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Thule/2021-08-25 thru 09-03%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Historical site visit lookup. Tests retrieval against the older-dated (2021) Thule visits which predate the FS-initials convention.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2021-08-25"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Thule%' returned the Nguyen-Womelsdorff 2021 Thule ASV folder (2,580 mentions)."
+  },
+  {
+    "query_id": "PQ-251",
+    "user_input": "What is deliverable IGSI-965?",
+    "reference": "IGSI-965 is the monitoring system DAA Accreditation Support Data (ACAS Scan Results) deliverable for May 2023, filed under CDRL A027.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2023/2023-May/Deliverables Report IGSI-965 monitoring system DAA Accreditation Support Data (ACAS Scan Results) (A027)/monitoring system Scan Report 2023-May.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-965%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Incident / deliverable ID lookup. IGSI-NNNN format is a reliable structured anchor for compliance queries.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-965"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%A027%' returned 'Deliverables Report IGSI-965 monitoring system DAA Accreditation Support Data (ACAS Scan Results) (A027)' (5,649 mentions)."
+  },
+  {
+    "query_id": "PQ-252",
+    "user_input": "When was deliverable IGSI-110 submitted and what did it contain?",
+    "reference": "IGSI-110 is the monitoring system ACAS Scan deliverable for November 2022, under CDRL A027 DAA Accreditation Support Data.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2022/2022-Nov/Deliverables Report IGSI-110 monitoring system Scans 2022-Nov (A027)/monitoring system Scan Report 2022-Nov.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-110%"
+    ],
+    "difficulty": "easy",
+    "rationale": "ID-plus-date query. Tests that the monitoring system Scan Report 2022-Nov is retrievable from the IGSI identifier alone.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-110"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'Deliverables Report IGSI-110 monitoring system Scans 2022-Nov (A027)' (4,728 mentions)."
+  },
+  {
+    "query_id": "PQ-253",
+    "user_input": "What contract does deliverable IGSI-2891 fall under?",
+    "reference": "IGSI-2891 is the legacy monitoring system RHEL8 Cybersecurity Assessment Test Report (CDRL A027) under contract 47QFRA22F0009.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report/A027- Cybersecurity Assessment Test Report-RHEL 8 legacy monitoring system/47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2891%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-reference test: deliverable ID should map to contract identifier via filename structure.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2891"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx' (4,528 mentions)."
+  },
+  {
+    "query_id": "PQ-254",
+    "user_input": "What does deliverable IGSI-727 cover?",
+    "reference": "IGSI-727 is the legacy monitoring system UDL Cybersecurity Assessment Test Report, filed under CDRL A027 - Cybersecurity Assessment Test Report.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report/A027 - Cybersecurity Assessment Test Report- legacy monitoring system UDL/Deliverables Report IGSI-727 legacy monitoring system UDL Cybersecurity Assessment Test Report (A027).xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-727%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Direct ID lookup against a CDRL A027 cyber assessment report.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-727"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'Deliverables Report IGSI-727 legacy monitoring system UDL Cybersecurity Assessment Test Report (A027).xlsx' (4,031 mentions)."
+  },
+  {
+    "query_id": "PQ-255",
+    "user_input": "What deliverable corresponds to the monitoring system October 2025 ACAS scan?",
+    "reference": "IGSCC-529 — DAA Accreditation Support Data ACAS Scan monitoring system October 2025, under contract FA881525FB002, CDRL A027.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2025/FA881525FB002_IGSCC-529_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_October-2025.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSCC-529%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Month-to-deliverable-ID lookup. IGSCC- prefix is distinct from IGSI- and the retrieval ranker must preserve the distinction.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSCC-529"
+      ],
+      "CONTRACT": [
+        "FA881525FB002"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'FA881525FB002_IGSCC-529_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_October-2025.xlsx' (3,894 mentions)."
+  },
+  {
+    "query_id": "PQ-256",
+    "user_input": "What is deliverable IGSCC-532?",
+    "reference": "IGSCC-532 is the DAA Accreditation Support Data ACAS Scan monitoring system January 2026 deliverable, under contract FA881525FB002, CDRL A027.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2026/FA881525FB002_IGSCC-532_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_January-2026.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSCC-532%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Recent-deliverable ID lookup. Tests retrieval of 2026 artifacts.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSCC-532"
+      ],
+      "CONTRACT": [
+        "FA881525FB002"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'FA881525FB002_IGSCC-532_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_January-2026.xlsx' (2,903 mentions)."
+  },
+  {
+    "query_id": "PQ-257",
+    "user_input": "What is the most recent monitoring system ACAS scan deliverable?",
+    "reference": "IGSCC-533 — DAA Accreditation Support Data ACAS Scan monitoring system February 2026, under contract FA881525FB002, CDRL A027.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2026/FA881525FB002_IGSCC-533_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_February-2026.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSCC-533%"
+    ],
+    "difficulty": "medium",
+    "rationale": "'Most recent' queries require retrieval to understand date recency. The February 2026 file is the latest in the 2026 subfolder as of mining time.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSCC-533"
+      ],
+      "CONTRACT": [
+        "FA881525FB002"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'FA881525FB002_IGSCC-533_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_February-2026.xlsx' (2,812 mentions) as the highest-dated file in 2026."
+  },
+  {
+    "query_id": "PQ-258",
+    "user_input": "What contract is deliverable IGSI-2553 under?",
+    "reference": "IGSI-2553 is the monitoring system DAA Accreditation Support Data ACAS Scan for July 2025, filed under contract 47QFRA22F0009, CDRL A027.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2025/47QFRA22F0009_IGSI-2553_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_July-2025.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2553%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Straddle query: July 2025 is near the 47QFRA22F0009 → FA881525FB002 contract boundary. Correct answer requires reading the filename contract prefix rather than inferring from date alone.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2553"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '47QFRA22F0009_IGSI-2553_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_July-2025.xlsx' (2,545 mentions)."
+  },
+  {
+    "query_id": "PQ-259",
+    "user_input": "What does deliverable IGSI-481 report on?",
+    "reference": "IGSI-481 is the Niger CT&E Report submitted 2022-12-13, under CDRL A027 DAA Accreditation Support Data (CT&E Report).",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (CT&E Report)/Deliverables Report IGSI-481 CT&E Report Niger (A027)/Niger CT&E Report 2022-Dec-13.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-481%"
+    ],
+    "difficulty": "medium",
+    "rationale": "CT&E (not ACAS) deliverable lookup — tests that retrieval differentiates sibling CDRL A027 subfolders.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-481"
+      ],
+      "SITE": [
+        "Niger"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned 'Deliverables Report IGSI-481 CT&E Report Niger (A027)/Niger CT&E Report 2022-Dec-13.xlsx' (3,153 mentions)."
+  },
+  {
+    "query_id": "PQ-260",
+    "user_input": "Do we have technical notes on IAVM 2020-A-0315?",
+    "reference": "Yes — IAVM 2020-A-0315 Aruba Network.pdf is filed under 3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly TCNO-IAVM/IAVM Technical Notes/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly TCNO-IAVM/IAVM Technical Notes/IAVM 2020-A-0315 Aruba Network.pdf"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%IAVM 2020-A-0315%"
+    ],
+    "difficulty": "easy",
+    "rationale": "IAVM advisory ID lookup — a structured identifier class that NetAdmins query frequently for patching context.",
+    "expected_anchor_entities": {
+      "IAVM": [
+        "2020-A-0315"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Network%' returned 'IAVM 2020-A-0315 Aruba Network.pdf' (2,383 mentions)."
+  },
+  {
+    "query_id": "PQ-261",
+    "user_input": "Is there a record of RFC-ONENET-07433 for Okinawa?",
+    "reference": "Yes — under 3.0 Cybersecurity/RFC/2022/2022-Oct-18 Okinawa RFC/, the email RE monitoring system Comm Network Permissions RFC-ONENET-07433 FECRQ0000250035.msg captures the request.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/RFC/2022/2022-Oct-18 Okinawa RFC/Jeremy/RE monitoring system Comm Network Permissions  RFC-ONENET-07433  FECRQ0000250035 (390 KB).msg"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%RFC-ONENET-07433%"
+    ],
+    "difficulty": "medium",
+    "rationale": "RFC ID lookup in an email-artifact folder. Tests retrieval against .msg files inside a dated RFC subfolder.",
+    "expected_anchor_entities": {
+      "RFC": [
+        "RFC-ONENET-07433"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned '3.0 Cybersecurity/RFC/2022/2022-Oct-18 Okinawa RFC/' containing the RFC-ONENET-07433 email (338 mentions)."
+  },
+  {
+    "query_id": "PQ-262",
+    "user_input": "Where is the 2018-10-23 Eareckson ACAS-SCAP Critical scan result stored?",
+    "reference": "3.0 Cybersecurity/ISSO/Continuous_Monitoring/legacy monitoring system/Monthly Scans/archive/2018-10/2018-10-23 Eareckson Site/ACAS-SCAP Results Critical 2018-10-23.xlsx.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/legacy monitoring system/Monthly Scans/archive/2018-10/2018-10-23 Eareckson Site/ACAS-SCAP Results Critical 2018-10-23.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/legacy monitoring system/Monthly Scans/archive/2018-10/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Historical ACAS-SCAP scan artifact lookup by site + date. Validates TABULAR retrieval into the deeply-nested archive tree.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Eareckson"
+      ],
+      "DATE": [
+        "2018-10-23"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Cybersecurity%' returned 'ACAS-SCAP Results Critical 2018-10-23.xlsx' under 2018-10/2018-10-23 Eareckson Site/ (13,682 mentions)."
+  },
+  {
+    "query_id": "PQ-263",
+    "user_input": "How many A027 ACAS scan deliverables have been issued under contract FA881525FB002?",
+    "reference": "Three confirmed as of 2026-04-12: IGSCC-529 (October 2025 monitoring system), IGSCC-532 (January 2026 monitoring system), and IGSCC-533 (February 2026 monitoring system), all under 1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2025/FA881525FB002_IGSCC-529_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_October-2025.xlsx",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2026/FA881525FB002_IGSCC-532_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_January-2026.xlsx",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2026/FA881525FB002_IGSCC-533_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_February-2026.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%FA881525FB002_IGSCC%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Canary-ready narrow aggregate: filename-prefix count, no Tier 1 entity dependency.",
+    "expected_anchor_entities": {
+      "CONTRACT": [
+        "FA881525FB002"
+      ],
+      "INCIDENT_ID": [
+        "IGSCC-529",
+        "IGSCC-532",
+        "IGSCC-533"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned exactly three FA881525FB002_IGSCC-prefixed ACAS scan files."
+  },
+  {
+    "query_id": "PQ-264",
+    "user_input": "Which IGSI-numbered deliverables fall under contract 47QFRA22F0009?",
+    "reference": "At least two confirmed by folder naming: IGSI-2553 (monitoring system DAA Accreditation July 2025 ACAS Scan) and IGSI-2891 (legacy monitoring system RHEL8 Cybersecurity Assessment Test Report). Other IGSI deliverables (IGSI-110, IGSI-481, IGSI-503, IGSI-727, IGSI-965, IGSI-966) exist in CDRL A027 subfolders without an explicit contract-number filename prefix.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2025/47QFRA22F0009_IGSI-2553_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_July-2025.xlsx",
+      "1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report/A027- Cybersecurity Assessment Test Report-RHEL 8 legacy monitoring system/47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Narrow aggregate with a correctness caveat — only files with the contract prefix in the filename are confirmed. Tests that retrieval does not over-claim.",
+    "expected_anchor_entities": {
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ],
+      "INCIDENT_ID": [
+        "IGSI-2553",
+        "IGSI-2891"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned two files with '47QFRA22F0009_IGSI-' filename prefix."
+  },
+  {
+    "query_id": "PQ-265",
+    "user_input": "List the SEMS3D-numbered documents in the CDRL A001 Site Survey deliverable corpus.",
+    "reference": "Confirmed from folder mining: SEMS3D-33018 (Loring monitoring system Site Survey, 18 Nov 16 Draft), SEMS3D-33541 (Loring monitoring system Site Survey, 1 Dec 16 Final), SEMS3D-34083 (UAE monitoring system Site Selection, 16-25 Jun 17), SEMS3D-35352 (Guam legacy monitoring system Move Site Survey), and SEMS3D-36327 (Wake Island monitoring system Site Survey). All under 1.0 enterprise program DM - Restricted/SEMS3D/A001-Site_Survey_Selection_Reports/ and parallel site-specific folders.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A001-Site_Survey_Selection_Reports/A001 - UAE Site Selection/UAE Site Selection (16-25 Jun 17)/Site Selection Report Drafts/SEMS3D-34083_NEXION Site Selection Report (CDRL A001)_UAE (16-25 Jun 2017)_Final Draft.pdf",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A001-Site_Survey_Selection_Reports/A001 - Wake Site Survey/SEMS3D-36327 Wake Island monitoring system Site Survey Report (CDRL A001).pdf",
+      "#  legacy monitoring system Sites/1_Sites/Guam/Site Survey/Drafts/SEMS3D-35352_Site Survey Report (CDRL A001) Guam legacy monitoring system Move.pdf",
+      "#  monitoring system Sites/1_Sites/2_Future Sites/Loring Maine/Loring Site Survey (October 2016)/Site Survey Report/SEMS3D-33018_Site Survey Report (CDRL A001)_Loring NEXION_18 Nov 16_Draft.pdf",
+      "#  monitoring system Sites/1_Sites/2_Future Sites/Loring Maine/Loring Site Survey (October 2016)/Site Survey Report/SEMS3D-33541_Site Survey Report (CDRL A001)_Loring NEXION_1 Dec 16_Final.pdf"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%SEMS3D-%Site%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Multi-site SEMS3D ID aggregation. Tests that retrieval spans both the 1.0 enterprise program DM/SEMS3D tree and the per-system site folders.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "SEMS3D-33018",
+        "SEMS3D-33541",
+        "SEMS3D-34083",
+        "SEMS3D-35352",
+        "SEMS3D-36327"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%A001%' returned the five confirmed SEMS3D-numbered site survey PDFs."
+  },
+  {
+    "query_id": "PQ-266",
+    "user_input": "Which shipments occurred in August 2025 to Wake and Fairford?",
+    "reference": "Three confirmed: 2025-08-19 Wake monitoring system Mil-Air outbound, 2025-08-25 Fairford NG Com outbound, and 2025-08-28 Fairford Mil-Air Com return.",
+    "reference_contexts": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Wake/2025_08_19 - Wake (Mil-Air)/NG Packing List_Wake-NEXION_2025-10 (Mil-Air).xlsx",
+      "5.0 Logistics/Shipments/2025 - Shipments/Fairford/2025_08_25 - Fairford (NG Com)/NG Packing List - Fairford.xlsx",
+      "5.0 Logistics/Shipments/2025 - Shipments/Fairford/2025_08-28 - Fairford Return Shipment (Mil-Air Com)/Return to NG Packing List_Fairford_2025-08.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Shipments/2025 - Shipments/Wake/2025_08%",
+      "5.0 Logistics/Shipments/2025 - Shipments/Fairford/2025_08%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Two-site one-month aggregation. Narrow scope stays clear of polluted entity columns.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Wake",
+        "Fairford"
+      ],
+      "DATE": [
+        "2025-08-19",
+        "2025-08-25",
+        "2025-08-28"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned one 2025_08 Wake shipment and two 2025_08 Fairford shipments."
+  },
+  {
+    "query_id": "PQ-267",
+    "user_input": "Which 2021 SEMS3D monthly scan packages exist for legacy monitoring system and monitoring system?",
+    "reference": "Four confirmed: SEMS3D-41352 (2021-Jan legacy monitoring system), SEMS3D-41724 (2021-May monitoring system), SEMS3D-41845 (2021-Jun legacy monitoring system), SEMS3D-41846 (2021-Jun monitoring system). All under 1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Jan - SEMS3D-41352/SEMS3D-41352.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-May - SEMS3D-41724/SEMS3D-41724.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Jun - SEMS3D-41845/SEMS3D-41845.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Jun - SEMS3D-41846/SEMS3D-41846.zip"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/%/Monthly Scans-POAMS/2021/%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Dual-system monthly scan aggregation. Only confirmed SEMS3D numbers from folder mining are claimed; more likely exist.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "SEMS3D-41352",
+        "SEMS3D-41724",
+        "SEMS3D-41845",
+        "SEMS3D-41846"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Cybersecurity%' returned four 2021 SEMS3D-numbered monthly scan zips under WX29 OY2-4 Continuous Monitoring."
+  },
+  {
+    "query_id": "PQ-268",
+    "user_input": "Which monitoring system sustainment POs were placed for the Azores install?",
+    "reference": "Three confirmed by folder naming: PO 5000481348 (Keysight FieldFox N9913A handheld RF analyzer from Newark, $14,714.00), PO 5000481178 (Wall Mount from PBJ, $507.00), and PO 5000483606 (Split Bolt Connector from PBJ, $1,900.00). All under 5.0 Logistics/Procurement/002 - Received/Azores monitoring system Install/.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/Azores monitoring system Install/PO - 5000481348, PR 3000015553 Field Fox Azores(Newark)($14,714.00)/",
+      "5.0 Logistics/Procurement/002 - Received/Azores monitoring system Install/PO - 5000481178, PR 3000016852 Wall Mount Azores(PBJ)($507.00)/",
+      "5.0 Logistics/Procurement/002 - Received/Azores monitoring system Install/PO - 5000483606, PR 3000010734 Split Bolt Connector(PBJ)($1,900.00)/"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "5.0 Logistics/Procurement/002 - Received/Azores monitoring system Install/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Single-install multi-PO aggregation. Anchored on folder paths, not Tier 1 PO column (which is polluted). Three POs total gives a verifiable answer.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000481348",
+        "5000481178",
+        "5000483606"
+      ],
+      "SITE": [
+        "Azores"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned exactly three PO-prefixed subfolders under 'Azores monitoring system Install/'."
+  },
+  {
+    "query_id": "PQ-269",
+    "user_input": "List all enterprise program weekly hours variance reports that cover weeks in December 2024.",
+    "reference": "Five reports — 2024-11-29, 2024-12-06, 2024-12-13, 2024-12-20, and 2024-12-31 enterprise program Weekly Hours Variance.xlsx — all filed under 10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/.",
+    "reference_contexts": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-11-29 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-06 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-13 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-20 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-31 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/%enterprise program Weekly Hours Variance%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow aggregate over a single recurring artifact series. Canary-ready; exact count and filenames are enumerable.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-11-29",
+        "2024-12-06",
+        "2024-12-13",
+        "2024-12-20",
+        "2024-12-31"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe returned exactly five xlsx files under 2024/2024-12/."
+  },
+  {
+    "query_id": "PQ-270",
+    "user_input": "How many distinct Thule site visit trips are recorded in the ! Site Visits tree?",
+    "reference": "Three confirmed distinct Thule ASV trips: 2021-08-25 thru 2021-09-03 (Nguyen-Womelsdorff), 2024-08-13 thru 2024-08-23 (FS-JD), and 2026-06-18 thru 2026-08-26 (FS-JR), all under ! Site Visits/(01) Sites/Thule/.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Thule/2021-08-25 thru 09-03 (Thule monitoring system ASV)(Nguyen-Womelsdorff)/EEMS/NG Packing List - Tools and Consumable Items.xlsx",
+      "! Site Visits/(01) Sites/Thule/2024-08-13 thru 08-23 (ASV)(FS-JD)/Packing List/NG Packing List_Thule-monitoring system ASV_2024-07-17.xlsx",
+      "! Site Visits/(01) Sites/Thule/2026-06-18 thru 08-26 (ASV)(FS-JR)/Packing List/NG Packing List - Thule-ASV_2026-06 (Outbound).xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "! Site Visits/(01) Sites/Thule/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Site-trip history aggregation. Three distinct dated trip folders are directly enumerable from folder naming; no dependence on polluted entities.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Thule"
+      ],
+      "DATE": [
+        "2021-08-25",
+        "2024-08-13",
+        "2026-06-18"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Thule%' returned three distinct '! Site Visits/(01) Sites/Thule/YYYY-MM-DD thru...' trip folders."
   }
 ]
