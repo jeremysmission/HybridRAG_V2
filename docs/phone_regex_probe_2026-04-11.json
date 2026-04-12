@@ -10,20 +10,20 @@
     "fake_rate_pct": 53.42
   },
   "new_pattern": {
-    "phone_matches": 31427,
+    "phone_matches": 31894,
     "email_matches": 2421,
-    "contact_total": 33848,
+    "contact_total": 34315,
     "part_matches": 36826,
     "date_matches": 44588
   },
   "reduction": {
-    "contact_absolute": 185071,
-    "contact_pct": 84.54
+    "contact_absolute": 184604,
+    "contact_pct": 84.33
   },
   "projection_10_4M": {
     "old_contact": 22845495,
-    "new_contact": 3532239,
-    "new_phones_only": 3279593,
+    "new_contact": 3580973,
+    "new_phones_only": 3328328,
     "new_emails_only": 252645
   },
   "sample_rejected_fakes": [

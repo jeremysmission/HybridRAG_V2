@@ -494,18 +494,30 @@ class RegexPreExtractor:
         # real phones). Two-stage match + validate is cleaner.
         #
         # Boundary guards:
-        #   (?<![\w.-]) / (?![\w.-])  — reject when a letter, digit, or
-        #   dot/dash sits right next to the candidate. Keeps us out of:
-        #     - Long digit runs: 3333333344, serial IDs, version strings
-        #     - Alphanumeric serials: ABC3043618872XYZ
-        #     - Multi-part dotted codes: 1.2.3.4.5.6.7
-        #   while still allowing normal text boundaries (space, punct,
-        #   newline, parens, colon, equals, slash).
+        #
+        #   Leading: (?<![\w.-])
+        #     Reject when a letter, digit, underscore, dot, or dash sits
+        #     immediately before the candidate. This blocks alphanumeric
+        #     serials (ABC3043618872XYZ) and matches embedded inside
+        #     dotted version/IP sequences (1.2.3.4.5552345678).
+        #
+        #   Trailing: (?!\w)(?!\.[A-Za-z0-9])(?!-\w)
+        #     Three zero-width checks; all must pass:
+        #       (?!\w)              — next char is not word char (blocks
+        #                             5552345678X and 5552345678_var)
+        #       (?!\.[A-Za-z0-9])   — not a dot followed by alphanumeric
+        #                             (blocks .example.com, .serial, .pdf)
+        #       (?!-\w)             — not a dash followed by word char
+        #                             (blocks -12345, -v2, -serial)
+        #     This allows ordinary trailing sentence punctuation (.  ,  ;
+        #     :  !  ?  newline) while still rejecting embeddings in larger
+        #     alphanumeric tokens. Round-2 QA fix — see the "Round 2 QA
+        #     fix" section of PHONE_REGEX_FIX_2026-04-11.md.
         self._phone_re = re.compile(
             r"(?<![\w.-])"
             r"(?:\+?1[\s.-]?)?"                        # optional +1 country code
             r"\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}"     # NXX-NXX-XXXX core
-            r"(?![\w.-])"
+            r"(?!\w)(?!\.[A-Za-z0-9])(?!-\w)"
         )
         self._date_re = re.compile(
             r"\b\d{4}-\d{2}-\d{2}\b"

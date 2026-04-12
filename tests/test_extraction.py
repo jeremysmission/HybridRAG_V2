@@ -192,6 +192,71 @@ class TestRegexPreExtractor:
             ]
             assert not phones, f"Leaked from repeat run {text!r}: {phones}"
 
+    def test_phone_accepts_sentence_punctuation(self, regex_extractor):
+        """Round-2 QA regression — phones followed by sentence punctuation.
+
+        Earlier boundary guard `(?![\\w.-])` rejected any phone followed by
+        a dot, which broke common prose like 'Call 555-234-5678.'. The new
+        guard `(?!\\w)(?!\\.[A-Za-z0-9])(?!-\\w)` allows trailing punctuation
+        while still rejecting embeddings in larger tokens.
+
+        CoPilot+ QA finding: 2026-04-11.
+        """
+        cases = [
+            # (input, expected phone text in top result)
+            ("Call 555-234-5678.", "555-234-5678"),
+            ("Call (555) 234-5678.", "(555) 234-5678"),
+            ("Phone: +1 555 234 5678.", "+1 555 234 5678"),
+            ("Support 555.234.5678.", "555.234.5678"),
+            ("Number is 555-234-5678, please call", "555-234-5678"),
+            ("Call 555-234-5678; thanks", "555-234-5678"),
+            ("See 555-234-5678?", "555-234-5678"),
+            ("Phone: 555-234-5678!", "555-234-5678"),
+            ("End of line 555-234-5678\n", "555-234-5678"),
+            ("555-234-5678", "555-234-5678"),  # bare, no trailing
+        ]
+        for text, expected in cases:
+            entities = regex_extractor.extract(text, "c1", "doc.txt")
+            phones = [
+                e.text for e in entities
+                if e.entity_type == "CONTACT" and "@" not in e.text
+            ]
+            assert phones, (
+                f"Sentence-punctuation regression: no phone extracted "
+                f"from {text!r}"
+            )
+            assert expected in phones, (
+                f"Expected {expected!r} in phones for {text!r}, got {phones}"
+            )
+
+    def test_phone_rejects_embedded_in_larger_tokens(self, regex_extractor):
+        """Round-2 QA regression — must not match inside larger tokens.
+
+        The trailing guard's three lookaheads block:
+          (?!\\w)             — alphanumeric suffix
+          (?!\\.[A-Za-z0-9])  — dotted alphanumeric continuation
+          (?!-\\w)            — dashed alphanumeric continuation
+        """
+        cases = [
+            "555-234-5678.example.com",
+            "555-234-5678.serial",
+            "555-234-5678-12345",
+            "555-234-5678X",
+            "doc_555-234-5678_v2",
+            "file555-234-5678.pdf",
+            "host-555-234-5678.local",
+        ]
+        for text in cases:
+            entities = regex_extractor.extract(text, "c1", "doc.txt")
+            phones = [
+                e.text for e in entities
+                if e.entity_type == "CONTACT" and "@" not in e.text
+            ]
+            assert not phones, (
+                f"Embedded-token regression: phone extracted from {text!r}: "
+                f"{phones}"
+            )
+
     def test_phone_validator_unit(self):
         """Direct unit test for RegexPreExtractor._is_valid_phone()."""
         from src.extraction.entity_extractor import RegexPreExtractor

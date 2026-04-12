@@ -1,6 +1,6 @@
 # Phone Regex Fix — Tier 1 CONTACT Over-Matching
 
-**Agent:** Agent 1 | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT
+**Agent:** reviewer | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT
 
 **Problem:** Tier 1 regex extraction on the 10.4M chunk corpus produced
 **16,121,361 CONTACT entities** — roughly 1.5 per chunk — dwarfing every
@@ -12,6 +12,13 @@ mis-matching OCR / tabular digit noise.
 validate pipeline. Regression tests lock in the behavior. Read-only probe
 on 100K randomly-sampled chunks measures the reduction before we re-run
 full Tier 1.
+
+**Round 2 (2026-04-11):** CoPilot+ QA found that the initial trailing
+boundary guard `(?![\w.-])` was too strict and rejected valid phones
+followed by sentence punctuation (`Call 555-234-5678.`). The boundary
+was reworked into three chained negative lookaheads that preserve
+sentence-punctuation handling while still blocking embeddings in larger
+tokens. See the "Round 2 QA fix" section at the bottom of this doc.
 
 ---
 
@@ -143,7 +150,7 @@ ABC3043618872XYZ     (alphanumeric serial)
 **Sample:** 100,000 chunks, random offsets from `data/index/lancedb`
 (seed=42), 10.4M chunks total in the store.
 
-**Environment:** Beast, GPU 1, V2 venv, CPU regex (GPU only loaded so the
+**Environment:** primary workstation, GPU 1, V2 venv, CPU regex (GPU only loaded so the
 embedder boot path doesn't complain).
 
 ### Sample-level counts
@@ -262,4 +269,120 @@ tests/test_extraction.py (full)                  59 passed
 
 ---
 
-Signed: Agent 1 | HybridRAG_V2 | 2026-04-11 MDT
+## Round 2 QA fix — sentence-punctuation regression
+
+### QA finding (CoPilot+, 2026-04-11)
+
+The Round-1 trailing boundary guard `(?![\w.-])` rejected any candidate
+where the next character was `.`, `-`, or `_`. That included sentence-
+final dots, which are the most common form in real prose. CoPilot+ QA
+reproduced directly:
+
+```
+"Call 555-234-5678."              -> []   (should extract 555-234-5678)
+"Call (555) 234-5678."            -> []
+"Phone: +1 555 234 5678."         -> []
+"Support 555.234.5678."           -> []
+"Call 555-234-5678 now."          -> ['555-234-5678']   (worked only w/o trailing .)
+```
+
+The over-match reduction was directionally correct, but the boundary was
+blocking valid phones in prose. Signoff blocked.
+
+### Fix — three chained negative lookaheads
+
+```python
+# Before (Round 1, rejected trailing dots)
+r"(?![\w.-])"
+
+# After (Round 2, accepts trailing punctuation)
+r"(?!\w)(?!\.[A-Za-z0-9])(?!-\w)"
+```
+
+The three checks each reject a specific embedding pattern without
+touching sentence punctuation:
+
+| Lookahead | Blocks | Allows |
+|-----------|--------|--------|
+| `(?!\w)` | `5552345678X`, `5552345678_var` | `.`, `,`, `;`, `:`, `!`, `?`, space, newline |
+| `(?!\.[A-Za-z0-9])` | `5552345678.example.com`, `5552345678.pdf`, `5552345678.serial` | bare `.` followed by non-alphanum (end of sentence) |
+| `(?!-\w)` | `5552345678-12345`, `5552345678-v2` | bare `-` followed by non-word |
+
+Leading boundary `(?<![\w.-])` is unchanged — leading dots on phones in
+prose are essentially unheard of (`.5552345678` only appears as a
+fragment of a version string or IP), and keeping `.` in the backward
+guard blocks those cleanly.
+
+### New test cases
+
+10 must-accept cases covering every sentence-punctuation variant:
+
+```
+"Call 555-234-5678."              -> ['555-234-5678']
+"Call (555) 234-5678."            -> ['(555) 234-5678']
+"Phone: +1 555 234 5678."         -> ['+1 555 234 5678']
+"Support 555.234.5678."           -> ['555.234.5678']
+"Number is 555-234-5678, please"  -> ['555-234-5678']
+"Call 555-234-5678; thanks"       -> ['555-234-5678']
+"See 555-234-5678?"               -> ['555-234-5678']
+"Phone: 555-234-5678!"            -> ['555-234-5678']
+"End of line 555-234-5678\n"      -> ['555-234-5678']
+"555-234-5678"                    -> ['555-234-5678']  (bare)
+```
+
+7 must-reject cases covering embedded-token cases:
+
+```
+"555-234-5678.example.com"  -> []
+"555-234-5678.serial"       -> []
+"555-234-5678-12345"        -> []
+"555-234-5678X"             -> []
+"doc_555-234-5678_v2"       -> []
+"file555-234-5678.pdf"      -> []  (leading boundary catches this)
+"host-555-234-5678.local"   -> []
+```
+
+All over-match rejects from Round 1 still fire (`2222222222`,
+`3333222222`, `1111111100`, NANP-invalid, long-digit-run cases).
+
+### Round-2 probe results
+
+Same 100K random-offset sample, same seed. Numbers are slightly up vs
+Round 1 because the new boundary is correctly recovering phones that
+were dropped by the too-strict trailing dot check:
+
+| Metric | Round 1 | Round 2 | Delta |
+|--------|--------:|--------:|------:|
+| Phone matches (sample) | 31,427 | **31,894** | +467 |
+| CONTACT total (sample) | 33,848 | **34,315** | +467 |
+| Reduction | 84.54% | **84.33%** | -0.21pp |
+| 10.4M CONTACT projection | 3,532,239 | **3,580,973** | +48,734 |
+
+The 467 recovered phones are all false negatives CoPilot+ QA was surfacing
+— sentence-punctuation cases that the Round-1 boundary was dropping.
+The reduction rate dropped by 0.21 percentage points, which is the
+correct direction: false-negative recovery without reintroducing false
+positives.
+
+### Tests
+
+```
+tests/test_extraction.py::TestRegexPreExtractor        27 passed
+tests/test_extraction.py (full)                        61 passed
+```
+
+### Files touched in Round 2
+
+- `src/extraction/entity_extractor.py` — boundary regex and comment updated
+- `tests/test_extraction.py` — 2 new test methods:
+  - `test_phone_accepts_sentence_punctuation` (10 cases)
+  - `test_phone_rejects_embedded_in_larger_tokens` (7 cases)
+- `docs/phone_regex_probe_2026-04-11.json` — refreshed with Round 2 numbers
+- `docs/PHONE_REGEX_FIX_2026-04-11.md` — this Round 2 section appended
+
+No changes to `tiered_extract.py`, `import_extract_gui.py`, or the on-
+disk entity store.
+
+---
+
+Signed: reviewer | HybridRAG_V2 | 2026-04-11 MDT

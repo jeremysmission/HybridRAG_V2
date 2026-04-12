@@ -1,5 +1,5 @@
 """
-Phone Regex Fix Probe - Agent 1 - 2026-04-11
+Phone Regex Fix Probe - reviewer - 2026-04-11
 
 Reads N chunks from the live 10.4M LanceDB store and runs the Tier 1 regex
 extraction with the OLD phone pattern and the NEW phone pattern side by
@@ -57,7 +57,7 @@ def main():
         limit = int(sys.argv[i + 1])
 
     print("=" * 70)
-    print("PHONE REGEX PROBE - Agent 1 - 2026-04-11")
+    print("PHONE REGEX PROBE - reviewer - 2026-04-11")
     print("=" * 70)
 
     config = load_config(str(v2_root / "config" / "config.yaml"))
