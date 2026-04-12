@@ -289,6 +289,15 @@ class ImportExtractRunner:
                 RegexPreExtractor, EventBlockParser, RegexRelationshipExtractor,
             )
             from collections import Counter
+            # iter_chunk_batches brings in _assert_streaming_api_available
+            # at import time — any lancedb regression that drops
+            # LanceQueryBuilder.to_batches will raise loudly here, before
+            # we start a long walk-away run.
+            from scripts.tiered_extract import (
+                iter_chunk_batches,
+                _is_tier2_candidate,
+                _resolve_gliner_device,
+            )
 
             store = LS2(str(V2_ROOT / config.paths.lance_db))
             entity_store = EntityStore(str(V2_ROOT / config.paths.entity_db))
@@ -302,30 +311,61 @@ class ImportExtractRunner:
             self._set_stat("chunks_total", chunk_count)
             self._log(f"Store has {chunk_count:,} chunks")
 
-            # Stream chunks in batches (10M+ safe — never loads all into RAM)
-            from scripts.tiered_extract import iter_chunk_batches
             total_chunks = chunk_count
 
-            # Tier 1 extraction with streaming progress
+            # Tier 1: stream chunks through regex + event + relationship
+            # extractors, flush entities and relationships to their stores
+            # per-batch. No cross-batch chunk retention, no corpus-sized
+            # lists held in memory.
+            #
+            # Memory strategy (mirrors commit 8a1531b CLI fix):
+            #   - chunks: at most one stream batch resident at a time
+            #   - entities: at most one batch worth — flushed to SQLite
+            #     per iter, cross-batch dedup handled by the store's
+            #     UNIQUE(chunk_id, entity_type, text) constraint via
+            #     INSERT OR IGNORE
+            #   - tier1_hit_chunk_ids: cumulative set of chunk_ids that
+            #     produced any Tier 1 entity. Small — a few million
+            #     short strings at 10M corpus scale
+            #
+            # An earlier version of this runner accumulated every chunk
+            # into a corpus-sized list during Tier 1 so Tier 2 could
+            # filter and process it later; on a 10.4M chunk corpus that
+            # pushed laptop RAM to 57.9 GB and made walk-away unusable.
+            # Tier 2 now opens its own streaming pass over the store
+            # instead (see below). See docs/CRITICAL_PYLANCE_INSTALL_...
+            # for the related Round 3 CLI discussion.
+
             extractor = RegexPreExtractor(part_patterns=config.extraction.part_patterns)
             event_parser = EventBlockParser(part_patterns=config.extraction.part_patterns)
             rel_extractor = RegexRelationshipExtractor()
 
-            all_entities: list = []
-            all_rels: list = []
-            seen_entities: set = set()
-            seen_rels: set = set()
+            tier1_hit_chunk_ids: set[str] = set()
+            tier1_extracted_count = 0   # entities the extractor produced (pre-dedup)
+            tier1_inserted_count = 0    # new rows committed to the store (post INSERT OR IGNORE)
+            tier1_rel_extracted_count = 0
+            tier1_rel_inserted_count = 0
+            tier1_type_counter: Counter = Counter()
             chunks_processed = 0
-            all_chunks_for_tier2: list = [] if max_tier >= 2 else None
 
             t1_start = time.perf_counter()
+            stop_requested = False
 
             for batch in iter_chunk_batches(store, batch_size=10000):
                 if self._stop_event.is_set():
                     self._log(f"Stop requested at chunk {chunks_processed:,} / {total_chunks:,}")
+                    stop_requested = True
                     break
 
+                batch_entities: list[Entity] = []
+                batch_rels: list = []
+                batch_processed = 0
+
                 for chunk in batch:
+                    if self._stop_event.is_set():
+                        stop_requested = True
+                        break
+
                     text = chunk["text"]
                     cid = chunk["chunk_id"]
                     src = chunk["source_path"]
@@ -334,60 +374,87 @@ class ImportExtractRunner:
                     block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
                     co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
 
+                    chunk_hit = False
                     for e in entities + block_entities:
-                        key = (e.chunk_id, e.entity_type, e.text)
-                        if key not in seen_entities:
-                            seen_entities.add(key)
-                            all_entities.append(e)
+                        batch_entities.append(e)
+                        tier1_type_counter[e.entity_type] += 1
+                        chunk_hit = True
+                    if chunk_hit:
+                        tier1_hit_chunk_ids.add(cid)
 
                     for r in block_rels + co_rels:
-                        key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
-                        if key not in seen_rels:
-                            seen_rels.add(key)
-                            all_rels.append(r)
+                        batch_rels.append(r)
 
-                # Keep chunks for Tier 2 if needed
-                if all_chunks_for_tier2 is not None:
-                    all_chunks_for_tier2.extend(batch)
+                    batch_processed += 1
 
-                chunks_processed += len(batch)
+                # Per-batch flush to the store — this is the Tier 1
+                # memory improvement over the CLI. insert_entities uses
+                # INSERT OR IGNORE against the UNIQUE constraint so
+                # cross-batch (and cross-run) duplicates are dropped by
+                # SQLite, not by a Python set that would grow unbounded
+                # across 10M+ entities.
+                tier1_extracted_count += len(batch_entities)
+                tier1_rel_extracted_count += len(batch_rels)
+                if batch_entities:
+                    inserted_e = entity_store.insert_entities(batch_entities)
+                    tier1_inserted_count += inserted_e
+                if batch_rels:
+                    inserted_r = rel_store.insert_relationships(batch_rels)
+                    tier1_rel_inserted_count += inserted_r
+
+                # Release batch-local lists before the next stream batch
+                batch_entities = []
+                batch_rels = []
+
+                chunks_processed += batch_processed
                 self._set_progress(chunks_processed, total_chunks)
                 self._set_stat("chunks_processed", chunks_processed)
-                self._set_stat("tier1_entities", len(all_entities))
-                self._set_stat("tier1_relationships", len(all_rels))
+                self._set_stat("tier1_entities", tier1_extracted_count)
+                self._set_stat("tier1_entities_new", tier1_inserted_count)
+                self._set_stat("tier1_relationships", tier1_rel_extracted_count)
                 elapsed_t1 = time.perf_counter() - t1_start
                 rate = chunks_processed / max(elapsed_t1, 0.001)
                 self._log(
                     f"Tier 1: {chunks_processed:,} / {total_chunks:,} "
-                    f"({rate:,.0f} chunks/sec, {len(all_entities):,} entities, "
-                    f"{len(all_rels):,} rels)"
+                    f"({rate:,.0f} chunks/sec, "
+                    f"{tier1_extracted_count:,} extracted, "
+                    f"{tier1_inserted_count:,} new, "
+                    f"{tier1_rel_extracted_count:,} rels)"
                 )
 
-            t1_elapsed = time.perf_counter() - t1_start
-            t1_types = Counter(e.entity_type for e in all_entities)
-            self._log(f"Tier 1: {len(all_entities):,} entities, {len(all_rels):,} rels ({t1_elapsed:.1f}s)")
-            self._log(f"  Types: {dict(t1_types)}")
+                if stop_requested:
+                    break
 
-            # Store Tier 1 results
-            if all_entities and not self._stop_event.is_set():
-                inserted_e = entity_store.insert_entities(all_entities)
-                self._log(f"  Stored {inserted_e:,} entities")
-            if all_rels and not self._stop_event.is_set():
-                inserted_r = rel_store.insert_relationships(all_rels)
-                self._log(f"  Stored {inserted_r:,} relationships")
+            t1_elapsed = time.perf_counter() - t1_start
+            self._log(
+                f"Tier 1 complete: {tier1_extracted_count:,} entities extracted, "
+                f"{tier1_inserted_count:,} new after store dedup, "
+                f"{tier1_rel_extracted_count:,} rels ({tier1_rel_inserted_count:,} new) "
+                f"({t1_elapsed:.1f}s)"
+            )
+            self._log(f"  Types: {dict(tier1_type_counter)}")
+            self._log(f"  Tier 1 hit chunks: {len(tier1_hit_chunk_ids):,}")
 
             results["tier1"] = {
                 "status": "PASS" if not self._stop_event.is_set() else "STOPPED",
-                "entities": len(all_entities),
-                "relationships": len(all_rels),
+                "entities": tier1_extracted_count,
+                "entities_new": tier1_inserted_count,
+                "relationships": tier1_rel_extracted_count,
+                "relationships_new": tier1_rel_inserted_count,
                 "elapsed": round(t1_elapsed, 1),
             }
 
             # ---- TIER 2 GLINER EXTRACTION ----
+            #
+            # Second streaming pass over the store — does NOT consume a
+            # list from Tier 1. Mirrors run_tier2_gliner in the CLI but
+            # inlined here because the GUI runner needs fine-grained
+            # progress callbacks and stop-event checks that are easier
+            # to wire inline than through a callback-heavy helper.
             if max_tier >= 2 and not self._stop_event.is_set():
                 self._set_phase("TIER 2 GLINER")
                 self._set_progress(0, 0)
-                self._log("Starting Tier 2 GLiNER extraction...")
+                self._log("Starting Tier 2 GLiNER extraction (second streaming pass)...")
 
                 try:
                     from gliner import GLiNER
@@ -410,30 +477,22 @@ class ImportExtractRunner:
                     rel_store.close()
                     return
 
-                # Resolve device
-                resolved_device = device
-                if "cuda" in device:
-                    requested_idx = int(device.split(":")[1]) if ":" in device else 0
-                    if requested_idx >= torch.cuda.device_count():
-                        resolved_device = "cuda:0"
+                resolved_device = _resolve_gliner_device(device)
+                if resolved_device is None:
+                    results["tier2"] = {"status": "SKIPPED", "reason": "GLiNER device unresolved"}
+                    self._finish_done(results, t_start)
+                    store.close()
+                    rel_store.close()
+                    return
+
+                if "cuda" in resolved_device:
                     gpu_idx = int(resolved_device.split(":")[1]) if ":" in resolved_device else 0
                     name = torch.cuda.get_device_name(gpu_idx)
                     free, total_vram = torch.cuda.mem_get_info(gpu_idx)
                     self._set_stat("gpu_status", f"{name} ({free / 1e9:.1f} / {total_vram / 1e9:.1f} GB)")
 
-                # Use chunks collected during Tier 1 streaming, or reload if needed
-                if not all_chunks_for_tier2:
-                    self._log("Re-loading chunks for Tier 2 (not collected during Tier 1)...")
-                    from scripts.tiered_extract import load_chunks as _load_chunks
-                    all_chunks_for_tier2 = _load_chunks(store)
-
-                # Filter chunks
                 min_chunk_len = config.extraction.gliner_min_chunk_len
-                filtered = [c for c in all_chunks_for_tier2 if len(c["text"].strip()) >= min_chunk_len
-                            and sum(1 for ch in c["text"] if ch.isalpha()) / max(len(c["text"]), 1) >= 0.3]
-                self._log(f"Tier 2 filter: {len(all_chunks_for_tier2):,} → {len(filtered):,} chunks")
 
-                # Load model
                 self._log(f"Loading GLiNER model: {config.extraction.gliner_model} on {resolved_device}")
                 model = GLiNER.from_pretrained(config.extraction.gliner_model)
                 if "cuda" in resolved_device:
@@ -443,56 +502,109 @@ class ImportExtractRunner:
                 labels = ["PERSON", "ORGANIZATION", "SITE", "FAILURE_MODE", "DATE"]
                 label_map = {"PERSON": "PERSON", "ORGANIZATION": "ORG", "SITE": "SITE",
                              "FAILURE_MODE": "PART", "DATE": "DATE"}
-                t2_entities: list = []
-                batch_size = 8
+
+                tier2_entity_count = 0
+                tier2_type_counter: Counter = Counter()
+                pending: list = []
+                pending_sources: list[dict] = []
+                gliner_batch_size = 8
+
                 t2_start = time.perf_counter()
+                scanned_chunks = 0
+                candidate_chunks = 0
+                self._set_stat("phase_detail", "Streaming second pass for Tier 2 candidates")
 
-                for i in range(0, len(filtered), batch_size):
-                    if self._stop_event.is_set():
-                        self._log(f"Stop requested at GLiNER batch {i:,}")
-                        break
-
-                    batch = filtered[i:i + batch_size]
-                    texts = [c["text"][:512] for c in batch]
+                def _flush_gliner_pending():
+                    """Run GLiNER on pending + flush resulting entities to the store."""
+                    nonlocal tier2_entity_count
+                    if not pending:
+                        return
                     try:
                         batch_results = model.batch_predict_entities(
-                            texts, labels, threshold=config.extraction.min_confidence, flat_ner=True,
+                            pending, labels,
+                            threshold=config.extraction.min_confidence,
+                            flat_ner=True,
                         )
-                        for chunk, entities in zip(batch, batch_results):
-                            for ent in entities:
-                                v2_type = label_map.get(ent["label"], ent["label"])
-                                key = (chunk["chunk_id"], v2_type, ent["text"].strip())
-                                if key not in seen_entities:
-                                    seen_entities.add(key)
-                                    t2_entities.append(Entity(
-                                        entity_type=v2_type,
-                                        text=ent["text"].strip(),
-                                        raw_text=ent["text"],
-                                        confidence=ent["score"],
-                                        chunk_id=chunk["chunk_id"],
-                                        source_path=chunk["source_path"],
-                                        context="",
-                                    ))
                     except Exception as e:
-                        self._log(f"GLiNER batch error at {i}: {e}")
+                        self._log(f"GLiNER batch error at scanned={scanned_chunks:,}: {e}")
+                        pending.clear()
+                        pending_sources.clear()
+                        return
 
-                    done = min(i + batch_size, len(filtered))
-                    self._set_progress(done, len(filtered))
-                    self._set_stat("chunks_processed", done)
-                    self._set_stat("tier2_entities", len(t2_entities))
+                    batch_ents: list[Entity] = []
+                    for chunk_info, ent_list in zip(pending_sources, batch_results):
+                        for ent in ent_list:
+                            v2_type = label_map.get(ent["label"], ent["label"])
+                            batch_ents.append(Entity(
+                                entity_type=v2_type,
+                                text=ent["text"].strip(),
+                                raw_text=ent["text"],
+                                confidence=ent["score"],
+                                chunk_id=chunk_info["chunk_id"],
+                                source_path=chunk_info["source_path"],
+                                context="",
+                            ))
+                            tier2_type_counter[v2_type] += 1
+                    if batch_ents:
+                        inserted = entity_store.insert_entities(batch_ents)
+                        tier2_entity_count += inserted
+                    pending.clear()
+                    pending_sources.clear()
 
-                    if done % 500 == 0:
-                        self._log(f"GLiNER: {done:,} / {len(filtered):,}, {len(t2_entities):,} entities")
+                # Second streaming pass — same store handle, fresh iteration
+                for batch in iter_chunk_batches(store, batch_size=10000):
+                    if self._stop_event.is_set():
+                        self._log(
+                            f"Stop requested at Tier 2 scan "
+                            f"{scanned_chunks:,} / {total_chunks:,}"
+                        )
+                        break
+
+                    batch_scanned = 0
+                    for chunk in batch:
+                        if self._stop_event.is_set():
+                            break
+                        batch_scanned += 1
+                        if not _is_tier2_candidate(chunk, min_chunk_len):
+                            continue
+                        candidate_chunks += 1
+                        pending.append(chunk["text"][:512])
+                        pending_sources.append({
+                            "chunk_id": chunk["chunk_id"],
+                            "source_path": chunk["source_path"],
+                        })
+                        if len(pending) >= gliner_batch_size:
+                            _flush_gliner_pending()
+                            if self._stop_event.is_set():
+                                break
+
+                    scanned_chunks += batch_scanned
+                    self._set_progress(scanned_chunks, total_chunks)
+                    self._set_stat("chunks_processed", scanned_chunks)
+                    self._set_stat("tier2_entities", tier2_entity_count)
+                    self._set_stat(
+                        "phase_detail",
+                        f"Tier 2 candidates: {candidate_chunks:,} / scanned {scanned_chunks:,}",
+                    )
+                    self._log(
+                        f"Tier 2: scanned {scanned_chunks:,} / {total_chunks:,}, "
+                        f"{candidate_chunks:,} candidates, {tier2_entity_count:,} entities"
+                    )
+
+                # Drain any remainder before closing out Tier 2
+                if not self._stop_event.is_set():
+                    _flush_gliner_pending()
 
                 t2_elapsed = time.perf_counter() - t2_start
-
-                if t2_entities and not self._stop_event.is_set():
-                    inserted_e2 = entity_store.insert_entities(t2_entities)
-                    self._log(f"Tier 2: {len(t2_entities):,} entities stored ({t2_elapsed:.1f}s)")
+                self._log(f"Tier 2: {tier2_entity_count:,} entities ({t2_elapsed:.1f}s)")
+                self._log(f"  Types: {dict(tier2_type_counter)}")
+                self._log(f"  Scanned: {scanned_chunks:,} | Candidates: {candidate_chunks:,}")
 
                 results["tier2"] = {
                     "status": "PASS" if not self._stop_event.is_set() else "STOPPED",
-                    "entities": len(t2_entities),
+                    "entities": tier2_entity_count,
+                    "candidates": candidate_chunks,
+                    "scanned": scanned_chunks,
                     "elapsed": round(t2_elapsed, 1),
                 }
 
