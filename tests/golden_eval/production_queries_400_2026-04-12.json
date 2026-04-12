@@ -8137,7 +8137,11 @@
     "query_id": "PQ-431",
     "user_input": "Cross-reference: how many Monthly Actuals + Cumulative Outages files exist for calendar year 2021?",
     "reference": "2021 Cumulative Outages: twelve files (Jan-Dec 2021.xlsx) confirmed under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/. 2021 Monthly Actuals: none observed via folder mining (the FEP Monthly Actuals family starts at 2024 in the surfaced anchors). The two families do not overlap in 2021.",
-    "reference_contexts": [],
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesJan2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesDec2021.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/"
+    ],
     "persona": "Aggregation / Cross-role",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "Engineering",
@@ -9853,7 +9857,15 @@
     "query_id": "PQ-499",
     "user_input": "Cross-reference: how many distinct site-keyed CDRL deliverable families show up in folder mining across A001, A006, A007, A009, A027, A031, and A013?",
     "reference": "Seven A-numbered CDRL families confirmed in surfaced anchors: A001 (SPR&IP appendices, MSR, Inventory, IPT slides), A006 (Installation Acceptance Test Plan/Procedures, Spectrum Analysis), A007 (Installation Acceptance Test Report), A009 (Monthly Status Report), A013 (System Engineering Plan), A027 (Cybersecurity / RMF / ACAS / CT&E), A031 (Integrated Master Schedule). Each family has 2+ confirmed deliverables in the eval corpus queries.",
-    "reference_contexts": [],
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A001 - Corrective Action Plan (CAP)/",
+      "1.5 enterprise program CDRLS/A006 - Installation Acceptance Test Plan Procedures/",
+      "1.5 enterprise program CDRLS/A007 - Installation Acceptance Test Report/",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/",
+      "1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/",
+      "1.5 enterprise program CDRLS/A013 - System Engineering Management Plan (SEMP)/"
+    ],
     "persona": "Aggregation / Cross-role",
     "expected_query_type": "AGGREGATE",
     "expected_document_family": "CDRLs",
