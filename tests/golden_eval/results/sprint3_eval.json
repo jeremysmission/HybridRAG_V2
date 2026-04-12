@@ -893,7 +893,7 @@
     },
     {
       "query_id": "GQ-034",
-      "query": "Summarize the 2019 congressional hearing about monitoring system system failures.",
+      "query": "Summarize the 2019 congressional hearing about monitoring systems failures.",
       "expected_type": "SEMANTIC",
       "routed_type": "SEMANTIC",
       "routing_correct": true,

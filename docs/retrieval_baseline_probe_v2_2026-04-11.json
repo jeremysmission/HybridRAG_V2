@@ -1,0 +1,1992 @@
+{
+  "summary": {
+    "total_queries": 25,
+    "chunk_count": 10435593,
+    "vector_index": true,
+    "fts_index": true,
+    "embed_p50_ms": 11.0,
+    "embed_p95_ms": 12.0,
+    "vector_p50_ms": 15.4,
+    "vector_p95_ms": 33.5,
+    "fts_p50_ms": 12.6,
+    "fts_p95_ms": 27.1,
+    "hybrid_p50_ms": 13.7,
+    "hybrid_p95_ms": 30.3
+  },
+  "queries": [
+    {
+      "id": "L01",
+      "cat": "Logistics",
+      "query": "shipment status for PO 23-00685",
+      "expect": "PO/shipment doc",
+      "exact_tokens": [
+        "23-00685"
+      ],
+      "embed_ms": 11.2,
+      "vector_ms": 33.5,
+      "fts_ms": 14.6,
+      "hybrid_ms": 23.0,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29O1 (SCATS 2018278965417)(HI to NG)(ASV-Install)(2018-10-12)(99.91)\\SCATS SA 2018278965417(HI to NG)(DMI OSI).pdf",
+          "short_src": "WX29O1 (SCATS 2018278965417)(HI to NG)(ASV-Install)(2018-10-12)(99.91)/SCATS SA 2018278965417(HI to NG)(DMI OSI).pdf",
+          "score": 0.5114,
+          "preview": "CKING NO 01 94 1 50 33   19  11 783104990886 *  01 115 1 66 41   13  13 783104992731 *  01 115 1 66 41   13  13 783104992710 *  SHIPMENT IN TRANSIT AN"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2018 Completed\\2018-04-06(WX29)(SCATS SA 2018090998260)(Eglin to NG)(49.20)\\SCATS SA 2018090998260 Order-Ship Inquiry (NG to Eglin)(3 Pelican Cases).pdf",
+          "short_src": "2018-04-06(WX29)(SCATS SA 2018090998260)(Eglin to NG)(49.20)/SCATS SA 2018090998260 Order-Ship Inquiry (NG to Eglin)(3 Pelican Cases).pdf",
+          "score": 0.5268,
+          "preview": "[SECTION] NUMB ER  2018090998260    490229 B1P752H62 PHGFBJ 397H         SHIPMENT PACKAGING  TYPE NMFC CLASS NO OF  PIECES  WEIGHT DIMENSIONS   L    W"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\1.0 FEP\\Matl\\Open POs_2025-11-25.xlsx",
+          "short_src": "Matl/Open POs_2025-11-25.xlsx",
+          "score": 0.5354,
+          "preview": ", Delivery Date: 2025-11-21T00:00:00, Need to Dock - Calculated: 2025-11-21T00:00:00, Delivery Line Status: No Receipts Yet, Goods Receipt Indicator: "
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2018 Completed\\MS-HW-18-00381(NG to Guam)(Guam-ISTO)\\Guam ISTO Shipment (2018-07-30).xlsx",
+          "short_src": "MS-HW-18-00381(NG to Guam)(Guam-ISTO)/Guam ISTO Shipment (2018-07-30).xlsx",
+          "score": 18.7979,
+          "preview": "[SHEET] Diego Garcia Shipment for Guam |  |  |  |  Shipment for Guam: Item Name, : Container, : Container Dimensions (in), : Weight, : Status Shipment"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2018 Completed\\MS-HW-18-00381(NG to Guam)(Guam-ISTO)\\Guam ISTO Shipment (2018-07-26).xlsx",
+          "short_src": "MS-HW-18-00381(NG to Guam)(Guam-ISTO)/Guam ISTO Shipment (2018-07-26).xlsx",
+          "score": 18.6793,
+          "preview": "[SHEET] Diego Garcia Shipment for Guam |  |  |  |  Shipment for Guam: Item Name, : Container, : Container Dimensions (in), : Weight, : Status Shipment"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\Archive\\AFI 31-101a.doc",
+          "short_src": "Archive/AFI 31-101a.doc",
+          "score": 17.7549,
+          "preview": "will be maintained at all times from shipper to consignee.  Each container shall be checked, sealed, and locked by two agents of the shipper (in each "
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29O1 (SCATS 2018278965417)(HI to NG)(ASV-Install)(2018-10-12)(99.91)\\SCATS SA 2018278965417(HI to NG)(DMI OSI).pdf",
+          "short_src": "WX29O1 (SCATS 2018278965417)(HI to NG)(ASV-Install)(2018-10-12)(99.91)/SCATS SA 2018278965417(HI to NG)(DMI OSI).pdf",
+          "score": 0,
+          "preview": "CKING NO 01 94 1 50 33   19  11 783104990886 *  01 115 1 66 41   13  13 783104992731 *  01 115 1 66 41   13  13 783104992710 *  SHIPMENT IN TRANSIT AN"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2018 Completed\\MS-HW-18-00381(NG to Guam)(Guam-ISTO)\\Guam ISTO Shipment (2018-07-30).xlsx",
+          "short_src": "MS-HW-18-00381(NG to Guam)(Guam-ISTO)/Guam ISTO Shipment (2018-07-30).xlsx",
+          "score": 0,
+          "preview": "[SHEET] Diego Garcia Shipment for Guam |  |  |  |  Shipment for Guam: Item Name, : Container, : Container Dimensions (in), : Weight, : Status Shipment"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2018 Completed\\2018-04-06(WX29)(SCATS SA 2018090998260)(Eglin to NG)(49.20)\\SCATS SA 2018090998260 Order-Ship Inquiry (NG to Eglin)(3 Pelican Cases).pdf",
+          "short_src": "2018-04-06(WX29)(SCATS SA 2018090998260)(Eglin to NG)(49.20)/SCATS SA 2018090998260 Order-Ship Inquiry (NG to Eglin)(3 Pelican Cases).pdf",
+          "score": 0,
+          "preview": "[SECTION] NUMB ER  2018090998260    490229 B1P752H62 PHGFBJ 397H         SHIPMENT PACKAGING  TYPE NMFC CLASS NO OF  PIECES  WEIGHT DIMENSIONS   L    W"
+        }
+      ],
+      "vector_hit": false,
+      "fts_hit": false,
+      "hybrid_hit": false,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "L02",
+      "cat": "Logistics",
+      "query": "purchase order 23-00292 delivery date",
+      "expect": "PO/procurement doc",
+      "exact_tokens": [
+        "23-00292"
+      ],
+      "embed_ms": 11.0,
+      "vector_ms": 65.2,
+      "fts_ms": 18.3,
+      "hybrid_ms": 25.7,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2011 PRs\\PR 124215 (R) (Citel) (B480-T & DD9-24V Surge Suppression)\\PR 124215 (Citel) (B480-T & DD9-24V Surge Suppression) (PO250797).pdf",
+          "short_src": "PR 124215 (R) (Citel) (B480-T & DD9-24V Surge Suppression)/PR 124215 (Citel) (B480-T & DD9-24V Surge Suppression) (PO250797).pdf",
+          "score": 0.5313,
+          "preview": "Purchase Order: 250797 3of4Page:                                                                                                      Date Printed: 03"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2012 PRs\\PR 143729 (R) (Salcha-Eielson Allied Support)\\PR 143729 (SEI) (PO 263130).pdf",
+          "short_src": "PR 143729 (R) (Salcha-Eielson Allied Support)/PR 143729 (SEI) (PO 263130).pdf",
+          "score": 0.5433,
+          "preview": "Purchase Order No:263130                 Change Order No: 1 2of1Page:                                                                                 "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29O3 (PO 7200933175)(Batteries (C & D))(Grainger)($89.00)\\15484192 - BATTERIES FOR WX29 OY3.pdf",
+          "short_src": "WX29O3 (PO 7200933175)(Batteries (C & D))(Grainger)($89.00)/15484192 - BATTERIES FOR WX29 OY3.pdf",
+          "score": 0.5448,
+          "preview": "Not a Purchase Order    Internal Northrop Grumman Distribution Only Delivery date: 06/08/2021 Supplier: Company VETERANS TRADING COMPANY LLC 849 NW 24"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\1.0 FEP\\Matl\\Space Report_2025.07.28.xlsx",
+          "short_src": "Matl/Space Report_2025.07.28.xlsx",
+          "score": 26.9334,
+          "preview": "te Date: 2025-02-03T00:00:00, Changed On Date: 2025-07-25T00:00:00, Actual Release Date: 2025-07-03T00:00:00, Item Delivery Date: 2025-06-10T00:00:00,"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\1.0 FEP\\Matl\\Space Report_2025.07.28.xlsx",
+          "short_src": "Matl/Space Report_2025.07.28.xlsx",
+          "score": 24.7594,
+          "preview": "Buyer Code: MRP, Buyer Name: MRP MGMT, Req Number: 31443301, Item Number: 23, Manufacturer Name: CISCO, Short Text1: IE-3300-8T2S-ECatalyst IE3300 wit"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\1.0 FEP\\Matl\\Space Report_2025.07.28.xlsx",
+          "short_src": "Matl/Space Report_2025.07.28.xlsx",
+          "score": 24.7246,
+          "preview": "Number: 206512-5, Short Text1: CLAMP, CABLE, LARGE, SHELL SIZE 23, CPC, Buyer Notes: TTI($128,4W) PENDING SW REVIEW 7/23, Note: 7/11/25: Release Group"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2011 PRs\\PR 124215 (R) (Citel) (B480-T & DD9-24V Surge Suppression)\\PR 124215 (Citel) (B480-T & DD9-24V Surge Suppression) (PO250797).pdf",
+          "short_src": "PR 124215 (R) (Citel) (B480-T & DD9-24V Surge Suppression)/PR 124215 (Citel) (B480-T & DD9-24V Surge Suppression) (PO250797).pdf",
+          "score": 0,
+          "preview": "Purchase Order: 250797 3of4Page:                                                                                                      Date Printed: 03"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\1.0 FEP\\Matl\\Space Report_2025.07.28.xlsx",
+          "short_src": "Matl/Space Report_2025.07.28.xlsx",
+          "score": 0,
+          "preview": "te Date: 2025-02-03T00:00:00, Changed On Date: 2025-07-25T00:00:00, Actual Release Date: 2025-07-03T00:00:00, Item Delivery Date: 2025-06-10T00:00:00,"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2012 PRs\\PR 143729 (R) (Salcha-Eielson Allied Support)\\PR 143729 (SEI) (PO 263130).pdf",
+          "short_src": "PR 143729 (R) (Salcha-Eielson Allied Support)/PR 143729 (SEI) (PO 263130).pdf",
+          "score": 0,
+          "preview": "Purchase Order No:263130                 Change Order No: 1 2of1Page:                                                                                 "
+        }
+      ],
+      "vector_hit": false,
+      "fts_hit": false,
+      "hybrid_hit": false,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "L03",
+      "cat": "Logistics",
+      "query": "packing list for shipment 23-00327",
+      "expect": "shipment/packing doc",
+      "exact_tokens": [
+        "23-00327"
+      ],
+      "embed_ms": 11.1,
+      "vector_ms": 12.4,
+      "fts_ms": 12.2,
+      "hybrid_ms": 11.4,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2013 Shipping Completed\\2013-09-27 (BAH to Guam) (Baluns and Resistors)\\2013-09-27 (BAH to Guam) (FedEx Delivered).pdf",
+          "short_src": "2013-09-27 (BAH to Guam) (Baluns and Resistors)/2013-09-27 (BAH to Guam) (FedEx Delivered).pdf",
+          "score": 0.513,
+          "preview": "ist/Front Desk Total shipment  weight 23 lbs / 10.4 kgs Special handling  section Deliver Weekday Service FedEx International Priority Dimensions 13x1"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX39 (PO 7200753121)(Grainger)($143.33)\\Packing Slip 2_PO 7200753121_Rcvd 2018-12-06.pdf",
+          "short_src": "WX39 (PO 7200753121)(Grainger)($143.33)/Packing Slip 2_PO 7200753121_Rcvd 2018-12-06.pdf",
+          "score": 0.5147,
+          "preview": "[SECTION] PACKINGLIST GRAINGE R® 11111 Click:www.grainger.comICall:1-800-GRAINGER(472-4643) WWGRAINGERDC 701GRAINGERWAY MINOOKAIL60447-9998 hipToI NOR"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2018 Completed\\TO WX28-ISTO Upgrade-Ascension\\Ascension Shipment.xlsx",
+          "short_src": "TO WX28-ISTO Upgrade-Ascension/Ascension Shipment.xlsx",
+          "score": 0.5222,
+          "preview": "[SHEET] Diego Garcia Shipment for Ascension |  |  |  Shipment for Ascension: Item Name, : Container, : Container Dimensions (in), : Weight Shipment fo"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-Site_Procurement_Spreadsheet\\SEMS3D-42424 IGS WX29OY4 Procurement Spreadsheet (06012022).pdf",
+          "short_src": "A001-Site_Procurement_Spreadsheet/SEMS3D-42424 IGS WX29OY4 Procurement Spreadsheet (06012022).pdf",
+          "score": 27.5392,
+          "preview": "ETURN SHIPMENT OF DPS AND MISC ITEMS EA 1 FEDEX 9-Nov-21 PURCHASE D511-6 PLIERS, SLIP JOINT, 6-INCH EA 3 NEWARK 1 7200958646 29-Nov-21 10-Nov-21 SHIPM"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Export_Control\\dtr_part_v_515.pdf",
+          "short_src": "Export_Control/dtr_part_v_515.pdf",
+          "score": 26.497,
+          "preview": "any importation of an armored vehicle.   Contact the Theater Sustainment Command (usarmy.usag-italy.usaraf.list.mobility- mct@mail.mil) for additional"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2020_Shipments\\2020-01-15 (NG to Curacao)(MS-HW-20-0016)\\Shipping Checklist - Curacao.docx",
+          "short_src": "2020-01-15 (NG to Curacao)(MS-HW-20-0016)/Shipping Checklist - Curacao.docx",
+          "score": 23.9197,
+          "preview": "Site: \t\t\t\t\tShip Date:   Shipment Type:   EEMS HSR No.:\t\t\tTCN:   Pre-Shipment (3 Months Out)\t   Identify and purchase materials for trip   Identify mis"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2013 Shipping Completed\\2013-09-27 (BAH to Guam) (Baluns and Resistors)\\2013-09-27 (BAH to Guam) (FedEx Delivered).pdf",
+          "short_src": "2013-09-27 (BAH to Guam) (Baluns and Resistors)/2013-09-27 (BAH to Guam) (FedEx Delivered).pdf",
+          "score": 0,
+          "preview": "ist/Front Desk Total shipment  weight 23 lbs / 10.4 kgs Special handling  section Deliver Weekday Service FedEx International Priority Dimensions 13x1"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-Site_Procurement_Spreadsheet\\SEMS3D-42424 IGS WX29OY4 Procurement Spreadsheet (06012022).pdf",
+          "short_src": "A001-Site_Procurement_Spreadsheet/SEMS3D-42424 IGS WX29OY4 Procurement Spreadsheet (06012022).pdf",
+          "score": 0,
+          "preview": "ETURN SHIPMENT OF DPS AND MISC ITEMS EA 1 FEDEX 9-Nov-21 PURCHASE D511-6 PLIERS, SLIP JOINT, 6-INCH EA 3 NEWARK 1 7200958646 29-Nov-21 10-Nov-21 SHIPM"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX39 (PO 7200753121)(Grainger)($143.33)\\Packing Slip 2_PO 7200753121_Rcvd 2018-12-06.pdf",
+          "short_src": "WX39 (PO 7200753121)(Grainger)($143.33)/Packing Slip 2_PO 7200753121_Rcvd 2018-12-06.pdf",
+          "score": 0,
+          "preview": "[SECTION] PACKINGLIST GRAINGE R® 11111 Click:www.grainger.comICall:1-800-GRAINGER(472-4643) WWGRAINGERDC 701GRAINGERWAY MINOOKAIL60447-9998 hipToI NOR"
+        }
+      ],
+      "vector_hit": false,
+      "fts_hit": false,
+      "hybrid_hit": false,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "L04",
+      "cat": "Logistics",
+      "query": "DD250 form for contract delivery",
+      "expect": "DD250/deliverable doc",
+      "exact_tokens": [
+        "DD250"
+      ],
+      "embed_ms": 11.3,
+      "vector_ms": 15.4,
+      "fts_ms": 10.8,
+      "hybrid_ms": 11.1,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\ISO 9001 Documents\\ISO 9001 Docs (Purchasing) (2014-08-19)\\ES_WI-6.1.2 (Preparing SOWs).pdf",
+          "short_src": "ISO 9001 Docs (Purchasing) (2014-08-19)/ES_WI-6.1.2 (Preparing SOWs).pdf",
+          "score": 0.5578,
+          "preview": "g Services, LLC contract includes specific DD Form 250  requirements with each deliverable or at the end of the Booz Allen Hamilton Engineering Servic"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#IGSCC\\Contracts\\Mod 1\\A-1L838 IGS SSC_CSF MOD 1.xlsx",
+          "short_src": "Mod 1/A-1L838 IGS SSC_CSF MOD 1.xlsx",
+          "score": 0.5665,
+          "preview": "efix, : Contract Set Up (Header Level), : Optional Field, : Indicates DD250 Prefix that should be populated on DD250. Used by shipping and invoicing t"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\General Information\\DD Form 250 (Material Inspection and Receiving Report) (2000-08).pdf",
+          "short_src": "General Information/DD Form 250 (Material Inspection and Receiving Report) (2000-08).pdf",
+          "score": 0.577,
+          "preview": "Form Approved OMB No. 0704-0248MATERIAL INSPECTION AND RECEIVING REPORT PLEASE DO NOT RETURN YOUR COMPLETED FORM TO THE ABOVE ADDRESS. SEND THIS FORM "
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\SSC Info\\Copy of Monthly Assessment-Dec22.xlsx",
+          "short_src": "SSC Info/Copy of Monthly Assessment-Dec22.xlsx",
+          "score": 24.1474,
+          "preview": "5.2, : Receipt and review of DD250, : Final acceptance by Government by the established completion date, : Receipt and review of DD250, : 2022-12-13T0"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#IGSCC\\Contracts\\Mod 1\\A-1L838 IGS SSC_CSF MOD 1.xlsx",
+          "short_src": "Mod 1/A-1L838 IGS SSC_CSF MOD 1.xlsx",
+          "score": 23.001,
+          "preview": "Submission Method, : Select, : Branch, : Yes, : No, : PME Billing Flag, : Select : Liquidation % Rate, : ICOM Flag, : Select CONTRACT SETUP REQUEST FO"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\SSC Info\\Copy of Monthly Assessment-Dec22.xlsx",
+          "short_src": "SSC Info/Copy of Monthly Assessment-Dec22.xlsx",
+          "score": 22.962,
+          "preview": "lly completed no later than the due date., : Monthly Surveillance, : Monthly, : 2022-12-13T00:00:00, : Yes, : Risk are tracked in Monthly Status Repor"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\ISO 9001 Documents\\ISO 9001 Docs (Purchasing) (2014-08-19)\\ES_WI-6.1.2 (Preparing SOWs).pdf",
+          "short_src": "ISO 9001 Docs (Purchasing) (2014-08-19)/ES_WI-6.1.2 (Preparing SOWs).pdf",
+          "score": 0,
+          "preview": "g Services, LLC contract includes specific DD Form 250  requirements with each deliverable or at the end of the Booz Allen Hamilton Engineering Servic"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\SSC Info\\Copy of Monthly Assessment-Dec22.xlsx",
+          "short_src": "SSC Info/Copy of Monthly Assessment-Dec22.xlsx",
+          "score": 0,
+          "preview": "5.2, : Receipt and review of DD250, : Final acceptance by Government by the established completion date, : Receipt and review of DD250, : 2022-12-13T0"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#IGSCC\\Contracts\\Mod 1\\A-1L838 IGS SSC_CSF MOD 1.xlsx",
+          "short_src": "Mod 1/A-1L838 IGS SSC_CSF MOD 1.xlsx",
+          "score": 0,
+          "preview": "efix, : Contract Set Up (Header Level), : Optional Field, : Indicates DD250 Prefix that should be populated on DD250. Used by shipping and invoicing t"
+        }
+      ],
+      "vector_hit": true,
+      "fts_hit": true,
+      "hybrid_hit": true,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "L05",
+      "cat": "Logistics",
+      "query": "procurement status CLIN items on order",
+      "expect": "procurement spreadsheet",
+      "exact_tokens": null,
+      "embed_ms": 11.1,
+      "vector_ms": 18.0,
+      "fts_ms": 22.7,
+      "hybrid_ms": 20.6,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)\\PO 7000327416 (Fan Pr-Backplanes-CPU Fans) (2017-08-14) (BS).pdf",
+          "short_src": "WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)/PO 7000327416 (Fan Pr-Backplanes-CPU Fans) (2017-08-14) (BS).pdf",
+          "score": 0.5275,
+          "preview": "on for payment of the material and/or services supplied under this purchase order. The purchase order number must be on all invoices. All invoices mus"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)\\PO 7000327416 (Fan Pr-Backplanes-CPU Fans) (2017-08-14) (MK).pdf",
+          "short_src": "WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)/PO 7000327416 (Fan Pr-Backplanes-CPU Fans) (2017-08-14) (MK).pdf",
+          "score": 0.5275,
+          "preview": "on for payment of the material and/or services supplied under this purchase order. The purchase order number must be on all invoices. All invoices mus"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)\\PO 7000327416 (Fan Pr-Backplanes-CPU Fans) (2017-08-14) (Notes).pdf",
+          "short_src": "WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)/PO 7000327416 (Fan Pr-Backplanes-CPU Fans) (2017-08-14) (Notes).pdf",
+          "score": 0.5275,
+          "preview": "on for payment of the material and/or services supplied under this purchase order. The purchase order number must be on all invoices. All invoices mus"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\013 - FEP Recon\\2023\\FEP Recon 20230210.xlsx",
+          "short_src": "2023/FEP Recon 20230210.xlsx",
+          "score": 16.2061,
+          "preview": "CLIN: 0009a, Network: A1A267053, Description: Niger ISTO Materials, Shopping Cart: 15901016, Purchase Req #: 31406802, Purchase Order #: 5000344717, P"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\C-ICP\\C-ICP Bible Rev_14_Aug.doc",
+          "short_src": "C-ICP/C-ICP Bible Rev_14_Aug.doc",
+          "score": 16.1908,
+          "preview": "ICAP Detail Data Report MICAP Status Report Reply to RDO Follow-up Ship Status Redistribution Order Confirmation Redistribution Order Confirmation Red"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\013 - FEP Recon\\2023\\FEP Recon 20230921.xlsx",
+          "short_src": "2023/FEP Recon 20230921.xlsx",
+          "score": 15.991,
+          "preview": "s, Shopping Cart: 15901486, Purchase Req #: 31406803, Purchase Order #: 5000342509, Placed: 1089, Booked: 1089, Reconciliation:: -21302.919999999995, "
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)\\PO 7000327416 (Fan Pr-Backplanes-CPU Fans) (2017-08-14) (BS).pdf",
+          "short_src": "WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)/PO 7000327416 (Fan Pr-Backplanes-CPU Fans) (2017-08-14) (BS).pdf",
+          "score": 0,
+          "preview": "on for payment of the material and/or services supplied under this purchase order. The purchase order number must be on all invoices. All invoices mus"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\013 - FEP Recon\\2023\\FEP Recon 20230210.xlsx",
+          "short_src": "2023/FEP Recon 20230210.xlsx",
+          "score": 0,
+          "preview": "CLIN: 0009a, Network: A1A267053, Description: Niger ISTO Materials, Shopping Cart: 15901016, Purchase Req #: 31406802, Purchase Order #: 5000344717, P"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)\\PO 7000327416 (Fan Pr-Backplanes-CPU Fans) (2017-08-14) (MK).pdf",
+          "short_src": "WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)/PO 7000327416 (Fan Pr-Backplanes-CPU Fans) (2017-08-14) (MK).pdf",
+          "score": 0,
+          "preview": "on for payment of the material and/or services supplied under this purchase order. The purchase order number must be on all invoices. All invoices mus"
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "L06",
+      "cat": "Logistics",
+      "query": "part number 1302-126B specifications",
+      "expect": "parts data",
+      "exact_tokens": [
+        "1302-126B"
+      ],
+      "embed_ms": 10.8,
+      "vector_ms": 20.4,
+      "fts_ms": 11.0,
+      "hybrid_ms": 10.4,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Shipments\\2026 - Shipments\\Guam\\2026_01_09 - Guam (NG Com-Air)\\CINVMDO-26-003-2 w list.pdf",
+          "short_src": "2026_01_09 - Guam (NG Com-Air)/CINVMDO-26-003-2 w list.pdf",
+          "score": 0.5373,
+          "preview": "[SECTION] 26 Part No: 1250-3607 MY 8536694010 1 EA 1065.00 1065.0 0 Serial Number: 003766 Description: T-Calibration kit used in conjunction with the "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\EEMS\\NEXION Jurisdiction and Classification Requests\\2024\\SP-JC-24-00039\\13C493.pdf",
+          "short_src": "SP-JC-24-00039/13C493.pdf",
+          "score": 0.5438,
+          "preview": "Part Number  13C583; 13C584; 130586; 13C587; 13C588; 22KD90; 23M299; 274A79; 30RRO7; 40KJ24; 40KJ25; 40KJ26; 40KJ28; 40KJ29; 460K16; 46MV76; 4HUH1; 51"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Parts (Downloaded Information)\\NEXION Parts\\DPS4D_Hardware\\ST3500413AS_HardDrive_Sys9to11.pdf",
+          "short_src": "DPS4D_Hardware/ST3500413AS_HardDrive_Sys9to11.pdf",
+          "score": 0.5448,
+          "preview": "umber (or part number) and country of purchase. The system will dis- play the warranty information for your drive. Contact start-stop cycles 50,000 at"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\NEXION.manifest_20180523.txt",
+          "short_src": "Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt",
+          "score": 44.4885,
+          "preview": "lter - Thermo Bond\\2013-05-10 (Thermo Bond Shelter at BES 1302-126B)\\IMG_4448.JPG I:\\#  005_ILS\\Parts\\NEXION Parts\\Shelter - Thermo Bond\\2013-05-10 (T"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\NEXION.manifest_20180523.txt",
+          "short_src": "Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt",
+          "score": 44.4885,
+          "preview": "lter - Thermo Bond\\2013-05-09 (Thermo Bond Shelter at BES 1302-126B)\\IMG_0621.JPG I:\\#  005_ILS\\Parts\\NEXION Parts\\Shelter - Thermo Bond\\2013-05-09 (T"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\NEXION.manifest_20180523.txt",
+          "short_src": "Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt",
+          "score": 44.4885,
+          "preview": "lter - Thermo Bond\\2013-05-10 (Thermo Bond Shelter at BES 1302-126B)\\IMG_4437.JPG I:\\#  005_ILS\\Parts\\NEXION Parts\\Shelter - Thermo Bond\\2013-05-10 (T"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Shipments\\2026 - Shipments\\Guam\\2026_01_09 - Guam (NG Com-Air)\\CINVMDO-26-003-2 w list.pdf",
+          "short_src": "2026_01_09 - Guam (NG Com-Air)/CINVMDO-26-003-2 w list.pdf",
+          "score": 0,
+          "preview": "[SECTION] 26 Part No: 1250-3607 MY 8536694010 1 EA 1065.00 1065.0 0 Serial Number: 003766 Description: T-Calibration kit used in conjunction with the "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\NEXION.manifest_20180523.txt",
+          "short_src": "Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt",
+          "score": 0,
+          "preview": "lter - Thermo Bond\\2013-05-10 (Thermo Bond Shelter at BES 1302-126B)\\IMG_4448.JPG I:\\#  005_ILS\\Parts\\NEXION Parts\\Shelter - Thermo Bond\\2013-05-10 (T"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\EEMS\\NEXION Jurisdiction and Classification Requests\\2024\\SP-JC-24-00039\\13C493.pdf",
+          "short_src": "SP-JC-24-00039/13C493.pdf",
+          "score": 0,
+          "preview": "Part Number  13C583; 13C584; 130586; 13C587; 13C588; 22KD90; 23M299; 274A79; 30RRO7; 40KJ24; 40KJ25; 40KJ26; 40KJ28; 40KJ29; 460K16; 46MV76; 4HUH1; 51"
+        }
+      ],
+      "vector_hit": false,
+      "fts_hit": true,
+      "hybrid_hit": true,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "L07",
+      "cat": "Logistics",
+      "query": "XL2200VARM3U power supply replacement",
+      "expect": "parts/tools doc",
+      "exact_tokens": [
+        "XL2200"
+      ],
+      "embed_ms": 13.1,
+      "vector_ms": 12.8,
+      "fts_ms": 5.9,
+      "hybrid_ms": 7.6,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2017 Completed\\MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)\\NGPackingSlip_Kwajalein_USRP PS_2017-04-06.doc",
+          "short_src": "MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)/NGPackingSlip_Kwajalein_USRP PS_2017-04-06.doc",
+          "score": 0.593,
+          "preview": "rty\rWe have found that the original USRP power supplies have been failing. This Spare Power Supply is a new, manufacturer s recommended replacement. S"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2017 Completed\\MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)\\NGPackingSlip_Kwajalein_USRP PS_2017-04-14.doc",
+          "short_src": "MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)/NGPackingSlip_Kwajalein_USRP PS_2017-04-14.doc",
+          "score": 0.593,
+          "preview": "rty\rWe have found that the original USRP power supplies have been failing. This Spare Power Supply is a new, manufacturer s recommended replacement. S"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2017 Completed\\MS-HW-17-00763 (WX29) (NG to Kwajalein) (Laptop) (2017-12-01) (22.32)\\Archive\\NGPackingSlip_Kwajalein_Laptop (2017-11-20).doc",
+          "short_src": "Archive/NGPackingSlip_Kwajalein_Laptop (2017-11-20).doc",
+          "score": 0.5973,
+          "preview": "rty\rWe have found that the original USRP power supplies have been failing. This Spare Power Supply is a new, manufacturer s recommended replacement. S"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\NEXION.manifest_20180523.txt",
+          "short_src": "Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt",
+          "score": 37.1796,
+          "preview": "[SECTION] I:\\# 005_ILS\\Parts\\NEXION Parts\\Batteries (APC Smart-UPS XL2200VARM3U 120V)\\NP7-12L_English.pdf I:\\#  005_ILS\\Parts\\NEXION Parts\\Batteries ("
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\NEXION.manifest_20180523.txt",
+          "short_src": "Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt",
+          "score": 29.3229,
+          "preview": "[SECTION] I:\\#  0 05_ILS\\Parts\\NEXION Parts\\UPS (APC Smart-UPS XL2200VARM3U 120V)\\APC Smart-UPS XL2200VARM3U120V I:\\#  005_ILS\\Parts\\NEXION Parts\\UPS "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\NEXION.manifest_20180523.txt",
+          "short_src": "Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt",
+          "score": 24.6688,
+          "preview": "\\APC Smart-UPS (Front-Upper Right Photo).jpg I:\\#  005_ILS\\Parts\\NEXION Parts\\UPS (APC Smart-UPS XL2200VARM3U 120V)\\APC Smart-UPS XL2200VARM3U120V\\APC"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2017 Completed\\MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)\\NGPackingSlip_Kwajalein_USRP PS_2017-04-06.doc",
+          "short_src": "MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)/NGPackingSlip_Kwajalein_USRP PS_2017-04-06.doc",
+          "score": 0,
+          "preview": "rty\rWe have found that the original USRP power supplies have been failing. This Spare Power Supply is a new, manufacturer s recommended replacement. S"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\NEXION.manifest_20180523.txt",
+          "short_src": "Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt",
+          "score": 0,
+          "preview": "[SECTION] I:\\# 005_ILS\\Parts\\NEXION Parts\\Batteries (APC Smart-UPS XL2200VARM3U 120V)\\NP7-12L_English.pdf I:\\#  005_ILS\\Parts\\NEXION Parts\\Batteries ("
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2017 Completed\\MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)\\NGPackingSlip_Kwajalein_USRP PS_2017-04-14.doc",
+          "short_src": "MS-HW-17-00126 (NG to Kwajalein) (USRP Power Supply) (USPS) (9.32)/NGPackingSlip_Kwajalein_USRP PS_2017-04-14.doc",
+          "score": 0,
+          "preview": "rty\rWe have found that the original USRP power supplies have been failing. This Spare Power Supply is a new, manufacturer s recommended replacement. S"
+        }
+      ],
+      "vector_hit": false,
+      "fts_hit": true,
+      "hybrid_hit": true,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "L08",
+      "cat": "Logistics",
+      "query": "serial number tracking for GFE warehouse property",
+      "expect": "GFE/warehouse doc",
+      "exact_tokens": null,
+      "embed_ms": 11.3,
+      "vector_ms": 11.7,
+      "fts_ms": 23.4,
+      "hybrid_ms": 23.7,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2015 PRs\\PR 462018 (LDI) (Preamps-PDSs-HOFs-CPUs-ECS Filters) (39559.20)\\SerialNumberRecord_Ver1-3.docx",
+          "short_src": "PR 462018 (LDI) (Preamps-PDSs-HOFs-CPUs-ECS Filters) (39559.20)/SerialNumberRecord_Ver1-3.docx",
+          "score": 0.6024,
+          "preview": "Serial Number Record"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29O1 (SCATS 2018282968175)(Patrick to NG)(36.20)\\SCATS SA 2018282968175(Patrick to NG)(SA History).pdf",
+          "short_src": "WX29O1 (SCATS 2018282968175)(Patrick to NG)(36.20)/SCATS SA 2018282968175(Patrick to NG)(SA History).pdf",
+          "score": 0.6241,
+          "preview": "[SECTION] 2018282968175 10/09/2018 14 :03 700 Tracking data posted number: 321654715104661 FEDERAL EXPRESS RPSI FEDEX.TRACKING IS O $0.00 $0.00 $0.00 "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2017 Completed\\2017-10-26 (WX29) (SCATS) (NG to Alpena) (2 Box) (40.46)\\SA 2017299964969 (History) (2017-10-26) (40.46).pdf",
+          "short_src": "2017-10-26 (WX29) (SCATS) (NG to Alpena) (2 Box) (40.46)/SA 2017299964969 (History) (2017-10-26) (40.46).pdf",
+          "score": 0.6243,
+          "preview": "[SECTION] 2017299964969 10/26/2017 1 0:16 700 Tracking data posted number: 788221843348 FEDERAL EXPRESS FEDE FEDEX.TRACKING IS O $0.00 $0. 00 $0.00  G"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\NG Property\\IGS CFO List.xlsx",
+          "short_src": "NG Property/IGS CFO List.xlsx",
+          "score": 20.7088,
+          "preview": "[SHEET] Sheet1 WAREHOUSE PROPERTY BOOK |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  : COMPANY:, : IONOSPHERIC GROUND SYSTEMS (IGS), NORTHROP GRUMMAN :"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\manifest_20180523.txt",
+          "short_src": "IGS/manifest_20180523.txt",
+          "score": 19.7314,
+          "preview": "040 (Sht 1) (1650 Cases) (6 Each) (1425.00).pdf I:\\#  005_ILS\\Government Property\\NEXION GFP_GFE\\GP Movement Forms\\BECO02-015 NEXION (Camera-Hawaii)\\B"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\NEXION.manifest_20180523.txt",
+          "short_src": "Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt",
+          "score": 19.7314,
+          "preview": "040 (Sht 1) (1650 Cases) (6 Each) (1425.00).pdf I:\\#  005_ILS\\Government Property\\NEXION GFP_GFE\\GP Movement Forms\\BECO02-015 NEXION (Camera-Hawaii)\\B"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2015 PRs\\PR 462018 (LDI) (Preamps-PDSs-HOFs-CPUs-ECS Filters) (39559.20)\\SerialNumberRecord_Ver1-3.docx",
+          "short_src": "PR 462018 (LDI) (Preamps-PDSs-HOFs-CPUs-ECS Filters) (39559.20)/SerialNumberRecord_Ver1-3.docx",
+          "score": 0,
+          "preview": "Serial Number Record"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\NG Property\\IGS CFO List.xlsx",
+          "short_src": "NG Property/IGS CFO List.xlsx",
+          "score": 0,
+          "preview": "[SHEET] Sheet1 WAREHOUSE PROPERTY BOOK |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  : COMPANY:, : IONOSPHERIC GROUND SYSTEMS (IGS), NORTHROP GRUMMAN :"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29O1 (SCATS 2018282968175)(Patrick to NG)(36.20)\\SCATS SA 2018282968175(Patrick to NG)(SA History).pdf",
+          "short_src": "WX29O1 (SCATS 2018282968175)(Patrick to NG)(36.20)/SCATS SA 2018282968175(Patrick to NG)(SA History).pdf",
+          "score": 0,
+          "preview": "[SECTION] 2018282968175 10/09/2018 14 :03 700 Tracking data posted number: 321654715104661 FEDERAL EXPRESS RPSI FEDEX.TRACKING IS O $0.00 $0.00 $0.00 "
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "L09",
+      "cat": "Logistics",
+      "query": "calibration records for test equipment",
+      "expect": "calibration folder doc",
+      "exact_tokens": null,
+      "embed_ms": 10.9,
+      "vector_ms": 16.0,
+      "fts_ms": 10.4,
+      "hybrid_ms": 8.9,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\Purchases (P-Card) (Purchase & Received)\\Electronics Purchases-Counterfeit Parts Plan\\Integrated Logistics (ILS) Plan.doc",
+          "short_src": "Electronics Purchases-Counterfeit Parts Plan/Integrated Logistics (ILS) Plan.doc",
+          "score": 0.4076,
+          "preview": "advanced notice via electronic mail when a piece of test equipment is ready to be calibrated.\rCalibration Records\rTest Equipment calibration records a"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A023 - Integrated Logistics Support Plan (ILS)\\Deliverables Report IGSI-1109 IGS Integrated Logistics Support Plan (ILSP) (A023).pdf",
+          "short_src": "A023 - Integrated Logistics Support Plan (ILS)/Deliverables Report IGSI-1109 IGS Integrated Logistics Support Plan (ILSP) (A023).pdf",
+          "score": 0.4212,
+          "preview": "d from first use date of the  equipment. M&TE due for calibration is identified at 90, 60, and 30 days out to ensure reca ll of  equipment and preclud"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\06_SEMS_Documents\\Integrated Logistics (ILS) Plan - Copy.doc",
+          "short_src": "06_SEMS_Documents/Integrated Logistics (ILS) Plan - Copy.doc",
+          "score": 0.422,
+          "preview": "is current.  Contact the ILS Team if the calibration date has expired on any test equipment.\rCalibration Records\rTest Equipment calibration records ar"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\JTAGS Plans\\JTAGS SEMP.docx",
+          "short_src": "JTAGS Plans/JTAGS SEMP.docx",
+          "score": 14.7131,
+          "preview": "ble and when debug is complete, calibration shall be performed using the calibration procedure prior to testing. Upon completion of test and integrati"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Eielson AFB - Alaska, US\\PSIP\\SOWs\\Tower Erection\\Archive\\656-DOC-003 Rev C_Scanned For Edits.pdf",
+          "short_src": "Archive/656-DOC-003 Rev C_Scanned For Edits.pdf",
+          "score": 14.6652,
+          "preview": "in the case of new equipment TCI will have on file manufacturer invoices and/or certifications confirming that the equipment was delivered to TCI prop"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-PSIP\\A001 - Thule PSIP Draft and Attachments\\Attachments\\Attachment 2_Allied Support SOW\\Attachment 2 - TCI Manual and Drawings 656-DOC-003 Rev C.zip",
+          "short_src": "Attachment 2_Allied Support SOW/Attachment 2 - TCI Manual and Drawings 656-DOC-003 Rev C.zip",
+          "score": 14.6403,
+          "preview": "[SECTION] 5. DATA RECORD ............................................................... .................................................. .........."
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\Purchases (P-Card) (Purchase & Received)\\Electronics Purchases-Counterfeit Parts Plan\\Integrated Logistics (ILS) Plan.doc",
+          "short_src": "Electronics Purchases-Counterfeit Parts Plan/Integrated Logistics (ILS) Plan.doc",
+          "score": 0,
+          "preview": "advanced notice via electronic mail when a piece of test equipment is ready to be calibrated.\rCalibration Records\rTest Equipment calibration records a"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\JTAGS Plans\\JTAGS SEMP.docx",
+          "short_src": "JTAGS Plans/JTAGS SEMP.docx",
+          "score": 0,
+          "preview": "ble and when debug is complete, calibration shall be performed using the calibration procedure prior to testing. Upon completion of test and integrati"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A023 - Integrated Logistics Support Plan (ILS)\\Deliverables Report IGSI-1109 IGS Integrated Logistics Support Plan (ILSP) (A023).pdf",
+          "short_src": "A023 - Integrated Logistics Support Plan (ILS)/Deliverables Report IGSI-1109 IGS Integrated Logistics Support Plan (ILSP) (A023).pdf",
+          "score": 0,
+          "preview": "d from first use date of the  equipment. M&TE due for calibration is identified at 90, 60, and 30 days out to ensure reca ll of  equipment and preclud"
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "L10",
+      "cat": "Logistics",
+      "query": "HAZMAT material safety data sheet",
+      "expect": "HAZMAT doc",
+      "exact_tokens": null,
+      "embed_ms": 11.3,
+      "vector_ms": 24.4,
+      "fts_ms": 6.7,
+      "hybrid_ms": 8.3,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\manifest_20180523.txt",
+          "short_src": "IGS/manifest_20180523.txt",
+          "score": 0.4651,
+          "preview": "RTV 732 Material Safety Data Sheet (US).pdf I:\\#  005_ILS\\HAZMAT\\Material Safety Data Sheets (MSDS)\\Dow Corning 732 Multi-purpose Sealant-White\\Archiv"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\manifest_20180523.txt",
+          "short_src": "IGS/manifest_20180523.txt",
+          "score": 0.471,
+          "preview": "RTV 732 Material Safety Data Sheet (German).pdf I:\\#  005_ILS\\HAZMAT\\Material Safety Data Sheets (MSDS)\\Dow Corning 732 Multi-purpose Sealant-White\\Ar"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\manifest_20180523.txt",
+          "short_src": "IGS/manifest_20180523.txt",
+          "score": 0.4885,
+          "preview": "[SECTION] I:\\#  005_IL S\\HAZMAT\\Material Safety Data Sheets (MSDS)\\Hazardous Materials in Locker\\20130702_155050.jpg I:\\#  005_ILS\\HAZMAT\\Material Saf"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\manifest_20180523.txt",
+          "short_src": "IGS/manifest_20180523.txt",
+          "score": 40.6178,
+          "preview": "897 Filament Tapes) I:\\#  005_ILS\\HAZMAT\\Material Safety Data Sheets (MSDS)\\Dow Corning 111 Valve Lubricant & Sealant I:\\#  005_ILS\\HAZMAT\\Material Sa"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\manifest_20180523.txt",
+          "short_src": "IGS/manifest_20180523.txt",
+          "score": 40.4147,
+          "preview": "ta Sheets (MSDS)\\WD-40 Lubricant I:\\#  005_ILS\\HAZMAT\\Material Safety Data Sheets (MSDS)\\Tape (Scotchrap 50) I:\\#  005_ILS\\HAZMAT\\Material Safety Data"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\manifest_20180523.txt",
+          "short_src": "IGS/manifest_20180523.txt",
+          "score": 39.7217,
+          "preview": "RTV 732 Material Safety Data Sheet (US).pdf I:\\#  005_ILS\\HAZMAT\\Material Safety Data Sheets (MSDS)\\Dow Corning 732 Multi-purpose Sealant-White\\Archiv"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\manifest_20180523.txt",
+          "short_src": "IGS/manifest_20180523.txt",
+          "score": 0,
+          "preview": "RTV 732 Material Safety Data Sheet (US).pdf I:\\#  005_ILS\\HAZMAT\\Material Safety Data Sheets (MSDS)\\Dow Corning 732 Multi-purpose Sealant-White\\Archiv"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\manifest_20180523.txt",
+          "short_src": "IGS/manifest_20180523.txt",
+          "score": 0,
+          "preview": "RTV 732 Material Safety Data Sheet (German).pdf I:\\#  005_ILS\\HAZMAT\\Material Safety Data Sheets (MSDS)\\Dow Corning 732 Multi-purpose Sealant-White\\Ar"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\manifest_20180523.txt",
+          "short_src": "IGS/manifest_20180523.txt",
+          "score": 0,
+          "preview": "[SECTION] I:\\#  005_IL S\\HAZMAT\\Material Safety Data Sheets (MSDS)\\Hazardous Materials in Locker\\20130702_155050.jpg I:\\#  005_ILS\\HAZMAT\\Material Saf"
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "E01",
+      "cat": "Engineering",
+      "query": "radar transmitter maintenance procedure",
+      "expect": "maintenance/engineering doc",
+      "exact_tokens": null,
+      "embed_ms": 10.9,
+      "vector_ms": 15.3,
+      "fts_ms": 10.0,
+      "hybrid_ms": 9.1,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2009-11-09 thru 14 (Sys 01 Install)(ARINC)\\TCIantMaintManual100-DOC-015 Rev E.pdf",
+          "short_src": "2009-11-09 thru 14 (Sys 01 Install)(ARINC)/TCIantMaintManual100-DOC-015 Rev E.pdf",
+          "score": 0.5063,
+          "preview": "metallic structure in electrical service. In  addition to the general procedures discussed here, refe r to the applicable TCI instruction manual for a"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\DM\\Interface Spec S2I4 Feb07_Original_Ver0.1_OLD\\_Additional Information\\_AFMAN\\afman15-129.pdf",
+          "short_src": "_AFMAN/afman15-129.pdf",
+          "score": 0.513,
+          "preview": "g OWS.  1.12.3.2.  Develop procedures for the proper opera tion of the AN/FMQ-18 radar equipment IAW TOs, equipment manuals, and other available techn"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\4.0 Training\\Other Training\\Radar Systems Engineering Course\\Module 08b AESA Y25.ppt",
+          "short_src": "Radar Systems Engineering Course/Module 08b AESA Y25.ppt",
+          "score": 0.5177,
+          "preview": "Pulse Repetition Frequency Mechanically Scanned Antenna (MSA) Radar - A Typical Fighter Radar Planar Array\rAntenna Gimbal\rControl Transmitter Processo"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\4.0 Training\\Other Training\\Radar Systems Engineering Course\\Module 09b transmitters Y25_1_10_2011__.ppt",
+          "short_src": "Radar Systems Engineering Course/Module 09b transmitters Y25_1_10_2011__.ppt",
+          "score": 24.92,
+          "preview": "xml.xmlPK drs/downrev.xmlPK Radar Systems Engineering Course [Content_Types].xml _rels/.rels drs/shapexml.xml drs/downrev.xmlD [Content_Types].xmlPK _"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\DM\\documents_UPDATED Aug07\\Maintenance_Manual_TroubleGuide\\Maintenance_Manual-T1-8-Final.pdf",
+          "short_src": "Maintenance_Manual_TroubleGuide/Maintenance_Manual-T1-8-Final.pdf",
+          "score": 23.0771,
+          "preview": "or the transmitter in the suite of output files created.  Adding a New Transmitter Site:  Adding a new transmitter requires the creation of the input "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\DM\\documents_UPDATED Aug07\\Maintenance_Manual_TroubleGuide\\MM_SP2_21Oct03.pdf",
+          "short_src": "Maintenance_Manual_TroubleGuide/MM_SP2_21Oct03.pdf",
+          "score": 22.7655,
+          "preview": "H_HOME/data/input/transfreq.in file.   Then the next normal run of the HF Illumination Map Generator software will include the new  frequency for the "
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2009-11-09 thru 14 (Sys 01 Install)(ARINC)\\TCIantMaintManual100-DOC-015 Rev E.pdf",
+          "short_src": "2009-11-09 thru 14 (Sys 01 Install)(ARINC)/TCIantMaintManual100-DOC-015 Rev E.pdf",
+          "score": 0,
+          "preview": "metallic structure in electrical service. In  addition to the general procedures discussed here, refe r to the applicable TCI instruction manual for a"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\4.0 Training\\Other Training\\Radar Systems Engineering Course\\Module 09b transmitters Y25_1_10_2011__.ppt",
+          "short_src": "Radar Systems Engineering Course/Module 09b transmitters Y25_1_10_2011__.ppt",
+          "score": 0,
+          "preview": "xml.xmlPK drs/downrev.xmlPK Radar Systems Engineering Course [Content_Types].xml _rels/.rels drs/shapexml.xml drs/downrev.xmlD [Content_Types].xmlPK _"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\DM\\Interface Spec S2I4 Feb07_Original_Ver0.1_OLD\\_Additional Information\\_AFMAN\\afman15-129.pdf",
+          "short_src": "_AFMAN/afman15-129.pdf",
+          "score": 0,
+          "preview": "g OWS.  1.12.3.2.  Develop procedures for the proper opera tion of the AN/FMQ-18 radar equipment IAW TOs, equipment manuals, and other available techn"
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "E02",
+      "cat": "Engineering",
+      "query": "antenna replacement steps for tower site",
+      "expect": "engineering/tower doc",
+      "exact_tokens": null,
+      "embed_ms": 11.0,
+      "vector_ms": 18.0,
+      "fts_ms": 16.6,
+      "hybrid_ms": 16.2,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Ascension 2018 (13-30 May)\\SEMS3D-36448 Ascension Island NEXION MSR (12-31 May 2018)(A001).pdf",
+          "short_src": "Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island NEXION MSR (12-31 May 2018)(A001).pdf",
+          "score": 0.474,
+          "preview": "tower can be rotated on the pin. New  foundations and guy rods can be strategically constructed at the site adjacent to the existing  foundations and "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Awase -Okinawa, Japan\\System Install\\Site Prep_Brice\\SOW-Brice (Site Prep at NRTF Awase)\\SOW-Brice_Okinawa-Awase (UNC) 1-19-2023.pdf",
+          "short_src": "SOW-Brice (Site Prep at NRTF Awase)/SOW-Brice_Okinawa-Awase (UNC) 1-19-2023.pdf",
+          "score": 0.4828,
+          "preview": "er/antenna. The tower  requires three earth ground electrodes measuring 10’ foot by ¾” (.75”) diameter, copper  clad. The electrodes shall be installe"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Awase -Okinawa, Japan\\To Be Deleted\\IGS SOW Okinawa-Awase (.doc",
+          "short_src": "To Be Deleted/IGS SOW Okinawa-Awase (.doc",
+          "score": 0.4849,
+          "preview": "aluns fed from transmitter radio frequency (RF) cables at the top of the tower.  The four (4) antenna elements are electrically terminated at the base"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-IPT_Briefing_Slides\\2019\\02_February\\SEMS3D-37979-IGS_IPT_Briefing_Slides .pdf",
+          "short_src": "02_February/SEMS3D-37979-IGS_IPT_Briefing_Slides .pdf",
+          "score": 28.7506,
+          "preview": "teriorating • Requires replacing all Rx  cables • NG plans to submit  Budgetary and Planning  Estimate for cable  replacement • Recommend replacing in"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2018-05-13 thru 05-30 (NEXION_Tower Anchor Inspection)(Brukardt-Buisman-Pitts)\\Ascension Island MaintenanceTestR1_for_signature_lb.pdf",
+          "short_src": "2018-05-13 thru 05-30 (NEXION_Tower Anchor Inspection)(Brukardt-Buisman-Pitts)/Ascension Island MaintenanceTestR1_for_signature_lb.pdf",
+          "score": 28.72,
+          "preview": "MAINTANANCE TEST SECTION 1  TRANSMIT (TX) TOWER/ANTENNA MAINTANCE VERIFICATION  Procedure Step Test Method Expected Results Observed Results P/F  1. V"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Eielson AFB - Alaska, US\\PSIP\\SOWs\\Tower Erection\\Archive\\656-DOC-003 Rev C_Scanned For Edits.pdf",
+          "short_src": "Archive/656-DOC-003 Rev C_Scanned For Edits.pdf",
+          "score": 26.5941,
+          "preview": "frequencies or across a high-to-low range as stated in the preceding step.  e Such fault should ordinarily be correctable by simply tightening any loo"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Ascension 2018 (13-30 May)\\SEMS3D-36448 Ascension Island NEXION MSR (12-31 May 2018)(A001).pdf",
+          "short_src": "Ascension 2018 (13-30 May)/SEMS3D-36448 Ascension Island NEXION MSR (12-31 May 2018)(A001).pdf",
+          "score": 0,
+          "preview": "tower can be rotated on the pin. New  foundations and guy rods can be strategically constructed at the site adjacent to the existing  foundations and "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-IPT_Briefing_Slides\\2019\\02_February\\SEMS3D-37979-IGS_IPT_Briefing_Slides .pdf",
+          "short_src": "02_February/SEMS3D-37979-IGS_IPT_Briefing_Slides .pdf",
+          "score": 0,
+          "preview": "teriorating • Requires replacing all Rx  cables • NG plans to submit  Budgetary and Planning  Estimate for cable  replacement • Recommend replacing in"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Awase -Okinawa, Japan\\System Install\\Site Prep_Brice\\SOW-Brice (Site Prep at NRTF Awase)\\SOW-Brice_Okinawa-Awase (UNC) 1-19-2023.pdf",
+          "short_src": "SOW-Brice (Site Prep at NRTF Awase)/SOW-Brice_Okinawa-Awase (UNC) 1-19-2023.pdf",
+          "score": 0,
+          "preview": "er/antenna. The tower  requires three earth ground electrodes measuring 10’ foot by ¾” (.75”) diameter, copper  clad. The electrodes shall be installe"
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "E03",
+      "cat": "Engineering",
+      "query": "power supply troubleshooting guide",
+      "expect": "engineering/troubleshooting",
+      "exact_tokens": null,
+      "embed_ms": 10.5,
+      "vector_ms": 11.7,
+      "fts_ms": 12.6,
+      "hybrid_ms": 10.0,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A041 - Commercial-Off-the- Shelf (COTS) Manuals and Supplemental Data\\ISTO\\ISTO COTS Manuals\\Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf",
+          "short_src": "ISTO COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf",
+          "score": 0.4268,
+          "preview": ". The indicator shows if power is present or if a power fault has occurred. Figure 112. AC PSU status indicator 1. AC PSU handle 2. Socket 3. Release "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A041 - Commercial-Off-the- Shelf (COTS) Manuals and Supplemental Data\\NEXION\\Attachments\\LDI Manuals\\Nexion_Data_Computer_MaintenanceManual_Ver1-0-0.pdf",
+          "short_src": "LDI Manuals/Nexion_Data_Computer_MaintenanceManual_Ver1-0-0.pdf",
+          "score": 0.4325,
+          "preview": "ssistance in locating a fault.     TROUBLESHOOTING THE POWER INTERFACE BOX    Special Test Equipment: Digital Multimeter  Reference Documents: Power I"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A041 - Commercial-Off-the- Shelf (COTS) Manuals and Supplemental Data\\NEXION\\Attachments\\NEXION System Manuals\\Nexion_Data_Computer_MaintenanceManual_Ver1-0-0.pdf",
+          "short_src": "NEXION System Manuals/Nexion_Data_Computer_MaintenanceManual_Ver1-0-0.pdf",
+          "score": 0.4325,
+          "preview": "ssistance in locating a fault.     TROUBLESHOOTING THE POWER INTERFACE BOX    Special Test Equipment: Digital Multimeter  Reference Documents: Power I"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A054 - Trouble Shooting Aids and Guides\\Deliverables Report IGSI-76 ISTO Troubleshooting Aides and Guides (A054).pdf",
+          "short_src": "A054 - Trouble Shooting Aids and Guides/Deliverables Report IGSI-76 ISTO Troubleshooting Aides and Guides (A054).pdf",
+          "score": 26.1681,
+          "preview": "M).      Figure 17. Server Connections (Back Panel)  Figure 18 shows the connections to the KVM switch. The switch is installed behind the KVM  consol"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\3-NEXION\\3_Miscellaneous\\Drawings (Switch-Cisco)(Catalyst 3850)(Thule)\\b_c3850_hig.pdf",
+          "short_src": "Drawings (Switch-Cisco)(Catalyst 3850)(Thule)/b_c3850_hig.pdf",
+          "score": 25.8393,
+          "preview": "the interfaces as the failed switch and functions the same as the failed switch. Catalyst 3850 Switch Hardware Installation Guide 119OL-26779-05 Troub"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\4-ISTO\\3_Miscellaneous\\ISTO (Switch)(Cisco Catalyst 3850 Series)(American Samoa)\\b_c3850_hig.pdf",
+          "short_src": "ISTO (Switch)(Cisco Catalyst 3850 Series)(American Samoa)/b_c3850_hig.pdf",
+          "score": 25.8393,
+          "preview": "the interfaces as the failed switch and functions the same as the failed switch. Catalyst 3850 Switch Hardware Installation Guide 111OL-26779-05 Troub"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A041 - Commercial-Off-the- Shelf (COTS) Manuals and Supplemental Data\\ISTO\\ISTO COTS Manuals\\Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf",
+          "short_src": "ISTO COTS Manuals/Dell_EMC_PowerEdge_r450_Server_-ism-pub-en-us.pdf",
+          "score": 0,
+          "preview": ". The indicator shows if power is present or if a power fault has occurred. Figure 112. AC PSU status indicator 1. AC PSU handle 2. Socket 3. Release "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A054 - Trouble Shooting Aids and Guides\\Deliverables Report IGSI-76 ISTO Troubleshooting Aides and Guides (A054).pdf",
+          "short_src": "A054 - Trouble Shooting Aids and Guides/Deliverables Report IGSI-76 ISTO Troubleshooting Aides and Guides (A054).pdf",
+          "score": 0,
+          "preview": "M).      Figure 17. Server Connections (Back Panel)  Figure 18 shows the connections to the KVM switch. The switch is installed behind the KVM  consol"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A041 - Commercial-Off-the- Shelf (COTS) Manuals and Supplemental Data\\NEXION\\Attachments\\LDI Manuals\\Nexion_Data_Computer_MaintenanceManual_Ver1-0-0.pdf",
+          "short_src": "LDI Manuals/Nexion_Data_Computer_MaintenanceManual_Ver1-0-0.pdf",
+          "score": 0,
+          "preview": "ssistance in locating a fault.     TROUBLESHOOTING THE POWER INTERFACE BOX    Special Test Equipment: Digital Multimeter  Reference Documents: Power I"
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "E04",
+      "cat": "Engineering",
+      "query": "system acceptance test procedure",
+      "expect": "engineering/test doc",
+      "exact_tokens": null,
+      "embed_ms": 10.5,
+      "vector_ms": 13.2,
+      "fts_ms": 10.5,
+      "hybrid_ms": 7.6,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A006 - Installation Acceptance Test Plan Procedures\\Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa NEXION (A006)\\Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx",
+          "short_src": "Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa NEXION (A006)/Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx",
+          "score": 0.4623,
+          "preview": "ment Matrix  Test Schedule  The testing is scheduled to take place upon completion of the system installation. The installation schedule is included i"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Awase (Okinawa JP)\\2023-08-18 thru 09-09 (Install 5 - FP)\\(Revised) Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx",
+          "short_src": "2023-08-18 thru 09-09 (Install 5 - FP)/(Revised) Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx",
+          "score": 0.4623,
+          "preview": "ment Matrix  Test Schedule  The testing is scheduled to take place upon completion of the system installation. The installation schedule is included i"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\American Samoa\\2024.01.14-2024.01.19 (GPS Repair) Pitts\\Deliverables Report IGSI-812 Installation Acceptance Test Plan and Procedures - American Samoa ISTO.pdf",
+          "short_src": "2024.01.14-2024.01.19 (GPS Repair) Pitts/Deliverables Report IGSI-812 Installation Acceptance Test Plan and Procedures - American Samoa ISTO.pdf",
+          "score": 0.4698,
+          "preview": "allation Plan. As there is a high probability that the network  will not be connected while NG and SSC are on site, testing may be completed in Colora"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A003 - Technical Report - Site Installation Plan (SIP)\\Deliverables Report IGSI-747 Final Site Installation Plan (SIP) (A003)- American Samoa.docx",
+          "short_src": "A003 - Technical Report - Site Installation Plan (SIP)/Deliverables Report IGSI-747 Final Site Installation Plan (SIP) (A003)- American Samoa.docx",
+          "score": 15.9591,
+          "preview": "be refined on site and will be reflected in the as-built drawing package.  The rack will be grounded to the ground bar, located on the south easterly "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A003 - Technical Report - Site Installation Plan (SIP)\\Deliverables report IGSI-411 Final Site Installation Plan (SIP) (A003)_Niger.docx",
+          "short_src": "A003 - Technical Report - Site Installation Plan (SIP)/Deliverables report IGSI-411 Final Site Installation Plan (SIP) (A003)_Niger.docx",
+          "score": 15.9445,
+          "preview": "on site dependent on what is available. Two grounding rods will be shipped in the case there is no available grounding solution for the ISTO component"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A038_-_Project_Change_Briefing\\A038_WX52_PCB#2_(AmericanSamoa)\\SEMS3D-41527 WX52 IGS Installs Project Change Brief #2 (A038).pdf",
+          "short_src": "A038_WX52_PCB#2_(AmericanSamoa)/SEMS3D-41527 WX52 IGS Installs Project Change Brief #2 (A038).pdf",
+          "score": 15.8049,
+          "preview": "6024 American Samoa (Added) - The Contractor shall  deliver an Installation  Acceptance Test Plan SEMS3D-41529 TOWX52 Installation Acceptance Test  Pl"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A006 - Installation Acceptance Test Plan Procedures\\Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa NEXION (A006)\\Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx",
+          "short_src": "Deliverables Report IGSI-103 Installation Acceptance Test Plan and Procedures Okinawa NEXION (A006)/Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx",
+          "score": 0,
+          "preview": "ment Matrix  Test Schedule  The testing is scheduled to take place upon completion of the system installation. The installation schedule is included i"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A003 - Technical Report - Site Installation Plan (SIP)\\Deliverables Report IGSI-747 Final Site Installation Plan (SIP) (A003)- American Samoa.docx",
+          "short_src": "A003 - Technical Report - Site Installation Plan (SIP)/Deliverables Report IGSI-747 Final Site Installation Plan (SIP) (A003)- American Samoa.docx",
+          "score": 0,
+          "preview": "be refined on site and will be reflected in the as-built drawing package.  The rack will be grounded to the ground bar, located on the south easterly "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Awase (Okinawa JP)\\2023-08-18 thru 09-09 (Install 5 - FP)\\(Revised) Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx",
+          "short_src": "2023-08-18 thru 09-09 (Install 5 - FP)/(Revised) Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006).docx",
+          "score": 0,
+          "preview": "ment Matrix  Test Schedule  The testing is scheduled to take place upon completion of the system installation. The installation schedule is included i"
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "E05",
+      "cat": "Engineering",
+      "query": "drawing number 55238 assembly instructions",
+      "expect": "drawing/engineering doc",
+      "exact_tokens": [
+        "55238"
+      ],
+      "embed_ms": 11.4,
+      "vector_ms": 13.0,
+      "fts_ms": 14.9,
+      "hybrid_ms": 14.4,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\Drawing Types & Requirements (Select the Proper Drawing for Your Application) 978-3-319-06983-8.pdf",
+          "short_src": "004_Drawings/Drawing Types & Requirements (Select the Proper Drawing for Your Application) 978-3-319-06983-8.pdf",
+          "score": 0.4994,
+          "preview": "hod. See ASME Y14.24 for complete requirements. Detail Assembly A detail assembly drawing depicts an assembly on which one or more parts are detailed "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\ICD Documents (Drawings)\\DOD-STD-00100D.PDF",
+          "short_src": "ICD Documents (Drawings)/DOD-STD-00100D.PDF",
+          "score": 0.5051,
+          "preview": "arable assembly Installation assembly drawing Exploded asaembly drawing Matched parts drawing Arrangement drawing Control drawing Envelope drawing Spe"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\ICD Documents (Drawings)\\DOD-STD-00100D.PDF",
+          "short_src": "ICD Documents (Drawings)/DOD-STD-00100D.PDF",
+          "score": 0.5303,
+          "preview": "trate a type of drawingi Actual format and drawing shall oonform to the textual requirements set forth in this standardi nl l -t .,.. Downloaded from "
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\ICD Documents (Drawings)\\DOD-STD-00100D.PDF",
+          "short_src": "ICD Documents (Drawings)/DOD-STD-00100D.PDF",
+          "score": 19.524,
+          "preview": "luded when requiredi fi An integral listing of parts with total quantities is requiredi (m) When an assembly is requiredg only the assembly number sha"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\MIL-HDBK-61A(SE) (Configuration Management Guidance) (2001-02-07).pdf",
+          "short_src": "DOCUMENTS LIBRARY/MIL-HDBK-61A(SE) (Configuration Management Guidance) (2001-02-07).pdf",
+          "score": 19.4962,
+          "preview": "is built) reflect all design details and include authorized engineering changes  • Drawing number and revision on manufacturing instructions matches c"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\Archive\\CM\\HDBK61.pdf",
+          "short_src": "CM/HDBK61.pdf",
+          "score": 19.4962,
+          "preview": "is built) reflect all design details and include authorized engineering changes  • Drawing number and revision on manufacturing instructions matches c"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\Drawing Types & Requirements (Select the Proper Drawing for Your Application) 978-3-319-06983-8.pdf",
+          "short_src": "004_Drawings/Drawing Types & Requirements (Select the Proper Drawing for Your Application) 978-3-319-06983-8.pdf",
+          "score": 0,
+          "preview": "hod. See ASME Y14.24 for complete requirements. Detail Assembly A detail assembly drawing depicts an assembly on which one or more parts are detailed "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\ICD Documents (Drawings)\\DOD-STD-00100D.PDF",
+          "short_src": "ICD Documents (Drawings)/DOD-STD-00100D.PDF",
+          "score": 0,
+          "preview": "luded when requiredi fi An integral listing of parts with total quantities is requiredi (m) When an assembly is requiredg only the assembly number sha"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\ICD Documents (Drawings)\\DOD-STD-00100D.PDF",
+          "short_src": "ICD Documents (Drawings)/DOD-STD-00100D.PDF",
+          "score": 0,
+          "preview": "arable assembly Installation assembly drawing Exploded asaembly drawing Matched parts drawing Arrangement drawing Control drawing Envelope drawing Spe"
+        }
+      ],
+      "vector_hit": false,
+      "fts_hit": false,
+      "hybrid_hit": false,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "F01",
+      "cat": "Lookup",
+      "query": "what part number is the KVM switch",
+      "expect": "parts list/BOM",
+      "exact_tokens": null,
+      "embed_ms": 10.9,
+      "vector_ms": 11.3,
+      "fts_ms": 16.1,
+      "hybrid_ms": 14.7,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A054 - Maintenance Manual\\ISTO\\Figures\\KvmConsoleInterfaces.PNG",
+          "short_src": "Figures/KvmConsoleInterfaces.PNG",
+          "score": 0.5257,
+          "preview": "a  KVM Switch (USB) Kyi Switch (VGA) Power {Pin Socket)"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\LMI\\LMI Source Data\\detailedInventory (002).xlsx",
+          "short_src": "LMI Source Data/detailedInventory (002).xlsx",
+          "score": 0.5269,
+          "preview": "3, Description: 2-port KVM switch, Usage: Not Connected or Powered Room #: 2586, Model: Trendnet kvm TK-204UK, Serial #: UN11262OU0995, Description: 2"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\13.0 IGS_Lab\\detailedInventory.xlsx",
+          "short_src": "13.0 IGS_Lab/detailedInventory.xlsx",
+          "score": 0.5378,
+          "preview": "3, Description: 2-port KVM switch, Usage: Not Connected or Powered Room #: 2586, Model: Trendnet kvm TK-204UK, Serial #: UN11262OU0995, Description: 2"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\4-ISTO\\2_As-Built Drawings (Sites)\\201811040-B (Guam ISTO As-Builts)\\201811040-B Parts List (Rev A) (2021-08-03) (Colored Version).xlsx",
+          "short_src": "201811040-B (Guam ISTO As-Builts)/201811040-B Parts List (Rev A) (2021-08-03) (Colored Version).xlsx",
+          "score": 22.8943,
+          "preview": "[SECTION] : ●, DESCRIPTION: CABLE, COMBINATION CABLE (Server to KVM Switch VGA DE-15 F and Server to KVM Switch VGA (D-Sub 15), ASSEMBLY: Server : ●, "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\4-ISTO\\2_As-Built Drawings (Sites)\\201811060-- (Singapore ISTO As-Builts)\\201811060-- Archive (Singapore)\\Parts List-Singapore (2020-05-04) (Colored Version)(Minus Various Cables)2.xlsx",
+          "short_src": "201811060-- Archive (Singapore)/Parts List-Singapore (2020-05-04) (Colored Version)(Minus Various Cables)2.xlsx",
+          "score": 22.5013,
+          "preview": "on: CABLE, SERIAL CABLE (Server to Autodialer), Assembly: Server, Notes: 1 PER INSTALLATION : ●, Description: CABLE, SERIAL CABLE (Server to GPS Recei"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\4-ISTO\\2_As-Built Drawings (Sites)\\201811060-- (Singapore ISTO As-Builts)\\201811060-- Archive (Singapore)\\201811060-- Archive\\Parts List-Singapore (2020-05-04) (Colored Version)(Minus Various Cables).xlsx",
+          "short_src": "201811060-- Archive/Parts List-Singapore (2020-05-04) (Colored Version)(Minus Various Cables).xlsx",
+          "score": 22.5013,
+          "preview": "on: CABLE, SERIAL CABLE (Server to Autodialer), Assembly: Server, Notes: 1 PER INSTALLATION : ●, Description: CABLE, SERIAL CABLE (Server to GPS Recei"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A054 - Maintenance Manual\\ISTO\\Figures\\KvmConsoleInterfaces.PNG",
+          "short_src": "Figures/KvmConsoleInterfaces.PNG",
+          "score": 0,
+          "preview": "a  KVM Switch (USB) Kyi Switch (VGA) Power {Pin Socket)"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\4-ISTO\\2_As-Built Drawings (Sites)\\201811040-B (Guam ISTO As-Builts)\\201811040-B Parts List (Rev A) (2021-08-03) (Colored Version).xlsx",
+          "short_src": "201811040-B (Guam ISTO As-Builts)/201811040-B Parts List (Rev A) (2021-08-03) (Colored Version).xlsx",
+          "score": 0,
+          "preview": "[SECTION] : ●, DESCRIPTION: CABLE, COMBINATION CABLE (Server to KVM Switch VGA DE-15 F and Server to KVM Switch VGA (D-Sub 15), ASSEMBLY: Server : ●, "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\LMI\\LMI Source Data\\detailedInventory (002).xlsx",
+          "short_src": "LMI Source Data/detailedInventory (002).xlsx",
+          "score": 0,
+          "preview": "3, Description: 2-port KVM switch, Usage: Not Connected or Powered Room #: 2586, Model: Trendnet kvm TK-204UK, Serial #: UN11262OU0995, Description: 2"
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "F02",
+      "cat": "Lookup",
+      "query": "point of contact for site visits",
+      "expect": "SOP/contact doc",
+      "exact_tokens": null,
+      "embed_ms": 10.5,
+      "vector_ms": 15.1,
+      "fts_ms": 15.1,
+      "hybrid_ms": 13.7,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Guam\\2017-12-03 thru 08 (Guam Site Survey - Frank P)\\Guam Site Survey 3-8 Dec 2017\\Site Survey Checklists\\ISTO Site Selection Checklist.docx",
+          "short_src": "Site Survey Checklists/ISTO Site Selection Checklist.docx",
+          "score": 0.4788,
+          "preview": "Points of Contact"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\2_Future Sites\\Loring Maine\\Loring Site Survey (October 2016)\\Site Survey Report\\Archive\\NEXION Site Survey Checklist_Loring_Draft (10 Oct 16)_1.docx",
+          "short_src": "Archive/NEXION Site Survey Checklist_Loring_Draft (10 Oct 16)_1.docx",
+          "score": 0.4788,
+          "preview": "Points of Contact"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\2_Future Sites\\Loring Maine\\Loring Site Survey (October 2016)\\Site Survey Report\\NEXION Site Survey Checklist_Loring_15 Nov 16.docx",
+          "short_src": "Site Survey Report/NEXION Site Survey Checklist_Loring_15 Nov 16.docx",
+          "score": 0.4788,
+          "preview": "Points of Contact"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(02) Forms & Documents\\International Travel Approval\\Security Threat Assessments\\C-584_Request for ISE\\04_Colombia (TL4)\\FCG_Colombia.docx",
+          "short_src": "04_Colombia (TL4)/FCG_Colombia.docx",
+          "score": 22.882,
+          "preview": "for an account.  Location:   Town/city/base the traveler will be in when in-country, be specific.   Official Travel In-country Lodging and Point of Co"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Wake 2019-10-(08-11) RTS\\SEMS3D-39315 Wake Island NEXION MSR (Oct 2019) - CDRL A001.pdf",
+          "short_src": "Wake 2019-10-(08-11) RTS/SEMS3D-39315 Wake Island NEXION MSR (Oct 2019) - CDRL A001.pdf",
+          "score": 21.5932,
+          "preview": "ION shelter was  returned to TSgt Johnson, the Wake Island NEXION Point of Contact (POC), for safekeeping.  Recommend that the hand-carried spare Cont"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Wake\\2025-10-02 thru 10-19 (ASV)(FS-JR)\\SAR-VAR\\SMO Code Submission_For access to PRSC Installations or Sites.docx",
+          "short_src": "SAR-VAR/SMO Code Submission_For access to PRSC Installations or Sites.docx",
+          "score": 20.9619,
+          "preview": "arch.  Eareckson A.S. IDT.  Point of Contact for DISS Visit Request SMO: (EAS IDT) Bethany Moseley (907) 616-1763, Bethany.moseley.ctr@mda.mil   SPACE"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Guam\\2017-12-03 thru 08 (Guam Site Survey - Frank P)\\Guam Site Survey 3-8 Dec 2017\\Site Survey Checklists\\ISTO Site Selection Checklist.docx",
+          "short_src": "Site Survey Checklists/ISTO Site Selection Checklist.docx",
+          "score": 0,
+          "preview": "Points of Contact"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(02) Forms & Documents\\International Travel Approval\\Security Threat Assessments\\C-584_Request for ISE\\04_Colombia (TL4)\\FCG_Colombia.docx",
+          "short_src": "04_Colombia (TL4)/FCG_Colombia.docx",
+          "score": 0,
+          "preview": "for an account.  Location:   Town/city/base the traveler will be in when in-country, be specific.   Official Travel In-country Lodging and Point of Co"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\2_Future Sites\\Loring Maine\\Loring Site Survey (October 2016)\\Site Survey Report\\Archive\\NEXION Site Survey Checklist_Loring_Draft (10 Oct 16)_1.docx",
+          "short_src": "Archive/NEXION Site Survey Checklist_Loring_Draft (10 Oct 16)_1.docx",
+          "score": 0,
+          "preview": "Points of Contact"
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "F03",
+      "cat": "Lookup",
+      "query": "PowerEdge server model and configuration",
+      "expect": "IT/server doc",
+      "exact_tokens": [
+        "PowerEdge"
+      ],
+      "embed_ms": 10.5,
+      "vector_ms": 13.3,
+      "fts_ms": 8.1,
+      "hybrid_ms": 7.7,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Parts (Downloaded Information)\\ISTO Parts\\Server (Dell PowerEdge R450) (PN XXXXXX)\\dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "short_src": "Server (Dell PowerEdge R450) (PN XXXXXX)/dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "score": 0.4872,
+          "preview": "stry standard that provides the option   of iDRAC Shared LOM and delivers better maximum   adapter density. Broader supportability for PSU  The latest"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Parts (Downloaded Information)\\ISTO Parts\\Server (Dell PowerEdge R450) (PN XXXXXX)\\dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "short_src": "Server (Dell PowerEdge R450) (PN XXXXXX)/dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "score": 0.5147,
+          "preview": "itory Manager  ∙ Power monitoring and management with Power Manager  ∙ One console management of Dell rack, tower and   modular servers  ∙ Integration"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Parts (Downloaded Information)\\ISTO Parts\\Server (Dell PowerEdge R340) (PN 210-AQUB)\\PowerEdge_R340_Technical_Guide.pdf",
+          "short_src": "Server (Dell PowerEdge R340) (PN 210-AQUB)/PowerEdge_R340_Technical_Guide.pdf",
+          "score": 0.5484,
+          "preview": "PowerEdge server  and provides functionality that helps IT administrators deploy, update, monitor, and maintain servers with no need for any additiona"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Parts (Downloaded Information)\\ISTO Parts\\Server (Dell PowerEdge R450) (PN XXXXXX)\\dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "short_src": "Server (Dell PowerEdge R450) (PN XXXXXX)/dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "score": 22.8413,
+          "preview": "n PowerEdge MX750c Server Full-featured, high performance,  modular and dense compute for  exceptional scalability PowerEdge R750 Server:  database an"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Parts (Downloaded Information)\\ISTO Parts\\Server (Dell PowerEdge R450) (PN XXXXXX)\\dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "short_src": "Server (Dell PowerEdge R450) (PN XXXXXX)/dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "score": 22.5875,
+          "preview": "most  computationally heavy workloads .2 2  Based on Dell Technologies internal testing comparing max. configuration benchmarks  with max. configurati"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\002 - Received\\NEXION Sustainment OY1 (1 Aug 23 - 31 Jul 24)\\PO - 5000433063, PR 31433720, C 16099648 Dell Server R740 NEXION(Future Tech)($29,251.00)\\DellR740.pdf",
+          "short_src": "PO - 5000433063, PR 31433720, C 16099648 Dell Server R740 NEXION(Future Tech)($29,251.00)/DellR740.pdf",
+          "score": 21.711,
+          "preview": "NICEF to help connect schools to the Internet. View the  PowerEdge R740 Rack Server Summary  Dell Price $21,387.29  Estimated Value $44,202:30 Total S"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Parts (Downloaded Information)\\ISTO Parts\\Server (Dell PowerEdge R450) (PN XXXXXX)\\dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "short_src": "Server (Dell PowerEdge R450) (PN XXXXXX)/dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "score": 0,
+          "preview": "stry standard that provides the option   of iDRAC Shared LOM and delivers better maximum   adapter density. Broader supportability for PSU  The latest"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Parts (Downloaded Information)\\ISTO Parts\\Server (Dell PowerEdge R450) (PN XXXXXX)\\dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "short_src": "Server (Dell PowerEdge R450) (PN XXXXXX)/dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "score": 0,
+          "preview": "n PowerEdge MX750c Server Full-featured, high performance,  modular and dense compute for  exceptional scalability PowerEdge R750 Server:  database an"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Parts (Downloaded Information)\\ISTO Parts\\Server (Dell PowerEdge R450) (PN XXXXXX)\\dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "short_src": "Server (Dell PowerEdge R450) (PN XXXXXX)/dell-emc-poweredge-15g-portfolio-brochure.pdf",
+          "score": 0,
+          "preview": "itory Manager  ∙ Power monitoring and management with Power Manager  ∙ One console management of Dell rack, tower and   modular servers  ∙ Integration"
+        }
+      ],
+      "vector_hit": true,
+      "fts_hit": true,
+      "hybrid_hit": true,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "F04",
+      "cat": "Lookup",
+      "query": "software license inventory list",
+      "expect": "software license doc",
+      "exact_tokens": null,
+      "embed_ms": 11.2,
+      "vector_ms": 14.8,
+      "fts_ms": 10.2,
+      "hybrid_ms": 10.7,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\RMF-WX29-Sustainment\\ISTO\\Artifacts-in-eMASS\\archive\\ISTO Cybersecurity SOP 2017-08-15.docx",
+          "short_src": "archive/ISTO Cybersecurity SOP 2017-08-15.docx",
+          "score": 0.5014,
+          "preview": "ntation in accordance with contract agreements and copyright laws;  b. Tracks the use of software and associated documentation protected by quantity l"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\RMF-WX29-Sustainment\\ISTO\\Artifacts-in-eMASS\\archive\\ISTO Cybersecurity SOP 2017-08-14.docx",
+          "short_src": "archive/ISTO Cybersecurity SOP 2017-08-14.docx",
+          "score": 0.5014,
+          "preview": "ntation in accordance with contract agreements and copyright laws;  b. Tracks the use of software and associated documentation protected by quantity l"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\RMF-WX29-Sustainment\\ISTO\\Artifacts-in-eMASS\\archive\\ISTO Cybersecurity SOP 2017-08-17.docx",
+          "short_src": "archive/ISTO Cybersecurity SOP 2017-08-17.docx",
+          "score": 0.5014,
+          "preview": "ntation in accordance with contract agreements and copyright laws;  b. Tracks the use of software and associated documentation protected by quantity l"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\RMF-WX29-Sustainment\\ISTO\\Artifacts-in-eMASS\\archive\\ISTO Cybersecurity SOP 2017-08-15.docx",
+          "short_src": "archive/ISTO Cybersecurity SOP 2017-08-15.docx",
+          "score": 20.8432,
+          "preview": "ntation in accordance with contract agreements and copyright laws;  b. Tracks the use of software and associated documentation protected by quantity l"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\RMF-WX29-Sustainment\\ISTO\\Artifacts-in-eMASS\\archive\\ISTO Cybersecurity SOP 2017-08-16.docx",
+          "short_src": "archive/ISTO Cybersecurity SOP 2017-08-16.docx",
+          "score": 20.8432,
+          "preview": "ntation in accordance with contract agreements and copyright laws;  b. Tracks the use of software and associated documentation protected by quantity l"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\RMF-WX29-Sustainment\\ISTO\\Artifacts-in-eMASS\\archive\\ISTO Cybersecurity SOP 2017-08-14.docx",
+          "short_src": "archive/ISTO Cybersecurity SOP 2017-08-14.docx",
+          "score": 20.8432,
+          "preview": "ntation in accordance with contract agreements and copyright laws;  b. Tracks the use of software and associated documentation protected by quantity l"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\RMF-WX29-Sustainment\\ISTO\\Artifacts-in-eMASS\\archive\\ISTO Cybersecurity SOP 2017-08-15.docx",
+          "short_src": "archive/ISTO Cybersecurity SOP 2017-08-15.docx",
+          "score": 0,
+          "preview": "ntation in accordance with contract agreements and copyright laws;  b. Tracks the use of software and associated documentation protected by quantity l"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\RMF-WX29-Sustainment\\ISTO\\Artifacts-in-eMASS\\archive\\ISTO Cybersecurity SOP 2017-08-14.docx",
+          "short_src": "archive/ISTO Cybersecurity SOP 2017-08-14.docx",
+          "score": 0,
+          "preview": "ntation in accordance with contract agreements and copyright laws;  b. Tracks the use of software and associated documentation protected by quantity l"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\RMF-WX29-Sustainment\\ISTO\\Artifacts-in-eMASS\\archive\\ISTO Cybersecurity SOP 2017-08-16.docx",
+          "short_src": "archive/ISTO Cybersecurity SOP 2017-08-16.docx",
+          "score": 0,
+          "preview": "ntation in accordance with contract agreements and copyright laws;  b. Tracks the use of software and associated documentation protected by quantity l"
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "F05",
+      "cat": "Lookup",
+      "query": "NEXION bill of materials components",
+      "expect": "BOM doc",
+      "exact_tokens": [
+        "NEXION"
+      ],
+      "embed_ms": 12.0,
+      "vector_ms": 20.4,
+      "fts_ms": 34.4,
+      "hybrid_ms": 32.8,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-SPR&IP\\NEXION\\A001 - SPR&IP(Main)\\Rev 11\\Draft\\Previous Versions\\DRAFT_SEMS3D-37587_SPR&IP_(A001) .docx",
+          "short_src": "Previous Versions/DRAFT_SEMS3D-37587_SPR&IP_(A001) .docx",
+          "score": 0.5194,
+          "preview": "sition of all equipment and materials required to perform the installation of the NEXION.  Any materials required for site preparation will be provide"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-SPR&IP\\NEXION\\A001 - SPR&IP(Main)\\Rev 11\\Draft\\Previous Versions\\Peer Reviews\\(Nachbar Ventura Edits)SEMS3D-37858_SPRIP_(A001).docx",
+          "short_src": "Peer Reviews/(Nachbar Ventura Edits)SEMS3D-37858_SPRIP_(A001).docx",
+          "score": 0.52,
+          "preview": "sition of all equipment and materials required to perform the installation of the NEXION.  Any materials required for site preparation will be provide"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-SPR&IP\\NEXION\\A001 - SPR&IP(Main)\\Rev 11\\Draft\\Previous Versions\\Peer Reviews\\(Nachbar Ventura Edits)SEMS3D-37858_SPRIP_(A001)_LO.docx",
+          "short_src": "Peer Reviews/(Nachbar Ventura Edits)SEMS3D-37858_SPRIP_(A001)_LO.docx",
+          "score": 0.52,
+          "preview": "sition of all equipment and materials required to perform the installation of the NEXION.  Any materials required for site preparation will be provide"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\DoD Systems.xls",
+          "short_src": "_WhatEver/DoD Systems.xls",
+          "score": 13.5656,
+          "preview": "financial performance. It also provides accurate financial information in a form that mirrors the day-to-day activities of the people, equipment and p"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#DMEA Program Management\\1.0 Contracts ATSP_DMEA\\Templates and Examples\\Examples\\RFP Dri-Bones Examples\\Enclosure 04a - CET 24-430_DRI-BONES_BOE.pdf",
+          "short_src": "RFP Dri-Bones Examples/Enclosure 04a - CET 24-430_DRI-BONES_BOE.pdf",
+          "score": 12.7487,
+          "preview": "control,  kitting, and Packaging, Handling, Shipping and Transportation  (PHS&T) staff at the Huntsville  Manufacturing Center.  NGC will provide high"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\TO WX28 IGS OS Upgrades\\Archive\\TO WX28 (1P752.027R1 OS Upgrades BOM Update) (Rcvd 2017-08-30).xlsx",
+          "short_src": "Archive/TO WX28 (1P752.027R1 OS Upgrades BOM Update) (Rcvd 2017-08-30).xlsx",
+          "score": 12.7168,
+          "preview": "[SHEET] Consolidated BOM BILL OF MATERIALS |  |  | 2017-02-06T00:00:00 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-SPR&IP\\NEXION\\A001 - SPR&IP(Main)\\Rev 11\\Draft\\Previous Versions\\DRAFT_SEMS3D-37587_SPR&IP_(A001) .docx",
+          "short_src": "Previous Versions/DRAFT_SEMS3D-37587_SPR&IP_(A001) .docx",
+          "score": 0,
+          "preview": "sition of all equipment and materials required to perform the installation of the NEXION.  Any materials required for site preparation will be provide"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\DoD Systems.xls",
+          "short_src": "_WhatEver/DoD Systems.xls",
+          "score": 0,
+          "preview": "financial performance. It also provides accurate financial information in a form that mirrors the day-to-day activities of the people, equipment and p"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-SPR&IP\\NEXION\\A001 - SPR&IP(Main)\\Rev 11\\Draft\\Previous Versions\\Peer Reviews\\(Nachbar Ventura Edits)SEMS3D-37858_SPRIP_(A001).docx",
+          "short_src": "Peer Reviews/(Nachbar Ventura Edits)SEMS3D-37858_SPRIP_(A001).docx",
+          "score": 0,
+          "preview": "sition of all equipment and materials required to perform the installation of the NEXION.  Any materials required for site preparation will be provide"
+        }
+      ],
+      "vector_hit": true,
+      "fts_hit": false,
+      "hybrid_hit": true,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "A01",
+      "cat": "Aggregation",
+      "query": "list all purchase orders from 2023",
+      "expect": "multiple PO docs",
+      "exact_tokens": null,
+      "embed_ms": 11.0,
+      "vector_ms": 23.6,
+      "fts_ms": 25.9,
+      "hybrid_ms": 30.3,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX39 (PO 7200751620)(McMaster Carr Quote)($320.53)\\McMaster-Carr Quote_$330.44.pdf",
+          "short_src": "WX39 (PO 7200751620)(McMaster Carr Quote)($320.53)/McMaster-Carr Quote_$330.44.pdf",
+          "score": 0.5902,
+          "preview": "Current Order | McMaster-Carr https://www.mcmaster.com/orders 1 of 4 11/12/2018, 12:35 PM   Current Order | McMaster-Carr https://www.mcmaster.com/ord"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000372377)(Newark)(RG-58 Cable)($388.24)Rcvd 2019-04-08\\PO 7000372377.pdf",
+          "short_src": "WX29 (PO 7000372377)(Newark)(RG-58 Cable)($388.24)Rcvd 2019-04-08/PO 7000372377.pdf",
+          "score": 0.6076,
+          "preview": "Purchase Order Number 2.  Purchase Order Line Item Number 3.  Quantity, Part Number, and Description 4.  Unit Price 5.  Extended Total Price 6.  Copy "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX39 (PO 7000367469)(Newark)(RG-213 1000')($2,204.09)rcvd 2019-02-13\\PO 7000367469.pdf",
+          "short_src": "WX39 (PO 7000367469)(Newark)(RG-213 1000')($2,204.09)rcvd 2019-02-13/PO 7000367469.pdf",
+          "score": 0.6151,
+          "preview": "Purchase Order Number 2.  Purchase Order Line Item Number 3.  Quantity, Part Number, and Description 4.  Unit Price 5.  Extended Total Price 6.  Copy "
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2013 RQs\\RQ-05719 (Graybar) (2AAW and 4AAW Split-Bolts)\\RQ-05719 (Graybar) (PO 268235).pdf",
+          "short_src": "RQ-05719 (Graybar) (2AAW and 4AAW Split-Bolts)/RQ-05719 (Graybar) (PO 268235).pdf",
+          "score": 23.7403,
+          "preview": "to fund the purchase of Split Bolt Connectors from Graybar           as listed on the attached Quote # 217260355.                      All invoices fo"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Government_Property\\NEXION GFP_GFE\\GP Input-Output Record\\000GP11731 (TCI) (Tower-Antenna Sys 12) (SN 1040)\\2015-04-24 Receipt D214724.pdf",
+          "short_src": "000GP11731 (TCI) (Tower-Antenna Sys 12) (SN 1040)/2015-04-24 Receipt D214724.pdf",
+          "score": 23.4332,
+          "preview": "ions List (USML).  Status: Received Comments /g122COMMENT by Corti, Vito [USA] on 12/22/2014 ***COMMENTS TO PURCHASE ORDER***  ***NOTE TO VENDOR: ACKN"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2011 PRs\\PR 125844 (R) (MicroMetals) (55G Anti-Climb Panels)\\PO 250802 Micro Metals.pdf",
+          "short_src": "PR 125844 (R) (MicroMetals) (55G Anti-Climb Panels)/PO 250802 Micro Metals.pdf",
+          "score": 23.1516,
+          "preview": "YLOR / COS DUE DESIRED EXTENDED COSTNET UNIT COSTQUANTITYDATEDATEREV    U/MITEM/DESCRIPTIONLINE           This is a rated order certified for national"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX39 (PO 7200751620)(McMaster Carr Quote)($320.53)\\McMaster-Carr Quote_$330.44.pdf",
+          "short_src": "WX39 (PO 7200751620)(McMaster Carr Quote)($320.53)/McMaster-Carr Quote_$330.44.pdf",
+          "score": 0,
+          "preview": "Current Order | McMaster-Carr https://www.mcmaster.com/orders 1 of 4 11/12/2018, 12:35 PM   Current Order | McMaster-Carr https://www.mcmaster.com/ord"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2013 RQs\\RQ-05719 (Graybar) (2AAW and 4AAW Split-Bolts)\\RQ-05719 (Graybar) (PO 268235).pdf",
+          "short_src": "RQ-05719 (Graybar) (2AAW and 4AAW Split-Bolts)/RQ-05719 (Graybar) (PO 268235).pdf",
+          "score": 0,
+          "preview": "to fund the purchase of Split Bolt Connectors from Graybar           as listed on the attached Quote # 217260355.                      All invoices fo"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000372377)(Newark)(RG-58 Cable)($388.24)Rcvd 2019-04-08\\PO 7000372377.pdf",
+          "short_src": "WX29 (PO 7000372377)(Newark)(RG-58 Cable)($388.24)Rcvd 2019-04-08/PO 7000372377.pdf",
+          "score": 0,
+          "preview": "Purchase Order Number 2.  Purchase Order Line Item Number 3.  Quantity, Part Number, and Description 4.  Unit Price 5.  Extended Total Price 6.  Copy "
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "A02",
+      "cat": "Aggregation",
+      "query": "how many unique part numbers in the inventory",
+      "expect": "inventory/parts spreadsheets",
+      "exact_tokens": null,
+      "embed_ms": 11.7,
+      "vector_ms": 9.0,
+      "fts_ms": 27.1,
+      "hybrid_ms": 26.4,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Learmonth\\2010 Install\\John's drive\\CENTON USB (E)\\Learmonth\\Optimization\\Procedures\\Eglin\\Removable Disk (E)\\DoD Guide to Uniquely Identifying Items.pdf",
+          "short_src": "Removable Disk (E)/DoD Guide to Uniquely Identifying Items.pdf",
+          "score": 0.6176,
+          "preview": "[SECTION] E2.1.12 .2 Serialization  within the  enterprise  identifier  Each item produced is assigned a serial  number that is unique among all the  "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\Archive\\IUID\\DoDUIDGuide.pdf",
+          "short_src": "IUID/DoDUIDGuide.pdf",
+          "score": 0.6176,
+          "preview": "[SECTION] E2.1.12 .2 Serialization  within the  enterprise  identifier  Each item produced is assigned a serial  number that is unique among all the  "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Sustainment_Tool\\inventory-control.xlsx",
+          "short_src": "Sustainment_Tool/inventory-control.xlsx",
+          "score": 0.622,
+          "preview": "lier, supplier part number, price and ordering/counting units. : 5. Set a reorder point for the item. Experience and time will help you optimize this "
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\DM\\DM_SEMP input v0.2.doc",
+          "short_src": "DM/DM_SEMP input v0.2.doc",
+          "score": 20.7135,
+          "preview": "ned to documents in past contract. SEMS Documents SEMSD.XXXXX-00 where:\rSEMSD = SEMS Document\rXXXXX = unique 5-digit number from database\r-0X = revisi"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\JTAGS Plans\\ILSP.docx",
+          "short_src": "JTAGS Plans/ILSP.docx",
+          "score": 19.0768,
+          "preview": "n equipment to perform exercise and training missions. The ITS provides enhanced mission training capabilities and is co-located with a TWS. The DLS p"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\DoD Systems.xls",
+          "short_src": "_WhatEver/DoD Systems.xls",
+          "score": 18.0958,
+          "preview": "uest Tracking Module - Tracks Purchase Requests from Inventory Management Specialist (IMS) input date through contract award and provides alerts when "
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Learmonth\\2010 Install\\John's drive\\CENTON USB (E)\\Learmonth\\Optimization\\Procedures\\Eglin\\Removable Disk (E)\\DoD Guide to Uniquely Identifying Items.pdf",
+          "short_src": "Removable Disk (E)/DoD Guide to Uniquely Identifying Items.pdf",
+          "score": 0,
+          "preview": "[SECTION] E2.1.12 .2 Serialization  within the  enterprise  identifier  Each item produced is assigned a serial  number that is unique among all the  "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\DM\\DM_SEMP input v0.2.doc",
+          "short_src": "DM/DM_SEMP input v0.2.doc",
+          "score": 0,
+          "preview": "ned to documents in past contract. SEMS Documents SEMSD.XXXXX-00 where:\rSEMSD = SEMS Document\rXXXXX = unique 5-digit number from database\r-0X = revisi"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\Archive\\IUID\\DoDUIDGuide.pdf",
+          "short_src": "IUID/DoDUIDGuide.pdf",
+          "score": 0,
+          "preview": "[SECTION] E2.1.12 .2 Serialization  within the  enterprise  identifier  Each item produced is assigned a serial  number that is unique among all the  "
+        }
+      ],
+      "vector_hit": null,
+      "fts_hit": null,
+      "hybrid_hit": null,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "A03",
+      "cat": "Aggregation",
+      "query": "all shipment dates for Alpena site",
+      "expect": "shipment docs mentioning Alpena",
+      "exact_tokens": [
+        "Alpena"
+      ],
+      "embed_ms": 11.2,
+      "vector_ms": 21.6,
+      "fts_ms": 11.0,
+      "hybrid_ms": 22.0,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2013 Shipping Completed\\2013-07-11 (Alpena to BAH) (Return 2 of 2)\\Return 1 Tracking (827042563974) (2013-07-12).pdf",
+          "short_src": "2013-07-11 (Alpena to BAH) (Return 2 of 2)/Return 1 Tracking (827042563974) (2013-07-12).pdf",
+          "score": 0.485,
+          "preview": "Alpena Return 1 of 2 (827042563974) COL US Ship (P/U) date : Thur 7/11/2013 4:41 pm In transit ALPENA, MI CO US Estimated delivery : Tues 7/16/2013 4:"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2013 Shipping Completed\\2013-07-11 (Alpena to BAH) (Return 2 of 2)\\Return 2 Tracking (795797531210) (2013-07-12).pdf",
+          "short_src": "2013-07-11 (Alpena to BAH) (Return 2 of 2)/Return 2 Tracking (795797531210) (2013-07-12).pdf",
+          "score": 0.4998,
+          "preview": "Alpena Return 2 of 2 (795797531210) COL US Ship (P/U) date : Thur 7/11/2013 4:41 pm In transit ALPENA, MI CO US Estimated delivery : Tues 7/16/2013 4:"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)\\Climb Gear Inspection\\Fall Arrest Inspection_Alpena(2-8 Jun 2021).docx",
+          "short_src": "Climb Gear Inspection/Fall Arrest Inspection_Alpena(2-8 Jun 2021).docx",
+          "score": 0.5021,
+          "preview": "ALPENA ASV/RTS (2-8 Jun 2021)"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Dashboard\\Shipping Tracker.xlsx",
+          "short_src": "Dashboard/Shipping Tracker.xlsx",
+          "score": 25.7596,
+          "preview": "e: Eglin, Est Ship Date: 2020-02-24T00:00:00, Date Arrived: 2020-02-24T00:00:00, Type of Shipment: Hand Carry, ASV/RTS: ASV, Ship From: NG, Ship to: E"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-SPR&IP\\NEXION\\A001 - Appendix J - Alpena\\Archive\\SPR&IP_Appendix J_Alpena_Draft_(DCRL A037)_13Aug13_ISO.docx",
+          "short_src": "Archive/SPR&IP_Appendix J_Alpena_Draft_(DCRL A037)_13Aug13_ISO.docx",
+          "score": 25.0147,
+          "preview": "ject located at Alpena CRTC, MI.  The primary Contractor for this effort is Booz Allen Hamilton Engineering Services, LLC and is referenced in this do"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-SPR&IP\\NEXION\\A001 - Appendix J - Alpena\\Archive\\SPR&IP_Appendix J_Alpena_Draft_(DCRL A037)_13Aug13_Draft.docx",
+          "short_src": "Archive/SPR&IP_Appendix J_Alpena_Draft_(DCRL A037)_13Aug13_Draft.docx",
+          "score": 25.0147,
+          "preview": "ject located at Alpena CRTC, MI.  The primary Contractor for this effort is Booz Allen Hamilton Engineering Services, LLC and is referenced in this do"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2013 Shipping Completed\\2013-07-11 (Alpena to BAH) (Return 2 of 2)\\Return 1 Tracking (827042563974) (2013-07-12).pdf",
+          "short_src": "2013-07-11 (Alpena to BAH) (Return 2 of 2)/Return 1 Tracking (827042563974) (2013-07-12).pdf",
+          "score": 0,
+          "preview": "Alpena Return 1 of 2 (827042563974) COL US Ship (P/U) date : Thur 7/11/2013 4:41 pm In transit ALPENA, MI CO US Estimated delivery : Tues 7/16/2013 4:"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Dashboard\\Shipping Tracker.xlsx",
+          "short_src": "Dashboard/Shipping Tracker.xlsx",
+          "score": 0,
+          "preview": "e: Eglin, Est Ship Date: 2020-02-24T00:00:00, Date Arrived: 2020-02-24T00:00:00, Type of Shipment: Hand Carry, ASV/RTS: ASV, Ship From: NG, Ship to: E"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2013 Shipping Completed\\2013-07-11 (Alpena to BAH) (Return 2 of 2)\\Return 2 Tracking (795797531210) (2013-07-12).pdf",
+          "short_src": "2013-07-11 (Alpena to BAH) (Return 2 of 2)/Return 2 Tracking (795797531210) (2013-07-12).pdf",
+          "score": 0,
+          "preview": "Alpena Return 2 of 2 (795797531210) COL US Ship (P/U) date : Thur 7/11/2013 4:41 pm In transit ALPENA, MI CO US Estimated delivery : Tues 7/16/2013 4:"
+        }
+      ],
+      "vector_hit": true,
+      "fts_hit": true,
+      "hybrid_hit": true,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "C01",
+      "cat": "Cybersecurity",
+      "query": "STIG compliance checklist findings",
+      "expect": "STIG/compliance doc",
+      "exact_tokens": [
+        "STIG"
+      ],
+      "embed_ms": 10.8,
+      "vector_ms": 21.0,
+      "fts_ms": 17.9,
+      "hybrid_ms": 16.2,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\CT&E-ST&E\\ISTO\\2018-01-19 ISTO OS Upgrade\\Archive\\CT&E Plan - ISTO OS Upgrade 2017-12-12.docx",
+          "short_src": "Archive/CT&E Plan - ISTO OS Upgrade 2017-12-12.docx",
+          "score": 0.4198,
+          "preview": "-12), the RHEL 7 Benchmark is not available; therefore, STIG compliance was achieved via manual checks of the STIG using the STIG Viewer.  Below are t"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\CT&E-ST&E\\NEXION\\2018-02-06 NEXION OS Upgrade\\archive\\CT&E Plan - NEXION OS Upgrade 2018-03-01.pdf",
+          "short_src": "archive/CT&E Plan - NEXION OS Upgrade 2018-03-01.pdf",
+          "score": 0.4257,
+          "preview": "Automated STIG checks will be used where  available and manual STIG checks will be reviewed where there is no automation.  Table 1 shows  the CT&E lis"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A027 - Cybersecurity\\A027 - CT&E-ST&E\\A027 - NEXION TOWX28 CT&E Plan OS Upgrade\\SEMS3D-36019 CT&E Plan NEXION OS Upgrade (A027) 2018-03-12.pdf",
+          "short_src": "A027 - NEXION TOWX28 CT&E Plan OS Upgrade/SEMS3D-36019 CT&E Plan NEXION OS Upgrade (A027) 2018-03-12.pdf",
+          "score": 0.4257,
+          "preview": "Automated STIG checks will be used where  available and manual STIG checks will be reviewed where there is no automation.  Table 1 shows  the CT&E lis"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\Procedures\\Procedure IGS STIG Viewer 2018-01-23.docx",
+          "short_src": "Procedures/Procedure IGS STIG Viewer 2018-01-23.docx",
+          "score": 20.1795,
+          "preview": "IGS STIG Viewer Procedure  2018 January 23  Purpose  Instructions to review and document STIG compliance using STIG Viewer  Material  STIG Viewer JAR "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\NEXION Cybersecurity - Archive\\2015 Annual IA Docs\\Information Assurance\\Schneider Archive\\NEXION\\unclassified_Network_Firewall_V8R2_STIG_062810.zip",
+          "short_src": "NEXION/unclassified_Network_Firewall_V8R2_STIG_062810.zip",
+          "score": 19.6919,
+          "preview": "roductory and background information that cannot be placed in the XML at  this time.  This would include such things as screen captures that help make"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\Archive\\Deliverables (Historical)\\Security Docs\\Checklists\\McAfee_VirusScan.pdf",
+          "short_src": "Checklists/McAfee_VirusScan.pdf",
+          "score": 19.0894,
+          "preview": "Unclassified UNTIL FILLED IN    CIRCLE ONE    FOR OFFICIAL USE ONLY (mark each page)    CONFIDENTIAL and SECRET (mark each page and each finding)     "
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\CT&E-ST&E\\ISTO\\2018-01-19 ISTO OS Upgrade\\Archive\\CT&E Plan - ISTO OS Upgrade 2017-12-12.docx",
+          "short_src": "Archive/CT&E Plan - ISTO OS Upgrade 2017-12-12.docx",
+          "score": 0,
+          "preview": "-12), the RHEL 7 Benchmark is not available; therefore, STIG compliance was achieved via manual checks of the STIG using the STIG Viewer.  Below are t"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\Procedures\\Procedure IGS STIG Viewer 2018-01-23.docx",
+          "short_src": "Procedures/Procedure IGS STIG Viewer 2018-01-23.docx",
+          "score": 0,
+          "preview": "IGS STIG Viewer Procedure  2018 January 23  Purpose  Instructions to review and document STIG compliance using STIG Viewer  Material  STIG Viewer JAR "
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\CT&E-ST&E\\NEXION\\2018-02-06 NEXION OS Upgrade\\archive\\CT&E Plan - NEXION OS Upgrade 2018-03-01.pdf",
+          "short_src": "archive/CT&E Plan - NEXION OS Upgrade 2018-03-01.pdf",
+          "score": 0,
+          "preview": "Automated STIG checks will be used where  available and manual STIG checks will be reviewed where there is no automation.  Table 1 shows  the CT&E lis"
+        }
+      ],
+      "vector_hit": true,
+      "fts_hit": true,
+      "hybrid_hit": true,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    },
+    {
+      "id": "C02",
+      "cat": "Cybersecurity",
+      "query": "ACAS vulnerability scan results",
+      "expect": "ACAS/scan doc",
+      "exact_tokens": [
+        "ACAS"
+      ],
+      "embed_ms": 10.9,
+      "vector_ms": 22.1,
+      "fts_ms": 9.2,
+      "hybrid_ms": 8.3,
+      "vector_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\Software-Config-Scripts\\ACAS\\Archive\\20140128_DISA_ACAS_TTP_V6R1.pdf",
+          "short_src": "Archive/20140128_DISA_ACAS_TTP_V6R1.pdf",
+          "score": 0.463,
+          "preview": "te the scan by highlighting the appropriate scan template and selecting the  Launch button on the Scans screen.  4. To view results of an individual s"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\Software-Config-Scripts\\ACAS\\Archive\\20140128_DISA_ACAS_TTP_V6R1.pdf",
+          "short_src": "Archive/20140128_DISA_ACAS_TTP_V6R1.pdf",
+          "score": 0.4687,
+          "preview": "ll remaining defaults.  k. Select the Submit button to save the template.  3. Initiate the scan by highlighting the appropriate scan template and sele"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  ISTO Sites\\4_Certification Test and Evaluation (CTE)\\Guam\\SCINDA-Guam CTE Report 19Sep2013.docx",
+          "short_src": "Guam/SCINDA-Guam CTE Report 19Sep2013.docx",
+          "score": 0.4835,
+          "preview": "in this report.  Automatic check procedures were accomplished by the Assured Compliance Assessment Solution (ACAS).  Host Name :  Guam Laptop  IP Addr"
+        }
+      ],
+      "fts_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\19.0_Work_Notes\\Cyber\\zArchive\\ACAS Build and SCC Install Work Note 2019-04-03.docx",
+          "short_src": "zArchive/ACAS Build and SCC Install Work Note 2019-04-03.docx",
+          "score": 26.2757,
+          "preview": "e ‘ACAS Scan Templates List’ section above.  Once the scans are completed, the scan results will appear in the  Scab > Scan Results page  Create Repor"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\19.0_Work_Notes\\Cyber\\zArchive\\ACAS Build Work Note 2018-11-01.docx",
+          "short_src": "zArchive/ACAS Build Work Note 2018-11-01.docx",
+          "score": 26.2757,
+          "preview": "e ‘ACAS Scan Templates List’ section above.  Once the scans are completed, the scan results will appear in the  Scab > Scan Results page  Create Repor"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\19.0_Work_Notes\\Cyber\\ACAS Best Practice Guide\\CM-259071-ACAS Best Practices Guide 5.4.1.pdf",
+          "short_src": "ACAS Best Practice Guide/CM-259071-ACAS Best Practices Guide 5.4.1.pdf",
+          "score": 26.1881,
+          "preview": "rmal Accuracy - Paranoid Scanning  ACAS Best Practices Guide scan policies are configured to discover vulnerabilities in endpoints  with a high degree"
+        }
+      ],
+      "hybrid_top3": [
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\Software-Config-Scripts\\ACAS\\Archive\\20140128_DISA_ACAS_TTP_V6R1.pdf",
+          "short_src": "Archive/20140128_DISA_ACAS_TTP_V6R1.pdf",
+          "score": 0,
+          "preview": "te the scan by highlighting the appropriate scan template and selecting the  Launch button on the Scans screen.  4. To view results of an individual s"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\19.0_Work_Notes\\Cyber\\zArchive\\ACAS Build and SCC Install Work Note 2019-04-03.docx",
+          "short_src": "zArchive/ACAS Build and SCC Install Work Note 2019-04-03.docx",
+          "score": 0,
+          "preview": "e ‘ACAS Scan Templates List’ section above.  Once the scans are completed, the scan results will appear in the  Scab > Scan Results page  Create Repor"
+        },
+        {
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\Software-Config-Scripts\\ACAS\\Archive\\20140128_DISA_ACAS_TTP_V6R1.pdf",
+          "short_src": "Archive/20140128_DISA_ACAS_TTP_V6R1.pdf",
+          "score": 0,
+          "preview": "ll remaining defaults.  k. Select the Submit button to save the template.  3. Initiate the scan by highlighting the appropriate scan template and sele"
+        }
+      ],
+      "vector_hit": true,
+      "fts_hit": true,
+      "hybrid_hit": true,
+      "fts_count": 5,
+      "vector_err": null,
+      "fts_err": null,
+      "hybrid_err": null
+    }
+  ]
+}

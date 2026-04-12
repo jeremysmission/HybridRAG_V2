@@ -6,13 +6,13 @@
 
 ## What actually happened
 
-Agent 1's Round 3 Tier 2 memory fix discovered that the streaming chunk iteration bug was caused by a silent `except: pass` that fell back to `load_chunks()` when the optional `pylance` package wasn't available. The fix was NOT to install pylance — it was to switch the streaming code to `lancedb.SearchBuilder.to_batches()`, which is built into `lancedb` itself (version 0.30+, already in requirements.txt) and does not depend on pylance at all.
+reviewer's Round 3 Tier 2 memory fix discovered that the streaming chunk iteration bug was caused by a silent `except: pass` that fell back to `load_chunks()` when the optional `pylance` package wasn't available. The fix was NOT to install pylance — it was to switch the streaming code to `lancedb.SearchBuilder.to_batches()`, which is built into `lancedb` itself (version 0.30+, already in requirements.txt) and does not depend on pylance at all.
 
-**Conclusion:** pylance is NOT a required dependency for V2. Installing it is harmless but pointless. The real fix is Agent 1's Round 3 commit to `scripts/tiered_extract.py` which uses lancedb's own streaming API.
+**Conclusion:** pylance is NOT a required dependency for V2. Installing it is harmless but pointless. The real fix is reviewer's Round 3 commit to `scripts/tiered_extract.py` which uses lancedb's own streaming API.
 
 ## What to do instead
 
-1. Pull the latest V2 (includes Agent 1's Round 3 fix at commit `8a1531b`).
+1. Pull the latest V2 (includes reviewer's Round 3 fix at commit `8a1531b`).
 2. Run `scripts/verify_install.py` — it checks every critical dependency (torch, lancedb, numpy, pyarrow, sentence_transformers, gliner, openai, fastapi, lxml) AND confirms `lancedb.LanceQueryBuilder.to_batches` exists:
 
    ```
@@ -53,7 +53,7 @@ On a 10.4M chunk corpus, this causes:
 - On 64 GB machines, it paging thrashes and takes hours longer than it should
 - Entity extraction may crash partway through with no clear error
 
-This bug hid on Beast and the workstation laptop today (2026-04-11) and was only caught when Agent 1 explicitly checked `import lance` and it failed.
+This bug hid on primary workstation and the workstation laptop today (2026-04-11) and was only caught when reviewer explicitly checked `import lance` and it failed.
 
 ## The Fix
 
@@ -106,7 +106,7 @@ Skipping this check risks:
 
 ## Why This Isn't Automatic Yet
 
-`pylance` was not in `requirements.txt` because it was pulled in implicitly on Beast via other packages. Work machines with slightly different environments do not get it. Agent 1 is adding it to the dependency list as part of the Tier 2 memory fix, but until that push lands and propagates to every machine, manual verification is required.
+`pylance` was not in `requirements.txt` because it was pulled in implicitly on primary workstation via other packages. Work machines with slightly different environments do not get it. reviewer is adding it to the dependency list as part of the Tier 2 memory fix, but until that push lands and propagates to every machine, manual verification is required.
 
 ## Detection Commands
 
