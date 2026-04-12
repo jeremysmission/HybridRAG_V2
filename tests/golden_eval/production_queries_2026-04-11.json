@@ -1,0 +1,261 @@
+[
+  {
+    "_comment": "=== PERSONA 1: PROGRAM MANAGER (PQ-001 through PQ-005) ===",
+    "id": "PQ-001",
+    "query": "Which CDRL deliverables in A001, A009, and A031 have the latest status updates?",
+    "expected_facts": ["A001", "A009", "A031", "Status"],
+    "expected_confidence": "HIGH",
+    "query_type": "TABULAR",
+    "persona": "Program Manager",
+    "document_family": "CDRLs — 1.5 enterprise program CDRLS (A001 through A025+, each with dedicated subfolder)",
+    "production_rationale": "The PM needs structured deliverable status, not just narrative context. Production has numbered CDRL folders with explicit deliverable status signals, including A001, A009, and A031."
+  },
+  {
+    "id": "PQ-002",
+    "query": "What schedule milestones and slips are shown in the latest PMR and Integrated Master Schedule?",
+    "expected_facts": ["PMR", "Integrated Master Schedule", "Schedule Performance"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "persona": "Program Manager",
+    "document_family": "Program Management — 6.0 PMR (IGS_PMR_2026_FebR1.pptx, Schedule Performance, SubK Slides) + CDRL A031 Integrated Master Schedule",
+    "production_rationale": "This is a narrative briefing question about schedule health. Production has PMR presentations and IMS artifacts that support the PM's milestone review workflow."
+  },
+  {
+    "id": "PQ-003",
+    "query": "How do the current FEP actuals compare to the funding plan and LDI burn-rate by OY3?",
+    "expected_facts": ["FEP", "Actuals", "Funding Plan", "LDI", "OY3"],
+    "expected_confidence": "HIGH",
+    "query_type": "TABULAR",
+    "persona": "Program Manager",
+    "document_family": "Program Management — 1.0 FEP (enterprise program FEP w_DMEA_OY3, ITD Actuals, CEAC) + LDI budget/hours spreadsheets",
+    "production_rationale": "This is a structured cost-tracking question. Production has FEP and LDI spreadsheets with actuals, plan, and burn-rate fields that map to the PM's daily budget view."
+  },
+  {
+    "id": "PQ-004",
+    "query": "What is the latest PMR briefing file name for the enterprise program program?",
+    "expected_facts": ["IGS_PMR_2026_FebR1.pptx"],
+    "expected_confidence": "HIGH",
+    "query_type": "ENTITY",
+    "persona": "Program Manager",
+    "document_family": "Program Management — 6.0 PMR (2022-2026 folders, Schedule Performance, SubK Slides)",
+    "production_rationale": "This is a direct entity lookup for the current briefing artifact. Production contains the named PMR presentation file in the PMR folder tree."
+  },
+  {
+    "id": "PQ-005",
+    "query": "What staffing, suborganization, and budget risks are flagged across the latest PM brief and variance reports?",
+    "expected_facts": ["SubK", "Weekly Variance Reports", "FEP"],
+    "expected_confidence": "HIGH",
+    "query_type": "COMPLEX",
+    "persona": "Program Manager",
+    "document_family": "Program Management — #Follow-On materials + 6.0 PMR/SubK Slides + 2.0 Weekly Variance Reports + 1.0 FEP",
+    "production_rationale": "This is a multi-part PM question that requires decomposing the staffing, suborganization, and budget angles before synthesizing them into one answer."
+  },
+
+  {
+    "_comment": "=== PERSONA 2: LOGISTICS LEAD (PQ-006 through PQ-010) ===",
+    "id": "PQ-006",
+    "query": "What purchase orders are currently open and which vendors or CLINs are still outstanding?",
+    "expected_facts": ["Purchase Order", "Vendor", "CLIN"],
+    "expected_confidence": "HIGH",
+    "query_type": "TABULAR",
+    "persona": "Logistics Lead",
+    "document_family": "Logistics / Procurement — 5.0 Logistics/Procurement/001 - Open Purchases (iBuy GL lists with CLIN, Vendor, PO# columns)",
+    "production_rationale": "This is a classic structured PO-status lookup. Production has procurement spreadsheets with open-purchase, vendor, and CLIN fields."
+  },
+  {
+    "id": "PQ-007",
+    "query": "Which site is named on the latest hand-carry packing list?",
+    "expected_facts": ["Misawa", "Okinawa"],
+    "expected_confidence": "HIGH",
+    "query_type": "ENTITY",
+    "persona": "Logistics Lead",
+    "document_family": "Logistics / Shipments — 5.0 Logistics/Shipments (Hand Carry Packing List, NG Packing List Template, Shipping Request forms)",
+    "production_rationale": "This is a direct site lookup from shipping paperwork. Production includes real OCONUS packing documents with site names in the shipment records."
+  },
+  {
+    "id": "PQ-008",
+    "query": "What parts are on the recommended spares list and what are their part numbers, quantities, and OEMs?",
+    "expected_facts": ["PART NUMBER", "QTY", "OEM", "Recommended Spares"],
+    "expected_confidence": "HIGH",
+    "query_type": "TABULAR",
+    "persona": "Logistics Lead",
+    "document_family": "Logistics / Parts — 5.0 Logistics/Parts (Downloaded Information)/Recommended Spares Parts List .xlsx",
+    "production_rationale": "This is table-style inventory retrieval from a spreadsheet. Production has a real spares list with part numbers, quantities, OEMs, and sub-system fields."
+  },
+  {
+    "id": "PQ-009",
+    "query": "Which equipment is due for calibration next, and what do the calibration audit folders show?",
+    "expected_facts": ["Calibration", "Material", "Testing Equipment"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "persona": "Logistics Lead",
+    "document_family": "Logistics / Calibration — 5.0 Logistics/Calibration (yearly folders 2022-2025, Material and Testing Equipment Calibration.pdf)",
+    "production_rationale": "This is a narrative operational question about calibration timing and audit evidence. Production has yearly calibration folders and a calibration reference PDF."
+  },
+  {
+    "id": "PQ-010",
+    "query": "Which OCONUS shipments also required customs or export-control paperwork, and what did they contain?",
+    "expected_facts": ["CBP Form 3311", "EEMS", "DD250", "Shipment"],
+    "expected_confidence": "HIGH",
+    "query_type": "COMPLEX",
+    "persona": "Logistics Lead",
+    "document_family": "Logistics / Shipments + Disposition + EEMS + DD250 records",
+    "production_rationale": "This is a multi-part logistics question spanning shipment content and compliance paperwork. Production has customs, disposition, and export-control artifacts that need to be combined."
+  },
+
+  {
+    "_comment": "=== PERSONA 3: FIELD ENGINEER (PQ-011 through PQ-015) ===",
+    "id": "PQ-011",
+    "query": "What parts have the highest failure rates across all sites based on the Part Failure Tracker and corrective action folders?",
+    "expected_facts": ["Part Failure", "Corrective Action Plan", "Failure Summary"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATE",
+    "persona": "Field Engineer",
+    "document_family": "Asset Mgmt — Part Failure Tracker.xlsx + CDRL A001 CAP folders + A001 Failure Summary & Analysis Report DID",
+    "production_rationale": "This is a cross-site counting/trending query. Production has a real Part Failure Tracker and corrective-action folders that support failure-rate aggregation."
+  },
+  {
+    "id": "PQ-012",
+    "query": "What Maintenance Service Reports have been filed across all monitoring system sites, and what maintenance actions and part replacements do they document?",
+    "expected_facts": ["Maintenance Service Report", "MSR"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATE",
+    "persona": "Field Engineer",
+    "document_family": "CDRL A002 — Maintenance Service Report (MSR) — site-specific subfolders",
+    "production_rationale": "This is an aggregate retrieval over many site reports. Production has many real MSR folders, so the question should summarize actions across multiple maintenance records."
+  },
+  {
+    "id": "PQ-013",
+    "query": "What site outages have been caused by power failures, UPS issues, or environmental damage, and what were the return-to-service procedures?",
+    "expected_facts": ["Outage", "Power", "UPS", "Return to Service"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "persona": "Field Engineer",
+    "document_family": "Systems Engineering — 3_Site Outages Analysis + 4_Site Issues/Fairford + UPS and power-repair artifacts",
+    "production_rationale": "This is a narrative failure-analysis question. Production has outage analysis and power-repair documents that support return-to-service guidance."
+  },
+  {
+    "id": "PQ-014",
+    "query": "Which site is associated with the latest Awase Okinawa installation package?",
+    "expected_facts": ["Awase", "Okinawa"],
+    "expected_confidence": "HIGH",
+    "query_type": "ENTITY",
+    "persona": "Field Engineer",
+    "document_family": "Site Visits — Awase (Okinawa JP) install folders + CDRL A006/A007 installation test artifacts",
+    "production_rationale": "This is a direct site lookup tied to an installation package. Production has a named Awase/Okinawa install set and matching test documentation."
+  },
+  {
+    "id": "PQ-015",
+    "query": "What installation acceptance tests were performed at the Awase Okinawa install, and what does the Site Installation Plan say about the phases?",
+    "expected_facts": ["Awase", "Okinawa", "Install", "Acceptance Test"],
+    "expected_confidence": "HIGH",
+    "query_type": "COMPLEX",
+    "persona": "Field Engineer",
+    "document_family": "Site Visits — Awase install folders + CDRL A003 Site Installation Plan + A006/A007 acceptance test artifacts",
+    "production_rationale": "This is a multi-part engineering question that requires combining a site-visit record with installation-plan and test-report content."
+  },
+
+  {
+    "_comment": "=== PERSONA 4: NETWORK ADMIN / CYBERSECURITY (PQ-016 through PQ-020) ===",
+    "id": "PQ-016",
+    "query": "What ACAS scan results, SCAP scan results, and STIG review findings are documented for legacy monitoring system and monitoring system systems?",
+    "expected_facts": ["ACAS", "SCAP", "STIG"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "persona": "Network Admin / Cybersecurity",
+    "document_family": "Cybersecurity — A027 DAA Accreditation Support Data + 111023_STIG_Review.xlsx + CT&E-ST&E folders",
+    "production_rationale": "This is a narrative compliance question about scan results and STIG findings. Production has dedicated cybersecurity artifacts for these reviews."
+  },
+  {
+    "id": "PQ-017",
+    "query": "What system name is listed on the latest RMF Security Plan?",
+    "expected_facts": ["legacy monitoring system"],
+    "expected_confidence": "HIGH",
+    "query_type": "ENTITY",
+    "persona": "Network Admin / Cybersecurity",
+    "document_family": "Cybersecurity — A027 RMF Security Plan / Security Authorization Package / System Authorization Boundary",
+    "production_rationale": "This is a direct entity lookup for the named system in the RMF package. Production contains a dedicated RMF security-plan artifact with the system name."
+  },
+  {
+    "id": "PQ-018",
+    "query": "What security events and cyber incidents have been documented, including the Fairford Russian event and the Alpena PPTP buffer overflow?",
+    "expected_facts": ["Fairford", "Alpena", "Buffer Overflow"],
+    "expected_confidence": "HIGH",
+    "query_type": "SEMANTIC",
+    "persona": "Network Admin / Cybersecurity",
+    "document_family": "Cybersecurity / ISSO / Security Events (2017-05-03 Eielson IP Conflict, 2017-05-25 monitoring system Port Scan, 2017-08-11 Alpena PPTP Buffer Overflow, 2019-03-27 Russian Fairford)",
+    "production_rationale": "This is incident-review narrative retrieval. Production has real cybersecurity event writeups with named sites and concrete attack vectors."
+  },
+  {
+    "id": "PQ-019",
+    "query": "What ATO re-authorization packages have been submitted and what system changes triggered them?",
+    "expected_facts": ["ATO", "RMF", "Authorization"],
+    "expected_confidence": "HIGH",
+    "query_type": "TABULAR",
+    "persona": "Network Admin / Cybersecurity",
+    "document_family": "Cybersecurity / ATO-ATC Package Changes (18+ packages) + A027 authorization package artifacts",
+    "production_rationale": "This is a structured package-status lookup across authorization artifacts. Production has multiple ATO change packages with clear package metadata."
+  },
+  {
+    "id": "PQ-020",
+    "query": "What monthly continuous monitoring audit results are documented for 2024, and what cybersecurity directives are active?",
+    "expected_facts": ["Continuous Monitoring", "Monthly Audit", "Log4j", "Wanna-Cry"],
+    "expected_confidence": "HIGH",
+    "query_type": "COMPLEX",
+    "persona": "Network Admin / Cybersecurity",
+    "document_family": "Cybersecurity — ISSO/Continuous_Monitoring/Monthly Audits-Archive/2024 + directives for Log4j, Wanna-Cry, and SPARTAN VIPER",
+    "production_rationale": "This is a multi-part cyber operations question that combines audit results with active directive tracking. Production has both monthly monitoring archives and directive artifacts."
+  },
+
+  {
+    "_comment": "=== PERSONA 5: AGGREGATION / CROSS-ROLE (PQ-021 through PQ-025) ===",
+    "id": "PQ-021",
+    "query": "How many monitoring system and legacy monitoring system sites are there, where are they located, and which ones have had installations or maintenance visits in the last three years?",
+    "expected_facts": ["Thule", "Eglin", "Vandenberg", "Ascension", "Guam", "Misawa", "Awase"],
+    "expected_confidence": "HIGH",
+    "query_type": "AGGREGATE",
+    "persona": "Aggregation / Cross-role",
+    "document_family": "Cross-family — monitoring system Sites/1_Sites + legacy monitoring system sites + Site Visits + MSR folders",
+    "production_rationale": "This is a cross-folder site-count and visit-history question. Production has enough site folders and visit records to support enumeration across the corpus."
+  },
+  {
+    "id": "PQ-022",
+    "query": "Which sites have had Corrective Action Plans filed, what incident numbers and failure types were involved, and what parts were consumed?",
+    "expected_facts": ["CAP", "IGSI-1811", "Fairford", "Misawa", "Learmonth", "Kwajalein", "Alpena"],
+    "expected_confidence": "HIGH",
+    "query_type": "COMPLEX",
+    "persona": "Aggregation / Cross-role",
+    "document_family": "Cross-family — A001 CAP folders + Part Failure Tracker + MSRs + spares lists",
+    "production_rationale": "This is a multi-part cross-role synthesis problem. It requires combining failure analysis, corrective actions, and parts consumption across multiple document families."
+  },
+  {
+    "id": "PQ-023",
+    "query": "How many open purchase orders exist across all procurement records, what parts have been received versus outstanding, and what is the total CLIN coverage?",
+    "expected_facts": ["Purchase Order", "CLIN", "Received", "Open"],
+    "expected_confidence": "PARTIAL",
+    "query_type": "TABULAR",
+    "persona": "Aggregation / Cross-role",
+    "document_family": "Cross-family — Procurement open/received folders + iBuy GL lists + A014 Priced Bill of Materials",
+    "production_rationale": "This is a structured cross-document procurement count. Production has open/received purchase records and CLIN-bearing spreadsheets that support table-style aggregation."
+  },
+  {
+    "id": "PQ-024",
+    "query": "Summarize all shipment activity, parts disposition, and calibration actions across fiscal years 2022 through 2026.",
+    "expected_facts": ["Shipment", "Disposition", "Calibration", "2022", "2023", "2024", "2025"],
+    "expected_confidence": "PARTIAL",
+    "query_type": "AGGREGATE",
+    "persona": "Aggregation / Cross-role",
+    "document_family": "Cross-family — Shipments year folders + Disposition year folders + Calibration year folders + AssetSmart snapshots",
+    "production_rationale": "This is a multi-year cross-document summarization problem. Production has shipment, disposition, and calibration records spanning multiple years."
+  },
+  {
+    "id": "PQ-025",
+    "query": "Give me a cross-program risk summary: what CDRLs are overdue, what ATO packages are pending, what cybersecurity directives remain active, and what parts have recurring failures?",
+    "expected_facts": ["CDRL", "ATO", "MTO", "TASKORD", "Part Failure"],
+    "expected_confidence": "PARTIAL",
+    "query_type": "COMPLEX",
+    "persona": "Aggregation / Cross-role",
+    "document_family": "Cross-family — CDRLs + ATO-ATC packages + directives + Part Failure Tracker + PMR + FEP",
+    "production_rationale": "This is the broadest demo-style cross-role synthesis query. It pulls together PM, logistics, cyber, and field-engineering risk signals into one answer."
+  }
+]

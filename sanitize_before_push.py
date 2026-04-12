@@ -70,6 +70,7 @@ TEXT_REPLACEMENTS = [
     (r"\bIGS/NEXION\b", "enterprise program"),
     (r"\bIGS[/ ]NEXION\b", "enterprise program"),
     (r"\bNEXION\b", "monitoring system"),
+    (r"\bISTO\b", "legacy monitoring system"),
     # Keep path segments like ".../IGS" intact in live config/schema strings.
     (r"(?<![./\\\\])\bIGS\b(?![/\\\\])", "enterprise program"),
     (r"\bionospheric\b", "atmospheric"),

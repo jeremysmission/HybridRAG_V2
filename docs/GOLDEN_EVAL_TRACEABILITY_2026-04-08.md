@@ -62,7 +62,7 @@ The traceability goal is simple: every `PQ-###` in the JSON pack must be traceab
 
 | ID | Type | Query | Corpus family |
 |----|------|-------|---------------|
-| PQ-016 | SEMANTIC | What ACAS scan results, SCAP scan results, and STIG review findings are documented for ISTO and monitoring system systems? | A027 DAA Accreditation Support Data + STIG review + CT&E-ST&E folders |
+| PQ-016 | SEMANTIC | What ACAS scan results, SCAP scan results, and STIG review findings are documented for the legacy monitoring system and the monitoring system? | A027 DAA Accreditation Support Data + STIG review + CT&E-ST&E folders |
 | PQ-017 | ENTITY | What system name is listed on the latest RMF Security Plan? | A027 RMF Security Plan / Security Authorization Package |
 | PQ-018 | SEMANTIC | What security events and cyber incidents have been documented, including the Fairford Russian event and the Alpena PPTP buffer overflow? | Security Events archive |
 | PQ-019 | TABULAR | What ATO re-authorization packages have been submitted and what system changes triggered them? | ATO-ATC package changes + A027 authorization artifacts |
@@ -72,7 +72,7 @@ The traceability goal is simple: every `PQ-###` in the JSON pack must be traceab
 
 | ID | Type | Query | Corpus family |
 |----|------|-------|---------------|
-| PQ-021 | AGGREGATE | How many monitoring system and ISTO sites are there, where are they located, and which ones have had installations or maintenance visits in the last three years? | monitoring system Sites + ISTO sites + Site Visits + MSR folders |
+| PQ-021 | AGGREGATE | How many monitoring system and legacy monitoring system sites are there, where are they located, and which ones have had installations or maintenance visits in the last three years? | monitoring system sites + legacy monitoring system sites + Site Visits + MSR folders |
 | PQ-022 | COMPLEX | Which sites have had Corrective Action Plans filed, what incident numbers and failure types were involved, and what parts were consumed? | A001 CAP folders + Part Failure Tracker + MSRs + spares lists |
 | PQ-023 | TABULAR | How many open purchase orders exist across all procurement records, what parts have been received versus outstanding, and what is the total CLIN coverage? | Procurement open/received folders + iBuy GL lists + A014 BOM |
 | PQ-024 | AGGREGATE | Summarize all shipment activity, parts disposition, and calibration actions across fiscal years 2022 through 2026. | Shipments + Disposition + Calibration + AssetSmart snapshots |
