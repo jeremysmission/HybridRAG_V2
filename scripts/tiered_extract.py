@@ -30,18 +30,20 @@ workstation.
 
 Streaming twice costs us a second scan over LanceDB (seconds on primary workstation)
 and gives us a hard memory ceiling that scales with ``batch_size`` and
-the GLiNER model footprint, not with corpus size. The only state kept
-across the Tier 1 and Tier 2 passes is a set of Tier 1 hit chunk IDs
-(``tier1_hit_chunk_ids``) — a few million short strings in the worst
-case, still comfortably under a gigabyte.
+the GLiNER model footprint, not with corpus size. Tier 1 entities are
+persisted before Tier 2 begins, and Tier 2 flushes bounded batches to
+SQLite while it streams, so entity retention no longer scales with the
+full corpus.
 """
 
 from __future__ import annotations
 
 import argparse
+import gc
 import json
 import sys
 import time
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -327,6 +329,169 @@ def _resolve_gliner_device(device: str) -> str | None:
     return resolved
 
 
+def _is_cuda_oom(exc: Exception) -> bool:
+    """Return True when an exception is clearly a CUDA OOM condition."""
+    message = str(exc).lower()
+    return "out of memory" in message and "cuda" in message
+
+
+def _stream_tier2_gliner(
+    store: LanceStore,
+    device: str,
+    model_name: str,
+    min_chunk_len: int,
+    min_confidence: float,
+    limit: int = 0,
+    stream_batch_size: int = 10000,
+    gliner_batch_size: int = 8,
+    progress_every: int = 500,
+    gliner_model=None,
+    on_entity_batch=None,
+) -> dict[str, object]:
+    """Shared Tier 2 streaming path used by both production and tests."""
+    if gliner_model is None:
+        try:
+            from gliner import GLiNER
+        except ImportError:
+            print("  GLiNER not installed -- skipping Tier 2")
+            return {
+                "scanned": 0,
+                "candidates": 0,
+                "raw_count": 0,
+                "type_counts": Counter(),
+            }
+
+        resolved_device = _resolve_gliner_device(device)
+        if resolved_device is None:
+            return {
+                "scanned": 0,
+                "candidates": 0,
+                "raw_count": 0,
+                "type_counts": Counter(),
+            }
+
+        print(f"  Loading GLiNER model: {model_name} on {resolved_device}")
+        model = GLiNER.from_pretrained(model_name)
+        if "cuda" in resolved_device:
+            import torch
+            gpu_idx = int(resolved_device.split(":")[1]) if ":" in resolved_device else 0
+            model = model.to(resolved_device)
+            print(f"  GLiNER on {resolved_device}: {torch.cuda.get_device_name(gpu_idx)}")
+            free, total = torch.cuda.mem_get_info(gpu_idx)
+            print(f"  VRAM after model load: {free/1e9:.1f}GB free / {total/1e9:.1f}GB total")
+    else:
+        model = gliner_model
+        resolved_device = device
+
+    labels = ["PERSON", "ORGANIZATION", "SITE", "FAILURE_MODE", "DATE"]
+    label_map = {
+        "PERSON": "PERSON",
+        "ORGANIZATION": "ORG",
+        "SITE": "SITE",
+        "FAILURE_MODE": "PART",
+        "DATE": "DATE",
+    }
+
+    pending: list[dict] = []
+    scanned = 0
+    candidates = 0
+    raw_count = 0
+    type_counts: Counter[str] = Counter()
+
+    def flush_pending() -> None:
+        """Run GLiNER on the pending batch and emit extracted entities."""
+        nonlocal raw_count
+        if not pending:
+            return
+
+        texts = [c["text"][:512] for c in pending]  # GLiNER works best on shorter text
+        pending_size = len(pending)
+        try:
+            batch_results = model.batch_predict_entities(
+                texts, labels, threshold=min_confidence, flat_ner=True,
+            )
+        except Exception as e:
+            pending.clear()
+            if _is_cuda_oom(e):
+                oom_detail = (
+                    f"  GLiNER CUDA OOM at scanned={scanned:,}, candidates={candidates:,}, "
+                    f"pending_batch={pending_size:,}, device={resolved_device}, model={model_name}"
+                )
+                if "cuda" in resolved_device:
+                    import torch
+                    gpu_idx = int(resolved_device.split(":")[1]) if ":" in resolved_device else 0
+                    free, total = torch.cuda.mem_get_info(gpu_idx)
+                    allocated = torch.cuda.memory_allocated(gpu_idx)
+                    reserved = torch.cuda.memory_reserved(gpu_idx)
+                    max_allocated = torch.cuda.max_memory_allocated(gpu_idx)
+                    max_reserved = torch.cuda.max_memory_reserved(gpu_idx)
+                    oom_detail += (
+                        f", free={free/1e9:.2f}GB/{total/1e9:.2f}GB"
+                        f", allocated={allocated/1e9:.2f}GB"
+                        f", reserved={reserved/1e9:.2f}GB"
+                        f", max_allocated={max_allocated/1e9:.2f}GB"
+                        f", max_reserved={max_reserved/1e9:.2f}GB"
+                    )
+                    torch.cuda.empty_cache()
+                raise RuntimeError(f"{oom_detail}. Aborting Tier 2 instead of retrying a failed batch.") from e
+
+            print(f"  GLiNER batch error at scanned={scanned:,}: {e}")
+            return
+
+        entity_batch: list[Entity] = []
+        for chunk, entities in zip(pending, batch_results):
+            for ent in entities:
+                v2_type = label_map.get(ent["label"], ent["label"])
+                entity_batch.append(Entity(
+                    entity_type=v2_type,
+                    text=ent["text"].strip(),
+                    raw_text=ent["text"],
+                    confidence=ent["score"],
+                    chunk_id=chunk["chunk_id"],
+                    source_path=chunk["source_path"],
+                    context="",
+                ))
+        pending.clear()
+
+        raw_count += len(entity_batch)
+        type_counts.update(e.entity_type for e in entity_batch)
+        if on_entity_batch is not None:
+            on_entity_batch(entity_batch)
+
+    # Second streaming pass — this is the whole point of the redesign.
+    # iter_chunk_batches yields one list[dict] at a time; we keep only
+    # the current stream batch plus the GLiNER pending batch in memory.
+    for batch in iter_chunk_batches(store, batch_size=stream_batch_size, limit=limit):
+        for chunk in batch:
+            scanned += 1
+            if not _is_tier2_candidate(chunk, min_chunk_len):
+                continue
+            candidates += 1
+            pending.append(chunk)
+            if len(pending) >= gliner_batch_size:
+                flush_pending()
+        # Progress log cadence — per-batch, not per-chunk
+        if progress_every and scanned % progress_every < stream_batch_size:
+            print(
+                f"  GLiNER progress: scanned {scanned:,}, "
+                f"candidates {candidates:,}, entities {raw_count:,}"
+            )
+
+    # Drain any remainder
+    flush_pending()
+
+    print(
+        f"  Tier 2 filter: {scanned:,} scanned -> {candidates:,} candidates "
+        f"({scanned - candidates:,} skipped by filter)"
+    )
+    return {
+        "scanned": scanned,
+        "candidates": candidates,
+        "raw_count": raw_count,
+        "type_counts": type_counts,
+    }
+
+
 def run_tier2_gliner(
     store: LanceStore,
     tier1_hit_chunk_ids: set[str],
@@ -353,9 +518,9 @@ def run_tier2_gliner(
     store:
         A LanceStore to stream from. Must already be open.
     tier1_hit_chunk_ids:
-        Set of chunk_ids that produced at least one Tier 1 entity. Passed
-        through but not currently used for filtering (see
-        ``_is_tier2_candidate`` docstring for rationale).
+        Compatibility-only parameter kept for the test harness and the
+        frozen GUI import path. The production Tier 2 path no longer
+        carries a corpus-scale Tier 1 hit set across passes.
     device:
         Requested CUDA device (e.g. ``cuda:1``).
     model_name:
@@ -380,98 +545,26 @@ def run_tier2_gliner(
 
     Returns
     -------
-    list[Entity]: de-duplication happens in the caller against the
-    cross-tier ``seen`` set, so this function does not dedupe itself.
+    list[Entity]: compatibility wrapper used by tests. Production code
+    uses ``_stream_tier2_gliner`` directly so entities can be flushed in
+    bounded SQLite batches instead of being retained for the full corpus.
     """
-    if gliner_model is None:
-        try:
-            from gliner import GLiNER
-        except ImportError:
-            print("  GLiNER not installed -- skipping Tier 2")
-            return []
-
-        resolved_device = _resolve_gliner_device(device)
-        if resolved_device is None:
-            return []
-
-        print(f"  Loading GLiNER model: {model_name} on {resolved_device}")
-        model = GLiNER.from_pretrained(model_name)
-        if "cuda" in resolved_device:
-            import torch
-            gpu_idx = int(resolved_device.split(":")[1]) if ":" in resolved_device else 0
-            model = model.to(resolved_device)
-            print(f"  GLiNER on {resolved_device}: {torch.cuda.get_device_name(gpu_idx)}")
-            free, total = torch.cuda.mem_get_info(gpu_idx)
-            print(f"  VRAM after model load: {free/1e9:.1f}GB free / {total/1e9:.1f}GB total")
-    else:
-        model = gliner_model
-
-    labels = ["PERSON", "ORGANIZATION", "SITE", "FAILURE_MODE", "DATE"]
-    label_map = {
-        "PERSON": "PERSON",
-        "ORGANIZATION": "ORG",
-        "SITE": "SITE",
-        "FAILURE_MODE": "PART",
-        "DATE": "DATE",
-    }
-
     all_entities: list[Entity] = []
-    pending: list[dict] = []
-    scanned = 0
-    candidates = 0
+    def collect_entities(entity_batch: list[Entity]) -> None:
+        all_entities.extend(entity_batch)
 
-    def flush_pending() -> None:
-        """Run GLiNER on the pending batch and append extracted entities."""
-        if not pending:
-            return
-        texts = [c["text"][:512] for c in pending]  # GLiNER works best on shorter text
-        try:
-            batch_results = model.batch_predict_entities(
-                texts, labels, threshold=min_confidence, flat_ner=True,
-            )
-        except Exception as e:
-            print(f"  GLiNER batch error at scanned={scanned:,}: {e}")
-            pending.clear()
-            return
-        for chunk, entities in zip(pending, batch_results):
-            for ent in entities:
-                v2_type = label_map.get(ent["label"], ent["label"])
-                all_entities.append(Entity(
-                    entity_type=v2_type,
-                    text=ent["text"].strip(),
-                    raw_text=ent["text"],
-                    confidence=ent["score"],
-                    chunk_id=chunk["chunk_id"],
-                    source_path=chunk["source_path"],
-                    context="",
-                ))
-        pending.clear()
-
-    # Second streaming pass — this is the whole point of the redesign.
-    # iter_chunk_batches yields one list[dict] at a time; we keep only
-    # the current stream batch plus the GLiNER pending batch in memory.
-    for batch in iter_chunk_batches(store, batch_size=stream_batch_size, limit=limit):
-        for chunk in batch:
-            scanned += 1
-            if not _is_tier2_candidate(chunk, min_chunk_len):
-                continue
-            candidates += 1
-            pending.append(chunk)
-            if len(pending) >= gliner_batch_size:
-                flush_pending()
-        # Progress log cadence — per-batch, not per-chunk
-        if progress_every and scanned % progress_every < stream_batch_size:
-            print(
-                f"  GLiNER progress: scanned {scanned:,}, "
-                f"candidates {candidates:,}, entities {len(all_entities):,}"
-            )
-
-    # Drain any remainder
-    flush_pending()
-
-    print(
-        f"  Tier 2 filter: {scanned:,} scanned -> {candidates:,} candidates "
-        f"({scanned - candidates:,} skipped by filter)"
+    _stream_tier2_gliner(
+        store=store,
+        device=device,
+        model_name=model_name,
+        min_chunk_len=min_chunk_len,
+        min_confidence=min_confidence,
+        limit=limit,
+        stream_batch_size=stream_batch_size,
+        gliner_batch_size=gliner_batch_size,
+        progress_every=progress_every,
+        gliner_model=gliner_model,
+        on_entity_batch=collect_entities,
     )
 
     return all_entities
@@ -527,9 +620,6 @@ def main() -> None:
     seen_rels: set = set()
     unique_rels: list[Relationship] = []
     chunks_processed = 0
-    # Hit-set is all we carry across to Tier 2. Never the chunks themselves —
-    # that's what blew up RAM to 57 GB in the old design (see module docstring).
-    tier1_hit_chunk_ids: set[str] = set()
 
     for batch in iter_chunk_batches(store, batch_size=10000, limit=args.limit):
         for chunk in batch:
@@ -541,15 +631,11 @@ def main() -> None:
             block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
             co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
 
-            chunk_had_hit = False
             for e in entities + block_entities:
                 key = (e.chunk_id, e.entity_type, e.text)
                 if key not in seen:
                     seen.add(key)
                     unique_t1.append(e)
-                    chunk_had_hit = True
-            if chunk_had_hit:
-                tier1_hit_chunk_ids.add(cid)
 
             for r in block_rels + co_rels:
                 key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
@@ -565,44 +651,74 @@ def main() -> None:
 
     t1_elapsed = time.perf_counter() - t1_start
 
-    from collections import Counter
     t1_types = Counter(e.entity_type for e in unique_t1)
     t1_preds = Counter(r.predicate for r in unique_rels)
-    print(f"  [TIER 1] {len(unique_t1):,} entities from {len(tier1_hit_chunk_ids):,} chunks ({t1_elapsed:.2f}s)")
+    t1_entity_total = len(unique_t1)
+    print(f"  [TIER 1] {t1_entity_total:,} entities ({t1_elapsed:.2f}s)")
     print(f"           Types: {dict(t1_types)}")
     print(f"           Rels:  {len(unique_rels):,} -- {dict(t1_preds)}")
     print(f"           Rate: {chunks_processed/max(t1_elapsed, 0.001):,.0f} chunks/sec")
     print()
 
-    all_entities = list(unique_t1)
+    total_entity_count = t1_entity_total
+    total_types = Counter(t1_types)
+    if not args.dry_run and unique_t1:
+        before_t1_e = entity_store.count_entities()
+        entity_store.insert_entities(unique_t1)
+        after_t1_e = entity_store.count_entities()
+        print(f"  [TIER 1] persisted {after_t1_e - before_t1_e:,} entities (before={before_t1_e:,}, after={after_t1_e:,})")
+        print()
+
+    unique_t1.clear()
+    seen.clear()
+    gc.collect()
+
     all_rels = list(unique_rels)
+    seen_rels.clear()
+    unique_rels.clear()
 
     # --- Tier 2: GLiNER (second streaming pass over the store) ---
+    t2_raw_count = 0
+    t2_types: Counter[str] = Counter()
+    t2_new_count = 0
     if args.tier >= 2:
         print(f"  [TIER 2] GLiNER extraction via second streaming pass...")
         t2_start = time.perf_counter()
-        tier2_entities = run_tier2_gliner(
+        tier2_flush_buffer: list[Entity] = []
+        tier2_store_flush_size = 1000
+
+        def handle_tier2_batch(entity_batch: list[Entity]) -> None:
+            if args.dry_run:
+                return
+            tier2_flush_buffer.extend(entity_batch)
+            if len(tier2_flush_buffer) >= tier2_store_flush_size:
+                entity_store.insert_entities(tier2_flush_buffer)
+                tier2_flush_buffer.clear()
+
+        before_t2_e = entity_store.count_entities() if not args.dry_run else 0
+        t2_result = _stream_tier2_gliner(
             store=store,
-            tier1_hit_chunk_ids=tier1_hit_chunk_ids,
             device=config.extraction.gliner_device,
             model_name=config.extraction.gliner_model,
             min_chunk_len=config.extraction.gliner_min_chunk_len,
             min_confidence=config.extraction.min_confidence,
             limit=args.limit,
+            on_entity_batch=handle_tier2_batch,
         )
+        if not args.dry_run and tier2_flush_buffer:
+            entity_store.insert_entities(tier2_flush_buffer)
+            tier2_flush_buffer.clear()
         t2_elapsed = time.perf_counter() - t2_start
 
-        # Dedup against the cross-tier seen set
-        new_t2_count = 0
-        for e in tier2_entities:
-            key = (e.chunk_id, e.entity_type, e.text)
-            if key not in seen:
-                seen.add(key)
-                all_entities.append(e)
-                new_t2_count += 1
+        t2_raw_count = int(t2_result["raw_count"])
+        t2_types = Counter(t2_result["type_counts"])
+        total_entity_count += t2_raw_count
+        total_types.update(t2_types)
+        if not args.dry_run:
+            after_t2_e = entity_store.count_entities()
+            t2_new_count = after_t2_e - before_t2_e
 
-        t2_types = Counter(e.entity_type for e in tier2_entities)
-        print(f"  [TIER 2] {len(tier2_entities):,} entities raw, {new_t2_count:,} new after dedup ({t2_elapsed:.1f}s)")
+        print(f"  [TIER 2] {t2_raw_count:,} entities raw, {t2_new_count:,} new after dedup ({t2_elapsed:.1f}s)")
         print(f"           Types: {dict(t2_types)}")
         print()
 
@@ -611,13 +727,6 @@ def main() -> None:
         print("  [TIER 3] LLM extraction (not yet implemented -- reserved for flagged items)")
         print()
 
-    # --- Store ---
-    if not args.dry_run and all_entities:
-        before_e = entity_store.count_entities()
-        inserted_e = entity_store.insert_entities(all_entities)
-        after_e = entity_store.count_entities()
-        print(f"  Entities:    {inserted_e:,} new (before={before_e:,}, after={after_e:,})")
-
     if not args.dry_run and all_rels:
         before_r = rel_store.count()
         inserted_r = rel_store.insert_relationships(all_rels)
@@ -625,13 +734,12 @@ def main() -> None:
         print(f"  Rels:        {inserted_r:,} new (before={before_r:,}, after={after_r:,})")
 
     if args.dry_run:
-        print(f"  DRY RUN:     would insert up to {len(all_entities):,} entities, {len(all_rels):,} rels")
+        print(f"  DRY RUN:     would insert up to {total_entity_count:,} entities, {len(all_rels):,} rels")
 
-    total_types = Counter(e.entity_type for e in all_entities)
     total_preds = Counter(r.predicate for r in all_rels)
     print()
     print(DIVIDER)
-    print(f"  Total entities:      {len(all_entities):,}")
+    print(f"  Total entities:      {total_entity_count:,}")
     print(f"  Entity breakdown:    {dict(total_types)}")
     print(f"  Total relationships: {len(all_rels):,}")
     print(f"  Rel breakdown:       {dict(total_preds)}")
