@@ -1,6 +1,6 @@
-# Agent Research Standing Orders
+# Research Standing Orders
 
-**Applies to:** all agents working on HybridRAG V2
+**Applies to:** all contributors working on HybridRAG V2
 **Authority:** Jeremy Randall (project owner)
 **Date established:** 2026-04-11
 

@@ -6,10 +6,10 @@ HybridRAG V2 is a tri-store retrieval and answer system for enterprise program a
 
 ## Daily Workflow
 
-For the current multi-agent, dual-GPU daily operating model, see [DAILY_WORKFLOW_2026-04-08.md](./DAILY_WORKFLOW_2026-04-08.md).
+For the current multi-copilot, dual-GPU daily operating model, see [DAILY_WORKFLOW_2026-04-08.md](./DAILY_WORKFLOW_2026-04-08.md).
 
 ### Research Standing Orders
-See [AGENT_RESEARCH_STANDING_ORDERS.md](./docs/AGENT_RESEARCH_STANDING_ORDERS.md) for the durable recency-first web-research policy used by active agents.
+See [RESEARCH_STANDING_ORDERS.md](./docs/RESEARCH_STANDING_ORDERS.md) for the durable recency-first web-research policy used during active development sessions.
 
 ## Core Architecture
 
