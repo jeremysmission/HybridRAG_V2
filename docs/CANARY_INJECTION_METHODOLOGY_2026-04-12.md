@@ -372,7 +372,7 @@ The pack should contain exactly **40 files**. That is big enough to cover all fi
 |---|---|---|---|---|
 | VALDOC-001 | `valcanary_README.txt` | `.txt` | human-readable explanation and visible canary marker | namespace, purpose, warning |
 | VALDOC-002 | `valcanary_ground_truth_index.xlsx` | `.xlsx` | machine-readable fact index for implementation and rehearsal | all expected totals, query IDs, evidence IDs |
-| VALDOC-003 | `valcanary_source_manifest.txt` | `.txt` | deterministic source manifest for generated files | list of 40 docs, bundle names, hashes after generation |
+| VALDOC-003 | `valcanary_source_manifest.txt` | `.txt` | deterministic in-pack source manifest for generated files | list of 39 non-manifest pack files; manifest hash recorded in `ground_truth_registry.json` |
 
 ### 10_PROGRAM_MANAGEMENT bundle
 
@@ -856,7 +856,7 @@ The script must:
 3. write the same spreadsheet row order every time,
 4. write the same document metadata every time,
 5. strip or freeze creation timestamps in generated Office/PDF artifacts,
-6. emit a manifest with per-file SHA-256 hashes.
+6. emit an in-pack manifest with SHA-256 hashes for every pack file **except the manifest itself**, and record the manifest file hash in `ground_truth_registry.json`.
 
 ### Chunk stability requirements
 

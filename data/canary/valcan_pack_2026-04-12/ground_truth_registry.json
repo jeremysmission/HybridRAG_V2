@@ -19,6 +19,12 @@
     "40_CYBERSECURITY": 8,
     "50_CROSS_ROLE": 3
   },
+  "integrity_policy": {
+    "source_manifest_relative_path": "_VALCAN_2026/00_README/valcanary_source_manifest.txt",
+    "source_manifest_excludes_self": true,
+    "source_manifest_scope": "All other files under _VALCAN_2026",
+    "manifest_file_hash_authority": "ground_truth_registry.json"
+  },
   "collision_check": {
     "entity_store": "data/index/entities.sqlite3",
     "prefix_scans_clean": [
@@ -178,11 +184,11 @@
     },
     {
       "relative_path": "_VALCAN_2026/00_README/valcanary_README.txt",
-      "sha256": "386a74a16d5185bcda9056e45667d84ea00e57f496064562fe04d4d5568dd59d"
+      "sha256": "c0c69f060ac0b38670467d174d345957c5b2d461f50cc34d113c007acd0c422a"
     },
     {
       "relative_path": "_VALCAN_2026/00_README/valcanary_source_manifest.txt",
-      "sha256": "318bce3df6b872c33eacf26980719bb5417916fe14e55875a40f471b66f685f8"
+      "sha256": "e742f2742f9f9025ed169fd5989decb6416adabf7572d6a66e110cd214b6e730"
     },
     {
       "relative_path": "_VALCAN_2026/10_PROGRAM_MANAGEMENT/valcanary_budget_rollup_fy2024.xlsx",

@@ -40,6 +40,14 @@ That registry is the source of truth for:
 - the three real-scoped manual-count demo checks
 - per-file SHA-256 hashes for the authored pack
 
+Hash policy
+-----------
+
+- valcanary_source_manifest.txt is a human-readable in-pack hash ledger for every other file under _VALCAN_2026.
+- The manifest intentionally does not hash itself, because a self-embedded SHA-256 entry is not stable.
+- The authoritative hash for valcanary_source_manifest.txt itself is stored in ground_truth_registry.json.
+- ground_truth_registry.json is therefore the complete integrity record for all 40 authored pack files.
+
 Operational use
 ---------------
 
