@@ -657,7 +657,7 @@
   {
     "query_id": "PQ-129",
     "user_input": "What site outages have been analyzed in the Systems Engineering folder?",
-    "reference": "Site outages analysis lives under 6.0 Systems_Engineering/3_Site Outages Analysis/. The folder includes the live snapshot at the root, the Outage Analysis for IPT Slides/ subfolder with dated IGS-Outage-Analysis_<YYYY-MM-DD>.xlsx files, and z_Archive/OutageMetrics/CumulativeOutageFiles/<YYYY>/ with monthly cumulative outage xlsx files (2021 has 12 confirmed monthly files; 2022 has 7).",
+    "reference": "Site outages analysis lives under 6.0 Systems_Engineering/3_Site Outages Analysis/. The folder includes the live snapshot at the root, the Outage Analysis for IPT Slides/ subfolder with dated enterprise program-Outage-Analysis_<YYYY-MM-DD>.xlsx files, and z_Archive/OutageMetrics/CumulativeOutageFiles/<YYYY>/ with monthly cumulative outage xlsx files (2021 has 12 confirmed monthly files; 2022 has 7).",
     "reference_contexts": [
       "6.0 Systems_Engineering/3_Site Outages Analysis/",
       "6.0 Systems_Engineering/3_Site Outages Analysis/Outage Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-12-01.xlsx",
@@ -1341,10 +1341,10 @@
   {
     "query_id": "PQ-159",
     "user_input": "What is the Priced Bill of Materials in CDRL A014 for the enterprise program?",
-    "reference": "A014 Priced Bill of Materials deliverable: 47QFRA22F0009_IGSI-2233_IGS_EMSI_PBOM_2024-04-22.xlsx under 1.5 enterprise program CDRLS/A014 - Priced Bill of Materials/. Plus the older IGSI-563 IGS EMSI PBOM under OASIS/A014.",
+    "reference": "A014 Priced Bill of Materials deliverable: 47QFRA22F0009_IGSI-2233_IGS_EMSI_PBOM_2024-04-22.xlsx under 1.5 enterprise program CDRLS/A014 - Priced Bill of Materials/. Plus the older IGSI-563 enterprise program EMSI PBOM under OASIS/A014.",
     "reference_contexts": [
       "1.5 enterprise program CDRLS/A014 - Priced Bill of Materials/47QFRA22F0009_IGSI-2233_IGS_EMSI_PBOM_2024-04-22.xlsx",
-      "1.0 enterprise program DM - Restricted/OASIS/A014 - Priced Bill of Materials/Deliverables Report IGSI-563 IGS EMSI PBOM/"
+      "1.0 enterprise program DM - Restricted/OASIS/A014 - Priced Bill of Materials/Deliverables Report IGSI-563 enterprise program EMSI PBOM/"
     ],
     "persona": "Program Manager",
     "expected_query_type": "TABULAR",
@@ -2102,7 +2102,7 @@
   {
     "query_id": "PQ-189",
     "user_input": "What installation was performed at American Samoa for legacy monitoring system?",
-    "reference": "American Samoa legacy monitoring system installation artifacts live under both #legacy monitoring system Sites/1_Sites/American_Samoa/Installation/Allied Support/ (with the IGS SOW American Samoa - Cable installation SOW) and ! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/ which includes Deliverables Report IGSI-812. As-built drawings are at 4-Drawings/4-legacy monitoring system/2_As-Built Drawings (Sites)/201811080-- (American Samoa legacy monitoring system As-Builts)/. As with Palau, no 'American Samoa legacy monitoring system Installation' procurement period folder surfaced; install lives in the site tree.",
+    "reference": "American Samoa legacy monitoring system installation artifacts live under both #legacy monitoring system Sites/1_Sites/American_Samoa/Installation/Allied Support/ (with the enterprise program SOW American Samoa - Cable installation SOW) and ! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/ which includes Deliverables Report IGSI-812. As-built drawings are at 4-Drawings/4-legacy monitoring system/2_As-Built Drawings (Sites)/201811080-- (American Samoa legacy monitoring system As-Builts)/. As with Palau, no 'American Samoa legacy monitoring system Installation' procurement period folder surfaced; install lives in the site tree.",
     "reference_contexts": [
       "#legacy monitoring system Sites/1_Sites/American_Samoa/Installation/Allied Support/IGS SOW American Samoa - Cable installation/",
       "! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/Deliverables Report IGSI-812/",
