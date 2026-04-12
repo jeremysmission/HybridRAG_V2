@@ -5352,5 +5352,1469 @@
     },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Anchor: folders probe returned two FA881525FB002_IGSCC MSR files with 2026-dated filenames."
+  },
+  {
+    "query_id": "PQ-331",
+    "user_input": "Show me the IGS Weekly Hours Variance report for the week ending 2024-12-31.",
+    "reference": "2024-12-31 enterprise program Weekly Hours Variance.xlsx, located under 10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/.",
+    "reference_contexts": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-31 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%2.0 Weekly Variance Reports/2024/2024-12/2024-12-31%Weekly Hours Variance%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated weekly variance file lookup. Tests exact-date TABULAR retrieval.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-12-31"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Weekly Variance%' returned 2024-12-31 dated file at top of count distribution."
+  },
+  {
+    "query_id": "PQ-332",
+    "user_input": "Which weekly hours variance reports were filed during December 2024?",
+    "reference": "Five files: 2024-11-29, 2024-12-06, 2024-12-13, 2024-12-20, and 2024-12-31 enterprise program Weekly Hours Variance.xlsx, all under 10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/.",
+    "reference_contexts": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-11-29 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-06 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-13 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-20 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-31 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%2.0 Weekly Variance Reports/2024/2024-12/%Weekly Hours Variance%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow month-scoped count of weekly reports. Five Friday-ending weeks expected (Nov 29, Dec 6, 13, 20, 27 -- Dec 27 was a holiday-shifted file dated 12-31).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-12"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Weekly Variance%' returned 5 distinct dated files under the 2024-12 subfolder."
+  },
+  {
+    "query_id": "PQ-333",
+    "user_input": "What does the September 2025 PMR briefing cover?",
+    "reference": "enterprise program_PMR_2025_Sept.pptx under 10.0 Program Management/6.0 PMR/2025/.",
+    "reference_contexts": [
+      "10.0 Program Management/6.0 PMR/2025/enterprise program_PMR_2025_Sept.pptx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%6.0 PMR/2025/%PMR_2025_Sept%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrative PMR slide deck retrieval. Tests SEMANTIC routing on a single deliverable file.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-09"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PMR%' returned the 2025 Sept deck."
+  },
+  {
+    "query_id": "PQ-334",
+    "user_input": "List the PMR decks delivered in 2025.",
+    "reference": "At least four PMR decks confirmed for 2025: August, September, October-November (data deck), and December. All under 10.0 Program Management/6.0 PMR/2025/.",
+    "reference_contexts": [
+      "10.0 Program Management/6.0 PMR/2025/enterprise program_PMR_2025_August.pptx",
+      "10.0 Program Management/6.0 PMR/2025/enterprise program_PMR_2025_Sept.pptx",
+      "10.0 Program Management/6.0 PMR/2025/enterprise program_PMR_2025_Oct_Nov_Data.pptx",
+      "10.0 Program Management/6.0 PMR/2025/enterprise program_PMR_2025_Dec.pptx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%6.0 PMR/2025/enterprise program_PMR_2025%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Year-scoped PMR enumeration. Confirmed deliverables visible from folder mining.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PMR%' returned 4 distinct 2025-dated PMR decks."
+  },
+  {
+    "query_id": "PQ-335",
+    "user_input": "What's in the January 2026 PMR deck?",
+    "reference": "enterprise program_PMR_2026_Jan.pptx under 10.0 Program Management/6.0 PMR/2026/.",
+    "reference_contexts": [
+      "10.0 Program Management/6.0 PMR/2026/enterprise program_PMR_2026_Jan.pptx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%6.0 PMR/2026/%PMR_2026_Jan%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single PMR deck retrieval. Easiest PMR family lookup for routing baseline.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2026-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PMR%' returned the 2026 Jan deck."
+  },
+  {
+    "query_id": "PQ-336",
+    "user_input": "Show me the IGSI-2497 monthly status report.",
+    "reference": "47QFRA22F0009_IGSI-2497_Monthly-Status-Report_2025-06-17.pdf under 1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/47QFRA22F0009_IGSI-2497_Monthly-Status-Report_2025-06-17.pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI-2497_Monthly-Status-Report%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Direct deliverable ID lookup against the A009 monthly status tree. Filename embeds contract + IGSI + delivery date.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2497"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ],
+      "DATE": [
+        "2025-06-17"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A009%' returned the IGSI-2497 deliverable filename."
+  },
+  {
+    "query_id": "PQ-337",
+    "user_input": "Which A009 monthly status reports were delivered in 2025?",
+    "reference": "At least three: IGSI-2494 (2025-03-11), IGSI-2496 (2025-05-13), IGSI-2497 (2025-06-17). All under 1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/47QFRA22F0009_IGSI-2494_Monthly-Status-Report_2025-03-11.pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/47QFRA22F0009_IGSI-2496_Monthly-Status-Report_2025-05-13.pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/47QFRA22F0009_IGSI-2497_Monthly-Status-Report_2025-06-17.pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A009 - Monthly Status Report/%47QFRA22F0009_IGSI-%2025-%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Year-scoped narrow enumeration. Confirmed: IGSI-2494 (2025-03-11), IGSI-2496 (2025-05-13), IGSI-2497 (2025-06-17).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025"
+      ],
+      "INCIDENT_ID": [
+        "IGSI-2494",
+        "IGSI-2496",
+        "IGSI-2497"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A009%' returned three 2025-dated A009 monthly status PDFs at top of count distribution."
+  },
+  {
+    "query_id": "PQ-338",
+    "user_input": "What was the May 2023 monthly status report deliverable ID?",
+    "reference": "IGSI-97. Filename: Deliverables Report IGSI-97 enterprise program Monthly Status Report - May23 (A009).pdf, under 1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2023/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2023/Deliverables Report IGSI-97 enterprise program Monthly Status Report - May23 (A009).pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A009 - Monthly Status Report/2023/%IGSI-97%May23%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single A009 deliverable lookup with month grounding. IGSI-97 confirmed via folder probe.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-97"
+      ],
+      "DATE": [
+        "2023-05"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A009%' returned IGSI-97 May23 deliverable."
+  },
+  {
+    "query_id": "PQ-339",
+    "user_input": "What does the A031 Integrated Master Schedule track?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A031 - Integrated Master Schedule (IMS)%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrative semantic question about an A-numbered CDRL family. Routing should hit SEMANTIC, not COMPLEX.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A031%IMS%' returned multiple IMS deliverables under 1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/."
+  },
+  {
+    "query_id": "PQ-340",
+    "user_input": "Show me the IGS IMS revision delivered on 2023-06-20.",
+    "reference": "IGSI-153. Filename: Deliverables Report IGSI-153 enterprise program IMS_06_20_23 (A031).pdf under 1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/Deliverables Report IGSI-153 enterprise program IMS_06_20_23 (A031).pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A031%IMS%IGSI-153%06_20_23%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Date-stamped IMS revision lookup. Filename embeds publication date in MM_DD_YY format.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-153"
+      ],
+      "DATE": [
+        "2023-06-20"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A031%IMS%' returned IGSI-153 with 06_20_23 date suffix."
+  },
+  {
+    "query_id": "PQ-341",
+    "user_input": "How many IMS revisions were delivered in 2023?",
+    "reference": "At least seven IMS revisions in 2023: IGSI-151 (04_20), IGSI-152 (05_16), IGSI-153 (06_20), IGSI-154 (07_27), IGSI-1146 (08_21), IGSI-1148 (10_30), IGSI-1149 (11_29). All under 1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/Deliverables Report IGSI-151 enterprise program IMS 04_20_23 (A031).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/Deliverables Report IGSI-152 enterprise program IMS_05_16_23 (A031).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/Deliverables Report IGSI-153 enterprise program IMS_06_20_23 (A031).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/Deliverables Report IGSI-154 enterprise program IMS_07_27_23 (A031).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/Deliverables Report IGSI-1146 enterprise program IMS_08_21_23 (A031).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/Deliverables Report IGSI-1148 enterprise program IMS_10_30_23 (A031).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/Deliverables Report IGSI-1149 enterprise program IMS_11_29_23 (A031).pdf"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A031 - Integrated Master Schedule (IMS)/2023/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow year-scoped IMS revision count. Confirmed: IGSI-151 (04_20_23), IGSI-152 (05_16_23), IGSI-153 (06_20_23), IGSI-154 (07_27_23), IGSI-1146 (08_21_23), IGSI-1148 (10_30_23), IGSI-1149 (11_29_23). At least 7.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2023"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A031%IMS%' returned 7 distinct 2023 IMS revision PDFs at top of count distribution."
+  },
+  {
+    "query_id": "PQ-342",
+    "user_input": "What is the cadence of the IGS Weekly Hours Variance reporting?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%2.0 Weekly Variance Reports%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Process / cadence semantic question grounded in observable folder structure (year/month/week files).",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Weekly Variance%' shows recurring weekly cadence under 10.0 Program Management/2.0 Weekly Variance Reports/YYYY/YYYY-MM/."
+  },
+  {
+    "query_id": "PQ-343",
+    "user_input": "What is purchase order 5000629092 and what did it order?",
+    "reference": "PO 5000629092 / PR 3000172736 ordered 3 DPS4D units from Northrop Grumman (LDI line) for the DMEA monitoring system Installation contract period (1 Jul 25 - 31 Dec 25), value $298,855.00.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/PO - 5000629092, PR 3000172736 DPS4D DMEA monitoring system(LDI)($298,855.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%PO - 5000629092%DPS4D%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Real SAP PO lookup. Folder name embeds PR, item, vendor, and dollar value -- canonical clean PO query format.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000629092"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned PO 5000629092 with full PR, item, vendor, and amount in folder name."
+  },
+  {
+    "query_id": "PQ-344",
+    "user_input": "What did PO 5000646999 procure?",
+    "reference": "PO 5000646999 / PR 3000180760 ordered Half Octave Filter Card from LDI for the monitoring system Sustainment NEW BASE YR period (1 Aug 25 - 31 Jul 26), value $6,250.00.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/PO - 5000646999, PR 3000180760 Half Octave Filter Card(LDI)($6,250.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%PO - 5000646999%Half Octave Filter Card%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Real SAP PO lookup against monitoring system NEW BASE YR period. Vendor was LDI.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000646999"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned PO 5000646999 with item Half Octave Filter Card."
+  },
+  {
+    "query_id": "PQ-345",
+    "user_input": "What was procured under PO 5300137494?",
+    "reference": "PO 5300137494 / PR 3000125821 procured a Tower Climbing Course from PBJ for the monitoring system Sustainment OY2 period (1 Aug 24 - 31 Jul 25), value $2,342.00.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5300137494, PR 3000125821 Tower Climbing Course (PBJ)($2,342.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%PO - 5300137494%Tower Climbing Course%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Service-style PO (training) rather than physical part. Folder name embeds the course type and vendor.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5300137494"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned PO 5300137494 with Tower Climbing Course."
+  },
+  {
+    "query_id": "PQ-346",
+    "user_input": "What was ordered on PO 5000603300?",
+    "reference": "PO 5000603300 / PR 3000152663 ordered Power Supply Assembly from LDI under the monitoring system Sustainment OY2 period (1 Aug 24 - 31 Jul 25), value $4,884.00.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5000603300, PR 3000152663 Power Supply Assembly(LDI)($4,884.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%PO - 5000603300%Power Supply Assembly%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Real SAP PO lookup. Power supply assembly part order from LDI.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000603300"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned PO 5000603300 with Power Supply Assembly."
+  },
+  {
+    "query_id": "PQ-347",
+    "user_input": "Which Soldering Material COCO1 purchase orders were received in October-November 2025?",
+    "reference": "At least seven received Soldering Material COCO1 POs/P-Cards in Oct-Nov 2025: PO 5300168058 (Wire Cutters, 10.17), PO 5300168606 (Wrist Strap, 10.27), PO 5300169203 (Smoke Absorber, 10.27), P-Card PR 3000187740 (Desoldering Tips, 10.29), P-Card PR 3000187603 (Safety Jackets, 10.20), PO 5300171302 (Blower, 11.10; Solder Wires, 11.12), PO 5300171743 (Sponge for Workstations, 11.20).",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300168058, PR 3000188282 Wire Cutters/10.17.2025 - PO 5300168058 - enterprise program.pdf",
+      "5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300168606, PR 3000188216 Wrist Strap/10.27.2025 - PO 5300168606 - enterprise program.pdf",
+      "5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300169203, PR 3000187741 Smoke Absorber/10.27.2025 - PO 5300169203 - enterprise program.pdf",
+      "5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/P-CARD, PR 3000187740 Desoldering Tips/10.29.2025 - PCard - enterprise program.pdf",
+      "5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/P-CARD, PR 3000187603 Safety Jackets/10.20.2025 - PCard - enterprise program.pdf",
+      "5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300171302, PR 3000187345 Blower/11.10.2025 - PO 5300171302 - enterprise program.pdf",
+      "5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300171743, PR 3000188215 Sponge for Workstations/11.20.2025 - PO 5300171743 - enterprise program.pdf"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%Soldering Material COCO1/Received/PO - %"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow folder-scoped received-PO enumeration for one tooling category. Confirmed via folder mining.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-10",
+        "2025-11"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned 7+ distinct Oct-Nov 2025 receipts under Soldering Material COCO1."
+  },
+  {
+    "query_id": "PQ-348",
+    "user_input": "What is FEP Recon and how often is it produced?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Logistics Lead",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5.0 Logistics/Procurement/013 - FEP Recon%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Process question about a recurring procurement reconciliation file family. Folder structure suggests roughly weekly cadence.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned multiple dated FEP Recon xlsx files under 5.0 Logistics/Procurement/013 - FEP Recon/2025/."
+  },
+  {
+    "query_id": "PQ-349",
+    "user_input": "Show me the FEP Recon file from 2025-04-16.",
+    "reference": "FEP Recon 20250416.xlsx under 5.0 Logistics/Procurement/013 - FEP Recon/2025/.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/013 - FEP Recon/2025/FEP Recon 20250416.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%013 - FEP Recon/2025/FEP Recon 20250416%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated reconciliation spreadsheet lookup. Filename uses YYYYMMDD compact format.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-04-16"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned FEP Recon 20250416.xlsx."
+  },
+  {
+    "query_id": "PQ-350",
+    "user_input": "What was procured under PO 5300154353?",
+    "reference": "PO 5300154353 / PR 3000171886 procured Secure CRT and FX monitoring system from PBJ during the monitoring system Sustainment OY2 period (1 Aug 24 - 31 Jul 25), value $700.00.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5300154353, PR 3000171886 Secure CRT and FX monitoring system(PBJ)($700.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%PO - 5300154353%Secure CRT%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Real SAP PO lookup. Item is a calibration/secure CRT pair with FX monitoring system grounding.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5300154353"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned PO 5300154353 with Secure CRT and FX item line."
+  },
+  {
+    "query_id": "PQ-351",
+    "user_input": "What does the A027 CT&E Report for Hawaii Install cover?",
+    "reference": null,
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - CT&E-ST&E/A027 - monitoring system TO5017 CT&E Report Hawaii/SEMS3D-34891 CT&E Report - Hawaii Install (CDRL A027).zip"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%A027 - CT&E-ST&E%CT&E Report Hawaii%"
+    ],
+    "difficulty": "medium",
+    "rationale": "CT&E narrative retrieval against the largest single A027 deliverable in the corpus. Tests SEMANTIC routing on a deep nested folder.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned the SEMS3D-34891 Hawaii CT&E zip as the highest-count single A027 deliverable."
+  },
+  {
+    "query_id": "PQ-352",
+    "user_input": "What's the IGSI-2891 ISTO RHEL8 cybersecurity assessment test report about?",
+    "reference": "47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx under 1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report/A027- Cybersecurity Assessment Test Report-RHEL 8 ISTO/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report/A027- Cybersecurity Assessment Test Report-RHEL 8 ISTO/47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single deliverable ENTITY lookup. Filename encodes contract + IGSI + system + OS + report type.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2891"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned the IGSI-2891 RHEL8 CT&E xlsx."
+  },
+  {
+    "query_id": "PQ-353",
+    "user_input": "Walk me through what's in the Eglin 2017-03 ASV desktop log.",
+    "reference": "Eglin_Desktop_Log.txt from the 2017-03-(20-24) ASV trip, under 1.0 enterprise program DM - Restricted/SEMS3D/A001-MSR/Eglin 2017-03-(20-24) ASV/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A001-MSR/Eglin 2017-03-(20-24) ASV/Eglin_Desktop_Log.txt"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%A001-MSR/Eglin 2017-03%Desktop_Log%"
+    ],
+    "difficulty": "medium",
+    "rationale": "MSR-era field log retrieval. Tests SEMANTIC routing on a non-CDRL operational log file.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Eglin"
+      ],
+      "DATE": [
+        "2017-03"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A001%' returned the Eglin 2017-03 ASV desktop log."
+  },
+  {
+    "query_id": "PQ-354",
+    "user_input": "Show me the Lualualei NRTF SPR&IP Appendix K consolidated PDF.",
+    "reference": "SEMS3D-33121_SPR&IP (CDRL A001)_Appendix K_Lualualei NRTF_16 Sep 16_Consolidated.pdf under 1.0 enterprise program DM - Restricted/SEMS3D/A001-SPR&IP/monitoring system/A001 - Appendix K - Lualualei/Archive/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A001-SPR&IP/monitoring system/A001 - Appendix K - Lualualei/Archive/SEMS3D-33121_SPR&IP (CDRL A001)_Appendix K_Lualualei NRTF_16 Sep 16_Consolidated.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A001 - Appendix K - Lualualei%SEMS3D-33121%Consolidated%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single SPR&IP appendix lookup with SEMS3D ID grounding.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Lualualei"
+      ],
+      "INCIDENT_ID": [
+        "SEMS3D-33121"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A001%' returned the SEMS3D-33121 Lualualei consolidated PDF."
+  },
+  {
+    "query_id": "PQ-355",
+    "user_input": "What's the Annual Inventory deliverable ID and where is it filed?",
+    "reference": "SEMS3D-40509 enterprise program Annual Inventory.pdf under 1.0 enterprise program DM - Restricted/SEMS3D/A001-Inventory/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A001-Inventory/SEMS3D-40509 enterprise program Annual Inventory.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A001-Inventory%SEMS3D-40509%Annual Inventory%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single A001 inventory deliverable lookup.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "SEMS3D-40509"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A001%' returned SEMS3D-40509 annual inventory PDF."
+  },
+  {
+    "query_id": "PQ-356",
+    "user_input": "Walk me through the Alpena SPR&IP Appendix J final document trail.",
+    "reference": "Two final variants of the Alpena Appendix J SPR&IP exist: SPR&IP_Appendix J_Alpena_Final_(DCRL A037)_13Aug13_AES.pdf and SPR&IP_Appendix J_Alpena_Final_(DCRL A037)_13Aug13_SMC.pdf, both under 1.0 enterprise program DM - Restricted/SEMS3D/A001-SPR&IP/monitoring system/A001 - Appendix J - Alpena/FinalDocument/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A001-SPR&IP/monitoring system/A001 - Appendix J - Alpena/FinalDocument/SPR&IP_Appendix J_Alpena_Final_(DCRL A037)_13Aug13_AES.pdf",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A001-SPR&IP/monitoring system/A001 - Appendix J - Alpena/FinalDocument/SPR&IP_Appendix J_Alpena_Final_(DCRL A037)_13Aug13_SMC.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A001 - Appendix J - Alpena%FinalDocument%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrative document trail across two final-document copies (AES and SMC review variants).",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Alpena"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A001%' returned two Alpena Appendix J final variants with same date but different reviewer suffixes."
+  },
+  {
+    "query_id": "PQ-357",
+    "user_input": "Where are the IPT briefing slides for January 2022 stored?",
+    "reference": "SEMS3D-41766- enterprise program_Jan_IPT_Briefing_Slides.pdf under 1.0 enterprise program DM - Restricted/SEMS3D/A001-IPT_Briefing_Slides/2022/01_Jan 22/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A001-IPT_Briefing_Slides/2022/01_Jan 22/SEMS3D-41766- enterprise program_Jan_IPT_Briefing_Slides.pdf"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%A001-IPT_Briefing_Slides/2022/01_Jan 22%SEMS3D-41766%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated IPT slide deck lookup with SEMS3D ID grounding.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "SEMS3D-41766"
+      ],
+      "DATE": [
+        "2022-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A001%' returned SEMS3D-41766 January 2022 IPT briefing."
+  },
+  {
+    "query_id": "PQ-358",
+    "user_input": "How many IPT briefing slide decks were filed in 2022?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%A001-IPT_Briefing_Slides/2022/%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Year-scoped recurring monthly briefing count. Folder mining surfaced January and March 2022 explicitly; full year is at least 12 if cadence held.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2022"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A001%' returned 2022 month-bucketed IPT briefing folders (01_Jan 22, 03_Mar 22 confirmed). Full enumeration requires deeper folder walk."
+  },
+  {
+    "query_id": "PQ-359",
+    "user_input": "Walk me through the 2018-08 Guam install SPR-IP draft documents.",
+    "reference": "The 2018-08-11 thru 25 Guam install (Frank P, Chris, Jim) trip captured SPR-IP draft examples under ! Site Visits/(01) Sites/Guam/2018-08-11 thru 25 (Guam)(Frank P, Chris, Jim)/Install (2018 Move)/SPR-IP/Format Examples/, including SEMS3D-36814 SPR&IP (A001) Apndx A - DRAFT-Bad.docx.",
+    "reference_contexts": [
+      "! Site Visits/(01) Sites/Guam/2018-08-11 thru 25 (Guam)(Frank P, Chris, Jim)/Install (2018 Move)/SPR-IP/Format Examples/SEMS3D-36814 SPR&IP (A001) Apndx A - DRAFT-Bad.docx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Site Visits",
+    "expected_source_patterns": [
+      "%Site Visits/(01) Sites/Guam/2018-08-11%Install%SPR-IP%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrative recall on a 2018 Guam install trip's SPR&IP draft trail. Folder name embeds date, install type, and team initials (Frank P, Chris, Jim).",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Guam"
+      ],
+      "DATE": [
+        "2018-08"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A001%' returned the Guam 2018 install SPR-IP draft examples folder with named team members."
+  },
+  {
+    "query_id": "PQ-360",
+    "user_input": "Show me the 2018-06 Eareckson STIG bundle archive.",
+    "reference": "scc-5.0.2_rhel7_x86_64_bundle (containing scc-5.0.2_rhel7_x86_64.tar.gz) under 3.0 Cybersecurity/CT&E-ST&E/monitoring system/2018-06-22 monitoring system Eareckson/Tools-STIGs-ACAS-Updates/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/CT&E-ST&E/monitoring system/2018-06-22 monitoring system Eareckson/Tools-STIGs-ACAS-Updates/scc-5.0.2_rhel7_x86_64_bundle/scc-5.0.2_rhel7_x86_64/scc-5.0.2_rhel7_x86_64.tar.gz"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%CT&E-ST&E/monitoring system/2018-06-22 monitoring system Eareckson%scc-5.0.2_rhel7_x86_64_bundle%"
+    ],
+    "difficulty": "medium",
+    "rationale": "STIG tooling archive from the 2018-06 Eareckson CT&E trip. Real SCC bundle filename.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Eareckson"
+      ],
+      "DATE": [
+        "2018-06-22"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%STIG%' returned the Eareckson SCC bundle as the largest single STIG-related corpus item."
+  },
+  {
+    "query_id": "PQ-361",
+    "user_input": "What's the typical structure of a CT&E trip folder?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%3.0 Cybersecurity/CT&E-ST&E/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Process question about how CT&E trips are organized in the cyber tree. Tests SEMANTIC routing without needing aggregate counts.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%STIG%' showed CT&E trip folders structured as 3.0 Cybersecurity/CT&E-ST&E/<system>/<date> <system> <site>/Tools-STIGs-ACAS-Updates/."
+  },
+  {
+    "query_id": "PQ-362",
+    "user_input": "What does an A001-SPR&IP Appendix K folder typically contain?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A001 - Appendix K - Lualualei%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Process / format semantic question about SPR&IP appendix folder layout, grounded in Lualualei archive examples.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Lualualei"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A001%' showed Lualualei Appendix K with Archive/, FinalDocument/, and Consolidated PDF subfolders."
+  },
+  {
+    "query_id": "PQ-363",
+    "user_input": "Show me the IGSI-2464 AC Plans and Controls deliverable dated 2024-12-20.",
+    "reference": "47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20.zip under 1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20.zip"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI-2464%AC Plans and Controls%2024-12-20%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single A027 RMF Security Plan deliverable lookup with date suffix.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2464"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ],
+      "DATE": [
+        "2024-12-20"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned IGSI-2464 AC Plans and Controls zip with 2024-12-20 date suffix."
+  },
+  {
+    "query_id": "PQ-364",
+    "user_input": "Show me the IGSI-2464 monitoring system AC security controls spreadsheet for 2025-01.",
+    "reference": "IGSI-2464-monitoring system_Security Controls_AC_2025-Jan.xlsx under 1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20/IGSI-2464-monitoring system_Security Controls_AC_2025-Jan.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2464-monitoring system_Security Controls_AC_2025-Jan%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated security controls xlsx tied to IGSI-2464 deliverable.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2464"
+      ],
+      "DATE": [
+        "2025-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned IGSI-2464 monitoring system AC controls 2025-Jan xlsx."
+  },
+  {
+    "query_id": "PQ-365",
+    "user_input": "Show me the IGSI-2464 legacy monitoring system AC security controls spreadsheet for 2025-01.",
+    "reference": "IGSI-2464-legacy monitoring system_Security Controls_AC_2025-Jan.xlsx under 1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20/IGSI-2464-legacy monitoring system_Security Controls_AC_2025-Jan.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%IGSI-2464-legacy monitoring system_Security Controls_AC_2025-Jan%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Twin of PQ-364 but for the legacy monitoring system. Tests TABULAR routing on a near-duplicate filename pair.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2464"
+      ],
+      "DATE": [
+        "2025-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned IGSI-2464 legacy monitoring system AC controls 2025-Jan xlsx."
+  },
+  {
+    "query_id": "PQ-366",
+    "user_input": "Show me the IGSI-2451 AT Plans and Controls deliverable.",
+    "reference": "47QFRA22F0009_IGSI-2451 AT Plans and Controls (A027) 2024-11-22.zip under 1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/47QFRA22F0009_IGSI-2451 AT Plans and Controls (A027) 2024-11-22.zip"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI-2451%AT Plans and Controls%2024-11-22%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single A027 AT family Plans and Controls deliverable lookup.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-2451"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ],
+      "DATE": [
+        "2024-11-22"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned IGSI-2451 AT Plans and Controls zip with 2024-11-22 date suffix."
+  },
+  {
+    "query_id": "PQ-367",
+    "user_input": "Show me the May 2023 IGSI-965 monitoring system DAA Accreditation ACAS scan report.",
+    "reference": "monitoring system Scan Report 2023-May.xlsx under 1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2023/2023-May/Deliverables Report IGSI-965 monitoring system DAA Accreditation Support Data (ACAS Scan Results) (A027)/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2023/2023-May/Deliverables Report IGSI-965 monitoring system DAA Accreditation Support Data (ACAS Scan Results) (A027)/monitoring system Scan Report 2023-May.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%2023-May/Deliverables Report IGSI-965 monitoring system DAA Accreditation%ACAS Scan Results%"
+    ],
+    "difficulty": "medium",
+    "rationale": "A027 DAA Accreditation ACAS scan TABULAR retrieval. Folder + filename both encode delivery month.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-965"
+      ],
+      "DATE": [
+        "2023-05"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned IGSI-965 monitoring system May 2023 ACAS scan xlsx."
+  },
+  {
+    "query_id": "PQ-368",
+    "user_input": "Show me the May 2023 IGSI-966 legacy monitoring system DAA Accreditation ACAS scan report.",
+    "reference": "legacy monitoring system Scan Report 2023-May.xlsx under 1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2023/2023-May/Deliverables Report IGSI-966 legacy monitoring system DAA Accreditation Support Data (ACAS San Results) (A027)/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2023/2023-May/Deliverables Report IGSI-966 legacy monitoring system DAA Accreditation Support Data (ACAS San Results) (A027)/legacy monitoring system Scan Report 2023-May.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%2023-May/Deliverables Report IGSI-966 legacy monitoring system DAA Accreditation%ACAS%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Twin of PQ-367 for the legacy monitoring system. Filename in folder name has 'San Results' typo (real corpus quirk preserved).",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-966"
+      ],
+      "DATE": [
+        "2023-05"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned IGSI-966 legacy monitoring system May 2023 ACAS scan xlsx with 'San Results' folder typo."
+  },
+  {
+    "query_id": "PQ-369",
+    "user_input": "Show me the November 2022 IGSI-110 monitoring system ACAS scan deliverable.",
+    "reference": "monitoring system Scan Report 2022-Nov.xlsx under 1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2022/2022-Nov/Deliverables Report IGSI-110 monitoring system Scans 2022-Nov (A027)/.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2022/2022-Nov/Deliverables Report IGSI-110 monitoring system Scans 2022-Nov (A027)/monitoring system Scan Report 2022-Nov.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%2022-Nov/Deliverables Report IGSI-110 monitoring system Scans 2022-Nov%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated A027 monthly scan deliverable. Earlier than IGSI-965/966 series.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-110"
+      ],
+      "DATE": [
+        "2022-11"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned IGSI-110 November 2022 monitoring system scan xlsx."
+  },
+  {
+    "query_id": "PQ-370",
+    "user_input": "How does the WX29 OY2-4 Continuous Monitoring program organize its monthly scan submissions?",
+    "reference": null,
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Jun - SEMS3D-41845/SEMS3D-41845.zip"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%A027 - WX29 OY2-4 Continuous Monitoring%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Process question about ConMon submission structure. Folder layout splits by system (legacy monitoring system vs monitoring system) then year then month-IGSI bundle.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A027%POAM%' showed monthly scan-POAM bundles split by legacy monitoring system and monitoring system, then by year-month-IGSI."
+  },
+  {
+    "query_id": "PQ-371",
+    "user_input": "How many WX29 monthly scan-POAM bundles were submitted in 2021?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%A027 - WX29 OY2-4 Continuous Monitoring%2021%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Year-scoped ConMon bundle count across both systems. Folder mining showed 2021-Jan, Feb, May, Jun, Oct on the monitoring system side and 2021-Jan, Jun on the legacy monitoring system side. Full month coverage requires deeper walk.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021"
+      ]
+    },
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A027%POAM%' returned at least 7 distinct 2021 monthly bundle folders across legacy monitoring system and monitoring system. Hard because full enumeration requires walking both system subtrees."
+  },
+  {
+    "query_id": "PQ-372",
+    "user_input": "Where are the historical STIG Results files for the legacy monitoring system Site stored?",
+    "reference": "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/YYYY/YYYY-MMM Site STIG Results/STIG Results Site YYYY-MMM.xlsx -- example: 2022-Jan STIG Results Site 2022-Jan.xlsx.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2022/2022-Jan Site STIG Results/STIG Results Site 2022-Jan.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%ISSO/Continuous_Monitoring/Monthly Audits-Archive%STIG Results%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Process question about archival monthly STIG result location. Tests SEMANTIC routing on a deep continuous monitoring path.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%STIG%' returned January 2022 archived STIG Results xlsx under ISSO Continuous Monitoring tree."
+  },
+  {
+    "query_id": "PQ-373",
+    "user_input": "Where are the 2018-11-07 monitoring system / legacy monitoring system pending STIGs and security controls submissions stored?",
+    "reference": "Two confirmed files under 3.0 Cybersecurity/archive/Submissions/2018-11-07 legacy monitoring system-monitoring system Pending STIGS-Security Controls to ISSM/: monitoring system-legacy monitoring system Security Controls 2018-11-07.xlsx and monitoring system-legacy monitoring system STIGs 2018-11-07 v2.xlsx.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/archive/Submissions/2018-11-07 legacy monitoring system-monitoring system Pending STIGS-Security Controls to ISSM/monitoring system-legacy monitoring system Security Controls 2018-11-07.xlsx",
+      "3.0 Cybersecurity/archive/Submissions/2018-11-07 legacy monitoring system-monitoring system Pending STIGS-Security Controls to ISSM/monitoring system-legacy monitoring system STIGs 2018-11-07 v2.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%archive/Submissions/2018-11-07%Pending STIGS-Security Controls to ISSM%"
+    ],
+    "difficulty": "medium",
+    "rationale": "ENTITY-style submission folder lookup with two real artifacts: monitoring system-legacy monitoring system Security Controls 2018-11-07.xlsx and monitoring system-legacy monitoring system STIGs 2018-11-07 v2.xlsx.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2018-11-07"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%STIG%' returned both 2018-11-07 submission xlsx files under the same ISSM submission folder."
+  },
+  {
+    "query_id": "PQ-374",
+    "user_input": "What is the difference between A027 - DAA Accreditation Support Data and A027 - Cybersecurity Assessment Test Report deliverable families?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A027 - DAA Accreditation Support Data%",
+      "%A027 - Cybersecurity Assessment Test Report%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-family conceptual question. Tests router and SEMANTIC retrieval to span two A027 sub-trees without hallucinating definitions.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned both A027 - DAA Accreditation Support Data (ACAS Scan Results) and A027 - Cybersecurity Assessment Test Report sub-trees as distinct families with overlapping but distinct purposes."
+  },
+  {
+    "query_id": "PQ-375",
+    "user_input": "Which A009 monthly status reports were filed in 2023?",
+    "reference": "At least five 2023 A009 monthly status reports observed: IGSI-97 (May), IGSI-99 (Jun), IGSI-1056 (Jul), IGSI-1057 (Aug), IGSI-1059 (Oct), all under 1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2023/. Full 12-month enumeration requires deeper folder walk.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2023/Deliverables Report IGSI-97 enterprise program Monthly Status Report - May23 (A009).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2023/Deliverables Report IGSI-99 enterprise program Monthly Status Report - June23 (A009).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2023/Deliverables Report IGSI-1056 enterprise program Monthly Status Report - July23 (A009).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2023/Deliverables Report IGSI-1057 enterprise program Monthly Status Report - August23 (A009).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2023/Deliverables Report IGSI-1059 enterprise program Monthly Status Report - Oct23 (A009).pdf"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A009 - Monthly Status Report/2023/%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Year-scoped A009 enumeration. Folder mining surfaced IGSI-97 (May), IGSI-99 (Jun), IGSI-1056 (Jul), IGSI-1057 (Aug), IGSI-1059 (Oct) explicitly. Full year requires full folder walk.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2023"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A009%' returned 5 distinct 2023 IGSI-NN A009 deliverables."
+  },
+  {
+    "query_id": "PQ-376",
+    "user_input": "Show me the IGSI-1064 March 2024 monthly status report.",
+    "reference": "47QFRA22F0009_IGSI-1064_enterprise program Monthly_Status_Report_2024-03.pdf under 1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/47QFRA22F0009_IGSI-1064_enterprise program Monthly_Status_Report_2024-03.pdf"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI-1064%2024-03%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single 2024 A009 deliverable lookup with both IGSI ID and date.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-1064"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ],
+      "DATE": [
+        "2024-03"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A009%' returned IGSI-1064 March 2024 deliverable."
+  },
+  {
+    "query_id": "PQ-377",
+    "user_input": "Which 2024 monthly status reports under contract 47QFRA22F0009 are filed?",
+    "reference": "At least four observed: IGSI-1062 (Jan-24), IGSI-1063 (Feb-24), IGSI-1064 (2024-03), IGSI-2490 (2024-11-19). All under 1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/Deliverables Report IGSI-1062 enterprise program Monthly Status Report - Jan-24 (A009).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/Deliverables Report IGSI-1063 enterprise program Monthly Status Report - Feb-24 (A009).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/47QFRA22F0009_IGSI-1064_enterprise program Monthly_Status_Report_2024-03.pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/47QFRA22F0009_IGSI-2490_Monthly-Status-Report_2024-11-19.pdf"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A009 - Monthly Status Report/2024/%47QFRA22F0009%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow contract+year scoped A009 enumeration. Folder mining surfaced IGSI-1064 (2024-03) and IGSI-2490 (2024-11-19) and the older IGSI-1062 (Jan-24) and IGSI-1063 (Feb-24) Deliverables Report variants.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024"
+      ],
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A009%' returned 4 distinct 2024 A009 deliverables under 47QFRA22F0009."
+  },
+  {
+    "query_id": "PQ-378",
+    "user_input": "How many DPS4D units were procured under PO 5000629092?",
+    "reference": "Three (3) DPS4D units, per the Northrop Grumman quote LDI 20250617-1, under PO 5000629092 / PR 3000172736.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/PO - 5000629092, PR 3000172736 DPS4D DMEA monitoring system(LDI)($298,855.00)/Quote Northrop Grumman, LDI 20250617-1, 3 DPS4Ds.pdf"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%PO - 5000629092%DPS4D%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Narrow line-item count from a single confirmed PO. Quote in folder content names 3 DPS4Ds.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000629092"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned the quote PDF naming 3 DPS4Ds explicitly."
+  },
+  {
+    "query_id": "PQ-379",
+    "user_input": "Cross-reference: which 2025 received POs were tied to DMEA monitoring system installation?",
+    "reference": "At least one confirmed: PO 5000629092 for 3 DPS4D units from LDI/Northrop Grumman, $298,855.00, under 5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/PO - 5000629092, PR 3000172736 DPS4D DMEA monitoring system(LDI)($298,855.00)/"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/PO - %"
+    ],
+    "difficulty": "medium",
+    "rationale": "Narrow contract-period-scoped PO enumeration. Confirmed: PO 5000629092 for DPS4D ($298,855).",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000629092"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned a single confirmed received PO under the DMEA installation period folder."
+  },
+  {
+    "query_id": "PQ-380",
+    "user_input": "Which received POs are tied to monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)?",
+    "reference": "At least two confirmed: PO 5000646999 (Half Octave Filter Card from LDI, $6,250.00) and PO 5300163657 (Calibration from Micro Precision, $12,720.00). Both under 5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/PO - 5000646999, PR 3000180760 Half Octave Filter Card(LDI)($6,250.00)/",
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/PO - 5300163657, PR 3000179491 Calibration (Micro Precision)($12,720.00)/"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/PO - %"
+    ],
+    "difficulty": "medium",
+    "rationale": "Period-scoped PO enumeration. Confirmed: 5000646999 (Half Octave Filter Card) and 5300163657 (Calibration).",
+    "expected_anchor_entities": {
+      "PO": [
+        "5000646999",
+        "5300163657"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned both POs under the NEW BASE YR period folder."
+  },
+  {
+    "query_id": "PQ-381",
+    "user_input": "Which received POs are tied to monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)?",
+    "reference": "At least four confirmed: PO 5300137494 (Tower Climbing Course/PBJ, $2,342), PO 5000603300 (Power Supply Assembly/LDI, $4,884), PO 5300154353 (Secure CRT and FX monitoring system/PBJ, $700), and PO 5000585586 (Pulling Tape/Grainger, $598). All under 5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5300137494, PR 3000125821 Tower Climbing Course (PBJ)($2,342.00)/",
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5000603300, PR 3000152663 Power Supply Assembly(LDI)($4,884.00)/",
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5300154353, PR 3000171886 Secure CRT and FX monitoring system(PBJ)($700.00)/",
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5000585586, PR 3000133844 Pulling Tape LLL monitoring system(GRAINGER)($598.00)/"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - %"
+    ],
+    "difficulty": "medium",
+    "rationale": "Period-scoped PO enumeration. Confirmed: 5300137494 (Tower Climbing Course), 5000603300 (Power Supply Assembly), 5300154353 (Secure CRT and FX), and the previously-cataloged 5000585586 (Pulling Tape).",
+    "expected_anchor_entities": {
+      "PO": [
+        "5300137494",
+        "5000603300",
+        "5300154353",
+        "5000585586"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned 4 distinct received POs under the OY2 period folder."
+  },
+  {
+    "query_id": "PQ-382",
+    "user_input": "Which subcontract PRs are recorded under LDI Labor for 2025?",
+    "reference": "Two PRs paired under one folder: PR 3000186737 (NEW) and PR 3000182451 (OLD), both for LDI Labor, under 5.0 Logistics/Procurement/011 - Subcontracts PRs/PR - 3000186737 (NEW), PR - 3000182451 (OLD) - LDI Labor/.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/011 - Subcontracts PRs/PR - 3000186737 (NEW), PR - 3000182451 (OLD) - LDI Labor/"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%011 - Subcontracts PRs/PR - 3000186737%LDI Labor%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Subcontract PR pair lookup. Folder name embeds both NEW (3000186737) and OLD (3000182451) PRs for the same labor line.",
+    "expected_anchor_entities": {
+      "PR": [
+        "3000186737",
+        "3000182451"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned the LDI Labor subcontract folder pairing both PRs."
+  },
+  {
+    "query_id": "PQ-383",
+    "user_input": "How many distinct A027 RMF Security Plan AC Plans and Controls deliverables exist across Base Year, OY1, and OY2?",
+    "reference": "Three distinct AC Plans and Controls deliverables across periods: IGSI-139 (Base Year, 2023-Mar), IGSI-1158 (OY1, 2023-Dec), and IGSI-2464 (OY2, 2024-12-20 / 2025-Jan). Each contains both monitoring system and legacy monitoring system Security Controls AC xlsx files.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/Base Year/Deliverables Report IGSI-139 monitoring system-legacy monitoring system AC Plans and Controls (A027)/monitoring system_Security Controls_AC_2023-Mar.xlsx",
+      "1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY1/Deliverables Report IGSI-1158 monitoring system-legacy monitoring system AC Plans and Controls (A027)/monitoring system_Security Controls_AC_2023-Dec.xlsx",
+      "1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20.zip"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%A027 - RMF Security Plan/Plans and Controls/%AC Plans and Controls%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-period CDRL enumeration. Confirmed: IGSI-139 (Base Year), IGSI-1158 (OY1), IGSI-2464 (OY2). Three distinct period-major deliverables.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "IGSI-139",
+        "IGSI-1158",
+        "IGSI-2464"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned three distinct period-major AC Plans and Controls IGSI deliverables across Base Year, OY1, and OY2."
+  },
+  {
+    "query_id": "PQ-384",
+    "user_input": "Cross-reference: which IGSI deliverables were filed in May 2023 across A009 and A027 families?",
+    "reference": "Three distinct IGSI deliverables in May 2023: A009 IGSI-97 (enterprise program Monthly Status Report - May23), A027 IGSI-965 (monitoring system DAA Accreditation ACAS Scan Results May 2023), and A027 IGSI-966 (legacy monitoring system DAA Accreditation ACAS Scan Results May 2023).",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2023/Deliverables Report IGSI-97 enterprise program Monthly Status Report - May23 (A009).pdf",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2023/2023-May/Deliverables Report IGSI-965 monitoring system DAA Accreditation Support Data (ACAS Scan Results) (A027)/monitoring system Scan Report 2023-May.xlsx",
+      "1.5 enterprise program CDRLS/A027 - DAA Accreditation Support Data (ACAS Scan Results)/2023/2023-May/Deliverables Report IGSI-966 legacy monitoring system DAA Accreditation Support Data (ACAS San Results) (A027)/legacy monitoring system Scan Report 2023-May.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%2023%May%A009%",
+      "%2023%May%A027%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-CDRL-family May 2023 enumeration. Confirmed: A009 IGSI-97 (Monthly Status), A027 IGSI-965 (monitoring system ACAS Scan), A027 IGSI-966 (legacy monitoring system ACAS Scan).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2023-05"
+      ],
+      "INCIDENT_ID": [
+        "IGSI-97",
+        "IGSI-965",
+        "IGSI-966"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' and '%A009%' returned three distinct May 2023 IGSI deliverables across A009 (1) and A027 (2)."
+  },
+  {
+    "query_id": "PQ-385",
+    "user_input": "Which 2018-11-07 cybersecurity submissions exist across the archive and Software-Config-Scripts trees?",
+    "reference": "At least three confirmed 2018-11-07 STIG-related cyber files: monitoring system-legacy monitoring system STIGs 2018-11-07.xlsx and v2 under 3.0 Cybersecurity/Software-Config-Scripts/STIG/Archive/Results/2018-11-07/, plus the matching submission xlsx files under 3.0 Cybersecurity/archive/Submissions/2018-11-07.../.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/Software-Config-Scripts/STIG/Archive/Results/2018-11-07/archive/monitoring system-legacy monitoring system STIGs 2018-11-07.xlsx",
+      "3.0 Cybersecurity/Software-Config-Scripts/STIG/Archive/Results/2018-11-07/archive/monitoring system-legacy monitoring system STIGs 2018-11-07 v2.xlsx",
+      "3.0 Cybersecurity/archive/Submissions/2018-11-07 legacy monitoring system-monitoring system Pending STIGS-Security Controls to ISSM/monitoring system-legacy monitoring system STIGs 2018-11-07 v2.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%2018-11-07%STIG%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Date-scoped cross-tree cyber file enumeration. Confirmed: archive/Submissions xlsx pair AND Software-Config-Scripts/STIG/Archive/Results variant.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2018-11-07"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%STIG%' returned 3+ distinct 2018-11-07 STIG xlsx files across two cybersecurity sub-trees."
+  },
+  {
+    "query_id": "PQ-386",
+    "user_input": "What's the difference between the IGS Weekly Hours Variance reports and the IGS PMR decks for tracking program health?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%2.0 Weekly Variance Reports%",
+      "%6.0 PMR%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-family semantic question on PM reporting cadence. Tests whether SEMANTIC routing handles a comparative two-family question without escalating to COMPLEX.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Weekly Variance%' and --like '%PMR%' returned weekly xlsx files vs monthly/sporadic pptx decks under 10.0 Program Management."
+  },
+  {
+    "query_id": "PQ-387",
+    "user_input": "Which contract is referenced in the OY2 IGSI-2464 AC Plans and Controls deliverable?",
+    "reference": "Contract 47QFRA22F0009. The deliverable filename is 47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20.zip.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20.zip"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%47QFRA22F0009_IGSI-2464%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Contract anchor extraction from a confirmed deliverable filename.",
+    "expected_anchor_entities": {
+      "CONTRACT": [
+        "47QFRA22F0009"
+      ],
+      "INCIDENT_ID": [
+        "IGSI-2464"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' returned the IGSI-2464 zip with the contract number embedded as filename prefix."
+  },
+  {
+    "query_id": "PQ-388",
+    "user_input": "How does the OASIS A009 monthly status report relate to the 10.0 Program Management Weekly Variance reporting?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%A009 - Monthly Status Report%",
+      "%2.0 Weekly Variance Reports%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-tree semantic comparison. Tests SEMANTIC routing on a two-family conceptual question without forcing COMPLEX.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%A009%' and --like '%Weekly Variance%' show OASIS-side monthly external CDRL deliverable vs internal weekly hours rollup under 10.0 Program Management."
+  },
+  {
+    "query_id": "PQ-389",
+    "user_input": "How many distinct PMR decks are filed across 2025 and 2026 combined?",
+    "reference": "At least six distinct PMR decks: 2025 -- August, September, October-November Data, December (4 confirmed). 2026 -- January (under 2026/) and February (under Archive/) (2 confirmed). Combined: 6+. All under 10.0 Program Management/6.0 PMR/.",
+    "reference_contexts": [
+      "10.0 Program Management/6.0 PMR/2025/enterprise program_PMR_2025_August.pptx",
+      "10.0 Program Management/6.0 PMR/2025/enterprise program_PMR_2025_Sept.pptx",
+      "10.0 Program Management/6.0 PMR/2025/enterprise program_PMR_2025_Oct_Nov_Data.pptx",
+      "10.0 Program Management/6.0 PMR/2025/enterprise program_PMR_2025_Dec.pptx",
+      "10.0 Program Management/6.0 PMR/2026/enterprise program_PMR_2026_Jan.pptx",
+      "10.0 Program Management/6.0 PMR/Archive/enterprise program_PMR_2026_Feb.pptx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%6.0 PMR/2025/%",
+      "%6.0 PMR/2026/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-year narrow PMR enumeration. Confirmed via folder mining: 2025 has at least August, September, October-November Data, December (4 decks); 2026 has at least January from the 2026 folder plus February from Archive.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025",
+        "2026"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PMR%' returned 6 distinct PMR deck files across 2025/, 2026/, and Archive/ subfolders."
+  },
+  {
+    "query_id": "PQ-390",
+    "user_input": "Cross-reference: which 2024-12 deliverables exist across A027 RMF Security Plan and the 2.0 Weekly Variance reporting?",
+    "reference": "On the A027 side: IGSI-2464 AC Plans and Controls (2024-12-20). On the 2.0 Weekly Variance Reports side: five weekly xlsx files (2024-11-29, 2024-12-06, 2024-12-13, 2024-12-20, 2024-12-31). One A027 deliverable + five weekly variance files in the same calendar month.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A027 - RMF Security Plan/Plans and Controls/OY2/47QFRA22F0009_IGSI-2464 AC Plans and Controls (A027) 2024-12-20.zip",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-11-29 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-06 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-13 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-20 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-31 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%2024-12%A027%",
+      "%2024-12%Weekly Hours Variance%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Date-scoped cross-tree enumeration. Confirmed: A027 IGSI-2464 AC Plans and Controls (2024-12-20) on the cyber side, and 5 weekly variance xlsx files on the PM side.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-12"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' and --like '%Weekly Variance%' returned one A027 December 2024 zip and five Dec 2024 weekly variance xlsx files."
   }
 ]
