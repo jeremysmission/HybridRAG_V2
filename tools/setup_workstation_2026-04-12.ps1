@@ -613,20 +613,21 @@ Wait-ForOperator -Message "Press any key to continue with workstation repair, Ct
 # 5. Upgrade pip + pip-system-certs
 # ============================================================
 Write-Step "Upgrading pip and installing pip-system-certs"
-$pipUpgradeOutput = & $VenvPython -m pip install --upgrade pip @TrustedHosts 2>&1
+Write-Info "This step can sit quietly for a minute or two on slower links while pip negotiates certs/proxy access."
+Write-Info "Streaming pip output live so a slow install does not look like a hung installer."
+& $VenvPython -m pip install --upgrade pip @TrustedHosts
 if ($LASTEXITCODE -eq 0) {
     Write-Ok "pip upgraded"
 } else {
     Write-Warn "pip upgrade returned non-zero"
-    Write-Info (($pipUpgradeOutput | Out-String).Trim())
 }
 
-$pipSystemCertsOutput = & $VenvPip install pip-system-certs @TrustedHosts 2>&1
+& $VenvPip install pip-system-certs @TrustedHosts
 if ($LASTEXITCODE -eq 0) {
     Write-Ok "pip-system-certs installed"
 } else {
     Write-Warn "pip-system-certs failed (non-blocking)"
-    Write-Info (($pipSystemCertsOutput | Out-String).Trim())
+    Write-Info "pip output is shown above. Continuing because pip-system-certs is non-blocking here."
 }
 
 # ============================================================
