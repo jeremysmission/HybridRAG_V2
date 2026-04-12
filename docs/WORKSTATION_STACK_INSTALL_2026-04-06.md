@@ -25,6 +25,8 @@ That means the repo can live under different roots on laptop and desktop without
 Both repos now have:
 
 - root installer launcher: `INSTALL_WORKSTATION.bat`
+- active HybridRAG V2 PowerShell entry: `tools/setup_workstation_2026-04-12.ps1`
+- legacy wrapper compatibility path: `tools/setup_workstation_2026-04-06.bat` -> `tools/setup_workstation_2026-04-12.ps1`
 - PowerShell process bypass via `-ExecutionPolicy Bypass`
 - UTF-8 / no-BOM-safe setup handling
 - `NO_PROXY=localhost,127.0.0.1`
@@ -142,6 +144,19 @@ start_corpusforge.bat --dry-run
 Open the HybridRAG_V2 folder
 Double-click INSTALL_WORKSTATION.bat
 ```
+
+Detect-first inventory only:
+
+```powershell
+cd <HybridRAG_V2 repo root>
+INSTALL_WORKSTATION.bat -DryRun -NoPause
+```
+
+Operator note:
+
+- `INSTALL_WORKSTATION.bat` is the canonical launcher and forwards arguments to `tools/setup_workstation_2026-04-12.ps1`
+- `tools/setup_workstation_2026-04-06.bat` remains only as a compatibility wrapper for older operator notes / shortcuts
+- `INSTALL_CUDA_TORCH_WORKSTATION.bat` is a targeted torch repair helper, not the primary installer path
 
 After install:
 

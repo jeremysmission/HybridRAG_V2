@@ -1,19 +1,28 @@
 @echo off
-title HybridRAG V2 Workstation Setup
+title HybridRAG V2 Workstation Setup (compat wrapper)
 setlocal EnableExtensions
 cd /d "%~dp0"
 
-set "SCRIPT=%~dp0setup_workstation_2026-04-06.ps1"
+REM The original 2026-04-06 PS1 pathname is currently blocked on this worktree.
+REM Use the recovered dated PS1 instead of the blocked exact pathname.
+set "SCRIPT=%~dp0setup_workstation_2026-04-12.ps1"
+set "SCRIPT_ARGS=%*"
+
+for %%A in (%*) do (
+  if /I "%%~A"=="-NoPause" set "HYBRIDRAG_NO_PAUSE=1"
+  if /I "%%~A"=="--no-pause" set "HYBRIDRAG_NO_PAUSE=1"
+)
 
 if not exist "%SCRIPT%" (
   echo [FAIL] Setup script not found:
   echo        %SCRIPT%
-  pause
+  if /I not "%HYBRIDRAG_NO_PAUSE%"=="1" pause
   exit /b 1
 )
 
-echo [INFO] HybridRAG V2 workstation setup
-echo [INFO] Script: %SCRIPT%
+echo [INFO] HybridRAG V2 workstation setup compatibility wrapper
+echo [INFO] Active script: %SCRIPT%
+echo [INFO] Pass-through args: %SCRIPT_ARGS%
 echo [INFO] Launching with session-only PowerShell execution-policy bypass.
 echo [INFO] The installer will assess the workstation first and pause at
 echo [INFO] meaningful checkpoints inside the PowerShell stage itself.
@@ -25,9 +34,9 @@ REM tell them what it is going to do. This closes the CoPilot+ QA Medium flagged
 REM on commit 0987126 about the wrapper's pop-and-wait pattern breaking the
 REM "double-click and walk away" success criterion.
 if exist "%ProgramFiles%\PowerShell\7\pwsh.exe" (
-  "%ProgramFiles%\PowerShell\7\pwsh.exe" -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%"
+  "%ProgramFiles%\PowerShell\7\pwsh.exe" -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" %SCRIPT_ARGS%
 ) else (
-  powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%"
+  powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" %SCRIPT_ARGS%
 )
 set "EXIT_CODE=%ERRORLEVEL%"
 echo.
