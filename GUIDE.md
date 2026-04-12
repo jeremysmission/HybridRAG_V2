@@ -8,6 +8,9 @@ HybridRAG V2 is a tri-store retrieval and answer system for enterprise program a
 
 For the current multi-agent, dual-GPU daily operating model, see [DAILY_WORKFLOW_2026-04-08.md](./DAILY_WORKFLOW_2026-04-08.md).
 
+### Research Standing Orders
+See [AGENT_RESEARCH_STANDING_ORDERS.md](./docs/AGENT_RESEARCH_STANDING_ORDERS.md) for the durable recency-first web-research policy used by active agents.
+
 ## Core Architecture
 
 - **Store 1:** LanceDB for vector search, BM25 hybrid search, and metadata filtering

@@ -25,6 +25,10 @@ A technique from 6 months ago is probably outdated. A technique from 2 years ago
 
 4. **Verify library API contracts against current docs** before committing to a design. Don't trust your training-time knowledge of `lancedb`, `gliner`, `sentence-transformers`, `torch`, `pyarrow`, `fastapi`, etc.
 
+5. **Bias toward recency for evaluations and benchmarks.** If you are defining a scoring method, benchmark set, or eval rubric, verify it against current community practice rather than older internal habits.
+
+6. **Default to a quick web check before non-trivial implementation.** The normal budget is about 10 minutes per research question, not an open-ended literature review.
+
 ## In-scope research areas
 
 - Retrieval-augmented generation evaluation (RAGAS, MTEB, BEIR, etc.)
@@ -36,12 +40,30 @@ A technique from 6 months ago is probably outdated. A technique from 2 years ago
 - AWS GovCloud specifics for SageMaker and Bedrock endpoints
 - Current state of open-weight LLMs (phi-4 variants, Llama, gpt-oss, Qwen, etc.)
 
+### Role-specific emphasis
+
+- **Evaluation / benchmarking work:** check current RAGAS docs, current MTEB leaderboard patterns, current BEIR-style retrieval evaluation patterns, and recent RAG evaluation papers before locking a rubric or query set.
+- **GUI / testing / architecture work:** check current `lancedb`, `pyarrow`, `torch`, `gliner`, `sentence-transformers`, and any Tkinter-adjacent bug reports or release notes when the issue looks version-sensitive.
+- **AWS / GovCloud work:** check current Bedrock, SageMaker, and OSS endpoint documentation because GovCloud behavior and auth details drift.
+- **Router tuning / extraction work:** check recent papers and implementation guidance on query classification, NER fine-tuning, and tiered extraction strategies before changing scoring or model-selection logic.
+
+### Example search prompts
+
+- `ragas evaluation 2026 production rag`
+- `lancedb 0.30 fts hybrid search api`
+- `gliner batch inference gpu 2026`
+- `aws bedrock govcloud oss endpoint openai sdk compatible`
+- `query router classification benchmark 2026`
+- `retrieval augmented generation evaluation metrics 2026`
+- any exact API or error message seen during implementation
+
 ## Out of scope
 
 - Personal browsing or general tutorial content
 - Anything that leaks corpus-specific, program-specific, or employer-specific details in the search query
 - Multi-hour research deep dives — keep it to ~10 minutes per question, cite the sources, move on
 - Re-researching something that is clearly in your training data and unlikely to have changed (standard library, basic Python patterns)
+- Searching for secrets, identifiers, or anything that would expose sensitive corpus contents outside approved systems
 
 ## Process discipline
 
@@ -53,6 +75,8 @@ A technique from 6 months ago is probably outdated. A technique from 2 years ago
 ## Network access
 
 Firewall is intentionally relaxed during active development sessions to allow research. This is a temporary operator-authorized state, not a standing open door. Do not assume network access is available outside active sessions.
+
+**Current session note (2026-04-11 through 2026-04-12):** user explicitly authorized broad web research to speed up implementation, evaluation, GUI testing, architecture work, and AWS/GovCloud verification. Use that access, but keep queries generic and do not leak corpus-specific or employer-specific details.
 
 ## Why this rule exists
 
