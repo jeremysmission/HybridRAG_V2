@@ -41,13 +41,13 @@ if not exist "%PYTHON%" (
     goto :fail
 )
 
-echo  === Step 1/6: Python Runtime ===
+echo  === Step 1/7: Python Runtime ===
 for /f "usebackq delims=" %%I in (`"%PYTHON%" -c "import sys,struct; print(sys.version.split()[0]); print('cp%d%d'%%sys.version_info[:2]); print('64bit=' + str(struct.calcsize('P')*8==64))" 2^>nul`) do (
     echo  %%I
 )
 echo.
 
-echo  === Step 2/6: pip Certificate Support ===
+echo  === Step 2/7: pip Certificate Support ===
 "%PIP%" show pip-system-certs >nul 2>&1
 if !errorlevel! neq 0 (
     echo  Installing pip-system-certs...
@@ -56,7 +56,7 @@ if !errorlevel! neq 0 (
 echo  [OK] pip-system-certs check complete.
 echo.
 
-echo  === Step 3/6: NVIDIA GPU Check ===
+echo  === Step 3/7: NVIDIA GPU Check ===
 nvidia-smi --query-gpu=name,compute_cap,driver_version,memory.total --format=csv,noheader 2>nul
 if !errorlevel! neq 0 (
     echo  [FAIL] nvidia-smi not found or no NVIDIA GPU detected.
@@ -65,12 +65,12 @@ if !errorlevel! neq 0 (
 echo  [OK] NVIDIA GPU detected.
 echo.
 
-echo  === Step 4/6: Remove Existing Torch Packages ===
+echo  === Step 4/7: Remove Existing Torch Packages ===
 "%PIP%" uninstall torch torchvision torchaudio -y 2>nul
 echo  [OK] Existing torch packages removed if present.
 echo.
 
-echo  === Step 5/6: Install Official cu128 Torch ===
+echo  === Step 5/7: Install Official cu128 Torch ===
 echo  Command:
 echo    .venv\Scripts\pip.exe install torch==2.7.1 --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps %TRUSTED%
 echo.
@@ -96,7 +96,7 @@ if !errorlevel! neq 0 (
 echo  [OK] CUDA torch installed.
 echo.
 
-echo  === Step 6/6: Verify CUDA ===
+echo  === Step 6/7: Verify CUDA ===
 "%PYTHON%" -c "import torch; print('Version:', torch.__version__); print('CUDA built-in:', torch.version.cuda); print('Available:', torch.cuda.is_available()); print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'N/A'); print('Compute capability:', torch.cuda.get_device_capability(0) if torch.cuda.is_available() else 'N/A')" 2>nul
 if !errorlevel! neq 0 (
     echo  [FAIL] torch import or CUDA verification failed.
@@ -114,7 +114,47 @@ if !errorlevel! neq 0 (
     goto :fail
 )
 echo.
-echo  [DONE] CUDA torch is ready for HybridRAG V2.
+
+echo  === Step 7/7: Verify Critical Dependencies ===
+echo  Running scripts\verify_install.py...
+echo.
+"%PYTHON%" "%PROJECT_ROOT%\scripts\verify_install.py"
+if !errorlevel! neq 0 (
+    echo.
+    echo  [WARN] One or more critical imports failed on first check.
+    echo  Attempting one-pass recovery: pip install -r requirements.txt
+    echo.
+    "%PIP%" install -r "%PROJECT_ROOT%\requirements.txt" %TRUSTED%
+    if !errorlevel! neq 0 (
+        echo.
+        echo  [FAIL] requirements.txt install failed during recovery.
+        echo  Check network, pip config, and corporate proxy settings.
+        goto :fail
+    )
+    echo.
+    echo  Recovery install finished. Re-running verify_install.py...
+    echo.
+    "%PYTHON%" "%PROJECT_ROOT%\scripts\verify_install.py"
+    if !errorlevel! neq 0 (
+        echo.
+        echo  [FAIL] Critical dependencies still missing after recovery.
+        echo.
+        echo  One or more required packages could not be installed
+        echo  from requirements.txt. Open scripts\verify_install.py
+        echo  output above to see which packages are missing.
+        echo.
+        echo  Common causes:
+        echo    - Corporate proxy blocking pypi.org
+        echo    - lancedb too old (needs ^>=0.30.1 for streaming API)
+        echo    - gliner or sentence_transformers wheel incompatible
+        echo.
+        goto :fail
+    )
+)
+echo  [OK] All critical dependencies verified.
+echo.
+
+echo  [DONE] CUDA torch + critical dependencies are ready for HybridRAG V2.
 set "_EXITCODE=0"
 goto :cleanup
 
