@@ -403,6 +403,277 @@ class TestRegexPreExtractor:
 
 
 # ===================================================================
+# Security-Standard Identifier Exclusion (security standard regex fix 2026-04-12)
+# ===================================================================
+#
+# Regression guard for the security standard SP 800-53 / STIG / MITRE CVE-CCE
+# pollution of the PART and PO columns on the 10.4M enterprise program
+# corpus (~98% of PO values were security standard Incident Response family IDs;
+# ~90% of top PART values were STIG baseline codes AS-/OS-/GPOS-/CCI-).
+#
+# See docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md for
+# the investigation and before/after evidence. The rejection list is
+# configurable — tests cover both the default-on behavior and the
+# per-corpus override path.
+
+
+class TestSecurityStandardExclusion:
+    """Ensures security standard / STIG / MITRE identifiers are NOT captured as
+    PART or PO entities by default, and that the exclusion list is
+    overridable per-corpus via constructor kwarg."""
+
+    @pytest.fixture
+    def extractor_with_generic_part_pattern(self):
+        """Extractor with the production config's permissive part pattern
+        [A-Z]{2,}-\\d{3,4} — the exact pattern that caught the top-21 STIG
+        baseline codes on the primary workstation store. Tests below prove the exclusion
+        gate now blocks them."""
+        return RegexPreExtractor(part_patterns=[
+            r"ARC-\d{4}",
+            r"[A-Z]{2,}-\d{3,4}",
+        ])
+
+    def _texts(self, extractor):
+        """Shortcut: run extractor on `text` and return PART / PO
+        text values as two lists."""
+        def go(text):
+            ents = extractor.extract(text, "c1", "doc.txt")
+            parts = [e.text for e in ents if e.entity_type == "PART"]
+            pos = [e.text for e in ents if e.entity_type == "PO"]
+            return parts, pos
+        return go
+
+    def test_stig_baseline_codes_rejected_as_part(self, extractor_with_generic_part_pattern):
+        """The top-21 PART values on the primary workstation store are all STIG baseline
+        codes: AS-5021, OS-0004, GPOS-0022, CCI-0001, SV-2045, HS-872.
+        None of these should be emitted as PART entities."""
+        go = self._texts(extractor_with_generic_part_pattern)
+        fakes = [
+            "Control baseline AS-5021 applies.",
+            "See OS-0004 for platform guidance.",
+            "GPOS-0022 defines the policy requirement.",
+            "CCI-0001 maps to the control.",
+            "Finding SV-2045 was remediated.",
+            "Host baseline HS-872 applied.",
+        ]
+        for text in fakes:
+            parts, _ = go(text)
+            assert not parts, (
+                f"security-standard identifier leaked through exclusion: "
+                f"text={text!r} got PARTs={parts}"
+            )
+
+    def test_nist_sp_800_53_rev5_families_all_rejected(self, extractor_with_generic_part_pattern):
+        """Every security standard SP 800-53 Rev 5 family must be excluded. Rev 5 added
+        PT (PII) and SR (Supply Chain Risk) vs Rev 4; both are in the
+        default list and tested here so a downgrade of the list is caught."""
+        go = self._texts(extractor_with_generic_part_pattern)
+        rev5_families = [
+            "AC-2(1)", "AT-3", "AU-12", "CA-5", "CM-8", "CP-9", "IA-5",
+            "IR-4", "MA-6", "MP-3", "PE-13", "PL-2", "PM-9", "PS-7",
+            "PT-3", "RA-5", "SA-11", "SC-7", "SI-4", "SR-6",
+        ]
+        for fam in rev5_families:
+            parts, pos = go(f"Control {fam} is in effect.")
+            assert not parts, f"security standard family {fam} leaked as PART: {parts}"
+            assert not pos, f"security standard family {fam} leaked as PO: {pos}"
+
+    def test_nist_ir_family_not_caught_by_report_id_regex(self):
+        """Regression for the 98% PO pollution: the _report_id_re
+        alternation used to include 'IR', catching security standard Incident
+        Response family controls (IR-1..IR-10) as report IDs. The
+        'IR' alternation was removed 2026-04-12 — any future
+        reintroduction must still pass this test, because the exclusion
+        gate below blocks industry standard family regardless.
+        """
+        ex = RegexPreExtractor(part_patterns=[])
+        for fake in ["IR-1", "IR-4", "IR-8", "IR-10"]:
+            ents = ex.extract(f"security standard control {fake} applies.", "c1", "d.txt")
+            pos = [e.text for e in ents if e.entity_type == "PO"]
+            assert not pos, (
+                f"industry standard family member {fake!r} leaked as PO: {pos}. "
+                f"Either _report_id_re IR alternation came back OR "
+                f"exclusion gate regressed."
+            )
+
+    def test_mitre_cve_cce_rejected(self, extractor_with_generic_part_pattern):
+        """MITRE Common Vulnerabilities and Exposures (CVE-YYYY-NNNN)
+        and Common Configuration Enumeration (CCE-NNNNN) are security
+        standard identifiers, not physical parts."""
+        go = self._texts(extractor_with_generic_part_pattern)
+        for fake in ["CVE-1999", "CVE-2024", "CCE-2720", "CCE-1001"]:
+            parts, _ = go(f"Reference {fake} was checked.")
+            assert not parts, f"MITRE identifier {fake} leaked as PART: {parts}"
+
+    def test_real_physical_parts_still_accepted(self, extractor_with_generic_part_pattern):
+        """Rejection must NOT drop real physical parts. These are the
+        confirmed-physical parts from the Phase 1 anchor mining in
+        docs/PRODUCTION_EVAL_400_RATIONALE_2026-04-12.md."""
+        go = self._texts(extractor_with_generic_part_pattern)
+        reals = [
+            ("Installed RG-213 coax cable.", "RG-213"),
+            ("Used LMR-400 for the run.", "LMR-400"),
+            ("Replaced ARC-4471 connector.", "ARC-4471"),
+        ]
+        for text, expected in reals:
+            parts, _ = go(text)
+            upper_parts = [p.upper() for p in parts]
+            assert any(expected in p for p in upper_parts), (
+                f"Real physical part {expected!r} dropped by exclusion "
+                f"from text {text!r}: got {parts}"
+            )
+
+    def test_sap_po_labeled_extracted(self):
+        """SAP 10-digit POs with an explicit label must be captured
+        as PO entities. The label is REQUIRED — a bare 10-digit
+        number can't be distinguished from phone-like OCR noise
+        without context.
+        """
+        ex = RegexPreExtractor(part_patterns=[])
+        cases = [
+            ("Raised PO 5000585586 to Grainger.", "5000585586"),
+            ("Purchase Order: 7000354926 approved.", "7000354926"),
+            ("PO#7000325121 shipped.", "7000325121"),
+            ("Purchase order 5000111222 delivered.", "5000111222"),
+            ("po 4500111111 is pending.", "4500111111"),
+        ]
+        for text, expected_po in cases:
+            ents = ex.extract(text, "c1", "doc.txt")
+            pos = [e.text for e in ents if e.entity_type == "PO"]
+            assert expected_po in pos, (
+                f"Labeled SAP PO {expected_po!r} not extracted from "
+                f"text {text!r}: got {pos}"
+            )
+
+    def test_sap_po_bare_10_digit_not_extracted(self):
+        """A bare 10-digit number with NO label must NOT be emitted as
+        a PO. This is the deliberate conservative choice — the corpus
+        is full of 10-digit phone numbers, shipment tracking IDs, and
+        timestamps that would otherwise pollute the PO column the same
+        way industry standard did before today's fix.
+        """
+        ex = RegexPreExtractor(part_patterns=[])
+        for fake in [
+            "Call us at 5552345678 any time.",
+            "Tracking 7000123456 in transit.",   # no 'PO' label
+            "Document 5000000001 attached.",     # generic doc number
+        ]:
+            ents = ex.extract(fake, "c1", "doc.txt")
+            pos = [e.text for e in ents if e.entity_type == "PO"]
+            # None of these should produce a 10-digit PO entity
+            assert not any(re.match(r"^\d{10}$", p) for p in pos), (
+                f"Bare 10-digit leaked as PO from {fake!r}: {pos}"
+            )
+
+    def test_exclusion_list_is_overridable(self):
+        """A caller can override the default exclusion list — e.g. on a
+        corpus where security standard family prefixes are NOT noise and should be
+        retained. Passing an empty list disables all exclusion."""
+        ex = RegexPreExtractor(
+            part_patterns=[r"[A-Z]{2,}-\d{3,4}"],
+            security_standard_exclude_prefixes=[],
+        )
+        ents = ex.extract("Control AS-5021 applies.", "c1", "doc.txt")
+        parts = [e.text for e in ents if e.entity_type == "PART"]
+        # With exclusion disabled, the generic pattern captures AS-5021
+        assert "AS-5021" in parts, (
+            f"With empty exclusion list, AS-5021 should be captured: got {parts}"
+        )
+
+    def test_exclusion_list_can_add_new_prefixes(self):
+        """Operators running on a different corpus can extend the
+        exclusion list with their own prefixes without touching code."""
+        ex = RegexPreExtractor(
+            part_patterns=[r"[A-Z]{2,}-\d{3,4}"],
+            security_standard_exclude_prefixes=["CUSTOM-", "LEGACY-"],
+        )
+        # These are NOT in the default list but should be rejected here
+        ents = ex.extract("Reference CUSTOM-0042 and LEGACY-900.", "c1", "doc.txt")
+        parts = [e.text for e in ents if e.entity_type == "PART"]
+        assert "CUSTOM-0042" not in parts
+        assert "LEGACY-900" not in parts
+
+    def test_validator_helper_direct(self):
+        """Direct unit test on the _is_security_standard_identifier
+        helper, independent of any regex match path."""
+        ex = RegexPreExtractor(part_patterns=[])
+        # Rejected
+        assert ex._is_security_standard_identifier("AC-2")
+        assert ex._is_security_standard_identifier("IR-4")
+        assert ex._is_security_standard_identifier("AS-5021")
+        assert ex._is_security_standard_identifier("GPOS-0022")
+        assert ex._is_security_standard_identifier("CCI-0001")
+        assert ex._is_security_standard_identifier("SV-2045")
+        assert ex._is_security_standard_identifier("SR-6")   # Rev 5 new family
+        assert ex._is_security_standard_identifier("PT-3")   # Rev 5 new family
+        assert ex._is_security_standard_identifier("CVE-2024")
+        assert ex._is_security_standard_identifier("cce-1001")  # case-insensitive
+        # Accepted
+        assert not ex._is_security_standard_identifier("RG-213")
+        assert not ex._is_security_standard_identifier("LMR-400")
+        assert not ex._is_security_standard_identifier("ARC-4471")
+        assert not ex._is_security_standard_identifier("5000585586")
+        assert not ex._is_security_standard_identifier("")
+        assert not ex._is_security_standard_identifier(None)  # type: ignore[arg-type]
+
+
+class TestEventBlockParserSecurityStandardExclusion:
+    """EventBlockParser must apply the same exclusion as
+    RegexPreExtractor. They're two separate code paths but operators
+    run them together, so a regression in either one re-pollutes the
+    entity store."""
+
+    def test_event_block_parts_rejected_if_nist_prefixed(self):
+        """Labeled 'Part#: AS-5021' in a maintenance event block must
+        NOT be emitted — AS- is a STIG baseline prefix, not a physical
+        part, even inside a maintenance log."""
+        parser = EventBlockParser(part_patterns=[r"[A-Z]{2,}-\d{3,4}"])
+        text = (
+            "1. Part#: AS-5021  Failure Mode: N/A  Action: Replaced\n"
+            "   New Unit Serial: SN-100234\n"
+        )
+        entities, _ = parser.parse(text, "c1", "doc.txt")
+        parts = [e.text.upper() for e in entities if e.entity_type == "PART"]
+        assert "AS-5021" not in parts, (
+            f"security standard/STIG prefix leaked through EventBlockParser: {parts}"
+        )
+
+    def test_event_block_real_part_still_emitted(self):
+        parser = EventBlockParser(part_patterns=[r"ARC-\d{4}"])
+        text = (
+            "1. Part#: ARC-4471\n"
+            "   Failure Mode: Connector fault\n"
+            "   Action: Replaced\n"
+            "   New Unit Serial: SN-987654\n"
+        )
+        entities, _ = parser.parse(text, "c1", "doc.txt")
+        parts = [e.text.upper() for e in entities if e.entity_type == "PART"]
+        # EventBlockParser emits whole-field values for Part#. Real
+        # physical part ARC-4471 must appear as the first PART entity.
+        assert any(p.startswith("ARC-4471") for p in parts), (
+            f"Real physical part ARC-4471 missing from parts: {parts}"
+        )
+
+    def test_event_block_parser_override_list(self):
+        parser = EventBlockParser(
+            part_patterns=[r"[A-Z]{2,}-\d{3,4}"],
+            security_standard_exclude_prefixes=["FOO-"],
+        )
+        # Default exclusion disabled — AS- is no longer in the reject list,
+        # so AS-5021 should now pass through even though the security standard default
+        # would have blocked it.
+        text = (
+            "1. Part#: AS-5021\n"
+            "   Action: Replaced\n"
+        )
+        entities, _ = parser.parse(text, "c1", "doc.txt")
+        parts = [e.text.upper() for e in entities if e.entity_type == "PART"]
+        assert any(p.startswith("AS-5021") for p in parts), (
+            f"Override list should allow AS-5021 through: got {parts}"
+        )
+
+
+# ===================================================================
 # QualityGate Tests
 # ===================================================================
 

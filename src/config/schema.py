@@ -101,6 +101,38 @@ class ExtractionConfig(BaseModel):
         ],
         description="Regex patterns for valid part numbers.",
     )
+    security_standard_exclude_prefixes: list[str] = Field(
+        default=[
+            # security standard SP 800-53 Rev 5 control families (all 20).
+            # Source: the SP 800-53 Rev 5 publication. See
+            # docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md
+            # for web research citations — a direct URL is omitted here
+            # because the repo sanitizer rewrites "security standard" inside
+            # URLs, which produces a broken link.
+            "AC-", "AT-", "AU-", "CA-", "CM-", "CP-", "IA-", "IR-", "MA-",
+            "MP-", "PE-", "PL-", "PM-", "PS-", "PT-", "RA-", "SA-", "SC-",
+            "SI-", "SR-",
+            # STIG baseline platform prefixes (seen in primary workstation entity store)
+            "AS-", "OS-", "GPOS-", "HS-",
+            # STIG / DISA identifier prefixes
+            "CCI-", "SV-", "SP-800", "SP-",
+            # MITRE security identifier prefixes
+            "CVE-", "CCE-",
+        ],
+        description=(
+            "Candidate strings whose UPPER() starts with any of these "
+            "prefixes are rejected by RegexPreExtractor and "
+            "EventBlockParser as security-standard identifiers, not "
+            "physical parts or procurement IDs. Default covers security standard "
+            "SP 800-53 Rev 5 + STIG CCI/SV + MITRE CVE/CCE + the "
+            "STIG baseline platform codes observed in the enterprise "
+            "program corpus. Operators running V2 against a different "
+            "corpus can override this list per-corpus without changing "
+            "the extractor code. See "
+            "docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md "
+            "for the rationale and before/after evidence."
+        ),
+    )
     gliner_enabled: bool = Field(default=False, description="Use GLiNER2 for first-pass NER (waiver pending).")
     gliner_device: str = Field(default="cuda:1", description="Device for GLiNER model. Use cuda:1 on primary workstation.")
     gliner_model: str = Field(default="urchade/gliner_medium-v2.1", description="GLiNER model name.")

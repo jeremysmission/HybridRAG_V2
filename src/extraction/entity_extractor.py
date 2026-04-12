@@ -481,8 +481,49 @@ class RegexPreExtractor:
     Results feed the same entity store as GLiNER (Tier 2) and LLM (Tier 3).
     """
 
-    def __init__(self, part_patterns: list[str] | None = None):
+    # Default security-standard prefix exclusion list. Matches the
+    # config.schema.ExtractionConfig.security_standard_exclude_prefixes
+    # default exactly so callers who don't pass a list still get the
+    # full Rev-5 + STIG + MITRE coverage. When callers DO pass a list
+    # (RegexPreExtractor(security_standard_exclude_prefixes=...)), it
+    # overrides this default verbatim — this is the per-corpus override
+    # point.
+    #
+    # The exclusion guards the class against the laptop-10M class of
+    # pollution for the PART/PO columns: the 98% industry standard-N pollution
+    # on the 10.4M enterprise program corpus traced back to the
+    # '_report_id_re' alternation including IR and to the generic
+    # '[A-Z]{2,}-\\d{3,4}' part pattern catching STIG baseline codes
+    # (AS-5021, OS-0004, GPOS-0022). See
+    # docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md.
+    _DEFAULT_SECURITY_STANDARD_PREFIXES: tuple[str, ...] = (
+        # security standard SP 800-53 Rev 5 control families (all 20)
+        "AC-", "AT-", "AU-", "CA-", "CM-", "CP-", "IA-", "IR-", "MA-",
+        "MP-", "PE-", "PL-", "PM-", "PS-", "PT-", "RA-", "SA-", "SC-",
+        "SI-", "SR-",
+        # STIG baseline platform prefixes
+        "AS-", "OS-", "GPOS-", "HS-",
+        # STIG / DISA identifier prefixes
+        "CCI-", "SV-", "SP-800", "SP-",
+        # MITRE security identifier prefixes
+        "CVE-", "CCE-",
+    )
+
+    def __init__(
+        self,
+        part_patterns: list[str] | None = None,
+        security_standard_exclude_prefixes: list[str] | tuple[str, ...] | None = None,
+    ):
         self._part_patterns = [re.compile(p) for p in (part_patterns or [])]
+        # Normalize exclusion prefixes to uppercase tuple for cheap startswith.
+        # Empty list is a legitimate "disable all exclusion" override.
+        if security_standard_exclude_prefixes is None:
+            self._security_exclude_prefixes: tuple[str, ...] = \
+                self._DEFAULT_SECURITY_STANDARD_PREFIXES
+        else:
+            self._security_exclude_prefixes = tuple(
+                p.upper() for p in security_standard_exclude_prefixes
+            )
         self._email_re = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
         # Phone regex: broad candidate matcher, validated by _is_valid_phone().
         #
@@ -525,9 +566,30 @@ class RegexPreExtractor:
             r"|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\s+\d{1,2},?\s+\d{4}\b"
         )
         self._po_re = re.compile(r"PO-\d{4}-\d{4}")
-        # V1-ported patterns
+        # Labeled SAP PO — 10-digit procurement number preceded by an
+        # explicit PO / Purchase Order label. Requiring a label is the
+        # only way to distinguish a real SAP PO from the dozens of
+        # other 10-digit tokens on every enterprise program page
+        # (phone numbers, shipment tracking, timestamps, OCR noise).
+        # See docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md
+        # for the per-100-chunk measurement confirming the SAP PO
+        # column is empty in the current store — all 98% of the PO
+        # values are industry standard-N, not real procurement.
+        self._sap_po_re = re.compile(
+            r"(?:Purchase\s*Order|PO\s*Number|P\.?O\.?|PO)"
+            r"\s*[#:.\-]?\s*"
+            r"(\d{10})"
+            r"\b",
+            re.IGNORECASE,
+        )
+        # V1-ported patterns.
+        # NOTE: 'IR' was removed from the _report_id_re alternation in
+        # the 2026-04-12 security standard fix — 98% of matches were security standard Incident
+        # Response family controls (IR-1..IR-10), not real Incident
+        # Reports. The enterprise program corpus uses FSR/UMR/ASV/RTS
+        # for real reports; IR-* was 100% collision with security standard.
         self._serial_re = re.compile(r"\bSN[-: ]?[A-Za-z0-9-]+\b", re.IGNORECASE)
-        self._report_id_re = re.compile(r"\b(?:FSR|UMR|IR|ASV|RTS)-[A-Za-z0-9_-]+\b", re.IGNORECASE)
+        self._report_id_re = re.compile(r"\b(?:FSR|UMR|ASV|RTS)-[A-Za-z0-9_-]+\b", re.IGNORECASE)
         # Field-label extraction (V1 service_event_extractor pattern)
         self._field_value_re = re.compile(
             r"^\s*(?P<label>(?:Site|Location|Point of Contact|POC|Technician|Engineer)"
@@ -540,6 +602,22 @@ class RegexPreExtractor:
             "technician": "PERSON", "engineer": "PERSON",
         }
 
+    def _is_security_standard_identifier(self, candidate: str) -> bool:
+        """Return True if the candidate matches a configured security-standard
+        prefix (security standard SP 800-53 family, STIG CCI/SV, MITRE CVE/CCE, STIG
+        baseline platform codes, etc.) and should NOT be emitted as a
+        PART or PO entity.
+
+        Called at every candidate-emit site in this class and in
+        EventBlockParser. Cheap — single startswith scan over a short
+        tuple. See
+        docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md.
+        """
+        if not candidate:
+            return False
+        upper = candidate.upper()
+        return any(upper.startswith(p) for p in self._security_exclude_prefixes)
+
     def extract(
         self, text: str, chunk_id: str, source_path: str
     ) -> list[Entity]:
@@ -548,10 +626,13 @@ class RegexPreExtractor:
 
         for pattern in self._part_patterns:
             for match in pattern.finditer(text):
+                candidate = match.group()
+                if self._is_security_standard_identifier(candidate):
+                    continue
                 entities.append(Entity(
                     entity_type="PART",
-                    text=match.group().upper(),
-                    raw_text=match.group(),
+                    text=candidate.upper(),
+                    raw_text=candidate,
                     confidence=1.0,
                     chunk_id=chunk_id,
                     source_path=source_path,
@@ -595,21 +676,30 @@ class RegexPreExtractor:
             ))
 
         for match in self._po_re.finditer(text):
+            candidate = match.group()
+            if self._is_security_standard_identifier(candidate):
+                continue
             entities.append(Entity(
                 entity_type="PO",
-                text=match.group().upper(),
-                raw_text=match.group(),
+                text=candidate.upper(),
+                raw_text=candidate,
                 confidence=1.0,
                 chunk_id=chunk_id,
                 source_path=source_path,
                 context=self._surrounding(text, match.start()),
             ))
 
-        # Serial numbers (V1 pattern)
-        for match in self._serial_re.finditer(text):
+        # SAP-format labeled POs (e.g., "PO 5000585586", "Purchase Order: 7000354926")
+        # Added 2026-04-12 as part of the security standard regex over-match fix. The
+        # 10-digit SAP PO column is effectively empty in the current
+        # Tier 1 store because no label-free 10-digit pattern exists.
+        for match in self._sap_po_re.finditer(text):
+            po_number = match.group(1)
+            if self._is_security_standard_identifier(po_number):
+                continue
             entities.append(Entity(
-                entity_type="PART",
-                text=match.group().upper(),
+                entity_type="PO",
+                text=po_number,
                 raw_text=match.group(),
                 confidence=0.95,
                 chunk_id=chunk_id,
@@ -617,12 +707,31 @@ class RegexPreExtractor:
                 context=self._surrounding(text, match.start()),
             ))
 
-        # Report IDs (FSR, UMR, IR, ASV, RTS)
+        # Serial numbers (V1 pattern)
+        for match in self._serial_re.finditer(text):
+            candidate = match.group()
+            if self._is_security_standard_identifier(candidate):
+                continue
+            entities.append(Entity(
+                entity_type="PART",
+                text=candidate.upper(),
+                raw_text=candidate,
+                confidence=0.95,
+                chunk_id=chunk_id,
+                source_path=source_path,
+                context=self._surrounding(text, match.start()),
+            ))
+
+        # Report IDs (FSR, UMR, ASV, RTS — IR removed 2026-04-12 due
+        # to 98% collision with security standard Incident Response family)
         for match in self._report_id_re.finditer(text):
+            candidate = match.group()
+            if self._is_security_standard_identifier(candidate):
+                continue
             entities.append(Entity(
                 entity_type="PO",
-                text=match.group().upper(),
-                raw_text=match.group(),
+                text=candidate.upper(),
+                raw_text=candidate,
                 confidence=0.9,
                 chunk_id=chunk_id,
                 source_path=source_path,
@@ -806,9 +915,32 @@ class EventBlockParser:
     failure modes. Produces Entity and Relationship objects directly.
     """
 
-    def __init__(self, part_patterns: list[str] | None = None):
+    def __init__(
+        self,
+        part_patterns: list[str] | None = None,
+        security_standard_exclude_prefixes: list[str] | tuple[str, ...] | None = None,
+    ):
         self._serial_re = re.compile(r"\bSN[-: ]?[A-Za-z0-9-]+\b", re.IGNORECASE)
         self._part_patterns = [re.compile(p) for p in (part_patterns or [])]
+        # Same exclusion list RegexPreExtractor uses. When callers don't
+        # pass one explicitly, fall back to the RegexPreExtractor
+        # default so the two classes stay in lockstep on corpus-specific
+        # rejection rules. See
+        # docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md.
+        if security_standard_exclude_prefixes is None:
+            self._security_exclude_prefixes: tuple[str, ...] = \
+                RegexPreExtractor._DEFAULT_SECURITY_STANDARD_PREFIXES
+        else:
+            self._security_exclude_prefixes = tuple(
+                p.upper() for p in security_standard_exclude_prefixes
+            )
+
+    def _is_security_standard_identifier(self, candidate: str) -> bool:
+        """Mirror of RegexPreExtractor._is_security_standard_identifier."""
+        if not candidate:
+            return False
+        upper = candidate.upper()
+        return any(upper.startswith(p) for p in self._security_exclude_prefixes)
 
     def parse(
         self, text: str, chunk_id: str, source_path: str,
@@ -848,7 +980,7 @@ class EventBlockParser:
             ctx = block[:160].strip()
 
             # Emit part entity
-            if part_number:
+            if part_number and not self._is_security_standard_identifier(part_number):
                 all_entities.append(Entity(
                     entity_type="PART", text=part_number, raw_text=part_number,
                     confidence=1.0, chunk_id=chunk_id,
@@ -856,7 +988,8 @@ class EventBlockParser:
                 ))
 
             # Emit component as PART
-            if component and component.upper() != part_number:
+            if (component and component.upper() != part_number
+                    and not self._is_security_standard_identifier(component)):
                 all_entities.append(Entity(
                     entity_type="PART", text=component, raw_text=component,
                     confidence=0.85, chunk_id=chunk_id,
@@ -865,7 +998,7 @@ class EventBlockParser:
 
             # Emit installed/removed parts
             for p in (installed_part, removed_part):
-                if p and p != part_number:
+                if p and p != part_number and not self._is_security_standard_identifier(p):
                     all_entities.append(Entity(
                         entity_type="PART", text=p, raw_text=p,
                         confidence=0.95, chunk_id=chunk_id,
@@ -874,14 +1007,19 @@ class EventBlockParser:
 
             # Emit serial numbers
             for sn in (new_serial, failed_serial, installed_serial, removed_serial):
-                if sn:
+                if sn and not self._is_security_standard_identifier(sn):
                     all_entities.append(Entity(
                         entity_type="PART", text=sn.upper(), raw_text=sn,
                         confidence=0.95, chunk_id=chunk_id,
                         source_path=source_path, context=ctx,
                     ))
 
-            # Emit failure mode
+            # Emit failure mode. We do NOT gate failure_mode through the
+            # security-standard exclusion — failure descriptions are free
+            # text like "receiver fault" or "antenna cable shorted" and
+            # can't collide with security standard family prefixes. Leaving the gate
+            # off here preserves EventBlockParser's signal on maintenance
+            # narrative even if a future rejection list grows aggressive.
             if failure_mode:
                 all_entities.append(Entity(
                     entity_type="PART", text=failure_mode, raw_text=failure_mode,
