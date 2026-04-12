@@ -5355,7 +5355,7 @@
   },
   {
     "query_id": "PQ-331",
-    "user_input": "Show me the IGS Weekly Hours Variance report for the week ending 2024-12-31.",
+    "user_input": "Show me the enterprise program Weekly Hours Variance report for the week ending 2024-12-31.",
     "reference": "2024-12-31 enterprise program Weekly Hours Variance.xlsx, located under 10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/.",
     "reference_contexts": [
       "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-31 enterprise program Weekly Hours Variance.xlsx"
@@ -5579,7 +5579,7 @@
   },
   {
     "query_id": "PQ-340",
-    "user_input": "Show me the IGS IMS revision delivered on 2023-06-20.",
+    "user_input": "Show me the enterprise program IMS revision delivered on 2023-06-20.",
     "reference": "IGSI-153. Filename: Deliverables Report IGSI-153 enterprise program IMS_06_20_23 (A031).pdf under 1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/.",
     "reference_contexts": [
       "1.0 enterprise program DM - Restricted/OASIS/A031 - Integrated Master Schedule (IMS)/2023/Deliverables Report IGSI-153 enterprise program IMS_06_20_23 (A031).pdf"
@@ -5634,7 +5634,7 @@
   },
   {
     "query_id": "PQ-342",
-    "user_input": "What is the cadence of the IGS Weekly Hours Variance reporting?",
+    "user_input": "What is the cadence of the enterprise program Weekly Hours Variance reporting?",
     "reference": null,
     "reference_contexts": [],
     "persona": "Program Manager",
@@ -5652,7 +5652,7 @@
   {
     "query_id": "PQ-343",
     "user_input": "What is purchase order 5000629092 and what did it order?",
-    "reference": "PO 5000629092 / PR 3000172736 ordered 3 DPS4D units from Northrop Grumman (LDI line) for the DMEA monitoring system Installation contract period (1 Jul 25 - 31 Dec 25), value $298,855.00.",
+    "reference": "PO 5000629092 / PR 3000172736 ordered 3 DPS4D units from Organization (LDI line) for the DMEA monitoring system Installation contract period (1 Jul 25 - 31 Dec 25), value $298,855.00.",
     "reference_contexts": [
       "5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/PO - 5000629092, PR 3000172736 DPS4D DMEA monitoring system(LDI)($298,855.00)/"
     ],
@@ -5855,10 +5855,10 @@
   },
   {
     "query_id": "PQ-352",
-    "user_input": "What's the IGSI-2891 ISTO RHEL8 cybersecurity assessment test report about?",
-    "reference": "47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx under 1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report/A027- Cybersecurity Assessment Test Report-RHEL 8 ISTO/.",
+    "user_input": "What's the IGSI-2891 legacy monitoring system RHEL8 cybersecurity assessment test report about?",
+    "reference": "47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx under 1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report/A027- Cybersecurity Assessment Test Report-RHEL 8 legacy monitoring system/.",
     "reference_contexts": [
-      "1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report/A027- Cybersecurity Assessment Test Report-RHEL 8 ISTO/47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx"
+      "1.5 enterprise program CDRLS/A027 - Cybersecurity Assessment Test Report/A027- Cybersecurity Assessment Test Report-RHEL 8 legacy monitoring system/47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx"
     ],
     "persona": "Field Engineer",
     "expected_query_type": "ENTITY",
@@ -6492,9 +6492,9 @@
   {
     "query_id": "PQ-378",
     "user_input": "How many DPS4D units were procured under PO 5000629092?",
-    "reference": "Three (3) DPS4D units, per the Northrop Grumman quote LDI 20250617-1, under PO 5000629092 / PR 3000172736.",
+    "reference": "Three (3) DPS4D units, per the Organization quote LDI 20250617-1, under PO 5000629092 / PR 3000172736.",
     "reference_contexts": [
-      "5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/PO - 5000629092, PR 3000172736 DPS4D DMEA monitoring system(LDI)($298,855.00)/Quote Northrop Grumman, LDI 20250617-1, 3 DPS4Ds.pdf"
+      "5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/PO - 5000629092, PR 3000172736 DPS4D DMEA monitoring system(LDI)($298,855.00)/Quote Organization, LDI 20250617-1, 3 DPS4Ds.pdf"
     ],
     "persona": "Aggregation / Cross-role",
     "expected_query_type": "ENTITY",
@@ -6515,7 +6515,7 @@
   {
     "query_id": "PQ-379",
     "user_input": "Cross-reference: which 2025 received POs were tied to DMEA monitoring system installation?",
-    "reference": "At least one confirmed: PO 5000629092 for 3 DPS4D units from LDI/Northrop Grumman, $298,855.00, under 5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/.",
+    "reference": "At least one confirmed: PO 5000629092 for 3 DPS4D units from LDI/Organization, $298,855.00, under 5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/.",
     "reference_contexts": [
       "5.0 Logistics/Procurement/002 - Received/DMEA monitoring system Installation (1 Jul 25 - 31 Dec 25)/PO - 5000629092, PR 3000172736 DPS4D DMEA monitoring system(LDI)($298,855.00)/"
     ],
@@ -6698,7 +6698,7 @@
   },
   {
     "query_id": "PQ-386",
-    "user_input": "What's the difference between the IGS Weekly Hours Variance reports and the IGS PMR decks for tracking program health?",
+    "user_input": "What's the difference between the enterprise program Weekly Hours Variance reports and the enterprise program PMR decks for tracking program health?",
     "reference": null,
     "reference_contexts": [],
     "persona": "Aggregation / Cross-role",
@@ -6816,5 +6816,1369 @@
     },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Anchor: folders probe --like '%CDRL%' and --like '%Weekly Variance%' returned one A027 December 2024 zip and five Dec 2024 weekly variance xlsx files."
+  },
+  {
+    "query_id": "PQ-391",
+    "user_input": "Show me the enterprise program FEP Monthly Actuals spreadsheet for 2024-07.",
+    "reference": "2024 07 Monthly Actuals.xlsx under 10.0 Program Management/1.0 FEP/Reference/.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 07 Monthly Actuals.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%1.0 FEP/Reference/2024 07 Monthly Actuals%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated FEP Monthly Actuals file lookup. Tests TABULAR routing on a recurring monthly finance workbook family.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-07"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned 2024 07 Monthly Actuals.xlsx in the Reference folder."
+  },
+  {
+    "query_id": "PQ-392",
+    "user_input": "Show me the enterprise program FEP Monthly Actuals spreadsheet for 2024-08.",
+    "reference": "2024 08 Monthly Actuals.xlsx under 10.0 Program Management/1.0 FEP/Reference/.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 08 Monthly Actuals.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%1.0 FEP/Reference/2024 08 Monthly Actuals%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Sibling of PQ-391. Tests that retrieval distinguishes adjacent monthly variants by exact date.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-08"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned 2024 08 Monthly Actuals.xlsx in the Reference folder."
+  },
+  {
+    "query_id": "PQ-393",
+    "user_input": "Show me the enterprise program FEP Monthly Actuals spreadsheet for 2024-12.",
+    "reference": "2024 12 Monthly Actuals.xlsx under 10.0 Program Management/1.0 FEP/Reference/.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 12 Monthly Actuals.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%1.0 FEP/Reference/2024 12 Monthly Actuals%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Year-end FEP rollup TABULAR lookup. Tests sub-month-precision routing on the recurring family.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-12"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned 2024 12 Monthly Actuals.xlsx in the Reference folder."
+  },
+  {
+    "query_id": "PQ-394",
+    "user_input": "Which Monthly Actuals spreadsheets exist for the second half of 2024?",
+    "reference": "Six files: 2024 07, 08, 09, 10, 11, and 12 Monthly Actuals.xlsx, all under 10.0 Program Management/1.0 FEP/Reference/.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 07 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 08 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 09 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 10 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 11 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 12 Monthly Actuals.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%1.0 FEP/Reference/2024 0[7-9] Monthly Actuals%",
+      "%1.0 FEP/Reference/2024 1[0-2] Monthly Actuals%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Six-file half-year enumeration over a single recurring family. Manually defensible: 2024-07 through 2024-12.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-07",
+        "2024-08",
+        "2024-09",
+        "2024-10",
+        "2024-11",
+        "2024-12"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned 12 distinct monthly xlsx files for 2024; second half is the trailing six."
+  },
+  {
+    "query_id": "PQ-395",
+    "user_input": "How many Monthly Actuals spreadsheets are filed for calendar year 2024?",
+    "reference": "Twelve files (2024 01 through 2024 12 Monthly Actuals.xlsx), all under 10.0 Program Management/1.0 FEP/Reference/. Plus a 2025 01 Monthly Actuals.xlsx that confirms cadence continued into 2025.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 01 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 02 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 03 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 04 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 05 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 06 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 07 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 08 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 09 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 10 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 11 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 12 Monthly Actuals.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%1.0 FEP/Reference/2024 %Monthly Actuals%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Full-year narrow enumeration. Confirmed via folder mining: all twelve months 2024-01 through 2024-12 plus 2025-01 are filed; CY2024 = 12 files.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned exactly 12 dated 2024 monthly Actuals xlsx files plus a 2025-01 follow-on."
+  },
+  {
+    "query_id": "PQ-396",
+    "user_input": "Show me the enterprise program FEP Monthly Actuals spreadsheet for 2025-01.",
+    "reference": "2025 01 Monthly Actuals.xlsx under 10.0 Program Management/1.0 FEP/Reference/.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2025 01 Monthly Actuals.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%1.0 FEP/Reference/2025 01 Monthly Actuals%"
+    ],
+    "difficulty": "easy",
+    "rationale": "First 2025 monthly FEP rollup. Confirms cadence into the new calendar year.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned 2025 01 Monthly Actuals.xlsx as the most recent dated file in the family."
+  },
+  {
+    "query_id": "PQ-397",
+    "user_input": "Show me the FEP Recon spreadsheet for 2025-05-07.",
+    "reference": "FEP Recon 20250507.xlsx under 5.0 Logistics/Procurement/013 - FEP Recon/2025/.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/013 - FEP Recon/2025/FEP Recon 20250507.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%013 - FEP Recon/2025/FEP Recon 20250507%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated FEP Recon TABULAR lookup. Companion to PQ-349 (2025-04-16).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2025-05-07"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned FEP Recon 20250507.xlsx."
+  },
+  {
+    "query_id": "PQ-398",
+    "user_input": "What does an FEP Monthly Actuals spreadsheet typically contain?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%1.0 FEP/Reference/%Monthly Actuals%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Format / content semantic question about the monthly FEP rollup family. Routing should land SEMANTIC, not TABULAR or COMPLEX.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned a recurring monthly xlsx family under 10.0 Program Management/1.0 FEP/Reference/."
+  },
+  {
+    "query_id": "PQ-399",
+    "user_input": "What is the relationship between the FEP Monthly Actuals spreadsheets and the FEP Recon spreadsheets?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Program Manager",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%1.0 FEP/Reference/%Monthly Actuals%",
+      "%013 - FEP Recon%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-family conceptual question on the two FEP recurring families: PM-side rollup vs Logistics-side reconciliation. Tests SEMANTIC routing without escalating to COMPLEX.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned PM-side monthly rollups; --like '%Procurement%2025%' returned procurement-side dated FEP Recon files."
+  },
+  {
+    "query_id": "PQ-400",
+    "user_input": "Where do the IGS Metrology QA audit closure reports live?",
+    "reference": "enterprise program Metrology QA Audit Closure Report-4625 (002).xlsx under 5.0 Logistics/Calibration/Calibration Audit/.",
+    "reference_contexts": [
+      "5.0 Logistics/Calibration/Calibration Audit/enterprise program Metrology QA Audit Closure Report-4625 (002).xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5.0 Logistics/Calibration/Calibration Audit/%Metrology QA Audit Closure Report%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single QA closure report file lookup. Tests cross-discipline (PM persona asking a logistics-side audit question).",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Calibration%' returned the Metrology QA Audit Closure Report under the Calibration Audit folder."
+  },
+  {
+    "query_id": "PQ-401",
+    "user_input": "Show me the enterprise program FEP Monthly Actuals spreadsheet for 2024-02.",
+    "reference": "2024 02 Monthly Actuals.xlsx under 10.0 Program Management/1.0 FEP/Reference/.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 02 Monthly Actuals.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%1.0 FEP/Reference/2024 02 Monthly Actuals%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated TABULAR lookup. February 2024 is the highest-count file in the family per anchor mining.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-02"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned 2024 02 Monthly Actuals.xlsx as the highest-count Monthly Actuals file."
+  },
+  {
+    "query_id": "PQ-402",
+    "user_input": "Show me the Calibration Tracker as of 2019-01-04.",
+    "reference": "Calibration Tracker (as of 04JAN19).xlsx under zzSEMS ARCHIVE/005_ILS/Calibration/.",
+    "reference_contexts": [
+      "zzSEMS ARCHIVE/005_ILS/Calibration/Calibration Tracker (as of 04JAN19).xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%zzSEMS ARCHIVE/005_ILS/Calibration/Calibration Tracker (as of 04JAN19)%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated calibration register file. Date encoded in DDMMMYY format (04JAN19) in the filename.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019-01-04"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Calibration%' returned the 04JAN19 Calibration Tracker xlsx."
+  },
+  {
+    "query_id": "PQ-403",
+    "user_input": "Which Calibration Tracker snapshots exist in the zzSEMS ARCHIVE Calibration folder?",
+    "reference": "Three snapshots in the primary location: 18DEC18, 20DEC18, and 04JAN19. A fourth (07JAN19) exists under zzSEMS ARCHIVE/005_ILS/Dashboard/Archive/.",
+    "reference_contexts": [
+      "zzSEMS ARCHIVE/005_ILS/Calibration/Calibration Tracker (as of 18DEC18).xlsx",
+      "zzSEMS ARCHIVE/005_ILS/Calibration/Calibration Tracker (as of 20DEC18).xlsx",
+      "zzSEMS ARCHIVE/005_ILS/Calibration/Calibration Tracker (as of 04JAN19).xlsx",
+      "zzSEMS ARCHIVE/005_ILS/Dashboard/Archive/Calibration Tracker (as of 07JAN19).xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%zzSEMS ARCHIVE/005_ILS/Calibration/Calibration Tracker (as of%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Folder-scoped snapshot enumeration. Confirmed via folder mining: 18DEC18, 20DEC18, 04JAN19. A 07JAN19 snapshot also exists in the Dashboard/Archive sibling folder.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Calibration%' returned 4 Calibration Tracker snapshots across two folders, three in the primary Calibration folder and one in Dashboard/Archive."
+  },
+  {
+    "query_id": "PQ-404",
+    "user_input": "Show me the Recommended Spares Parts List from 2018-06-27.",
+    "reference": "Recommended Spares Parts List (2018-06-27).xlsx under 5.0 Logistics/Parts (Downloaded Information)/.",
+    "reference_contexts": [
+      "5.0 Logistics/Parts (Downloaded Information)/Recommended Spares Parts List (2018-06-27).xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5.0 Logistics/Parts (Downloaded Information)/Recommended Spares Parts List (2018-06-27)%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated spares list TABULAR lookup. Folder anchor confirms exact filename.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2018-06-27"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Recommended Spares%' returned the 2018-06-27 dated Recommended Spares Parts List xlsx."
+  },
+  {
+    "query_id": "PQ-405",
+    "user_input": "How many Recommended Spares Parts List snapshots exist across the corpus?",
+    "reference": "Three confirmed: Recommended Spares Parts List (2018-06-26).xlsx and (2018-06-27).xlsx under 5.0 Logistics/Parts (Downloaded Information)/, plus an undated Recommended Spares Parts List.xlsx under zzSEMS ARCHIVE/005_ILS/Spares/.",
+    "reference_contexts": [
+      "5.0 Logistics/Parts (Downloaded Information)/Recommended Spares Parts List (2018-06-26).xlsx",
+      "5.0 Logistics/Parts (Downloaded Information)/Recommended Spares Parts List (2018-06-27).xlsx",
+      "zzSEMS ARCHIVE/005_ILS/Spares/Recommended Spares Parts List.xlsx"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%Recommended Spares Parts List%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-folder enumeration of a recurring spares register family. Confirmed: two dated 2018-06 snapshots in the primary parts folder plus one undated reference in the SEMS archive.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Recommended Spares%' returned exactly 3 distinct Recommended Spares Parts List xlsx files across two folders."
+  },
+  {
+    "query_id": "PQ-406",
+    "user_input": "What's the FieldFox MY53103705 calibration certificate due date?",
+    "reference": "2019-04-25 (encoded in filename: Calibration Certificate 178512 (Due 2019-04-25).pdf), under zzSEMS ARCHIVE/005_ILS/Calibration/FieldFox (MY53103705)/.",
+    "reference_contexts": [
+      "zzSEMS ARCHIVE/005_ILS/Calibration/FieldFox (MY53103705)/Calibration Certificate 178512 (Due 2019-04-25).pdf"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%FieldFox (MY53103705)/Calibration Certificate%Due 2019-04-25%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Equipment serial-number to calibration-due-date lookup. Filename embeds both the cert number and due date.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Calibration%' returned the FieldFox MY53103705 cert with Due 2019-04-25 date in filename."
+  },
+  {
+    "query_id": "PQ-407",
+    "user_input": "What was the procurement chain for the OY1 NEXION July equipment calibration line?",
+    "reference": "PO 5300108811 / PR 3000062055 covered July Equipment Calibration for the monitoring system under monitoring system Sustainment OY1 (1 Aug 23 - 31 Jul 24), value $3,012.00.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY1 (1 Aug 23 - 31 Jul 24)/PO - 5300108811, PR 3000062055 July Equip Calibration monitoring system($3,012.00)/"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%PO - 5300108811%July Equip Calibration%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Real PO/PR pair lookup. Folder name embeds period, item, and value.",
+    "expected_anchor_entities": {
+      "PO": [
+        "5300108811"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Calibration%' returned PO 5300108811 with July Equip Calibration line under the monitoring system Sustainment OY1 period."
+  },
+  {
+    "query_id": "PQ-408",
+    "user_input": "Show me the 2025 calibration record for the 1250-3607 Calibration Kit serial 3766.",
+    "reference": "1250-3607_SN # 3766.pdf under 5.0 Logistics/Calibration/2025/1250-3607_Calibration Kit/.",
+    "reference_contexts": [
+      "5.0 Logistics/Calibration/2025/1250-3607_Calibration Kit/1250-3607_SN # 3766.pdf"
+    ],
+    "persona": "Logistics Lead",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%5.0 Logistics/Calibration/2025/1250-3607_Calibration Kit/1250-3607_SN # 3766%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Asset-level calibration record lookup. Tests TABULAR routing on a per-instrument PDF rather than a spreadsheet.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Calibration%' returned the 1250-3607 Calibration Kit SN 3766 PDF under the 2025 calibration year folder."
+  },
+  {
+    "query_id": "PQ-409",
+    "user_input": "Show me the May 2022 Cumulative Outages spreadsheet.",
+    "reference": "CumulativeOutagesMay2022.xlsx under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesMay2022.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%CumulativeOutageFiles/2022/CumulativeOutagesMay2022%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated outage metrics file. Recurring monthly engineering register family.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2022-05"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' returned CumulativeOutagesMay2022.xlsx in the 2022 subfolder."
+  },
+  {
+    "query_id": "PQ-410",
+    "user_input": "Show me the April 2022 Cumulative Outages spreadsheet.",
+    "reference": "CumulativeOutagesApr2022.xlsx under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesApr2022.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%CumulativeOutageFiles/2022/CumulativeOutagesApr2022%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Sibling of PQ-409. Tests adjacent-month TABULAR distinction inside the same folder.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2022-04"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' returned CumulativeOutagesApr2022.xlsx in the 2022 subfolder."
+  },
+  {
+    "query_id": "PQ-411",
+    "user_input": "Show me the January 2022 Cumulative Outages spreadsheet.",
+    "reference": "CumulativeOutagesJan2022.xlsx under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesJan2022.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%CumulativeOutageFiles/2022/CumulativeOutagesJan2022%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Year-start outage rollup TABULAR lookup.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2022-01"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' returned CumulativeOutagesJan2022.xlsx in the 2022 subfolder."
+  },
+  {
+    "query_id": "PQ-412",
+    "user_input": "Which Cumulative Outages spreadsheets are filed for the first half of 2022?",
+    "reference": "Six files in the 2022/ subfolder: CumulativeOutages Jan, Feb, Mar, Apr, May, and Jun 2022.xlsx, all under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesJan2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesFeb2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesMar2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesApr2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesMay2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesJun2022.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%CumulativeOutageFiles/2022/CumulativeOutages%2022%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Half-year narrow enumeration. Confirmed: Jan, Feb, Mar, Apr, May, Jun 2022 in the 2022/ subfolder. Note: Jul 2022 is structurally stored at the parent level (PQ-329 already documents this).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2022-01",
+        "2022-02",
+        "2022-03",
+        "2022-04",
+        "2022-05",
+        "2022-06"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' returned 6 distinct Jan-Jun 2022 dated xlsx files in the 2022/ subfolder."
+  },
+  {
+    "query_id": "PQ-413",
+    "user_input": "Show me the December 2021 Cumulative Outages spreadsheet.",
+    "reference": "CumulativeOutagesDec2021.xlsx under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesDec2021.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%CumulativeOutageFiles/2021/CumulativeOutagesDec2021%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Year-end 2021 outage rollup TABULAR lookup.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021-12"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' returned CumulativeOutagesDec2021.xlsx in the 2021/ subfolder."
+  },
+  {
+    "query_id": "PQ-414",
+    "user_input": "How many Cumulative Outages monthly spreadsheets are filed for calendar year 2021?",
+    "reference": "Twelve files: CumulativeOutages Jan through Dec 2021.xlsx, all under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/. Plus a CumulativeOutagesJul2021test.xlsx duplicate sibling.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesJan2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesFeb2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesMar2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesApr2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesMay2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesJun2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesJul2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesAug2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesSep2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesOct2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesNov2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesDec2021.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%CumulativeOutageFiles/2021/CumulativeOutages%2021%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Full-year narrow enumeration over a recurring monthly engineering register family. Confirmed: all 12 months Jan-Dec 2021 plus a Jul 2021 'test' duplicate.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' returned exactly 12 dated 2021 monthly Cumulative Outages xlsx files plus one test sibling."
+  },
+  {
+    "query_id": "PQ-415",
+    "user_input": "Is there a duplicate or test variant of the July 2021 Cumulative Outages file?",
+    "reference": "Yes -- two files exist for Jul 2021: CumulativeOutagesJul2021.xlsx (the real one) and CumulativeOutagesJul2021test.xlsx (a test sibling), both under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesJul2021.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/CumulativeOutagesJul2021test.xlsx"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%CumulativeOutagesJul2021%"
+    ],
+    "difficulty": "medium",
+    "rationale": "File-quirk discovery query. Tests retrieval against a dataset that contains both a real and a 'test' suffix variant of the same date.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021-07"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' returned both CumulativeOutagesJul2021.xlsx and CumulativeOutagesJul2021test.xlsx with identical chunk counts."
+  },
+  {
+    "query_id": "PQ-416",
+    "user_input": "What is the structure of the Cumulative Outages monthly spreadsheet family?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%CumulativeOutageFiles%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Process / format semantic question about the monthly outage rollup family. Tests SEMANTIC routing on a recurring engineering register.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' showed CumulativeOutages<MMM><YYYY>.xlsx files organized by year subfolders under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/."
+  },
+  {
+    "query_id": "PQ-417",
+    "user_input": "Where are the Cumulative Outages spreadsheets actually stored in the corpus?",
+    "reference": "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/<YYYY>/CumulativeOutages<MMM><YYYY>.xlsx -- with structural quirks (e.g., Jul 2022 stored at the parent level rather than under 2022/, see PQ-329).",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%6.0 Systems_Engineering/3_Site Outages Analysis%CumulativeOutageFiles%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Location-only semantic question. Confirms the z_Archive subfolder pattern.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' showed the canonical z_Archive/OutageMetrics path with year subfolders."
+  },
+  {
+    "query_id": "PQ-418",
+    "user_input": "Where are the 2019-04 ConMon NEXION Vandenberg site audit logs stored?",
+    "reference": "Two files for Vandenberg (van) under monitoring system in April 2019: audit.log and van-audit-201904.zip. Both under 3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Apr/Site Logs/monitoring system/van/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Apr/Site Logs/monitoring system/van/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Apr/Site Logs/monitoring system/van/van-audit-201904.zip"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Apr%NEXION/van%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Date+system+site cross-cut. Folder mining shows both the raw audit.log and the zipped variant for Vandenberg April 2019.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Vandenberg"
+      ],
+      "DATE": [
+        "2019-04"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Continuous_Monitoring%Monthly%' returned both the raw audit.log and the van-audit-201904.zip for Vandenberg in April 2019."
+  },
+  {
+    "query_id": "PQ-419",
+    "user_input": "What three-letter site codes appear in the 2019-02 ConMon NEXION site logs?",
+    "reference": "At least five three-letter codes confirmed in 2019-02 monitoring system Site Logs: alp (Alpena), egl (Eglin), fai (Fairford), gua (Guam), and lll (Lualualei). All under 3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/alp/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/egl/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/fai/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/gua/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/lll/audit.log"
+    ],
+    "persona": "Field Engineer",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/NEXION/%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Folder enumeration over per-site three-letter abbreviation codes used in the monthly ConMon audit tree. Confirmed via folder mining: alp (Alpena), egl (Eglin), fai (Fairford), gua (Guam), lll (Lualualei).",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Alpena",
+        "Eglin",
+        "Fairford",
+        "Guam",
+        "Lualualei"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Continuous_Monitoring%Monthly%' returned 5 distinct site code subfolders under the 2019-02 monitoring system Site Logs path."
+  },
+  {
+    "query_id": "PQ-420",
+    "user_input": "Show me the November 2021 NEXION WX29 monthly scan POAM bundle.",
+    "reference": "SEMS3D-41811.zip under 1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Oct - SEMS3D-41811/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Oct - SEMS3D-41811/SEMS3D-41811.zip"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%A027 - WX29 OY2-4 Continuous Monitoring/NEXION/Monthly Scans-POAMS/2021/2021-Oct - SEMS3D-41811%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Single dated ConMon scan-POAM zip lookup. Filename embeds SEMS3D ID.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "SEMS3D-41811"
+      ],
+      "DATE": [
+        "2021-10"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PoAM%' returned the SEMS3D-41811 zip under the 2021-Oct monitoring system bundle folder."
+  },
+  {
+    "query_id": "PQ-421",
+    "user_input": "Show me the February 2021 NEXION WX29 monthly scan POAM bundle.",
+    "reference": "SEMS3D-41437.zip under 1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Feb - SEMS3D-41437/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Feb - SEMS3D-41437/SEMS3D-41437.zip"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%A027 - WX29 OY2-4 Continuous Monitoring/NEXION/Monthly Scans-POAMS/2021/2021-Feb - SEMS3D-41437%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Sibling of PQ-420. Tests adjacent-month TABULAR distinction inside the same recurring family.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "SEMS3D-41437"
+      ],
+      "DATE": [
+        "2021-02"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PoAM%' returned the SEMS3D-41437 zip under the 2021-Feb monitoring system bundle folder."
+  },
+  {
+    "query_id": "PQ-422",
+    "user_input": "Show me the February 2021 ISTO WX29 monthly scan POAM bundle.",
+    "reference": "SEMS3D-41436.zip under 1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Feb - SEMS3D-41436/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Feb - SEMS3D-41436/SEMS3D-41436.zip"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%A027 - WX29 OY2-4 Continuous Monitoring/ISTO/Monthly Scans-POAMS/2021/2021-Feb - SEMS3D-41436%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Twin of PQ-421 for the legacy monitoring system. Tests retrieval can split monitoring system vs legacy monitoring system trees on the same date.",
+    "expected_anchor_entities": {
+      "INCIDENT_ID": [
+        "SEMS3D-41436"
+      ],
+      "DATE": [
+        "2021-02"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PoAM%' returned the SEMS3D-41436 zip under the 2021-Feb legacy monitoring system bundle folder."
+  },
+  {
+    "query_id": "PQ-423",
+    "user_input": "Which NEXION WX29 ConMon monthly bundles were submitted in 2021?",
+    "reference": "At least five monitoring system 2021 bundles confirmed: SEMS3D-41353 (2021-Jan), 41437 (2021-Feb), 41724 (2021-May), 41846 (2021-Jun), 41811 (2021-Oct). All under 1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Jan - SEMS3D-41353/SEMS3D-41353.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Feb - SEMS3D-41437/SEMS3D-41437.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-May - SEMS3D-41724/SEMS3D-41724.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Jun - SEMS3D-41846/SEMS3D-41846.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Oct - SEMS3D-41811/SEMS3D-41811.zip"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%A027 - WX29 OY2-4 Continuous Monitoring/NEXION/Monthly Scans-POAMS/2021/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Year-scoped narrow enumeration over one system's ConMon monthly bundle family. Confirmed: Jan (41353), Feb (41437), May (41724), Jun (41846), Oct (41811).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021"
+      ],
+      "INCIDENT_ID": [
+        "SEMS3D-41353",
+        "SEMS3D-41437",
+        "SEMS3D-41724",
+        "SEMS3D-41846",
+        "SEMS3D-41811"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PoAM%' returned 5 distinct 2021 SEMS3D-numbered monitoring system bundles under the WX29 ConMon tree."
+  },
+  {
+    "query_id": "PQ-424",
+    "user_input": "Which ISTO WX29 ConMon monthly bundles were submitted in 2021?",
+    "reference": "At least four legacy monitoring system 2021 bundles confirmed: SEMS3D-41352 (2021-Jan), 41436 (2021-Feb), 41845 (2021-Jun), 41800 (2021-Oct). All under 1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Jan - SEMS3D-41352/SEMS3D-41352.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Feb - SEMS3D-41436/SEMS3D-41436.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Jun - SEMS3D-41845/SEMS3D-41845.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Oct - SEMS3D-41800/SEMS3D-41800.zip"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%A027 - WX29 OY2-4 Continuous Monitoring/ISTO/Monthly Scans-POAMS/2021/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Twin of PQ-423 for the legacy monitoring system. Confirmed: Jan (41352), Feb (41436), Jun (41845), Oct (41800).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021"
+      ],
+      "INCIDENT_ID": [
+        "SEMS3D-41352",
+        "SEMS3D-41436",
+        "SEMS3D-41845",
+        "SEMS3D-41800"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PoAM%' returned 4 distinct 2021 SEMS3D-numbered legacy monitoring system bundles under the WX29 ConMon tree."
+  },
+  {
+    "query_id": "PQ-425",
+    "user_input": "Show me the legacy monitoring system WX28 CT&E scan results POAM spreadsheet from 2018-02-26.",
+    "reference": "legacy monitoring system_WX28_CT&E_Scan_Results & POAM_2018-02-26.xlsx under 3.0 Cybersecurity/archive/Submissions/2018-02-27 legacy monitoring system CT&E Report and Results to ISSM/legacy monitoring system CT&E Report-Results/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/archive/Submissions/2018-02-27 legacy monitoring system CT&E Report and Results to ISSM/legacy monitoring system CT&E Report-Results/legacy monitoring system_WX28_CT&E_Scan_Results & POAM_2018-02-26.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%2018-02-27 ISTO CT&E Report and Results to ISSM%CT&E_Scan_Results%POAM_2018-02-26%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Single dated CT&E scan results POAM spreadsheet. Submitted to ISSM 2018-02-27, generated 2018-02-26.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2018-02-26"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PoAM%' returned the legacy monitoring system_WX28_CT&E_Scan_Results & POAM_2018-02-26.xlsx ISSM submission."
+  },
+  {
+    "query_id": "PQ-426",
+    "user_input": "Show me the IGS STIG-IA Pending POAM list from 2018-06-28.",
+    "reference": "enterprise program STIG-IA Pending-POAM List 2018-06-28.xlsx under 3.0 Cybersecurity/Software-Config-Scripts/STIG/Archive/Results/2018-06-28/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/Software-Config-Scripts/STIG/Archive/Results/2018-06-28/enterprise program STIG-IA Pending-POAM List 2018-06-28.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%STIG/Archive/Results/2018-06-28/enterprise program STIG-IA Pending-POAM List 2018-06-28%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Single dated STIG-IA pending POAM list TABULAR lookup.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2018-06-28"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PoAM%' returned the 2018-06-28 dated STIG-IA Pending POAM xlsx."
+  },
+  {
+    "query_id": "PQ-427",
+    "user_input": "What is the difference between WX28 and WX29 in the ConMon archives?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%WX28%",
+      "%WX29%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-program semantic question. Tests SEMANTIC routing on a comparative two-program question, grounded in distinct CT&E and ConMon submissions.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PoAM%' returned both WX28 (2018 CT&E submissions) and WX29 (OY2-4 Continuous Monitoring) artifacts as distinct programs in the cyber tree."
+  },
+  {
+    "query_id": "PQ-428",
+    "user_input": "Show me the October 2018 ACAS-SCAP results for the legacy monitoring system Singapore lab.",
+    "reference": "ACAS-SCAP Result NEXION-ISTO 2018-11-13.xlsx (the dated submission from the 2018-10-30 Singapore lab visit) under 3.0 Cybersecurity/ISSO/Continuous_Monitoring/legacy monitoring system/Monthly Scans/archive/2018-10/2018-10-30 legacy monitoring system Lab (Singapore)/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/legacy monitoring system/Monthly Scans/archive/2018-10/2018-10-30 legacy monitoring system Lab (Singapore)/ACAS-SCAP Result monitoring system-legacy monitoring system 2018-11-13.xlsx"
+    ],
+    "persona": "Cybersecurity / Network Admin",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%Continuous_Monitoring/ISTO/Monthly Scans/archive/2018-10/2018-10-30 ISTO Lab (Singapore)%ACAS-SCAP%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Date+site+system cross-cut TABULAR lookup. Filename and folder both encode the lab and date.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Singapore"
+      ],
+      "DATE": [
+        "2018-10-30"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Continuous_Monitoring%Monthly%' returned the 2018-10-30 Singapore lab ACAS-SCAP results xlsx under the legacy monitoring system Monthly Scans archive."
+  },
+  {
+    "query_id": "PQ-429",
+    "user_input": "Cross-reference: which Monthly Actuals files exist in the same calendar month as the matching Weekly Hours Variance reports for 2024-12?",
+    "reference": "One Monthly Actuals file (2024 12 Monthly Actuals.xlsx under 10.0 Program Management/1.0 FEP/Reference/) and five Weekly Hours Variance files (2024-11-29, 2024-12-06, 2024-12-13, 2024-12-20, 2024-12-31 under 10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/).",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 12 Monthly Actuals.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-11-29 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-06 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-13 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-20 enterprise program Weekly Hours Variance.xlsx",
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-31 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%2024 12 Monthly Actuals%",
+      "%2024-12%Weekly Hours Variance%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-family month-scoped enumeration. PM-side has one Monthly Actuals (2024-12) and the 2.0 Weekly Variance Reports family has five weekly xlsx files for the same calendar month.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-12"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' and --like '%Weekly Variance%' returned 1 + 5 dated files in the same December 2024 calendar month."
+  },
+  {
+    "query_id": "PQ-430",
+    "user_input": "Cross-reference: which calibration sources exist for FieldFox MY53103705 vs FieldFox MY53103706?",
+    "reference": "Two FieldFox units with paired certificates: MY53103705 has Calibration Certificate 178512 (Due 2019-04-25), MY53103706 has Calibration Certificate 178523 (Due 2019-04-25). Both under zzSEMS ARCHIVE/005_ILS/Calibration/.",
+    "reference_contexts": [
+      "zzSEMS ARCHIVE/005_ILS/Calibration/FieldFox (MY53103705)/Calibration Certificate 178512 (Due 2019-04-25).pdf",
+      "zzSEMS ARCHIVE/005_ILS/Calibration/FieldFox (MY53103706)/Calibration Certificate 178523 (Due 2019-04-25).pdf"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%FieldFox (MY53103705)/Calibration Certificate%",
+      "%FieldFox (MY53103706)/Calibration Certificate%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Two-asset side-by-side calibration certificate enumeration. Both certs share the same 2019-04-25 due date.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Calibration%' returned both FieldFox MY53103705 and MY53103706 certs with matching due dates."
+  },
+  {
+    "query_id": "PQ-431",
+    "user_input": "Cross-reference: how many Monthly Actuals + Cumulative Outages files exist for calendar year 2021?",
+    "reference": "2021 Cumulative Outages: twelve files (Jan-Dec 2021.xlsx) confirmed under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2021/. 2021 Monthly Actuals: none observed via folder mining (the FEP Monthly Actuals family starts at 2024 in the surfaced anchors). The two families do not overlap in 2021.",
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%CumulativeOutageFiles/2021/CumulativeOutages%2021%",
+      "%FEP/Reference/2021%Monthly Actuals%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-family year enumeration. 2021 Cumulative Outages: 12 confirmed (Jan-Dec). 2021 Monthly Actuals: not present in folder mining (the FEP family confirmed starts at 2024-01). Report what is observed and what is absent.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' returned 12 dated 2021 monthly files; folders probe --like '%Monthly Actuals%' did not surface any 2021-dated files."
+  },
+  {
+    "query_id": "PQ-432",
+    "user_input": "Cross-reference: which 2018-06 cybersecurity submissions exist across the STIG, CT&E, and Submissions trees?",
+    "reference": "At least three confirmed: STIG-IA Pending POAM list 2018-06-28 (under Software-Config-Scripts/STIG/Archive/Results/), the 2018-06-22 monitoring system Eareckson CT&E SCC tooling bundle (under CT&E-ST&E/monitoring system/), and the legacy monitoring system Monthly Scans CAT I 2018-06-28 archive (under ISSO/Continuous_Monitoring/legacy monitoring system/).",
+    "reference_contexts": [
+      "3.0 Cybersecurity/Software-Config-Scripts/STIG/Archive/Results/2018-06-28/enterprise program STIG-IA Pending-POAM List 2018-06-28.xlsx",
+      "3.0 Cybersecurity/CT&E-ST&E/monitoring system/2018-06-22 monitoring system Eareckson/Tools-STIGs-ACAS-Updates/scc-5.0.2_rhel7_x86_64_bundle/scc-5.0.2_rhel7_x86_64/scc-5.0.2_rhel7_x86_64.tar.gz",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/legacy monitoring system/Monthly Scans/archive/archive/CAT I's/STIG CAT I 2018-06-28.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%STIG/Archive/Results/2018-06%",
+      "%CT&E-ST&E%2018-06%",
+      "%Submissions/2018-06%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-tree June 2018 cyber enumeration. Confirmed: 2018-06-28 STIG-IA Pending-POAM list (Software-Config-Scripts), 2018-06-22 monitoring system Eareckson SCC bundle (CT&E-ST&E), 2018-06-28 STIG CAT I monthly scan archive (legacy monitoring system).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2018-06"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PoAM%' and --like '%STIG%' returned three distinct 2018-06 cyber artifacts across STIG/CT&E/ConMon trees."
+  },
+  {
+    "query_id": "PQ-433",
+    "user_input": "Cross-reference: how many dated calibration tracker snapshots exist across the corpus?",
+    "reference": "Four total: three in zzSEMS ARCHIVE/005_ILS/Calibration/ (18DEC18, 20DEC18, 04JAN19) and one in zzSEMS ARCHIVE/005_ILS/Dashboard/Archive/ (07JAN19).",
+    "reference_contexts": [
+      "zzSEMS ARCHIVE/005_ILS/Calibration/Calibration Tracker (as of 18DEC18).xlsx",
+      "zzSEMS ARCHIVE/005_ILS/Calibration/Calibration Tracker (as of 20DEC18).xlsx",
+      "zzSEMS ARCHIVE/005_ILS/Calibration/Calibration Tracker (as of 04JAN19).xlsx",
+      "zzSEMS ARCHIVE/005_ILS/Dashboard/Archive/Calibration Tracker (as of 07JAN19).xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%Calibration Tracker (as of%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Folder-scoped recurring register snapshot enumeration. Confirmed: 18DEC18, 20DEC18, 04JAN19 in the primary Calibration folder, and 07JAN19 in the Dashboard archive sibling.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Calibration%' returned 4 dated Calibration Tracker xlsx snapshots across two folders."
+  },
+  {
+    "query_id": "PQ-434",
+    "user_input": "Cross-reference: which 2025 calibration-themed POs exist across the procurement folders?",
+    "reference": "Four confirmed calibration POs across procurement periods: PO 5300163657 (Calibration Micro Precision $12,720, NEW BASE YR), PO 5300108811 (July Equip Calibration $3,012, OY1), PO 5300059557 (Equipment Calibration $1,445, Base Year), PO 5300060017 (Tension Meter Calibration $680, Base Year). All under 5.0 Logistics/Procurement/002 - Received/.",
+    "reference_contexts": [
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/PO - 5300163657, PR 3000179491 Calibration (Micro Precision)($12,720.00)/",
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY1 (1 Aug 23 - 31 Jul 24)/PO - 5300108811, PR 3000062055 July Equip Calibration monitoring system($3,012.00)/",
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment Base Year (1 Aug 22 - 31 Jul 23)/PO - 5300059557, PR 31425822, C 16041934 Equipment Calibration (PBJ)($1,445.00)/",
+      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment Base Year (1 Aug 22 - 31 Jul 23)/PO - 5300060017, PR 31427400, C 16053516 Tension Meter Calibration(PBJ)($680.00)/"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Logistics",
+    "expected_source_patterns": [
+      "%Procurement%Calibration%",
+      "%Procurement%Tension Meter Calibration%",
+      "%Procurement%Equip Calibration%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-period calibration PO enumeration. Confirmed: 5300163657 (NEW BASE YR Calibration / Micro Precision), 5300108811 (OY1 July Equip Calibration), 5300059557 (Base Year Equipment Calibration), 5300060017 (Base Year Tension Meter Calibration).",
+    "expected_anchor_entities": {
+      "PO": [
+        "5300163657",
+        "5300108811",
+        "5300059557",
+        "5300060017"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Calibration%' returned 4 distinct calibration POs across NEW BASE YR, OY1, and Base Year periods."
+  },
+  {
+    "query_id": "PQ-435",
+    "user_input": "Cross-reference: which 2018-10 ConMon results exist in the legacy monitoring system Monthly Scans archive?",
+    "reference": "Three confirmed 2018-10 ConMon archive entries: Lualualei Site (2018-10-09), Eareckson Site (2018-10-23), Singapore Lab (2018-10-30). All under 3.0 Cybersecurity/ISSO/Continuous_Monitoring/legacy monitoring system/Monthly Scans/archive/2018-10/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/legacy monitoring system/Monthly Scans/archive/2018-10/2018-10-09 Lualualei Site/Monthly Scans 2018 Oct 10 legacy monitoring system-monitoring system b.xlsx",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/legacy monitoring system/Monthly Scans/archive/2018-10/2018-10-23 Eareckson Site/ACAS-SCAP Results CAT I 2018-10-23.xlsx",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/legacy monitoring system/Monthly Scans/archive/2018-10/2018-10-30 legacy monitoring system Lab (Singapore)/ACAS-SCAP Result monitoring system-legacy monitoring system 2018-11-13.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%Continuous_Monitoring/ISTO/Monthly Scans/archive/2018-10/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Single-month ConMon archive enumeration. Confirmed: 2018-10-09 Lualualei Site (Monthly Scans 2018 Oct 10 ISTO-NEXION b.xlsx), 2018-10-23 Eareckson Site (ACAS-SCAP Results CAT I 2018-10-23.xlsx), 2018-10-30 Singapore Lab (ACAS-SCAP Result NEXION-ISTO 2018-11-13.xlsx).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2018-10"
+      ],
+      "SITE": [
+        "Lualualei",
+        "Eareckson",
+        "Singapore"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Continuous_Monitoring%Monthly%' returned 3 distinct October 2018 site/lab entries under the legacy monitoring system Monthly Scans archive."
+  },
+  {
+    "query_id": "PQ-436",
+    "user_input": "Cross-reference: which 2019 monthly ConMon audit-archive months are present?",
+    "reference": "At least four 2019 months observed in the Monthly Audits-Archive: Feb (Site Logs - Report), Apr (Site Logs), May (Site Logs), Jul (NEXION/ISTO logs). All under 3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/. Full year coverage requires deeper folder walk.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/alp/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Apr/Site Logs/monitoring system/van/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-May/Site Logs/monitoring system/ear/EAR-AuditReport-201905.zip",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Jul/legacy monitoring system/asc/asc-logs-2019-jul.zip"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%Continuous_Monitoring/Monthly Audits-Archive/2019/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Year-scoped month enumeration over the recurring monthly cyber audit archive. Confirmed: 2019-Feb, 2019-Apr, 2019-May, 2019-Jul (from folder mining).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Continuous_Monitoring%Monthly%' returned 4 distinct 2019 monthly audit-archive subfolders."
+  },
+  {
+    "query_id": "PQ-437",
+    "user_input": "Cross-reference: which Eareckson site logs exist across 2019 and 2018?",
+    "reference": "At least two: EAR-AuditReport-201905.zip (2019-May, ConMon archive) and the 2018-06-22 monitoring system Eareckson CT&E trip SCC tooling bundle. Note: Eareckson is also referenced as 'Shemya' in some folder names.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-May/Site Logs/monitoring system/ear/EAR-AuditReport-201905.zip",
+      "3.0 Cybersecurity/CT&E-ST&E/monitoring system/2018-06-22 monitoring system Eareckson/Tools-STIGs-ACAS-Updates/scc-5.0.2_rhel7_x86_64_bundle/scc-5.0.2_rhel7_x86_64/scc-5.0.2_rhel7_x86_64.tar.gz"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%Continuous_Monitoring%ear%",
+      "%2018-06-22 monitoring system Eareckson%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Site-scoped multi-year log enumeration. Confirmed: 2019-05 EAR-AuditReport zip and 2018-06-22 Eareckson CT&E SCC bundle.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Eareckson"
+      ],
+      "DATE": [
+        "2019-05",
+        "2018-06-22"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Continuous_Monitoring%Monthly%' and --like '%STIG%' both surfaced Eareckson-tagged 2019-May and 2018-06-22 artifacts."
+  },
+  {
+    "query_id": "PQ-438",
+    "user_input": "Cross-reference: how many 2019-Feb monitoring system per-site audit logs exist (by three-letter site code)?",
+    "reference": "Five three-letter site codes confirmed: alp (Alpena), egl (Eglin), fai (Fairford), gua (Guam), lll (Lualualei). Each has an audit.log file under 3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/<code>/audit.log.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/alp/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/egl/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/fai/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/gua/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/lll/audit.log"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/NEXION/%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Single-month per-site enumeration over the per-site audit log family. Confirmed five three-letter codes via folder mining.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2019-02"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Continuous_Monitoring%Monthly%' returned 5 distinct three-letter site code subfolders under the 2019-Feb monitoring system Site Logs - Report path."
+  },
+  {
+    "query_id": "PQ-439",
+    "user_input": "Cross-reference: do Kwajalein site logs appear in both the legacy monitoring system and monitoring system 2019-Feb audit archives?",
+    "reference": "Yes -- Kwajalein (Kwa) audit.log is present under 3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/legacy monitoring system/Kwa/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/legacy monitoring system/Kwa/audit.log"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%2019-Feb%ISTO/Kwa%audit.log%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-system site presence check. Confirmed: Kwajalein (Kwa) appears under the legacy monitoring system tree in 2019-Feb.",
+    "expected_anchor_entities": {
+      "SITE": [
+        "Kwajalein"
+      ],
+      "DATE": [
+        "2019-02"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Continuous_Monitoring%Monthly%' returned the Kwa audit.log under the legacy monitoring system subtree for 2019-Feb."
+  },
+  {
+    "query_id": "PQ-440",
+    "user_input": "How does the 'enterprise program FEP Monthly Actuals' family relate to the 'enterprise program Monthly Status Report' (A009) family?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "%FEP/Reference/%Monthly Actuals%",
+      "%A009 - Monthly Status Report%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-tree conceptual question on internal financial rollup vs external CDRL deliverable. Tests SEMANTIC routing without escalating to COMPLEX.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned PM-side internal financial rollups; --like '%A009%' returned externally-delivered CDRL monthly status reports under the OASIS tree."
+  },
+  {
+    "query_id": "PQ-441",
+    "user_input": "Cross-reference: how many SEMS3D-numbered ConMon bundles were submitted across both NEXION and ISTO in calendar year 2021?",
+    "reference": "At least nine distinct SEMS3D-numbered 2021 monthly bundles across both systems: monitoring system has SEMS3D-41353 (Jan), 41437 (Feb), 41724 (May), 41846 (Jun), 41811 (Oct). legacy monitoring system has SEMS3D-41352 (Jan), 41436 (Feb), 41845 (Jun), 41800 (Oct). All under 1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/.",
+    "reference_contexts": [
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Jan - SEMS3D-41353/SEMS3D-41353.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Jan - SEMS3D-41352/SEMS3D-41352.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Feb - SEMS3D-41437/SEMS3D-41437.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Feb - SEMS3D-41436/SEMS3D-41436.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-May - SEMS3D-41724/SEMS3D-41724.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Jun - SEMS3D-41845/SEMS3D-41845.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Jun - SEMS3D-41846/SEMS3D-41846.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/legacy monitoring system/Monthly Scans-POAMS/2021/2021-Oct - SEMS3D-41800/SEMS3D-41800.zip",
+      "1.0 enterprise program DM - Restricted/SEMS3D/A027 - Cybersecurity/A027 - WX29 OY2-4 Continuous Monitoring/monitoring system/Monthly Scans-POAMS/2021/2021-Oct - SEMS3D-41811/SEMS3D-41811.zip"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%A027 - WX29 OY2-4 Continuous Monitoring%2021%SEMS3D-%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-system year-scoped SEMS3D-tagged ConMon bundle count. monitoring system: 5+ confirmed (41353, 41437, 41724, 41846, 41811). legacy monitoring system: 4+ confirmed (41352, 41436, 41845, 41800). Combined: at least 9 distinct bundles.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2021"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%PoAM%' returned 9 distinct 2021 SEMS3D-numbered bundles across monitoring system (5) and legacy monitoring system (4) trees."
+  },
+  {
+    "query_id": "PQ-442",
+    "user_input": "Cross-reference: which Cumulative Outages monthly files exist for 2022 across both subfolder layouts?",
+    "reference": "Seven 2022 files: Jan-Jun under 2022/ subfolder, plus Jul 2022 stored at the parent CumulativeOutageFiles/ level. All under 6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/.",
+    "reference_contexts": [
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesJan2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesFeb2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesMar2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesApr2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesMay2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/2022/CumulativeOutagesJun2022.xlsx",
+      "6.0 Systems_Engineering/3_Site Outages Analysis/z_Archive/OutageMetrics/CumulativeOutageFiles/CumulativeOutagesJul2022.xlsx"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Engineering",
+    "expected_source_patterns": [
+      "%CumulativeOutageFiles/2022/CumulativeOutages%2022%",
+      "%CumulativeOutageFiles/CumulativeOutagesJul2022%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-layout 2022 enumeration. The 2022/ subfolder holds Jan-Jun. Jul 2022 lives at the parent level, not in the 2022/ subfolder (structural quirk noted in PQ-329).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2022"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%CumulativeOutages%' returned 6 dated 2022 files in the 2022/ subfolder plus 1 at the parent level (Jul 2022)."
+  },
+  {
+    "query_id": "PQ-443",
+    "user_input": "How does the FEP Recon family in Logistics relate to the FEP Monthly Actuals family in Program Management?",
+    "reference": null,
+    "reference_contexts": [],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "SEMANTIC",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%013 - FEP Recon%",
+      "%FEP/Reference/%Monthly Actuals%"
+    ],
+    "difficulty": "medium",
+    "rationale": "Cross-tree process question. The two FEP families live under different top-level subtrees (Logistics vs PM) and serve different cadences (~weekly recon vs monthly actuals).",
+    "expected_anchor_entities": {},
+    "has_ground_truth": false,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' surfaced dated FEP Recon xlsx files under Logistics; --like '%Monthly Actuals%' surfaced dated Monthly Actuals xlsx files under Program Management."
+  },
+  {
+    "query_id": "PQ-444",
+    "user_input": "Cross-reference: which three-letter codes are used in the ConMon site log folders, and what sites do they map to?",
+    "reference": "At least nine confirmed three-letter codes: alp = Alpena, ear = Eareckson, egl = Eglin, fai = Fairford, gua = Guam, Kwa = Kwajalein (under legacy monitoring system tree), lll = Lualualei, van = Vandenberg, asc = Ascension. All used as folder names under 3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/<YYYY>/<YYYY-MMM>/Site Logs(- Report)?/<system>/<code>/.",
+    "reference_contexts": [
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/alp/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-May/Site Logs/monitoring system/ear/EAR-AuditReport-201905.zip",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/egl/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/fai/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/gua/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/legacy monitoring system/Kwa/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Feb/Site Logs - Report/monitoring system/lll/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Apr/Site Logs/monitoring system/van/audit.log",
+      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2019/2019-Jul/legacy monitoring system/asc/asc-logs-2019-jul.zip"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Cybersecurity",
+    "expected_source_patterns": [
+      "%Continuous_Monitoring/Monthly Audits-Archive%Site Logs%/%/audit.log"
+    ],
+    "difficulty": "hard",
+    "rationale": "Code-to-site mapping enumeration. Confirmed: alp=Alpena, ear=Eareckson, egl=Eglin, fai=Fairford, gua=Guam, Kwa=Kwajalein, lll=Lualualei, van=Vandenberg, asc=Ascension.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Continuous_Monitoring%Monthly%' returned 9 distinct three-letter site code folders across multiple 2019 months, mapping to nine real legacy monitoring system / monitoring system sites."
+  },
+  {
+    "query_id": "PQ-445",
+    "user_input": "Cross-reference: which 2024 PM finance/scheduling rollup files exist alongside the same year's A009 monthly status report deliverables?",
+    "reference": "On the PM internal side: 12 Monthly Actuals files (2024 01 through 2024 12) under 10.0 Program Management/1.0 FEP/Reference/. On the externally-delivered CDRL side: at least 4 confirmed A009 deliverables (IGSI-1062 Jan-24, IGSI-1063 Feb-24, IGSI-1064 2024-03, IGSI-2490 2024-11-19) under 1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/. The internal cadence is denser than the surfaced externally-delivered cadence -- not all monthly internal rollups have a confirmed CDRL twin in folder mining.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 01 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 12 Monthly Actuals.xlsx",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/Deliverables Report IGSI-1062 enterprise program Monthly Status Report - Jan-24 (A009).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/Deliverables Report IGSI-1063 enterprise program Monthly Status Report - Feb-24 (A009).pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/47QFRA22F0009_IGSI-1064_enterprise program Monthly_Status_Report_2024-03.pdf",
+      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2024/47QFRA22F0009_IGSI-2490_Monthly-Status-Report_2024-11-19.pdf"
+    ],
+    "persona": "Aggregation / Cross-role",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "%FEP/Reference/2024%Monthly Actuals%",
+      "%A009 - Monthly Status Report/2024/%"
+    ],
+    "difficulty": "hard",
+    "rationale": "Cross-tree year enumeration. PM internal: 12 Monthly Actuals files for 2024. CDRL deliverables: at least 4 confirmed A009 monthly status reports (IGSI-1062, 1063, 1064, 2490).",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Anchor: folders probe --like '%Monthly Actuals%' returned 12 dated 2024 PM rollups; --like '%A009%' returned 4 dated 2024 CDRL deliverables. The two families overlap in time but not 1:1."
   }
 ]
