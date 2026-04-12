@@ -67,12 +67,30 @@ TEXT_REPLACEMENTS = [
     (r"\bdebate session\b", "review session"),
 
     # Program-specific terms -> generic
+    #
+    # IMPORTANT: order matters. More-specific multi-token phrases run before
+    # the single-token rules below, otherwise the single-token rules leave
+    # malformed output like "enterprise program program" or
+    # "legacy monitoring system and monitoring system systems".
     (r"\bIGS/NEXION\b", "enterprise program"),
     (r"\bIGS[/ ]NEXION\b", "enterprise program"),
+    # Multi-word combos that the single-token rules would break:
+    (r"\bIGS\s+program\b", "enterprise program"),
+    (r"\bISTO\s+and\s+NEXION\s+systems?\b", "legacy monitoring system and monitoring system"),
+    (r"\bNEXION\s+and\s+ISTO\s+systems?\b", "monitoring system and legacy monitoring system"),
+    (r"\bISTO/NEXION\b", "legacy monitoring system / monitoring system"),
+    (r"\bNEXION/ISTO\b", "monitoring system / legacy monitoring system"),
+    # Single-token fallthrough rules:
     (r"\bNEXION\b", "monitoring system"),
     (r"\bISTO\b", "legacy monitoring system"),
     # Keep path segments like ".../IGS" intact in live config/schema strings.
     (r"(?<![./\\\\])\bIGS\b(?![/\\\\])", "enterprise program"),
+    # Post-replacement cleanups: catch any stragglers where earlier rules
+    # already ran on untouched text and left duplicate nouns. These are
+    # idempotent and cheap.
+    (r"\benterprise program program\b", "enterprise program"),
+    (r"\bmonitoring system systems?\b", "monitoring systems"),
+    (r"\blegacy monitoring system systems?\b", "legacy monitoring systems"),
     (r"\bionospheric\b", "atmospheric"),
     (r"\bIonospheric\b", "Atmospheric"),
     (r"\bionosonde\b", "sensor system"),

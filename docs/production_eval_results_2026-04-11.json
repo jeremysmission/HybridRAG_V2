@@ -8,8 +8,12 @@
   "partial_count": 5,
   "miss_count": 0,
   "routing_correct": 12,
-  "p50_embed_retrieve_ms": 2628,
-  "p95_embed_retrieve_ms": 30845,
+  "p50_pure_retrieval_ms": 559,
+  "p95_pure_retrieval_ms": 29239,
+  "p50_wall_clock_ms": 2628,
+  "p95_wall_clock_ms": 30845,
+  "p50_router_ms": 1562,
+  "p95_router_ms": 2368,
   "per_persona": {
     "Program Manager": {
       "total": 5,
@@ -125,7 +129,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 enterprise program DM - Restricted\\SEMS3D\\A051 - PDP_RR\\WX29\\SEMS3D-40432 WX29 OY3 Project Development Plan (PDP) Final.pdf",
           "short_source": "WX29/SEMS3D-40432 WX29 OY3 Project Development Plan (PDP) Final.pdf",
           "score": 0.0,
-          "text_preview": "st reporting information. SEMS3D-40154 1p752.065 enterprise program Sustainment Proposal, SEMS3D- 40419 SEMS III WBS Dictionary, SEMS3D-40420 CDRL A019 Contract Work Breakd...",
+          "text_preview": "st reporting information. SEMS3D-40154 1p752.065 enterprise program Sustainment Proposal, SEMS3D- 40419 SEMS III WBS Dictionary, SEMS3D-40420 CDRL A019 Contr...",
           "in_family": true
         },
         {
@@ -308,7 +312,7 @@
       "expected_query_type": "ENTITY",
       "routed_query_type": "ENTITY",
       "routing_correct": true,
-      "query": "What is the latest PMR briefing file name for the enterprise program program?",
+      "query": "What is the latest PMR briefing file name for the enterprise program?",
       "expected_document_family": "Program Management \u2014 6.0 PMR (2022-2026 folders, Schedule Performance, SubK Slides)",
       "family_signals": [
         "pmr",
@@ -483,7 +487,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\1.0 FEP\\Matl\\2025.02 PR & PO_R2.xlsx",
           "short_source": "Matl/2025.02 PR & PO_R2.xlsx",
           "score": 0.0,
-          "text_preview": "q. Tracking Number: enterprise program, Plant: STMX, Storage Location: STXD, Order Quantity: 1, Order Unit: LO, Quantity in SKU: 0, Net Price: 2074, Currency: USD, Price Un...",
+          "text_preview": "q. Tracking Number: enterprise program, Plant: STMX, Storage Location: STXD, Order Quantity: 1, Order Unit: LO, Quantity in SKU: 0, Net Price: 2074, Currency...",
           "in_family": false
         },
         {
@@ -564,7 +568,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Wake\\2023-03-23 thru 04-06 (ASV-RTS)(Seagren-Sepp)\\Import-Export_EEMS\\Hand carry to Wake Island - SP-HW-23-007.msg",
           "short_source": "Import-Export_EEMS/Hand carry to Wake Island - SP-HW-23-007.msg",
           "score": 0.0,
-          "text_preview": "Subject: Hand carry to Wake Island - SP-HW-23-007 From: Kuo, Leoncio K [US] (SP) To: Seagren, Frank A [US] (SP)\u0000 Body: Hello Frank, Please see attached comme...",
+          "text_preview": "Subject: Hand carry to Wake Island - SP-HW-23-007 From: Kuo, Leoncio K [US] (SP) To: Seagren, Frank A [US] (SP) Body: Hello Frank, Please see attached comme...",
           "in_family": true
         },
         {
@@ -626,7 +630,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 enterprise program DM - Restricted\\SEMS3D\\A054 - Maintenance Manual\\legacy monitoring system\\2022Update\\SEMS3D-41714 legacy monitoring system Maintenance Manual (CDRL A054)(Final).docx",
           "short_source": "2022Update/SEMS3D-41714 legacy monitoring system Maintenance Manual (CDRL A054)(Final).docx",
           "score": 0.0,
-          "text_preview": "ce the GPS antenna. Parts List Table 4 provides the legacy monitoring system system parts list including part number (PN), original equipment manufacturer (OEM), unit of measure...",
+          "text_preview": "ce the GPS antenna. Parts List Table 4 provides the legacy monitoring systems parts list including part number (PN), original equipment manufacturer (OEM), u...",
           "in_family": true
         },
         {
@@ -635,7 +639,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 enterprise program DM - Restricted\\SEMS3D\\A001-Critical_Spares_Reports\\A001 - WX31 Critical Spares Planning Estimate\\SEMS3D-36712 Critical Spares Planning Estimate (A01).docx",
           "short_source": "A001 - WX31 Critical Spares Planning Estimate/SEMS3D-36712 Critical Spares Planning Estimate (A01).docx",
           "score": 0.0,
-          "text_preview": "d spares parts list Recommended Spares Parts List (RSPL) Table 6 is a list of monitoring system/legacy monitoring system recommended spares parts lists. Table 6. Recommended Spares Parts L...",
+          "text_preview": "d spares parts list Recommended Spares Parts List (RSPL) Table 6 is a list of monitoring system/legacy monitoring system recommended spares parts lists. Tabl...",
           "in_family": true
         },
         {
@@ -841,7 +845,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\monitoring system\\Documents and Forms\\monitoring system Life Cycle Sustainment Plan.pdf",
           "short_source": "Documents and Forms/monitoring system Life Cycle Sustainment Plan.pdf",
           "score": 0.0,
-          "text_preview": "esponsible for all supply issues that arise lAW the PWS. 5.8.3 Inventory Control Point (ICP) Analysis and Selection Not applicable. monitoring system will be organization...",
+          "text_preview": "esponsible for all supply issues that arise lAW the PWS. 5.8.3 Inventory Control Point (ICP) Analysis and Selection Not applicable. monitoring system will be...",
           "in_family": false
         },
         {
@@ -1047,7 +1051,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\2.0 Weekly Variance Reports\\2023\\2023-07\\2023-07-28 enterprise program Weekly Hours Variance.xlsx",
           "short_source": "2023-07/2023-07-28 enterprise program Weekly Hours Variance.xlsx",
           "score": 0.0,
-          "text_preview": "INSTALLATION - Okinawa (Awase), Values: 60.800000000000004, : 120.5, : -59.699999999999996 : 0006a, : A1A267060, : monitoring system PhII INSTALL - Misawa, Values: 15.2...",
+          "text_preview": "INSTALLATION - Okinawa (Awase), Values: 60.800000000000004, : 120.5, : -59.699999999999996 : 0006a, : A1A267060, : monitoring system PhII INSTALL - Misawa, V...",
           "in_family": true
         },
         {
@@ -1083,7 +1087,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\2.0 Weekly Variance Reports\\2023\\2023-11\\2023-11-17 enterprise program Weekly Hours Variance.xlsx",
           "short_source": "2023-11/2023-11-17 enterprise program Weekly Hours Variance.xlsx",
           "score": 0.0,
-          "text_preview": "- Okinawa (Awase), : 0, : 28.2, : -28.2 : 0006A, : A1A267060, : monitoring system PHII INSTALL - Misawa, : 0, : 25.8, : -25.8 : 0010A, : A1A267064, : legacy monitoring system INSTALLATION ...",
+          "text_preview": "- Okinawa (Awase), : 0, : 28.2, : -28.2 : 0006A, : A1A267060, : monitoring system PHII INSTALL - Misawa, : 0, : 25.8, : -25.8 : 0010A, : A1A267064, : legacy ...",
           "in_family": true
         }
       ],
@@ -1170,7 +1174,7 @@
       "expected_query_type": "SEMANTIC",
       "routed_query_type": "COMPLEX",
       "routing_correct": false,
-      "query": "What ACAS scan results, SCAP scan results, and STIG review findings are documented for legacy monitoring system and monitoring system systems?",
+      "query": "What ACAS scan results, SCAP scan results, and STIG review findings are documented for legacy monitoring system and monitoring systems?",
       "expected_document_family": "Cybersecurity \u2014 A027 DAA Accreditation Support Data + 111023_STIG_Review.xlsx + CT&E-ST&E folders",
       "family_signals": [
         "acas",
@@ -1222,7 +1226,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\19.0_Work_Notes\\Cyber\\ACAS Build and SCC Install\\ACAS Build and SCC Install Work Note 2020-08-03.docx",
           "short_source": "ACAS Build and SCC Install/ACAS Build and SCC Install Work Note 2020-08-03.docx",
           "score": 0.0,
-          "text_preview": "atmospheric Ground Systems ACAS Build and SCC Install [DRAFT] For monitoring system and legacy monitoring system 2020-Feb-10 Prepared By: Organization Space Systems 3535 Organization Grumm...",
+          "text_preview": "atmospheric Ground Systems ACAS Build and SCC Install [DRAFT] For monitoring system and legacy monitoring system 2020-Feb-10 Prepared By: Organization Space ...",
           "in_family": true
         },
         {
@@ -1303,7 +1307,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\RMF\\RMF_Resources\\RMF_Training-ORG\\RMF Training\\Training Material\\Key Documents\\fea_v2.pdf",
           "short_source": "Key Documents/fea_v2.pdf",
           "score": 0.0,
-          "text_preview": ", assess, and manage risks to their systems, applications, and infrastructures. The National Institute of Standards and Technology (security standard) is at the forefront...",
+          "text_preview": ", assess, and manage risks to their systems, applications, and infrastructures. The National Institute of Standards and Technology (security standard) is at ...",
           "in_family": true
         }
       ],
@@ -1568,7 +1572,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Accounts\\Account Approvals - 2875\\Approved Users - 2875 Signed\\DD2875 (Randall J) monitoring system-legacy monitoring system.pdf",
           "short_source": "Approved Users - 2875 Signed/DD2875 (Randall J) monitoring system-legacy monitoring system.pdf",
           "score": 0.0,
-          "text_preview": "Systems LOCATION (Physical Location of System) legacy monitoring system and monitoring system Operational Sites PART I (To be completed by Requester) 1. NAME (Last, First, Middle Initial) ...",
+          "text_preview": "Systems LOCATION (Physical Location of System) legacy monitoring system and monitoring system Operational Sites PART I (To be completed by Requester) 1. NAME...",
           "in_family": true
         },
         {
@@ -1586,7 +1590,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Accounts\\Account Approvals - 2875\\New Requests\\DD2875 (Randall J) monitoring system-legacy monitoring system.pdf",
           "short_source": "New Requests/DD2875 (Randall J) monitoring system-legacy monitoring system.pdf",
           "score": 0.0,
-          "text_preview": "Systems LOCATION (Physical Location of System) legacy monitoring system and monitoring system Operational Sites PART I (To be completed by Requester) 1. NAME (Last, First, Middle Initial) ...",
+          "text_preview": "Systems LOCATION (Physical Location of System) legacy monitoring system and monitoring system Operational Sites PART I (To be completed by Requester) 1. NAME...",
           "in_family": true
         },
         {
@@ -1604,7 +1608,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - enterprise program (Carey)\\eMASS\\archive\\legacy monitoring system\\archive\\IGS_Sustainment_PWS_1Mar17.docx",
           "short_source": "archive/IGS_Sustainment_PWS_1Mar17.docx",
           "score": 0.0,
-          "text_preview": "the medium and high frequency radio bands. There are nine monitoring system operational sites. The test bed suite is located at the organization?s facility in Colorado Sp...",
+          "text_preview": "the medium and high frequency radio bands. There are nine monitoring system operational sites. The test bed suite is located at the organization?s facility i...",
           "in_family": true
         }
       ],
@@ -1826,7 +1830,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Mission Assurance\\Audits\\2025\\2025 Audit Schedule-NGPro 3.6 WPs-enterprise program.xlsx",
           "short_source": "2025/2025 Audit Schedule-NGPro 3.6 WPs-enterprise program.xlsx",
           "score": 0.0,
-          "text_preview": "[SECTION] 2025 Audit Schedule-enterprise program: Logistics/Supportability/ Field Engineering, : SEP-25 2025 Audit Schedule-enterprise program: A101-PGSO Control of Documented Information...",
+          "text_preview": "[SECTION] 2025 Audit Schedule-enterprise program: Logistics/Supportability/ Field Engineering, : SEP-25 2025 Audit Schedule-enterprise program: A101-PGSO Con...",
           "in_family": false
         }
       ],
@@ -1894,7 +1898,7 @@
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\archive\\Status-Report\\Archive\\SEMS3D-XXXXX_IGS IPT Briefing Slides_(CDRL A001)_13 April 2017 - Bannister updates VXN.pptx",
           "short_source": "Archive/SEMS3D-XXXXX_IGS IPT Briefing Slides_(CDRL A001)_13 April 2017 - Bannister updates VXN.pptx",
           "score": 0.0,
-          "text_preview": "[SLIDE 1] monitoring system OR Trend [SLIDE 2] Outages ? 2017 Cumulative [SLIDE 3] Outages ? ITD Cumulative [SLIDE 4] Cybersecurity All monitoring system TCNOs reviewed through Ap...",
+          "text_preview": "[SLIDE 1] monitoring system OR Trend [SLIDE 2] Outages ? 2017 Cumulative [SLIDE 3] Outages ? ITD Cumulative [SLIDE 4] Cybersecurity All monitoring system TCN...",
           "in_family": true
         },
         {

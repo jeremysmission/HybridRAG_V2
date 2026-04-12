@@ -166,8 +166,18 @@ class EvalRun:
     partial_count: int
     miss_count: int
     routing_correct: int
-    p50_embed_retrieve_ms: int
-    p95_embed_retrieve_ms: int
+    # Pure retrieval = embed + vector kNN + FTS + fusion + rerank only
+    # (matches MD report headline). Computed from result.retrieval_ms.
+    p50_pure_retrieval_ms: int
+    p95_pure_retrieval_ms: int
+    # Wall clock = router LLM call + pure retrieval.
+    # Computed from result.embed_retrieve_ms (misnamed field, same value).
+    p50_wall_clock_ms: int
+    p95_wall_clock_ms: int
+    # OpenAI router LLM classification latency alone.
+    # Computed from result.router_ms.
+    p50_router_ms: int
+    p95_router_ms: int
     per_persona: dict
     per_query_type: dict
     results: list[dict] = field(default_factory=list)
@@ -189,11 +199,21 @@ def _ascii(s: str) -> str:
     return s.encode("ascii", "replace").decode("ascii")
 
 
+_CTRL_CHARS_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
+
+
 def _clean_preview(text: str, max_chars: int = PREVIEW_CHARS) -> str:
+    """Strip control bytes and collapse whitespace for markdown-safe previews.
+
+    Drops NUL (0x00), DEL (0x7F), and other C0 control codes so the
+    rendered markdown never contains raw binary bytes. Keeps \t, \n, \r.
+    """
     if not text:
         return ""
-    # Collapse whitespace
-    cleaned = re.sub(r"\s+", " ", text).strip()
+    # Drop control bytes first so they cannot slip into the output stream
+    cleaned = _CTRL_CHARS_RE.sub("", text)
+    # Collapse whitespace (also rewrites any remaining \t/\n/\r to spaces)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
     if len(cleaned) > max_chars:
         cleaned = cleaned[:max_chars - 3] + "..."
     return _ascii(cleaned)
@@ -714,7 +734,13 @@ def write_markdown_report(
 # Main
 # ---------------------------------------------------------------------------
 def _rebuild_report_from_json() -> int:
-    """Rebuild the MD report from an existing JSON artifact without re-running queries."""
+    """Rebuild the MD report and regenerate summary fields from saved JSON.
+
+    Reads RESULTS_JSON, reconstructs QueryEvalResult dataclasses, recomputes
+    latency percentiles with honest pure-retrieval / wall-clock / router
+    separation, rewrites both the JSON and the MD. Supports the previous
+    JSON schema (p50_embed_retrieve_ms) for backwards compatibility.
+    """
     print("=" * 72)
     print("  REBUILDING REPORT FROM SAVED JSON (no eval rerun)")
     print("=" * 72)
@@ -724,30 +750,45 @@ def _rebuild_report_from_json() -> int:
     with open(RESULTS_JSON, encoding="utf-8") as f:
         raw = json.load(f)
 
-    # Reconstruct dataclasses
-    results = [
-        QueryEvalResult(
-            id=d["id"],
-            persona=d["persona"],
-            expected_query_type=d["expected_query_type"],
-            routed_query_type=d["routed_query_type"],
-            routing_correct=d["routing_correct"],
-            query=d["query"],
-            expected_document_family=d["expected_document_family"],
-            family_signals=d.get("family_signals", []),
-            top_in_family=d["top_in_family"],
-            any_top5_in_family=d["any_top5_in_family"],
-            verdict=d["verdict"],
-            entity_dependent=d["entity_dependent"],
-            embed_retrieve_ms=d["embed_retrieve_ms"],
-            router_ms=d["router_ms"],
-            retrieval_ms=d["retrieval_ms"],
-            top_results=d.get("top_results", []),
-            notes=d.get("notes", ""),
-            error=d.get("error", ""),
+    # Reconstruct QueryEvalResult, stripping any control bytes from previews
+    # that may have been written under the pre-fix preview cleaner.
+    reconstructed_results: list[QueryEvalResult] = []
+    for d in raw.get("results", []):
+        cleaned_top = []
+        for tr in d.get("top_results", []) or []:
+            preview = tr.get("text_preview") or ""
+            tr_fixed = dict(tr)
+            tr_fixed["text_preview"] = _clean_preview(preview)
+            cleaned_top.append(tr_fixed)
+        reconstructed_results.append(
+            QueryEvalResult(
+                id=d["id"],
+                persona=d["persona"],
+                expected_query_type=d["expected_query_type"],
+                routed_query_type=d["routed_query_type"],
+                routing_correct=d["routing_correct"],
+                query=d["query"],
+                expected_document_family=d["expected_document_family"],
+                family_signals=d.get("family_signals", []),
+                top_in_family=d["top_in_family"],
+                any_top5_in_family=d["any_top5_in_family"],
+                verdict=d["verdict"],
+                entity_dependent=d["entity_dependent"],
+                embed_retrieve_ms=d["embed_retrieve_ms"],
+                router_ms=d["router_ms"],
+                retrieval_ms=d["retrieval_ms"],
+                top_results=cleaned_top,
+                notes=d.get("notes", ""),
+                error=d.get("error", ""),
+            )
         )
-        for d in raw.get("results", [])
-    ]
+
+    # Recompute latency buckets from results[] -- this overwrites any old
+    # misnamed fields in the JSON with honest pure/wall/router values.
+    pure_retrieval = [r.retrieval_ms for r in reconstructed_results if not r.error]
+    wall_clock = [r.embed_retrieve_ms for r in reconstructed_results if not r.error]
+    router_latencies = [r.router_ms for r in reconstructed_results if not r.error]
+
     run = EvalRun(
         run_id=raw["run_id"],
         timestamp_utc=raw["timestamp_utc"],
@@ -758,14 +799,27 @@ def _rebuild_report_from_json() -> int:
         partial_count=raw["partial_count"],
         miss_count=raw["miss_count"],
         routing_correct=raw["routing_correct"],
-        p50_embed_retrieve_ms=raw["p50_embed_retrieve_ms"],
-        p95_embed_retrieve_ms=raw["p95_embed_retrieve_ms"],
+        p50_pure_retrieval_ms=_percentile(pure_retrieval, 50),
+        p95_pure_retrieval_ms=_percentile(pure_retrieval, 95),
+        p50_wall_clock_ms=_percentile(wall_clock, 50),
+        p95_wall_clock_ms=_percentile(wall_clock, 95),
+        p50_router_ms=_percentile(router_latencies, 50),
+        p95_router_ms=_percentile(router_latencies, 95),
         per_persona=raw["per_persona"],
         per_query_type=raw["per_query_type"],
-        results=raw["results"],
+        results=[asdict(r) for r in reconstructed_results],
     )
-    write_markdown_report(run, results)
-    print(f"MD report rewritten: {REPORT_MD}")
+    # Rewrite both the JSON (with new schema) and the MD report.
+    write_json_results(run)
+    write_markdown_report(run, reconstructed_results)
+    print(f"JSON rewritten: {RESULTS_JSON}")
+    print(f"MD rewritten:   {REPORT_MD}")
+    print(
+        f"Latency: pure retrieval P50={run.p50_pure_retrieval_ms}ms "
+        f"P95={run.p95_pure_retrieval_ms}ms | "
+        f"wall P50={run.p50_wall_clock_ms}ms P95={run.p95_wall_clock_ms}ms | "
+        f"router P50={run.p50_router_ms}ms P95={run.p95_router_ms}ms"
+    )
     return 0
 
 
@@ -867,9 +921,10 @@ def main() -> int:
     partial_count = sum(1 for r in results if r.verdict == "PARTIAL")
     miss_count = sum(1 for r in results if r.verdict == "MISS")
     routing_correct = sum(1 for r in results if r.routing_correct)
-    latencies = [r.embed_retrieve_ms for r in results if not r.error]
-    p50 = _percentile(latencies, 50)
-    p95 = _percentile(latencies, 95)
+
+    pure_retrieval = [r.retrieval_ms for r in results if not r.error]
+    wall_clock = [r.embed_retrieve_ms for r in results if not r.error]
+    router_latencies = [r.router_ms for r in results if not r.error]
 
     per_persona = _scorecard(results, lambda r: r.persona)
     per_query_type = _scorecard(results, lambda r: r.expected_query_type)
@@ -885,8 +940,12 @@ def main() -> int:
         partial_count=partial_count,
         miss_count=miss_count,
         routing_correct=routing_correct,
-        p50_embed_retrieve_ms=p50,
-        p95_embed_retrieve_ms=p95,
+        p50_pure_retrieval_ms=_percentile(pure_retrieval, 50),
+        p95_pure_retrieval_ms=_percentile(pure_retrieval, 95),
+        p50_wall_clock_ms=_percentile(wall_clock, 50),
+        p95_wall_clock_ms=_percentile(wall_clock, 95),
+        p50_router_ms=_percentile(router_latencies, 50),
+        p95_router_ms=_percentile(router_latencies, 95),
         per_persona=per_persona,
         per_query_type=per_query_type,
         results=[asdict(r) for r in results],
@@ -903,7 +962,9 @@ def main() -> int:
     print(f"  PARTIAL: {partial_count}/{len(results)}")
     print(f"  MISS:    {miss_count}/{len(results)}")
     print(f"  Routing: {routing_correct}/{len(results)}")
-    print(f"  Latency: P50 {p50}ms  P95 {p95}ms")
+    print(f"  Pure retrieval:  P50 {run.p50_pure_retrieval_ms}ms  P95 {run.p95_pure_retrieval_ms}ms")
+    print(f"  Wall clock:      P50 {run.p50_wall_clock_ms}ms  P95 {run.p95_wall_clock_ms}ms")
+    print(f"  Router LLM:      P50 {run.p50_router_ms}ms  P95 {run.p95_router_ms}ms")
     print()
     print(f"  JSON report: {RESULTS_JSON}")
     print(f"  MD report:   {REPORT_MD}")

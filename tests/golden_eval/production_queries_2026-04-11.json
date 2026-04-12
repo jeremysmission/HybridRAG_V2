@@ -32,7 +32,7 @@
   },
   {
     "id": "PQ-004",
-    "query": "What is the latest PMR briefing file name for the enterprise program program?",
+    "query": "What is the latest PMR briefing file name for the enterprise program?",
     "expected_facts": ["IGS_PMR_2026_FebR1.pptx"],
     "expected_confidence": "HIGH",
     "query_type": "ENTITY",
@@ -158,7 +158,7 @@
   {
     "_comment": "=== PERSONA 4: NETWORK ADMIN / CYBERSECURITY (PQ-016 through PQ-020) ===",
     "id": "PQ-016",
-    "query": "What ACAS scan results, SCAP scan results, and STIG review findings are documented for legacy monitoring system and monitoring system systems?",
+    "query": "What ACAS scan results, SCAP scan results, and STIG review findings are documented for legacy monitoring system and monitoring systems?",
     "expected_facts": ["ACAS", "SCAP", "STIG"],
     "expected_confidence": "HIGH",
     "query_type": "SEMANTIC",

@@ -35,7 +35,7 @@ The traceability goal is simple: every `PQ-###` in the JSON pack must be traceab
 | PQ-001 | TABULAR | Which CDRL deliverables in A001, A009, and A031 have the latest status updates? | CDRLs - 1.5 enterprise program CDRLS |
 | PQ-002 | SEMANTIC | What schedule milestones and slips are shown in the latest PMR and Integrated Master Schedule? | Program Management - 6.0 PMR + CDRL A031 IMS |
 | PQ-003 | TABULAR | How do the current FEP actuals compare to the funding plan and LDI burn-rate by OY3? | Program Management - 1.0 FEP + LDI budget/hours spreadsheets |
-| PQ-004 | ENTITY | What is the latest PMR briefing file name for the enterprise program program? | Program Management - 6.0 PMR |
+| PQ-004 | ENTITY | What is the latest PMR briefing file name for the enterprise program? | Program Management - 6.0 PMR |
 | PQ-005 | COMPLEX | What staffing, suborganization, and budget risks are flagged across the latest PM brief and variance reports? | Follow-on materials + PMR/SubK Slides + Weekly Variance Reports + FEP |
 
 ### Logistics Lead
