@@ -25,9 +25,9 @@ two-letter prefixes: AC, AT, AU, CA, CM, CP, IA, IR, MA, MP, PE, PL,
 PM, PS, PT, RA, SA, SC, SI, SR. Rev 5 added PT (PII Processing and
 Transparency) and SR (Supply Chain Risk Management) compared to Rev 4.
 
-- Source: NIST SP 800-53 Rev 5 canonical publication on
-  csrc.{nist-domain}.gov (URL omitted here because the repo sanitizer
-  rewrites "nist" inside URLs and produces a broken link; search
+- Source: security standard SP 800-53 Rev 5 canonical publication on
+  csrc.{security standard-domain}.gov (URL omitted here because the repo sanitizer
+  rewrites "security standard" inside URLs and produces a broken link; search
   "SP 800-53 Rev 5" to locate the canonical catalog)
 - Secondary: control family explainers at `saltycloud.com`, `ipkeys.com`,
   `securityscientist.net`, `drata.com`, `secureframe.com`, `cybersaint.io`
@@ -346,14 +346,16 @@ RegexPreExtractor(part_patterns=config.extraction.part_patterns)
 EventBlockParser(part_patterns=config.extraction.part_patterns)
 ```
 
-Without passing the new `security_standard_exclude_prefixes` kwarg.
+Without passing the new `security_standard_exclude_patterns` kwarg
+(renamed in Round 2 from the Round-1 `security_standard_exclude_prefixes`
+when the matcher switched from prefix-startswith to regex match).
 That's fine for the **default-on** behavior — both classes fall back to
-`_DEFAULT_SECURITY_STANDARD_PREFIXES` when the kwarg is `None`. So the
+`_DEFAULT_SECURITY_STANDARD_PATTERNS` when the kwarg is `None`. So the
 security standard rejection IS applied on every walk-away run that starts after
 this commit lands, without any caller change.
 
 **But the per-corpus override path is latent.** An operator editing
-`config.yaml::extraction.security_standard_exclude_prefixes` will NOT
+`config.yaml::extraction.security_standard_exclude_patterns` will NOT
 see the override take effect until a future follow-up commit wires the
 config value through the CLI/GUI caller sites. The config field exists
 so that wiring commit is a one-line change when unfrozen.
@@ -362,7 +364,7 @@ Recommended followup (new task): a two-line change at each of the six
 callers in `scripts/tiered_extract.py`, `scripts/import_extract_gui.py`,
 `scripts/extract_entities.py`, `scripts/overnight_extraction.py`,
 `scripts/phone_regex_probe.py` to pass
-`security_standard_exclude_prefixes=config.extraction.security_standard_exclude_prefixes`
+`security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns`
 to the `RegexPreExtractor` / `EventBlockParser` constructors.
 
 ---
@@ -479,8 +481,8 @@ default). That was a dead giveaway I missed when drafting Round 1.
 ### Round 2 fix — suffix-length discriminator
 
 Switched the exclusion matcher from **prefix-startswith** to
-**regex match**. The new default list constrains NIST families to
-**1-2 digit suffixes + optional enhancement**, because NIST SP 800-53
+**regex match**. The new default list constrains security standard families to
+**1-2 digit suffixes + optional enhancement**, because security standard SP 800-53
 Rev 5 tops out at SC-51 (confirmed via the official control catalog
 search on 2026-04-12). Real hardware parts in this corpus use
 **3+ digit suffixes** (PS-800, SA-9000, FM-220, ARC-4471). The digit
@@ -495,13 +497,39 @@ re.compile(
 )
 ```
 
-Examples:
-- `IR-4`, `AC-2(1)`, `PS-7`, `SA-11`, `SC-51` → **rejected** (security standard
-  control, 1-2 digit suffix)
-- `PS-800`, `SA-9000`, `CP-220`, `PE-4000`, `SC-1000` → **accepted**
-  (3+ digit suffix = hardware, not security standard control)
-- `IR-4A`, `IR-1N-04`, `IR-7802` → **accepted** (letters or 3+ digit
-  suffixes = real report IDs)
+Examples (behavior under the full production `part_patterns`
+configuration with the `[A-Z]{2,}-\d{3,4}` catch-all):
+
+- `IR-4`, `IR-10`, `AC-2(1)`, `PS-7`, `SA-11`, `SC-51` → **not extracted**.
+  Two gates contribute: (1) none match the production
+  `part_patterns` list because the catch-all `[A-Z]{2,}-\d{3,4}`
+  requires a 3-4 digit pure-numeric suffix, and (2) the exclusion
+  pattern would reject them anyway as a safety net.
+- `PS-800`, `SA-9000`, `CP-220`, `PE-4000`, `SC-1000` → **accepted as
+  PART** (3+ digit suffix matches the catch-all; suffix-length rule
+  doesn't treat them as security standard controls).
+- `IR-4A`, `IR-1N-04` → **not extracted**. The suffix has letters so
+  no production pattern matches (neither the catch-all nor the
+  Round-1 `_report_id_re`, which had `IR` removed). The exclusion
+  gate never gets to look at them.
+- `IR-7802`, `IR-7694` → **accepted as PART** (4-digit suffix matches
+  the catch-all; suffix-length rule does not reject 4-digit). These
+  used to be restricted as PO under the Round-0 pre-fix code because
+  the old `_report_id_re` alternation included `IR`; now they fall
+  through to the `[A-Z]{2,}-\d{3,4}` catch-all and are emitted as
+  PART. That is a deliberate type migration, not a regression —
+  `IR-7802` looks more like a hardware identifier than a real
+  incident report and the domain-specific report IDs in this corpus
+  use `FSR`, `UMR`, `ASV`, and `RTS` prefixes.
+
+Note: if a future caller sets `part_patterns=[]` (no catch-all) and
+relies solely on the exclusion gate to classify candidates, the
+exclusion pattern is a safety net — not a candidate-emitter. The
+candidate has to be matched by SOME pattern before the exclusion has
+anything to filter. The current test suite covers both cases via
+`TestSecurityStandardExclusion.test_nist_ir_family_not_caught_by_report_id_regex`
+(empty `part_patterns`) and `...extractor_with_generic_part_pattern`
+fixture (full catch-all).
 
 **STIG baseline codes** (`AS-`, `OS-`, `GPOS-`, `HS-`) stay on a
 broader pattern `^(?:AS|OS|GPOS|HS)-\d{3,5}$` because AS/OS/GPOS/HS
