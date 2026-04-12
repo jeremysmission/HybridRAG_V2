@@ -1,0 +1,5 @@
+data/canary/**/*.pdf -text
+data/canary/**/*.docx -text
+data/canary/**/*.xlsx -text
+data/canary/**/*.json text eol=lf
+data/canary/**/*.txt text eol=lf

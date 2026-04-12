@@ -1,0 +1,19 @@
+[CANARY-VALIDATION-DOCUMENT-DO-NOT-USE-IN-PRODUCTION]
+Canary Namespace: VALCAN-2026
+Canary Document ID: VALDOC-037
+Canary Bundle: 40_CYBERSECURITY
+Synthetic Owner: Jane Canary
+Production Use: prohibited
+Repo Pack Root: data/canary/valcan_pack_2026-04-12/_VALCAN_2026/40_CYBERSECURITY/
+Future Deploy Root: E:\CorpusTransfr\verified\IGS\_VALCAN_2026\
+
+Validation Named Directives Reference
+=====================================
+
+Synthetic directive set used for validation and demo rehearsal:
+- VALDIR-ALPHA-HARDENING | Validation hardening baseline memo | ACTIVE
+- VALDIR-BRAVO-REMOTE-ACCESS | Validation remote access boundary memo | ACTIVE
+- VALDIR-CHARLIE-LOG-RETENTION | Validation log retention policy memo | ACTIVE
+- VALDIR-DELTA-PKI-ROTATION | Validation key rotation memo | ACTIVE
+- VALDIR-ECHO-ENDPOINT-BASELINE | Validation endpoint baseline memo | ACTIVE
+The directive count in this validation pack is fixed at 5.

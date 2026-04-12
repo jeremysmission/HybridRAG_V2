@@ -1,0 +1,19 @@
+[CANARY-VALIDATION-DOCUMENT-DO-NOT-USE-IN-PRODUCTION]
+Canary Namespace: VALCAN-2026
+Canary Document ID: VALDOC-029
+Canary Bundle: 30_FIELD_ENGINEERING
+Synthetic Owner: Jane Canary
+Production Use: prohibited
+Repo Pack Root: data/canary/valcan_pack_2026-04-12/_VALCAN_2026/30_FIELD_ENGINEERING/
+Future Deploy Root: E:\CorpusTransfr\verified\IGS\_VALCAN_2026\
+
+Validation Site Visit Rollup 2024
+=================================
+
+Validation visit counts by site:
+- VALSITE-ALPHA -> 2 visits (Two lightning service events)
+- VALSITE-BRAVO -> 2 visits (One lightning event and one calibration visit)
+- VALSITE-CHARLIE -> 2 visits (One lightning event and one network remediation visit)
+- VALSITE-DELTA -> 3 visits (One power-quality event and two maintenance visits)
+- VALSITE-ECHO -> 2 visits (One routine visit and one power-quality event)
+Total site visits tracked: 11.

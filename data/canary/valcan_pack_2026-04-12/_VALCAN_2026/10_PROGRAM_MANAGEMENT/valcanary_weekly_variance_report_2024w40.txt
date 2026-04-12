@@ -1,0 +1,17 @@
+[CANARY-VALIDATION-DOCUMENT-DO-NOT-USE-IN-PRODUCTION]
+Canary Namespace: VALCAN-2026
+Canary Document ID: VALDOC-008
+Canary Bundle: 10_PROGRAM_MANAGEMENT
+Synthetic Owner: Jane Canary
+Production Use: prohibited
+Repo Pack Root: data/canary/valcan_pack_2026-04-12/_VALCAN_2026/10_PROGRAM_MANAGEMENT/
+Future Deploy Root: E:\CorpusTransfr\verified\IGS\_VALCAN_2026\
+
+Validation Weekly Variance Report 2024W40
+=========================================
+
+Week 40 variance summary:
+- schedule pressure remains tied to three slipped milestones.
+- late deliverables currently include VAL-A009-MSR-Q4, VAL-A027-POAM-UPDATE-Q4, VAL-A031-IMS-REV-B, VAL-A055-INVENTORY-ROLLUP.
+- open purchase-order value remains $425,600.
+- staffing pressure is concentrated on field closeout and calibration follow-up.

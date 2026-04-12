@@ -1,0 +1,78 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Length 963 >>
+stream
+BT
+/F1 10 Tf
+50 770 Td
+14 TL
+([CANARY-VALIDATION-DOCUMENT-DO-NOT-USE-IN-PRODUCTION]) Tj
+T*
+(Canary Namespace: VALCAN-2026) Tj
+T*
+(Canary Document ID: VALDOC-027) Tj
+T*
+(Canary Bundle: 30_FIELD_ENGINEERING) Tj
+T*
+(Synthetic Owner: Jane Canary) Tj
+T*
+(Production Use: prohibited) Tj
+T*
+(Repo Pack Root: data/canary/valcan_pack_2026-04-12/_VALCAN_2026/30_FIELD_ENGINEERING/) Tj
+T*
+(Future Deploy Root: E:\\CorpusTransfr\\verified\\IGS\\_VALCAN_2026\\) Tj
+T*
+() Tj
+T*
+(Validation Failure Mode Summary 2024) Tj
+T*
+() Tj
+T*
+(Lightning-related service events in 2024: 4.) Tj
+T*
+(Distinct parts failed during lightning events: 5.) Tj
+T*
+(Affected sites: VALSITE-ALPHA, VALSITE-BRAVO, VALSITE-CHARLIE.) Tj
+T*
+(Distinct failed parts:) Tj
+T*
+(- VALPART-FAN-006) Tj
+T*
+(- VALPART-FLT-009) Tj
+T*
+(- VALPART-GPSANT-004) Tj
+T*
+(- VALPART-UPS48V-003) Tj
+T*
+(- VALPART-UPSCARD-015) Tj
+T*
+(This summary is the primary evidence document for the hard canary aggregation query.) Tj
+ET
+endstream
+endobj
+3 0 obj
+<< /Type /Page /Parent 4 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>
+endobj
+4 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+5 0 obj
+<< /Type /Catalog /Pages 4 0 R >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000085 00000 n 
+0000001099 00000 n 
+0000001225 00000 n 
+0000001282 00000 n 
+trailer
+<< /Size 6 /Root 5 0 R >>
+startxref
+1331
+%%EOF

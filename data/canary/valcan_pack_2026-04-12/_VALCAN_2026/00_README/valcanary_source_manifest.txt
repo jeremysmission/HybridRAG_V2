@@ -1,0 +1,55 @@
+[CANARY-VALIDATION-DOCUMENT-DO-NOT-USE-IN-PRODUCTION]
+Canary Namespace: VALCAN-2026
+Canary Document ID: VALDOC-003
+Canary Bundle: 00_README
+Synthetic Owner: Jane Canary
+Production Use: prohibited
+Repo Pack Root: data/canary/valcan_pack_2026-04-12/_VALCAN_2026/00_README/
+Future Deploy Root: E:\CorpusTransfr\verified\IGS\_VALCAN_2026\
+
+VALCAN Source Manifest
+======================
+
+Deterministic source manifest for the validation canary pack.
+Total authored documents before manifest self-entry: 39
+Document registry and file hashes:
+- VALDOC-001 | 00_README | 00_README/valcanary_README.txt | sha256=57c3ce6e1049aa7f475018f9beb1b428d6763aa01b43af5030631852ba9f0bd8
+- VALDOC-002 | 00_README | 00_README/valcanary_ground_truth_index.xlsx | sha256=67bfccacbf9f5c4925a1f891c140bd952cc88d9b122a7b942cd7e7ee6a219b17
+- VALDOC-004 | 10_PROGRAM_MANAGEMENT | 10_PROGRAM_MANAGEMENT/valcanary_contract_master_2024.pdf | sha256=e817ba0a23bf97134d4876f40fa27dbf7f413b846b1dda2206fe7ed98653f470
+- VALDOC-005 | 10_PROGRAM_MANAGEMENT | 10_PROGRAM_MANAGEMENT/valcanary_cdrl_status_register_q4_2024.xlsx | sha256=8becc87487c773d4386b1ff31776b1514fdc513b8cd3695fe932f5b5fefeec13
+- VALDOC-006 | 10_PROGRAM_MANAGEMENT | 10_PROGRAM_MANAGEMENT/valcanary_integrated_master_schedule_q4_2024.xlsx | sha256=3fca55aaf78b5be3d577a16c1dbbfd46527791c212a01b2a1dfba60f64044eee
+- VALDOC-007 | 10_PROGRAM_MANAGEMENT | 10_PROGRAM_MANAGEMENT/valcanary_pmr_brief_q4_2024.docx | sha256=bf0f26c2aa60b5d1b35961f01e95ae732015042acef1e6c5a5826d786eed91cc
+- VALDOC-008 | 10_PROGRAM_MANAGEMENT | 10_PROGRAM_MANAGEMENT/valcanary_weekly_variance_report_2024w40.txt | sha256=9f5a7c469999b2ce8bf42a6985c2e1534643163b43f31c47c82db5ccaebd1f07
+- VALDOC-009 | 10_PROGRAM_MANAGEMENT | 10_PROGRAM_MANAGEMENT/valcanary_budget_rollup_fy2024.xlsx | sha256=43867bf2650df73e59b49140c0ae3066d26d852718c1baef6020bf2e1cbb9654
+- VALDOC-010 | 10_PROGRAM_MANAGEMENT | 10_PROGRAM_MANAGEMENT/valcanary_contract_risk_register_q4_2024.xlsx | sha256=88036cdd48a7b8b2224d1b0d1198d3d570c829601f4b36c167669a7155850ff8
+- VALDOC-011 | 10_PROGRAM_MANAGEMENT | 10_PROGRAM_MANAGEMENT/valcanary_cdrl_a009_delivery_memo.docx | sha256=13a592c87015d51c23102127ce9f406cc1aa0d53f92a7dd27609713729d33abe
+- VALDOC-012 | 20_LOGISTICS | 20_LOGISTICS/valcanary_po_register_2024.xlsx | sha256=d40cf9a9b7b06af9ac145c4db20fe75630819f337936774ddc8d18c4236b8661
+- VALDOC-013 | 20_LOGISTICS | 20_LOGISTICS/valcanary_po_receipts_2024.xlsx | sha256=b5f8a860ca53a2ac43c1492d63da1792b7a23e6ff2a1b28c73d8dca9bfb2be53
+- VALDOC-014 | 20_LOGISTICS | 20_LOGISTICS/valcanary_parts_master_list.xlsx | sha256=6e7aae9028e7c4e170614324fc307acdb452394f35d32e186cc9b094609d055d
+- VALDOC-015 | 20_LOGISTICS | 20_LOGISTICS/valcanary_shipment_manifest_q1_q2_2024.xlsx | sha256=6902c850c9225897097c2747137cf83fbeabdd761e056f8f92b7d7df3e509724
+- VALDOC-016 | 20_LOGISTICS | 20_LOGISTICS/valcanary_customs_export_packet_alpha_bravo.pdf | sha256=f3774cba560ca176f07ea28c2d58677f0465e971afca5a69958996f3d5f02449
+- VALDOC-017 | 20_LOGISTICS | 20_LOGISTICS/valcanary_calibration_due_register_2024.xlsx | sha256=08a63ae4f8818c50fa6ee31ed4a6992ec367e6999f0cb79d0cc1c09dff60a30e
+- VALDOC-018 | 20_LOGISTICS | 20_LOGISTICS/valcanary_calibration_completion_report_2024.docx | sha256=50b6bc8f4a85c1f3d11b1db97571a03da53b14b99a96c9a064f5f3dbff344b85
+- VALDOC-019 | 20_LOGISTICS | 20_LOGISTICS/valcanary_vendor_quote_summary_q2_2024.pdf | sha256=b69dfaf906ab1d7dfb451d033c0ac5a93c0b311e63b58a033be8cdf53f5f7b2a
+- VALDOC-020 | 20_LOGISTICS | 20_LOGISTICS/valcanary_receiving_exception_log.txt | sha256=e1fcf4ed936a121c981dd24e587af97c7f3c230bfb3ecacec30c592cd8905358
+- VALDOC-021 | 20_LOGISTICS | 20_LOGISTICS/valcanary_oconus_shipment_crosswalk.xlsx | sha256=10a8445a34beed6e5c01758df1f7c527edee52eb15217add839f501f02ddc748
+- VALDOC-022 | 30_FIELD_ENGINEERING | 30_FIELD_ENGINEERING/valcanary_service_event_tracker_2024.xlsx | sha256=ef44276736ac250469d90b246578099497e93bb952c9e2ec7a0b1d815f6c05ad
+- VALDOC-023 | 30_FIELD_ENGINEERING | 30_FIELD_ENGINEERING/valcanary_msr_alpha_2024_03_12.docx | sha256=8a7dab60efcce843aae2f08327f8ccced855dd24343107a8fbbaf18fc9e9cbf1
+- VALDOC-024 | 30_FIELD_ENGINEERING | 30_FIELD_ENGINEERING/valcanary_msr_bravo_2024_05_18.docx | sha256=1660e3fd66567d4e157d69969fd684443824be1d67a6f57a8ed6443b8af5ae92
+- VALDOC-025 | 30_FIELD_ENGINEERING | 30_FIELD_ENGINEERING/valcanary_msr_charlie_2024_06_30.docx | sha256=c9d95e5db9123897e7ac6cb4e27bf787e57f80792771bbbd0c5016f783107e72
+- VALDOC-026 | 30_FIELD_ENGINEERING | 30_FIELD_ENGINEERING/valcanary_msr_delta_2024_08_22.docx | sha256=82b493caa318e15618a67b22ec37c802564b6025d32186614ad4de1b00ab3d9a
+- VALDOC-027 | 30_FIELD_ENGINEERING | 30_FIELD_ENGINEERING/valcanary_failure_mode_summary_2024.pdf | sha256=1e2ad5c0e75fb81520fc4227e3d6fb3f0d1c4906d2ec7b568a11462696534eed
+- VALDOC-028 | 30_FIELD_ENGINEERING | 30_FIELD_ENGINEERING/valcanary_corrective_action_crosswalk.xlsx | sha256=e30434dfe1bda127263be45ca40d2f4da74f23caf52a7355924ecd17a2ec949b
+- VALDOC-029 | 30_FIELD_ENGINEERING | 30_FIELD_ENGINEERING/valcanary_site_visit_rollup_2024.txt | sha256=1fcb31954ac27af86a3110dc66b250db6d676a74a926d51efbda1fb39d07471f
+- VALDOC-030 | 40_CYBERSECURITY | 40_CYBERSECURITY/valcanary_acas_rollup_q2_2024_alpha.pdf | sha256=1fa01df245a8640f41a623cd5318da237bc0d1ae1324a2c7b263ff3ea58ff8d1
+- VALDOC-031 | 40_CYBERSECURITY | 40_CYBERSECURITY/valcanary_acas_rollup_q3_2024_bravo.pdf | sha256=ef72ffb629fe581e9579b28b38b2c610b257bb43c21e0e999d35e2cd48727ffc
+- VALDOC-032 | 40_CYBERSECURITY | 40_CYBERSECURITY/valcanary_stig_checklist_rollup_2024.xlsx | sha256=6109a37460149fab8705daf7e20adef559337d650194f3d9a7292cebe8f88949
+- VALDOC-033 | 40_CYBERSECURITY | 40_CYBERSECURITY/valcanary_poam_register_q4_2024.xlsx | sha256=68872dd89a5864d82d37119f7cb4fe66aea8a3ea1ea1c1d9bd04eca115a087d4
+- VALDOC-034 | 40_CYBERSECURITY | 40_CYBERSECURITY/valcanary_monthly_cyber_audit_summary_2024.docx | sha256=545a5f959dbae4b38a88cd27466106f9bcb6ec7d5dab933b34a8fed4949665a0
+- VALDOC-035 | 40_CYBERSECURITY | 40_CYBERSECURITY/valcanary_vulnerability_exception_memo.pdf | sha256=3d3330f0634c644c4592cb0a4423228646ae1c22bf20af592ba51b40e2e39a7c
+- VALDOC-036 | 40_CYBERSECURITY | 40_CYBERSECURITY/valcanary_baseline_inventory_for_scans.xlsx | sha256=4f17c284ac957b91d7559853422c8375957fe53fdb3d4bef90e2c2118c3e0f9a
+- VALDOC-037 | 40_CYBERSECURITY | 40_CYBERSECURITY/valcanary_named_directives_reference.txt | sha256=57f57de22b156fc80c554a6e6676f42c1c905f7b632da11c05072720bcffeb8a
+- VALDOC-038 | 50_CROSS_ROLE | 50_CROSS_ROLE/valcanary_site_registry.xlsx | sha256=2ca1669ad5f8f61f04d14985b83019bfe0328b7e72032adc6638c88d3e2e8c53
+- VALDOC-039 | 50_CROSS_ROLE | 50_CROSS_ROLE/valcanary_part_failure_to_po_crosswalk.xlsx | sha256=b2b921774725ba88a94cc036519a654c57b4612af71e4dd9a1e30b9ffd1add1a
+- VALDOC-040 | 50_CROSS_ROLE | 50_CROSS_ROLE/valcanary_readiness_dashboard_q4_2024.pdf | sha256=d26436474429ff0b68cad0c276aabc92526dc29ac22d50e260026cbef730f65d
+- VALDOC-003 | 00_README | 00_README/valcanary_source_manifest.txt | sha256=SEE ground_truth_registry.json (self-reference intentionally externalized)
