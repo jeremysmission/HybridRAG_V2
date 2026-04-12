@@ -9,6 +9,17 @@
 .NOTES
     Author: Jeremy Randall
     Date:   2026-04-06
+
+    Single source of truth for critical dependency verification:
+      scripts\verify_install.py (see CRITICAL_IMPORTS list)
+
+    Any new critical runtime dependency goes in requirements.txt AND in
+    scripts\verify_install.py::CRITICAL_IMPORTS. Do NOT add a parallel
+    hand-rolled package list here -- Section 9 below delegates the entire
+    import check to verify_install.py so the two paths cannot drift.
+    Reference: commit 8a1361d introduced verify_install.py as the canonical
+    install gate; this script was wired into it on 2026-04-12 to close the
+    installer-drift gap that silently skipped gliner on a walk-away run.
 #>
 
 # ============================================================
@@ -438,6 +449,27 @@ if ($ok) {
     }
     if ($drillFails.Count -gt 0) {
         Write-Fail "Drill-down failures: $($drillFails -join ', ')"
+        # Fast-fail on critical-package install failures. The canonical
+        # import verification runs in Section 9 (scripts\verify_install.py)
+        # and is the single source of truth; this gate is belt-and-suspenders
+        # for the case where pip returns non-zero before Section 9 runs.
+        # Keep aligned with scripts\verify_install.py::CRITICAL_IMPORTS.
+        $criticalBlock = @(
+            "torch", "numpy", "pyarrow", "lancedb",
+            "sentence-transformers", "sentence_transformers",
+            "gliner", "openai", "fastapi", "lxml"
+        )
+        $criticalHits = @()
+        foreach ($f in $drillFails) {
+            $name = (($f -split '[=<>!~\s]')[0]).ToLower()
+            if ($criticalBlock -contains $name) { $criticalHits += $f }
+        }
+        if ($criticalHits.Count -gt 0) {
+            Write-Fail "Critical package install failures: $($criticalHits -join ', ')"
+            Write-Info "These are required for HybridRAG V2 to run. Aborting install."
+            Write-Info "Diagnose with: .venv\Scripts\python.exe scripts\verify_install.py"
+            exit 1
+        }
     } else {
         Write-Ok "All packages installed via drill-down"
     }
@@ -471,47 +503,42 @@ if ($LASTEXITCODE -eq 0) {
 Remove-TempFileQuietly -Path $verifyPy
 
 # ============================================================
-# 9. Verify key imports (V2-specific)
+# 9. Verify critical imports (delegated to scripts\verify_install.py)
 # ============================================================
-Write-Step "Verifying key imports"
-$importPy = Join-Path $env:TEMP "v2_verify_imports.py"
-$importCode = @'
-import sys, importlib
-packages = [
-    "numpy", "pydantic", "yaml", "openai", "sentence_transformers",
-    "httpx", "fastapi", "uvicorn", "lancedb", "flashrank",
-    "pdfplumber", "structlog", "rich", "tiktoken", "keyring",
-    "PIL", "lxml", "openpyxl", "psutil", "cryptography", "einops",
-]
-fails = []
-for pkg in packages:
-    try:
-        importlib.import_module(pkg)
-        ver = getattr(sys.modules[pkg], "__version__", "OK")
-        print(f"  OK: {pkg} {ver}")
-    except ImportError as e:
-        print(f"  FAIL: {pkg} -- {e}")
-        fails.append(pkg)
-if fails:
-    print("FAILED_IMPORTS=" + ",".join(fails))
-    raise SystemExit(1)
-print("ALL_IMPORTS_OK")
-'@
-[System.IO.File]::WriteAllText($importPy, $importCode, [System.Text.UTF8Encoding]::new($false))
-$importResult = & $VenvPython $importPy 2>&1
-$importOutput = ($importResult | Out-String).Trim()
-if ($LASTEXITCODE -eq 0) {
-    foreach ($line in ($importOutput -split "`n")) {
-        if ($line -match "OK:") { Write-Ok $line.Trim() }
-    }
+# This section deliberately does NOT maintain its own hand-rolled import
+# list. scripts\verify_install.py::CRITICAL_IMPORTS is the single source
+# of truth -- adding a parallel list here would silently drift out of sync
+# (which is exactly the bug that silently skipped gliner on the walk-away
+# workstation run on 2026-04-12). Keep it delegated.
+Write-Step "Verifying critical imports (scripts\verify_install.py)"
+$verifyScript = Join-Path $ProjectRoot "scripts\verify_install.py"
+if (-not (Test-Path $verifyScript)) {
+    Write-Fail "verify_install.py not found at $verifyScript"
+    exit 1
+}
+
+$verifyOutput = & $VenvPython $verifyScript 2>&1
+$verifyExit = $LASTEXITCODE
+$verifyText = ($verifyOutput | Out-String).TrimEnd()
+if ($verifyText) { Write-Host $verifyText }
+
+if ($verifyExit -eq 0) {
+    Write-Ok "All critical imports verified via scripts\verify_install.py"
 } else {
-    foreach ($line in ($importOutput -split "`n")) {
-        $trimmed = $line.Trim()
-        if ($trimmed -match "OK:") { Write-Ok $trimmed }
-        elseif ($trimmed -match "FAIL:") { Write-Fail $trimmed }
+    Write-Warn "verify_install.py reported failures -- attempting one-pass recovery"
+    & $VenvPip install -r $reqFile @TrustedHosts 2>&1 | Out-Null
+    $verifyOutput2 = & $VenvPython $verifyScript 2>&1
+    $verifyExit2 = $LASTEXITCODE
+    $verifyText2 = ($verifyOutput2 | Out-String).TrimEnd()
+    if ($verifyText2) { Write-Host $verifyText2 }
+    if ($verifyExit2 -eq 0) {
+        Write-Ok "All critical imports verified after recovery"
+    } else {
+        Write-Fail "Critical imports still broken after recovery pass"
+        Write-Info "Diagnose with: .venv\Scripts\python.exe scripts\verify_install.py"
+        exit 1
     }
 }
-Remove-TempFileQuietly -Path $importPy
 
 # ============================================================
 # 10. Check Ollama
