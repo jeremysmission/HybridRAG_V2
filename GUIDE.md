@@ -17,6 +17,9 @@ For the current multi-agent, dual-GPU daily operating model, see [DAILY_WORKFLOW
 - **Reranker:** FlashRank on CPU
 - **Generation Layer:** OpenAI-compatible providers plus local Ollama for development and stress testing
 
+### Index Architecture
+See [V2_INDEX_ARCHITECTURE_AND_REBUILD_2026-04-11.md](./docs/V2_INDEX_ARCHITECTURE_AND_REBUILD_2026-04-11.md) — V2 uses LanceDB, not FAISS.
+
 ## Development Rules
 
 - **500 lines max per class** where practical
