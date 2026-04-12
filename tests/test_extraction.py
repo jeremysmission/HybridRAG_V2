@@ -90,6 +90,134 @@ class TestRegexPreExtractor:
         assert len(phones) >= 1
         assert "970" in phones[0].text
 
+    def test_phone_accepts_real_formats(self, regex_extractor):
+        """Real phone formats must all be extracted."""
+        samples = [
+            ("Call (555) 234-5678 today", "(555) 234-5678"),
+            ("Phone 555-234-5678", "555-234-5678"),
+            ("Reach +1 555 234 5678", "+1 555 234 5678"),
+            ("Try 555.234.5678 next", "555.234.5678"),
+            ("Direct 5552345678 now", "5552345678"),
+            ("Call 1-555-234-5678", "1-555-234-5678"),
+            ("Toll free 800-555-1212", "800-555-1212"),
+        ]
+        for text, expected_fragment in samples:
+            entities = regex_extractor.extract(text, "c1", "doc.txt")
+            phones = [
+                e.text for e in entities
+                if e.entity_type == "CONTACT" and "@" not in e.text
+            ]
+            assert phones, f"No phone extracted from {text!r}"
+            # Validator should accept the exact match the regex captured
+            assert any(p.replace(" ", "").replace("-", "").replace(".", "")
+                       .replace("(", "").replace(")", "").replace("+", "")
+                       .endswith("5552345678") or "970" in p or "8005551212" in p.replace("-", "").replace(" ", "")
+                       for p in phones), f"Phone content wrong for {text!r}: {phones}"
+
+    def test_phone_rejects_repeated_digit_garbage(self, regex_extractor):
+        """The 16M CONTACT over-match from Sprint 7.4 was repeated-digit OCR noise.
+
+        These strings must NOT produce phone entities. They are the literal
+        samples primary workstation surfaced from the 10.4M corpus store.
+        """
+        fakes = [
+            "3333333344",
+            "4444444444",
+            "2222222222",
+            "3333222222",
+            "2211111111",
+            "9999999999",
+            "0000000000",
+            "1111111111",
+        ]
+        for fake in fakes:
+            text = f"Value in table: {fake} end"
+            entities = regex_extractor.extract(text, "c1", "doc.txt")
+            phones = [
+                e for e in entities
+                if e.entity_type == "CONTACT" and "@" not in e.text
+            ]
+            assert not phones, (
+                f"Fake phone {fake!r} leaked through validator: "
+                f"{[e.text for e in phones]}"
+            )
+
+    def test_phone_rejects_nanp_invalid(self, regex_extractor):
+        """NANP area code and prefix first digit must be 2-9."""
+        # Area code starts with 0 or 1
+        invalid_area = [
+            "0123456789",  # area 012
+            "1234567890",  # area 123 (first digit 1)
+        ]
+        for fake in invalid_area:
+            text = f"Number {fake} here"
+            entities = regex_extractor.extract(text, "c1", "doc.txt")
+            phones = [
+                e for e in entities
+                if e.entity_type == "CONTACT" and "@" not in e.text
+            ]
+            assert not phones, f"NANP-invalid {fake!r} leaked: {phones}"
+
+    def test_phone_rejects_inside_longer_digit_runs(self, regex_extractor):
+        """Don't match a 10-digit window inside a longer digit sequence.
+
+        Serial numbers, document IDs, and raw tabular runs often contain
+        12-16 consecutive digits. The regex lookbehind/lookahead must
+        prevent matching any 10-digit subsequence.
+        """
+        cases = [
+            "Serial 12345678901234",          # 14 digits
+            "Doc ID: 5552345678901",          # 13 digits, first 10 would be NANP-valid
+            "Run: 999555234567801234",        # 18 digits
+        ]
+        for text in cases:
+            entities = regex_extractor.extract(text, "c1", "doc.txt")
+            phones = [
+                e for e in entities
+                if e.entity_type == "CONTACT" and "@" not in e.text
+            ]
+            assert not phones, f"Leaked from long digit run {text!r}: {phones}"
+
+    def test_phone_rejects_long_repeat_runs(self, regex_extractor):
+        """7+ consecutive identical digits should never be a phone."""
+        cases = [
+            "Call 5550000000 now",   # 7 zeros in a row
+            "Call 5557777777 now",   # 7 sevens in a row
+        ]
+        for text in cases:
+            entities = regex_extractor.extract(text, "c1", "doc.txt")
+            phones = [
+                e for e in entities
+                if e.entity_type == "CONTACT" and "@" not in e.text
+            ]
+            assert not phones, f"Leaked from repeat run {text!r}: {phones}"
+
+    def test_phone_validator_unit(self):
+        """Direct unit test for RegexPreExtractor._is_valid_phone()."""
+        from src.extraction.entity_extractor import RegexPreExtractor
+        v = RegexPreExtractor._is_valid_phone
+
+        # Valid
+        assert v("(555) 234-5678")
+        assert v("555-234-5678")
+        assert v("+1 555 234 5678")
+        assert v("555.234.5678")
+        assert v("5552345678")
+        assert v("1-555-234-5678")
+        assert v("15552345678")
+        assert v("(970) 555-0142")
+
+        # Invalid
+        assert not v("2222222222")
+        assert not v("3333333344")
+        assert not v("3333222222")
+        assert not v("9999999999")
+        assert not v("0123456789")   # area 012
+        assert not v("1234567890")   # area starts with 1
+        assert not v("5550000000")   # 7 zeros in a row
+        assert not v("12345")        # too short
+        assert not v("25552345678")  # 11 digits, leading digit not 1
+
     def test_date_iso_format(self, regex_extractor):
         text = "Scheduled for 2025-06-15."
         entities = regex_extractor.extract(text, "c1", "doc.txt")

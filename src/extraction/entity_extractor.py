@@ -484,7 +484,29 @@ class RegexPreExtractor:
     def __init__(self, part_patterns: list[str] | None = None):
         self._part_patterns = [re.compile(p) for p in (part_patterns or [])]
         self._email_re = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
-        self._phone_re = re.compile(r"\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}")
+        # Phone regex: broad candidate matcher, validated by _is_valid_phone().
+        #
+        # Why not just tighten the regex? Phone number formats are messy
+        # (parens, dots, dashes, spaces, optional country code). Trying to
+        # encode every validity rule in regex alone produced either false
+        # positives (the 16M CONTACT over-match on the 10.4M corpus — see
+        # docs/PHONE_REGEX_FIX_2026-04-11.md) or false negatives (missing
+        # real phones). Two-stage match + validate is cleaner.
+        #
+        # Boundary guards:
+        #   (?<![\w.-]) / (?![\w.-])  — reject when a letter, digit, or
+        #   dot/dash sits right next to the candidate. Keeps us out of:
+        #     - Long digit runs: 3333333344, serial IDs, version strings
+        #     - Alphanumeric serials: ABC3043618872XYZ
+        #     - Multi-part dotted codes: 1.2.3.4.5.6.7
+        #   while still allowing normal text boundaries (space, punct,
+        #   newline, parens, colon, equals, slash).
+        self._phone_re = re.compile(
+            r"(?<![\w.-])"
+            r"(?:\+?1[\s.-]?)?"                        # optional +1 country code
+            r"\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}"     # NXX-NXX-XXXX core
+            r"(?![\w.-])"
+        )
         self._date_re = re.compile(
             r"\b\d{4}-\d{2}-\d{2}\b"
             r"|\b\d{1,2}/\d{1,2}/\d{2,4}\b"
@@ -536,10 +558,13 @@ class RegexPreExtractor:
             ))
 
         for match in self._phone_re.finditer(text):
+            candidate = match.group()
+            if not self._is_valid_phone(candidate):
+                continue
             entities.append(Entity(
                 entity_type="CONTACT",
-                text=match.group(),
-                raw_text=match.group(),
+                text=candidate,
+                raw_text=candidate,
                 confidence=1.0,
                 chunk_id=chunk_id,
                 source_path=source_path,
@@ -615,6 +640,65 @@ class RegexPreExtractor:
         start = max(0, pos - window)
         end = min(len(text), pos + window)
         return text[start:end].strip()
+
+    @staticmethod
+    def _is_valid_phone(candidate: str) -> bool:
+        """
+        Validate a candidate phone match against US NANP rules.
+
+        The regex `self._phone_re` is intentionally permissive so it catches
+        all reasonable phone formats. This validator rejects the garbage:
+
+          - Repeated-digit strings (2222222222, 3333222222, 9999999999)
+          - OCR/spreadsheet noise masquerading as digit runs
+          - NANP-invalid numbers (area code or prefix starting with 0/1)
+          - Wrong-length digit sequences
+
+        The 16M CONTACT over-match from Sprint 7.4 Tier 1 came almost
+        entirely from repeated-digit sequences in OCR'd tables — this
+        validator is the primary fix. See docs/PHONE_REGEX_FIX_2026-04-11.md
+        for the diagnosis and before/after evidence.
+
+        Accepts (returns True):
+          (555) 234-5678, 555-234-5678, +1 555 234 5678,
+          555.234.5678, 5552345678, 1-555-234-5678
+
+        Rejects (returns False):
+          2222222222, 4444444444, 3333222222, 2211111111, 3333333344,
+          1234567890 (NANP area starts with 1), any 9+ consecutive same digit
+        """
+        # Strip to digits only
+        digits = re.sub(r"\D", "", candidate)
+
+        # 11 digits only valid if leading 1 (US country code)
+        if len(digits) == 11:
+            if digits[0] != "1":
+                return False
+            digits = digits[1:]
+        if len(digits) != 10:
+            return False
+
+        # NANP rules: area code and prefix first digits must be 2-9
+        if digits[0] in "01":
+            return False
+        if digits[3] in "01":
+            return False
+
+        # Uniqueness: real US phones have broad digit diversity.
+        # The fake OCR/tabular matches are always 1-3 unique digits
+        # (2222222222, 3333222222, 2211111111, etc). A floor of 4 unique
+        # digits rejects every documented fake in the primary workstation sample while
+        # leaving real phones untouched.
+        if len(set(digits)) < 4:
+            return False
+
+        # Reject any run of 7+ identical consecutive digits (5550000000,
+        # 8005551234 passes because only 3 zeros in a row).
+        for i in range(len(digits) - 6):
+            if len(set(digits[i:i + 7])) == 1:
+                return False
+
+        return True
 
 
 # ---------------------------------------------------------------------------
