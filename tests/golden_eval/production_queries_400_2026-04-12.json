@@ -1,14 +1,5 @@
 [
   {
-    "_comment": "=== PRODUCTION EVAL 400-QUERY SET — PHASE 1 (50 queries) ===",
-    "_phase": "Phase 1 of 400",
-    "_authored_by": "reviewer | HybridRAG_V2 | 2026-04-12 MDT",
-    "_schema": "RAGAS v0.3 SingleTurnSample compatible (user_input, reference, reference_contexts) plus eval metadata (persona, expected_query_type, difficulty, expected_anchor_entities).",
-    "_methodology": "Hand-curated using real anchors mined from entities.sqlite3 (8.02M entities) and source_path patterns from the enterprise program corpus Tier 1 extraction. No LLM-generated queries, no fictitious identifiers.",
-    "_source_rationale_doc": "docs/PRODUCTION_EVAL_400_RATIONALE_2026-04-12.md",
-    "_note": "Phase 1 delivers 50 new queries (PQ-101 through PQ-150). The existing 25 queries at tests/golden_eval/production_queries_2026-04-11.json (PQ-001 through PQ-025) will be merged into this file in a future pass; do not double-count. Target for full Phase 2+ is 400 total."
-  },
-  {
     "query_id": "PQ-101",
     "user_input": "What is the latest enterprise program weekly hours variance for fiscal year 2024?",
     "reference": null,
@@ -1028,12 +1019,6 @@
     "expected_anchor_entities": {},
     "has_ground_truth": true,
     "corpus_grounding_evidence": "CDRL folder tree contains 20+ numbered folders confirmed via direct corpus exploration; A027 alone has 9+ subfolders for different RMF artifact types."
-  },
-  {
-    "_comment": "=== PHASE 2A — PQ-151 through PQ-210 (60 more queries) ===",
-    "_phase": "Phase 2A (first batch)",
-    "_authored_by": "reviewer | HybridRAG_V2 | 2026-04-12 MDT",
-    "_mining_adjustment_note": "Phase 2A avoids Tier 1 PO/PART entity columns (98%/90% polluted by security standard controls). Anchors sourced from real folder paths mined via mine_query_anchors.py folders subcommand. See rationale doc Section 12 for details."
   },
   {
     "query_id": "PQ-151",

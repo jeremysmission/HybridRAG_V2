@@ -251,15 +251,41 @@ def _verdict(top_in_family: bool, any_top5_in_family: bool) -> str:
 # ---------------------------------------------------------------------------
 # Per-query execution
 # ---------------------------------------------------------------------------
+def _get_query_id(qdef: dict) -> str | None:
+    """Read query id from either legacy schema (id) or RAGAS schema (query_id).
+
+    Returns None for entries that have neither -- those are metadata blocks
+    (e.g. _comment, _phase headers in the Phase 1/2A 400-query file) and
+    must be skipped by the runner.
+    """
+    return qdef.get("query_id") or qdef.get("id")
+
+
+def _get_query_text(qdef: dict) -> str | None:
+    """Read query text from either legacy schema (query) or RAGAS schema (user_input)."""
+    return qdef.get("user_input") or qdef.get("query")
+
+
+def _get_expected_type(qdef: dict) -> str:
+    """Read expected query type from either legacy (query_type) or RAGAS
+    schema (expected_query_type, which is reviewer metadata on top of RAGAS)."""
+    return qdef.get("expected_query_type") or qdef.get("query_type", "SEMANTIC")
+
+
+def _get_expected_family(qdef: dict) -> str:
+    """Read expected document family from either schema."""
+    return qdef.get("expected_document_family") or qdef.get("document_family", "")
+
+
 def run_query(
     qdef: dict,
     pipeline: QueryPipeline,
 ) -> QueryEvalResult:
-    qid = qdef["id"]
-    query_text = qdef["query"]
+    qid = _get_query_id(qdef) or "UNKNOWN"
+    query_text = _get_query_text(qdef) or ""
     persona = qdef.get("persona", "Unknown")
-    expected_type = qdef.get("query_type", "SEMANTIC")
-    expected_family = qdef.get("document_family", "")
+    expected_type = _get_expected_type(qdef)
+    expected_family = _get_expected_family(qdef)
     signals = FAMILY_SIGNALS.get(qid, [])
 
     error = ""
@@ -827,6 +853,19 @@ def main() -> int:
     if "--rebuild-report" in sys.argv:
         return _rebuild_report_from_json()
 
+    # Parse --queries PATH CLI arg (defaults to the legacy 25-query file).
+    # This lets the runner consume either the legacy 25-query schema or the
+    # RAGAS 400-query schema without duplicating the runner. Entries without
+    # a recognizable query id/text are treated as metadata blocks and skipped.
+    queries_path = PRODUCTION_JSON
+    if "--queries" in sys.argv:
+        idx = sys.argv.index("--queries")
+        if idx + 1 < len(sys.argv):
+            candidate = Path(sys.argv[idx + 1])
+            if not candidate.is_absolute():
+                candidate = v2_root / candidate
+            queries_path = candidate
+
     print("=" * 72)
     print("  PRODUCTION GOLDEN EVAL — reviewer — 2026-04-11")
     print("=" * 72)
@@ -836,14 +875,21 @@ def main() -> int:
     gpu_device = f"physical GPU {_physical_gpu} -> cuda:0 ({gpu_name})"
     print(f"GPU: {gpu_device}")
 
-    if not PRODUCTION_JSON.exists():
-        print(f"ERROR: production queries not found at {PRODUCTION_JSON}")
+    if not queries_path.exists():
+        print(f"ERROR: production queries not found at {queries_path}")
         return 2
 
-    with open(PRODUCTION_JSON, encoding="utf-8") as f:
+    with open(queries_path, encoding="utf-8") as f:
         raw = json.load(f)
-    queries = [q for q in raw if "id" in q and "query" in q]
-    print(f"Loaded {len(queries)} production queries")
+    # Accept both schemas and skip metadata blocks (entries with neither
+    # query_id nor id). This is the QA-required hardening per the Phase 2A
+    # review: mixed-shape JSON files are parsed defensively.
+    queries = [q for q in raw if _get_query_id(q) and _get_query_text(q)]
+    skipped = len(raw) - len(queries)
+    print(
+        f"Loaded {len(queries)} production queries from {queries_path.name}"
+        + (f" (skipped {skipped} metadata blocks)" if skipped else "")
+    )
 
     config = load_config(str(v2_root / "config" / "config.yaml"))
     lance_path = str(v2_root / config.paths.lance_db)
@@ -897,12 +943,13 @@ def main() -> int:
     )
 
     print()
-    print("Running 25 queries...")
+    print(f"Running {len(queries)} queries...")
     print("-" * 72)
     results: list[QueryEvalResult] = []
     for i, qdef in enumerate(queries, 1):
-        qid = qdef.get("id", f"?{i}")
-        print(f"  [{i:>2}/{len(queries)}] {qid} ({qdef.get('persona', '?')}): {qdef.get('query', '')[:48]}...")
+        qid = _get_query_id(qdef) or f"?{i}"
+        qtext = _get_query_text(qdef) or ""
+        print(f"  [{i:>2}/{len(queries)}] {qid} ({qdef.get('persona', '?')}): {qtext[:48]}...")
         r = run_query(qdef, pipeline)
         results.append(r)
         fam_flag = "[in]" if r.top_in_family else ("[top5]" if r.any_top5_in_family else "[out]")
