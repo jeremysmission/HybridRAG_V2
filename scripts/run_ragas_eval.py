@@ -267,6 +267,14 @@ def print_readiness_summary(
     total = len(queries)
     eligible = sum(1 for r in readiness if r.eligible_for_retrieval_metrics)
     phase2c_ready = sum(1 for r in readiness if r.fully_phase2c_enriched)
+    eligible_but_missing_reference = sum(
+        1
+        for r in readiness
+        if r.eligible_for_retrieval_metrics and not r.fully_phase2c_enriched
+    )
+    blocked_missing_contexts = sum(
+        1 for r in readiness if "missing_reference_contexts" in r.reasons
+    )
     reason_counts = Counter(reason for r in readiness for reason in r.reasons)
     per_type_ready = Counter(
         q.expected_query_type
@@ -282,6 +290,14 @@ def print_readiness_summary(
     print(f"Skipped metadata blocks: {metadata_blocks}")
     print(f"Eligible now for retrieval-side RAGAS metrics: {eligible}/{total}")
     print(f"Fully Phase 2C enriched (reference + reference_contexts): {phase2c_ready}/{total}")
+    print(
+        "Eligible for retrieval metrics but still missing `reference`: "
+        f"{eligible_but_missing_reference}/{total}"
+    )
+    print(
+        "Blocked for retrieval-side metrics because `reference_contexts` are missing: "
+        f"{blocked_missing_contexts}/{total}"
+    )
     print(f"Blocked on Phase 2C enrichment: {total - phase2c_ready}/{total}")
     print()
     print("Skipped / incomplete counts by reason:")
