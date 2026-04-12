@@ -36,7 +36,23 @@ from src.extraction.entity_extractor import EntityExtractor, ENTITY_SCHEMA, EXTR
 # Config
 # ---------------------------------------------------------------------------
 
-DEFAULT_CLONE1_DB = r"{USER_HOME}\HybridRAG3_Clone1\data\index\hybridrag.sqlite3"
+def _default_clone1_db() -> str:
+    """Resolve the default Clone1 SQLite path from the operator's home dir.
+
+    Historical note: an earlier revision of this file used a raw-string
+    literal ``r"{USER_HOME}\\HybridRAG3_Clone1\\..."`` that was never
+    substituted by any templating step, so the script would hard-fail at
+    startup on every machine with "Clone1 database not found at
+    {USER_HOME}\\...". Same defect class as the one fixed in
+    ``scripts/overnight_extraction.py`` (commit da7e5e5). Use
+    ``Path.home()`` so the default resolves correctly on any Windows
+    user profile, and let ``--clone1-db`` override it when the Clone1
+    index lives somewhere else.
+    """
+    return str(Path.home() / "HybridRAG3_Clone1" / "data" / "index" / "hybridrag.sqlite3")
+
+
+DEFAULT_CLONE1_DB = _default_clone1_db()
 SAMPLE_SIZE = 50
 CATEGORIES = {
     "short": "text_length < 300",
@@ -405,7 +421,18 @@ def main():
     # Check Clone1 database exists
     if not Path(args.clone1_db).exists():
         print(f"ERROR: Clone1 database not found at {args.clone1_db}")
-        print("  Provide path with --clone1-db or ensure Clone1 index is available")
+        print()
+        print("This test is the Clone1 / Ollama-phi4 vs GPT-4o A/B benchmark. It")
+        print("reads chunks from a HybridRAG3_Clone1 SQLite index. If you do not")
+        print("have Clone1 on this machine, this test cannot run -- it is NOT the")
+        print("same pipeline as scripts/tiered_extract.py (V2 LanceStore Tier 1/2).")
+        print()
+        print("Either point --clone1-db at an existing Clone1 index:")
+        print("  python scripts/ab_extraction_test.py --clone1-db C:\\path\\to\\hybridrag.sqlite3")
+        print()
+        print("Or run the V2 pipelines directly instead:")
+        print("  .venv\\Scripts\\python.exe scripts\\tiered_extract.py --tier 1")
+        print("  .venv\\Scripts\\python.exe scripts\\tiered_extract.py --tier 2")
         sys.exit(1)
 
     # Sample chunks
