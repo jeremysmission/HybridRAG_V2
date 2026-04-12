@@ -481,48 +481,73 @@ class RegexPreExtractor:
     Results feed the same entity store as GLiNER (Tier 2) and LLM (Tier 3).
     """
 
-    # Default security-standard prefix exclusion list. Matches the
-    # config.schema.ExtractionConfig.security_standard_exclude_prefixes
-    # default exactly so callers who don't pass a list still get the
-    # full Rev-5 + STIG + MITRE coverage. When callers DO pass a list
-    # (RegexPreExtractor(security_standard_exclude_prefixes=...)), it
-    # overrides this default verbatim — this is the per-corpus override
-    # point.
+    # Default security-standard rejection patterns (regexes, matched
+    # against the UPPER()-case candidate). Each entry is a fully-anchored
+    # pattern that describes a security-standard identifier shape the
+    # extractor should NOT emit as PART or PO.
     #
-    # The exclusion guards the class against the laptop-10M class of
-    # pollution for the PART/PO columns: the 98% industry standard-N pollution
-    # on the 10.4M enterprise program corpus traced back to the
-    # '_report_id_re' alternation including IR and to the generic
-    # '[A-Z]{2,}-\\d{3,4}' part pattern catching STIG baseline codes
-    # (AS-5021, OS-0004, GPOS-0022). See
-    # docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md.
-    _DEFAULT_SECURITY_STANDARD_PREFIXES: tuple[str, ...] = (
-        # security standard SP 800-53 Rev 5 control families (all 20)
-        "AC-", "AT-", "AU-", "CA-", "CM-", "CP-", "IA-", "IR-", "MA-",
-        "MP-", "PE-", "PL-", "PM-", "PS-", "PT-", "RA-", "SA-", "SC-",
-        "SI-", "SR-",
-        # STIG baseline platform prefixes
-        "AS-", "OS-", "GPOS-", "HS-",
-        # STIG / DISA identifier prefixes
-        "CCI-", "SV-", "SP-800", "SP-",
-        # MITRE security identifier prefixes
-        "CVE-", "CCE-",
+    # Why regexes, not just prefixes? Round 2 QA caught that a blanket
+    # "PS-" prefix rejection dropped real hardware parts like PS-800
+    # (Granite Peak backordered item in the tier2 test corpus) and
+    # SA-9000 (spectrum analyzer in the 400-query eval), because PS and
+    # SA are both security standard SP 800-53 families AND real part-family prefixes
+    # in this corpus. The distinguishing feature is the **suffix digit
+    # length**: security standard controls top out at SC-51 (2 digits, per the Rev 5
+    # catalog — confirmed via security standard csrc.security standard.gov search on 2026-04-12).
+    # Real hardware parts typically use 3-4 digit suffixes. The security standard
+    # pattern below uses `\d{1,2}(\(\d+\))?` so it matches security standard-shaped
+    # controls like IR-4, AC-2(1), SC-51 but NOT PS-800 or SA-9000.
+    #
+    # STIG baseline codes (AS-5021, OS-0004, GPOS-0022, HS-872) are
+    # 3-5 digit suffixes and the AS/OS/GPOS/HS prefixes are STIG-only —
+    # no collision with real parts in this corpus — so their pattern
+    # takes the full suffix-length range.
+    #
+    # See docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md for
+    # the original evidence and QA Round 2 feedback at
+    # https://github.com/{GITHUB_USER}/HybridRAG_V2 commit log.
+    _DEFAULT_SECURITY_STANDARD_PATTERNS: tuple[re.Pattern[str], ...] = (
+        # security standard SP 800-53 Rev 5 control families (all 20, including Rev 5
+        # additions PT and SR). Suffix must be 1-2 digits + optional
+        # enhancement. This deliberately does NOT match 3+ digit suffixes
+        # so real hardware parts like PS-800 and SA-9000 pass through.
+        re.compile(
+            r"^(?:AC|AT|AU|CA|CM|CP|IA|IR|MA|MP|PE|PL|PM|PS|PT|RA|SA|SC|SI|SR)"
+            r"-\d{1,2}(\(\d+\))?$"
+        ),
+        # STIG baseline platform codes — 3-5 digit suffix, no part-family
+        # collisions observed in this corpus.
+        re.compile(r"^(?:AS|OS|GPOS|HS)-\d{3,5}$"),
+        # STIG / DISA Control Correlation Identifier
+        re.compile(r"^CCI-\d+$"),
+        # STIG / DISA Vulnerability ID
+        re.compile(r"^SV-\d+$"),
+        # security standard SP 800 publication reference
+        re.compile(r"^SP[\s\-]?800\b"),
+        # MITRE Common Vulnerabilities and Exposures
+        re.compile(r"^CVE-\d{4}"),
+        # MITRE Common Configuration Enumeration
+        re.compile(r"^CCE-\d+$"),
     )
 
     def __init__(
         self,
         part_patterns: list[str] | None = None,
-        security_standard_exclude_prefixes: list[str] | tuple[str, ...] | None = None,
+        security_standard_exclude_patterns: (
+            list[str | re.Pattern[str]] | tuple[str | re.Pattern[str], ...] | None
+        ) = None,
     ):
         self._part_patterns = [re.compile(p) for p in (part_patterns or [])]
-        # Normalize exclusion prefixes to uppercase tuple for cheap startswith.
-        # Empty list is a legitimate "disable all exclusion" override.
-        if security_standard_exclude_prefixes is None:
-            self._security_exclude_prefixes: tuple[str, ...] = \
-                self._DEFAULT_SECURITY_STANDARD_PREFIXES
+        # Normalize exclusion patterns: accept strings (compiled as regex)
+        # or pre-compiled Pattern objects. Empty list is a legitimate
+        # "disable all exclusion" override.
+        if security_standard_exclude_patterns is None:
+            self._security_exclude_patterns: tuple[re.Pattern[str], ...] = \
+                self._DEFAULT_SECURITY_STANDARD_PATTERNS
         else:
-            self._security_exclude_prefixes = tuple(
-                p.upper() for p in security_standard_exclude_prefixes
+            self._security_exclude_patterns = tuple(
+                p if isinstance(p, re.Pattern) else re.compile(p)
+                for p in security_standard_exclude_patterns
             )
         self._email_re = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
         # Phone regex: broad candidate matcher, validated by _is_valid_phone().
@@ -604,19 +629,26 @@ class RegexPreExtractor:
 
     def _is_security_standard_identifier(self, candidate: str) -> bool:
         """Return True if the candidate matches a configured security-standard
-        prefix (security standard SP 800-53 family, STIG CCI/SV, MITRE CVE/CCE, STIG
-        baseline platform codes, etc.) and should NOT be emitted as a
-        PART or PO entity.
+        rejection pattern (security standard SP 800-53 Rev 5 family with 1-2 digit
+        suffix, STIG CCI/SV, MITRE CVE/CCE, STIG baseline platform
+        codes, etc.) and should NOT be emitted as a PART or PO entity.
 
         Called at every candidate-emit site in this class and in
-        EventBlockParser. Cheap — single startswith scan over a short
-        tuple. See
-        docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md.
+        EventBlockParser. Cheap — a short sequence of regex matches
+        against the UPPER()-case candidate. Round-2 QA fix changed
+        this from prefix-startswith matching to regex matching so that
+        real hardware parts sharing a prefix with a security standard control
+        family (e.g. PS-800 vs PS-7, SA-9000 vs SA-11) are not dropped.
+
+        See docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md
+        Round-2 section for the regression evidence and the security standard
+        suffix-length rationale (security standard Rev 5 tops out at SC-51, so any
+        3+ digit suffix is not a security standard control).
         """
         if not candidate:
             return False
         upper = candidate.upper()
-        return any(upper.startswith(p) for p in self._security_exclude_prefixes)
+        return any(p.match(upper) for p in self._security_exclude_patterns)
 
     def extract(
         self, text: str, chunk_id: str, source_path: str
@@ -918,29 +950,35 @@ class EventBlockParser:
     def __init__(
         self,
         part_patterns: list[str] | None = None,
-        security_standard_exclude_prefixes: list[str] | tuple[str, ...] | None = None,
+        security_standard_exclude_patterns: (
+            list[str | re.Pattern[str]] | tuple[str | re.Pattern[str], ...] | None
+        ) = None,
     ):
         self._serial_re = re.compile(r"\bSN[-: ]?[A-Za-z0-9-]+\b", re.IGNORECASE)
         self._part_patterns = [re.compile(p) for p in (part_patterns or [])]
-        # Same exclusion list RegexPreExtractor uses. When callers don't
-        # pass one explicitly, fall back to the RegexPreExtractor
-        # default so the two classes stay in lockstep on corpus-specific
-        # rejection rules. See
+        # Same exclusion patterns RegexPreExtractor uses. When callers
+        # don't pass one explicitly, fall back to the RegexPreExtractor
+        # class default so the two classes stay in lockstep on
+        # corpus-specific rejection rules. See
         # docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md.
-        if security_standard_exclude_prefixes is None:
-            self._security_exclude_prefixes: tuple[str, ...] = \
-                RegexPreExtractor._DEFAULT_SECURITY_STANDARD_PREFIXES
+        if security_standard_exclude_patterns is None:
+            self._security_exclude_patterns: tuple[re.Pattern[str], ...] = \
+                RegexPreExtractor._DEFAULT_SECURITY_STANDARD_PATTERNS
         else:
-            self._security_exclude_prefixes = tuple(
-                p.upper() for p in security_standard_exclude_prefixes
+            self._security_exclude_patterns = tuple(
+                p if isinstance(p, re.Pattern) else re.compile(p)
+                for p in security_standard_exclude_patterns
             )
 
     def _is_security_standard_identifier(self, candidate: str) -> bool:
-        """Mirror of RegexPreExtractor._is_security_standard_identifier."""
+        """Mirror of RegexPreExtractor._is_security_standard_identifier.
+        Uses regex match (not prefix startswith) so real hardware parts
+        with 3+ digit suffixes don't collide with security standard families that
+        share a prefix (PS-800 vs security standard PS-7, SA-9000 vs security standard SA-11)."""
         if not candidate:
             return False
         upper = candidate.upper()
-        return any(upper.startswith(p) for p in self._security_exclude_prefixes)
+        return any(p.match(upper) for p in self._security_exclude_patterns)
 
     def parse(
         self, text: str, chunk_id: str, source_path: str,

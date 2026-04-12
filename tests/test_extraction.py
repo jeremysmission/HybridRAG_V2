@@ -571,7 +571,7 @@ class TestSecurityStandardExclusion:
         retained. Passing an empty list disables all exclusion."""
         ex = RegexPreExtractor(
             part_patterns=[r"[A-Z]{2,}-\d{3,4}"],
-            security_standard_exclude_prefixes=[],
+            security_standard_exclude_patterns=[],
         )
         ents = ex.extract("Control AS-5021 applies.", "c1", "doc.txt")
         parts = [e.text for e in ents if e.entity_type == "PART"]
@@ -580,18 +580,114 @@ class TestSecurityStandardExclusion:
             f"With empty exclusion list, AS-5021 should be captured: got {parts}"
         )
 
-    def test_exclusion_list_can_add_new_prefixes(self):
+    def test_exclusion_list_can_add_new_patterns(self):
         """Operators running on a different corpus can extend the
-        exclusion list with their own prefixes without touching code."""
+        exclusion list with their own regex patterns without touching
+        extractor code. Round-2 QA fix changed this API from
+        prefix-startswith matching to regex matching."""
         ex = RegexPreExtractor(
             part_patterns=[r"[A-Z]{2,}-\d{3,4}"],
-            security_standard_exclude_prefixes=["CUSTOM-", "LEGACY-"],
+            security_standard_exclude_patterns=[
+                r"^CUSTOM-\d+$",
+                r"^LEGACY-\d+$",
+            ],
         )
         # These are NOT in the default list but should be rejected here
         ents = ex.extract("Reference CUSTOM-0042 and LEGACY-900.", "c1", "doc.txt")
         parts = [e.text for e in ents if e.entity_type == "PART"]
         assert "CUSTOM-0042" not in parts
         assert "LEGACY-900" not in parts
+
+    def test_real_hardware_parts_sharing_nist_prefix_accepted(self):
+        """Round-2 QA regression guard for PS-800 / SA-9000 class.
+
+        The first-round fix used prefix-startswith matching, which
+        dropped real hardware parts whose family prefix collides with
+        a security standard SP 800-53 control family. QA caught:
+
+          - PS-800: Granite Peak backordered part, expected in
+            docs/DEMO_DAY_CHECKLIST_2026-04-07.md and
+            tests/test_corpus/tier2_stress/spreadsheet_fragment.txt
+          - SA-9000: Spectrum Analyzer referenced throughout
+            tests/golden_eval/golden_tuning_400.json
+
+        Round-2 fix: switch the exclusion matcher from prefix-startswith
+        to full-regex, and constrain security standard patterns to 1-2 digit
+        suffixes so 3-4 digit hardware suffixes pass through.
+        """
+        ex = RegexPreExtractor(part_patterns=[
+            r"[A-Z]{2,}-\d{3,4}",
+            r"PS-\d{3}",
+        ])
+        corpus_native = [
+            ("Backordered part PS-800 at Granite Peak.", "PS-800"),
+            ("Lead time for Spectrum Analyzer SA-9000 is 6 weeks.", "SA-9000"),
+            ("Installed PS-800 per work order.", "PS-800"),
+            ("Calibration of SA-9000 complete.", "SA-9000"),
+        ]
+        for text, expected in corpus_native:
+            ents = ex.extract(text, "c1", "doc.txt")
+            parts = [e.text for e in ents if e.entity_type == "PART"]
+            assert expected in parts, (
+                f"Real hardware part {expected!r} dropped by exclusion "
+                f"from text {text!r}: got {parts}. "
+                f"This is the Round-2 QA regression. The exclusion "
+                f"should use regex match with security standard suffix length 1-2 "
+                f"digits, not prefix startswith."
+            )
+
+    def test_nist_family_short_suffix_still_rejected(self):
+        """Pair with test_real_hardware_parts_sharing_nist_prefix_accepted.
+
+        Make sure the suffix-length rule actually rejects the security standard
+        controls whose family prefix overlaps with hardware (PS, SA,
+        and the other 18 families). PS-1..PS-9 are security standard Personnel
+        Security controls, SA-1..SA-23 are security standard System and Services
+        Acquisition controls. They must still be blocked.
+        """
+        ex = RegexPreExtractor(part_patterns=[
+            r"[A-Z]{2,}-\d{3,4}",
+            r"PS-\d{3}",
+        ])
+        rejects = [
+            "PS-1", "PS-3", "PS-7",            # security standard Personnel Security
+            "SA-1", "SA-5", "SA-11", "SA-22",  # security standard System Services Acq
+            "AC-2(1)",                          # security standard enhancement form
+            "SC-51",                            # security standard SC family top
+        ]
+        for fake in rejects:
+            text = f"Control {fake} applies."
+            ents = ex.extract(text, "c1", "doc.txt")
+            parts = [e.text for e in ents if e.entity_type == "PART"]
+            pos = [e.text for e in ents if e.entity_type == "PO"]
+            assert not parts, f"security standard {fake} leaked as PART: {parts}"
+            assert not pos, f"security standard {fake} leaked as PO: {pos}"
+
+    def test_hypothetical_3digit_hardware_on_other_nist_families(self):
+        """Future-proof: if any other security standard family prefix (CP-, PE-,
+        PM-, SC-, SI-, etc.) gains a hardware collision in a future
+        corpus, the suffix-length rule already handles it. Verify
+        with a few hypotheticals so the rule is explicit in the test
+        surface, not load-bearing on PS/SA alone.
+        """
+        ex = RegexPreExtractor(part_patterns=[r"[A-Z]{2,}-\d{3,4}"])
+        hypothetical_parts = [
+            "CP-220",    # Control Panel 220
+            "PE-4000",   # Power Element 4000
+            "PM-500",    # Preventive Maintenance kit 500
+            "SC-1000",   # Signal Conditioner 1000
+            "IR-420",    # Infrared sensor 420
+        ]
+        for part in hypothetical_parts:
+            text = f"Installed {part} per spec."
+            ents = ex.extract(text, "c1", "doc.txt")
+            parts = [e.text for e in ents if e.entity_type == "PART"]
+            assert part in parts, (
+                f"Hypothetical 3-4 digit hardware part {part!r} dropped "
+                f"by exclusion from text {text!r}: got {parts}. "
+                f"Suffix-length rule should let security standard-prefixed 3+ digit "
+                f"parts through."
+            )
 
     def test_validator_helper_direct(self):
         """Direct unit test on the _is_security_standard_identifier
@@ -657,10 +753,10 @@ class TestEventBlockParserSecurityStandardExclusion:
     def test_event_block_parser_override_list(self):
         parser = EventBlockParser(
             part_patterns=[r"[A-Z]{2,}-\d{3,4}"],
-            security_standard_exclude_prefixes=["FOO-"],
+            security_standard_exclude_patterns=[r"^FOO-\d+$"],
         )
         # Default exclusion disabled — AS- is no longer in the reject list,
-        # so AS-5021 should now pass through even though the security standard default
+        # so AS-5021 should now pass through even though the default
         # would have blocked it.
         text = (
             "1. Part#: AS-5021\n"
@@ -670,6 +766,26 @@ class TestEventBlockParserSecurityStandardExclusion:
         parts = [e.text.upper() for e in entities if e.entity_type == "PART"]
         assert any(p.startswith("AS-5021") for p in parts), (
             f"Override list should allow AS-5021 through: got {parts}"
+        )
+
+    def test_event_block_parser_accepts_hardware_with_nist_prefix(self):
+        """Round-2 regression guard — EventBlockParser must also honor
+        the suffix-length rule so PS-800 / SA-9000 survive through the
+        maintenance-event code path, not just the RegexPreExtractor
+        code path."""
+        parser = EventBlockParser(part_patterns=[
+            r"[A-Z]{2,}-\d{3,4}",
+            r"PS-\d{3}",
+        ])
+        text = (
+            "1. Part#: PS-800\n"
+            "   Failure Mode: Intermittent\n"
+            "   Action: Replaced\n"
+        )
+        entities, _ = parser.parse(text, "c1", "doc.txt")
+        parts = [e.text.upper() for e in entities if e.entity_type == "PART"]
+        assert any(p.startswith("PS-800") for p in parts), (
+            f"EventBlockParser dropped real hardware PS-800: got {parts}"
         )
 
 

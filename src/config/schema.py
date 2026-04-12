@@ -101,36 +101,49 @@ class ExtractionConfig(BaseModel):
         ],
         description="Regex patterns for valid part numbers.",
     )
-    security_standard_exclude_prefixes: list[str] = Field(
+    security_standard_exclude_patterns: list[str] = Field(
         default=[
-            # security standard SP 800-53 Rev 5 control families (all 20).
-            # Source: the SP 800-53 Rev 5 publication. See
-            # docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md
-            # for web research citations — a direct URL is omitted here
-            # because the repo sanitizer rewrites "security standard" inside
-            # URLs, which produces a broken link.
-            "AC-", "AT-", "AU-", "CA-", "CM-", "CP-", "IA-", "IR-", "MA-",
-            "MP-", "PE-", "PL-", "PM-", "PS-", "PT-", "RA-", "SA-", "SC-",
-            "SI-", "SR-",
-            # STIG baseline platform prefixes (seen in primary workstation entity store)
-            "AS-", "OS-", "GPOS-", "HS-",
-            # STIG / DISA identifier prefixes
-            "CCI-", "SV-", "SP-800", "SP-",
-            # MITRE security identifier prefixes
-            "CVE-", "CCE-",
+            # security standard SP 800-53 Rev 5 control families (all 20). Suffix must
+            # be 1-2 digits + optional enhancement — the Rev 5 catalog
+            # tops out at SC-51, so any 3+ digit suffix is NOT a security standard
+            # control. The digit-length discriminator is what keeps real
+            # hardware parts like PS-800 (Granite Peak backordered item)
+            # and SA-9000 (spectrum analyzer) passing through even
+            # though PS and SA are both security standard family prefixes.
+            r"^(?:AC|AT|AU|CA|CM|CP|IA|IR|MA|MP|PE|PL|PM|PS|PT|RA|SA|SC|SI|SR)-\d{1,2}(\(\d+\))?$",
+            # STIG baseline platform codes — 3-5 digit suffix. AS/OS/
+            # GPOS/HS are STIG-only prefixes with no real-part
+            # collisions in this corpus.
+            r"^(?:AS|OS|GPOS|HS)-\d{3,5}$",
+            # STIG / DISA Control Correlation Identifier
+            r"^CCI-\d+$",
+            # STIG / DISA Vulnerability ID
+            r"^SV-\d+$",
+            # security standard SP 800 publication reference
+            r"^SP[\s\-]?800\b",
+            # MITRE Common Vulnerabilities and Exposures
+            r"^CVE-\d{4}",
+            # MITRE Common Configuration Enumeration
+            r"^CCE-\d+$",
         ],
         description=(
-            "Candidate strings whose UPPER() starts with any of these "
-            "prefixes are rejected by RegexPreExtractor and "
-            "EventBlockParser as security-standard identifiers, not "
-            "physical parts or procurement IDs. Default covers security standard "
-            "SP 800-53 Rev 5 + STIG CCI/SV + MITRE CVE/CCE + the "
-            "STIG baseline platform codes observed in the enterprise "
-            "program corpus. Operators running V2 against a different "
-            "corpus can override this list per-corpus without changing "
-            "the extractor code. See "
+            "Regex patterns matched against the UPPER()-case candidate "
+            "at every PART / PO emit site in RegexPreExtractor and "
+            "EventBlockParser. Any match rejects the candidate as a "
+            "security-standard identifier, not a physical part or "
+            "procurement ID. Default covers security standard SP 800-53 Rev 5 (all "
+            "20 families, 1-2 digit suffix discriminator so PS-800 and "
+            "SA-9000 hardware survive) + STIG baseline platform codes + "
+            "STIG CCI/SV + security standard SP 800 publication refs + MITRE CVE/CCE. "
+            "Operators running V2 against a different corpus can "
+            "override this list per-corpus without changing the "
+            "extractor code. Empty list = no exclusion (useful for "
+            "cybersecurity doc corpora where the security standard/STIG identifiers "
+            "ARE the content). See "
             "docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md "
-            "for the rationale and before/after evidence."
+            "for the rationale, before/after evidence, and Round 2 QA "
+            "regression that drove the shift from prefix matching to "
+            "regex matching."
         ),
     )
     gliner_enabled: bool = Field(default=False, description="Use GLiNER2 for first-pass NER (waiver pending).")
