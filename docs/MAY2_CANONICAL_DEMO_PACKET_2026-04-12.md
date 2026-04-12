@@ -15,9 +15,9 @@
 
 ### Current repo-local store at `C:\HybridRAG_V2\data\index`
 
-- Entity rows: **19,959,604**
-- Relationships: **0**
-- Extracted table rows: **0**
+- Entity rows in `entities.sqlite3`: **19,959,604**
+- Relationships in `relationships.sqlite3`: **59**
+- Extracted table rows in `entities.sqlite3`: **0**
 
 ### Current entity mix
 
@@ -33,7 +33,7 @@
 
 - Higher entity-row volume does **not** mean aggregation is clean.
 - Broad `PART` and `PO` aggregation is still unsafe until the Tier 2 fix, clean Tier 1 rerun, and production eval on the cleaned store are complete.
-- Relationships remain `0`; do not present relationship-backed reasoning as solved.
+- Relationships remain extremely thin at `59`; do not present relationship-backed reasoning as solved.
 
 ## What V2 Can Honestly Claim Now
 
@@ -48,7 +48,7 @@
 - Do **not** say aggregation is solved or that V1's failure mode is fully closed.
 - Do **not** sell the router as production-grade; latest documented routing accuracy is **12/25 correct (48%)**.
 - Do **not** promise "ask anything" or open audience-choice early.
-- Do **not** imply relationship-backed reasoning is complete while relationships remain `0`.
+- Do **not** imply relationship-backed reasoning is complete while relationships remain thin.
 - Do **not** use "restricted-ready," "GovCloud-ready," or "zero-cost" language unless separately re-verified for the actual demo environment.
 
 ## Safest Demo Shape Right Now
@@ -98,7 +98,7 @@ Stop and re-freeze the packet if any of the following happen:
 
 ## Source Basis
 
-- `docs/COORDINATOR_STATE_2026-04-12_evening.md`
+- `docs/COORDINATOR_STATE_2026-04-11.md`
 - `docs/CRASH_RECOVERY_2026-04-12.md`
 - `docs/V2_DEMO_READINESS_GAP_ANALYSIS_2026-04-12.md`
 - `docs/DEMO_DAY_RESEARCH_2026-04-12.md`
