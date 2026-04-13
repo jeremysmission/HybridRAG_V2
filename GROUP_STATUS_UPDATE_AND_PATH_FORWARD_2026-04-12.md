@@ -81,7 +81,7 @@ That is why the architecture split and quality gates matter: they are what make 
 
 A recent positive change is that the company has only very recently released an internal AI toolkit with temporary access to OSS-20B and OSS-120B through AWS. That gives me a practical way to use stronger AI only on the remaining heavy preprocessing tasks, while still preserving the overall low-cost tiered design instead of moving to a broad cloud-heavy workflow. It also adds a new engineering burden: learning the AWS infrastructure side quickly enough to use the toolkit correctly without creating hidden cost or configuration problems. Because this path runs through government AWS rather than standard commercial AWS, it carries its own extra restrictions and integration friction.
 
-That access path also required application and back-and-forth with an AI Staff Engineer because there were issues on their side that had to be debugged before the environment became usable.
+That access path also required application and back-and-forth with an AI Staff Engineer because there were issues on their side that had to be debugged before the environment became usable. Even after access, the working path required additional integration learning because the practical workflow depended on government AWS infrastructure plus Azure-style formatting expectations, the company's enterprise endpoint AI layer, and OpenAI-compatible patterns inside Jupyter-based development.
 
 ## What Has Been Completed
 

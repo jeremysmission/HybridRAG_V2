@@ -171,6 +171,7 @@ There were also real environment constraints:
 - repeated IT/admin-access instability across two machines disrupted continuity and forced resets
 - proxy/network friction slowed initial database establishment dramatically
 - preprocessing at this corpus scale is materially different on CPU-only versus CUDA/GPU paths, so software compatibility work to keep preprocessing on the GPU path was a real schedule item, not an optimization nicety
+- the new government AWS path also came with provider-side access issues and a non-trivial integration curve across Azure-style formatting assumptions, the enterprise AI endpoint layer, and OpenAI-compatible Jupyter workflows
 
 The time has gone into making the pipeline measurable, stageable, and production-shaped.
 

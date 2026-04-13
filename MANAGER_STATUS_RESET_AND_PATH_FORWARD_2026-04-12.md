@@ -105,6 +105,8 @@ A recent positive development is that the company has only very recently release
 
 Even getting access to that path was not automatic. I had to apply for it and work through an AI Staff Engineer while they debugged a couple of issues on their side before I could use it. That is part of why the cloud-enabled preprocessing path only became practical very recently.
 
+Even after access, the path was not plug-and-play. To make the government AWS path usable, I had to line up a mix of Azure-style formatting expectations, the company's enterprise endpoint AI layer, and OpenAI-compatible usage patterns inside Jupyter-based workflows. That created additional learning curve and integration work, but it is now moving in the right direction.
+
 ## What Happens Next
 
 The next steps are now concrete and measurable:

@@ -160,6 +160,8 @@ An important recent development is that the company has only just released an in
 
 Access to that path also required application and coordination with an AI Staff Engineer because there were provider-side issues that had to be debugged before the environment became usable. That reinforces the point that this was not simply a matter of “turning on AWS” and continuing as normal.
 
+Even after access, the practical workflow still required extra integration learning: government AWS infrastructure, Azure-style formatting expectations, the company's enterprise AI endpoint layer, and OpenAI-compatible Jupyter workflows all had to line up before the path became useful. That added learning curve, but it also means the project now has a clearer way to apply stronger AI selectively without abandoning the tiered cost strategy.
+
 ## Why This Took Time
 
 The time was not spent polishing a demo.

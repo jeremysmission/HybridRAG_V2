@@ -61,6 +61,7 @@
 - That also means learning the AWS infrastructure side on the fly so I can use it correctly without opening up hidden cloud-cost issues.
 - It is government AWS, not standard commercial AWS, so it comes with extra restrictions and setup friction.
 - Even getting access required application and working through an AI Staff Engineer while provider-side issues were debugged.
+- And the usable workflow still required extra integration learning across government AWS, Azure-style formatting, the company enterprise AI endpoint layer, and OpenAI-compatible Jupyter workflows.
 
 ## Current Status
 
