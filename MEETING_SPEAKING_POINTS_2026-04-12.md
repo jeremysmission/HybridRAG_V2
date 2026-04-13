@@ -60,6 +60,7 @@
 - I plan to use that selectively for the remaining heavy preprocessing tasks, without abandoning the low-cost tiered design.
 - That also means learning the AWS infrastructure side on the fly so I can use it correctly without opening up hidden cloud-cost issues.
 - It is government AWS, not standard commercial AWS, so it comes with extra restrictions and setup friction.
+- Even getting access required application and working through an AI Staff Engineer while provider-side issues were debugged.
 
 ## Current Status
 

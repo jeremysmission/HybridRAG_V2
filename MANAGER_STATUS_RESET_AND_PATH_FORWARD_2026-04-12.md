@@ -103,6 +103,8 @@ That cost discipline is part of why the architecture and gating work matters so 
 
 A recent positive development is that the company has only very recently released an internal AI toolkit that includes temporary access to OSS-20B and OSS-120B models through AWS. I am deliberately not treating that as a reason to move to an uncontrolled cloud-heavy design. Instead, I found a way to use that temporarily free capability selectively for the remaining heavy preprocessing tasks where it can help the most. That lets me accelerate the hardest remaining AI work without giving up the lower-cost tiered design. It also means I have had to learn the AWS infrastructure side on the fly in order to use that path responsibly and avoid hidden cloud-cost or configuration mistakes. Because this is government AWS rather than standard commercial AWS, it also comes with its own set of access, configuration, and integration restrictions.
 
+Even getting access to that path was not automatic. I had to apply for it and work through an AI Staff Engineer while they debugged a couple of issues on their side before I could use it. That is part of why the cloud-enabled preprocessing path only became practical very recently.
+
 ## What Happens Next
 
 The next steps are now concrete and measurable:

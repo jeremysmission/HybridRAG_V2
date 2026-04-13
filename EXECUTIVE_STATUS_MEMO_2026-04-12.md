@@ -49,6 +49,8 @@ I am instead building a tiered Python-based pipeline that minimizes expensive AI
 
 A recent positive development is that the company has only very recently released an internal AI toolkit that includes temporary access to OSS-20B and OSS-120B models through AWS. I am planning to use that selectively for the remaining heavy preprocessing tasks where it creates real leverage, while still avoiding an open-ended cloud-heavy cost model. That also requires me to learn the AWS infrastructure side on the fly so the new capability can be used correctly and cost-consciously. Because this is government AWS rather than standard commercial AWS, it adds an additional layer of restrictions and setup complexity.
 
+Access to that path also required application and coordination with an AI Staff Engineer because there were issues on the provider side that had to be debugged before it was usable.
+
 ## Current Status
 
 The system is in a much stronger state than V1, but the remaining gating item is a clean Tier 1 rerun using the new quality controls. The current path forward is now concrete:
