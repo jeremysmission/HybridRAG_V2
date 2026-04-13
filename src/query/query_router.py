@@ -209,8 +209,9 @@ class QueryRouter:
         Apply deterministic routing overrides for high-signal query shapes.
 
         When the lexical intent is high-signal, prefer the deterministic type
-        over the model guess. Keep the rewrite/sub-query guards for Ollama,
-        where query expansion quality is materially less reliable.
+        over the model guess. Apply rewrite/sub-query guards for every provider
+        path so the same high-signal queries stay stable even when the LLM
+        backend changes.
         """
         deterministic = self._deterministic_type(classification.original_query)
         if not deterministic:
@@ -222,36 +223,35 @@ class QueryRouter:
             classification.query_type = deterministic
             guard_actions.append(f"type={deterministic}")
 
-        if self.llm.provider == "ollama":
-            guarded_expanded = self._guarded_expanded_query(
-                classification.original_query,
-                classification.expanded_query,
-            )
-            if guarded_expanded != classification.expanded_query:
-                classification.expanded_query = guarded_expanded
-                guard_actions.append("expanded_query")
+        guarded_expanded = self._guarded_expanded_query(
+            classification.original_query,
+            classification.expanded_query,
+        )
+        if guarded_expanded != classification.expanded_query:
+            classification.expanded_query = guarded_expanded
+            guard_actions.append("expanded_query")
 
-            guarded_sub_queries = self._guarded_sub_queries(
-                classification.original_query,
-                deterministic,
-            )
-            if guarded_sub_queries is not None:
-                classification.sub_queries = guarded_sub_queries
-                guard_actions.append("sub_queries")
-            elif deterministic != "COMPLEX":
-                classification.sub_queries = []
-            elif deterministic == "COMPLEX" and not classification.sub_queries:
-                classification.sub_queries = [
-                    SubQuery(query_text=classification.original_query, query_type="SEMANTIC")
-                ]
-                guard_actions.append("sub_queries_fallback")
+        guarded_sub_queries = self._guarded_sub_queries(
+            classification.original_query,
+            deterministic,
+        )
+        if guarded_sub_queries is not None:
+            classification.sub_queries = guarded_sub_queries
+            guard_actions.append("sub_queries")
+        elif deterministic != "COMPLEX":
+            classification.sub_queries = []
+        elif deterministic == "COMPLEX" and not classification.sub_queries:
+            classification.sub_queries = [
+                SubQuery(query_text=classification.original_query, query_type="SEMANTIC")
+            ]
+            guard_actions.append("sub_queries_fallback")
 
         if not guard_actions:
             return classification
 
         classification.reasoning = (
             f"{classification.reasoning} | guard_override={','.join(guard_actions)} "
-            "for local-ollama high-signal query pattern"
+            "for high-signal query pattern"
         ).strip()
         return classification
 
@@ -260,12 +260,19 @@ class QueryRouter:
         q = " ".join(query.lower().split())
         part_number = self._extract_part_number(query)
         person_name = self._extract_person_name(query)
+        date_match = re.search(r"\b20\d{2}-\d{2}-\d{2}\b", q)
 
         if "general condition" in q and "recent visit" in q:
             return "service report maintenance repair status recent visits radar site"
 
         if self._is_contact_email_query(q) and person_name:
             return f"{person_name} contact email Contact POC senior field technician"
+
+        if "weekly hours variance" in q:
+            expanded = "enterprise program Weekly Hours Variance report"
+            if date_match:
+                return f"{expanded} week ending {date_match.group(0)}"
+            return expanded
 
         if (
             part_number
@@ -448,8 +455,29 @@ class QueryRouter:
         if self._is_compare_question(q):
             return "SEMANTIC"
 
+        if self._has_any(q, ["which cdrl is", "which contract is", "which deliverable is"]):
+            return "ENTITY"
+
         if re.search(
             r"\bwhat is documented in the .+\b(report|file|spreadsheet)\b dated\b",
+            q,
+        ):
+            return "ENTITY"
+
+        if re.search(
+            r"^(?:which|list)\b.*\b(?:exist|exists|were|was|are|occurred|occur|filed|submitted|delivered|processed|received|archived|recorded|tied to|fall under|appear)\b",
+            q,
+        ) or q.startswith("cross-reference: which") or q.startswith("cross reference: which"):
+            return "AGGREGATE"
+
+        if re.search(
+            r"^(?:show me|what is|what was|where is)\b.*\b(?:monthly status report|weekly hours variance|monthly actuals|priced bill of materials|bill of materials|packing list|part failure tracker|site inventory|spares report|site outage analysis|cumulative outage metrics|fep recon|stig reviews|security controls spreadsheet|controls spreadsheet|recommended spares parts list|monthly status reports|monthly actuals spreadsheet|spreadsheet|tracker|analysis|inventory|results|file)\b",
+            q,
+        ):
+            return "TABULAR"
+
+        if re.search(
+            r"^(?:what|when|who|where)\b.*\b(?:deliverable|shipment|package|certificate|directive|guide|plan|record|work note|slide|procedure|playbook|scan report|poam report|cap report|change package|ato package|iss package|test report)\b",
             q,
         ):
             return "ENTITY"
@@ -460,6 +488,8 @@ class QueryRouter:
                 "which cdrl is",
                 "what contract number covers",
                 "what is purchase order",
+                "what is po ",
+                "what is po",
                 "what is the packing list",
                 "what is documented in",
                 "what was shipped to",
@@ -488,6 +518,8 @@ class QueryRouter:
                 "what is the s4 hana fixes list",
                 "what is the corrective action plan",
                 "what known issues are documented",
+                "what is the scan report",
+                "what does the scan report",
             ],
         ):
             return "ENTITY"

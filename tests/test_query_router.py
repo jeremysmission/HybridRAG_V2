@@ -205,6 +205,87 @@ def test_deterministic_guard_overrides_stubbed_llm_for_tabular_query():
     assert "guard_override=type=TABULAR" in result.reasoning
 
 
+def test_deterministic_guard_applies_expansion_on_api_provider():
+    payload = {
+        "query_type": "SEMANTIC",
+        "sub_queries": [],
+        "entity_filters": {
+            "entity_type": "",
+            "text_pattern": "",
+            "site_filter": "",
+        },
+        "expanded_query": "summarize the spreadsheet",
+        "reasoning": "llm guess",
+    }
+    router = QueryRouter(_StubLLM(payload, provider="api"))
+
+    result = router.classify(
+        "Show me the enterprise program Weekly Hours Variance report for the week ending 2024-12-31."
+    )
+
+    assert result.query_type == "TABULAR"
+    assert result.expanded_query == (
+        "enterprise program Weekly Hours Variance report week ending 2024-12-31"
+    )
+    assert "guard_override=type=TABULAR,expanded_query" in result.reasoning
+
+
+def test_deterministic_guard_applies_complex_subqueries_on_api_provider():
+    payload = {
+        "query_type": "SEMANTIC",
+        "sub_queries": [],
+        "entity_filters": {
+            "entity_type": "",
+            "text_pattern": "",
+            "site_filter": "",
+        },
+        "expanded_query": "generic rewrite",
+        "reasoning": "llm guess",
+    }
+    router = QueryRouter(_StubLLM(payload, provider="api"))
+
+    result = router.classify(
+        "Who is the point of contact for the site where ARC-4471 was ordered?"
+    )
+
+    assert result.query_type == "COMPLEX"
+    assert [sq.query_type for sq in result.sub_queries] == ["SEMANTIC", "SEMANTIC"]
+
+
+def test_fallback_routes_deliverable_lookup_to_entity():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify("What is deliverable IGSI-965?")
+
+    assert result.query_type == "ENTITY"
+
+
+def test_fallback_routes_shipment_question_to_entity():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify(
+        "What Thule monitoring system ASV shipment was sent in July 2024 and what was its travel mode?"
+    )
+
+    assert result.query_type == "ENTITY"
+
+
+def test_fallback_routes_which_listing_query_to_aggregate():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify("Which shipments occurred in August 2025?")
+
+    assert result.query_type == "AGGREGATE"
+
+
+def test_fallback_routes_bill_of_materials_query_to_tabular():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify("What is the Priced Bill of Materials in CDRL A014 for the enterprise program?")
+
+    assert result.query_type == "TABULAR"
+
+
 def test_compare_query_stays_semantic():
     router = QueryRouter(_UnavailableLLM())
 
