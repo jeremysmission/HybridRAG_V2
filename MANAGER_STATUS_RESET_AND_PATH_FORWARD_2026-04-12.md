@@ -117,6 +117,38 @@ This matters for two reasons:
 
 That cost discipline is important because outsourcing or cloud-first approaches for a CUI-sensitive RAG effort of this size can become expensive quickly. I am trying to build something that is more affordable to sustain over time, not just something flashy in the short term.
 
+## What I Mean By "Tiers"
+
+One thing that is easy to miss in these updates is what I mean when I say the system is now "tiered."
+
+In practical terms, the tiers are layers of extraction work with different cost, speed, and precision characteristics.
+
+I chose that design because the corpus is too large and too messy to run the heaviest AI method across everything by default.
+
+The current tiers mean:
+
+- **Import**
+  - this is the step before the tiers
+  - the prepared chunk/vector export is loaded into the searchable store so the system has a normalized indexed baseline to work from
+- **Tier 1**
+  - fast broad-pass extraction
+  - this is the deterministic high-volume layer that scans the full corpus for structured candidate values such as dates, contacts, purchase-order-like values, and part-number-like values
+  - it is optimized for throughput and scale, not for final truth
+- **Tier 2**
+  - model-based entity extraction on the narrower subset where deterministic patterns are not enough
+  - this is where people, organizations, locations, and messier entity classes are handled more intelligently
+- **Tier 3**
+  - reserved for the hardest relationship-heavy or ambiguity-heavy cases
+  - this is the most expensive layer and should only touch the smaller tail that truly needs deeper reasoning or relationship extraction
+
+The reason for using tiers is both technical and financial:
+
+- the easier work should be handled by cheaper local logic first
+- only the narrower ambiguous portion should use the more expensive AI path
+- this gives me a realistic path to lower recurring cost and lower maintenance burden after the initial build
+
+So when I say "tiered," I do not mean unnecessary complexity for its own sake. I mean a controlled layered approach that keeps the expensive AI work focused only where it adds the most value.
+
 ## What Changed Recently On The AI Infrastructure Side
 
 A recent positive development is that the company only very recently released an internal AI toolkit that includes temporary access to OSS-20B and OSS-120B models through government AWS.
@@ -129,6 +161,35 @@ That is helpful, but it has not been plug-and-play. To even get to that point, I
 - line up government AWS restrictions, Azure-style formatting expectations, the enterprise company AI endpoint layer, and OpenAI-compatible Jupyter workflows
 
 The good news is that this path is finally becoming usable. My intent is not to abandon the tiered low-cost design, but to use this temporarily free company-provided AI selectively for the remaining heavy preprocessing tasks where it provides the most leverage.
+
+## Why Spending Time On AWS Now Is Justified
+
+The main reason this AWS work is worth doing now is that it applies to the expensive one-time build phase, not to the long-term steady-state operating model.
+
+There is a big difference between:
+
+- the initial conversion of the legacy corpus into AI-usable form
+- and the ongoing incremental maintenance path after the system is established
+
+The initial build includes the heaviest preprocessing tasks:
+
+- large-scale chunking and normalization
+- embeddings and enrichment
+- model-assisted extraction on the hardest subset
+- one-time conversion of old legacy content into a cleaner AI-ready architecture
+
+That front-loaded work is where stronger remote AI capability helps the most, because it can shorten the one-time heavy lift on the hardest portion of the corpus.
+
+The important point is that I am **not** designing the system to depend on that heavy remote AI path forever.
+
+The intended long-term model is:
+
+- do the one-time heavy build work now using the best temporarily available company capability where it truly helps
+- keep the broad pass local and deterministic
+- let nights-and-weekends or scheduled production windows handle smaller incremental updates offline
+- reserve remote model usage for exceptional cases instead of making it the permanent default
+
+That is why the AWS learning and setup time is justified. It is helping accelerate the hardest remaining one-time preprocessing and enrichment tasks without locking the program into a permanently high cloud bill. In other words, I am using temporary external leverage for the initial heavy lift while still designing the steady-state production model around lower-cost local and incremental processing.
 
 ## Current Status
 
