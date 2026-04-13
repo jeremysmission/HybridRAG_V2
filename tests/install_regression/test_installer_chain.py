@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import shutil
 import subprocess
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -32,6 +33,21 @@ ACTIVE_PS1 = V2_ROOT / "tools" / "setup_workstation_2026-04-12.ps1"
 
 def _read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
+
+
+def _build_minimal_installer_tree(root: Path) -> None:
+    """Create the smallest project tree needed for installer dry-run smoke."""
+    (root / "tools").mkdir(parents=True, exist_ok=True)
+    (root / "src" / "config").mkdir(parents=True, exist_ok=True)
+
+    shutil.copy2(INSTALL_BAT, root / "INSTALL_WORKSTATION.bat")
+    shutil.copy2(ACTIVE_BAT, root / "tools" / "setup_workstation_2026-04-12.bat")
+    shutil.copy2(LEGACY_BAT, root / "tools" / "setup_workstation_2026-04-06.bat")
+    shutil.copy2(ACTIVE_PS1, root / "tools" / "setup_workstation_2026-04-12.ps1")
+    (root / "src" / "config" / "schema.py").write_text(
+        "# minimal schema marker for installer dry-run smoke\n",
+        encoding="utf-8",
+    )
 
 
 def _have_py312() -> bool:
@@ -108,3 +124,27 @@ def test_launcher_dryrun_smoke(launcher: str, expected_line: str):
     assert "Pre-flight inventory (detect-first)" in output
     assert "-DryRun mode: inventory reported above, no install actions performed." in output
     assert expected_line in output
+
+
+@pytest.mark.skipif(
+    shutil.which("cmd") is None or not _have_py312(),
+    reason="Windows cmd.exe and py -3.12 are required for installer smoke runs",
+)
+def test_fresh_checkout_dryrun_does_not_create_venv():
+    with tempfile.TemporaryDirectory(prefix="v2_install_dryrun_") as tmpdir:
+        root = Path(tmpdir)
+        _build_minimal_installer_tree(root)
+
+        result = subprocess.run(
+            ["cmd", "/c", "INSTALL_WORKSTATION.bat", "-DryRun", "-NoPause"],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=300,
+            check=False,
+        )
+        output = result.stdout + "\n" + result.stderr
+
+        assert result.returncode == 0, output
+        assert "-DryRun mode: inventory reported above, no install actions performed." in output
+        assert not (root / ".venv").exists(), output

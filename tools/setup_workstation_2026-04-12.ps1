@@ -239,6 +239,33 @@ print(json.dumps({
     }
 }
 
+function Get-PyLauncherRuntimeInfo {
+    $probePy = Join-Path $env:TEMP "v2_probe_python_runtime_launcher.py"
+    $probeCode = @'
+import json
+import platform
+import struct
+import sys
+
+print(json.dumps({
+    "python_version": ".".join(map(str, sys.version_info[:3])),
+    "python_tag": f"cp{sys.version_info[0]}{sys.version_info[1]}",
+    "is_64bit": struct.calcsize("P") * 8 == 64,
+    "platform": platform.platform(),
+}))
+'@
+    try {
+        [System.IO.File]::WriteAllText($probePy, $probeCode, [System.Text.UTF8Encoding]::new($false))
+        $raw = & py -3.12 $probePy 2>$null
+        Remove-TempFileQuietly -Path $probePy
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($raw)) { return $null }
+        return ($raw | ConvertFrom-Json)
+    } catch {
+        Remove-TempFileQuietly -Path $probePy
+        return $null
+    }
+}
+
 function Write-TorchInstallGuidance {
     param(
         [string]$RepoName,
@@ -496,65 +523,102 @@ if ($pyVersion -match "Python 3\.12") {
 }
 
 # ============================================================
-# 4. Create .venv
+# 4. Prepare .venv
 # ============================================================
-Write-Step "Creating virtual environment"
+Write-Step "Preparing virtual environment"
 $VenvDir    = Join-Path $ProjectRoot ".venv"
 $VenvPython = Join-Path $VenvDir "Scripts\python.exe"
 $VenvPip    = Join-Path $VenvDir "Scripts\pip.exe"
+$PipIni     = Join-Path $VenvDir "pip.ini"
+$ProxyInfo  = Get-WorkstationProxyInfo
+$RequireCuda = Test-NvidiaGpuPresent
+$RuntimeInfo = $null
 
 if (Test-Path $VenvPython) {
     Write-Ok ".venv already exists"
 } else {
-    $ok = Invoke-WithRetry -Label "py -3.12 -m venv .venv" -Action {
-        & py -3.12 -m venv "$VenvDir"
+    if ($DryRun) {
+        Write-Info ".venv not present; -DryRun will not create it."
+    } else {
+        $ok = Invoke-WithRetry -Label "py -3.12 -m venv .venv" -Action {
+            & py -3.12 -m venv "$VenvDir"
+        }
+        if ($ok) {
+            Write-Ok ".venv created"
+        } else {
+            Write-Fail "Could not create .venv"
+            exit 1
+        }
     }
-    if ($ok) { Write-Ok ".venv created" } else { Write-Fail "Could not create .venv"; exit 1 }
 }
 
-# Activate (for this process only)
-$env:VIRTUAL_ENV = $VenvDir
-$env:PATH = (Join-Path $VenvDir "Scripts") + ";" + $env:PATH
-$PipIni = Join-Path $VenvDir "pip.ini"
-$ProxyInfo = Get-WorkstationProxyInfo
-if ($ProxyInfo.ProxyDetected) {
-    if (-not $env:HTTP_PROXY) { $env:HTTP_PROXY = $ProxyInfo.ProxyUrl }
-    if (-not $env:HTTPS_PROXY) { $env:HTTPS_PROXY = $ProxyInfo.ProxyUrl }
-    $env:http_proxy = $env:HTTP_PROXY
-    $env:https_proxy = $env:HTTPS_PROXY
-    Write-Ok "Using proxy for pip ($($ProxyInfo.Source)): $($ProxyInfo.ProxyUrl)"
-} elseif (-not [string]::IsNullOrWhiteSpace($ProxyInfo.AutoConfigUrl)) {
-    Write-Warn "Detected PAC proxy config: $($ProxyInfo.AutoConfigUrl)"
-    Write-Info "pip may still need explicit HTTP_PROXY/HTTPS_PROXY values if package installs fail"
-} else {
-    Write-Info "No workstation proxy detected; pip will use direct internet"
-}
-Initialize-PipConfig -PipIniPath $PipIni -ProxyUrl $ProxyInfo.ProxyUrl
-if (Test-PipConfigReadable -PythonExe $VenvPython) {
-    Write-Ok "Created proxy-safe pip config: $PipIni"
-} else {
-    Write-Warn "pip.ini validation failed; rewriting once"
-    Initialize-PipConfig -PipIniPath $PipIni -ProxyUrl $ProxyInfo.ProxyUrl
-    if (Test-PipConfigReadable -PythonExe $VenvPython) {
-        Write-Ok "pip.ini repaired: $PipIni"
+if (Test-Path $VenvPython) {
+    # Activate (for this process only)
+    $env:VIRTUAL_ENV = $VenvDir
+    $env:PATH = (Join-Path $VenvDir "Scripts") + ";" + $env:PATH
+    $RuntimeInfo = Get-PythonRuntimeInfo -PythonExe $VenvPython
+
+    if (-not $DryRun) {
+        if ($ProxyInfo.ProxyDetected) {
+            if (-not $env:HTTP_PROXY) { $env:HTTP_PROXY = $ProxyInfo.ProxyUrl }
+            if (-not $env:HTTPS_PROXY) { $env:HTTPS_PROXY = $ProxyInfo.ProxyUrl }
+            $env:http_proxy = $env:HTTP_PROXY
+            $env:https_proxy = $env:HTTPS_PROXY
+            Write-Ok "Using proxy for pip ($($ProxyInfo.Source)): $($ProxyInfo.ProxyUrl)"
+        } elseif (-not [string]::IsNullOrWhiteSpace($ProxyInfo.AutoConfigUrl)) {
+            Write-Warn "Detected PAC proxy config: $($ProxyInfo.AutoConfigUrl)"
+            Write-Info "pip may still need explicit HTTP_PROXY/HTTPS_PROXY values if package installs fail"
+        } else {
+            Write-Info "No workstation proxy detected; pip will use direct internet"
+        }
+        Initialize-PipConfig -PipIniPath $PipIni -ProxyUrl $ProxyInfo.ProxyUrl
+        if (Test-PipConfigReadable -PythonExe $VenvPython) {
+            Write-Ok "Created proxy-safe pip config: $PipIni"
+        } else {
+            Write-Warn "pip.ini validation failed; rewriting once"
+            Initialize-PipConfig -PipIniPath $PipIni -ProxyUrl $ProxyInfo.ProxyUrl
+            if (Test-PipConfigReadable -PythonExe $VenvPython) {
+                Write-Ok "pip.ini repaired: $PipIni"
+            } else {
+                Write-Fail "pip.ini validation failed -- pip cannot read $PipIni"
+                exit 1
+            }
+        }
     } else {
-        Write-Fail "pip.ini validation failed -- pip cannot read $PipIni"
-        exit 1
+        if ($ProxyInfo.ProxyDetected) {
+            Write-Info "Proxy detected ($($ProxyInfo.Source)): $($ProxyInfo.ProxyUrl)"
+        } elseif (-not [string]::IsNullOrWhiteSpace($ProxyInfo.AutoConfigUrl)) {
+            Write-Info "PAC proxy detected: $($ProxyInfo.AutoConfigUrl)"
+        } else {
+            Write-Info "No workstation proxy detected; pip would use direct internet"
+        }
     }
+} else {
+    if ($ProxyInfo.ProxyDetected) {
+        Write-Info "Proxy detected ($($ProxyInfo.Source)): $($ProxyInfo.ProxyUrl)"
+    } elseif (-not [string]::IsNullOrWhiteSpace($ProxyInfo.AutoConfigUrl)) {
+        Write-Info "PAC proxy detected: $($ProxyInfo.AutoConfigUrl)"
+    } else {
+        Write-Info "No workstation proxy detected; pip would use direct internet"
+    }
+    $RuntimeInfo = Get-PyLauncherRuntimeInfo
 }
-$RequireCuda = Test-NvidiaGpuPresent
-$RuntimeInfo = Get-PythonRuntimeInfo -PythonExe $VenvPython
 
 # ============================================================
 # 4.5 Assessment Summary
 # ============================================================
 Write-Step "Pre-flight inventory (detect-first)"
 
-$pipVersionOutput = & $VenvPython -m pip --version 2>&1
-$pipVersionStr = (($pipVersionOutput | Out-String).Trim())
-$pipSystemCertsSummary = & $VenvPython -m pip show pip-system-certs 2>&1
-$pipSystemCertsPresent = ($LASTEXITCODE -eq 0 -and $pipSystemCertsSummary -notmatch "Package\(s\) not found")
-$torchInfo = Test-TorchCuda128 -PythonExe $VenvPython
+$pipVersionStr = "venv absent"
+$pipSystemCertsPresent = $false
+$torchInfo = $null
+if (Test-Path $VenvPython) {
+    $pipVersionOutput = & $VenvPython -m pip --version 2>&1
+    $pipVersionStr = (($pipVersionOutput | Out-String).Trim())
+    $pipSystemCertsSummary = & $VenvPython -m pip show pip-system-certs 2>&1
+    $pipSystemCertsPresent = ($LASTEXITCODE -eq 0 -and $pipSystemCertsSummary -notmatch "Package\(s\) not found")
+    $torchInfo = Test-TorchCuda128 -PythonExe $VenvPython
+}
 $winInfo = Get-WindowsInfo
 $diskFree = Get-DiskFreeGB -Path $ProjectRoot
 $nvidiaInfo = Get-NvidiaDriverInfo
