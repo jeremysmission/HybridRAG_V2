@@ -342,6 +342,8 @@ def test_fallback_routes_shipment_question_to_entity():
     )
 
     assert result.query_type == "ENTITY"
+    assert "packing list" in result.expanded_query.lower()
+    assert "2024_07" in result.expanded_query.lower()
 
 
 def test_fallback_routes_which_listing_query_to_aggregate():
@@ -358,6 +360,32 @@ def test_fallback_routes_bill_of_materials_query_to_tabular():
     result = router.classify("What is the Priced Bill of Materials in CDRL A014 for the enterprise program?")
 
     assert result.query_type == "TABULAR"
+    assert "deliverables report" in result.expanded_query.lower()
+    assert "pbom" in result.expanded_query.lower()
+
+
+def test_cdrl_management_plan_query_adds_deliverable_bias_to_expanded_query():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify(
+        "What does the Program Management Plan (CDRL A008) say about contract deliverables and schedules?"
+    )
+
+    assert result.query_type == "SEMANTIC"
+    assert "deliverables report" in result.expanded_query.lower()
+    assert "systems management plan" in result.expanded_query.lower()
+
+
+def test_exact_date_shipment_query_adds_path_friendly_date_tokens():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify(
+        "What was in the Azores return equipment shipment of 2024-06-14?"
+    )
+
+    assert result.query_type == "ENTITY"
+    assert "packing list" in result.expanded_query.lower()
+    assert "2024_06_14" in result.expanded_query.lower()
 
 
 def test_compare_query_stays_semantic():

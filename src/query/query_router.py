@@ -25,6 +25,21 @@ from src.llm.client import LLMClient
 
 logger = logging.getLogger(__name__)
 
+_MONTH_TO_NUM = {
+    "january": "01",
+    "february": "02",
+    "march": "03",
+    "april": "04",
+    "may": "05",
+    "june": "06",
+    "july": "07",
+    "august": "08",
+    "september": "09",
+    "october": "10",
+    "november": "11",
+    "december": "12",
+}
+
 ROUTER_SCHEMA = {
     "type": "json_schema",
     "json_schema": {
@@ -194,7 +209,7 @@ class QueryRouter:
         if qtype in ("ENTITY", "AGGREGATE", "TABULAR"):
             entity_type, text_pattern, site_filter = self._extract_fallback_filters(query, qtype)
 
-        return QueryClassification(
+        classification = QueryClassification(
             query_type=qtype,
             original_query=query,
             expanded_query=query,
@@ -203,6 +218,7 @@ class QueryRouter:
             site_filter=site_filter,
             reasoning="fallback: rule-based classification (LLM unavailable)",
         )
+        return self._apply_routing_guards(classification)
 
     def _apply_routing_guards(self, classification: QueryClassification) -> QueryClassification:
         """
@@ -261,6 +277,8 @@ class QueryRouter:
         part_number = self._extract_part_number(query)
         person_name = self._extract_person_name(query)
         date_match = re.search(r"\b20\d{2}-\d{2}-\d{2}\b", q)
+        cdrl_code = self._extract_cdrl_code(q)
+        base = current or query
 
         if "general condition" in q and "recent visit" in q:
             return "service report maintenance repair status recent visits radar site"
@@ -311,6 +329,25 @@ class QueryRouter:
             if "cancelled" in q:
                 return "PO Number Status CANCELLED Destination Notes purchase order spreadsheet"
             return query
+
+        if cdrl_code:
+            extras = ["contract data requirements list", cdrl_code, "deliverables report"]
+            if "maintenance service report" in q or "maintenance service reports" in q:
+                extras.extend(["maintenance service report", "msr", "submitted"])
+            elif "bill of materials" in q:
+                extras.extend(["priced bill of materials", "bill of materials", "pbom"])
+            elif "management plan" in q:
+                extras.extend(["program management plan", "systems management plan", "oasis"])
+            elif self._has_any(q, ["submitted under", "delivered under", "filed under"]):
+                extras.extend(["submitted", "delivered", "filed"])
+            return self._append_search_terms(base, extras)
+
+        if self._looks_like_shipment_lookup(q):
+            extras = ["packing list", "shipment", "logistics"]
+            if "return shipment" in q or "return equipment shipment" in q:
+                extras.append("return")
+            extras.extend(self._temporal_search_terms(q))
+            return self._append_search_terms(base, extras)
 
         return current or query
 
@@ -961,6 +998,82 @@ class QueryRouter:
             ["ordered", "shipped", "delivered", "received", "backordered"],
         )
         return has_contact_lookup and has_dependent_clause and has_order_cue
+
+    def _extract_cdrl_code(self, query: str) -> str | None:
+        """Extract a CDRL code such as A014 from the query when present."""
+        match = re.search(r"\bcdrl\s+(a\d{3})\b", query, re.IGNORECASE)
+        if match:
+            return match.group(1).upper()
+        match = re.search(r"\b(a\d{3})\b", query, re.IGNORECASE)
+        if match and "cdrl" in query:
+            return match.group(1).upper()
+        return None
+
+    def _looks_like_shipment_lookup(self, query: str) -> bool:
+        """Detect narrow shipment/packing-list lookups that benefit from path cues."""
+        if not self._has_any(query, ["shipment", "packing list", "shipped to", "return shipment"]):
+            return False
+        if re.search(r"\b20\d{2}-\d{2}-\d{2}\b", query):
+            return True
+        if re.search(
+            r"\b("
+            r"january|february|march|april|may|june|july|august|"
+            r"september|october|november|december"
+            r")\s+20\d{2}\b",
+            query,
+        ):
+            return True
+        return False
+
+    def _temporal_search_terms(self, query: str) -> list[str]:
+        """Convert date mentions into path-friendly retrieval hints."""
+        terms: list[str] = []
+
+        for match in re.finditer(r"\b(20\d{2})-(\d{2})-(\d{2})\b", query):
+            year, month, day = match.groups()
+            terms.extend([
+                f"{year}_{month}_{day}",
+                f"{year}-{month}-{day}",
+                f"{year}_{month}",
+            ])
+
+        for match in re.finditer(
+            r"\b("
+            r"january|february|march|april|may|june|july|august|"
+            r"september|october|november|december"
+            r")\s+(20\d{2})\b",
+            query,
+        ):
+            month_name, year = match.groups()
+            month = _MONTH_TO_NUM[month_name]
+            terms.extend([
+                f"{year}_{month}",
+                f"{year}-{month}",
+                f"{month_name} {year}",
+            ])
+
+        deduped: list[str] = []
+        seen: set[str] = set()
+        for term in terms:
+            if term not in seen:
+                seen.add(term)
+                deduped.append(term)
+        return deduped
+
+    def _append_search_terms(self, base: str, extras: list[str]) -> str:
+        """Append retrieval hints without duplicating terms already present."""
+        current = " ".join((base or "").split())
+        lower = current.lower()
+        appended = [current] if current else []
+        for extra in extras:
+            token = extra.strip()
+            if not token:
+                continue
+            if token.lower() in lower:
+                continue
+            appended.append(token)
+            lower = f"{lower} {token.lower()}".strip()
+        return " ".join(appended).strip()
 
     def _extract_person_name(self, query: str) -> str | None:
         """Extract a capitalized person name from the original query text."""
