@@ -321,7 +321,6 @@ class QueryRouter:
                 "purchase order",
                 "backordered",
                 "in transit",
-                "shipped",
                 "cancelled",
                 "tracking",
             ],

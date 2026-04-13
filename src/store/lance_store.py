@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 import math
+import re
 from dataclasses import dataclass
 from datetime import timedelta
 from pathlib import Path
@@ -307,6 +308,64 @@ class LanceStore:
                 parse_quality=r.get("parse_quality", 1.0),
             )
             for r in results
+        ]
+
+    def metadata_path_search(
+        self,
+        path_terms: list[str],
+        limit: int = 10,
+    ) -> list[ChunkResult]:
+        """Return chunks whose ``source_path`` matches all supplied path terms.
+
+        This is a narrow metadata-recall helper for path-heavy queries such as
+        dated shipment folders and CDRL-coded deliverable lookups. It does not
+        replace hybrid search; it supplements it when the evidence indicates the
+        answer lives primarily in folder/file naming rather than chunk text.
+        """
+        if self._table is None or not path_terms:
+            return []
+
+        clauses = []
+        for term in path_terms:
+            normalized = (term or "").strip().lower()
+            if not normalized:
+                continue
+            escaped = re.sub(r"['\\\\]", lambda m: f"\\{m.group(0)}", normalized)
+            clauses.append(f"lower(source_path) LIKE '%{escaped}%'")
+
+        if not clauses:
+            return []
+
+        try:
+            rows = (
+                self._table.search()
+                .where(" AND ".join(clauses))
+                .select([
+                    "chunk_id",
+                    "text",
+                    "enriched_text",
+                    "source_path",
+                    "chunk_index",
+                    "parse_quality",
+                ])
+                .limit(limit)
+                .to_list()
+            )
+        except Exception as e:
+            logger.warning("Metadata path search failed for %s: %s", path_terms, e)
+            return []
+
+        return [
+            ChunkResult(
+                chunk_id=r.get("chunk_id", ""),
+                text=r.get("text", ""),
+                enriched_text=r.get("enriched_text") or None,
+                source_path=r.get("source_path", ""),
+                score=-1.0,
+                chunk_index=r.get("chunk_index", 0),
+                parse_quality=r.get("parse_quality", 1.0),
+            )
+            for r in rows
         ]
 
     def count(self) -> int:

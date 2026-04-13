@@ -16,6 +16,7 @@ class _FakeEmbedder:
 class _FakeStore:
     def __init__(self):
         self.calls = []
+        self.path_calls = []
 
     def hybrid_search(self, query_vector, query_text="", top_k=10, nprobes=None, refine_factor=None):
         self.calls.append({
@@ -25,17 +26,34 @@ class _FakeStore:
             "refine_factor": refine_factor,
         })
         return [
-            {
-                "chunk_id": f"c{i}",
-                "text": f"result {i}",
-                "enriched_text": "",
-                "source_path": f"path{i}.txt",
-                "_distance": float(i),
-                "chunk_index": i,
-                "parse_quality": 1.0,
-            }
+            ChunkResult(
+                chunk_id=f"c{i}",
+                text=f"result {i}",
+                enriched_text="",
+                source_path=f"path{i}.txt",
+                score=float(i),
+                chunk_index=i,
+                parse_quality=1.0,
+            )
             for i in range(top_k)
         ]
+
+    def metadata_path_search(self, path_terms, limit=10):
+        self.path_calls.append({
+            "path_terms": list(path_terms),
+            "limit": limit,
+        })
+        if "learmonth" in path_terms and "2024_08" in path_terms:
+            return [
+                ChunkResult(
+                    chunk_id="path-hit",
+                    text="metadata hit",
+                    enriched_text=None,
+                    source_path=r"D:\Corpus\5.0 Logistics\Shipments\2024 - Shipments\Learmonth\2024_08_26 - Learmonth (Comm)\NG Packing List - Learmonth 2024.xlsx",
+                    score=-1.0,
+                )
+            ]
+        return []
 
 
 class _FakeRetriever:
@@ -139,3 +157,18 @@ def test_pipeline_stays_at_top_k_when_reranker_is_disabled():
 
     assert retriever.calls[-1]["top_k"] == 10
     assert retriever.calls[-1]["candidate_pool"] == 10
+
+
+def test_vector_retriever_merges_metadata_path_hits_ahead_of_hybrid_results():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    results = retriever.search(
+        "What was shipped to Learmonth in August 2024? packing list 2024_08",
+        top_k=10,
+        candidate_pool=30,
+    )
+
+    assert store.path_calls
+    assert results[0].chunk_id == "path-hit"
+    assert any(call["path_terms"] == ["learmonth", "2024_08"] for call in store.path_calls)
