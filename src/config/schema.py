@@ -89,7 +89,6 @@ class ExtractionConfig(BaseModel):
         default=[
             r"ARC-\d{4}",
             r"IGSI-\d+",
-            r"PO-\d{4}-\d{4}",
             r"SN[-: ]?\d+",
             r"SEMS3D-\d+",
             r"[A-Z]{2,}-\d{3,4}",

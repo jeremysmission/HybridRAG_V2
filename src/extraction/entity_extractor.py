@@ -529,6 +529,7 @@ class RegexPreExtractor:
         # MITRE Common Configuration Enumeration
         re.compile(r"^CCE-\d+$"),
     )
+    _LEGACY_PO_PATTERN = re.compile(r"^PO-\d{4}-\d{4}$", re.IGNORECASE)
 
     def __init__(
         self,
@@ -650,6 +651,29 @@ class RegexPreExtractor:
         upper = candidate.upper()
         return any(p.match(upper) for p in self._security_exclude_patterns)
 
+    @staticmethod
+    def _has_token_boundaries(text: str, start: int, end: int) -> bool:
+        """Reject matches embedded in a larger token.
+
+        This prevents partial captures like ``RG-213`` from ``RG-213A`` and
+        stops ``PO`` labels from being matched inside words like ``repo``.
+        """
+        if start > 0:
+            prev = text[start - 1]
+            if prev.isalnum() or prev in {"_", "-"}:
+                return False
+        if end < len(text):
+            nxt = text[end]
+            if nxt.isalnum() or nxt in {"_", "-"}:
+                return False
+        return True
+
+    def _is_purchase_order_identifier(self, candidate: str) -> bool:
+        """Return True when a candidate is a purchase-order token, not a part."""
+        if not candidate:
+            return False
+        return bool(self._LEGACY_PO_PATTERN.fullmatch(candidate))
+
     def extract(
         self, text: str, chunk_id: str, source_path: str
     ) -> list[Entity]:
@@ -659,6 +683,10 @@ class RegexPreExtractor:
         for pattern in self._part_patterns:
             for match in pattern.finditer(text):
                 candidate = match.group()
+                if not self._has_token_boundaries(text, match.start(), match.end()):
+                    continue
+                if self._is_purchase_order_identifier(candidate):
+                    continue
                 if self._is_security_standard_identifier(candidate):
                     continue
                 entities.append(Entity(
@@ -709,6 +737,8 @@ class RegexPreExtractor:
 
         for match in self._po_re.finditer(text):
             candidate = match.group()
+            if not self._has_token_boundaries(text, match.start(), match.end()):
+                continue
             if self._is_security_standard_identifier(candidate):
                 continue
             entities.append(Entity(
@@ -726,6 +756,8 @@ class RegexPreExtractor:
         # 10-digit SAP PO column is effectively empty in the current
         # Tier 1 store because no label-free 10-digit pattern exists.
         for match in self._sap_po_re.finditer(text):
+            if not self._has_token_boundaries(text, match.start(), match.end()):
+                continue
             po_number = match.group(1)
             if self._is_security_standard_identifier(po_number):
                 continue
@@ -980,6 +1012,12 @@ class EventBlockParser:
         upper = candidate.upper()
         return any(p.match(upper) for p in self._security_exclude_patterns)
 
+    @staticmethod
+    def _is_purchase_order_identifier(candidate: str) -> bool:
+        if not candidate:
+            return False
+        return bool(RegexPreExtractor._LEGACY_PO_PATTERN.fullmatch(candidate))
+
     def parse(
         self, text: str, chunk_id: str, source_path: str,
     ) -> tuple[list[Entity], list[Relationship]]:
@@ -1018,7 +1056,9 @@ class EventBlockParser:
             ctx = block[:160].strip()
 
             # Emit part entity
-            if part_number and not self._is_security_standard_identifier(part_number):
+            if (part_number
+                    and not self._is_purchase_order_identifier(part_number)
+                    and not self._is_security_standard_identifier(part_number)):
                 all_entities.append(Entity(
                     entity_type="PART", text=part_number, raw_text=part_number,
                     confidence=1.0, chunk_id=chunk_id,
@@ -1027,6 +1067,7 @@ class EventBlockParser:
 
             # Emit component as PART
             if (component and component.upper() != part_number
+                    and not self._is_purchase_order_identifier(component)
                     and not self._is_security_standard_identifier(component)):
                 all_entities.append(Entity(
                     entity_type="PART", text=component, raw_text=component,
@@ -1036,7 +1077,9 @@ class EventBlockParser:
 
             # Emit installed/removed parts
             for p in (installed_part, removed_part):
-                if p and p != part_number and not self._is_security_standard_identifier(p):
+                if (p and p != part_number
+                        and not self._is_purchase_order_identifier(p)
+                        and not self._is_security_standard_identifier(p)):
                     all_entities.append(Entity(
                         entity_type="PART", text=p, raw_text=p,
                         confidence=0.95, chunk_id=chunk_id,

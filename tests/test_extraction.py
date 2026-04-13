@@ -13,6 +13,7 @@ Covers:
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 import tempfile
 from pathlib import Path
@@ -38,7 +39,6 @@ def regex_extractor():
     return RegexPreExtractor(part_patterns=[
         r"ARC-\d{4}",
         r"IGSI-\d+",
-        r"PO-\d{4}-\d{4}",
         r"SN[-: ]?\d+",
         r"SEMS3D-\d+",
         r"[A-Z]{2,}-\d{3,4}",
@@ -565,6 +565,49 @@ class TestSecurityStandardExclusion:
                 f"Bare 10-digit leaked as PO from {fake!r}: {pos}"
             )
 
+    def test_sap_po_label_requires_leading_boundary(self):
+        """The SAP PO label must start at a real token boundary, not inside
+        a larger word like 'repo' or 'SPO'."""
+        ex = RegexPreExtractor(part_patterns=[])
+        for fake in [
+            "repo 5000585586 archived",
+            "XPO 5000585586 archived",
+            "SPO#7000325121 shipped",
+            "APO 4500111111 pending",
+        ]:
+            ents = ex.extract(fake, "c1", "doc.txt")
+            pos = [e.text for e in ents if e.entity_type == "PO"]
+            assert not pos, f"Embedded PO label leaked from {fake!r}: {pos}"
+
+    def test_legacy_po_emitted_only_as_po(self, regex_extractor):
+        """Legacy PO-YYYY-NNNN identifiers should stay in PO, not leak into
+        PART through the generic part matcher."""
+        ents = regex_extractor.extract("Raised PO-2024-1234 for site A.", "c1", "doc.txt")
+        parts = [e.text for e in ents if e.entity_type == "PART"]
+        pos = [e.text for e in ents if e.entity_type == "PO"]
+        assert "PO-2024-1234" in pos
+        assert "PO-2024-1234" not in parts
+        assert "PO-2024" not in parts
+
+    def test_embedded_part_and_po_tokens_rejected(self, regex_extractor):
+        """Reject substring matches embedded inside longer alphanumeric or
+        hyphenated tokens."""
+        cases = [
+            ("fooPO-2024-1234bar", {"PART": {"PO-2024-1234", "PO-2024"}, "PO": {"PO-2024-1234"}}),
+            ("XPO-2024-1234 shipped", {"PART": {"XPO-2024", "PO-2024-1234", "PO-2024"}, "PO": {"PO-2024-1234"}}),
+            ("abcRG-213xyz", {"PART": {"RG-213"}}),
+            ("installed RG-213A today", {"PART": {"RG-213"}}),
+            ("token SA-9000X in text", {"PART": {"SA-9000"}}),
+        ]
+        for text, forbidden in cases:
+            ents = regex_extractor.extract(text, "c1", "doc.txt")
+            by_type = {}
+            for entity in ents:
+                by_type.setdefault(entity.entity_type, set()).add(entity.text)
+            for entity_type, blocked in forbidden.items():
+                leaked = by_type.get(entity_type, set()) & blocked
+                assert not leaked, f"Embedded token leaked from {text!r}: {entity_type}={sorted(leaked)}"
+
     def test_exclusion_list_is_overridable(self):
         """A caller can override the default exclusion list — e.g. on a
         corpus where security standard family prefixes are NOT noise and should be
@@ -786,6 +829,20 @@ class TestEventBlockParserSecurityStandardExclusion:
         parts = [e.text.upper() for e in entities if e.entity_type == "PART"]
         assert any(p.startswith("PS-800") for p in parts), (
             f"EventBlockParser dropped real hardware PS-800: got {parts}"
+        )
+
+    def test_event_block_parser_rejects_po_shaped_part(self):
+        """EventBlockParser should not emit a purchase order token as PART
+        just because it appeared under a Part# label."""
+        parser = EventBlockParser(part_patterns=[r"[A-Z]{2,}-\d{3,4}"])
+        text = (
+            "1. Part#: PO-2024-1234\n"
+            "   Action: Replaced\n"
+        )
+        entities, _ = parser.parse(text, "c1", "doc.txt")
+        parts = [e.text.upper() for e in entities if e.entity_type == "PART"]
+        assert "PO-2024-1234" not in parts, (
+            f"Purchase order leaked as EventBlockParser PART: {parts}"
         )
 
 
