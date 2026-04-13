@@ -190,6 +190,7 @@ def fake_config(tmp_path):
     )
     cfg_extraction = types.SimpleNamespace(
         part_patterns=[r"PO-\d{4}-\d{4}"],
+        security_standard_exclude_patterns=[],
         gliner_model="fake-model",
         gliner_device="cpu",
         gliner_min_chunk_len=20,
@@ -311,6 +312,7 @@ def _invoke_run(
         ),
         extraction=types.SimpleNamespace(
             part_patterns=[r"PO-\d{4}-\d{4}"],
+            security_standard_exclude_patterns=[],
             gliner_model="fake-model",
             gliner_device="cpu",
             gliner_min_chunk_len=20,

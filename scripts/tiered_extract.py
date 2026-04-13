@@ -39,7 +39,6 @@ full corpus.
 from __future__ import annotations
 
 import argparse
-import gc
 import json
 import sys
 import time
@@ -61,6 +60,8 @@ from src.extraction.entity_extractor import (
 from src.store.relationship_store import RelationshipStore, Relationship
 
 DIVIDER = "=" * 60
+TIER1_ENTITY_FLUSH_SIZE = 1000
+TIER1_REL_FLUSH_SIZE = 1000
 
 
 def _assert_streaming_api_available() -> None:
@@ -287,6 +288,137 @@ def run_tier1(
                 pass  # skip errors silently for regex
 
     return all_entities, all_rels
+
+
+def _stream_tier1(
+    store: LanceStore,
+    entity_store: EntityStore,
+    rel_store: RelationshipStore,
+    extractor: RegexPreExtractor,
+    event_parser: EventBlockParser,
+    rel_extractor: RegexRelationshipExtractor,
+    *,
+    limit: int = 0,
+    batch_size: int = 10000,
+    dry_run: bool = False,
+    entity_flush_size: int = TIER1_ENTITY_FLUSH_SIZE,
+    rel_flush_size: int = TIER1_REL_FLUSH_SIZE,
+    on_progress=None,
+) -> dict[str, object]:
+    """Stream Tier 1 with bounded flush buffers.
+
+    The extractor paths still dedup in-memory by candidate key so the
+    per-run semantics match the old full-corpus accumulator, but entity
+    and relationship objects are flushed incrementally instead of being
+    retained until the end of the scan.
+    """
+
+    seen_entities: set[tuple[str, str, str]] = set()
+    seen_rels: set[tuple[str, str, str, str]] = set()
+    entity_buffer: list[Entity] = []
+    rel_buffer: list[Relationship] = []
+    raw_entity_count = 0
+    raw_rel_count = 0
+    inserted_entity_count = 0
+    inserted_rel_count = 0
+    inserted_entity_types: Counter[str] = Counter()
+    inserted_rel_preds: Counter[str] = Counter()
+    t1_types: Counter[str] = Counter()
+    t1_preds: Counter[str] = Counter()
+    chunks_processed = 0
+
+    def flush_entities(force: bool = False) -> None:
+        nonlocal inserted_entity_count
+        if not entity_buffer:
+            return
+        if dry_run:
+            entity_buffer.clear()
+            return
+        if not force and len(entity_buffer) < entity_flush_size:
+            return
+        before_count, before_types = _entity_store_counts(entity_store)
+        entity_store.insert_entities(entity_buffer)
+        after_count, after_types = _entity_store_counts(entity_store)
+        inserted_entity_count += after_count - before_count
+        inserted_entity_types.update(_counter_delta(after_types, before_types))
+        entity_buffer.clear()
+
+    def flush_relationships(force: bool = False) -> None:
+        nonlocal inserted_rel_count
+        if not rel_buffer:
+            return
+        if dry_run:
+            rel_buffer.clear()
+            return
+        if not force and len(rel_buffer) < rel_flush_size:
+            return
+        before_count = rel_store.count()
+        before_preds = rel_store.predicate_summary()
+        rel_store.insert_relationships(rel_buffer)
+        after_count = rel_store.count()
+        after_preds = rel_store.predicate_summary()
+        inserted_rel_count += after_count - before_count
+        inserted_rel_preds.update(_counter_delta(Counter(after_preds), Counter(before_preds)))
+        rel_buffer.clear()
+
+    for batch in iter_chunk_batches(store, batch_size=batch_size, limit=limit):
+        for chunk in batch:
+            text = chunk["text"]
+            cid = chunk["chunk_id"]
+            src = chunk["source_path"]
+
+            entities = extractor.extract(text=text, chunk_id=cid, source_path=src)
+            block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
+            co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
+
+            for e in entities + block_entities:
+                key = (e.chunk_id, e.entity_type, e.text)
+                if key in seen_entities:
+                    continue
+                seen_entities.add(key)
+                entity_buffer.append(e)
+                raw_entity_count += 1
+                t1_types[e.entity_type] += 1
+                if len(entity_buffer) >= entity_flush_size:
+                    flush_entities(force=True)
+
+            for r in block_rels + co_rels:
+                key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
+                if key in seen_rels:
+                    continue
+                seen_rels.add(key)
+                rel_buffer.append(r)
+                raw_rel_count += 1
+                t1_preds[r.predicate] += 1
+                if len(rel_buffer) >= rel_flush_size:
+                    flush_relationships(force=True)
+
+        chunks_processed += len(batch)
+        if on_progress is not None:
+            on_progress(
+                chunks_processed,
+                raw_entity_count,
+                raw_rel_count,
+                len(entity_buffer),
+                len(rel_buffer),
+            )
+
+    flush_entities(force=True)
+    flush_relationships(force=True)
+
+    return {
+        "chunks_processed": chunks_processed,
+        "raw_entity_count": raw_entity_count,
+        "raw_relationship_count": raw_rel_count,
+        "entity_types": t1_types,
+        "relationship_preds": t1_preds,
+        "inserted_entity_count": inserted_entity_count,
+        "inserted_relationship_count": inserted_rel_count,
+        "inserted_entity_types": inserted_entity_types,
+        "inserted_relationship_preds": inserted_rel_preds,
+        "entity_buffer_size": len(entity_buffer),
+        "relationship_buffer_size": len(rel_buffer),
+    }
 
 
 def _is_tier2_candidate(chunk: dict, min_chunk_len: int) -> bool:
@@ -648,72 +780,54 @@ def main() -> None:
         security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
     )
     rel_extractor = RegexRelationshipExtractor()
-
-    seen: set = set()
-    unique_t1: list[Entity] = []
-    seen_rels: set = set()
-    unique_rels: list[Relationship] = []
-    chunks_processed = 0
-
-    for batch in iter_chunk_batches(store, batch_size=10000, limit=args.limit):
-        for chunk in batch:
-            text = chunk["text"]
-            cid = chunk["chunk_id"]
-            src = chunk["source_path"]
-
-            entities = extractor.extract(text=text, chunk_id=cid, source_path=src)
-            block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
-            co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
-
-            for e in entities + block_entities:
-                key = (e.chunk_id, e.entity_type, e.text)
-                if key not in seen:
-                    seen.add(key)
-                    unique_t1.append(e)
-
-            for r in block_rels + co_rels:
-                key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
-                if key not in seen_rels:
-                    seen_rels.add(key)
-                    unique_rels.append(r)
-
-        chunks_processed += len(batch)
+    def _tier1_progress(
+        chunks_done: int,
+        entity_total: int,
+        rel_total: int,
+        entity_buffer_size: int,
+        rel_buffer_size: int,
+    ) -> None:
         elapsed = time.perf_counter() - t1_start
-        rate = chunks_processed / max(elapsed, 0.001)
-        print(f"  Tier 1: {chunks_processed:,} / {total_chunks:,} chunks "
-              f"({rate:,.0f} chunks/sec, {len(unique_t1):,} entities, {len(unique_rels):,} rels)")
+        rate = chunks_done / max(elapsed, 0.001)
+        print(
+            f"  Tier 1: {chunks_done:,} / {total_chunks:,} chunks "
+            f"({rate:,.0f} chunks/sec, {entity_total:,} entities, {rel_total:,} rels; "
+            f"buffered {entity_buffer_size:,}/{rel_buffer_size:,})"
+        )
+
+    t1_result = _stream_tier1(
+        store=store,
+        entity_store=entity_store,
+        rel_store=rel_store,
+        extractor=extractor,
+        event_parser=event_parser,
+        rel_extractor=rel_extractor,
+        limit=args.limit,
+        batch_size=10000,
+        dry_run=args.dry_run,
+        on_progress=_tier1_progress,
+    )
 
     t1_elapsed = time.perf_counter() - t1_start
-
-    t1_types = Counter(e.entity_type for e in unique_t1)
-    t1_preds = Counter(r.predicate for r in unique_rels)
-    t1_entity_total = len(unique_t1)
+    t1_entity_total = int(t1_result["raw_entity_count"])
+    t1_rel_total = int(t1_result["raw_relationship_count"])
+    t1_types = Counter(t1_result["entity_types"])
+    t1_preds = Counter(t1_result["relationship_preds"])
+    t1_inserted_rel_total = int(t1_result["inserted_relationship_count"])
     print(f"  [TIER 1] {t1_entity_total:,} entities ({t1_elapsed:.2f}s)")
     print(f"           Types: {dict(t1_types)}")
-    print(f"           Rels:  {len(unique_rels):,} -- {dict(t1_preds)}")
-    print(f"           Rate: {chunks_processed/max(t1_elapsed, 0.001):,.0f} chunks/sec")
+    print(f"           Rels:  {t1_rel_total:,} -- {dict(t1_preds)}")
+    print(f"           Rate: {int(t1_result['chunks_processed'])/max(t1_elapsed, 0.001):,.0f} chunks/sec")
     print()
 
-    total_entity_count = t1_entity_total if args.dry_run else 0
-    total_types = Counter(t1_types) if args.dry_run else Counter()
-    if not args.dry_run and unique_t1:
-        before_t1_e, before_t1_types = _entity_store_counts(entity_store)
-        entity_store.insert_entities(unique_t1)
-        after_t1_e, after_t1_types = _entity_store_counts(entity_store)
-        t1_new_count = after_t1_e - before_t1_e
-        t1_new_types = _counter_delta(after_t1_types, before_t1_types)
-        total_entity_count += t1_new_count
-        total_types.update(t1_new_types)
-        print(f"  [TIER 1] persisted {after_t1_e - before_t1_e:,} entities (before={before_t1_e:,}, after={after_t1_e:,})")
+    total_entity_count = t1_entity_total if args.dry_run else int(t1_result["inserted_entity_count"])
+    total_types = Counter(t1_types) if args.dry_run else Counter(t1_result["inserted_entity_types"])
+    if not args.dry_run:
+        print(
+            f"  [TIER 1] persisted {int(t1_result['inserted_entity_count']):,} entities "
+            f"and {t1_inserted_rel_total:,} relationships"
+        )
         print()
-
-    unique_t1.clear()
-    seen.clear()
-    gc.collect()
-
-    all_rels = list(unique_rels)
-    seen_rels.clear()
-    unique_rels.clear()
 
     # --- Tier 2: GLiNER (second streaming pass over the store) ---
     t2_raw_count = 0
@@ -777,26 +891,22 @@ def main() -> None:
         print("  [TIER 3] LLM extraction (not yet implemented -- reserved for flagged items)")
         print()
 
-    if not args.dry_run and all_rels:
-        before_r = rel_store.count()
-        inserted_r = rel_store.insert_relationships(all_rels)
-        after_r = rel_store.count()
-        print(f"  Rels:        {inserted_r:,} new (before={before_r:,}, after={after_r:,})")
+    total_relationship_count = t1_rel_total if args.dry_run else t1_inserted_rel_total
+    total_preds = Counter(t1_preds) if args.dry_run else Counter(t1_result["inserted_relationship_preds"])
 
     if args.dry_run:
         print(
             f"  DRY RUN:     would extract up to {total_entity_count:,} raw "
-            f"entities (pre-dedup; Tier 1 + Tier 2 raw), {len(all_rels):,} rels"
+            f"entities (pre-dedup; Tier 1 + Tier 2 raw), {t1_rel_total:,} rels"
         )
 
-    total_preds = Counter(r.predicate for r in all_rels)
     total_label = "Total entities (raw, pre-dedup)" if args.dry_run else "Total entities (inserted)"
     breakdown_label = "Entity breakdown (raw)" if args.dry_run else "Entity breakdown (inserted)"
     print()
     print(DIVIDER)
     print(f"  {total_label}: {total_entity_count:,}")
     print(f"  {breakdown_label}: {dict(total_types)}")
-    print(f"  Total relationships: {len(all_rels):,}")
+    print(f"  Total relationships: {total_relationship_count:,}")
     print(f"  Rel breakdown:       {dict(total_preds)}")
     print(f"  Total time:          {time.perf_counter()-t0:.1f}s")
     print(DIVIDER)

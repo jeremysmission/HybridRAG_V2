@@ -31,9 +31,12 @@ import pytest
 V2_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(V2_ROOT))
 
+from src.store.entity_store import Entity, EntityStore
 from src.store.lance_store import LanceStore
+from src.store.relationship_store import Relationship, RelationshipStore
 from scripts.tiered_extract import (
     _is_tier2_candidate,
+    _stream_tier1,
     iter_chunk_batches,
     load_chunks,
     run_tier2_gliner,
@@ -260,6 +263,140 @@ class TestIterChunkBatchesReal:
                 list(iter_chunk_batches(tiny_store, batch_size=5))
         finally:
             broken_table.search = original_search  # type: ignore[assignment]
+
+
+# ---------------------------------------------------------------------------
+# Tier 1 streaming flush path
+# ---------------------------------------------------------------------------
+
+class TestTier1StreamingFlush:
+    def _fake_chunk_batches(self):
+        return [
+            [
+                {"chunk_id": "c1", "text": "chunk one", "source_path": "a.txt"},
+                {"chunk_id": "c2", "text": "chunk two", "source_path": "b.txt"},
+            ],
+            [
+                {"chunk_id": "c1", "text": "chunk one again", "source_path": "a.txt"},
+            ],
+        ]
+
+    def _make_extractors(self):
+        entity_map = {
+            "c1": [Entity("PART", "PS-800", "PS-800", 1.0, "c1", "a.txt", "")],
+            "c2": [Entity("PART", "SA-9000", "SA-9000", 1.0, "c2", "b.txt", "")],
+        }
+        rel_map = {
+            "c1": [Relationship("PART", "PS-800", "ORDERED_FOR", "SITE", "Site-A", 1.0, "a.txt", "c1", "")],
+            "c2": [Relationship("PART", "SA-9000", "ORDERED_FOR", "SITE", "Site-B", 1.0, "b.txt", "c2", "")],
+        }
+
+        class _Extractor:
+            def extract(self, text, chunk_id, source_path):
+                return list(entity_map.get(chunk_id, []))
+
+        class _EventParser:
+            def parse(self, text, chunk_id, source_path):
+                return [], []
+
+        class _RelExtractor:
+            def extract(self, text, chunk_id, source_path):
+                return list(rel_map.get(chunk_id, []))
+
+        return _Extractor(), _EventParser(), _RelExtractor()
+
+    def test_streams_and_flushes_incrementally(self, tmp_path, monkeypatch):
+        from scripts import tiered_extract as te
+
+        store = object()
+        entity_store = EntityStore(str(tmp_path / "entities.sqlite3"))
+        rel_store = RelationshipStore(str(tmp_path / "relationships.sqlite3"))
+        extractor, event_parser, rel_extractor = self._make_extractors()
+        entity_batches: list[list[str]] = []
+        rel_batches: list[list[str]] = []
+
+        orig_insert_entities = entity_store.insert_entities
+        orig_insert_relationships = rel_store.insert_relationships
+
+        def record_entities(batch):
+            entity_batches.append([e.text for e in batch])
+            return orig_insert_entities(batch)
+
+        def record_relationships(batch):
+            rel_batches.append([r.subject_text for r in batch])
+            return orig_insert_relationships(batch)
+
+        monkeypatch.setattr(entity_store, "insert_entities", record_entities)
+        monkeypatch.setattr(rel_store, "insert_relationships", record_relationships)
+        monkeypatch.setattr(te, "iter_chunk_batches", lambda *a, **k: self._fake_chunk_batches())
+
+        try:
+            result = te._stream_tier1(
+                store=store,  # type: ignore[arg-type]
+                entity_store=entity_store,
+                rel_store=rel_store,
+                extractor=extractor,
+                event_parser=event_parser,
+                rel_extractor=rel_extractor,
+                limit=0,
+                batch_size=2,
+                dry_run=False,
+                entity_flush_size=1,
+                rel_flush_size=1,
+            )
+
+            assert result["chunks_processed"] == 3
+            assert result["raw_entity_count"] == 2
+            assert result["raw_relationship_count"] == 2
+            assert result["inserted_entity_count"] == 2
+            assert result["inserted_relationship_count"] == 2
+            assert entity_batches == [["PS-800"], ["SA-9000"]]
+            assert rel_batches == [["PS-800"], ["SA-9000"]]
+            assert entity_store.count_entities() == 2
+            assert rel_store.count() == 2
+        finally:
+            entity_store.close()
+            rel_store.close()
+
+    def test_dry_run_never_writes(self, tmp_path, monkeypatch):
+        from scripts import tiered_extract as te
+
+        store = object()
+        entity_store = EntityStore(str(tmp_path / "entities.sqlite3"))
+        rel_store = RelationshipStore(str(tmp_path / "relationships.sqlite3"))
+        extractor, event_parser, rel_extractor = self._make_extractors()
+
+        def boom(*args, **kwargs):
+            raise AssertionError("dry-run should not write to SQLite")
+
+        monkeypatch.setattr(entity_store, "insert_entities", boom)
+        monkeypatch.setattr(rel_store, "insert_relationships", boom)
+        monkeypatch.setattr(te, "iter_chunk_batches", lambda *a, **k: self._fake_chunk_batches())
+
+        try:
+            result = te._stream_tier1(
+                store=store,  # type: ignore[arg-type]
+                entity_store=entity_store,
+                rel_store=rel_store,
+                extractor=extractor,
+                event_parser=event_parser,
+                rel_extractor=rel_extractor,
+                limit=0,
+                batch_size=2,
+                dry_run=True,
+                entity_flush_size=1,
+                rel_flush_size=1,
+            )
+
+            assert result["raw_entity_count"] == 2
+            assert result["raw_relationship_count"] == 2
+            assert result["inserted_entity_count"] == 0
+            assert result["inserted_relationship_count"] == 0
+            assert entity_store.count_entities() == 0
+            assert rel_store.count() == 0
+        finally:
+            entity_store.close()
+            rel_store.close()
 
     def test_fallback_opt_in_uses_load_chunks(self, tiny_store):
         """``allow_load_fallback=True`` is the only path to the materialize
