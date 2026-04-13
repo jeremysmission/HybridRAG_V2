@@ -81,6 +81,8 @@ The main lesson is:
 
 Once I found that V1 could not aggregate reliably and that Tier 1 extraction was still capable of poisoning business-facing entities, the responsible move was to stop promising progress based on appearance and rebuild the path so it can be measured and trusted.
 
+It is also important to understand that this is not like installing a normal legacy software program. AI preprocessing at this scale means converting a very large legacy corpus through chunking, embedding, enrichment, and extraction so it becomes usable inside an AI architecture. Those are compute-intensive one-time builds and conversions that can take days or weeks, even before the final question-answering layer is ready.
+
 ## Budget And Resource Constraint Context
 
 An important part of this effort is that I am building this under tight cost constraints instead of using the more expensive default path.

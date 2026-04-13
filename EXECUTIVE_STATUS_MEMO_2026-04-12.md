@@ -34,7 +34,7 @@ Over the last stretch, I focused on turning the prototype into something measura
 - added an automated pre-rerun quality gate
 - documented a staged promotion process so future data additions can be screened before reaching production
 
-This also included a meaningful amount of enabling work around approvals and environment readiness. I did not start with every AI use case, software path, and hardware path already cleared and available. Part of the effort has been getting the project into a state where the technical work could be done responsibly, including a long stop-and-go period caused by proxy/network friction while downloading and establishing the working database, repeated IT/admin-access interruptions across two machines, and software compatibility work needed to keep preprocessing on the GPU path instead of much slower CPU-only paths. That environment is now finally coming together.
+This also included a meaningful amount of enabling work around approvals and environment readiness. I did not start with every AI use case, software path, and hardware path already cleared and available. Part of the effort has been getting the project into a state where the technical work could be done responsibly, including a long stop-and-go period caused by proxy/network friction while downloading and establishing the working database, repeated IT/admin-access interruptions across two machines, software compatibility work needed to keep preprocessing on the GPU path instead of much slower CPU-only paths, and the fact that the desktop workstation is still largely an on-site machine rather than a practical remote-development machine. The workstation laptop has at least made it possible to keep work moving on nights and weekends while that desktop limitation remains in place.
 
 ## Cost And Delivery Context
 
@@ -79,6 +79,8 @@ This is a milestone estimate, not a claim that every remaining unknown is gone. 
 ## Why The Time Was Necessary
 
 The time was not spent polishing a demo. It was spent preventing a bad demo and avoiding repeated wasted reruns. The key lesson is that I was closer to a visible prototype than to a trustworthy system. I chose to correct that now rather than build on top of unreliable data.
+
+It is also important to understand that this is not the same as standing up a normal legacy software tool. Converting a large legacy corpus into AI-ready form requires chunking, embedding, enrichment, and extraction passes before the final answer layer can work well. At this scale, those are compute-intensive one-time builds and conversions that can take days or weeks rather than behaving like a normal software install.
 
 ## Bottom Line
 

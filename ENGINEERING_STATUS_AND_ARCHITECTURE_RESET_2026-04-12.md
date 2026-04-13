@@ -88,6 +88,8 @@ The important shift is:
 
 This is the key engineering correction.
 
+It is also worth stating explicitly that the preprocessing path here is a real data-engineering workload, not a simple software-install workload. Converting the legacy corpus into AI-usable form requires chunking, embedding, enrichment, extraction, indexing, and validation passes. At this corpus size, those are compute-intensive one-time builds and conversions that can consume days or weeks before the downstream QA path is even meaningful.
+
 ## Current Baseline
 
 On the current store, the 400-query baseline is usable enough for diagnosis but not yet the final truth baseline:

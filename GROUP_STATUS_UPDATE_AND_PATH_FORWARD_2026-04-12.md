@@ -46,6 +46,8 @@ The main lesson was:
 
 - the old path was closer to a visible prototype than to a trustworthy system
 
+It is also worth clarifying that this kind of AI preprocessing is not analogous to deploying a normal legacy software package. A large corpus has to be converted into AI-usable form through chunking, embedding, enrichment, and extraction. Those are compute-intensive one-time conversions, and at this scale they can consume days or weeks of build time before the final system can even be judged fairly.
+
 ## Why The Work Took Time
 
 There are three reasons the work took longer than the original optimistic path suggested.
@@ -69,9 +71,10 @@ I did not start with every required path already available. Part of the effort h
 - dealing with unstable admin access across two machines and repeated IT resets
 - working through proxy/network friction while downloading and establishing the working database
 - resolving software compatibility problems so preprocessing could use CUDA/GPU instead of falling back to CPU-only execution
+- working around the fact that the desktop workstation is still effectively on-site only rather than remotely available
 - adapting the design to what was actually available at each stage
 
-That means some of the elapsed time has gone into getting the project into a state where the engineering work could be done correctly. In particular, establishing the working database was slowed by more than a month of stop-and-go downloading under proxy/network constraints, and productivity was also affected by two-machine admin-access instability plus the need to solve GPU-vs-CPU preprocessing compatibility on corpus-scale jobs.
+That means some of the elapsed time has gone into getting the project into a state where the engineering work could be done correctly. In particular, establishing the working database was slowed by more than a month of stop-and-go downloading under proxy/network constraints, and productivity was also affected by two-machine admin-access instability plus the need to solve GPU-vs-CPU preprocessing compatibility on corpus-scale jobs. The desktop workstation also still remains largely on-site only, so the workstation laptop has been the main way to keep progress moving during nights and weekends away from that machine.
 
 ### 3. Intentional cost discipline
 

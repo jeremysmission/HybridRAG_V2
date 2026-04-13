@@ -18,6 +18,7 @@
 - IT/admin access across two machines was unstable and required resets.
 - Proxy/network friction made establishing the working database a long stop-and-go process.
 - Preprocessing compatibility had to be solved so corpus-scale work could run on CUDA/GPU instead of CPU-only paths.
+- This preprocessing work is not like installing a normal legacy app; chunking, embedding, enriching, and extracting a huge corpus is compute-intensive and can take days or weeks for one-time builds.
 - The system was at risk of confusing real business identifiers with technical/security codes.
 - I stopped the blind rerun path so I would not waste another full day producing a dirty store.
 
