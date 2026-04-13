@@ -182,17 +182,34 @@ If the shadow slice is clean, run a full Tier 1 rerun into an isolated clean sto
 
 ### Live launch
 
-- launched: `2026-04-13 08:10 America/Denver`
-- wrapper PID: `196808`
-- monitor PID: `192168`
-- clean config:
-  - `config/config.tier1_clean_2026-04-13.yaml`
-- monitor log:
-  - `logs\tier1_clean_run_20260413_081035.monitor.txt`
-- note:
-  - the first launch wrapper did not create the intended stdout text log,
-    so liveness is being tracked through the monitor log plus SQLite WAL
-    growth in `data/index/clean/tier1_clean_20260413`
+- first buffered launch:
+  - launched: `2026-04-13 08:10 America/Denver`
+  - outcome:
+    - terminated intentionally after the streaming Tier 1 refactor landed
+    - reason:
+      - old code buffered all Tier 1 outputs until the end of the run,
+        which made progress non-durable and hard to observe
+- active relaunched run:
+  - launched: `2026-04-13 08:39 America/Denver`
+  - launcher:
+    - `scripts/run_tier1_clean_launcher.py`
+  - run id:
+    - `20260413_083954`
+  - launcher PID:
+    - `200180`
+  - child PID:
+    - `203152`
+  - clean config:
+    - `config/config.tier1_clean_2026-04-13.yaml`
+  - manifest:
+    - `logs/tier1_clean_runs/tier1_clean_run_20260413_083954.json`
+  - stdout/stderr log:
+    - `logs/tier1_clean_runs/tier1_clean_run_20260413_083954.log`
+  - observed early rate:
+    - about `6,000` chunks/sec through the first `210,000` chunks
+  - implication:
+    - Beast-side full clean Tier 1 looks like a sub-hour job on the
+      streaming path, not an all-day blind rerun
 
 ### Status
 
