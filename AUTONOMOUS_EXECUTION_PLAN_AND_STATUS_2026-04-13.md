@@ -342,7 +342,40 @@ Once a clean Tier 1 store exists, prepare the next 400-query baseline rerun agai
 
 ### Status
 
-- Running in background at lunch-break checkpoint
+- Completed
+
+### Final clean-store baseline result
+
+- completed:
+  - `2026-04-13 11:30 America/Denver`
+- result artifacts:
+  - `docs\production_eval_results_clean_tier1_2026-04-13.json`
+  - `docs\PRODUCTION_EVAL_RESULTS_CLEAN_TIER1_2026-04-13.md`
+- headline:
+  - `PASS: 158/400` (`40%`)
+  - `PASS + PARTIAL: 254/400` (`64%`)
+  - `MISS: 146/400`
+  - routing correct: `287/400` (`72%`)
+- latency:
+  - pure retrieval `P50 433ms / P95 2711ms`
+  - wall clock incl. router `P50 2628ms / P95 5528ms`
+- important interpretation:
+  - the cleaned store improved the truthful baseline enough to justify
+    shifting focus away from Tier 1 cleanup and toward targeted
+    retrieval/routing follow-on work
+  - routing improved materially versus the earlier dirty-store baseline
+  - retrieval is still strongest for Program Manager / Field Engineer lanes
+    and remains weakest in the identifier-heavy Logistics lane
+
+### Immediate next follow-on lane
+
+- analyze the cleaned baseline by miss family and query slice
+- identify the highest-yield fix targets from the cleaned store rather than
+  guessing from the older dirty baseline
+- expected first targets:
+  - Logistics / shipping / procurement family misses
+  - identifier/path-heavy retrieval misses
+  - remaining router weak spots on the real provider path
 
 ## Workstation Coordination Notes
 
@@ -381,4 +414,4 @@ If Beast crashes, the recovery order is:
 
 ## Short Summary
 
-The unattended Beast-side mission is now past the biggest dependency. The replacement isolated clean Tier 1 rerun completed and the clean-store audit is a full PASS: blocked namespaces are gone from the audited `PO` / `PART` path, and both the PO and PART preserve sentinels survive in the corrected store. The next immediate dependency is the truthful 400-query clean-store baseline. That rerun is already launched in the background under `run_production_eval.py`; one process is actively consuming CPU/RAM and should be allowed to continue, while no second baseline should be launched unless that active process exits or the output artifacts appear complete.
+The unattended Beast-side mission has now cleared the major data-trust dependency. The replacement isolated clean Tier 1 rerun completed and the clean-store audit is a full PASS: blocked namespaces are gone from the audited `PO` / `PART` path, and both the PO and PART preserve sentinels survive in the corrected store. The follow-on clean-store 400-query baseline also completed successfully and is now frozen in local artifacts. The next immediate dependency is no longer “make Tier 1 clean.” It is “use the clean baseline to identify the highest-yield retrieval and routing fixes on the rebuilt store.”
