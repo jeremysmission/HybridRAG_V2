@@ -47,6 +47,8 @@ A more typical vendor-heavy or cloud-heavy path for this kind of effort could ea
 
 I am instead building a tiered Python-based pipeline that minimizes expensive AI passes over the full 700GB corpus. The intent is to push most of the broad preprocessing into lower-cost deterministic stages, reserve the heavier AI work for the reduced subset where it is actually needed, and drive the long-term query-cost model toward something much smaller. That is part of why the architecture split and quality gates matter: if the pipeline is not trustworthy, reruns waste both schedule and the cost savings this design is meant to deliver.
 
+A recent positive development is that the company has only very recently released an internal AI toolkit that includes temporary access to OSS-20B and OSS-120B models through AWS. I am planning to use that selectively for the remaining heavy preprocessing tasks where it creates real leverage, while still avoiding an open-ended cloud-heavy cost model. That also requires me to learn the AWS infrastructure side on the fly so the new capability can be used correctly and cost-consciously. Because this is government AWS rather than standard commercial AWS, it adds an additional layer of restrictions and setup complexity.
+
 ## Current Status
 
 The system is in a much stronger state than V1, but the remaining gating item is a clean Tier 1 rerun using the new quality controls. The current path forward is now concrete:
@@ -54,8 +56,9 @@ The system is in a much stronger state than V1, but the remaining gating item is
 1. run the automated Tier 1 quality gate
 2. run a controlled shadow extraction on a smaller sample
 3. if it passes, run one clean full Tier 1 rerun
-4. rerun the evaluation baseline on the cleaned store
-5. use that clean baseline to finish retrieval and routing improvements
+4. use the newly available company OSS toolkit selectively for the remaining heavy preprocessing tasks
+5. rerun the evaluation baseline on the cleaned store
+6. use that clean baseline to finish retrieval and routing improvements
 
 ## Estimated Timeline
 
@@ -89,4 +92,4 @@ Rather than force a brittle demo, I split the system into two cleaner applicatio
 
 The main issue I uncovered was that the first-pass extraction layer was sometimes classifying security-control and technical codes as if they were business entities such as purchase orders and part numbers. That would have made the system look polished while still producing misleading answers. I stopped the blind rerun path, hardened the extraction logic, added automated quality gates, and built a grounded evaluation set so progress can be measured honestly.
 
-At this point, the architecture reset is complete and the next steps are clear: run the automated Tier 1 gate, run a controlled shadow extraction, perform one clean full Tier 1 rerun if that passes, and then rerun the evaluation baseline on the cleaned store. My current estimate is about two weeks to get to a trustworthy demo candidate on this rebuilt path, assuming the clean rerun behaves as expected. The extra time has gone into making the system dependable instead of just making it look close, while also keeping the long-term operating-cost model much lower than a more cloud-heavy approach.
+At this point, the architecture reset is complete and the next steps are clear: run the automated Tier 1 gate, run a controlled shadow extraction, perform one clean full Tier 1 rerun if that passes, selectively use the newly available company OSS toolkit for the remaining heavy preprocessing tasks, and then rerun the evaluation baseline on the cleaned store. My current estimate is about two weeks to get to a trustworthy demo candidate on this rebuilt path, assuming the clean rerun behaves as expected. The extra time has gone into making the system dependable instead of just making it look close, while also keeping the long-term operating-cost model much lower than a more cloud-heavy approach.

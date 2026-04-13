@@ -156,6 +156,8 @@ In practical terms, the target is:
 
 That cost target is only realistic if the pipeline is trustworthy. Dirty reruns destroy both schedule and cost savings.
 
+An important recent development is that the company has only just released an internal AI toolkit that includes temporary access to OSS-20B and OSS-120B via AWS. That matters because it creates a narrow, cost-controlled way to use stronger AI on the remaining heavy preprocessing tasks without changing the overall philosophy of the system. The strategy remains the same: broad work stays local and deterministic, while the heavier model path is used sparingly where it creates the most leverage. It also means the project now includes a self-taught AWS infrastructure learning curve so that this new capability can be used responsibly instead of turning into unmanaged cloud complexity. Because this path runs through government AWS rather than standard commercial AWS, there is also a separate layer of restrictions and configuration friction that has to be worked through.
+
 ## Why This Took Time
 
 The time was not spent polishing a demo.

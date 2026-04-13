@@ -101,6 +101,8 @@ The design goal is:
 
 That cost discipline is part of why the architecture and gating work matters so much. If the pipeline is dirty, every rerun wastes not only time but also the cost savings the tiered design is supposed to create.
 
+A recent positive development is that the company has only very recently released an internal AI toolkit that includes temporary access to OSS-20B and OSS-120B models through AWS. I am deliberately not treating that as a reason to move to an uncontrolled cloud-heavy design. Instead, I found a way to use that temporarily free capability selectively for the remaining heavy preprocessing tasks where it can help the most. That lets me accelerate the hardest remaining AI work without giving up the lower-cost tiered design. It also means I have had to learn the AWS infrastructure side on the fly in order to use that path responsibly and avoid hidden cloud-cost or configuration mistakes. Because this is government AWS rather than standard commercial AWS, it also comes with its own set of access, configuration, and integration restrictions.
+
 ## What Happens Next
 
 The next steps are now concrete and measurable:
@@ -109,7 +111,8 @@ The next steps are now concrete and measurable:
 2. Run a controlled shadow extraction on a smaller chunk sample.
 3. If it passes, run one clean full Tier 1 rerun.
 4. Rerun the 400-query production baseline on the cleaned store.
-5. Use that clean baseline to tighten remaining retrieval and routing problems.
+5. Use the newly available company OSS toolkit selectively for the remaining heavy preprocessing tasks that truly need it.
+6. Use the clean baseline to tighten remaining retrieval and routing problems.
 
 This is the shortest credible path to a trustworthy demo and a trustworthy production direction.
 

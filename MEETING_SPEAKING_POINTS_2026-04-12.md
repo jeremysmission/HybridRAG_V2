@@ -56,6 +56,10 @@
 - A more cloud-heavy or vendor-heavy path could be much more expensive up front and monthly.
 - I am building a tiered Python pipeline to reduce expensive AI passes and keep long-term operating cost low.
 - The extra engineering up front is what makes the lower recurring-cost model possible.
+- We now also have a newly released company AI toolkit with temporary OSS-20B / OSS-120B access through AWS.
+- I plan to use that selectively for the remaining heavy preprocessing tasks, without abandoning the low-cost tiered design.
+- That also means learning the AWS infrastructure side on the fly so I can use it correctly without opening up hidden cloud-cost issues.
+- It is government AWS, not standard commercial AWS, so it comes with extra restrictions and setup friction.
 
 ## Current Status
 
@@ -68,8 +72,9 @@
 1. run automated Tier 1 gate
 2. run shadow Tier 1 sample
 3. if clean, run one full Tier 1 rerun
-4. rerun the 400-query baseline on the cleaned store
-5. finish targeted retrieval/router tightening
+4. use the company OSS toolkit selectively for remaining heavy preprocessing
+5. rerun the 400-query baseline on the cleaned store
+6. finish targeted retrieval/router tightening
 
 ## Schedule
 

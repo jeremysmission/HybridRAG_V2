@@ -79,6 +79,8 @@ I am deliberately not taking the most cloud-heavy path. A more vendor-heavy or c
 
 That is why the architecture split and quality gates matter: they are what make the low-recurring-cost model realistic.
 
+A recent positive change is that the company has only very recently released an internal AI toolkit with temporary access to OSS-20B and OSS-120B through AWS. That gives me a practical way to use stronger AI only on the remaining heavy preprocessing tasks, while still preserving the overall low-cost tiered design instead of moving to a broad cloud-heavy workflow. It also adds a new engineering burden: learning the AWS infrastructure side quickly enough to use the toolkit correctly without creating hidden cost or configuration problems. Because this path runs through government AWS rather than standard commercial AWS, it carries its own extra restrictions and integration friction.
+
 ## What Has Been Completed
 
 Completed work includes:
@@ -117,8 +119,9 @@ The current work is not open-ended churn. It is converging around a clear gated 
 1. run automated Tier 1 quality gate
 2. run controlled shadow Tier 1 sample
 3. if clean, run one full Tier 1 rerun
-4. rerun the 400-query baseline on the cleaned store
-5. finish targeted retrieval and routing improvements
+4. selectively use the company OSS toolkit for the remaining heavy preprocessing tasks
+5. rerun the 400-query baseline on the cleaned store
+6. finish targeted retrieval and routing improvements
 
 That is the shortest credible path to a trustworthy demo candidate and a production-shaped design.
 
