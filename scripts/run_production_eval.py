@@ -59,6 +59,11 @@ from src.llm.client import LLMClient  # noqa: E402
 PRODUCTION_JSON = v2_root / "tests" / "golden_eval" / "production_queries_2026-04-11.json"
 REPORT_MD = v2_root / "docs" / "PRODUCTION_EVAL_RESULTS_2026-04-11.md"
 RESULTS_JSON = v2_root / "docs" / "production_eval_results_2026-04-11.json"
+CONFIG_PATH = v2_root / "config" / "config.yaml"
+
+REPORT_QUERY_LABEL = "tests/golden_eval/production_queries_2026-04-11.json"
+REPORT_ENTITY_DB_LABEL = "data/index/entities.sqlite3"
+REPORT_CONFIG_LABEL = "config/config.yaml"
 
 TOP_K = 5
 PREVIEW_CHARS = 160
@@ -521,8 +526,9 @@ def write_markdown_report(
     lines.append(f"- LanceDB chunks: **{run.store_chunks:,}**")
     lines.append(f"- GPU: `{run.gpu_device}`")
     lines.append(f"- Top-K: **{TOP_K}**")
-    lines.append(f"- Query pack: `tests/golden_eval/production_queries_2026-04-11.json`")
-    lines.append(f"- Entity store: `data/index/entities.sqlite3` (8.02M entities post phone-regex round 2 fix at `7faef97`)")
+    lines.append(f"- Query pack: `{REPORT_QUERY_LABEL}`")
+    lines.append(f"- Entity store: `{REPORT_ENTITY_DB_LABEL}`")
+    lines.append(f"- Config: `{REPORT_CONFIG_LABEL}`")
     lines.append(f"- FTS fixes applied: `715fe4b` (single-column FTS) + `957eaab` (hybrid builder chain)")
     lines.append("")
 
@@ -912,21 +918,17 @@ def _rebuild_report_from_json() -> int:
 
 
 def main() -> int:
+    global REPORT_MD, RESULTS_JSON, REPORT_QUERY_LABEL, REPORT_ENTITY_DB_LABEL, REPORT_CONFIG_LABEL
+
+    queries_path = _resolve_cli_path("--queries", PRODUCTION_JSON)
+    config_path = _resolve_cli_path("--config", CONFIG_PATH)
+    REPORT_MD = _resolve_cli_path("--report-md", REPORT_MD)
+    RESULTS_JSON = _resolve_cli_path("--results-json", RESULTS_JSON)
+    REPORT_QUERY_LABEL = str(queries_path.relative_to(v2_root)).replace("\\", "/") if queries_path.is_relative_to(v2_root) else str(queries_path)
+    REPORT_CONFIG_LABEL = str(config_path.relative_to(v2_root)).replace("\\", "/") if config_path.is_relative_to(v2_root) else str(config_path)
+
     if "--rebuild-report" in sys.argv:
         return _rebuild_report_from_json()
-
-    # Parse --queries PATH CLI arg (defaults to the legacy 25-query file).
-    # This lets the runner consume either the legacy 25-query schema or the
-    # RAGAS 400-query schema without duplicating the runner. Entries without
-    # a recognizable query id/text are treated as metadata blocks and skipped.
-    queries_path = PRODUCTION_JSON
-    if "--queries" in sys.argv:
-        idx = sys.argv.index("--queries")
-        if idx + 1 < len(sys.argv):
-            candidate = Path(sys.argv[idx + 1])
-            if not candidate.is_absolute():
-                candidate = v2_root / candidate
-            queries_path = candidate
 
     print("=" * 72)
     print("  PRODUCTION GOLDEN EVAL — reviewer — 2026-04-11")
@@ -953,7 +955,7 @@ def main() -> int:
         + (f" (skipped {skipped} metadata blocks)" if skipped else "")
     )
 
-    config = load_config(str(v2_root / "config" / "config.yaml"))
+    config = load_config(str(config_path))
     lance_path = str(v2_root / config.paths.lance_db)
     store = LanceStore(lance_path)
     store_count = store.count()
@@ -980,6 +982,7 @@ def main() -> int:
     # Entity retriever: load if DB exists, but we don't rely on CONTACT counts
     entity_retriever = None
     entity_db_path = v2_root / config.paths.entity_db
+    REPORT_ENTITY_DB_LABEL = str(entity_db_path.relative_to(v2_root)).replace("\\", "/") if entity_db_path.is_relative_to(v2_root) else str(entity_db_path)
     if entity_db_path.exists():
         try:
             from src.store.entity_store import EntityStore
@@ -1086,3 +1089,13 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+def _resolve_cli_path(flag: str, default: Path) -> Path:
+    if flag not in sys.argv:
+        return default
+    idx = sys.argv.index(flag)
+    if idx + 1 >= len(sys.argv):
+        raise SystemExit(f"ERROR: {flag} requires a path")
+    candidate = Path(sys.argv[idx + 1])
+    if not candidate.is_absolute():
+        candidate = v2_root / candidate
+    return candidate
