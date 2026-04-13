@@ -48,6 +48,16 @@ Completed work includes:
 - built an automated pre-rerun quality gate so future data additions can be screened before contaminating production
 - documented the forward process for staged promotion instead of blind rerun
 
+This work also included a large amount of enabling effort that is easy to overlook from the outside:
+
+- identifying and submitting the needed AI use cases for approval
+- working through software and dependency approval paths
+- sorting out hardware and workstation readiness constraints
+- dealing with difficult proxy/network conditions while downloading and establishing the working database
+- adapting the design to what was actually available at each stage instead of what would have been ideal on day one
+
+In practical terms, I did not start this effort with every approval, dependency, and hardware path already in place. Part of the time went into getting the project into a state where the technical work could happen correctly. That included more than a month of stop-and-go downloading through proxy/network friction just to get a working database established. I am finally getting to the point where the system, the tooling, and the environment are lining up at the same time.
+
 ## Current Status
 
 The project is now in a much better state than it was under V1, but the current bottleneck is not installer work or basic retrieval plumbing. The bottleneck is structured-data trust.
