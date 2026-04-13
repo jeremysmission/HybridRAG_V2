@@ -87,7 +87,27 @@ Plain-English version:
 
 I found that the earlier system could retrieve documents but could not support reliable structured answers. I rebuilt the pipeline into two cleaner applications, hardened the install/import/export path, built a real evaluation set, and added automated quality gates so future data updates can be checked before they pollute production. I am now at the stage where I can do one controlled shadow run and one intentional clean rerun, instead of repeatedly losing time to dirty reruns.
 
+## Manager Framing For A Non-Technical Audience
+
+If the audience is non-technical, the easiest honest framing is:
+
+- this is the program's first AI project
+- the source material comes from many years of legacy data
+- the data was not originally created for an AI system
+- naming, security labels, identifiers, and document conventions are inconsistent across that history
+- that means the hard part is not only "building an AI model"
+- the hard part is teaching the system which patterns are real business information and which patterns only look similar
+
+Plain-English version using that framing:
+
+"This has turned into the normal growing pains of a first AI project built on top of about 15 years of legacy data. The old data was never designed for an AI system, so it contains inconsistent naming conventions, mixed document styles, and codes that look alike even when they mean very different things. The system was starting to confuse real business identifiers with security-control and technical codes, which would have made the answers look polished but not trustworthy. Instead of forcing a demo on top of that, I split the system into cleaner parts, added quality checks, and built a safer process so future data can be screened before it reaches production. The extra time is going into making the system dependable rather than just impressive on the surface."
+
+## Very Short Manager Version
+
+If a shorter version is needed:
+
+"I found that the original path looked closer to a demo than it really was. Because this is our first AI project and it sits on top of roughly 15 years of inconsistent legacy data, I had to stop and harden the pipeline so the system does not confuse business information with technical/security codes. I split the architecture, built the quality gates, and now I am at the point where I can do one controlled clean rerun instead of wasting more time on unreliable runs."
+
 ## Short Spoken Version
 
 "I had to reset the architecture after finding that the original version could retrieve documents but could not aggregate reliably enough for the kind of answers we need. I split the system into an upstream export app and a downstream retrieval/evaluation app, fixed several hidden reliability issues, built a grounded 400-query evaluation corpus, and added automated quality gates to prevent bad data from contaminating production. The next milestone is one controlled shadow extraction, then one clean Tier 1 rerun, then a fresh measured baseline on the rebuilt system."
-
