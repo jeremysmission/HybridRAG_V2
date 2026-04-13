@@ -69,6 +69,26 @@ The main lesson is:
 
 Once I found that V1 could not aggregate reliably and that Tier 1 extraction was still capable of poisoning business-facing entities, the responsible move was to stop promising progress based on appearance and rebuild the path so it can be measured and trusted.
 
+## Budget And Resource Constraint Context
+
+An important part of this effort is that I am building this under tight cost constraints instead of using the more expensive default path.
+
+The more conventional approach would be to contract out large parts of the design and cloud execution path, which would likely run on the order of:
+
+- roughly `$15K-$20K` for the design and setup work alone
+- then ongoing cloud costs in the range of roughly `$800/month`
+
+Instead, I have been building a homegrown Python pipeline that uses a tiered approach to reduce how much expensive AI preprocessing is needed on the full 700GB corpus.
+
+The design goal is:
+
+- do the broad filtering and deterministic preprocessing locally
+- reduce the expensive AI-heavy work to a much smaller fraction of the data
+- use the temporarily available company-provided AWS AI services only where they add real value
+- push the long-term query cost toward something closer to tens of dollars per month instead of hundreds or thousands
+
+That cost discipline is part of why the architecture and gating work matters so much. If the pipeline is dirty, every rerun wastes not only time but also the cost savings the tiered design is supposed to create.
+
 ## What Happens Next
 
 The next steps are now concrete and measurable:
@@ -101,6 +121,10 @@ If the audience is non-technical, the easiest honest framing is:
 Plain-English version using that framing:
 
 "This has turned into the normal growing pains of a first AI project built on top of about 15 years of legacy data. The old data was never designed for an AI system, so it contains inconsistent naming conventions, mixed document styles, and codes that look alike even when they mean very different things. The system was starting to confuse real business identifiers with security-control and technical codes, which would have made the answers look polished but not trustworthy. Instead of forcing a demo on top of that, I split the system into cleaner parts, added quality checks, and built a safer process so future data can be screened before it reaches production. The extra time is going into making the system dependable rather than just impressive on the surface."
+
+Additional budget framing if useful:
+
+"I am also doing this under a cost-control model. The standard cloud-heavy path for something like this can get expensive quickly. I am deliberately building a tiered pipeline that minimizes expensive AI passes over the full corpus and keeps long-term usage costs low. That means a little more engineering up front, but it is what gives us a realistic path to something operational without turning it into a high-cost recurring service."
 
 ## Very Short Manager Version
 

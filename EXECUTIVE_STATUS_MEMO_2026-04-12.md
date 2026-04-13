@@ -34,6 +34,17 @@ Over the last stretch, I focused on turning the prototype into something measura
 - added an automated pre-rerun quality gate
 - documented a staged promotion process so future data additions can be screened before reaching production
 
+## Cost And Delivery Context
+
+This work is also being done under a deliberate cost-control strategy.
+
+A more typical vendor-heavy or cloud-heavy path for this kind of effort could easily involve:
+
+- approximately `$15K-$20K` in design/setup effort
+- then recurring cloud costs around `$800/month`
+
+I am instead building a tiered Python-based pipeline that minimizes expensive AI passes over the full 700GB corpus. The intent is to push most of the broad preprocessing into lower-cost deterministic stages, reserve the heavier AI work for the reduced subset where it is actually needed, and drive the long-term query-cost model toward something much smaller. That is part of why the architecture split and quality gates matter: if the pipeline is not trustworthy, reruns waste both schedule and the cost savings this design is meant to deliver.
+
 ## Current Status
 
 The system is in a much stronger state than V1, but the remaining gating item is a clean Tier 1 rerun using the new quality controls. The current path forward is now concrete:
@@ -62,4 +73,4 @@ Rather than force a brittle demo, I split the system into two cleaner applicatio
 
 The main issue I uncovered was that the first-pass extraction layer was sometimes classifying security-control and technical codes as if they were business entities such as purchase orders and part numbers. That would have made the system look polished while still producing misleading answers. I stopped the blind rerun path, hardened the extraction logic, added automated quality gates, and built a grounded evaluation set so progress can be measured honestly.
 
-At this point, the architecture reset is complete and the next steps are clear: run the automated Tier 1 gate, run a controlled shadow extraction, perform one clean full Tier 1 rerun if that passes, and then rerun the evaluation baseline on the cleaned store. The extra time has gone into making the system dependable instead of just making it look close.
+At this point, the architecture reset is complete and the next steps are clear: run the automated Tier 1 gate, run a controlled shadow extraction, perform one clean full Tier 1 rerun if that passes, and then rerun the evaluation baseline on the cleaned store. The extra time has gone into making the system dependable instead of just making it look close, while also keeping the long-term operating-cost model much lower than a more cloud-heavy approach.
