@@ -1,0 +1,62 @@
+# HybridRAG V2 Configuration -- Tier 1 Shadow Run
+# Date: 2026-04-13
+# Purpose: Run a bounded Tier 1 shadow extraction against the live LanceDB
+# store while writing entities/relationships to an isolated shadow path.
+
+paths:
+  lance_db: "data/index/lancedb"
+  entity_db: "data/index/shadow/tier1_shadow_20260413/entities.sqlite3"
+  embedengine_output: "data/source"
+  site_vocabulary: "config/site_vocabulary.yaml"
+
+retrieval:
+  top_k: 10
+  candidate_pool: 30
+  min_score: 0.1
+  reranker_enabled: true
+  reranker_top_n: 30
+
+llm:
+  model: "gpt-4o"
+  deployment: "gpt-4o"
+  context_window: 128000
+  max_tokens: 16384
+  temperature: 0.08
+  timeout_seconds: 180
+  api_base: ""
+  api_version: "2024-10-21"
+  provider: "auto"
+
+extraction:
+  min_confidence: 0.5
+  model: "phi4:14b-q4_K_M"
+  part_patterns:
+    - 'ARC-\d{4}'
+    - 'IGSI-\d+'
+    - 'PO-\d{4}-\d{4}'
+    - 'SN[-: ]?\d+'
+    - 'SEMS3D-\d+'
+    - '[A-Z]{2,}-\d{3,4}'
+    - 'WR-\d{4}'
+    - 'FM-\d{3}'
+    - 'AB-\d{3}'
+    - 'PS-\d{3}'
+    - 'AH-\d{3}'
+  gliner_enabled: false
+  gliner_device: "cuda:1"
+  gliner_model: "urchade/gliner_medium-v2.1"
+  gliner_min_chunk_len: 50
+  gpt4o_extraction: true
+  max_concurrent: 16
+
+server:
+  host: "127.0.0.1"
+  port: 8000
+
+crag:
+  enabled: false
+  confidence_threshold: 0.8
+  max_retries: 2
+  verifier_model: "gpt-oss-20b"
+
+hardware_preset: "primary workstation"
