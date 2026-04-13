@@ -170,7 +170,12 @@ def _load_backends(app, config, logger):
 
             router = QueryRouter(llm_client) if llm_client else None
             vector_retriever = (
-                VectorRetriever(lance_store, embedder, top_k=config.retrieval.top_k)
+                VectorRetriever(
+                    lance_store,
+                    embedder,
+                    top_k=config.retrieval.top_k,
+                    candidate_pool=config.retrieval.candidate_pool,
+                )
                 if lance_store and embedder else None
             )
             entity_retriever = EntityRetriever(

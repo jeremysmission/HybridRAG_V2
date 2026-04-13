@@ -357,7 +357,12 @@ def _build_retrieval_lane(top_k: int):
         dim=768,
         device=device,
     )
-    retriever = VectorRetriever(store, embedder, top_k=top_k)
+    retriever = VectorRetriever(
+        store,
+        embedder,
+        top_k=top_k,
+        candidate_pool=max(top_k, config.retrieval.candidate_pool),
+    )
     return retriever, {
         "device": device,
         "store_chunks": store.count(),

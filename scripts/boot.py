@@ -66,7 +66,10 @@ def boot_system(config: V2Config | str | Path | None = None) -> SimpleNamespace:
 
     query_router = QueryRouter(llm_client)
     vector_retriever = VectorRetriever(
-        lance_store, embedder, top_k=cfg.retrieval.top_k
+        lance_store,
+        embedder,
+        top_k=cfg.retrieval.top_k,
+        candidate_pool=cfg.retrieval.candidate_pool,
     )
     entity_retriever = EntityRetriever(
         entity_store=entity_store,

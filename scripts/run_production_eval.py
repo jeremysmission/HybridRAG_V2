@@ -100,7 +100,7 @@ FAMILY_SIGNALS: dict[str, list[str]] = {
     "PQ-014": ["awase", "okinawa", "installation", "a006", "a007"],
     "PQ-015": ["awase", "okinawa", "site installation plan", "a003", "a006", "a007", "acceptance test"],
 
-    # Network Admin / Cybersecurity
+    # Cybersecurity / Network Admin
     "PQ-016": ["acas", "scap", "stig", "a027", "ct&e", "cte", "cybersecurity"],
     "PQ-017": ["rmf", "security plan", "authorization package", "authorization boundary", "a027"],
     "PQ-018": ["security event", "fairford", "alpena", "port scan", "buffer overflow", "cyber incident"],
@@ -568,7 +568,7 @@ def write_markdown_report(
         "Program Manager",
         "Logistics Lead",
         "Field Engineer",
-        "Network Admin / Cybersecurity",
+        "Cybersecurity / Network Admin",
         "Aggregation / Cross-role",
     ]
     pb = run.per_persona
@@ -964,7 +964,12 @@ def main() -> int:
     print("Initializing embedder on GPU 1...")
     embedder = Embedder(model_name="nomic-ai/nomic-embed-text-v1.5", dim=768, device="cuda")
 
-    retriever = VectorRetriever(store, embedder, top_k=TOP_K)
+    retriever = VectorRetriever(
+        store,
+        embedder,
+        top_k=TOP_K,
+        candidate_pool=config.retrieval.candidate_pool,
+    )
     ctx_builder = ContextBuilder(
         top_k=TOP_K,
         reranker_enabled=config.retrieval.reranker_enabled,

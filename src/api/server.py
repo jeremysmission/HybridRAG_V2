@@ -70,8 +70,16 @@ def create_app(config_path: str = "config/config.yaml") -> FastAPI:
     )
 
     # Initialize query pipeline components
-    vector_retriever = VectorRetriever(lance_store, embedder, top_k=config.retrieval.top_k)
-    context_builder = ContextBuilder(top_k=config.retrieval.top_k)
+    vector_retriever = VectorRetriever(
+        lance_store,
+        embedder,
+        top_k=config.retrieval.top_k,
+        candidate_pool=config.retrieval.candidate_pool,
+    )
+    context_builder = ContextBuilder(
+        top_k=config.retrieval.top_k,
+        reranker_enabled=config.retrieval.reranker_enabled,
+    )
     generator = Generator(llm_client)
     query_router = QueryRouter(llm_client)
     entity_retriever = EntityRetriever(

@@ -22,12 +22,14 @@ class VectorRetriever:
         store: LanceStore,
         embedder,
         top_k: int = 10,
+        candidate_pool: int | None = None,
         nprobes: int | None = None,
         refine_factor: int | None = None,
     ):
         self.store = store
         self.embedder = embedder
         self.top_k = top_k
+        self.candidate_pool = max(top_k, candidate_pool or top_k)
         self.nprobes = nprobes if nprobes is not None else self._env_int("HYBRIDRAG_LANCE_NPROBES")
         self.refine_factor = (
             refine_factor
@@ -40,13 +42,25 @@ class VectorRetriever:
                 refine_factor=self.refine_factor,
             )
 
-    def search(self, query: str, top_k: int | None = None) -> list[ChunkResult]:
+    def search(
+        self,
+        query: str,
+        top_k: int | None = None,
+        candidate_pool: int | None = None,
+    ) -> list[ChunkResult]:
         """
         Search for chunks matching the query.
 
         Embeds the query, runs hybrid search (vector + BM25).
+
+        ``top_k`` is the caller's target result count. ``candidate_pool``
+        controls how many candidates we ask the store for before any
+        downstream reranking/trimming. Direct callers that do not want a
+        wider pool can omit ``candidate_pool`` and will get exactly
+        ``top_k`` back.
         """
         k = top_k or self.top_k
+        fetch_k = max(k, candidate_pool or k)
         # Sanitize: strip control chars and limit length to prevent tokenizer errors
         query = "".join(ch for ch in query if ch.isprintable() or ch in ("\n", "\t"))
         query = query[:4096]
@@ -56,7 +70,7 @@ class VectorRetriever:
         results = self.store.hybrid_search(
             query_vector=query_vector,
             query_text=query,
-            top_k=k,
+            top_k=fetch_k,
             nprobes=self.nprobes,
             refine_factor=self.refine_factor,
         )

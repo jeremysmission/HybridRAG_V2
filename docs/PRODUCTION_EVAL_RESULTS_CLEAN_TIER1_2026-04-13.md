@@ -10,9 +10,9 @@
 - LanceDB chunks: **10,435,593**
 - GPU: `physical GPU 1 -> cuda:0 (NVIDIA GeForce RTX 3090)`
 - Top-K: **5**
-- Query pack: `tests/golden_eval/production_queries_400_2026-04-12.json`
-- Entity store: `data/index/clean/tier1_clean_20260413/entities.sqlite3`
-- Config: `config/config.tier1_clean_2026-04-13.yaml`
+- Query pack: `tests/golden_eval/production_queries_2026-04-11.json`
+- Entity store: `data/index/entities.sqlite3`
+- Config: `config/config.yaml`
 - FTS fixes applied: `715fe4b` (single-column FTS) + `957eaab` (hybrid builder chain)
 
 ## Headline
@@ -31,7 +31,7 @@
 | Program Manager | 80 | 41 | 16 | 23 | 53/80 |
 | Logistics Lead | 80 | 12 | 33 | 35 | 53/80 |
 | Field Engineer | 80 | 42 | 12 | 26 | 57/80 |
-| Network Admin / Cybersecurity | 0 | 0 | 0 | 0 | 0/0 |
+| Cybersecurity / Network Admin | 80 | 31 | 21 | 28 | 55/80 |
 | Aggregation / Cross-role | 80 | 32 | 14 | 34 | 69/80 |
 
 ## Per-Query-Type Breakdown

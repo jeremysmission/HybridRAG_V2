@@ -157,7 +157,11 @@ class QueryPipeline:
             return self.context_builder.build(guarded_results, c.original_query)
 
         search_query = c.expanded_query or c.original_query
-        results = self.vector_retriever.search(search_query, top_k=top_k)
+        results = self.vector_retriever.search(
+            search_query,
+            top_k=top_k,
+            candidate_pool=self._retrieval_candidate_pool(top_k),
+        )
         if not results:
             return None
         return self.context_builder.build(results, c.original_query)
@@ -179,7 +183,11 @@ class QueryPipeline:
 
         # Always also do vector search for additional context
         search_query = c.expanded_query or c.original_query
-        vector_results = self.vector_retriever.search(search_query, top_k=top_k)
+        vector_results = self.vector_retriever.search(
+            search_query,
+            top_k=top_k,
+            candidate_pool=self._retrieval_candidate_pool(top_k),
+        )
         vector_context = None
         if vector_results:
             vector_context = self.context_builder.build(vector_results, c.original_query)
@@ -314,11 +322,21 @@ class QueryPipeline:
         for query in search_queries:
             if not query:
                 continue
-            for result in self.vector_retriever.search(query, top_k=per_query_top_k):
+            for result in self.vector_retriever.search(
+                query,
+                top_k=per_query_top_k,
+                candidate_pool=self._retrieval_candidate_pool(per_query_top_k),
+            ):
                 if result.chunk_id not in merged:
                     merged[result.chunk_id] = result
 
         return list(merged.values())
+
+    def _retrieval_candidate_pool(self, top_k: int) -> int:
+        """Use a wider retrieval pool only when reranking is actually active."""
+        if getattr(self.context_builder, "_reranker", None) is None:
+            return top_k
+        return max(top_k, getattr(self.vector_retriever, "candidate_pool", top_k))
 
     def _prioritize_visit_condition_results(
         self, results: list[ChunkResult]

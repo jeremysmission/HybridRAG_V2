@@ -119,7 +119,12 @@ def _init_pipeline(config: V2Config, retrieval_only: bool):
     print(f"  Store loaded: {store.count()} chunks")
 
     embedder = Embedder(model_name="nomic-ai/nomic-embed-text-v1.5", dim=768, device="cuda")
-    retriever = VectorRetriever(store, embedder, top_k=config.retrieval.top_k)
+    retriever = VectorRetriever(
+        store,
+        embedder,
+        top_k=config.retrieval.top_k,
+        candidate_pool=config.retrieval.candidate_pool,
+    )
     ctx_builder = ContextBuilder(
         top_k=config.retrieval.top_k,
         reranker_enabled=config.retrieval.reranker_enabled,

@@ -10,15 +10,16 @@ If the machine crashes or a new coordinator has to resume, start here.
 
 Advance the next agreed dependency:
 
-- prove the Tier 1 path is clean enough to trust
+- use the now-clean Tier 1 baseline to drive the first measured retrieval and
+  routing fixes
 
 The current execution order is:
 
-1. run the Tier 1 regex gate
-2. run a bounded shadow Tier 1 slice
-3. approve or reject the full clean Tier 1 rerun
-4. if approved, run one clean full Tier 1 rerun in an isolated store
-5. rerun the 400-query baseline on the cleaned store
+1. keep the clean Tier 1 rerun and clean-store baseline frozen
+2. fix any correctness gaps in the baseline/reporting path
+3. extract the highest-yield miss families from the clean baseline
+4. land the smallest high-value retrieval/routing fixes
+5. rerun the clean 400 baseline after each meaningful retrieval slice
 
 ## Current Starting State
 
@@ -32,6 +33,77 @@ The current execution order is:
   - [WORKSTATION_MANUAL_INSTALL_AND_WORKDAY_ACTIONS_2026-04-13.md](./WORKSTATION_MANUAL_INSTALL_AND_WORKDAY_ACTIONS_2026-04-13.md)
 
 ## Autonomous Task Queue
+
+## Slice E: Freeze clean baseline and follow-on priorities
+
+### Goal
+
+Capture the clean-store baseline as the new truth source and freeze the first
+evidence-driven follow-on plan.
+
+### Frozen artifacts
+
+- `docs/PRODUCTION_EVAL_RESULTS_CLEAN_TIER1_2026-04-13.md`
+- `docs/production_eval_results_clean_tier1_2026-04-13.json`
+- `docs/CLEAN_TIER1_BASELINE_FOLLOWON_PRIORITIES_2026-04-13.md`
+
+### Headline
+
+- clean baseline:
+  - `158 PASS`
+  - `96 PARTIAL`
+  - `146 MISS`
+  - `287/400 routing correct`
+- dominant miss families:
+  - `CDRLs: 86`
+  - `Logistics: 49`
+
+### Status
+
+- Completed
+
+## Slice F: Fix clean-baseline correctness and retrieval wiring
+
+### Goal
+
+Eliminate obvious correctness gaps before deeper follow-on work.
+
+### Landed fixes
+
+- fixed the markdown persona scorecard label mismatch:
+  - `Cybersecurity / Network Admin` no longer shows `0/0`
+- fixed retrieval candidate-pool wiring:
+  - reranker can now actually see the configured wider candidate pool on the
+    live pipeline path instead of only `top_k`
+
+### Files
+
+- `scripts/run_production_eval.py`
+- `src/query/vector_retriever.py`
+- `src/query/pipeline.py`
+- `scripts/boot.py`
+- `src/api/server.py`
+- `src/gui/launch_gui.py`
+- `scripts/run_golden_eval.py`
+- `scripts/run_ragas_eval.py`
+- `tests/test_candidate_pool_wiring.py`
+
+### Verification
+
+- `python -m pytest -q tests/test_candidate_pool_wiring.py`
+- `python -m pytest -q tests/test_reranker_path_aware.py`
+
+### Status
+
+- Completed
+
+## Active Next Slice
+
+- start the first real follow-on retrieval hardening work
+- primary target:
+  - CDRL family retrieval
+- secondary target:
+  - Logistics site/date/shipment retrieval
 
 ## Slice A: Freeze Tier 1 execution tooling
 
