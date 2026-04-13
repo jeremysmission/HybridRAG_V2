@@ -1,0 +1,204 @@
+{
+  "profile_name": "workstation_safe",
+  "workstation_only": true,
+  "canonical_corpus": "C:\\HybridRAG_V2\\tests\\golden_eval\\production_queries_400_2026-04-12.json",
+  "derived_profile": "C:\\HybridRAG_V2\\tests\\golden_eval\\profiles\\workstation_safe\\production_queries_400_workstation_safe_2026-04-12.json",
+  "generated_at_utc": "2026-04-13T03:18:42.327246+00:00",
+  "sanitized_fields": [
+    "user_input",
+    "reference",
+    "rationale",
+    "corpus_grounding_evidence"
+  ],
+  "preserved_machine_grounding_fields": [
+    "query_id",
+    "persona",
+    "expected_query_type",
+    "expected_document_family",
+    "reference_contexts",
+    "expected_source_patterns",
+    "expected_anchor_entities",
+    "difficulty",
+    "has_ground_truth"
+  ],
+  "banned_token_policy": {
+    "rewritten_program_tokens": [
+      "IGS",
+      "ISTO",
+      "NEXION"
+    ],
+    "preserved_identifiers": [
+      "IGSI-*",
+      "IGSCC-*"
+    ],
+    "preserved_field_rationale": "reference_contexts and expected_source_patterns remain exact so workstation-safe profiles do not break path-grounded eval behavior."
+  },
+  "summary": {
+    "total_queries": 400,
+    "queries_changed": 0,
+    "fields_changed": 0,
+    "disallowed_hits_in_sanitized_fields": 0,
+    "allowed_residual_hits_in_preserved_fields": 126,
+    "ok": true
+  },
+  "transform_summary": {},
+  "allowed_residual_hits_by_field": {
+    "expected_source_patterns": 29,
+    "reference_contexts": 97
+  },
+  "allowed_residual_examples": [
+    {
+      "query_id": "PQ-105",
+      "field": "expected_source_patterns[0]",
+      "token": "IGS",
+      "excerpt": "10.0 Program Management/6.0 PMR/%IGS_PMR%.pptx"
+    },
+    {
+      "query_id": "PQ-129",
+      "field": "reference_contexts[1]",
+      "token": "IGS",
+      "excerpt": "ge Analysis for IPT Slides/zArchive/IGS-Outage-Analysis_2025-12-01.xlsx"
+    },
+    {
+      "query_id": "PQ-130",
+      "field": "reference_contexts[0]",
+      "token": "NEXION",
+      "excerpt": "811_Corrective_Action_Plan_Fairford-NEXION_2024-06-05.docx"
+    },
+    {
+      "query_id": "PQ-153",
+      "field": "reference_contexts[3]",
+      "token": "ISTO",
+      "excerpt": "ring system/47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test"
+    },
+    {
+      "query_id": "PQ-158",
+      "field": "reference_contexts[0]",
+      "token": "IGS",
+      "excerpt": "Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Update"
+    },
+    {
+      "query_id": "PQ-159",
+      "field": "reference_contexts[0]",
+      "token": "IGS",
+      "excerpt": "f Materials/47QFRA22F0009_IGSI-2233_IGS_EMSI_PBOM_2024-04-22.xlsx"
+    },
+    {
+      "query_id": "PQ-160",
+      "field": "reference_contexts[0]",
+      "token": "IGS",
+      "excerpt": "Plan (ILSP)/FA881525FB002_IGSCC-129_IGS_Integrated-Logistics-Support-Plan/"
+    },
+    {
+      "query_id": "PQ-160",
+      "field": "reference_contexts[2]",
+      "token": "IGS",
+      "excerpt": " Plan (ILS)/FA881525FB002_IGSCC-129_IGS_Integrated-Logistics/"
+    },
+    {
+      "query_id": "PQ-184",
+      "field": "reference_contexts[0]",
+      "token": "NEXION",
+      "excerpt": "29_Corrective_Action_Plan_Learmonth-NEXION_2024-08-16/"
+    },
+    {
+      "query_id": "PQ-184",
+      "field": "expected_source_patterns[0]",
+      "token": "NEXION",
+      "excerpt": "29_Corrective_Action_Plan_Learmonth-NEXION_2024-08-16%"
+    },
+    {
+      "query_id": "PQ-185",
+      "field": "reference_contexts[0]",
+      "token": "ISTO",
+      "excerpt": "83_Corrective-Action-Plan_Kwajalein-ISTO_2024-10-25/"
+    },
+    {
+      "query_id": "PQ-185",
+      "field": "expected_source_patterns[0]",
+      "token": "ISTO",
+      "excerpt": "83_Corrective-Action-Plan_Kwajalein-ISTO_2024-10-25%"
+    },
+    {
+      "query_id": "PQ-186",
+      "field": "reference_contexts[0]",
+      "token": "NEXION",
+      "excerpt": "-4013_Corrective-Action-Plan_Alpena-NEXION_2025-07-14/"
+    },
+    {
+      "query_id": "PQ-186",
+      "field": "expected_source_patterns[0]",
+      "token": "NEXION",
+      "excerpt": "-4013_Corrective-Action-Plan_Alpena-NEXION_2025-07-14%"
+    },
+    {
+      "query_id": "PQ-189",
+      "field": "reference_contexts[0]",
+      "token": "IGS",
+      "excerpt": "n_Samoa/Installation/Allied Support/IGS SOW American Samoa - Cable installa"
+    },
+    {
+      "query_id": "PQ-193",
+      "field": "reference_contexts[0]",
+      "token": "NEXION",
+      "excerpt": "ccreditation-Support-Data_ACAS-Scan_NEXION_July-2025/"
+    },
+    {
+      "query_id": "PQ-193",
+      "field": "expected_source_patterns[0]",
+      "token": "NEXION",
+      "excerpt": "ccreditation-Support-Data_ACAS-Scan_NEXION_July-2025%"
+    },
+    {
+      "query_id": "PQ-195",
+      "field": "expected_source_patterns[0]",
+      "token": "ISTO",
+      "excerpt": "%IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test"
+    },
+    {
+      "query_id": "PQ-197",
+      "field": "expected_source_patterns[0]",
+      "token": "ISTO",
+      "excerpt": "/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/%"
+    },
+    {
+      "query_id": "PQ-215",
+      "field": "reference_contexts[0]",
+      "token": "ISTO",
+      "excerpt": "ring system/47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test"
+    },
+    {
+      "query_id": "PQ-215",
+      "field": "reference_contexts[1]",
+      "token": "NEXION",
+      "excerpt": "ccreditation-Support-Data_ACAS-Scan_NEXION_July-2025.xlsx"
+    },
+    {
+      "query_id": "PQ-216",
+      "field": "reference_contexts[0]",
+      "token": "NEXION",
+      "excerpt": "ccreditation-Support-Data_ACAS-Scan_NEXION_October-2025.xlsx"
+    },
+    {
+      "query_id": "PQ-216",
+      "field": "reference_contexts[1]",
+      "token": "NEXION",
+      "excerpt": "ccreditation-Support-Data_ACAS-Scan_NEXION_January-2026.xlsx"
+    },
+    {
+      "query_id": "PQ-216",
+      "field": "reference_contexts[2]",
+      "token": "NEXION",
+      "excerpt": "ccreditation-Support-Data_ACAS-Scan_NEXION_February-2026.xlsx"
+    },
+    {
+      "query_id": "PQ-235",
+      "field": "reference_contexts[0]",
+      "token": "NEXION",
+      "excerpt": "Wake (Mil-Air)/NG Packing List_Wake-NEXION_2025-10 (Mil-Air).xlsx"
+    }
+  ],
+  "disallowed_hits": [],
+  "canonical_sha256": "9fbaf2eda29c7fd1bea5166833f91245013bfd313e366f699eff93fd1eb443bb",
+  "derived_sha256": "674cfa3806521d1ca2c49a02c3389a2cc62e3bee762a230a622dfd4598326464"
+}
