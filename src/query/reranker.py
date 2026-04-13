@@ -41,7 +41,7 @@ class FlashReranker:
 
         # Build passages for FlashRank
         passages = [
-            {"id": r.chunk_id, "text": r.text}
+            {"id": r.chunk_id, "text": self._build_passage_text(r)}
             for r in results
         ]
 
@@ -59,3 +59,22 @@ class FlashReranker:
                 reranked.append(result)
 
         return reranked
+
+    @staticmethod
+    def _build_passage_text(result: ChunkResult) -> str:
+        """
+        Include source-path metadata in the reranker passage.
+
+        The underlying document text remains the primary signal, but
+        source-path clues help the reranker surface family/path matches
+        earlier for queries whose intent is encoded in folder names,
+        filenames, or exact identifiers.
+        """
+        parts = []
+        if result.source_path:
+            parts.append(f"Source path: {result.source_path}")
+        if result.enriched_text:
+            parts.append(result.enriched_text)
+        elif result.text:
+            parts.append(result.text)
+        return "\n".join(parts).strip()
