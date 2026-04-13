@@ -533,6 +533,7 @@ $PipIni     = Join-Path $VenvDir "pip.ini"
 $ProxyInfo  = Get-WorkstationProxyInfo
 $RequireCuda = Test-NvidiaGpuPresent
 $RuntimeInfo = $null
+$VenvWasCreated = $false
 
 if (Test-Path $VenvPython) {
     Write-Ok ".venv already exists"
@@ -544,6 +545,7 @@ if (Test-Path $VenvPython) {
             & py -3.12 -m venv "$VenvDir"
         }
         if ($ok) {
+            $VenvWasCreated = $true
             Write-Ok ".venv created"
         } else {
             Write-Fail "Could not create .venv"
@@ -677,28 +679,54 @@ Wait-ForOperator -Message "Press any key to continue with workstation repair, Ct
 # 5. Upgrade pip + pip-system-certs
 # ============================================================
 Write-Step "Upgrading pip and installing pip-system-certs"
-Write-Info "This step can sit quietly for a minute or two on slower links while pip negotiates certs/proxy access."
-Write-Info "Streaming pip output live so a slow install does not look like a hung installer."
-& $VenvPython -m pip install --upgrade pip @TrustedHosts
-if ($LASTEXITCODE -eq 0) {
-    Write-Ok "pip upgraded"
+if ($VenvWasCreated) {
+    Write-Info "Fresh venv detected -- upgrading pip before package installs."
+    Write-Info "This step can sit quietly for a minute or two on slower links while pip negotiates certs/proxy access."
+    Write-Info "Streaming pip output live so a slow install does not look like a hung installer."
+    & $VenvPython -m pip install --upgrade pip @TrustedHosts
+    if ($LASTEXITCODE -eq 0) {
+        Write-Ok "pip upgraded"
+    } else {
+        Write-Warn "pip upgrade returned non-zero"
+    }
 } else {
-    Write-Warn "pip upgrade returned non-zero"
+    Write-Ok "pip already present in existing venv -- skipping upgrade"
 }
 
-& $VenvPip install pip-system-certs @TrustedHosts
-if ($LASTEXITCODE -eq 0) {
-    Write-Ok "pip-system-certs installed"
+if ($pipSystemCertsPresent) {
+    Write-Ok "pip-system-certs already installed -- skipping"
 } else {
-    Write-Warn "pip-system-certs failed (non-blocking)"
-    Write-Info "pip output is shown above. Continuing because pip-system-certs is non-blocking here."
+    Write-Info "Installing pip-system-certs into the venv."
+    & $VenvPip install pip-system-certs @TrustedHosts
+    if ($LASTEXITCODE -eq 0) {
+        Write-Ok "pip-system-certs installed"
+    } else {
+        Write-Warn "pip-system-certs failed (non-blocking)"
+        Write-Info "pip output is shown above. Continuing because pip-system-certs is non-blocking here."
+    }
 }
 
 # ============================================================
 # 6. Install torch CUDA (BEFORE requirements.txt)
 # ============================================================
 Write-Step "Installing torch"
-if ($RequireCuda) {
+$torchHealthy = ($torchInfo -and $torchInfo.installed -and $torchInfo.is_271)
+$torchHealthyForLane = $false
+if ($torchHealthy) {
+    if ($RequireCuda) {
+        $torchHealthyForLane = ($torchInfo.is_cu128 -and $torchInfo.cuda_available)
+    } else {
+        $torchHealthyForLane = $true
+    }
+}
+
+if ($torchHealthyForLane) {
+    if ($RequireCuda) {
+        Write-Ok "torch CUDA already healthy ($($torchInfo.version)) -- skipping install"
+    } else {
+        Write-Ok "torch already healthy ($($torchInfo.version)) -- skipping install"
+    }
+} elseif ($RequireCuda) {
     $ok = Invoke-WithRetry -Label "pip install torch==2.7.1 (cu128)" -Action {
         & $VenvPip install "torch==2.7.1" --index-url https://download.pytorch.org/whl/cu128 --force-reinstall --no-deps @TrustedHosts --quiet 2>&1 | Out-Null
     }

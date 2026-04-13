@@ -98,6 +98,19 @@ def test_pip_stage_streams_live_output_instead_of_buffering():
     assert "Streaming pip output live" in text
 
 
+def test_existing_healthy_venv_skips_pip_repair():
+    text = _read_text(ACTIVE_PS1)
+    assert 'pip already present in existing venv -- skipping upgrade' in text
+    assert 'pip-system-certs already installed -- skipping' in text
+
+
+def test_existing_healthy_torch_skips_reinstall():
+    text = _read_text(ACTIVE_PS1)
+    assert '$torchHealthyForLane' in text
+    assert 'torch CUDA already healthy' in text
+    assert '--force-reinstall --no-deps' in text
+
+
 @pytest.mark.skipif(
     shutil.which("cmd") is None or not _have_py312(),
     reason="Windows cmd.exe and py -3.12 are required for installer smoke runs",
