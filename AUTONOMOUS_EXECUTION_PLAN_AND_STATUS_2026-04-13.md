@@ -255,9 +255,28 @@ If the shadow slice is clean, run a full Tier 1 rerun into an isolated clean sto
   - `data/index/clean/tier1_clean_20260413`
 - rerun the clean-store audit immediately after completion
 
+### Replacement relaunch
+
+- backup of the first clean store:
+  - `data/index/clean/tier1_clean_20260413_prelegacypo_backup`
+- relaunched:
+  - `2026-04-13 09:59 America/Denver`
+- launcher:
+  - `scripts/run_tier1_clean_launcher.py`
+- run id:
+  - `20260413_095955`
+- launcher PID:
+  - `204468`
+- child PID:
+  - `213116`
+- manifest:
+  - `logs/tier1_clean_runs/tier1_clean_run_20260413_095955.json`
+- stdout/stderr log:
+  - `logs/tier1_clean_runs/tier1_clean_run_20260413_095955.log`
+
 ### Status
 
-- Replacement rerun approved and pending relaunch
+- Replacement rerun running
 
 ## Slice E: Clean-store evaluation prep
 
