@@ -117,6 +117,13 @@ A recent positive change is that the company has only very recently released an 
 
 That access path also required application and back-and-forth with an AI Staff Engineer because there were issues on their side that had to be debugged before the environment became usable. Even after access, the working path required additional integration learning because the practical workflow depended on government AWS infrastructure plus Azure-style formatting expectations, the company's enterprise endpoint AI layer, and OpenAI-compatible patterns inside Jupyter-based development.
 
+This also directly justifies the current time being spent on AWS. The company AI Toolkit now provides a temporary low-cost path for the remaining one-time heavy extraction and enrichment work. Using that path now is the resource-conscious move because it can reduce both:
+
+- the amount of slow local-only heavy lifting still left in the initial build
+- the amount of future paid endpoint usage that would otherwise be needed for the same one-time work
+
+In short, the current AWS effort is not a detour. It is the best available way to accelerate the hardest remaining one-time preprocessing work while the temporary internal model access is available.
+
 ## What Has Been Completed
 
 Completed work includes:

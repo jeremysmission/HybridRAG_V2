@@ -2,6 +2,37 @@
 
 ## Why I Am Sending A Reset
 
+To make this update easier to follow, I want to define the main terms first.
+
+- **HybridRAG**
+  - short for **Hybrid Retrieval-Augmented Generation**
+  - in this project, that means combining semantic/vector retrieval with text/keyword retrieval instead of relying on only one search method
+- **V1**
+  - the original HybridRAG implementation
+  - this was the first version of the system and the path I previously described as getting close to a demo
+- **V2**
+  - the rebuilt current system, `HybridRAG_V2`
+  - this is the new architecture I refer to below when I describe the reset and the current path forward
+- **CorpusForge**
+  - the new upstream application that prepares, normalizes, and exports the corpus before V2 imports and uses it
+
+## How The Project Evolved
+
+The project did not originally begin as two separate applications.
+
+It started as a single HybridRAG effort, which I now refer to as `V1`. In that original form, ingest, preprocessing, retrieval, extraction, and answering were still too tightly coupled. That was enough to make early proof-of-concept progress, but it also made it too easy for the system to look closer to done than it really was.
+
+Once I pushed V1 harder against the real IGS drive, it became clear that I needed a cleaner separation of responsibilities. That is why the project evolved into:
+
+- `CorpusForge`
+  - the upstream corpus-preparation side
+  - responsible for ingest, normalization, chunking/export, and integrity checks
+- `HybridRAG_V2`
+  - the downstream retrieval-and-answering side
+  - responsible for import, retrieval, extraction, evaluation, and answer generation
+
+So the move from one HybridRAG code path into `CorpusForge` plus `HybridRAG_V2` was not cosmetic refactoring. It was the architectural response to what I learned from V1.
+
 My last major update was still based on the original V1 path and the assumption that I was closing in on a usable demo. Since then, I found that the project was closer to a retrieval demo than to a trustworthy AI system. That is why I need to reset the status, explain what changed, and explain why the work has taken longer than I originally expected.
 
 The short version is:
@@ -149,6 +180,39 @@ The reason for using tiers is both technical and financial:
 
 So when I say "tiered," I do not mean unnecessary complexity for its own sake. I mean a controlled layered approach that keeps the expensive AI work focused only where it adds the most value.
 
+## What The Tiered Strategy Saves
+
+The tiered strategy is also one of the main reasons this project is still financially realistic.
+
+Without a tiered design, the default path would be to run heavier AI extraction and enrichment broadly across the corpus. On a corpus of this size, that would increase both:
+
+- processing time
+- external model cost
+
+By using a tiered approach instead, I am deliberately:
+
+- doing the broad deterministic and rule-based work locally
+- keeping embeddings local on GPU where they are fast and effectively free once the workstation is in place
+- reducing the amount of data that needs stronger model-based extraction
+- reserving the heaviest AI path for the smaller subset where it creates the most value
+
+That saves money in two ways:
+
+1. it lowers the number of expensive model calls during the initial build
+2. it keeps the steady-state production model from becoming dependent on a high monthly cloud burn
+
+It also saves time in two ways:
+
+1. it avoids spending heavy-model runtime on easy low-ambiguity cases
+2. it lets the long-term maintenance path stay incremental, so future nightly or scheduled updates can be handled mostly offline rather than reprocessing the whole corpus with the most expensive path
+
+In practical terms, this is the difference between:
+
+- a broad cloud-heavy extraction design that is expensive to build and expensive to keep running
+- and a staged local-first design that uses stronger remote AI only where it is worth the cost
+
+That is a major part of the value I have been adding through the architecture redesign. I am not only trying to make the system work; I am trying to make it work in a way that the program can afford to maintain.
+
 ## What Changed Recently On The AI Infrastructure Side
 
 A recent positive development is that the company only very recently released an internal AI toolkit that includes temporary access to OSS-20B and OSS-120B models through government AWS.
@@ -190,6 +254,10 @@ The intended long-term model is:
 - reserve remote model usage for exceptional cases instead of making it the permanent default
 
 That is why the AWS learning and setup time is justified. It is helping accelerate the hardest remaining one-time preprocessing and enrichment tasks without locking the program into a permanently high cloud bill. In other words, I am using temporary external leverage for the initial heavy lift while still designing the steady-state production model around lower-cost local and incremental processing.
+
+There is also a timing advantage to using that path now rather than later. While the company toolkit access is temporarily free, it lets me process the hardest remaining enrichment and extraction subset at essentially zero model cost. If I deferred that work until after the free window or tried to do the same work through a paid general-purpose endpoint, the build would either take longer on local/offline resources or cost materially more in API usage. So part of the value here is being resourceful and using the temporary company capability while it is available, rather than missing that window and paying for the same heavy one-time work later.
+
+That is the direct justification for the current time being spent on AWS. It is not a side project away from the main effort. It is part of the main effort because it creates the best available path for the remaining one-time heavy extraction and enrichment work while the company-provided models are temporarily available at little or no additional model cost.
 
 ## Current Status
 

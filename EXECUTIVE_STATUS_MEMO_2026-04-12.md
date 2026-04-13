@@ -49,6 +49,8 @@ I am instead building a tiered Python-based pipeline that minimizes expensive AI
 
 A recent positive development is that the company has only very recently released an internal AI toolkit that includes temporary access to OSS-20B and OSS-120B models through AWS. I am planning to use that selectively for the remaining heavy preprocessing tasks where it creates real leverage, while still avoiding an open-ended cloud-heavy cost model. That also requires me to learn the AWS infrastructure side on the fly so the new capability can be used correctly and cost-consciously. Because this is government AWS rather than standard commercial AWS, it adds an additional layer of restrictions and setup complexity.
 
+This is also why current time on AWS is justified: it is the best available path for the remaining one-time heavy extraction and enrichment work while the temporary company model access is available. Using it now can reduce both local build time and future paid endpoint spend for the same one-time preprocessing scope.
+
 Access to that path also required application and coordination with an AI Staff Engineer because there were issues on the provider side that had to be debugged before it was usable. Even after access, making the path practical required additional integration work because the usable workflow depended on combining government AWS infrastructure, Azure-style formatting expectations, the company's enterprise endpoint AI layer, and OpenAI-compatible usage patterns in Jupyter-based development.
 
 ## Current Status
