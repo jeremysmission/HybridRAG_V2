@@ -594,10 +594,10 @@ class TestSecurityStandardExclusion:
             )
 
     def test_sap_po_labeled_extracted(self):
-        """SAP 10-digit POs with an explicit label must be captured
-        as PO entities. The label is REQUIRED — a bare 10-digit
-        number can't be distinguished from phone-like OCR noise
-        without context.
+        """Labeled procurement POs in the two proven-safe numeric families
+        (legacy 6-digit and modern 10-digit) must be captured as PO entities.
+        The label is REQUIRED — a bare number can't be distinguished from
+        phone-like OCR noise or other numeric debris without context.
         """
         ex = RegexPreExtractor(part_patterns=[])
         cases = [
@@ -607,6 +607,9 @@ class TestSecurityStandardExclusion:
             ("P.O. 4500111111 pending.", "4500111111"),
             ("Purchase order 5000111222 delivered.", "5000111222"),
             ("po 4500111111 is pending.", "4500111111"),
+            ("Purchase Order: 268235 created to fund the order.", "268235"),
+            ("All invoices must reference Purchase Order No. 250802.", "250802"),
+            ("Purchase order number 7200751620 was approved.", "7200751620"),
         ]
         for text, expected_po in cases:
             ents = ex.extract(text, "c1", "doc.txt")
@@ -635,6 +638,15 @@ class TestSecurityStandardExclusion:
             assert not any(re.match(r"^\d{10}$", p) for p in pos), (
                 f"Bare 10-digit leaked as PO from {fake!r}: {pos}"
             )
+
+    def test_labeled_8digit_numeric_po_stays_fail_closed(self):
+        """8-digit numeric PO-adjacent identifiers remain ambiguous in this
+        corpus and should not auto-promote just because a PO label is nearby.
+        """
+        ex = RegexPreExtractor(part_patterns=[])
+        ents = ex.extract("Purchase Order: 15404062", "c1", "doc.txt")
+        pos = [e.text for e in ents if e.entity_type == "PO"]
+        assert "15404062" not in pos, f"Ambiguous 8-digit PO leaked: {pos}"
 
     def test_sap_po_label_requires_leading_boundary(self):
         """The SAP PO label must start at a real token boundary, not inside

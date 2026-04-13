@@ -180,7 +180,7 @@ If the shadow slice is clean, run a full Tier 1 rerun into an isolated clean sto
 - relationships:
   - `data/index/clean/tier1_clean_20260413/relationships.sqlite3`
 
-### Live launch
+### First clean run outcome
 
 - first buffered launch:
   - launched: `2026-04-13 08:10 America/Denver`
@@ -205,15 +205,59 @@ If the shadow slice is clean, run a full Tier 1 rerun into an isolated clean sto
     - `logs/tier1_clean_runs/tier1_clean_run_20260413_083954.json`
   - stdout/stderr log:
     - `logs/tier1_clean_runs/tier1_clean_run_20260413_083954.log`
-  - observed early rate:
-    - about `6,000` chunks/sec through the first `210,000` chunks
-  - implication:
-    - Beast-side full clean Tier 1 looks like a sub-hour job on the
-      streaming path, not an all-day blind rerun
+  - completed:
+    - `2026-04-13 09:45 America/Denver`
+  - final result:
+    - `5,775,224` entities
+    - `59` relationships
+    - about `65.8` minutes on the streaming path
+
+### Post-run audit result
+
+- blocked-namespace leakage:
+  - none
+- preserve-set result:
+  - `PART` preserve set passed after aligning the audit harness to the
+    agreed corpus audit
+  - `PO` preserve set failed on two missing legacy 6-digit sentinels:
+    - `268235`
+    - `250802`
+
+### Root cause of the preserve failure
+
+- the clean rerun was built before the latest legacy-PO fix landed
+- direct chunk validation proved both missing values are real labeled
+  procurement POs in the corpus:
+  - `Purchase Order: 268235`
+  - `Purchase Order: 250802`
+- the extractor previously handled:
+  - `PO-YYYY-NNNN`
+  - labeled 10-digit SAP POs
+- it did **not** yet handle labeled 6-digit legacy procurement POs
+
+### Fix status
+
+- local fix landed:
+  - labeled `PO` extraction now accepts `6`-digit and `10`-digit
+    procurement numbers when explicitly labeled
+  - ambiguous `8`-digit numerics remain fail-closed
+- validation after the fix:
+  - direct extraction against the real `268235` / `250802` chunks now
+    succeeds
+  - regex gate re-run: `40/40` pass
+  - fresh `5,000`-chunk shadow slice after the fix remains clean:
+    - no blocked-family `PO` / `PART` leakage in the top ranks
+
+### Next launch
+
+- rotate the first clean store aside
+- relaunch a replacement isolated clean Tier 1 run into:
+  - `data/index/clean/tier1_clean_20260413`
+- rerun the clean-store audit immediately after completion
 
 ### Status
 
-- Running
+- Replacement rerun approved and pending relaunch
 
 ## Slice E: Clean-store evaluation prep
 
@@ -251,9 +295,12 @@ If Beast crashes, the recovery order is:
    - `logs\tier1_regex_gate_20260413_073707.txt`
 4. rerun or continue the shadow slice:
    - `scripts\run_tier1_shadow_slice.py`
-5. if shadow evidence matches the latest approved state, resume or relaunch:
-   - `.\.venv\Scripts\python.exe scripts\tiered_extract.py --config config\config.tier1_clean_2026-04-13.yaml --tier 1`
+5. read the latest status in Slice D above
+6. if the replacement rerun has not started, relaunch via:
+   - `.\.venv\Scripts\python.exe scripts\run_tier1_clean_launcher.py --config config\config.tier1_clean_2026-04-13.yaml`
+7. after it finishes, rerun:
+   - `.\.venv\Scripts\python.exe scripts\audit_tier1_clean_store.py --entity-db data\index\clean\tier1_clean_20260413\entities.sqlite3 --markdown docs\TIER1_CLEAN_RERUN_RESULTS_2026-04-13.md`
 
 ## Short Summary
 
-The current unattended Beast-side mission has advanced: the shadow slice is now clean enough to approve an isolated full clean Tier 1 rerun. The next unattended step is to launch that full rerun into `data/index/clean/tier1_clean_20260413`, then use the cleaned store for the next truthful evaluation baseline.
+The current unattended Beast-side mission has advanced further: the first streaming clean Tier 1 rerun completed and eliminated the known blocked namespaces from the top `PO` / `PART` values, but it still missed two real legacy 6-digit procurement POs. That legacy-PO recall gap is now fixed in code and revalidated on the real documents. The next unattended step is to relaunch a replacement clean Tier 1 rerun with that fix in place, then use the corrected clean store for the next truthful evaluation baseline.

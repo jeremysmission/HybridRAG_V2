@@ -620,8 +620,9 @@ class RegexPreExtractor:
         # values are industry standard-N, not real procurement.
         self._sap_po_re = re.compile(
             r"(?:Purchase\s*Order|PO\s*Number|P\.?O\.?|PO)"
+            r"(?:\s*(?:No\.?|Number))?"
             r"\s*[#:.\-]?\s*"
-            r"(\d{10})"
+            r"(\d{6}|\d{10})"
             r"\b",
             re.IGNORECASE,
         )
