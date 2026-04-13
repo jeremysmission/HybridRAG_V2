@@ -220,7 +220,7 @@ The next sequence is:
 
 Plain-English version:
 
-The first version showed that AI could find relevant documents, but it did not yet prove that the system could answer questions safely enough for real use. I found that some technical and security codes were being mistaken for business data. Instead of forcing a demo on top of that, I split the system into cleaner parts, kept the pieces that were working, and added quality gates so future data can be checked before it reaches production. The design now uses cheaper broad processing first and saves the heavier AI work for the smaller portion where it is actually needed, which is how I am trying to make the system both reliable and affordable.
+The first version showed that AI could find relevant documents, but it did not yet prove that the system could answer questions safely enough for real use. I found that some technical and security codes were being mistaken for business data. Instead of forcing a demo on top of that, I split the system into cleaner parts, kept the pieces that were working, and added quality gates so future data can be checked before it reaches production. The design now uses cheaper broad processing first and saves the heavier AI work for the smaller portion where it is actually needed, which is how I am trying to make the system both reliable and affordable. Because the desktop workstation is still largely an on-site-only resource, the workstation laptop has also been important for keeping nights-and-weekends progress moving when I am away from that primary machine.
 
 ## Technical Story
 
