@@ -46,7 +46,10 @@ Commit and push the shadow-run config and shadow-slice runner so they are recove
 
 ### Status
 
-- In progress
+- Completed
+- Frozen and pushed:
+  - `config/config.tier1_shadow_2026-04-13.yaml`
+  - `scripts/run_tier1_shadow_slice.py`
 
 ## Slice B: Freeze regex gate result
 
@@ -113,9 +116,48 @@ Planned command:
 - preserve-set identifiers survive
 - enough evidence to approve or reject the full rerun
 
+### Current shadow-run evidence
+
+- First sampled shadow slice:
+  - `logs\tier1_shadow_slice_20260413_075912.txt`
+  - `logs\tier1_shadow_slice_20260413_075912.json`
+  - Result: strong improvement, but still leaked embedded/report-code tails
+    such as `FSR-L22`, plus non-physical `PART` tails such as
+    `CVE-202`, `DO-0003`, `DO-0011`, `IGS-2522`, `MSR-029`, and
+    `DV-200`
+- Follow-on hardening landed locally:
+  - wired `security_standard_exclude_patterns` through all shared Tier 1
+    entrypoints
+  - narrowed serial regex to reject bare `SN*` words while preserving
+    real serials
+  - added boundary enforcement to report-ID extraction
+  - added corpus-backed rejection families for `CVE` fragments,
+    `DO-0003`-style delivery-order codes, `IGS/IGSI` drawing IDs,
+    `MSR-*`, `DV-*`, and `IEEE-*`
+- Latest shadow slice:
+  - `logs\tier1_shadow_slice_20260413_080702.txt`
+  - `logs\tier1_shadow_slice_20260413_080702.json`
+  - Result:
+    - scanned `100,000`
+    - selected `10,000` stratified
+    - entities `8,579`
+    - `PO` top-50 now entirely business-looking purchase-order values
+    - `PART` top-50 now dominated by physical parts / serials instead of
+      security or program-code junk
+
+### Approval decision
+
+- Approved for isolated full clean Tier 1 rerun
+- Rationale:
+  - regex gate is green (`40/40`)
+  - live-sample dangerous hits remain `0`
+  - shadow top-50 `PO` is clean
+  - shadow `PART` tail no longer shows the blocked security/governance
+    namespaces that previously polluted the store
+
 ### Status
 
-- In progress
+- Completed
 
 ## Slice D: Full clean Tier 1 rerun in isolated store
 
@@ -123,9 +165,24 @@ Planned command:
 
 If the shadow slice is clean, run a full Tier 1 rerun into an isolated clean store, not the main live entity DB.
 
+### Planned command
+
+```powershell
+.\.venv\Scripts\python.exe scripts\tiered_extract.py `
+  --config config\config.tier1_clean_2026-04-13.yaml `
+  --tier 1
+```
+
+### Isolated target
+
+- entities:
+  - `data/index/clean/tier1_clean_20260413/entities.sqlite3`
+- relationships:
+  - `data/index/clean/tier1_clean_20260413/relationships.sqlite3`
+
 ### Status
 
-- Pending shadow-run approval
+- Ready to launch
 
 ## Slice E: Clean-store evaluation prep
 
@@ -163,8 +220,9 @@ If Beast crashes, the recovery order is:
    - `logs\tier1_regex_gate_20260413_073707.txt`
 4. rerun or continue the shadow slice:
    - `scripts\run_tier1_shadow_slice.py`
-5. only after shadow approval, move to a full clean rerun
+5. if shadow evidence matches the latest approved state, resume or relaunch:
+   - `.\.venv\Scripts\python.exe scripts\tiered_extract.py --config config\config.tier1_clean_2026-04-13.yaml --tier 1`
 
 ## Short Summary
 
-The current unattended Beast-side mission is simple: freeze the new shadow-slice tooling, run the sampled Tier 1 shadow slice, and use that evidence to decide whether a full clean Tier 1 rerun should be launched into an isolated store. Everything else is downstream of that decision.
+The current unattended Beast-side mission has advanced: the shadow slice is now clean enough to approve an isolated full clean Tier 1 rerun. The next unattended step is to launch that full rerun into `data/index/clean/tier1_clean_20260413`, then use the cleaned store for the next truthful evaluation baseline.

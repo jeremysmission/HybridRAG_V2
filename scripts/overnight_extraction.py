@@ -237,7 +237,10 @@ def main():
         sys.exit(1)
 
     extractor = EntityExtractor(llm_client)
-    regex_pre = RegexPreExtractor(part_patterns=config.extraction.part_patterns)
+    regex_pre = RegexPreExtractor(
+        part_patterns=config.extraction.part_patterns,
+        security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
+    )
     quality_gate = QualityGate(
         min_confidence=config.extraction.min_confidence,
         vocab_path=config.paths.site_vocabulary,

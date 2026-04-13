@@ -524,10 +524,27 @@ class RegexPreExtractor:
         re.compile(r"^SV-\d+$"),
         # security standard SP 800 publication reference
         re.compile(r"^SP[\s\-]?800\b"),
-        # MITRE Common Vulnerabilities and Exposures
-        re.compile(r"^CVE-\d{4}"),
+        # MITRE Common Vulnerabilities and Exposures. OCR/chunk splits
+        # can truncate CVE-2024-7525 into fragments like CVE-202.
+        re.compile(r"^CVE-\d{3,}(?:-\d+)*$"),
         # MITRE Common Configuration Enumeration
         re.compile(r"^CCE-\d+$"),
+        # Red Hat security advisories commonly surfaced by Nessus/scan exports
+        re.compile(r"^RHSA-\d{4}$"),
+        # Additional cyber/status debris families surfaced by the live
+        # corpus audit. These are not physical parts.
+        re.compile(r"^SNMP$"),
+        re.compile(r"^APP-\d+$"),
+        re.compile(r"^SERVICE_(?:START|STOP)$"),
+        re.compile(r"^[A-Z0-9]+(?:_[A-Z0-9]+)+$"),
+        re.compile(r"^CNSSI-\d+$"),
+        re.compile(r"^DD-\d{4}$"),
+        re.compile(r"^DO-\d{4}$"),
+        re.compile(r"^IGS(?:I|CC)?-\d{3,5}$"),
+        re.compile(r"^MSR-\d+$"),
+        re.compile(r"^DV-\d{2,4}$"),
+        re.compile(r"^IEEE-\d+$"),
+        re.compile(r"^SNOW$"),
     )
     _LEGACY_PO_PATTERN = re.compile(r"^PO-\d{4}-\d{4}$", re.IGNORECASE)
 
@@ -614,7 +631,14 @@ class RegexPreExtractor:
         # Response family controls (IR-1..IR-10), not real Incident
         # Reports. The enterprise program corpus uses FSR/UMR/ASV/RTS
         # for real reports; IR-* was 100% collision with security standard.
-        self._serial_re = re.compile(r"\bSN[-: ]?[A-Za-z0-9-]+\b", re.IGNORECASE)
+        # Serial numbers:
+        #   - explicit label/separator forms: SN-12345, SN 12345-A, SN:ABC123
+        #   - compact digit-led forms seen in field data: SN4112
+        # Reject bare SN-prefixed words like SNMP, SNOW, SNAP-IN, SNIFFERS.
+        self._serial_re = re.compile(
+            r"\b(?:SN[-: ]+[A-Za-z0-9-]+|SN\d{3,}[A-Za-z0-9-]*)\b",
+            re.IGNORECASE,
+        )
         self._report_id_re = re.compile(r"\b(?:FSR|UMR|ASV|RTS)-[A-Za-z0-9_-]+\b", re.IGNORECASE)
         # Field-label extraction (V1 service_event_extractor pattern)
         self._field_value_re = re.compile(
@@ -790,6 +814,8 @@ class RegexPreExtractor:
         # to 98% collision with security standard Incident Response family)
         for match in self._report_id_re.finditer(text):
             candidate = match.group()
+            if not self._has_token_boundaries(text, match.start(), match.end()):
+                continue
             if self._is_security_standard_identifier(candidate):
                 continue
             entities.append(Entity(
@@ -986,7 +1012,10 @@ class EventBlockParser:
             list[str | re.Pattern[str]] | tuple[str | re.Pattern[str], ...] | None
         ) = None,
     ):
-        self._serial_re = re.compile(r"\bSN[-: ]?[A-Za-z0-9-]+\b", re.IGNORECASE)
+        self._serial_re = re.compile(
+            r"\b(?:SN[-: ]+[A-Za-z0-9-]+|SN\d{3,}[A-Za-z0-9-]*)\b",
+            re.IGNORECASE,
+        )
         self._part_patterns = [re.compile(p) for p in (part_patterns or [])]
         # Same exclusion patterns RegexPreExtractor uses. When callers
         # don't pass one explicitly, fall back to the RegexPreExtractor

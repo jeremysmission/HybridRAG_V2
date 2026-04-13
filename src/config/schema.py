@@ -120,10 +120,28 @@ class ExtractionConfig(BaseModel):
             r"^SV-\d+$",
             # security standard SP 800 publication reference
             r"^SP[\s\-]?800\b",
-            # MITRE Common Vulnerabilities and Exposures
-            r"^CVE-\d{4}",
+            # MITRE Common Vulnerabilities and Exposures. Some OCR /
+            # chunking splits turn CVE-2024-7525 into a shorter CVE-202
+            # fragment, so reject the governed namespace broadly.
+            r"^CVE-\d{3,}(?:-\d+)*$",
             # MITRE Common Configuration Enumeration
             r"^CCE-\d+$",
+            # Red Hat Security Advisories from scan/plugin findings
+            r"^RHSA-\d{4}$",
+            # Security tooling shorthand and generic cyber debris seen in
+            # the live corpus audit. These are not physical parts.
+            r"^SNMP$",
+            r"^APP-\d+$",
+            r"^SERVICE_(?:START|STOP)$",
+            r"^[A-Z0-9]+(?:_[A-Z0-9]+)+$",
+            r"^CNSSI-\d+$",
+            r"^DD-\d{4}$",
+            r"^DO-\d{4}$",
+            r"^IGS(?:I|CC)?-\d{3,5}$",
+            r"^MSR-\d+$",
+            r"^DV-\d{2,4}$",
+            r"^IEEE-\d+$",
+            r"^SNOW$",
         ],
         description=(
             "Regex patterns matched against the UPPER()-case candidate "
@@ -133,7 +151,8 @@ class ExtractionConfig(BaseModel):
             "procurement ID. Default covers security standard SP 800-53 Rev 5 (all "
             "20 families, 1-2 digit suffix discriminator so PS-800 and "
             "SA-9000 hardware survive) + STIG baseline platform codes + "
-            "STIG CCI/SV + security standard SP 800 publication refs + MITRE CVE/CCE. "
+            "STIG CCI/SV + security standard SP 800 publication refs + MITRE CVE/CCE + "
+            "RHSA/security-tooling debris families surfaced by the Tier 1 corpus audit. "
             "Operators running V2 against a different corpus can "
             "override this list per-corpus without changing the "
             "extractor code. Empty list = no exclusion (useful for "

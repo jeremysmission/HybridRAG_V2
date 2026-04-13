@@ -251,8 +251,14 @@ def run_tier1(
     max_concurrent: int,
 ) -> tuple[list[Entity], list[Relationship]]:
     """Tier 1: Regex + event block + relationship extraction. Threaded."""
-    extractor = RegexPreExtractor(part_patterns=part_patterns)
-    event_parser = EventBlockParser(part_patterns=part_patterns)
+    extractor = RegexPreExtractor(
+        part_patterns=part_patterns,
+        security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
+    )
+    event_parser = EventBlockParser(
+        part_patterns=part_patterns,
+        security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
+    )
     rel_extractor = RegexRelationshipExtractor()
     all_entities: list[Entity] = []
     all_rels: list[Relationship] = []
@@ -633,8 +639,14 @@ def main() -> None:
     print("  [TIER 1] Regex + event block + relationship extraction (streaming)...")
     t1_start = time.perf_counter()
 
-    extractor = RegexPreExtractor(part_patterns=config.extraction.part_patterns)
-    event_parser = EventBlockParser(part_patterns=config.extraction.part_patterns)
+    extractor = RegexPreExtractor(
+        part_patterns=config.extraction.part_patterns,
+        security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
+    )
+    event_parser = EventBlockParser(
+        part_patterns=config.extraction.part_patterns,
+        security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
+    )
     rel_extractor = RegexRelationshipExtractor()
 
     seen: set = set()

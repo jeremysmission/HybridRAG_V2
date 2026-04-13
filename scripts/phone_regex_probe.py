@@ -110,7 +110,10 @@ def main():
     store.close()
 
     # Build the new extractor
-    extractor = RegexPreExtractor(part_patterns=config.extraction.part_patterns)
+    extractor = RegexPreExtractor(
+        part_patterns=config.extraction.part_patterns,
+        security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
+    )
 
     # Metrics
     old_total_phones = 0

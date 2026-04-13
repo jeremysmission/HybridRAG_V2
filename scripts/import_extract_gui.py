@@ -377,8 +377,14 @@ class ImportExtractRunner:
             # instead (see below). See docs/CRITICAL_PYLANCE_INSTALL_...
             # for the related Round 3 CLI discussion.
 
-            extractor = RegexPreExtractor(part_patterns=config.extraction.part_patterns)
-            event_parser = EventBlockParser(part_patterns=config.extraction.part_patterns)
+            extractor = RegexPreExtractor(
+                part_patterns=config.extraction.part_patterns,
+                security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
+            )
+            event_parser = EventBlockParser(
+                part_patterns=config.extraction.part_patterns,
+                security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
+            )
             rel_extractor = RegexRelationshipExtractor()
 
             tier1_hit_chunk_ids: set[str] = set()

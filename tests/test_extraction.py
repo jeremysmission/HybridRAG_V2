@@ -330,11 +330,34 @@ class TestRegexPreExtractor:
         serials = [e for e in entities if e.entity_type == "PART" and "SN" in e.text.upper()]
         assert len(serials) >= 1
 
+    def test_serial_regex_rejects_bare_sn_words(self, regex_extractor):
+        for text in [
+            "SNMP service is enabled.",
+            "Weather may include snow.",
+            "Use the Security Configuration snap-in.",
+            "Packet sniffers were detected.",
+        ]:
+            entities = regex_extractor.extract(text, "c1", "doc.txt")
+            serials = [e.text for e in entities if e.entity_type == "PART" and e.text.upper().startswith("SN")]
+            assert not serials, f"bare SN word leaked as serial/part from {text!r}: {serials}"
+
+    def test_serial_regex_accepts_compact_digit_serial(self, regex_extractor):
+        text = "Device serial SN4112 was removed."
+        entities = regex_extractor.extract(text, "c1", "doc.txt")
+        serials = [e.text for e in entities if e.entity_type == "PART"]
+        assert any(s.upper().startswith("SN4112") for s in serials), f"compact serial missing: {serials}"
+
     def test_report_id_fsr(self, regex_extractor):
         text = "Reference FSR-2025-001 for details."
         entities = regex_extractor.extract(text, "c1", "doc.txt")
         reports = [e for e in entities if e.entity_type == "PO" and "FSR" in e.text]
         assert len(reports) >= 1
+
+    def test_report_id_rejects_embedded_product_code(self, regex_extractor):
+        text = "Website: E9225E24B-FSR-L22 Mechatronics Fan Group | DigiKey"
+        entities = regex_extractor.extract(text, "c1", "doc.txt")
+        reports = [e.text for e in entities if e.entity_type == "PO"]
+        assert "FSR-L22" not in reports, f"embedded product code leaked as report id/PO: {reports}"
 
     def test_report_id_umr(self, regex_extractor):
         text = "See UMR-THULE-2025 for context."
@@ -523,6 +546,34 @@ class TestSecurityStandardExclusion:
         for fake in ["CVE-1999", "CVE-2024", "CCE-2720", "CCE-1001"]:
             parts, _ = go(f"Reference {fake} was checked.")
             assert not parts, f"MITRE identifier {fake} leaked as PART: {parts}"
+
+    def test_additional_cyber_noise_rejected(self, extractor_with_generic_part_pattern):
+        """Regression guard for additional cyber/noise families found in the
+        shadow slice and corpus audit."""
+        go = self._texts(extractor_with_generic_part_pattern)
+        for fake in [
+            "RHSA-2018",
+            "RHSA-2024",
+            "APP-0001",
+            "SERVICE_STOP",
+            "SNMP",
+            "CNSSI-4009",
+            "DD-2842",
+            "DO-0003",
+            "DO-0011",
+            "IGS-2522",
+            "IGSI-2466",
+            "MSR-029",
+            "DV-200",
+            "IEEE-1394",
+            "SNOW",
+            "pam_faillock",
+            "unconfined_u",
+            "CVE-202",
+        ]:
+            parts, pos = go(f"Reference {fake} was checked.")
+            assert not parts, f"cyber-noise identifier {fake} leaked as PART: {parts}"
+            assert not pos, f"cyber-noise identifier {fake} leaked as PO: {pos}"
 
     def test_real_physical_parts_still_accepted(self, extractor_with_generic_part_pattern):
         """Rejection must NOT drop real physical parts. These are the
@@ -784,6 +835,21 @@ class TestSecurityStandardExclusion:
         assert ex._is_security_standard_identifier("PT-3")   # Rev 5 new family
         assert ex._is_security_standard_identifier("CVE-2024")
         assert ex._is_security_standard_identifier("cce-1001")  # case-insensitive
+        assert ex._is_security_standard_identifier("RHSA-2018")
+        assert ex._is_security_standard_identifier("SNMP")
+        assert ex._is_security_standard_identifier("APP-0001")
+        assert ex._is_security_standard_identifier("SERVICE_STOP")
+        assert ex._is_security_standard_identifier("pam_faillock")
+        assert ex._is_security_standard_identifier("CNSSI-4009")
+        assert ex._is_security_standard_identifier("DD-2842")
+        assert ex._is_security_standard_identifier("DO-0003")
+        assert ex._is_security_standard_identifier("IGS-2522")
+        assert ex._is_security_standard_identifier("IGSI-2466")
+        assert ex._is_security_standard_identifier("MSR-029")
+        assert ex._is_security_standard_identifier("DV-200")
+        assert ex._is_security_standard_identifier("IEEE-1394")
+        assert ex._is_security_standard_identifier("CVE-202")
+        assert ex._is_security_standard_identifier("SNOW")
         # Accepted
         assert not ex._is_security_standard_identifier("RG-213")
         assert not ex._is_security_standard_identifier("LMR-400")
@@ -881,6 +947,19 @@ class TestEventBlockParserSecurityStandardExclusion:
         assert "PO-2024-1234" not in parts, (
             f"Purchase order leaked as EventBlockParser PART: {parts}"
         )
+
+    def test_event_block_parser_rejects_additional_cyber_noise(self):
+        parser = EventBlockParser(part_patterns=[r"[A-Z]{2,}-\d{3,4}"])
+        for fake in ["RHSA-2018", "APP-0001", "SERVICE_STOP", "SNMP", "CNSSI-4009", "DD-2842", "DO-0003", "IGS-2522", "MSR-029", "DV-200", "IEEE-1394", "SNOW", "CVE-202"]:
+            text = (
+                f"1. Part#: {fake}\n"
+                "   Action: Replaced\n"
+            )
+            entities, _ = parser.parse(text, "c1", "doc.txt")
+            parts = [e.text.upper() for e in entities if e.entity_type == "PART"]
+            assert fake not in parts, (
+                f"Cyber-noise identifier leaked through EventBlockParser: {fake} -> {parts}"
+            )
 
 
 # ===================================================================
