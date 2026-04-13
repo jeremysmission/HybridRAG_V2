@@ -172,3 +172,42 @@ def test_vector_retriever_merges_metadata_path_hits_ahead_of_hybrid_results():
     assert store.path_calls
     assert results[0].chunk_id == "path-hit"
     assert any(call["path_terms"] == ["learmonth", "2024_08"] for call in store.path_calls)
+
+
+def test_vector_retriever_builds_cdrl_deliverable_hints_for_submitted_reports():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._path_hint_groups(
+        "Which CDRL is A002 and what maintenance service reports have been submitted under it?"
+    )
+
+    assert ["a002", "maintenance service report"] in groups
+    assert ["a002", "msr"] in groups
+    assert ["a002", "deliverables report"] in groups
+
+
+def test_vector_retriever_builds_exact_deliverable_id_hints_for_cdrl_subtypes():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._path_hint_groups(
+        "What was the monitoring system ACAS scan deliverable for July 2025 (IGSI-2553)?"
+    )
+
+    assert ["igsi-2553", "acas scan"] in groups
+    assert ["igsi-2553"] in groups
+
+
+def test_vector_retriever_builds_cdrl_deliverable_hints_for_com_sum_queries():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._path_hint_groups(
+        "What has been delivered under CDRL A025 Computer Operation Manual and Software User Manual?"
+    )
+
+    assert ["a025", "computer operation manual"] in groups
+    assert ["a025", "software user manual"] in groups
+    assert ["a025", "com-sum"] in groups
+    assert ["a025", "deliverables report"] in groups

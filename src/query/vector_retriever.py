@@ -175,14 +175,25 @@ class VectorRetriever:
         groups: list[list[str]] = []
 
         cdrl = self._extract_cdrl_code(lower)
+        deliverable_id = self._extract_deliverable_id(lower)
+        cdrl_hints = self._cdrl_title_hints(lower)
         site = self._extract_site_hint(q)
         exact_dates = re.findall(r"\b20\d{2}-\d{2}-\d{2}\b", lower)
         month_terms = re.findall(r"\b20\d{2}[_-]\d{2}\b", lower)
 
+        if deliverable_id:
+            for hint in cdrl_hints:
+                groups.append([deliverable_id, hint])
+            groups.append([deliverable_id])
+
         if cdrl:
-            title = self._cdrl_title_hint(lower)
-            if title:
-                groups.append([cdrl.lower(), title])
+            deliverable_intent = self._has_deliverable_intent(lower)
+            if deliverable_intent:
+                groups.append([cdrl.lower(), "deliverables report"])
+                groups.append([cdrl.lower(), "deliverables"])
+                groups.append([cdrl.lower(), "delivered"])
+            for hint in cdrl_hints:
+                groups.append([cdrl.lower(), hint])
             groups.append([cdrl.lower()])
 
         if self._looks_like_shipment_query(lower) and site:
@@ -217,23 +228,69 @@ class VectorRetriever:
         return deduped
 
     def _extract_cdrl_code(self, query: str) -> str | None:
-        match = re.search(r"\bcdrl\s+(a\d{3})\b", query)
+        match = re.search(r"\bcdrl(?:\s+is)?\s+(a\d{3})\b", query)
         if match:
             return match.group(1).upper()
         return None
 
-    def _cdrl_title_hint(self, query: str) -> str | None:
-        if "maintenance service report" in query:
-            return "maintenance service report"
-        if "bill of materials" in query:
-            return "bill of materials"
-        if "management plan" in query:
-            return "management plan"
-        if "integrated logistics support plan" in query:
-            return "integrated logistics support plan"
-        if "computer operation manual" in query:
-            return "computer operation manual"
+    def _extract_deliverable_id(self, query: str) -> str | None:
+        match = re.search(r"\b(igscc-\d+|igsi-\d+)\b", query)
+        if match:
+            return match.group(1).lower()
         return None
+
+    def _cdrl_title_hints(self, query: str) -> list[str]:
+        hints: list[str] = []
+        if "maintenance service report" in query:
+            hints.extend(["msr", "maintenance service report"])
+        if "integrated master schedule" in query:
+            hints.extend(["ims", "integrated master schedule"])
+        if "configuration change request" in query or "configuration change requests" in query:
+            hints.append("configuration change")
+        if "corrective action plan" in query:
+            hints.extend(["cap", "corrective action plan"])
+        if "cybersecurity assessment test report" in query:
+            hints.append("cybersecurity assessment test report")
+        if "ct&e report" in query or "cte report" in query:
+            hints.append("ct&e report")
+        if "acas scan" in query or "acas scan results" in query:
+            hints.append("acas scan")
+        if "scap scan" in query or "scap scan results" in query:
+            hints.append("scap scan")
+        if "rmf security plan" in query:
+            hints.append("rmf security plan")
+        if "bill of materials" in query:
+            hints.extend(["pbom", "bill of materials"])
+        if "management plan" in query:
+            hints.extend(["program management plan", "management plan"])
+        if "integrated logistics support plan" in query:
+            hints.extend(["ilsp", "integrated logistics support plan"])
+        if "computer operation manual" in query:
+            hints.extend(["com-sum", "computer operation manual"])
+        if "software user manual" in query or "software users manual" in query:
+            hints.extend(["com-sum", "software user manual"])
+        deduped: list[str] = []
+        seen: set[str] = set()
+        for hint in hints:
+            if hint not in seen:
+                seen.add(hint)
+                deduped.append(hint)
+        return deduped
+
+    def _has_deliverable_intent(self, query: str) -> bool:
+        return any(
+            phrase in query
+            for phrase in (
+                "what has been delivered",
+                "what has been submitted",
+                "have been submitted",
+                "have been filed",
+                "has been filed",
+                "archived for",
+                "deliverable",
+                "deliverables",
+            )
+        )
 
     def _looks_like_shipment_query(self, query: str) -> bool:
         return any(token in query for token in ("shipment", "packing list", "shipped to", "return shipment"))
