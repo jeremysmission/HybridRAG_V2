@@ -117,6 +117,44 @@ This design exists to:
 - improve reliability
 - avoid running the heaviest AI path over everything
 
+## Why This Matters To Different Team Roles
+
+This effort is not only about an AI model. It affects multiple functional lanes in different ways.
+
+- **Program management**
+  - the main value here is moving from a prototype that looked promising to a system that is measurable, gated, and more supportable
+  - the architecture split, quality gates, and evaluation baseline reduce the risk of overclaiming readiness
+  - the tiered design is also part of a long-term cost-control strategy, not just a technical preference
+
+- **Logistics / supply / material analysts**
+  - this work directly affects whether purchase-order-like data, part numbers, BOM-style evidence, shipping records, and procurement references can be trusted
+  - one of the main reasons for the reset was that these business-facing entity types were being polluted by unrelated technical/security identifiers
+  - the cleanup and gating work is what makes future procurement and material questions more trustworthy
+
+- **Cyber security / IA**
+  - a major part of the problem was that security identifiers such as STIG / DISA / MITRE / NIST-style codes were colliding with business fields
+  - the current path explicitly protects against treating cyber/security identifiers as if they were logistics or program entities
+  - this is also important for trust, because it preserves a cleaner boundary between cybersecurity artifacts and business data
+
+- **Field engineers / site install teams**
+  - the real corpus includes site-specific install folders, packing lists, inventories, surveys, acceptance artifacts, and travel/field records
+  - retrieval was already proving useful for finding those documents, but the structured-answer path needed to become more trustworthy before site-level counts and rollups could be treated seriously
+  - the current work is aimed at making that path usable without misleading the people who depend on it
+
+- **Network administrators / infrastructure support**
+  - the project has depended heavily on getting the environment stable enough to run corpus-scale preprocessing and indexing reliably
+  - import/index reliability, workstation operability, proxy-aware installs, GPU/CUDA compatibility, and government AWS integration are all part of the real engineering scope
+  - this is one reason the project has taken more than “just model tuning” time
+
+- **Engineers / technical reviewers**
+  - the main correction was architectural: separate upstream corpus preparation from downstream retrieval/extraction/evaluation
+  - the system is now moving toward a stage -> audit -> promote model instead of direct authoritative writes
+  - that is the right direction for future maintainability and production hardening
+
+- **Leadership / stakeholders**
+  - the most important message is that the work has shifted from “make something demo-like” to “make something trustworthy enough to stand behind”
+  - the extra time has gone into reducing false confidence, lowering long-term cost risk, and creating a more sustainable path forward
+
 ## Why Continued Work Is Justified
 
 The current work is not open-ended churn. It is converging around a clear gated path:
