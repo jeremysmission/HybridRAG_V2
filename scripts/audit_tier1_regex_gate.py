@@ -191,6 +191,12 @@ def curated_cases() -> list[GateCase]:
             source_ref="tests/test_extraction.py",
         ),
         GateCase(
+            name="security-standard-sp800",
+            text="SP 800-53 Rev 5 guidance applies.",
+            must_not_have=(GateExpectation("PART", "SP 800-53"), GateExpectation("PO", "SP 800-53")),
+            source_ref="tests/test_extraction.py",
+        ),
+        GateCase(
             name="phone-garbage-repeat",
             text="Value in table: 3333333344 end",
             must_not_have=(GateExpectation("CONTACT", "3333333344"),),
@@ -257,6 +263,12 @@ def curated_cases() -> list[GateCase]:
             source_ref="tests/test_extraction.py + docs/NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md",
         ),
         GateCase(
+            name="po-period-label",
+            text="P.O. 4500111111 pending.",
+            must_have=(GateExpectation("PO", "4500111111"),),
+            source_ref="tests/test_extraction.py",
+        ),
+        GateCase(
             name="po-purchase-order-label",
             text="Purchase Order: 7000354926 approved.",
             must_have=(GateExpectation("PO", "7000354926"),),
@@ -302,6 +314,24 @@ def curated_cases() -> list[GateCase]:
             name="report-umr",
             text="See UMR-THULE-2025 for context.",
             must_have=(GateExpectation("PO", "UMR-THULE-2025"),),
+            source_ref="tests/test_extraction.py",
+        ),
+        GateCase(
+            name="report-asv",
+            text="Reference ASV-VAFB for details.",
+            must_have=(GateExpectation("PO", "ASV-VAFB"),),
+            source_ref="tests/test_extraction.py",
+        ),
+        GateCase(
+            name="report-rts",
+            text="Archive RTS-DATA preserved.",
+            must_have=(GateExpectation("PO", "RTS-DATA"),),
+            source_ref="tests/test_extraction.py",
+        ),
+        GateCase(
+            name="report-fsr-l22",
+            text="Reference FSR-L22 for details.",
+            must_have=(GateExpectation("PO", "FSR-L22"),),
             source_ref="tests/test_extraction.py",
         ),
         GateCase(
