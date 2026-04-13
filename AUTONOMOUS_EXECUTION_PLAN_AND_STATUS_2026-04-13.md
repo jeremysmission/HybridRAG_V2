@@ -120,41 +120,64 @@ so the next engineering pass stays evidence-driven.
 - deterministic shipment/date query expansion
 - corrected clean markdown persona scorecard row
 
-### Active launch
+### Completed smoke run
 
 - launched:
   - `2026-04-13 12:39 America/Denver`
+- important correction:
+  - this run omitted `--queries`
+  - it therefore executed the legacy `25`-query production pack, not the
+    intended `400`-query pack
+- still useful as a smoke result for the metadata-path slice:
+  - `PASS: 18/25`
+  - `PARTIAL: 6/25`
+  - `MISS: 1/25`
+  - routing correct: `10/25`
+- artifacts:
+  - `docs\PRODUCTION_EVAL_RESULTS_POST_METADATA_PATH_PATCH_2026-04-13.md`
+  - `docs\production_eval_results_post_metadata_path_patch_2026-04-13.json`
+- logs:
+  - `logs\production_eval_post_metadata_path_patch_20260413_123900.out.log`
+  - `logs\production_eval_post_metadata_path_patch_20260413_123900.err.log`
+
+### Current active launch
+
+- launched:
+  - `2026-04-13 12:57 America/Denver`
+- purpose:
+  - run the intended `400`-query baseline after the CDRL deliverable-path
+    hint slice landed on `master`
 - command:
 
 ```powershell
 .\.venv\Scripts\python.exe scripts\run_production_eval.py `
+  --queries tests\golden_eval\production_queries_400_2026-04-12.json `
   --config config\config.tier1_clean_2026-04-13.yaml `
-  --report-md docs\PRODUCTION_EVAL_RESULTS_POST_METADATA_PATH_PATCH_2026-04-13.md `
-  --results-json docs\production_eval_results_post_metadata_path_patch_2026-04-13.json
+  --report-md docs\PRODUCTION_EVAL_RESULTS_POST_CDRL_PATH_PATCH_400_2026-04-13.md `
+  --results-json docs\production_eval_results_post_cdrl_path_patch_400_2026-04-13.json
 ```
 
 - active process observed:
   - launcher:
-    - `224320` (`C:\HybridRAG_V2\.venv\Scripts\python.exe`)
+    - `224776` (`C:\HybridRAG_V2\.venv\Scripts\python.exe`)
   - child:
-    - `224760` (`C:\Users\jerem\AppData\Local\Programs\Python\Python312\python.exe`)
-  - child CPU / working set at `2026-04-13 12:42 America/Denver`:
-    - about `695.62` CPU seconds
-    - about `5.07 GB` working set
+    - `240780` (`C:\Users\jerem\AppData\Local\Programs\Python\Python312\python.exe`)
 - logs:
-  - `logs\production_eval_post_metadata_path_patch_20260413_123900.out.log`
-  - `logs\production_eval_post_metadata_path_patch_20260413_123900.err.log`
-- artifacts at checkpoint:
-  - `docs\PRODUCTION_EVAL_RESULTS_POST_METADATA_PATH_PATCH_2026-04-13.md`
-  - `docs\production_eval_results_post_metadata_path_patch_2026-04-13.json`
-  - neither existed yet at the `12:42` checkpoint
+  - `logs\production_eval_post_cdrl_path_patch_400_20260413_125710.out.log`
+  - `logs\production_eval_post_cdrl_path_patch_400_20260413_125710.err.log`
+- artifacts at launch checkpoint:
+  - `docs\PRODUCTION_EVAL_RESULTS_POST_CDRL_PATH_PATCH_400_2026-04-13.md`
+  - `docs\production_eval_results_post_cdrl_path_patch_400_2026-04-13.json`
+  - neither existed yet at the `12:57` checkpoint
 
 ### Resume rule
 
-- do **not** relaunch this post-patch clean baseline if either process
-  `224320` or `224760` is still alive
-- first inspect the log pair above, then check whether the report/json outputs
-  already exist before launching anything new
+- do **not** relaunch the active `400`-query post-CDRL baseline if either
+  process `224776` or `240780` is still alive
+- the earlier post-metadata-path artifacts above are complete and can be read,
+  but they are a `25`-query smoke, not the intended `400`-query score
+- first inspect the active `400`-query log pair above, then check whether the
+  report/json outputs already exist before launching anything new
 
 ## Slice A: Freeze Tier 1 execution tooling
 
