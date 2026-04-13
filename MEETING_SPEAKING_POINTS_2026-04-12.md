@@ -15,7 +15,9 @@
 - This is our first AI project on top of roughly 15 years of legacy data.
 - The data was never designed for AI use.
 - Naming, security labels, identifiers, and document structure are inconsistent.
+- IT/admin access across two machines was unstable and required resets.
 - Proxy/network friction made establishing the working database a long stop-and-go process.
+- Preprocessing compatibility had to be solved so corpus-scale work could run on CUDA/GPU instead of CPU-only paths.
 - The system was at risk of confusing real business identifiers with technical/security codes.
 - I stopped the blind rerun path so I would not waste another full day producing a dirty store.
 

@@ -34,7 +34,7 @@ Over the last stretch, I focused on turning the prototype into something measura
 - added an automated pre-rerun quality gate
 - documented a staged promotion process so future data additions can be screened before reaching production
 
-This also included a meaningful amount of enabling work around approvals and environment readiness. I did not start with every AI use case, software path, and hardware path already cleared and available. Part of the effort has been getting the project into a state where the technical work could be done responsibly, including a long stop-and-go period caused by proxy/network friction while downloading and establishing the working database. That environment is now finally coming together.
+This also included a meaningful amount of enabling work around approvals and environment readiness. I did not start with every AI use case, software path, and hardware path already cleared and available. Part of the effort has been getting the project into a state where the technical work could be done responsibly, including a long stop-and-go period caused by proxy/network friction while downloading and establishing the working database, repeated IT/admin-access interruptions across two machines, and software compatibility work needed to keep preprocessing on the GPU path instead of much slower CPU-only paths. That environment is now finally coming together.
 
 ## Cost And Delivery Context
 

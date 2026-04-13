@@ -66,10 +66,12 @@ I did not start with every required path already available. Part of the effort h
 - identifying and submitting AI use cases for approval
 - working through software and dependency approval paths
 - getting workstation and hardware paths lined up
+- dealing with unstable admin access across two machines and repeated IT resets
 - working through proxy/network friction while downloading and establishing the working database
+- resolving software compatibility problems so preprocessing could use CUDA/GPU instead of falling back to CPU-only execution
 - adapting the design to what was actually available at each stage
 
-That means some of the elapsed time has gone into getting the project into a state where the engineering work could be done correctly. In particular, establishing the working database was slowed by more than a month of stop-and-go downloading under proxy/network constraints.
+That means some of the elapsed time has gone into getting the project into a state where the engineering work could be done correctly. In particular, establishing the working database was slowed by more than a month of stop-and-go downloading under proxy/network constraints, and productivity was also affected by two-machine admin-access instability plus the need to solve GPU-vs-CPU preprocessing compatibility on corpus-scale jobs.
 
 ### 3. Intentional cost discipline
 

@@ -166,6 +166,12 @@ The lost time was not caused by cosmetic polish. It came from discovering that:
 - the data itself contains long-tail collisions that look valid to naive regexes
 - a full rerun is expensive enough that doing it without gates is irresponsible
 
+There were also real environment constraints:
+
+- repeated IT/admin-access instability across two machines disrupted continuity and forced resets
+- proxy/network friction slowed initial database establishment dramatically
+- preprocessing at this corpus scale is materially different on CPU-only versus CUDA/GPU paths, so software compatibility work to keep preprocessing on the GPU path was a real schedule item, not an optimization nicety
+
 The time has gone into making the pipeline measurable, stageable, and production-shaped.
 
 ## Next Technical Steps

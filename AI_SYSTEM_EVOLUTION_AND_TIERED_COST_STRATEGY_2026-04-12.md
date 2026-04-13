@@ -175,10 +175,12 @@ It is also important that this did not happen in a vacuum. Along the way, a sign
 - identifying and submitting AI use cases for approval
 - working through software and dependency approval constraints
 - getting the necessary workstation and hardware paths lined up
+- dealing with unstable admin access across two machines and repeated IT resets
 - working through difficult proxy/network conditions while downloading and establishing the working database
+- resolving software compatibility issues so heavy preprocessing could stay on CUDA/GPU instead of falling back to CPU-only execution
 - adapting the architecture to what was actually available at each stage
 
-So part of the elapsed time was not only model and pipeline design. It was getting the project into a state where the engineering work could be done with the right tools and approvals in place. In practice, the proxy/network constraint alone made the initial database establishment a stop-and-go effort over more than a month. That environment is finally coming together.
+So part of the elapsed time was not only model and pipeline design. It was getting the project into a state where the engineering work could be done with the right tools and approvals in place. In practice, the proxy/network constraint alone made the initial database establishment a stop-and-go effort over more than a month, the two-machine admin issue caused repeated continuity breaks, and the GPU-vs-CPU preprocessing compatibility problem had to be solved because corpus-scale preprocessing is dramatically less practical when stuck on CPU only. That environment is finally coming together.
 
 ## Current Position
 
