@@ -105,6 +105,47 @@ Eliminate obvious correctness gaps before deeper follow-on work.
 - secondary target:
   - Logistics site/date/shipment retrieval
 
+## Slice G: Measure post-retrieval patch clean baseline
+
+### Goal
+
+Re-run the clean-store 400 baseline after the first retrieval/routing patch set
+so the next engineering pass stays evidence-driven.
+
+### Included patch set
+
+- retrieval candidate-pool wiring fix
+- fallback router now applies guarded query rewrites
+- deterministic CDRL query expansion
+- deterministic shipment/date query expansion
+- corrected clean markdown persona scorecard row
+
+### Active launch
+
+- launched:
+  - `2026-04-13 12:29 America/Denver`
+- command:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\run_production_eval.py `
+  --config config\config.tier1_clean_2026-04-13.yaml `
+  --report-md docs\PRODUCTION_EVAL_RESULTS_POST_RETRIEVAL_PATCH_2026-04-13.md `
+  --results-json docs\production_eval_results_post_retrieval_patch_2026-04-13.json
+```
+
+- active process observed:
+  - `225376` (`C:\HybridRAG_V2\.venv\Scripts\python.exe`)
+- logs:
+  - `logs\production_eval_post_retrieval_patch_20260413_122910.out.log`
+  - `logs\production_eval_post_retrieval_patch_20260413_122910.err.log`
+
+### Resume rule
+
+- do **not** relaunch this post-patch clean baseline if process `225376` is
+  still alive
+- first inspect the log pair above, then check whether the report/json outputs
+  already exist before launching anything new
+
 ## Slice A: Freeze Tier 1 execution tooling
 
 ### Goal
