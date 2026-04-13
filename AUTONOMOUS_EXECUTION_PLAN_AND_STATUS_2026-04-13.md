@@ -180,9 +180,23 @@ If the shadow slice is clean, run a full Tier 1 rerun into an isolated clean sto
 - relationships:
   - `data/index/clean/tier1_clean_20260413/relationships.sqlite3`
 
+### Live launch
+
+- launched: `2026-04-13 08:10 America/Denver`
+- wrapper PID: `196808`
+- monitor PID: `192168`
+- clean config:
+  - `config/config.tier1_clean_2026-04-13.yaml`
+- monitor log:
+  - `logs\tier1_clean_run_20260413_081035.monitor.txt`
+- note:
+  - the first launch wrapper did not create the intended stdout text log,
+    so liveness is being tracked through the monitor log plus SQLite WAL
+    growth in `data/index/clean/tier1_clean_20260413`
+
 ### Status
 
-- Ready to launch
+- Running
 
 ## Slice E: Clean-store evaluation prep
 
