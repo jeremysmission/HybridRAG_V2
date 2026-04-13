@@ -14,6 +14,37 @@ This is a fuller written update for the team that explains:
 
 ## Summary
 
+To make the rest of this update easier to follow, I want to define the main terms up front.
+
+- **HybridRAG**
+  - short for **Hybrid Retrieval-Augmented Generation**
+  - in this project, that means combining semantic/vector retrieval with text/keyword retrieval instead of relying on only one search method
+- **V1**
+  - the original HybridRAG implementation
+  - this was the first version of the system and the path I previously reported as being close to a demo
+- **V2**
+  - the rebuilt current system, `HybridRAG_V2`
+  - this is the new architecture I refer to below when I describe the reset and the current path forward
+- **CorpusForge**
+  - the new upstream application that prepares, normalizes, and exports the corpus before V2 imports and uses it
+
+## How The Project Evolved
+
+The project did not begin as two separate applications.
+
+It started as a single HybridRAG effort, which I now refer to as `V1`. In that original form, ingest, preprocessing, retrieval, extraction, and answering were still too tightly coupled. That was workable for early proof-of-concept progress, but it made it too hard to tell which part of the system was actually trustworthy and which part was only appearing to work.
+
+Once I pushed V1 harder against the real IGS drive, it became clear that I needed a cleaner separation of responsibilities. That is why the project evolved into:
+
+- `CorpusForge`
+  - the upstream corpus-preparation side
+  - responsible for ingest, normalization, chunking/export, and integrity checks
+- `HybridRAG_V2`
+  - the downstream retrieval-and-answering side
+  - responsible for import, retrieval, extraction, evaluation, and answer generation
+
+So the split into `CorpusForge` plus `HybridRAG_V2` was not a branding change. It was the architectural response to what I learned from V1.
+
 I need to reset expectations from the earlier V1 status. The original version proved that retrieval on the corpus was possible, but it did not prove that the system could support trustworthy structured answers. In particular, V1 could find relevant evidence but could not aggregate reliably enough for the kind of answers we ultimately want to stand behind.
 
 Rather than continue forcing a brittle one-app design, I kept the pieces that were working and rebuilt the system into a cleaner two-application architecture:
@@ -91,6 +122,7 @@ That access path also required application and back-and-forth with an AI Staff E
 Completed work includes:
 
 - architecture reset into `CorpusForge` and `HybridRAG_V2`
+- CorpusForge deduplication/canonicalization work to reduce duplicate parse, chunk, embed, extract, and storage overhead
 - installer and workstation reliability improvements
 - import/index reliability fixes
 - Forge export integrity checks
@@ -106,9 +138,21 @@ Completed work includes:
 
 The system uses extraction tiers:
 
-- **Tier 1**: fast deterministic extraction across the full corpus
-- **Tier 2**: model-based entity extraction on a narrower subset
-- **Tier 3**: the most expensive hard-tail reasoning/relationship path
+- **Tier 1**
+  - fast deterministic extraction across the full corpus
+  - technically this is the broad rule/regex candidate-generation pass over the indexed corpus
+  - it is best at structured values with stable shapes such as dates, contacts, purchase-order-like values, and part-number-like values
+  - it saves time and money by preventing later model-based tiers from spending compute on easy high-volume cases
+- **Tier 2**
+  - model-based entity extraction on a narrower subset
+  - technically this is the smarter NER-style pass, currently aligned with GLiNER-style extraction, for entities that are too messy for deterministic patterns alone
+  - it is where people, organizations, sites/locations, and harder real-world entity classes are handled more intelligently
+  - it saves time and money by avoiding use of the heaviest reasoning path on cases that a narrower entity model can already solve
+- **Tier 3**
+  - the most expensive hard-tail reasoning/relationship path
+  - technically this is the selective higher-cost path for the ambiguous or relationship-heavy subset that still remains after Tier 1 and Tier 2
+  - it is where deeper extraction, harder cross-field interpretation, and relationship-heavy reasoning belong
+  - it saves time and money by being reserved only for the smallest most difficult slice instead of becoming the default for the entire corpus
 
 This design exists to:
 
@@ -116,6 +160,24 @@ This design exists to:
 - preserve speed
 - improve reliability
 - avoid running the heaviest AI path over everything
+
+The important point is that each tier is designed to remove work from the next one. That layered reduction is a major reason the system is still financially and operationally realistic on a corpus of this size.
+
+## Additional Value From CorpusForge Deduplication
+
+Another important improvement is the deduplication work in `CorpusForge`.
+
+That work matters because duplicate or near-duplicate files create waste at multiple stages:
+
+- duplicate parsing
+- duplicate chunking
+- duplicate embeddings
+- duplicate extraction
+- larger exports
+- larger indexes
+- noisier retrieval results
+
+By reducing duplicated content earlier in the pipeline, the system avoids paying that cost over and over again. That saves both processing time and storage/index overhead, and it also improves answer quality by reducing duplicate evidence and repeated noise in downstream retrieval.
 
 ## Why This Matters To Different Team Roles
 
