@@ -12,6 +12,8 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+import pytest
+
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -250,6 +252,78 @@ def test_deterministic_guard_applies_complex_subqueries_on_api_provider():
 
     assert result.query_type == "COMPLEX"
     assert [sq.query_type for sq in result.sub_queries] == ["SEMANTIC", "SEMANTIC"]
+
+
+@pytest.mark.parametrize(
+    "query, expected_fragment",
+    [
+        (
+            "What does the Program Management Plan (CDRL A008) say about contract deliverables and schedules?",
+            "guard_override=type=SEMANTIC",
+        ),
+        (
+            "What are the Contingency Plan Report and After Action Review templates used for?",
+            "guard_override=type=SEMANTIC",
+        ),
+        (
+            "What is in the System Engineering Management Plan (CDRL A013) for the enterprise program?",
+            "guard_override=type=SEMANTIC",
+        ),
+        (
+            "What is the Integrated Logistics Support Plan (CDRL A023) and what does it cover?",
+            "guard_override=type=SEMANTIC",
+        ),
+        (
+            "What is the status of the enterprise program follow-on contract Sources Sought response?",
+            "guard_override=type=SEMANTIC",
+        ),
+        (
+            "What are the cost and schedule variances reported in the latest Program Management Review?",
+            "guard_override=type=SEMANTIC",
+        ),
+    ],
+)
+def test_deterministic_guard_keeps_document_content_questions_semantic_on_api_provider(
+    query, expected_fragment
+):
+    payload = {
+        "query_type": "ENTITY",
+        "sub_queries": [],
+        "entity_filters": {
+            "entity_type": "",
+            "text_pattern": "",
+            "site_filter": "",
+        },
+        "expanded_query": "llm guess",
+        "reasoning": "llm guess",
+    }
+    router = QueryRouter(_StubLLM(payload, provider="api"))
+
+    result = router.classify(query)
+
+    assert result.query_type == "SEMANTIC"
+    assert expected_fragment in result.reasoning
+
+
+def test_deterministic_guard_does_not_override_scan_report_contain_query():
+    payload = {
+        "query_type": "ENTITY",
+        "sub_queries": [],
+        "entity_filters": {
+            "entity_type": "",
+            "text_pattern": "",
+            "site_filter": "",
+        },
+        "expanded_query": "llm guess",
+        "reasoning": "llm guess",
+    }
+    router = QueryRouter(_StubLLM(payload, provider="api"))
+
+    result = router.classify(
+        "What does the monitoring system Scan Report from May 2023 (IGSI-965) contain?"
+    )
+
+    assert result.query_type == "ENTITY"
 
 
 def test_fallback_routes_deliverable_lookup_to_entity():

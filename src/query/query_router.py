@@ -455,6 +455,9 @@ class QueryRouter:
         if self._is_compare_question(q):
             return "SEMANTIC"
 
+        if self._is_document_content_question(q):
+            return "SEMANTIC"
+
         if self._has_any(q, ["which cdrl is", "which contract is", "which deliverable is"]):
             return "ENTITY"
 
@@ -538,6 +541,78 @@ class QueryRouter:
             return "ENTITY"
 
         return None
+
+    def _is_document_content_question(self, query: str) -> bool:
+        """Return True for content questions about documents/reports/plans.
+
+        These are semantic read-the-document questions, not entity or
+        tabular lookups, even when they mention report-like nouns.
+        """
+        if not re.search(r"^(?:what is|what are|what does)\b", query):
+            return False
+
+        if self._has_any(
+            query,
+            [
+                "say about",
+                "templates used for",
+                "what is in the",
+                "sources sought response",
+                "reported in the latest",
+            ],
+        ):
+            if not self._has_any(
+                query,
+                [
+                    "spreadsheet",
+                    "table",
+                    "tracker",
+                    "inventory",
+                    "actuals",
+                    "budget",
+                    "packing list",
+                    "purchase order",
+                    "po-",
+                    "status of po",
+                    "where do i find",
+                    "where can i find",
+                    "show me",
+                    "documented under",
+                    "report show",
+                    "results file",
+                ],
+            ):
+                return True
+
+        if self._has_any(query, ["cover", "covers", "contain", "contains"]):
+            if self._has_any(
+                query,
+                ["plan", "report", "guide", "template", "package", "manual", "playbook", "procedure"],
+            ) and "scan report" not in query:
+                if not self._has_any(
+                    query,
+                    [
+                        "spreadsheet",
+                        "table",
+                        "tracker",
+                        "inventory",
+                        "actuals",
+                        "budget",
+                        "packing list",
+                        "purchase order",
+                        "po-",
+                        "status of po",
+                        "where do i find",
+                        "where can i find",
+                        "show me",
+                        "documented under",
+                        "report show",
+                        "results file",
+                    ],
+                ):
+                    return True
+
+        return False
 
     def _aggregate_signal_score(self, query: str) -> int:
         """High-signal cues for multi-document listing/counting questions."""
