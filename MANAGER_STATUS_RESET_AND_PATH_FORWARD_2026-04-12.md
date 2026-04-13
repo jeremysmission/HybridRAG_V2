@@ -101,6 +101,40 @@ The next steps are now concrete and measurable:
 
 This is the shortest credible path to a trustworthy demo and a trustworthy production direction.
 
+## Estimated Timeline
+
+The safest way to describe schedule is by milestone, not by implying that every remaining unknown is gone.
+
+My current estimate is:
+
+- roughly **2 more weeks** to get to a trustworthy demo candidate on the rebuilt path
+
+That estimate assumes:
+
+- the automated Tier 1 gate passes
+- the shadow Tier 1 run does not reveal a new major collision class
+- the clean Tier 1 rerun completes as expected
+- the post-rerun baseline improves without exposing a completely new blocker
+
+What that 2-week estimate covers:
+
+- Tier 1 gate
+- shadow extraction
+- one clean full Tier 1 rerun
+- rerun of the 400-query baseline
+- final tightening on the highest-value remaining retrieval/routing issues
+- preparation of a more trustworthy demo candidate
+
+What it does **not** mean:
+
+- full production hardening of every path
+- "answer any question" maturity with no further iteration
+- completion of all future automation and promotion work
+
+If asked for the shortest honest answer:
+
+"About two weeks to get to a trustworthy demo candidate on the rebuilt architecture, assuming the clean rerun behaves the way the new quality gates suggest it should."
+
 ## Non-Technical Summary
 
 Plain-English version:
@@ -130,7 +164,7 @@ Additional budget framing if useful:
 
 If a shorter version is needed:
 
-"I found that the original path looked closer to a demo than it really was. Because this is our first AI project and it sits on top of roughly 15 years of inconsistent legacy data, I had to stop and harden the pipeline so the system does not confuse business information with technical/security codes. I split the architecture, built the quality gates, and now I am at the point where I can do one controlled clean rerun instead of wasting more time on unreliable runs."
+"I found that the original path looked closer to a demo than it really was. Because this is our first AI project and it sits on top of roughly 15 years of inconsistent legacy data, I had to stop and harden the pipeline so the system does not confuse business information with technical/security codes. I split the architecture, built the quality gates, and now I am at the point where I can do one controlled clean rerun instead of wasting more time on unreliable runs. My current estimate is about two weeks to get to a trustworthy demo candidate on the rebuilt path."
 
 ## Short Spoken Version
 

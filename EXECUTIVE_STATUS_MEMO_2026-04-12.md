@@ -55,6 +55,20 @@ The system is in a much stronger state than V1, but the remaining gating item is
 4. rerun the evaluation baseline on the cleaned store
 5. use that clean baseline to finish retrieval and routing improvements
 
+## Estimated Timeline
+
+My current estimate is approximately **2 more weeks** to reach a trustworthy demo candidate on the rebuilt path.
+
+That estimate is based on the current gated sequence:
+
+1. automated Tier 1 quality gate
+2. controlled shadow extraction
+3. one clean full Tier 1 rerun
+4. rerun of the evaluation baseline
+5. targeted tightening of the highest-value remaining issues
+
+This is a milestone estimate, not a claim that every remaining unknown is gone. It is the estimate for a trustworthy demo candidate on the current architecture, not for complete production maturity.
+
 ## Why The Time Was Necessary
 
 The time was not spent polishing a demo. It was spent preventing a bad demo and avoiding repeated wasted reruns. The key lesson is that I was closer to a visible prototype than to a trustworthy system. I chose to correct that now rather than build on top of unreliable data.
@@ -73,4 +87,4 @@ Rather than force a brittle demo, I split the system into two cleaner applicatio
 
 The main issue I uncovered was that the first-pass extraction layer was sometimes classifying security-control and technical codes as if they were business entities such as purchase orders and part numbers. That would have made the system look polished while still producing misleading answers. I stopped the blind rerun path, hardened the extraction logic, added automated quality gates, and built a grounded evaluation set so progress can be measured honestly.
 
-At this point, the architecture reset is complete and the next steps are clear: run the automated Tier 1 gate, run a controlled shadow extraction, perform one clean full Tier 1 rerun if that passes, and then rerun the evaluation baseline on the cleaned store. The extra time has gone into making the system dependable instead of just making it look close, while also keeping the long-term operating-cost model much lower than a more cloud-heavy approach.
+At this point, the architecture reset is complete and the next steps are clear: run the automated Tier 1 gate, run a controlled shadow extraction, perform one clean full Tier 1 rerun if that passes, and then rerun the evaluation baseline on the cleaned store. My current estimate is about two weeks to get to a trustworthy demo candidate on this rebuilt path, assuming the clean rerun behaves as expected. The extra time has gone into making the system dependable instead of just making it look close, while also keeping the long-term operating-cost model much lower than a more cloud-heavy approach.
