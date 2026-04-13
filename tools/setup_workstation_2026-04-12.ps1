@@ -322,6 +322,49 @@ function Invoke-WithRetry {
     return $false
 }
 
+function Get-RequirementName {
+    param([string]$Requirement)
+    if ([string]::IsNullOrWhiteSpace($Requirement)) { return "" }
+    $req = $Requirement.Trim()
+    $req = ($req -split '\[')[0]
+    return (($req -split '[=<>!~\s]')[0]).Trim().ToLower()
+}
+
+function Install-GlinerDrilldownFallback {
+    param(
+        [string]$PythonExe,
+        [string]$GlinerRequirement,
+        [string[]]$CommonArgs
+    )
+    $glinerDeps = @(
+        "huggingface_hub>=0.21.4",
+        "onnxruntime",
+        "sentencepiece",
+        "tqdm",
+        "transformers>=4.51.3,<5.2.0"
+    )
+
+    Write-Warn "  GLiNER install failed -- retrying with explicit dependency bootstrap"
+    foreach ($dep in $glinerDeps) {
+        Write-Info "    GLiNER bootstrap dep: $dep"
+        & $PythonExe -m pip install $dep @CommonArgs --quiet 2>&1 | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            Write-Fail "    GLiNER bootstrap dep failed: $dep"
+            return $false
+        }
+    }
+
+    Write-Info "    Retrying GLiNER wheel install with --no-deps"
+    & $PythonExe -m pip install --no-deps $GlinerRequirement @CommonArgs --quiet 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Fail "    GLiNER --no-deps retry failed"
+        return $false
+    }
+
+    Write-Ok "  GLiNER installed after dependency bootstrap"
+    return $true
+}
+
 # ---------------------------------------------------------------------------
 # Inventory helpers -- non-destructive detection only. Called from the
 # pre-flight inventory (Section 4.5) BEFORE any install step runs, and
@@ -760,9 +803,10 @@ if (-not (Test-Path $reqFile)) {
     Write-Fail "requirements.txt not found at $reqFile"
     exit 1
 }
+$step7PipArgs = @("--disable-pip-version-check") + $TrustedHosts
 
 $ok = Invoke-WithRetry -Label "pip install -r requirements.txt" -Action {
-    & $VenvPip install -r $reqFile @TrustedHosts --quiet 2>&1 | Out-Null
+    & $VenvPython -m pip install -r $reqFile @step7PipArgs --quiet 2>&1 | Out-Null
 }
 
 if ($ok) {
@@ -777,10 +821,19 @@ if ($ok) {
         # Skip torch (already installed from CUDA index)
         if ($pkg -match '^torch(\s|$|=|>|<)') { continue }
         Write-Info "  Installing: $pkg"
-        & $VenvPip install $pkg @TrustedHosts --quiet 2>&1 | Out-Null
+        & $VenvPython -m pip install $pkg @step7PipArgs --quiet 2>&1 | Out-Null
         if ($LASTEXITCODE -ne 0) {
-            Write-Fail "  Failed: $pkg"
-            $drillFails += $pkg
+            $pkgName = Get-RequirementName -Requirement $pkg
+            if ($pkgName -eq "gliner") {
+                $glinerRecovered = Install-GlinerDrilldownFallback -PythonExe $VenvPython -GlinerRequirement $pkg -CommonArgs $step7PipArgs
+                if (-not $glinerRecovered) {
+                    Write-Fail "  Failed: $pkg"
+                    $drillFails += $pkg
+                }
+            } else {
+                Write-Fail "  Failed: $pkg"
+                $drillFails += $pkg
+            }
         }
     }
     if ($drillFails.Count -gt 0) {
@@ -808,7 +861,17 @@ if ($ok) {
             if ($choice -eq "R") {
                 Write-Info "Retrying drill-down for critical packages..."
                 foreach ($pkg in $criticalHits) {
-                    & $VenvPip install $pkg @TrustedHosts --quiet 2>&1 | Out-Null
+                    $pkgName = Get-RequirementName -Requirement $pkg
+                    if ($pkgName -eq "gliner") {
+                        $retryOk = Install-GlinerDrilldownFallback -PythonExe $VenvPython -GlinerRequirement $pkg -CommonArgs $step7PipArgs
+                        if (-not $retryOk) {
+                            Write-Info "Manual workaround:"
+                            Write-Host "      .venv\Scripts\python.exe -m pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org huggingface_hub onnxruntime sentencepiece tqdm ""transformers>=4.51.3,<5.2.0""" -ForegroundColor Gray
+                            Write-Host "      .venv\Scripts\python.exe -m pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --no-deps gliner==0.2.26" -ForegroundColor Gray
+                        }
+                    } else {
+                        & $VenvPython -m pip install $pkg @step7PipArgs --quiet 2>&1 | Out-Null
+                    }
                 }
                 # Fall through -- Section 9 verify_install.py will catch anything
                 # still broken after the retry.
