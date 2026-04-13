@@ -1,9 +1,10 @@
 """
 Production Golden Eval Runner — reviewer — 2026-04-11
 
-Runs the 25 production queries from tests/golden_eval/production_queries_2026-04-11.json
-through the full V2 QueryPipeline (retrieve_context path, no generation) against
-the live 10.4M chunk LanceDB store.
+Runs the legacy 25-query pack by default, and can also score the current
+400-query production baseline when `--queries` points at the newer pack.
+Both modes use the full V2 QueryPipeline (retrieve_context path, no
+generation) against the live LanceDB store.
 
 Output:
   - docs/PRODUCTION_EVAL_RESULTS_2026-04-11.md   (human-readable scorecard)
@@ -107,6 +108,34 @@ FAMILY_SIGNALS: dict[str, list[str]] = {
     "PQ-023": ["procurement", "open purchase", "received", "ibuy", "clin", "purchase order", "a014"],
     "PQ-024": ["shipment", "disposition", "calibration", "assetsmart"],
     "PQ-025": ["cdrl", "ato", "mto", "taskord", "directive", "part failure", "pmr", "fep", "variance", "corrective action"],
+}
+
+_FAMILY_STOPWORDS = {
+    "the",
+    "and",
+    "for",
+    "with",
+    "from",
+    "into",
+    "that",
+    "this",
+    "have",
+    "what",
+    "when",
+    "where",
+    "which",
+    "how",
+    "many",
+    "does",
+    "are",
+    "who",
+    "why",
+    "latest",
+    "show",
+    "me",
+    "cross",
+    "reference",
+    "cross-reference",
 }
 
 # Queries that fundamentally need the entity store (Tier 2/Tier 3 extraction)
@@ -232,6 +261,39 @@ def _match_in_family(source_path: str, text: str, signals: list[str]) -> bool:
     return False
 
 
+def _family_signals_for_query(qdef: dict) -> list[str]:
+    """Return family match signals for a query.
+
+    The legacy 25-query eval used hand-authored per-query signal lists. The
+    400-query corpus is family-labeled instead, so we fall back to the expected
+    family label plus its tokenized parts when no hand-authored mapping exists.
+    """
+    qid = _get_query_id(qdef) or ""
+    if qid in FAMILY_SIGNALS:
+        return FAMILY_SIGNALS[qid]
+
+    family = (_get_expected_family(qdef) or "").strip().lower()
+    if not family:
+        return []
+
+    tokens = [t for t in re.split(r"[^a-z0-9]+", family) if t]
+    signals: list[str] = []
+    signals.append(family)
+    if len(tokens) > 1:
+        signals.append(" ".join(tokens))
+    for tok in tokens:
+        if len(tok) > 2 and tok not in _FAMILY_STOPWORDS:
+            signals.append(tok)
+    # Preserve order while deduplicating.
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for sig in signals:
+        if sig not in seen:
+            seen.add(sig)
+            deduped.append(sig)
+    return deduped
+
+
 def _percentile(arr: list[int], p: int) -> int:
     if not arr:
         return 0
@@ -286,7 +348,7 @@ def run_query(
     persona = qdef.get("persona", "Unknown")
     expected_type = _get_expected_type(qdef)
     expected_family = _get_expected_family(qdef)
-    signals = FAMILY_SIGNALS.get(qid, [])
+    signals = _family_signals_for_query(qdef)
 
     error = ""
     routed_type = "ERROR"
