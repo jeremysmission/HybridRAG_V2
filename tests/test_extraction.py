@@ -342,6 +342,25 @@ class TestRegexPreExtractor:
         reports = [e for e in entities if e.entity_type == "PO" and "UMR" in e.text]
         assert len(reports) >= 1
 
+    @pytest.mark.parametrize(
+        "text, expected",
+        [
+            ("Reference ASV-VAFB for details.", "ASV-VAFB"),
+            ("Archive RTS-DATA preserved.", "RTS-DATA"),
+            ("Reference FSR-L22 for details.", "FSR-L22"),
+        ],
+    )
+    def test_report_ids_corpus_variants(self, regex_extractor, text, expected):
+        """Corpus-native report IDs from the live PO-polluted store should stay in PO.
+
+        These long-tail identifiers still matter for live lookups and should
+        not regress just because the high-volume IR-family false positives were
+        removed.
+        """
+        entities = regex_extractor.extract(text, "c1", "doc.txt")
+        reports = [e.text for e in entities if e.entity_type == "PO"]
+        assert expected in reports, f"Expected report ID {expected!r} missing from {reports}"
+
     def test_field_label_site(self, regex_extractor):
         text = "Site: Thule Air Base\nPOC: SSgt Webb"
         entities = regex_extractor.extract(text, "c1", "doc.txt")
@@ -534,6 +553,7 @@ class TestSecurityStandardExclusion:
             ("Raised PO 5000585586 to Grainger.", "5000585586"),
             ("Purchase Order: 7000354926 approved.", "7000354926"),
             ("PO#7000325121 shipped.", "7000325121"),
+            ("P.O. 4500111111 pending.", "4500111111"),
             ("Purchase order 5000111222 delivered.", "5000111222"),
             ("po 4500111111 is pending.", "4500111111"),
         ]
@@ -705,6 +725,23 @@ class TestSecurityStandardExclusion:
             pos = [e.text for e in ents if e.entity_type == "PO"]
             assert not parts, f"security standard {fake} leaked as PART: {parts}"
             assert not pos, f"security standard {fake} leaked as PO: {pos}"
+
+    def test_sp800_publications_rejected_as_part_and_po(self, extractor_with_generic_part_pattern):
+        """SP 800 publication references are security-standard metadata, not parts.
+
+        The explicit SP 800 guard is part of the default exclusion list and
+        should block common publication-reference formats with or without
+        punctuation.
+        """
+        go = self._texts(extractor_with_generic_part_pattern)
+        for text in [
+            "SP 800-53 Rev 5 guidance applies.",
+            "SP-800-53 Appendix A applies.",
+            "SP800-53 guidance applies.",
+        ]:
+            parts, pos = go(text)
+            assert not parts, f"SP 800 publication leaked as PART: text={text!r} parts={parts}"
+            assert not pos, f"SP 800 publication leaked as PO: text={text!r} pos={pos}"
 
     def test_hypothetical_3digit_hardware_on_other_nist_families(self):
         """Future-proof: if any other security standard family prefix (CP-, PE-,
