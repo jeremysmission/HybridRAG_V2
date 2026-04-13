@@ -123,26 +123,36 @@ so the next engineering pass stays evidence-driven.
 ### Active launch
 
 - launched:
-  - `2026-04-13 12:29 America/Denver`
+  - `2026-04-13 12:39 America/Denver`
 - command:
 
 ```powershell
 .\.venv\Scripts\python.exe scripts\run_production_eval.py `
   --config config\config.tier1_clean_2026-04-13.yaml `
-  --report-md docs\PRODUCTION_EVAL_RESULTS_POST_RETRIEVAL_PATCH_2026-04-13.md `
-  --results-json docs\production_eval_results_post_retrieval_patch_2026-04-13.json
+  --report-md docs\PRODUCTION_EVAL_RESULTS_POST_METADATA_PATH_PATCH_2026-04-13.md `
+  --results-json docs\production_eval_results_post_metadata_path_patch_2026-04-13.json
 ```
 
 - active process observed:
-  - `225376` (`C:\HybridRAG_V2\.venv\Scripts\python.exe`)
+  - launcher:
+    - `224320` (`C:\HybridRAG_V2\.venv\Scripts\python.exe`)
+  - child:
+    - `224760` (`C:\Users\jerem\AppData\Local\Programs\Python\Python312\python.exe`)
+  - child CPU / working set at `2026-04-13 12:42 America/Denver`:
+    - about `695.62` CPU seconds
+    - about `5.07 GB` working set
 - logs:
-  - `logs\production_eval_post_retrieval_patch_20260413_122910.out.log`
-  - `logs\production_eval_post_retrieval_patch_20260413_122910.err.log`
+  - `logs\production_eval_post_metadata_path_patch_20260413_123900.out.log`
+  - `logs\production_eval_post_metadata_path_patch_20260413_123900.err.log`
+- artifacts at checkpoint:
+  - `docs\PRODUCTION_EVAL_RESULTS_POST_METADATA_PATH_PATCH_2026-04-13.md`
+  - `docs\production_eval_results_post_metadata_path_patch_2026-04-13.json`
+  - neither existed yet at the `12:42` checkpoint
 
 ### Resume rule
 
-- do **not** relaunch this post-patch clean baseline if process `225376` is
-  still alive
+- do **not** relaunch this post-patch clean baseline if either process
+  `224320` or `224760` is still alive
 - first inspect the log pair above, then check whether the report/json outputs
   already exist before launching anything new
 
