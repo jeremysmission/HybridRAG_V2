@@ -273,10 +273,23 @@ If the shadow slice is clean, run a full Tier 1 rerun into an isolated clean sto
   - `logs/tier1_clean_runs/tier1_clean_run_20260413_095955.json`
 - stdout/stderr log:
   - `logs/tier1_clean_runs/tier1_clean_run_20260413_095955.log`
+- completed:
+  - `2026-04-13 11:05 America/Denver`
+- final audited result:
+  - verdict: `PASS`
+  - entities: `5,781,766`
+  - relationships: `59`
+  - `PO`: `119,812`
+  - `PART`: `316,184`
+  - blocked namespace hits: `none`
+  - PO preserve sentinels: `pass`
+  - PART preserve sentinels: `pass`
+- audit artifact:
+  - `docs/TIER1_CLEAN_RERUN_RESULTS_2026-04-13.md`
 
 ### Status
 
-- Replacement rerun running
+- Completed and approved as the clean Tier 1 baseline store
 
 ## Slice E: Clean-store evaluation prep
 
@@ -284,9 +297,52 @@ If the shadow slice is clean, run a full Tier 1 rerun into an isolated clean sto
 
 Once a clean Tier 1 store exists, prepare the next 400-query baseline rerun against that cleaned store.
 
+### Clean-store baseline launch
+
+- initial baseline attempt failed fast on a runner bug:
+  - `NameError: _resolve_cli_path is not defined`
+- root cause:
+  - `if __name__ == "__main__": sys.exit(main())` was above the helper
+    definition, so `main()` could execute before `_resolve_cli_path`
+    existed
+- local fix:
+  - moved the `__main__` block to the bottom of
+    `scripts/run_production_eval.py`
+- relaunch command:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\run_production_eval.py `
+  --queries tests\golden_eval\production_queries_400_2026-04-12.json `
+  --config config\config.tier1_clean_2026-04-13.yaml `
+  --results-json docs\production_eval_results_clean_tier1_2026-04-13.json `
+  --report-md docs\PRODUCTION_EVAL_RESULTS_CLEAN_TIER1_2026-04-13.md
+```
+
+### Current live state at lunch-break checkpoint
+
+- launched:
+  - `2026-04-13 11:07 America/Denver`
+- active eval PID:
+  - `206972`
+  - executable:
+    - `C:\Users\jerem\AppData\Local\Programs\Python\Python312\python.exe`
+  - CPU at checkpoint:
+    - `628.33`
+  - working set at checkpoint:
+    - about `6.1 GB`
+- duplicate near-idle process also present with same command line:
+  - PID `213380`
+  - executable:
+    - `C:\HybridRAG_V2\.venv\Scripts\python.exe`
+  - CPU at checkpoint:
+    - `0.03`
+- clean-store output files did **not** exist yet at the checkpoint, so do
+  **not** assume completion and do **not** relaunch a second baseline while
+  PID `206972` is still alive
+
 ### Status
 
-- Pending clean Tier 1 store
+- Running in background at lunch-break checkpoint
 
 ## Workstation Coordination Notes
 
@@ -319,7 +375,10 @@ If Beast crashes, the recovery order is:
    - `.\.venv\Scripts\python.exe scripts\run_tier1_clean_launcher.py --config config\config.tier1_clean_2026-04-13.yaml`
 7. after it finishes, rerun:
    - `.\.venv\Scripts\python.exe scripts\audit_tier1_clean_store.py --entity-db data\index\clean\tier1_clean_20260413\entities.sqlite3 --markdown docs\TIER1_CLEAN_RERUN_RESULTS_2026-04-13.md`
+8. before launching any new clean-store eval, check whether PID `206972`
+   or another `run_production_eval.py` process is already active:
+   - `Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*run_production_eval.py*config.tier1_clean_2026-04-13.yaml*' } | Select-Object ProcessId,CommandLine`
 
 ## Short Summary
 
-The current unattended Beast-side mission has advanced further: the first streaming clean Tier 1 rerun completed and eliminated the known blocked namespaces from the top `PO` / `PART` values, but it still missed two real legacy 6-digit procurement POs. That legacy-PO recall gap is now fixed in code and revalidated on the real documents. The next unattended step is to relaunch a replacement clean Tier 1 rerun with that fix in place, then use the corrected clean store for the next truthful evaluation baseline.
+The unattended Beast-side mission is now past the biggest dependency. The replacement isolated clean Tier 1 rerun completed and the clean-store audit is a full PASS: blocked namespaces are gone from the audited `PO` / `PART` path, and both the PO and PART preserve sentinels survive in the corrected store. The next immediate dependency is the truthful 400-query clean-store baseline. That rerun is already launched in the background under `run_production_eval.py`; one process is actively consuming CPU/RAM and should be allowed to continue, while no second baseline should be launched unless that active process exits or the output artifacts appear complete.

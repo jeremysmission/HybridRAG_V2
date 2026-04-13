@@ -1087,8 +1087,6 @@ def main() -> int:
     return 0
 
 
-if __name__ == "__main__":
-    sys.exit(main())
 def _resolve_cli_path(flag: str, default: Path) -> Path:
     if flag not in sys.argv:
         return default
@@ -1099,3 +1097,7 @@ def _resolve_cli_path(flag: str, default: Path) -> Path:
     if not candidate.is_absolute():
         candidate = v2_root / candidate
     return candidate
+
+
+if __name__ == "__main__":
+    sys.exit(main())
