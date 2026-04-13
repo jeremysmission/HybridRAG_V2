@@ -126,3 +126,90 @@ def test_ollama_guard_builds_multi_hop_subqueries():
     assert "ARC-4471 destination site requestor purchase order status" == result.sub_queries[0].query_text
     assert "point of contact site requestor contact" == result.sub_queries[1].query_text
 
+
+def test_fallback_routes_corpus_tabular_lookup_to_tabular():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify("What does the enterprise program Weekly Hours Variance report show?")
+
+    assert result.query_type == "TABULAR"
+
+
+def test_fallback_routes_corpus_aggregate_inventory_to_aggregate():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify("What procurement records exist for the monitoring system Sustainment option year 2 period?")
+
+    assert result.query_type == "AGGREGATE"
+
+
+def test_fallback_routes_corpus_entity_single_record_lookup_to_entity():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify("Which CDRL is A002 and what maintenance service reports have been submitted under it?")
+
+    assert result.query_type == "ENTITY"
+
+
+def test_fallback_routes_budget_query_to_tabular():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify("What is the LDI suborganization 2024 budget for ORG enterprise program and how is it organized by option year?")
+
+    assert result.query_type == "TABULAR"
+
+
+def test_fallback_routes_documented_under_query_to_aggregate():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify("What are the configuration change requests documented under CDRL A050?")
+
+    assert result.query_type == "AGGREGATE"
+
+
+def test_fallback_routes_tracker_query_to_tabular():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify("What is the Part Failure Tracker and what parts have been replaced?")
+
+    assert result.query_type == "TABULAR"
+
+
+def test_fallback_routes_report_dated_query_to_entity():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify(
+        "What is documented in the enterprise program Weekly Hours Variance report dated 2025-01-10?"
+    )
+
+    assert result.query_type == "ENTITY"
+
+
+def test_deterministic_guard_overrides_stubbed_llm_for_tabular_query():
+    payload = {
+        "query_type": "SEMANTIC",
+        "sub_queries": [],
+        "entity_filters": {
+            "entity_type": "",
+            "text_pattern": "",
+            "site_filter": "",
+        },
+        "expanded_query": "summarize the spreadsheet",
+        "reasoning": "llm guess",
+    }
+    router = QueryRouter(_StubLLM(payload, provider="api"))
+
+    result = router.classify("Show me the enterprise program Weekly Hours Variance report for the week ending 2024-12-31.")
+
+    assert result.query_type == "TABULAR"
+    assert "guard_override=type=TABULAR" in result.reasoning
+
+
+def test_compare_query_stays_semantic():
+    router = QueryRouter(_UnavailableLLM())
+
+    result = router.classify(
+        "What is the difference between the enterprise program Weekly Hours Variance reports and the enterprise program PMR decks for tracking program health?"
+    )
+
+    assert result.query_type == "SEMANTIC"

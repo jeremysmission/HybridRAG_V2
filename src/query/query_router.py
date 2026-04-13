@@ -208,15 +208,12 @@ class QueryRouter:
         """
         Apply deterministic routing overrides for high-signal query shapes.
 
-        Local Ollama routing is materially less reliable than GPT-4o on these
-        narrow patterns, so we prefer deterministic routing when the lexical
-        intent is clear.
+        When the lexical intent is high-signal, prefer the deterministic type
+        over the model guess. Keep the rewrite/sub-query guards for Ollama,
+        where query expansion quality is materially less reliable.
         """
         deterministic = self._deterministic_type(classification.original_query)
         if not deterministic:
-            return classification
-
-        if self.llm.provider != "ollama":
             return classification
 
         guard_actions: list[str] = []
@@ -225,28 +222,29 @@ class QueryRouter:
             classification.query_type = deterministic
             guard_actions.append(f"type={deterministic}")
 
-        guarded_expanded = self._guarded_expanded_query(
-            classification.original_query,
-            classification.expanded_query,
-        )
-        if guarded_expanded != classification.expanded_query:
-            classification.expanded_query = guarded_expanded
-            guard_actions.append("expanded_query")
+        if self.llm.provider == "ollama":
+            guarded_expanded = self._guarded_expanded_query(
+                classification.original_query,
+                classification.expanded_query,
+            )
+            if guarded_expanded != classification.expanded_query:
+                classification.expanded_query = guarded_expanded
+                guard_actions.append("expanded_query")
 
-        guarded_sub_queries = self._guarded_sub_queries(
-            classification.original_query,
-            deterministic,
-        )
-        if guarded_sub_queries is not None:
-            classification.sub_queries = guarded_sub_queries
-            guard_actions.append("sub_queries")
-        elif deterministic != "COMPLEX":
-            classification.sub_queries = []
-        elif deterministic == "COMPLEX" and not classification.sub_queries:
-            classification.sub_queries = [
-                SubQuery(query_text=classification.original_query, query_type="SEMANTIC")
-            ]
-            guard_actions.append("sub_queries_fallback")
+            guarded_sub_queries = self._guarded_sub_queries(
+                classification.original_query,
+                deterministic,
+            )
+            if guarded_sub_queries is not None:
+                classification.sub_queries = guarded_sub_queries
+                guard_actions.append("sub_queries")
+            elif deterministic != "COMPLEX":
+                classification.sub_queries = []
+            elif deterministic == "COMPLEX" and not classification.sub_queries:
+                classification.sub_queries = [
+                    SubQuery(query_text=classification.original_query, query_type="SEMANTIC")
+                ]
+                guard_actions.append("sub_queries_fallback")
 
         if not guard_actions:
             return classification
@@ -444,28 +442,300 @@ class QueryRouter:
         """Return a strong-signal routing decision when intent is obvious."""
         q = " ".join(query.lower().split())
 
-        if self._has_any(q, ["compare", " versus ", " vs ", "difference between"]):
-            return "COMPLEX"
-
         if self._is_multi_hop_lookup(q):
             return "COMPLEX"
 
+        if self._is_compare_question(q):
+            return "SEMANTIC"
+
+        if re.search(
+            r"\bwhat is documented in the .+\b(report|file|spreadsheet)\b dated\b",
+            q,
+        ):
+            return "ENTITY"
+
         if self._has_any(
             q,
+            [
+                "which cdrl is",
+                "what contract number covers",
+                "what is purchase order",
+                "what is the packing list",
+                "what is documented in",
+                "what was shipped to",
+                "what was in the",
+                "what was sent",
+                "what was procured",
+                "what was processed",
+                "what was traveled",
+                "what was received on po",
+                "what part was received on po",
+                "what was purchase order",
+                "what was the purchase order",
+                "what did we buy from",
+                "who supplied",
+                "who traveled on",
+                "what work was performed under",
+                "what was the",
+                "what template is used",
+                "what directive has been issued",
+                "what incident",
+                "what is contract ",
+                "what is the contract ",
+                "what is the packing list for",
+                "which tripp lite power cord part number is used",
+                "what all-weather enclosure part is used",
+                "what is the s4 hana fixes list",
+                "what is the corrective action plan",
+                "what known issues are documented",
+            ],
+        ):
+            return "ENTITY"
+
+        aggregate_score = self._aggregate_signal_score(q)
+        tabular_score = self._tabular_signal_score(q)
+        entity_score = self._entity_signal_score(q)
+
+        if aggregate_score >= 3 and aggregate_score >= tabular_score:
+            return "AGGREGATE"
+
+        if tabular_score >= 3 and tabular_score >= entity_score:
+            return "TABULAR"
+
+        if entity_score >= 3:
+            return "ENTITY"
+
+        return None
+
+    def _aggregate_signal_score(self, query: str) -> int:
+        """High-signal cues for multi-document listing/counting questions."""
+        score = 0
+        if self._has_any(
+            query,
+            [
+                "how many",
+                "count ",
+                "list all",
+                "full set",
+                "roll up",
+                "timeline of all",
+                "across all",
+                "across every",
+                "distribution",
+                "trend",
+            ],
+        ):
+            score += 3
+
+        if self._has_any(
+            query,
+            [
+                "records exist",
+                "documents exist",
+                "procurement records exist",
+                "installation documents exist",
+                "open purchase orders exist",
+                "monthly actuals are available",
+                "deliverables have been filed",
+                "deliverables have been submitted",
+                "deliverables have been delivered",
+                "documented under",
+                "filed under",
+                "submitted under",
+                "delivered under",
+                "have been performed",
+                "have been documented",
+                "have been filed",
+                "have been submitted",
+                "have been delivered",
+                "have had installation visits documented",
+                "return shipments",
+                "have been processed",
+                "have been submitted",
+                "have been filed",
+                "have been documented",
+                "have had",
+                "sites have",
+            ],
+        ):
+            score += 2
+
+        if self._has_any(
+            query,
+            [
+                "which sites have",
+                "what sites have",
+                "what has been delivered",
+                "what has been submitted",
+                "what has been processed",
+                "what has been filed",
+                "what procurement records exist",
+                "what installation documents exist",
+                "what monthly actuals are available",
+                "what open purchase orders exist",
+                "what return shipments",
+                "what has been delivered under",
+                "what has been documented under",
+                "what has been filed under",
+                "what has been submitted under",
+                "what are the configuration change requests documented under",
+                "what acas scan deliverables have been filed",
+                "which sites appear in both",
+                "what asv visits have been performed",
+                "what deliverables are being submitted under",
+                "what deliverables have been filed under",
+                "what deliverables have been submitted under",
+                "what deliverables have been delivered under",
+            ],
+        ):
+            score += 3
+
+        if self._has_any(
+            query,
+            [
+                "fep monthly actuals",
+                "weekly variance reports",
+                "site outage analysis",
+                "cumulative outage metrics",
+                "monthly status reports",
+                "acceptance test report documents",
+                "configuration change requests",
+                "corrective action plans",
+                "deliverable types",
+                "delivery records",
+                "ato re-authorization packages",
+                "calibration records",
+                "installation visits documented",
+                "sites have had",
+                "shipments occurred",
+                "occurred in august",
+                "since 2014",
+                "since 2020",
+                "under contract",
+            ],
+        ):
+            score += 1
+
+        return score
+
+    def _tabular_signal_score(self, query: str) -> int:
+        """High-signal cues for spreadsheet/report/file lookups."""
+        score = 0
+        if "show me" in query:
+            score += 3
+        if "where is" in query and self._has_any(
+            query,
+            [
+                "report",
+                "file",
+                "spreadsheet",
+                "tracker",
+                "analysis",
+                "variance",
+                "actuals",
+                "budget",
+                "inventory",
+                "results",
+                "packing list",
+                "scan result",
+                "controls spreadsheet",
+                "site outage analysis",
+                "fep recon",
+                "bill of materials",
+                "priced bill of materials",
+            ],
+        ):
+            score += 3
+
+        if self._has_any(
+            query,
             [
                 "status of po-",
                 "purchase order",
                 "backordered",
                 "in transit",
                 "shipped",
-                "cancelled",
                 "tracking",
+                "cancelled",
             ],
         ):
-            return "TABULAR"
+            score += 2
+
+        if self._has_any(query, ["status of po-", "what is the status of po-"]):
+            score += 3
 
         if self._has_any(
-            q,
+            query,
+            [
+                "weekly hours variance",
+                "monthly actuals",
+                "budget",
+                "packing list",
+                "part failure tracker",
+                "site inventory",
+                "spares report",
+                "site outage analysis",
+                "cumulative outage metrics",
+                "fep recon",
+                "stig reviews",
+                "scan result",
+                "security controls spreadsheet",
+                "controls spreadsheet",
+                "bill of materials",
+                "priced bill of materials",
+                "recommended spares parts list",
+                "report file",
+                "spreadsheet",
+                "tracker",
+                "analysis",
+                "inventory",
+                "results",
+                "file",
+                "report",
+            ],
+        ):
+            score += 2
+
+        if self._has_any(query, ["budget", "part failure tracker"]):
+            score += 1
+
+        if re.search(
+            r"\bwhat (?:does|did) the .*(?:show|document)\b",
+            query,
+        ):
+            score += 3
+        if re.search(
+            r"\bwhat is the (?:latest|current|final)\b.*\b(report|file|spreadsheet|tracker|analysis|variance|actuals|budget|inventory|results)\b",
+            query,
+        ):
+            score += 3
+        if re.search(
+            r"\bwhat was the .*\b(weekly hours variance|site outage analysis|packing list|fep recon|scan result|security controls spreadsheet)\b",
+            query,
+        ):
+            score += 3
+
+        return score
+
+    def _is_compare_question(self, query: str) -> bool:
+        """Return True for simple compare/difference questions that should stay semantic."""
+        return self._has_any(
+            query,
+            [
+                "difference between",
+                "compare",
+                "compare ",
+                " versus ",
+                " vs ",
+                "how does",
+            ],
+        )
+
+    def _entity_signal_score(self, query: str) -> int:
+        """High-signal cues for single-item factual lookups."""
+        score = 0
+        if self._has_any(
+            query,
             [
                 "who is",
                 "who are",
@@ -478,40 +748,91 @@ class QueryRouter:
                 "next scheduled maintenance",
             ],
         ):
-            return "ENTITY"
+            score += 3
 
         if self._has_any(
-            q,
+            query,
             [
-                "how many",
-                "count ",
-                "list all",
-                "across all",
-                "across every",
-                "unique part numbers",
-                "which sites have",
-                "parts were consumed",
+                "which cdrl is",
+                "what contract number covers",
+                "what is purchase order",
+                "what is the packing list",
+                "what is documented in",
+                "what was shipped to",
+                "what was in the",
+                "what was sent",
+                "what was procured",
+                "what was processed",
+                "what was traveled",
+                "what was received on po",
+                "what part was received on po",
+                "what was purchase order",
+                "what was the purchase order",
+                "what did we buy from",
+                "who supplied",
+                "who traveled on",
+                "what work was performed under",
+                "what was the",
+                "what template is used",
+                "what directive has been issued",
+                "what incident",
+                "what is contract ",
+                "what is the contract ",
+                "what is the packing list for",
+                "which tripp lite power cord part number is used",
+                "what all-weather enclosure part is used",
+                "what is the s4 hana fixes list",
+                "what is the corrective action plan",
+                "what known issues are documented",
+                "what is documented in the enterprise program weekly hours variance report dated",
+                "what is the monthly status report",
+                "what is the part failure tracker",
+                "what is the priced bill of materials",
             ],
         ):
-            return "AGGREGATE"
+            score += 2
 
-        semantic_patterns = [
-            r"\bwhat part was replaced\b",
-            r"\bpart was replaced\b",
-            r"\breplaced on the transmitter\b",
-            r"\boutput power\b",
-            r"\bcalibration procedure\b",
-            r"\bworkaround\b",
-            r"\bgeneral condition\b",
-            r"\bmaintenance was performed\b",
-            r"\bups battery capacity\b",
-            r"\bnoise issues?\b",
-            r"\breplacement board\b",
-        ]
-        if any(re.search(pattern, q) for pattern in semantic_patterns):
-            return "SEMANTIC"
+        if self._has_any(
+            query,
+            [
+                "shipment",
+                "contract number",
+                "purchase order",
+                "cdrl",
+                "incident",
+                "template",
+                "directive",
+                "site survey report",
+                "corrective action plan",
+                "known issues",
+                "packing list",
+                "purchase order",
+                "shipment",
+                "report dated",
+                "template used",
+                "report from",
+                "incident igsi-",
+                "fixes list",
+                "part number is used",
+                "purchase order",
+                "report dated",
+            ],
+        ):
+            score += 1
 
-        return None
+        if re.search(
+            r"\bwhat is the .+\b(report|template|list|plan|package|directive|record|form)\b(?: dated .+)?$",
+            query,
+        ):
+            score += 2
+
+        if re.search(
+            r"\bwhat is documented in the .+\b(report|file|spreadsheet)\b dated\b",
+            query,
+        ):
+            score += 4
+
+        return score
 
     def _has_any(self, query: str, terms: list[str]) -> bool:
         """Case-normalized substring helper."""
