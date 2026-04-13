@@ -1,17 +1,74 @@
 # Manager Status Reset And Path Forward 2026-04-12
 
-## Why This Update Is Different
+## Why I Am Sending A Reset
 
-My last status update was still based on the original V1 path and the assumption that I was closing in on a usable demo. Since then, I found a hard limitation in V1: it could retrieve documents, but it could not aggregate reliably enough to support the type of answers I need to demonstrate. Rather than force a brittle demo, I stopped treating V1 as the main path, kept the pieces that were actually working, and rebuilt the system into a cleaner two-application design.
+My last major update was still based on the original V1 path and the assumption that I was closing in on a usable demo. Since then, I found that the project was closer to a retrieval demo than to a trustworthy AI system. That is why I need to reset the status, explain what changed, and explain why the work has taken longer than I originally expected.
 
-## Architecture Reset
+The short version is:
 
-The current system is now split into:
+- V1 proved that the program's data could be searched and retrieved with AI techniques
+- V1 did **not** prove that the system could answer business-facing questions reliably
+- once I tested it more seriously against the real IGS drive and real aggregation-style questions, I found issues that would have made a demo look better than the underlying system really was
+- rather than force a brittle demo, I split the work into a cleaner architecture and rebuilt the path around quality gates and measurable progress
+
+## Where I Started
+
+The original goal was to build an AI system that could work over roughly 15 years of mixed-format legacy program data, answer questions over that corpus, and do it without creating a large recurring cloud bill.
+
+I originally pursued that through a single-system V1 path. That version did accomplish something important:
+
+- it proved that the corpus could be indexed
+- it proved that relevant documents could be retrieved
+- it proved that a homegrown Python approach could do more than a toy proof of concept
+
+At that stage, it looked like I was getting close to a demo.
+
+## What I Ran Into Before The Core AI Problems
+
+Before the main AI design issues were even fully visible, a significant amount of setup friction slowed progress:
+
+- I had to identify and submit multiple AI use cases and software paths for approval
+- I had to work through hardware and workstation readiness constraints
+- I had to deal with unstable admin access across two machines, including getting bumped off one machine and needing IT resets
+- I had to spend more than a month dealing with stop-and-go proxy/network issues just to get the working database and dependencies established
+- I had to solve software compatibility issues so heavy preprocessing would stay on CUDA/GPU instead of falling back to much slower CPU-only execution
+- I only very recently got access to the company's new AI toolkit path, which runs through government AWS and came with its own approval, setup, and integration learning curve
+
+In other words, I did not start this effort with a clean, fully approved, fully provisioned AI environment. Part of the elapsed time went into getting the project into a state where the technical work could happen correctly at all.
+
+## What Failed In V1
+
+The major turning point came when I pushed V1 harder against the real IGS drive and tried to use it for the kind of answers that matter to the program, not just document retrieval.
+
+That is where I found the hard limitation:
+
+- V1 could retrieve relevant documents and chunks
+- but it could not aggregate reliably enough to support trustworthy business-facing answers
+
+This was not a small tuning issue. It was a structural issue.
+
+On the actual IGS data, many identifiers look similar even when they mean very different things. Purchase orders, part numbers, technical report IDs, security-control identifiers, and cyber-governance codes all coexist in the same legacy drive. V1 was capable of finding related documents, but when I pushed it toward counting, rollups, and structured answers, the first-pass extraction layer was still confusing some of those categories.
+
+That meant the system could produce answers that looked plausible while still being semantically wrong.
+
+The biggest examples were:
+
+- purchase-order style fields being polluted by security-control and report-code patterns
+- part-number style fields being polluted by STIG / DISA / MITRE / NIST-style identifiers
+- aggregation-style answers looking more mature on the surface than they really were underneath
+
+That is the key reason I stopped treating V1 as "almost done."
+
+## Why I Reset The Architecture
+
+Once I found those issues, I made the decision to stop trying to force the one-system V1 path and instead split the system into two cleaner applications with clearer responsibilities.
+
+The current architecture is:
 
 - `CorpusForge`
   - upstream ingest
   - normalization
-  - export packaging
+  - chunk/vector export
   - integrity checks
 - `HybridRAG_V2`
   - import into the searchable store
@@ -20,111 +77,92 @@ The current system is now split into:
   - evaluation
   - answer generation
 
-This was not cosmetic refactoring. It was necessary to separate upstream data preparation from downstream retrieval and reasoning so I could identify which parts were actually trustworthy.
+This was not a restart from zero. I kept what was actually working and repurposed it into a cleaner design. The point of the split was to separate upstream data preparation from downstream retrieval and reasoning so I could isolate failures and stop hiding weak assumptions inside one large path.
 
-## What I Found
+## What I Have Been Doing Since The Reset
 
-The biggest issue I uncovered was in the first-pass entity extraction layer. It was populating business-facing fields like purchase orders and part numbers with security-control and cyber-governance identifiers. That means the system could look operational while still producing misleading structured answers. This is the main reason I stopped the blind rerun path and shifted from “demo soon” to “make the pipeline trustworthy first.”
-
-Examples of what was going wrong:
-
-- purchase order fields were being polluted by control-family codes
-- part-number fields were being polluted by STIG / DISA / MITRE-style identifiers
-- a full rerun without quality gates would have consumed time and produced another dirty store
-
-## What I Have Accomplished Since The Pivot
-
-Over the last stretch, I have been converting the system from a fragile prototype path into a measurable, production-shaped pipeline.
+Since the pivot away from V1, the work has been focused on turning the project from a fragile prototype path into a measurable, production-shaped pipeline.
 
 Completed work includes:
 
-- split the architecture into `CorpusForge` and `HybridRAG_V2`
-- hardened workstation/install paths so the system is actually operable
-- fixed import/index reliability problems
-- added export integrity and metadata-contract checks between the two applications
-- built a grounded 400-query evaluation corpus so progress can be measured honestly
-- fixed the production-eval harness so the baseline is now believable instead of misleading
-- hardened Tier 1 regex logic against known false-positive classes
-- built an automated pre-rerun quality gate so future data additions can be screened before contaminating production
-- documented the forward process for staged promotion instead of blind rerun
+- splitting the system into `CorpusForge` and `HybridRAG_V2`
+- hardening installer and workstation setup so the system is actually operable
+- fixing import/index reliability issues
+- adding export integrity and metadata-contract checks between the two applications
+- building a grounded 400-query evaluation corpus so progress can be measured honestly
+- fixing the production-evaluation harness so the baseline is believable
+- hardening Tier 1 extraction logic against known false-positive classes
+- building automated quality gates so future data additions can be screened before contaminating production
+- documenting a staged promotion process instead of a blind rerun process
 
-This work also included a large amount of enabling effort that is easy to overlook from the outside:
+The important change here is that I am no longer relying on "it seems to work." I now have an evaluation set, quality gates, and a cleaner architecture that let me measure what is actually trustworthy.
 
-- identifying and submitting the needed AI use cases for approval
-- working through software and dependency approval paths
-- sorting out hardware and workstation readiness constraints
-- dealing with IT/admin-access instability across two machines
-- dealing with difficult proxy/network conditions while downloading and establishing the working database
-- working through software compatibility issues needed to keep preprocessing on CUDA/GPU instead of falling back to CPU-only paths
-- adapting the design to what was actually available at each stage instead of what would have been ideal on day one
+## How The Design Evolved
 
-In practical terms, I did not start this effort with every approval, dependency, and hardware path already in place. Part of the time went into getting the project into a state where the technical work could happen correctly. That included more than a month of stop-and-go downloading through proxy/network friction just to get a working database established, repeated IT resets caused by unstable admin access across two machines, and software compatibility work to keep preprocessing on the GPU path where corpus-scale performance is realistic. I am finally getting to the point where the system, the tooling, and the environment are lining up at the same time.
+The design has also evolved in a deliberate cost-controlled direction.
+
+Instead of taking the more expensive default path of pushing everything through a cloud-heavy AI workflow, I have been building a tiered system in homegrown Python.
+
+What I mean by a tiered approach is:
+
+- broad deterministic preprocessing and filtering happen first
+- the corpus is reduced before the heaviest AI steps are used
+- later stages only use stronger AI where it adds real value
+- future data should be staged, checked, and promoted only if it passes quality gates
+
+This matters for two reasons:
+
+1. it reduces the chance of polluting the system with bad extracted data
+2. it reduces both startup cost and long-term maintenance cost
+
+That cost discipline is important because outsourcing or cloud-first approaches for a CUI-sensitive RAG effort of this size can become expensive quickly. I am trying to build something that is more affordable to sustain over time, not just something flashy in the short term.
+
+## What Changed Recently On The AI Infrastructure Side
+
+A recent positive development is that the company only very recently released an internal AI toolkit that includes temporary access to OSS-20B and OSS-120B models through government AWS.
+
+That is helpful, but it has not been plug-and-play. To even get to that point, I had to:
+
+- apply for access
+- work through an AI Staff Engineer while they debugged issues on their side
+- learn a government AWS path on the fly instead of standard commercial AWS
+- line up government AWS restrictions, Azure-style formatting expectations, the enterprise company AI endpoint layer, and OpenAI-compatible Jupyter workflows
+
+The good news is that this path is finally becoming usable. My intent is not to abandon the tiered low-cost design, but to use this temporarily free company-provided AI selectively for the remaining heavy preprocessing tasks where it provides the most leverage.
 
 ## Current Status
 
-The project is now in a much better state than it was under V1, but the current bottleneck is not installer work or basic retrieval plumbing. The bottleneck is structured-data trust.
+The project is in a much better place now than it was under V1, but the current bottleneck is not basic retrieval anymore. The current bottleneck is structured-data trust.
 
 What is true right now:
 
+- the architecture reset is complete
+- the core repos and pipeline boundaries are in much better shape
 - retrieval is real and usable
-- the rebuilt architecture is in place
 - the evaluation corpus is in place
-- the main remaining gating item is a clean Tier 1 rerun on top of the new quality controls
+- the main gating item is a clean Tier 1 rerun on top of the new quality controls
 
-## Why It Took Longer Than Expected
+That means I am no longer trying to guess my way to a demo. I now have a more disciplined path:
 
-I underestimated how many hidden reliability issues were still sitting underneath a “working” demo path.
+1. run the automated Tier 1 quality gate
+2. run a controlled shadow extraction on a smaller sample
+3. if that passes, run one clean full Tier 1 rerun
+4. rerun the 400-query baseline on the cleaned store
+5. then tighten the remaining retrieval and routing issues from evidence
 
-The main lesson is:
+## Why This Took Longer Than I Expected
+
+The simplest honest explanation is this:
 
 - I was closer to a demo than I was to a trustworthy system
 
-Once I found that V1 could not aggregate reliably and that Tier 1 extraction was still capable of poisoning business-facing entities, the responsible move was to stop promising progress based on appearance and rebuild the path so it can be measured and trusted.
+Once I found that V1 could retrieve but not aggregate reliably enough, and once I found that the real IGS drive still contained enough identifier collisions to poison structured answers, the responsible move was to stop and harden the system instead of presenting something that would be hard to trust.
 
-It is also important to understand that this is not like installing a normal legacy software program. AI preprocessing at this scale means converting a very large legacy corpus through chunking, embedding, enrichment, and extraction so it becomes usable inside an AI architecture. Those are compute-intensive one-time builds and conversions that can take days or weeks, even before the final question-answering layer is ready.
+It is also important to understand that this kind of AI preprocessing work is not like installing a normal legacy software program. To make a large legacy corpus usable inside an AI system, it has to be chunked, embedded, enriched, indexed, extracted, audited, and revalidated. On a corpus of this size, those are compute-intensive one-time builds and conversions that can take days or weeks even before the final question-answering layer is ready.
 
-## Budget And Resource Constraint Context
+## Timeline And What I Need Next
 
-An important part of this effort is that I am building this under tight cost constraints instead of using the more expensive default path.
-
-The more conventional approach would be to contract out large parts of the design and cloud execution path, which would likely run on the order of:
-
-- roughly `$15K-$20K` for the design and setup work alone
-- then ongoing cloud costs in the range of roughly `$800/month`
-
-Instead, I have been building a homegrown Python pipeline that uses a tiered approach to reduce how much expensive AI preprocessing is needed on the full 700GB corpus.
-
-The design goal is:
-
-- do the broad filtering and deterministic preprocessing locally
-- reduce the expensive AI-heavy work to a much smaller fraction of the data
-- use the temporarily available company-provided AWS AI services only where they add real value
-- push the long-term query cost toward something closer to tens of dollars per month instead of hundreds or thousands
-
-That cost discipline is part of why the architecture and gating work matters so much. If the pipeline is dirty, every rerun wastes not only time but also the cost savings the tiered design is supposed to create.
-
-A recent positive development is that the company has only very recently released an internal AI toolkit that includes temporary access to OSS-20B and OSS-120B models through AWS. I am deliberately not treating that as a reason to move to an uncontrolled cloud-heavy design. Instead, I found a way to use that temporarily free capability selectively for the remaining heavy preprocessing tasks where it can help the most. That lets me accelerate the hardest remaining AI work without giving up the lower-cost tiered design. It also means I have had to learn the AWS infrastructure side on the fly in order to use that path responsibly and avoid hidden cloud-cost or configuration mistakes. Because this is government AWS rather than standard commercial AWS, it also comes with its own set of access, configuration, and integration restrictions.
-
-Even getting access to that path was not automatic. I had to apply for it and work through an AI Staff Engineer while they debugged a couple of issues on their side before I could use it. That is part of why the cloud-enabled preprocessing path only became practical very recently.
-
-Even after access, the path was not plug-and-play. To make the government AWS path usable, I had to line up a mix of Azure-style formatting expectations, the company's enterprise endpoint AI layer, and OpenAI-compatible usage patterns inside Jupyter-based workflows. That created additional learning curve and integration work, but it is now moving in the right direction.
-
-## What Happens Next
-
-The next steps are now concrete and measurable:
-
-1. Run the automated Tier 1 regex quality gate.
-2. Run a controlled shadow extraction on a smaller chunk sample.
-3. If it passes, run one clean full Tier 1 rerun.
-4. Rerun the 400-query production baseline on the cleaned store.
-5. Use the newly available company OSS toolkit selectively for the remaining heavy preprocessing tasks that truly need it.
-6. Use the clean baseline to tighten remaining retrieval and routing problems.
-
-This is the shortest credible path to a trustworthy demo and a trustworthy production direction.
-
-## Estimated Timeline
-
-The safest way to describe schedule is by milestone, not by implying that every remaining unknown is gone.
+The safest way to describe the schedule is by milestone.
 
 My current estimate is:
 
@@ -132,61 +170,32 @@ My current estimate is:
 
 That estimate assumes:
 
-- the automated Tier 1 gate passes
-- the shadow Tier 1 run does not reveal a new major collision class
-- the clean Tier 1 rerun completes as expected
+- the automated Tier 1 gate continues to pass
+- the clean rerun behaves as expected
 - the post-rerun baseline improves without exposing a completely new blocker
 
-What that 2-week estimate covers:
+What that estimate covers:
 
 - Tier 1 gate
 - shadow extraction
-- one clean full Tier 1 rerun
+- one intentional clean full Tier 1 rerun
 - rerun of the 400-query baseline
-- final tightening on the highest-value remaining retrieval/routing issues
-- preparation of a more trustworthy demo candidate
+- targeted tightening of the remaining highest-value retrieval/routing issues
 
-What it does **not** mean:
+What it does not mean:
 
-- full production hardening of every path
-- "answer any question" maturity with no further iteration
-- completion of all future automation and promotion work
+- that every future automation task is finished
+- that the system is already at full production maturity
+- that every possible question type will be solved immediately after that demo candidate milestone
 
-If asked for the shortest honest answer:
+## Plain-English Summary
 
-"About two weeks to get to a trustworthy demo candidate on the rebuilt architecture, assuming the clean rerun behaves the way the new quality gates suggest it should."
+If I had to explain this in the simplest possible way:
 
-## Non-Technical Summary
-
-Plain-English version:
-
-I found that the earlier system could retrieve documents but could not support reliable structured answers. I rebuilt the pipeline into two cleaner applications, hardened the install/import/export path, built a real evaluation set, and added automated quality gates so future data updates can be checked before they pollute production. I am now at the stage where I can do one controlled shadow run and one intentional clean rerun, instead of repeatedly losing time to dirty reruns.
-
-## Manager Framing For A Non-Technical Audience
-
-If the audience is non-technical, the easiest honest framing is:
-
-- this is the program's first AI project
-- the source material comes from many years of legacy data
-- the data was not originally created for an AI system
-- naming, security labels, identifiers, and document conventions are inconsistent across that history
-- that means the hard part is not only "building an AI model"
-- the hard part is teaching the system which patterns are real business information and which patterns only look similar
-
-Plain-English version using that framing:
-
-"This has turned into the normal growing pains of a first AI project built on top of about 15 years of legacy data. The old data was never designed for an AI system, so it contains inconsistent naming conventions, mixed document styles, and codes that look alike even when they mean very different things. The system was starting to confuse real business identifiers with security-control and technical codes, which would have made the answers look polished but not trustworthy. Instead of forcing a demo on top of that, I split the system into cleaner parts, added quality checks, and built a safer process so future data can be screened before it reaches production. The extra time is going into making the system dependable rather than just impressive on the surface."
-
-Additional budget framing if useful:
-
-"I am also doing this under a cost-control model. The standard cloud-heavy path for something like this can get expensive quickly. I am deliberately building a tiered pipeline that minimizes expensive AI passes over the full corpus and keeps long-term usage costs low. That means a little more engineering up front, but it is what gives us a realistic path to something operational without turning it into a high-cost recurring service."
+This has turned into the normal growing pains of a first AI project built on top of many years of legacy data. The old data was never designed for AI use, so it contains inconsistent naming, mixed document styles, and codes that look alike even when they mean very different things. I found that the earlier version could find documents, but it could not yet support trustworthy counting and structured answers on the real IGS drive. Rather than force a fragile demo, I split the system into cleaner parts, added quality gates, and rebuilt the path so future data can be screened before it reaches production. The extra time has gone into making the system dependable rather than just impressive on the surface.
 
 ## Very Short Manager Version
 
 If a shorter version is needed:
 
-"I found that the original path looked closer to a demo than it really was. Because this is our first AI project and it sits on top of roughly 15 years of inconsistent legacy data, I had to stop and harden the pipeline so the system does not confuse business information with technical/security codes. I split the architecture, built the quality gates, and now I am at the point where I can do one controlled clean rerun instead of wasting more time on unreliable runs. My current estimate is about two weeks to get to a trustworthy demo candidate on the rebuilt path."
-
-## Short Spoken Version
-
-"I had to reset the architecture after finding that the original version could retrieve documents but could not aggregate reliably enough for the kind of answers we need. I split the system into an upstream export app and a downstream retrieval/evaluation app, fixed several hidden reliability issues, built a grounded 400-query evaluation corpus, and added automated quality gates to prevent bad data from contaminating production. The next milestone is one controlled shadow extraction, then one clean Tier 1 rerun, then a fresh measured baseline on the rebuilt system."
+"I found that the original path was closer to a retrieval demo than to a trustworthy production-style AI system. On the real IGS drive, it could retrieve documents but could not aggregate reliably enough for business-facing answers because some business fields were still being polluted by technical and security identifiers. I reset the architecture into two cleaner applications, built quality gates and a grounded evaluation set, and I am now at the point where I can do one controlled clean rerun instead of wasting more time on blind reruns. My current estimate is about two weeks to get to a trustworthy demo candidate on the rebuilt path."
