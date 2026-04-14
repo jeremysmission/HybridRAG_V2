@@ -28,19 +28,119 @@ endpoint the query router is already configured to use.
 
 Everything else is optional tuning.
 
-## Launch tab cheat sheet
+## Launch tab -- field-by-field walkthrough
 
-| Field                  | What it is                                    | When to change it                                                         |
-|------------------------|-----------------------------------------------|---------------------------------------------------------------------------|
-| **Query pack**         | JSON of 400 questions + expected answers      | Only if you have a new pack                                               |
-| **Config YAML**        | Retrieval + store config                      | Only when A/B testing a new retrieval config                              |
-| **Report MD**          | Markdown output path                          | Change before each run so you do not overwrite a prior report             |
-| **Results JSON**       | Machine-readable output path                  | Same as above                                                             |
-| **CUDA_VISIBLE_DEVICES** | GPU index                                   | Leave at `0` on single-GPU workstations                                   |
-| **Max queries**        | Cap on how many queries to run                | Set to `5` for a smoke test; leave blank for a real 400-query run         |
+The Launch tab has six fields. Most of them you never touch after the first
+time. Here is what each one is, what gets selected by default, and when you
+would change it.
 
-**Start** kicks off the run. **Stop** cancels at the end of the current query
-(cooperative cancel, not a hard kill).
+### 1. Query pack (JSON)
+
+- **What it is:** the list of standardized questions the eval runs, paired
+  with the known-correct answer paths for each one. This is the "test" in
+  "test suite."
+- **Default:** `tests/golden_eval/production_queries_400_2026-04-12.json`
+  (400 questions across three personas).
+- **Browse button opens in:** `tests/golden_eval/` inside your checkout.
+- **When to change it:** rarely. Only if a new frozen query pack has been
+  generated for a later iteration. If you are writing a new pack yourself,
+  save it under `tests/golden_eval/` and pick it here.
+- **What happens if you pick something bad:** the runner refuses to start
+  and pops `Query pack not found` or reports zero usable queries.
+
+### 2. Config YAML
+
+- **What it is:** the retrieval / routing / store configuration that the
+  eval runs against. Contains the LanceDB path, reranker toggles, candidate
+  pool size, router thresholds, etc.
+- **Default:** `config/config.tier1_clean_2026-04-13.yaml` (the current
+  frozen clean Tier 1 baseline).
+- **Browse button opens in:** `config/` inside your checkout.
+- **When to change it:** A/B testing -- you point baseline at the old
+  config, candidate at the new config, and diff the runs in the Compare
+  tab.
+- **What happens if you pick something bad:** the runner refuses to start
+  and pops `Config not found`, or fails at `LOAD_STORE` if the config
+  points at a non-existent LanceDB path.
+
+### 3. Report MD (output path)
+
+- **What it is:** where the human-readable Markdown scorecard is written
+  at the end of the run. This is the file you open to read the result.
+- **Default:** `docs/PRODUCTION_EVAL_RESULTS_GUI_<timestamp>.md` -- a new
+  timestamped filename every run, so back-to-back runs do not overwrite
+  each other.
+- **Browse button opens:** a save-as dialog in `docs/`.
+- **When to change it:** if you want a custom filename to make the run
+  easy to identify later (e.g.
+  `docs/PRODUCTION_EVAL_RESULTS_CAP_PATCH_BASELINE.md`).
+- **Safety net:** if the path you pick already exists on disk, the GUI
+  pops a yes/no overwrite confirmation before starting. Default is **No**.
+
+### 4. Results JSON (output path)
+
+- **What it is:** the machine-readable version of the same report.
+  History / Results / Compare tabs all consume this file. Every new GUI
+  run writes a `provenance` block here so repeated runs can be told apart.
+- **Default:** `docs/production_eval_results_gui_<timestamp>.json` -- same
+  timestamp convention as the MD.
+- **Browse button opens:** a save-as dialog in `docs/`.
+- **When to change it:** same rule as Report MD -- rename for clarity, or
+  leave the timestamped default.
+- **Safety net:** same overwrite confirmation as the MD.
+
+### 5. CUDA_VISIBLE_DEVICES
+
+- **What it is:** the GPU index Python should bind to before loading
+  torch / the embedder.
+- **Default:** `0` (the single GPU on a workstation).
+- **When to change it:** very rarely -- only if your machine has multiple
+  GPUs and you want to pin the eval to a specific one.
+- **What happens if you pick something bad:** the runner fails at BOOT
+  with `CUDA not available` or a torch device error.
+
+### 6. Max queries (blank = all)
+
+- **What it is:** a cap on how many queries from the pack to actually run.
+  Blank (empty) means run every query in the pack.
+- **Default:** blank (run the full 400).
+- **When to change it:**
+  - Set to `5` for a quick smoke test (~2 minutes).
+  - Set to `25` for a slightly larger sanity check (~5-10 minutes).
+  - Leave blank for a real regression run (~30-75 minutes).
+- **What happens if you pick something bad:** a non-positive or
+  non-numeric value is treated as blank and the full pack runs. No error.
+
+---
+
+## Start / Stop / Clear log / Save as defaults / Reset defaults
+
+Five buttons sit right below the input fields:
+
+- **Start** -- kicks off the run. Disabled while a run is in progress.
+- **Stop** -- cooperatively cancels between queries (not a hard kill, so
+  the current query finishes first, typically within 30-75 seconds).
+- **Clear log** -- wipes the live log window without affecting output
+  files or stored results.
+- **Save as defaults** -- writes all six field values + GPU index + max
+  queries to `.eval_gui_defaults.json` at the repo root. Next time you
+  launch the GUI, those saved values load automatically instead of the
+  shipped ones. This is a per-checkout file -- it is gitignored and never
+  pushed. The small status line under the buttons shows whether you are
+  on `Defaults: shipped` or `Defaults: saved on <timestamp>`.
+- **Reset defaults** -- restores every field to the shipped values and
+  deletes the saved defaults file. Pops a yes/no confirmation first.
+
+### Typical daily flow (after your first run)
+
+1. Double-click `start_eval_gui.bat`.
+2. Status line reads `Defaults: saved on <your last save>`.
+3. Every field is pre-populated from your saved values.
+4. Click **Start**.
+5. Go get coffee.
+
+You should only need to touch Browse on day one (to find and save your
+preferred paths). After that, Start is the only button you click.
 
 ## What "done" looks like
 

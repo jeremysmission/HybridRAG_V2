@@ -34,6 +34,12 @@ DEFAULT_QUERIES = V2_ROOT / "tests" / "golden_eval" / "production_queries_400_20
 DEFAULT_CONFIG = V2_ROOT / "config" / "config.tier1_clean_2026-04-13.yaml"
 DEFAULT_DOCS = V2_ROOT / "docs"
 
+# Live operator defaults file. Not date-stamped because it is a runtime
+# state file that gets rewritten on every 'Save as defaults' click. Kept
+# at the repo root and gitignored so each checkout can have its own
+# operator-preferred values without polluting the shared repo state.
+DEFAULTS_FILE = V2_ROOT / ".eval_gui_defaults.json"
+
 
 class LaunchPanel(tk.Frame):
     """File pickers + Start/Stop + live stream for one eval run."""
@@ -41,13 +47,25 @@ class LaunchPanel(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent, bg=DARK["bg"])
         self._runner = EvalRunner(self._on_runner_event)
-        self._var_queries = StringVar(value=str(DEFAULT_QUERIES))
-        self._var_config = StringVar(value=str(DEFAULT_CONFIG))
-        self._var_report_md = StringVar(value=self._default_report_md())
-        self._var_results_json = StringVar(value=self._default_results_json())
-        self._var_gpu = StringVar(value="0")
-        self._var_max_q = StringVar(value="")
+
+        saved = self._load_saved_defaults()
+        self._defaults_source = "saved" if saved else "shipped"
+        self._defaults_saved_at = saved.get("saved_at", "") if saved else ""
+
+        self._var_queries = StringVar(value=saved.get("queries_path", str(DEFAULT_QUERIES)) if saved else str(DEFAULT_QUERIES))
+        self._var_config = StringVar(value=saved.get("config_path", str(DEFAULT_CONFIG)) if saved else str(DEFAULT_CONFIG))
+        self._var_report_md = StringVar(value=saved.get("report_md_template", "") if saved else self._default_report_md())
+        self._var_results_json = StringVar(value=saved.get("results_json_template", "") if saved else self._default_results_json())
+        self._var_gpu = StringVar(value=saved.get("gpu_index", "0") if saved else "0")
+        self._var_max_q = StringVar(value=saved.get("max_queries", "") if saved else "")
         self._var_phase = StringVar(value="idle")
+        self._var_defaults_status = StringVar(value=self._defaults_status_text())
+
+        # Fall back to shipped templates if the saved values are blank.
+        if not (self._var_report_md.get() or "").strip():
+            self._var_report_md.set(self._default_report_md())
+        if not (self._var_results_json.get() or "").strip():
+            self._var_results_json.set(self._default_results_json())
 
         self._build()
         self._set_running(False)
@@ -109,7 +127,22 @@ class LaunchPanel(tk.Frame):
         self._btn_stop = ttk.Button(ctrl, text="Stop", style="Tertiary.TButton", command=self._on_stop)
         self._btn_stop.pack(side=tk.LEFT, padx=(0, 6))
         self._btn_clear = ttk.Button(ctrl, text="Clear log", style="Tertiary.TButton", command=self._clear_log)
-        self._btn_clear.pack(side=tk.LEFT)
+        self._btn_clear.pack(side=tk.LEFT, padx=(0, 12))
+
+        self._btn_save_defaults = ttk.Button(
+            ctrl,
+            text="Save as defaults",
+            style="TButton",
+            command=self._on_save_defaults,
+        )
+        self._btn_save_defaults.pack(side=tk.LEFT, padx=(0, 6))
+        self._btn_reset_defaults = ttk.Button(
+            ctrl,
+            text="Reset defaults",
+            style="Tertiary.TButton",
+            command=self._on_reset_defaults,
+        )
+        self._btn_reset_defaults.pack(side=tk.LEFT)
 
         phase_label = ttk.Label(
             ctrl,
@@ -119,6 +152,17 @@ class LaunchPanel(tk.Frame):
             background=DARK["bg"],
         )
         phase_label.pack(side=tk.RIGHT)
+
+        # Defaults-source indicator (tiny status line under the button row so
+        # the operator can see whether shipped or personal defaults are loaded).
+        defaults_status = ttk.Label(
+            outer,
+            textvariable=self._var_defaults_status,
+            font=FONT_SMALL,
+            foreground=DARK["label_fg"],
+            background=DARK["bg"],
+        )
+        defaults_status.pack(anchor="w", pady=(0, 4))
 
         # Progress bar
         self._progress = ttk.Progressbar(outer, orient="horizontal", mode="determinate", maximum=100)
@@ -242,6 +286,99 @@ class LaunchPanel(tk.Frame):
         )
         if path:
             self._var_results_json.set(path)
+
+    # ------------------------------------------------------------------
+    # Persisted operator defaults
+    # ------------------------------------------------------------------
+    def _load_saved_defaults(self) -> dict:
+        """Read the persisted operator-defaults file if it exists.
+
+        Returns an empty dict if the file is missing, unreadable, or the
+        schema does not match. Never raises -- a broken defaults file must
+        not prevent the GUI from launching.
+        """
+        try:
+            if not DEFAULTS_FILE.exists():
+                return {}
+            with DEFAULTS_FILE.open("r", encoding="utf-8") as f:
+                data = json.load(f)
+            if not isinstance(data, dict):
+                return {}
+            return data
+        except Exception:
+            return {}
+
+    def _on_save_defaults(self) -> None:
+        """Persist the current field values so next launch loads them."""
+        payload = {
+            "queries_path": (self._var_queries.get() or "").strip(),
+            "config_path": (self._var_config.get() or "").strip(),
+            "report_md_template": (self._var_report_md.get() or "").strip(),
+            "results_json_template": (self._var_results_json.get() or "").strip(),
+            "gpu_index": (self._var_gpu.get() or "0").strip() or "0",
+            "max_queries": (self._var_max_q.get() or "").strip(),
+            "saved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "schema_version": 1,
+        }
+        try:
+            DEFAULTS_FILE.parent.mkdir(parents=True, exist_ok=True)
+            with DEFAULTS_FILE.open("w", encoding="utf-8") as f:
+                json.dump(payload, f, indent=2)
+        except Exception as exc:
+            messagebox.showerror(
+                "Save defaults",
+                f"Could not write {DEFAULTS_FILE}:\n{exc}",
+            )
+            return
+
+        self._defaults_source = "saved"
+        self._defaults_saved_at = payload["saved_at"]
+        self._var_defaults_status.set(self._defaults_status_text())
+        self._append_log(
+            f"Operator defaults saved to {DEFAULTS_FILE.name}",
+            "OK",
+        )
+
+    def _on_reset_defaults(self) -> None:
+        """Restore shipped defaults and delete any persisted file."""
+        confirm = messagebox.askyesno(
+            "Reset defaults?",
+            (
+                "This will restore the shipped default query pack, config, "
+                "output templates, GPU index, and max-queries values, and "
+                "delete the saved defaults file if present.\n\n"
+                "Proceed?"
+            ),
+            default="no",
+        )
+        if not confirm:
+            return
+
+        try:
+            if DEFAULTS_FILE.exists():
+                DEFAULTS_FILE.unlink()
+        except Exception as exc:
+            messagebox.showerror(
+                "Reset defaults",
+                f"Could not delete {DEFAULTS_FILE}:\n{exc}",
+            )
+            return
+
+        self._var_queries.set(str(DEFAULT_QUERIES))
+        self._var_config.set(str(DEFAULT_CONFIG))
+        self._var_report_md.set(self._default_report_md())
+        self._var_results_json.set(self._default_results_json())
+        self._var_gpu.set("0")
+        self._var_max_q.set("")
+        self._defaults_source = "shipped"
+        self._defaults_saved_at = ""
+        self._var_defaults_status.set(self._defaults_status_text())
+        self._append_log("Operator defaults reset to shipped values.", "WARN")
+
+    def _defaults_status_text(self) -> str:
+        if self._defaults_source == "saved" and self._defaults_saved_at:
+            return f"Defaults: saved on {self._defaults_saved_at}  ({DEFAULTS_FILE.name})"
+        return "Defaults: shipped (no saved file)"
 
     def _default_report_md(self) -> str:
         stamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")

@@ -356,6 +356,112 @@ def test_launcher_bat_uses_module_form():
     assert 'GUI_MODULE=src.gui.eval_gui' in bat_src
 
 
+def test_launch_panel_save_and_load_operator_defaults(withdrawn_root, tmp_path: Path, monkeypatch):
+    """Save as defaults -> next-launch load round-trip."""
+    import src.gui.eval_panels.launch_panel as lp_module
+
+    fake_defaults = tmp_path / ".eval_gui_defaults.json"
+    monkeypatch.setattr(lp_module, "DEFAULTS_FILE", fake_defaults)
+
+    panel = lp_module.LaunchPanel(withdrawn_root)
+    panel.pack()
+    withdrawn_root.update_idletasks()
+
+    assert panel._defaults_source == "shipped"
+    assert not fake_defaults.exists()
+
+    panel._var_queries.set(str(tmp_path / "my_queries.json"))
+    panel._var_config.set(str(tmp_path / "my_config.yaml"))
+    panel._var_report_md.set(str(tmp_path / "my_report.md"))
+    panel._var_results_json.set(str(tmp_path / "my_results.json"))
+    panel._var_gpu.set("0")
+    panel._var_max_q.set("25")
+
+    panel._on_save_defaults()
+
+    assert fake_defaults.exists(), "Save should create the defaults file"
+    saved = json.loads(fake_defaults.read_text(encoding="utf-8"))
+    assert saved["queries_path"] == str(tmp_path / "my_queries.json")
+    assert saved["config_path"] == str(tmp_path / "my_config.yaml")
+    assert saved["max_queries"] == "25"
+    assert saved["schema_version"] == 1
+    assert saved.get("saved_at")
+    assert panel._defaults_source == "saved"
+    assert "saved on" in panel._var_defaults_status.get()
+
+    panel.destroy()
+
+    panel2 = lp_module.LaunchPanel(withdrawn_root)
+    panel2.pack()
+    withdrawn_root.update_idletasks()
+
+    assert panel2._defaults_source == "saved"
+    assert panel2._var_queries.get() == str(tmp_path / "my_queries.json")
+    assert panel2._var_config.get() == str(tmp_path / "my_config.yaml")
+    assert panel2._var_max_q.get() == "25"
+
+
+def test_launch_panel_reset_defaults_restores_shipped_values(
+    withdrawn_root, tmp_path: Path, monkeypatch
+):
+    """Reset defaults must delete the saved file and restore shipped values."""
+    import src.gui.eval_panels.launch_panel as lp_module
+
+    fake_defaults = tmp_path / ".eval_gui_defaults.json"
+    fake_defaults.write_text(
+        json.dumps(
+            {
+                "queries_path": str(tmp_path / "saved_q.json"),
+                "config_path": str(tmp_path / "saved_c.yaml"),
+                "report_md_template": str(tmp_path / "saved_r.md"),
+                "results_json_template": str(tmp_path / "saved_r.json"),
+                "gpu_index": "0",
+                "max_queries": "5",
+                "saved_at": "2026-04-13 20:00:00",
+                "schema_version": 1,
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(lp_module, "DEFAULTS_FILE", fake_defaults)
+    monkeypatch.setattr(
+        "tkinter.messagebox.askyesno", lambda *a, **k: True
+    )
+
+    panel = lp_module.LaunchPanel(withdrawn_root)
+    panel.pack()
+    withdrawn_root.update_idletasks()
+
+    assert panel._defaults_source == "saved"
+    assert panel._var_queries.get() == str(tmp_path / "saved_q.json")
+
+    panel._on_reset_defaults()
+
+    assert not fake_defaults.exists(), "Reset must delete the defaults file"
+    assert panel._defaults_source == "shipped"
+    assert panel._var_queries.get() == str(lp_module.DEFAULT_QUERIES)
+    assert panel._var_config.get() == str(lp_module.DEFAULT_CONFIG)
+    assert panel._var_max_q.get() == ""
+
+
+def test_launch_panel_corrupt_defaults_file_does_not_block_launch(
+    withdrawn_root, tmp_path: Path, monkeypatch
+):
+    """A broken defaults file must fall back to shipped values silently."""
+    import src.gui.eval_panels.launch_panel as lp_module
+
+    fake_defaults = tmp_path / ".eval_gui_defaults.json"
+    fake_defaults.write_text("{not valid json", encoding="utf-8")
+    monkeypatch.setattr(lp_module, "DEFAULTS_FILE", fake_defaults)
+
+    panel = lp_module.LaunchPanel(withdrawn_root)
+    panel.pack()
+    withdrawn_root.update_idletasks()
+
+    assert panel._defaults_source == "shipped"
+    assert panel._var_queries.get() == str(lp_module.DEFAULT_QUERIES)
+
+
 def test_history_panel_label_column_uses_provenance(withdrawn_root, tmp_path: Path):
     """History label column should show pack/config from provenance."""
     from src.gui.eval_panels.history_panel import HistoryPanel

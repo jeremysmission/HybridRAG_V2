@@ -27,6 +27,9 @@ build/
 venv/
 env/
 
+# Offline install bundles (wheels + HF model snapshots) — build artifacts, too large to commit
+vendor/
+
 # IDE
 .vscode/
 .idea/
@@ -89,3 +92,6 @@ benchmark_results_*.json
 
 # Ad-hoc results folder at repo root
 /results/
+
+# Eval GUI per-operator persisted defaults (live runtime state, not shared)
+/.eval_gui_defaults.json
