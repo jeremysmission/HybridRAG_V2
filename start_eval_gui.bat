@@ -58,13 +58,33 @@ if errorlevel 1 goto broken_venv
 
 REM --- Environment setup ---
 set "PYTHONPATH=%PROJECT_ROOT%"
+set "HYBRIDRAG_PROJECT_ROOT=%PROJECT_ROOT%"
 set "PYTHONUTF8=1"
 set "PYTHONIOENCODING=utf-8"
+
+REM ---- Proxy hardening (mirrors start_gui.bat + HybridRAG3 canonical pattern)
+REM Keep loopback direct and let any inherited HTTPS_PROXY / HTTP_PROXY pass
+REM through to Python + requests + huggingface_hub + openai client untouched.
+REM Operator is expected to set HTTPS_PROXY / HTTP_PROXY at the shell or
+REM system level before launching on a proxied work network.
 set "NO_PROXY=localhost,127.0.0.1"
 set "no_proxy=localhost,127.0.0.1"
+set "HYBRIDRAG_NETWORK_KILL_SWITCH=0"
+set "HYBRIDRAG_OFFLINE=0"
+
+REM Silence HF Hub 'unauthenticated requests' telemetry noise and let cached
+REM model loads succeed on air-gapped / offline workstations.
+set "HF_HUB_DISABLE_TELEMETRY=1"
+if not defined HF_HUB_ENABLE_HF_TRANSFER set "HF_HUB_ENABLE_HF_TRANSFER=0"
+if not defined TRANSFORMERS_NO_ADVISORY_WARNINGS set "TRANSFORMERS_NO_ADVISORY_WARNINGS=1"
 
 REM Single-CUDA-GPU workstation default. Override before launch if needed.
 if not defined CUDA_VISIBLE_DEVICES set "CUDA_VISIBLE_DEVICES=0"
+
+echo [INFO] Proxy:    HTTPS_PROXY=%HTTPS_PROXY%
+echo [INFO] Proxy:    HTTP_PROXY=%HTTP_PROXY%
+echo [INFO] Proxy:    NO_PROXY=%NO_PROXY%
+echo [INFO] Offline:  HYBRIDRAG_OFFLINE=%HYBRIDRAG_OFFLINE%  KILL_SWITCH=%HYBRIDRAG_NETWORK_KILL_SWITCH%
 
 REM Activate venv
 if exist "%VENV_ACTIVATE%" call "%VENV_ACTIVATE%" >nul 2>nul
@@ -144,6 +164,14 @@ echo Common checks:
 echo   - Is the LanceDB store present? (config.paths.lance_db)
 echo   - Does the query pack JSON exist?
 echo   - Is CUDA available? (nvidia-smi)
+echo.
+echo Proxy / network debug:
+echo   - HTTPS_PROXY=%HTTPS_PROXY%
+echo   - HTTP_PROXY=%HTTP_PROXY%
+echo   - NO_PROXY=%NO_PROXY%
+echo   - If HuggingFace model download is failing on first run, set
+echo     HTTPS_PROXY and HTTP_PROXY in your shell BEFORE launching,
+echo     or pre-cache the embedder/reranker to %%USERPROFILE%%\.cache\huggingface.
 call :maybe_pause
 exit /b %EXIT_CODE%
 

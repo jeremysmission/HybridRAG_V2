@@ -16,6 +16,22 @@ set "MAIN_INSTALLER=%PROJECT_ROOT%\INSTALL_WORKSTATION.bat"
 echo [INFO] HybridRAG V2 Eval GUI install
 echo [INFO] Repo root: %PROJECT_ROOT%
 
+REM ---- Proxy hardening (mirrors tools\setup_workstation_*.ps1 canonical pattern)
+REM Loopback stays direct. HTTPS_PROXY / HTTP_PROXY / HTTPS_PROXY_CA / cert env
+REM vars pass through to the delegated installer so pip + certifi + requests see
+REM the same proxy the operator's shell sees. The full proxy detection (env ->
+REM Windows registry -> PAC URL -> pip.ini) lives in the delegated PowerShell
+REM installer; we only surface the resolved state here for quick debug.
+set "NO_PROXY=localhost,127.0.0.1"
+set "no_proxy=localhost,127.0.0.1"
+if not defined HYBRIDRAG_NETWORK_KILL_SWITCH set "HYBRIDRAG_NETWORK_KILL_SWITCH=0"
+if not defined HYBRIDRAG_OFFLINE set "HYBRIDRAG_OFFLINE=0"
+set "HF_HUB_DISABLE_TELEMETRY=1"
+
+echo [INFO] Proxy:    HTTPS_PROXY=%HTTPS_PROXY%
+echo [INFO] Proxy:    HTTP_PROXY=%HTTP_PROXY%
+echo [INFO] Proxy:    NO_PROXY=%NO_PROXY%
+
 if not exist "%VENV_PYTHON%" (
   echo [INFO] .venv not found -- delegating to INSTALL_WORKSTATION.bat
   if not exist "%MAIN_INSTALLER%" (
