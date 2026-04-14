@@ -64,6 +64,17 @@ class VectorRetriever:
         "december",
     }
 
+    _KNOWN_SITES = {
+        "fairford",
+        "misawa",
+        "learmonth",
+        "kwajalein",
+        "alpena",
+        "diego garcia",
+        "ascension",
+        "thule",
+    }
+
     def __init__(
         self,
         store: LanceStore,
@@ -178,8 +189,35 @@ class VectorRetriever:
         deliverable_id = self._extract_deliverable_id(lower)
         cdrl_hints = self._cdrl_title_hints(lower)
         site = self._extract_site_hint(q)
+        known_site = self._extract_known_site(lower)
         exact_dates = re.findall(r"\b20\d{2}-\d{2}-\d{2}\b", lower)
         month_terms = re.findall(r"\b20\d{2}[_-]\d{2}\b", lower)
+
+        if self._looks_like_cap_query(lower):
+            groups.append(["a001", "corrective action plan"])
+            groups.append(["corrective action plan", "cap"])
+            if deliverable_id:
+                groups.append([deliverable_id, "corrective action plan"])
+                groups.append([deliverable_id, "a001"])
+                if known_site:
+                    groups.append([deliverable_id, known_site, "corrective action plan"])
+            if known_site:
+                groups.append([known_site, "corrective action plan"])
+                groups.append([known_site, "a001"])
+                for date in exact_dates[:2]:
+                    groups.append([known_site, date, "corrective action plan"])
+
+        a027_hints = self._a027_subtype_hints(lower)
+        if a027_hints:
+            for subtype in a027_hints:
+                groups.append(["a027", subtype])
+                if deliverable_id:
+                    groups.append([deliverable_id, subtype])
+                if known_site:
+                    groups.append([known_site, subtype])
+            if deliverable_id:
+                groups.append([deliverable_id, "a027"])
+            groups.append(["a027"])
 
         if deliverable_id:
             for hint in cdrl_hints:
@@ -291,6 +329,54 @@ class VectorRetriever:
                 "deliverables",
             )
         )
+
+    def _looks_like_cap_query(self, query: str) -> bool:
+        if "corrective action plan" in query:
+            return True
+        if re.search(r"\b(igsi|igscc)-\d+\b", query) and (
+            "cap" in query or "corrective" in query or "incident" in query
+        ):
+            return True
+        if re.search(r"\bcap\b", query) and (
+            "incident" in query
+            or "findings" in query
+            or "filed" in query
+            or any(site in query for site in self._KNOWN_SITES)
+        ):
+            return True
+        return False
+
+    def _a027_subtype_hints(self, query: str) -> list[str]:
+        hints: list[str] = []
+        if "acas" in query or "acas scan" in query or "scan results" in query:
+            hints.append("acas scan results")
+        if "scap" in query:
+            hints.append("scap scan")
+        if "ct&e" in query or "cte report" in query or "ct and e" in query:
+            hints.append("ct&e")
+        if "rmf" in query or "rmf security plan" in query:
+            hints.append("rmf security plan")
+        if "cybersecurity assessment" in query:
+            hints.append("cybersecurity assessment test report")
+        if "plans and controls" in query:
+            hints.append("plans and controls")
+        if "monthly audit" in query:
+            hints.append("monthly audit report")
+        if "daa accreditation" in query:
+            hints.append("daa accreditation support data")
+        deduped: list[str] = []
+        seen: set[str] = set()
+        for hint in hints:
+            if hint not in seen:
+                seen.add(hint)
+                deduped.append(hint)
+        return deduped
+
+    def _extract_known_site(self, query: str) -> str | None:
+        for site in self._KNOWN_SITES:
+            if site in query:
+                return site
+        return None
 
     def _looks_like_shipment_query(self, query: str) -> bool:
         return any(token in query for token in ("shipment", "packing list", "shipped to", "return shipment"))

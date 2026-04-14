@@ -211,3 +211,54 @@ def test_vector_retriever_builds_cdrl_deliverable_hints_for_com_sum_queries():
     assert ["a025", "software user manual"] in groups
     assert ["a025", "com-sum"] in groups
     assert ["a025", "deliverables report"] in groups
+
+
+def test_vector_retriever_builds_cap_path_hints_for_explicit_corrective_action_plan():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._path_hint_groups(
+        "What is the Corrective Action Plan for Fairford monitoring system incident IGSI-1811?"
+    )
+
+    assert ["a001", "corrective action plan"] in groups
+    assert ["igsi-1811", "corrective action plan"] in groups
+    assert ["igsi-1811", "fairford", "corrective action plan"] in groups
+    assert ["fairford", "a001"] in groups
+
+
+def test_vector_retriever_builds_cap_path_hints_for_bare_cap_token():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._path_hint_groups(
+        "What were the Misawa 2024 CAP findings under incident IGSI-2234?"
+    )
+
+    assert ["a001", "corrective action plan"] in groups
+    assert ["igsi-2234", "corrective action plan"] in groups
+    assert ["misawa", "a001"] in groups
+
+
+def test_vector_retriever_builds_a027_path_hints_for_acas_scan_query():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._path_hint_groups(
+        "What was the Learmonth ACAS scan results deliverable for July 2025 (IGSI-2553)?"
+    )
+
+    assert ["a027", "acas scan results"] in groups
+    assert ["igsi-2553", "acas scan results"] in groups
+    assert ["learmonth", "acas scan results"] in groups
+
+
+def test_vector_retriever_does_not_trigger_cap_hint_on_unrelated_cap_usage():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._path_hint_groups(
+        "What is the maximum cap on monthly deliverables?"
+    )
+
+    assert ["a001", "corrective action plan"] not in groups
