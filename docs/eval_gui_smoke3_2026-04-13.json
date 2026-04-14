@@ -1,25 +1,25 @@
 {
-  "run_id": "20260414_012547",
-  "timestamp_utc": "2026-04-14T01:25:47.422227+00:00",
+  "run_id": "20260414_035830",
+  "timestamp_utc": "2026-04-14T03:58:30.741436+00:00",
   "store_chunks": 10435593,
   "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (NVIDIA GeForce RTX 3090)",
   "total_queries": 3,
-  "pass_count": 2,
+  "pass_count": 3,
   "partial_count": 0,
-  "miss_count": 1,
+  "miss_count": 0,
   "routing_correct": 3,
-  "p50_pure_retrieval_ms": 5887,
-  "p95_pure_retrieval_ms": 71403,
-  "p50_wall_clock_ms": 8526,
-  "p95_wall_clock_ms": 75163,
-  "p50_router_ms": 2990,
-  "p95_router_ms": 3691,
+  "p50_pure_retrieval_ms": 25089,
+  "p95_pure_retrieval_ms": 95043,
+  "p50_wall_clock_ms": 30195,
+  "p95_wall_clock_ms": 96707,
+  "p50_router_ms": 2367,
+  "p95_router_ms": 2861,
   "per_persona": {
     "Program Manager": {
       "total": 3,
-      "PASS": 2,
+      "PASS": 3,
       "PARTIAL": 0,
-      "MISS": 1,
+      "MISS": 0,
       "routing_correct": 3
     }
   },
@@ -40,9 +40,9 @@
     },
     "ENTITY": {
       "total": 1,
-      "PASS": 0,
+      "PASS": 1,
       "PARTIAL": 0,
-      "MISS": 1,
+      "MISS": 0,
       "routing_correct": 1
     }
   },
@@ -64,9 +64,9 @@
       "any_top5_in_family": true,
       "verdict": "PASS",
       "entity_dependent": false,
-      "embed_retrieve_ms": 7104,
-      "router_ms": 2990,
-      "retrieval_ms": 4064,
+      "embed_retrieve_ms": 15440,
+      "router_ms": 2861,
+      "retrieval_ms": 11841,
       "top_results": [
         {
           "rank": 1,
@@ -134,54 +134,54 @@
       "any_top5_in_family": true,
       "verdict": "PASS",
       "entity_dependent": false,
-      "embed_retrieve_ms": 75163,
-      "router_ms": 3691,
-      "retrieval_ms": 71403,
+      "embed_retrieve_ms": 96707,
+      "router_ms": 1595,
+      "retrieval_ms": 95043,
       "top_results": [
         {
           "rank": 1,
-          "chunk_id": "dc31219de6b489b60b847ea4ad72bb92bb3005fe5f5e4c79d9b77ebcb6f56da6",
-          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\1.0 IGS Plans\\IGS PMP\\Deliverables Report IGSI-63 IGS Program Management Plan (A008) CAF.doc",
-          "short_source": "IGS PMP/Deliverables Report IGSI-63 IGS Program Management Plan (A008) CAF.doc",
+          "chunk_id": "e9e38bfda7f62719e83aece554b9f468bf6c9b401039cfe36e9fc6b6cc7b56d6",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\PM101\\PM101_Business Acumen .pptx",
+          "short_source": "PM101/PM101_Business Acumen .pptx",
           "score": 0.0,
-          "text_preview": "f Work Performed. Forecast Expenditure Plan The FEP displays a time-phased estimate of expected spending profiles for the contract, enabling the calculation ...",
+          "text_preview": "inancial Forecasts & Trends Detailed AOP Financial Forecast (Near-Term) LRSP Financial Forecast (Long-Term) NG CognosDatabase Leads Qualification Process Fin...",
           "in_family": true
         },
         {
           "rank": 2,
-          "chunk_id": "d2968d09de3bb026b219d6d0cb9fed0f74ef7482a929f6c9b1ac857b02d335af",
-          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\4.0 Training\\02_Document Review\\Project Management Plan\\Financial_Tools\\201805 SEMSIII FEP Training (Beginner).pptx",
-          "short_source": "Financial_Tools/201805 SEMSIII FEP Training (Beginner).pptx",
+          "chunk_id": "625220a48bef7134e358d1f0e0d9604ae3b082dfc513429ff119da95632f9c42",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\Delete After Time\\,DanaInfo=www.itsmacademy.com+itSMF_ITILV3_Intro_Overview.pdf",
+          "short_source": "Delete After Time/,DanaInfo=www.itsmacademy.com+itSMF_ITILV3_Intro_Overview.pdf",
           "score": 0.0,
-          "text_preview": "[SECTION] NORTHROP GR UMMAN PRIVATE / PROPRIETARY LEVEL I External Customer Reporting Cost Performance Report (CPR) ? Contractually due 15 workdays after end...",
+          "text_preview": "t the core of the ITIL V3 lifecycle. It sets out guidance to all IT service providers and their customers, to help them operate and thrive in the long term b...",
           "in_family": true
         },
         {
           "rank": 3,
-          "chunk_id": "4d3b8858789574821fed33b7cb18e21ebce9d2935834398136f44690946c69aa",
-          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\1.0 IGS Plans\\IGS PMP\\Deliverables Report IGSI-63 IGS Program Management Plan (A008).doc",
-          "short_source": "IGS PMP/Deliverables Report IGSI-63 IGS Program Management Plan (A008).doc",
+          "chunk_id": "be011b2a94bf6f83be545895ba2be4a0b8d08212766ea62189c363bc7ad9da74",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\1.0 DMEA CDRLS\\A001_Monthly-Status-Report\\TO 25FE035 CET 25-523 IGSEP CDRL A001 MSR due 20260120.docx",
+          "short_source": "A001_Monthly-Status-Report/TO 25FE035 CET 25-523 IGSEP CDRL A001 MSR due 20260120.docx",
           "score": 0.0,
-          "text_preview": "f Work Performed. Forecast Expenditure Plan The FEP displays a time-phased estimate of expected spending profiles for the contract, enabling the calculation ...",
-          "in_family": true
+          "text_preview": "flects the actual spend through December 2025 along with the forecast spend through October 2026 (NG accounting month ends 25 Sept 2026, so there are 3 days ...",
+          "in_family": false
         },
         {
           "rank": 4,
-          "chunk_id": "7cbc50cfeb4e2363ad24a8aa3866403df00927ec67ab4ba96abe53e3c07afcbe",
-          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\4.0 Training\\02_Document Review\\Project Management Plan\\Financial_Tools\\201805 SEMSIII FEP Training (Advanced).pptx",
-          "short_source": "Financial_Tools/201805 SEMSIII FEP Training (Advanced).pptx",
+          "chunk_id": "85c571fda5d98bae788a06b09d8086922db68f20d0c71de413ced6e1a1efb5f7",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\Archive\\PMP\\15-0019_NEXION_PMP_(CDRL A081)_Rev 4_20 Apr 15_ISO.doc",
+          "short_source": "PMP/15-0019_NEXION_PMP_(CDRL A081)_Rev 4_20 Apr 15_ISO.doc",
           "score": 0.0,
-          "text_preview": "al Briefing occur after the initial briefing) Annual Executive Review (AER) Internal Management Reporting Quarterly Subcontract Funding Annual Operating Plan...",
-          "in_family": true
+          "text_preview": "anges, unforeseen events that resultresulting in changes to the plan for execution, or because the project has deviated significantly from the baseline sched...",
+          "in_family": false
         },
         {
           "rank": 5,
-          "chunk_id": "fff01f1bb4e8c6a18730380d7b6816e3fcfcb58aeae27ba389596c720fefc753",
-          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\001_Project_Management\\SEMS Program Docs\\Archive\\Program Management Plan.doc",
-          "short_source": "Archive/Program Management Plan.doc",
+          "chunk_id": "65d4ca6f94ceee72e390d47b2e2a237132127829dff03722ccd9286e0bb1b36f",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Poland\\Soils Analysis\\Bids\\2024260_ngc_slupsk_poland_24062024.pdf",
+          "short_source": "Bids/2024260_ngc_slupsk_poland_24062024.pdf",
           "score": 0.0,
-          "text_preview": "Expenditure Plan The FEP displays a time-phased estimate of expected spending profiles for active task orders, enabling the calculation of an estimated cost ...",
-          "in_family": true
+          "text_preview": "4.) DEADLINE PERFORMANCE BY SCHEDULE: 10 th of September, 2024 Each party may be released from liability for performance in its contractual obligations/order...",
+          "in_family": false
         }
       ],
       "notes": "",
@@ -198,25 +198,88 @@
       "family_signals": [
         "cdrls"
       ],
-      "top_in_family": false,
-      "any_top5_in_family": false,
-      "verdict": "MISS",
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
       "entity_dependent": false,
-      "embed_retrieve_ms": 8526,
-      "router_ms": 2541,
-      "retrieval_ms": 5887,
+      "embed_retrieve_ms": 30195,
+      "router_ms": 2367,
+      "retrieval_ms": 25089,
       "top_results": [
         {
           "rank": 1,
-          "chunk_id": "4dc47c4056bca4fad0a6be806b35e6cdb4dc0537876d7d3b283548d632543544",
-          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\DIDs\\CDRL DIDs\\A002--Maintenance Service Report\\DI-MGMT-80995A.pdf",
-          "short_source": "A002--Maintenance Service Report/DI-MGMT-80995A.pdf",
-          "score": 0.0,
-          "text_preview": "DATA ITEM DESCRIPTION Title: Maintenance Service Report Number: DI-MGMT-80995A Approval Date: 08 NOV 2006 AMSC Number: 7626 Limitation: N/A DTIC Applicable: ...",
-          "in_family": false
+          "chunk_id": "335ed6577db465a438c5dfaa510729156e3f71672f17e02b4f245e23e401ccf5",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Alpena-NEXION\\Deliverables Report IGSI-59 Alpena NEXION MSR R2 (A002).docx",
+          "short_source": "Alpena-NEXION/Deliverables Report IGSI-59 Alpena NEXION MSR R2 (A002).docx",
+          "score": -1.0,
+          "text_preview": "Maintenance Service Report Alpena NEXION 19 May 2023 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A002 Prepared For: Space Systems Command (SSC...",
+          "in_family": true
         },
         {
           "rank": 2,
+          "chunk_id": "73d2c66116730e1b224a498ed78f38ccff8aed5b36ab7fd31f1e089045dac21d",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Alpena-NEXION\\47QFRA22F0009_IGSI-3031_MSR_Alpena-NEXION_2025-07-03.docx",
+          "short_source": "Alpena-NEXION/47QFRA22F0009_IGSI-3031_MSR_Alpena-NEXION_2025-07-03.docx",
+          "score": -1.0,
+          "text_preview": "Maintenance Service Report Alpena NEXION 03 July 2025 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A002 Prepared For: Space Systems Command (SS...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "cd95da57b5b73217376066273475c96a820d8c46e58987ced2b088b8fc9d009b",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Alpena-NEXION\\47QFRA22F0009_IGSI-4017_MSR_Alpena-NEXION_2025-07-30.docx",
+          "short_source": "Alpena-NEXION/47QFRA22F0009_IGSI-4017_MSR_Alpena-NEXION_2025-07-30.docx",
+          "score": -1.0,
+          "text_preview": "Maintenance Service Report Alpena NEXION 30 July 2025 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A002 Prepared For: Space Systems Command (SS...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "4984bc2a8a3dc14cca6177ec70780a78782d20d10fc0f3a5f0bc62f2607baff4",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Curacao-ISTO\\47QFRA22F0009_IGSI-2736_Curacao-ISTO_MSR_2025-01-28.docx",
+          "short_source": "Curacao-ISTO/47QFRA22F0009_IGSI-2736_Curacao-ISTO_MSR_2025-01-28.docx",
+          "score": -1.0,
+          "text_preview": "Maintenance Service Report Curacao ISTO 28 January 2025 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A002 Prepared For: Space Systems Command (...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "e5f42ff6d8d89113a6755b4b0a92f9e389f2f794b5d953658d181c79bdeeb065",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Ascension-ISTO\\FA881525FB002_IGSCC-946_MSR_Ascension-ISTO_2026-04-02.docx",
+          "short_source": "Ascension-ISTO/FA881525FB002_IGSCC-946_MSR_Ascension-ISTO_2026-04-02.docx",
+          "score": -1.0,
+          "text_preview": "Maintenance Service Report Ascension ISTO 02 Apr 2026 Prepared Under: Contract Number: FA881525FB002 CDRL Number A002 Prepared For: Space Systems Command (SS...",
+          "in_family": true
+        },
+        {
+          "rank": 6,
+          "chunk_id": "9acb21ed6c08cadd00dd6ab5e37b5de4f20e25b26fe90ea58ea31810d3bfc160",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\Archive\\CM\\STD2549.pdf",
+          "short_source": "CM/STD2549.pdf",
+          "score": 0.0,
+          "text_preview": "be ordered only if the Government desires to track delivery and disposition of technical data or includes the requirement for on-line review and comment on d...",
+          "in_family": false
+        },
+        {
+          "rank": 7,
+          "chunk_id": "c77229c964ff6d267713062897fca1689266882df70b4e5982cf24cb0dd695f1",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\Report.Eglin.manifest_20180523.txt",
+          "short_source": "Searching for File Paths for NEXION Deliverable Control Log/Report.Eglin.manifest_20180523.txt",
+          "score": 0.0,
+          "text_preview": "EXION (20-24 Mar 17).docx I:\\# 003 Deliverables\\TO WX29 Deliverables\\MSR_CDRL A001\\Eglin ASV (20-24 Mar 17)\\SEMS3D-XXXXX_Maintenance Service Report (MSR)_(CD...",
+          "in_family": false
+        },
+        {
+          "rank": 8,
+          "chunk_id": "8fc11b6e025d83330dd2ad8b32a355eaaa991cfaca4e9ed5937a3794fe7bcfde",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\MIL-STD-2549 (DoD Interface Standard) (Config Mngmnt Data Interface) (1997-06-30).pdf",
+          "short_source": "DOCUMENTS LIBRARY/MIL-STD-2549 (DoD Interface Standard) (Config Mngmnt Data Interface) (1997-06-30).pdf",
+          "score": 0.0,
+          "text_preview": "be ordered only if the Government desires to track delivery and disposition of technical data or includes the requirement for on-line review and comment on d...",
+          "in_family": false
+        },
+        {
+          "rank": 9,
           "chunk_id": "fac128bc8210451e9a565a187192d04052963b3310946852e4411f5dadeeb90b",
           "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\IGSCC\\A002 - Maintenance Service Report (MSR)\\Wake Island\\FA881525FB002_IGSCC-1_MSR_Wake-NEXION_2025-11-7.pdf",
           "short_source": "Wake Island/FA881525FB002_IGSCC-1_MSR_Wake-NEXION_2025-11-7.pdf",
@@ -225,35 +288,32 @@
           "in_family": false
         },
         {
-          "rank": 3,
-          "chunk_id": "c6ad40bccab1eee9882e35903642dbf0c29898830695b8203239cc1f569a0186",
-          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\Data Item Description (DID) Reference\\A088_DI_MGMT_80995A.PDF",
-          "short_source": "Data Item Description (DID) Reference/A088_DI_MGMT_80995A.PDF",
+          "rank": 10,
+          "chunk_id": "8ebf806fb26fe0b704b38b68e9776f23ffef2cc151663f7d62d1361011498269",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\Delete After Time\\SEFGuide 01-01.pdf",
+          "short_source": "Delete After Time/SEFGuide 01-01.pdf",
           "score": 0.0,
-          "text_preview": "DATA ITEM DESCRIPTION Title: Maintenance Service Report Number: DI-MGMT-80995A Approval Date: 08 NOV 2006 AMSC Number: 7626 Limitation: N/A DTIC Applicable: ...",
-          "in_family": false
-        },
-        {
-          "rank": 4,
-          "chunk_id": "a408eada5f6c86f8dfca2a2487c7eebf42276b2434c47a0b217e829c94d72f2b",
-          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\Archive\\Deliverables (Historical)\\Maintenance Service Reports\\2012\\Guam_Dec2012_(Restoral)\\Maintenance Service Report_(13-0004)_Guam_Final_23Jan13_Updated.pdf",
-          "short_source": "Guam_Dec2012_(Restoral)/Maintenance Service Report_(13-0004)_Guam_Final_23Jan13_Updated.pdf",
-          "score": 0.0,
-          "text_preview": "[SECTION] TABLE 1. MAINTENANCE DOCUMENTS .......................................................... ............................................................",
-          "in_family": false
-        },
-        {
-          "rank": 5,
-          "chunk_id": "056a5832ce31510faf2664ad8e1e5d612986b323f26d1cb6f3c07a717a817aac",
-          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#IGSCC\\Contracts\\Awarded\\Exhibit A_OASIS_SB_8(a)_Pool_2_Contract_Conformed Copy_.pdf",
-          "short_source": "Awarded/Exhibit A_OASIS_SB_8(a)_Pool_2_Contract_Conformed Copy_.pdf",
-          "score": 0.0,
-          "text_preview": "to meet the following deliverables, reports, or compliance standards may result in activation of Dormant Status and/or result in a Contractor being Off-Rampe...",
-          "in_family": false
+          "text_preview": "[SECTION] INTEGRATED WITH THE MASTER PROGRAM PLANNING SCHEDULE SUBMITTED ON MAGNETIC MEDIA IN ACCORDANCE WITH DI-A-3007/T. PREPARED BY: DATE: APPROVED BY: DA...",
+          "in_family": true
         }
       ],
       "notes": "",
       "error": ""
     }
-  ]
+  ],
+  "provenance": {
+    "queries_path": "C:\\HybridRAG_V2\\tests\\golden_eval\\production_queries_smoke3.json",
+    "queries_pack_name": "production_queries_smoke3.json",
+    "config_path": "C:\\HybridRAG_V2\\config\\config.tier1_clean_2026-04-13.yaml",
+    "config_name": "config.tier1_clean_2026-04-13.yaml",
+    "lance_path": "C:\\HybridRAG_V2\\data\\index\\lancedb",
+    "report_md_path": "C:\\HybridRAG_V2\\docs\\EVAL_GUI_SMOKE3_2026-04-13.md",
+    "results_json_path": "C:\\HybridRAG_V2\\docs\\eval_gui_smoke3_2026-04-13.json",
+    "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (NVIDIA GeForce RTX 3090)",
+    "gpu_index_requested": "0",
+    "max_queries_requested": 3,
+    "run_status": "PASS",
+    "elapsed_s": 176.7,
+    "runner_source": "src.gui.eval_panels.runner.EvalRunner"
+  }
 }

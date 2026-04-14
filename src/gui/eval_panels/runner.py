@@ -284,6 +284,53 @@ class EvalRunner:
             rpe.write_json_results(run)
             rpe.write_markdown_report(run, results)
 
+            # ---- Post-write provenance injection ------------------------------
+            # Add audit fields the base EvalRun dataclass does not persist so
+            # repeated runs can be told apart in results/history/compare views
+            # (queries pack used, config used, store path, output paths, GPU
+            # label, wall-clock elapsed, source source runner tag). Kept as a
+            # narrow post-write patch so we do not widen the scope of
+            # scripts/run_production_eval.py.
+            try:
+                provenance = {
+                    "queries_path": str(queries_path),
+                    "queries_pack_name": queries_path.name,
+                    "config_path": str(config_path),
+                    "config_name": config_path.name,
+                    "lance_path": lance_path,
+                    "report_md_path": str(report_md),
+                    "results_json_path": str(results_json),
+                    "gpu_device": gpu_device,
+                    "gpu_index_requested": gpu_index,
+                    "max_queries_requested": max_queries,
+                    "run_status": status,
+                    "elapsed_s": round(time.time() - t_start, 1),
+                    "runner_source": "src.gui.eval_panels.runner.EvalRunner",
+                }
+                with open(results_json, "r", encoding="utf-8") as f:
+                    existing = json.load(f)
+                if isinstance(existing, dict):
+                    if not existing.get("timestamp_utc"):
+                        existing["timestamp_utc"] = datetime.now(timezone.utc).isoformat()
+                    existing["provenance"] = provenance
+                    with open(results_json, "w", encoding="utf-8") as f:
+                        json.dump(existing, f, indent=2, default=str)
+                    self._emit(
+                        "log",
+                        {
+                            "msg": f"Provenance written: queries={queries_path.name} config={config_path.name}",
+                            "level": "INFO",
+                        },
+                    )
+            except Exception as provenance_exc:
+                self._emit(
+                    "log",
+                    {
+                        "msg": f"Provenance injection failed (non-fatal): {provenance_exc}",
+                        "level": "WARN",
+                    },
+                )
+
             self._emit(
                 "scorecard",
                 {

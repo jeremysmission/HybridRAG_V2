@@ -24,12 +24,17 @@ from src.gui.theme import (
 )
 
 
-DEFAULT_DOCS_DIR = Path(r"C:\HybridRAG_V2\docs")
+# Resolve the V2 repo root from this module's location so the history
+# scan works on any checkout path. Prior hardcoded C:\HybridRAG_V2\docs
+# caused silent empty history on clones or alternate install paths.
+_V2_ROOT = Path(__file__).resolve().parents[3]
+DEFAULT_DOCS_DIR = _V2_ROOT / "docs"
 EVAL_GLOB = "production_eval_results*.json"
 
 COLUMNS = (
     "run_id",
     "timestamp",
+    "label",
     "total",
     "pass",
     "partial",
@@ -42,6 +47,7 @@ COLUMNS = (
 COLUMN_LABELS = {
     "run_id": "Run ID",
     "timestamp": "Timestamp (UTC)",
+    "label": "Pack / Config",
     "total": "Total",
     "pass": "PASS",
     "partial": "PARTIAL",
@@ -54,6 +60,7 @@ COLUMN_LABELS = {
 COLUMN_WIDTHS = {
     "run_id": 140,
     "timestamp": 180,
+    "label": 240,
     "total": 60,
     "pass": 60,
     "partial": 70,
@@ -367,11 +374,36 @@ class HistoryPanel(tk.Frame):
 
             ts = data.get("timestamp_utc") or mtime_iso or ""
 
+            prov = data.get("provenance") or {}
+            queries_pack = (
+                prov.get("queries_pack_name")
+                or (Path(prov.get("queries_path", "")).name if prov.get("queries_path") else "")
+                or ""
+            )
+            config_name = (
+                prov.get("config_name")
+                or (Path(prov.get("config_path", "")).name if prov.get("config_path") else "")
+                or ""
+            )
+
+            def _stem(name: str) -> str:
+                return Path(name).stem if name else ""
+
+            if queries_pack and config_name:
+                label = f"{_stem(queries_pack)} / {_stem(config_name)}"
+            elif queries_pack:
+                label = _stem(queries_pack)
+            else:
+                label = _stem(fp.name)
+
             rec = {
                 "run_id": str(data.get("run_id", "") or ""),
                 "timestamp_utc": str(data.get("timestamp_utc", "") or ""),
+                "label": label,
+                "queries_pack": queries_pack,
+                "config_name": config_name,
                 "store_chunks": data.get("store_chunks"),
-                "gpu_device": data.get("gpu_device", ""),
+                "gpu_device": prov.get("gpu_device") or data.get("gpu_device", ""),
                 "total_queries": int(data.get("total_queries") or 0),
                 "pass_count": int(data.get("pass_count") or 0),
                 "partial_count": int(data.get("partial_count") or 0),
@@ -379,7 +411,8 @@ class HistoryPanel(tk.Frame):
                 "routing_correct": int(data.get("routing_correct") or 0),
                 "p50_pure_retrieval_ms": data.get("p50_pure_retrieval_ms"),
                 "p95_pure_retrieval_ms": data.get("p95_pure_retrieval_ms"),
-                "elapsed": data.get("elapsed_seconds")
+                "elapsed": prov.get("elapsed_s")
+                or data.get("elapsed_seconds")
                 or data.get("elapsed_sec")
                 or data.get("elapsed")
                 or "",
@@ -439,6 +472,7 @@ class HistoryPanel(tk.Frame):
             values = (
                 rec["run_id"] or "(no id)",
                 ts_disp,
+                rec.get("label") or "",
                 rec["total_queries"],
                 rec["pass_count"],
                 rec["partial_count"],
@@ -535,6 +569,8 @@ class HistoryPanel(tk.Frame):
                 return -1 if v is None else v
             if col == "filename":
                 return r["filename"]
+            if col == "label":
+                return r.get("label") or ""
             return ""
 
         self._records.sort(key=key_fn, reverse=not ascending)

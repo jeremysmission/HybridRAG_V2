@@ -256,3 +256,105 @@ def test_history_panel_scans_docs_without_crash(withdrawn_root):
     panel.pack()
     withdrawn_root.update_idletasks()
     assert panel.winfo_exists()
+
+
+def test_results_panel_default_dir_is_not_hardcoded():
+    """Regression: the results panel must resolve its default docs dir from
+    the repo root, not a hardcoded C:\\HybridRAG_V2\\docs string."""
+    from src.gui.eval_panels import results_panel as rp
+
+    expected = (Path(rp.__file__).resolve().parents[3] / "docs").resolve()
+    assert rp._DEFAULT_RESULTS_DIR.resolve() == expected
+
+
+def test_history_panel_default_dir_is_not_hardcoded():
+    """Regression: the history panel must resolve its default docs dir from
+    the repo root, not a hardcoded C:\\HybridRAG_V2\\docs string."""
+    from src.gui.eval_panels import history_panel as hp
+
+    expected = (Path(hp.__file__).resolve().parents[3] / "docs").resolve()
+    assert hp.DEFAULT_DOCS_DIR.resolve() == expected
+
+
+def test_results_panel_renders_provenance_block(withdrawn_root, tmp_path: Path):
+    """Run Info strip populates from a provenance-stamped results JSON."""
+    from src.gui.eval_panels.results_panel import ResultsPanel
+
+    sample = {
+        "run_id": "20260413_200000",
+        "timestamp_utc": "2026-04-13T20:00:00+00:00",
+        "store_chunks": 10435593,
+        "total_queries": 3,
+        "pass_count": 2,
+        "partial_count": 0,
+        "miss_count": 1,
+        "routing_correct": 3,
+        "p50_pure_retrieval_ms": 120,
+        "p95_pure_retrieval_ms": 4000,
+        "provenance": {
+            "queries_path": "tests/golden_eval/production_queries_smoke3.json",
+            "queries_pack_name": "production_queries_smoke3.json",
+            "config_path": "config/config.tier1_clean_2026-04-13.yaml",
+            "config_name": "config.tier1_clean_2026-04-13.yaml",
+            "lance_path": "data/index/lancedb",
+            "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (stub)",
+            "gpu_index_requested": "0",
+            "max_queries_requested": 3,
+            "run_status": "PASS",
+            "elapsed_s": 116.8,
+        },
+        "results": [
+            {"id": "PQ-101", "verdict": "PASS", "persona": "PM", "routing_correct": True,
+             "retrieval_ms": 100},
+            {"id": "PQ-102", "verdict": "PASS", "persona": "PM", "routing_correct": True,
+             "retrieval_ms": 200},
+            {"id": "PQ-103", "verdict": "MISS", "persona": "PM", "routing_correct": True,
+             "retrieval_ms": 150},
+        ],
+    }
+    sample_path = tmp_path / "sample_results.json"
+    sample_path.write_text(json.dumps(sample), encoding="utf-8")
+
+    panel = ResultsPanel(withdrawn_root, initial_path=sample_path)
+    panel.pack()
+    withdrawn_root.update_idletasks()
+
+    run_info_text = panel._run_info_var.get()
+    assert "production_queries_smoke3.json" in run_info_text
+    assert "config.tier1_clean_2026-04-13.yaml" in run_info_text
+    assert "data/index/lancedb" in run_info_text
+    assert "20260413_200000" in run_info_text
+    assert "PASS" in run_info_text
+    assert "first 3" in run_info_text
+
+
+def test_history_panel_label_column_uses_provenance(withdrawn_root, tmp_path: Path):
+    """History label column should show pack/config from provenance."""
+    from src.gui.eval_panels.history_panel import HistoryPanel
+
+    sample = {
+        "run_id": "20260413_200000",
+        "timestamp_utc": "2026-04-13T20:00:00+00:00",
+        "total_queries": 3,
+        "pass_count": 2,
+        "partial_count": 0,
+        "miss_count": 1,
+        "routing_correct": 3,
+        "provenance": {
+            "queries_pack_name": "production_queries_400_2026-04-12.json",
+            "config_name": "config.tier1_clean_2026-04-13.yaml",
+        },
+        "results": [],
+    }
+    p = tmp_path / "production_eval_results_smoke_2026-04-13.json"
+    p.write_text(json.dumps(sample), encoding="utf-8")
+
+    panel = HistoryPanel(withdrawn_root, docs_dir=tmp_path)
+    panel.pack()
+    withdrawn_root.update_idletasks()
+
+    assert len(panel._records) == 1
+    rec = panel._records[0]
+    label = rec.get("label") or ""
+    assert "production_queries_400_2026-04-12" in label
+    assert "config.tier1_clean_2026-04-13" in label

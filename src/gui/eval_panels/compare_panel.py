@@ -383,16 +383,28 @@ class ComparePanel(tk.Frame):
             return
 
         n = len(data.get("results", []))
+        prov = data.get("provenance") or {}
+        queries_stem = Path(prov.get("queries_pack_name", "")).stem if prov.get("queries_pack_name") else ""
+        config_stem = Path(prov.get("config_name", "")).stem if prov.get("config_name") else ""
+        run_id = data.get("run_id") or ""
+        if queries_stem and config_stem:
+            tag = f"{queries_stem} / {config_stem}"
+        elif run_id:
+            tag = run_id
+        else:
+            tag = path.name
+        status_text = f"Loaded {n} queries -- {tag}"
+
         if role == "baseline":
             self._baseline_path = path
             self._baseline_data = data
             self._baseline_var.set(str(path))
-            self._baseline_status.set(f"Loaded {n} queries")
+            self._baseline_status.set(status_text)
         else:
             self._candidate_path = path
             self._candidate_data = data
             self._candidate_var.set(str(path))
-            self._candidate_status.set(f"Loaded {n} queries")
+            self._candidate_status.set(status_text)
 
         self._update_compare_state()
 

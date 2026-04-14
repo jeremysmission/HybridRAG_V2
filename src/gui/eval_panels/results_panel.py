@@ -29,7 +29,11 @@ from src.gui.theme import (
 )
 
 
-_DEFAULT_RESULTS_DIR = Path(r"C:\HybridRAG_V2\docs")
+# V2 repo root resolved from this module's location so the panel works on
+# any checkout path (prior hardcoded C:\HybridRAG_V2\docs made history /
+# results silently empty on clones or alternate install paths).
+_V2_ROOT = Path(__file__).resolve().parents[3]
+_DEFAULT_RESULTS_DIR = _V2_ROOT / "docs"
 
 
 class ResultsPanel(tk.Frame):
@@ -72,8 +76,11 @@ class ResultsPanel(tk.Frame):
             "p95": tk.StringVar(value="-"),
         }
 
+        self._run_info_var = tk.StringVar(value="No run loaded")
+
         self._build_top_row()
         self._build_scorecard()
+        self._build_run_info()
         self._build_filter_row()
         self._build_main_split()
         self._build_status_bar()
@@ -185,6 +192,41 @@ class ResultsPanel(tk.Frame):
                 fg=color,
                 font=FONT_SECTION,
             ).pack(anchor="w")
+
+    def _build_run_info(self) -> None:
+        """Provenance strip shown above the filter row.
+
+        Displays query pack, config, Lance/store path, GPU, timestamp,
+        run_id, and elapsed time so operators can audit repeated runs
+        without popping the JSON open.
+        """
+        frame = tk.Frame(
+            self,
+            bg=DARK["panel_bg"],
+            highlightthickness=1,
+            highlightbackground=DARK["border"],
+        )
+        frame.pack(side="top", fill="x", padx=12, pady=(0, 6))
+
+        tk.Label(
+            frame,
+            text="Run Info",
+            bg=DARK["panel_bg"],
+            fg=DARK["label_fg"],
+            font=FONT_SMALL,
+        ).pack(anchor="w", padx=10, pady=(6, 0))
+
+        self._run_info_label = tk.Label(
+            frame,
+            textvariable=self._run_info_var,
+            bg=DARK["panel_bg"],
+            fg=DARK["fg"],
+            font=FONT_MONO,
+            justify="left",
+            anchor="w",
+            wraplength=1100,
+        )
+        self._run_info_label.pack(anchor="w", fill="x", padx=10, pady=(0, 8))
 
     def _build_filter_row(self) -> None:
         row = tk.Frame(self, bg=DARK["bg"])
@@ -348,8 +390,47 @@ class ResultsPanel(tk.Frame):
 
         self._refresh_filter_options()
         self._update_scorecard()
+        self._update_run_info()
         self._apply_filters()
         return True
+
+    def _update_run_info(self) -> None:
+        """Populate the Run Info strip from loaded metadata + provenance."""
+        meta = self._run_meta or {}
+        prov = meta.get("provenance") or {}
+
+        run_id = meta.get("run_id") or "?"
+        timestamp = meta.get("timestamp_utc") or "?"
+        total = meta.get("total_queries") or len(self._all_results) or 0
+        store_chunks = meta.get("store_chunks") or "?"
+        gpu_device = prov.get("gpu_device") or meta.get("gpu_device") or "?"
+
+        queries_name = prov.get("queries_pack_name") or "?"
+        config_name = prov.get("config_name") or "?"
+        lance_path = prov.get("lance_path") or "?"
+        queries_path = prov.get("queries_path") or "?"
+        config_path = prov.get("config_path") or "?"
+        elapsed = prov.get("elapsed_s")
+        elapsed_text = f"{elapsed}s" if elapsed is not None else "?"
+        max_q = prov.get("max_queries_requested")
+        max_text = f"first {max_q}" if max_q else "all"
+        run_status = prov.get("run_status") or "?"
+
+        lines = [
+            f"run_id:     {run_id}",
+            f"timestamp:  {timestamp}    status: {run_status}    elapsed: {elapsed_text}",
+            f"queries:    {queries_name}  ({max_text})",
+            f"config:     {config_name}",
+            f"store:      {lance_path}    chunks: {store_chunks}",
+            f"gpu:        {gpu_device}",
+            f"total run:  {total} queries",
+        ]
+        if queries_path != "?" and queries_path != queries_name:
+            lines.append(f"queries@:   {queries_path}")
+        if config_path != "?" and config_path != config_name:
+            lines.append(f"config@:    {config_path}")
+
+        self._run_info_var.set("\n".join(lines))
 
     # ------------------------------------------------------------------
     # Event handlers

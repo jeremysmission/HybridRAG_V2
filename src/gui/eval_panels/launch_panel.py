@@ -271,6 +271,25 @@ class LaunchPanel(tk.Frame):
         report_md.parent.mkdir(parents=True, exist_ok=True)
         results_json.parent.mkdir(parents=True, exist_ok=True)
 
+        # Confirm overwrite of existing output files so an operator cannot
+        # silently clobber a prior baseline when kicking off a fresh run.
+        existing = [p for p in (results_json, report_md) if p.exists()]
+        if existing:
+            names = "\n  ".join(str(p) for p in existing)
+            proceed = messagebox.askyesno(
+                "Overwrite output files?",
+                (
+                    "The following output file(s) already exist and will be "
+                    "overwritten by this run:\n\n  "
+                    f"{names}\n\n"
+                    "Proceed and overwrite?"
+                ),
+                default="no",
+            )
+            if not proceed:
+                self._append_log("Run cancelled: operator declined overwrite.", "WARN")
+                return
+
         max_q_raw = (self._var_max_q.get() or "").strip()
         max_q = int(max_q_raw) if max_q_raw.isdigit() and int(max_q_raw) > 0 else None
 
