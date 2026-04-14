@@ -1,0 +1,79 @@
+[
+  {
+    "query_id": "PQ-101",
+    "user_input": "What is the latest enterprise program weekly hours variance for fiscal year 2024?",
+    "reference": "Latest 2024 weekly hours variance: 2024-12-31 enterprise program Weekly Hours Variance.xlsx, the final filed weekly file for calendar year 2024 (folder mining shows it as the trailing dated file).",
+    "reference_contexts": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/2024-12/2024-12-31 enterprise program Weekly Hours Variance.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "TABULAR",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/2.0 Weekly Variance Reports/2024/%enterprise program Weekly Hours Variance%"
+    ],
+    "difficulty": "easy",
+    "rationale": "Tests the PM's primary cost/schedule pulse check: direct spreadsheet lookup against a recurring standardized artifact. Real weekly variance reports exist for every Friday in 2024.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024-12-31",
+        "2024-12-20",
+        "2024-12-13"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Entity store contains 15,256 entity hits on 2024-12-31 Weekly Hours Variance.xlsx alone; the artifact family has dozens of dated siblings under 2.0 Weekly Variance Reports/2024/."
+  },
+  {
+    "query_id": "PQ-102",
+    "user_input": "What are the FEP monthly actuals for 2024 and how do they roll up across months?",
+    "reference": "Twelve dated 2024 monthly actuals files exist (2024 01 through 2024 12 Monthly Actuals.xlsx), all under 10.0 Program Management/1.0 FEP/Reference/. The cadence continues into 2025 with at least 2025 01 Monthly Actuals.xlsx confirmed.",
+    "reference_contexts": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 01 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 02 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 06 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2024 12 Monthly Actuals.xlsx",
+      "10.0 Program Management/1.0 FEP/Reference/2025 01 Monthly Actuals.xlsx"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "AGGREGATE",
+    "expected_document_family": "Program Management",
+    "expected_source_patterns": [
+      "10.0 Program Management/1.0 FEP/Reference/2024 %Monthly Actuals.xlsx"
+    ],
+    "difficulty": "medium",
+    "rationale": "Aggregation across 12 monthly actuals files. Tests whether retrieval can enumerate the full 2024 FEP series without missing months.",
+    "expected_anchor_entities": {
+      "DATE": [
+        "2024 02",
+        "2024 07",
+        "2024 08",
+        "2024 09",
+        "2024 10",
+        "2024 11",
+        "2024 12"
+      ]
+    },
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "Folder listing confirmed via anchor miner: '1.0 FEP/Reference/2024 NN Monthly Actuals.xlsx' exists for each month with 7,886-7,930 entity hits per file."
+  },
+  {
+    "query_id": "PQ-103",
+    "user_input": "Which CDRL is A002 and what maintenance service reports have been submitted under it?",
+    "reference": "A002 is the Maintenance Service Report (MSR) CDRL. Submissions are organized by site under 1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/ with 21 site-specific subfolders covering Alpena through Wake.",
+    "reference_contexts": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/"
+    ],
+    "persona": "Program Manager",
+    "expected_query_type": "ENTITY",
+    "expected_document_family": "CDRLs",
+    "expected_source_patterns": [
+      "1.5 enterprise program CDRLS/A002 - Maintenance Service Report (MSR)/%"
+    ],
+    "difficulty": "easy",
+    "rationale": "CDRL code -> deliverable type lookup. Tests that exact identifier 'A002' matches against the folder naming convention.",
+    "expected_anchor_entities": {},
+    "has_ground_truth": true,
+    "corpus_grounding_evidence": "21 MSR site subfolders confirmed via corpus folder listing; A002 is the canonical CDRL code for Maintenance Service Reports per the folder naming."
+  }
+]
