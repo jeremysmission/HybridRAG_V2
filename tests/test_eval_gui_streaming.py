@@ -217,6 +217,38 @@ def test_compare_panel_constructs_clean(withdrawn_root):
     assert panel.winfo_exists()
 
 
+def test_compare_panel_headline_signs_are_correct(withdrawn_root):
+    """MISS dropping 146 -> 96 must render as '-50', not '+-50'."""
+    from src.gui.eval_panels.compare_panel import ComparePanel
+
+    panel = ComparePanel(withdrawn_root)
+    panel.pack()
+    panel._baseline_data = {
+        "pass_count": 158,
+        "partial_count": 96,
+        "miss_count": 146,
+        "routing_correct": 287,
+    }
+    panel._candidate_data = {
+        "pass_count": 226,
+        "partial_count": 78,
+        "miss_count": 96,
+        "routing_correct": 298,
+    }
+    panel._refresh_headline()
+
+    miss_text = panel._headline_labels["miss"].cget("text")
+    pass_text = panel._headline_labels["pass"].cget("text")
+    partial_text = panel._headline_labels["partial"].cget("text")
+    routing_text = panel._headline_labels["routing"].cget("text")
+
+    assert "+-" not in miss_text, f"bad sign in MISS: {miss_text}"
+    assert "-50" in miss_text, f"expected -50 in MISS: {miss_text}"
+    assert "+68" in pass_text, f"expected +68 in PASS: {pass_text}"
+    assert "-18" in partial_text, f"expected -18 in PARTIAL: {partial_text}"
+    assert "+11" in routing_text, f"expected +11 in Routing: {routing_text}"
+
+
 def test_history_panel_scans_docs_without_crash(withdrawn_root):
     from src.gui.eval_panels.history_panel import HistoryPanel
 

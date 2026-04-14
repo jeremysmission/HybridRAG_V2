@@ -497,13 +497,11 @@ class ComparePanel(tk.Frame):
             delta = av - bv
             if delta == 0:
                 color = DARK["label_fg"]
-                sign = "+0"
             elif (delta > 0) ^ lower_is_better:
                 color = DARK["green"]
-                sign = f"+{delta}"
             else:
                 color = DARK["red"]
-                sign = f"{delta}"
+            sign = f"{delta:+d}"
             return (f"{label}: {bv} -> {av} ({sign})", color)
 
         text, color = fmt("pass_count", "PASS")
@@ -515,7 +513,7 @@ class ComparePanel(tk.Frame):
         bv = int(b.get("partial_count") or 0)
         av = int(a.get("partial_count") or 0)
         delta = av - bv
-        sign = f"+{delta}" if delta > 0 else (f"{delta}" if delta < 0 else "+0")
+        sign = f"{delta:+d}"
         self._headline_labels["partial"].configure(
             text=f"PARTIAL: {bv} -> {av} ({sign})",
             fg=DARK["label_fg"],
