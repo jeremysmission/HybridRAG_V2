@@ -328,6 +328,34 @@ def test_results_panel_renders_provenance_block(withdrawn_root, tmp_path: Path):
     assert "first 3" in run_info_text
 
 
+def test_canonical_module_entry_point_exposes_main_and_evalgui():
+    """Regression: the canonical -m entry point must live at src.gui.eval_gui,
+    not scripts/eval_gui.py. scripts/eval_gui.py must be a forwarding shim."""
+    from src.gui import eval_gui as canonical
+
+    assert hasattr(canonical, "EvalGUI")
+    assert hasattr(canonical, "main")
+    assert callable(canonical.main)
+
+    shim_path = V2_ROOT / "scripts" / "eval_gui.py"
+    assert shim_path.exists()
+    shim_src = shim_path.read_text(encoding="utf-8")
+    assert "from src.gui.eval_gui import main" in shim_src, (
+        "scripts/eval_gui.py must forward to src.gui.eval_gui.main -- "
+        "any other structure re-introduces the interpreter-split bug."
+    )
+
+
+def test_launcher_bat_uses_module_form():
+    """Regression: start_eval_gui.bat must launch with -m src.gui.eval_gui
+    so Python stays pinned to the launching .venv interpreter."""
+    bat_path = V2_ROOT / "start_eval_gui.bat"
+    assert bat_path.exists()
+    bat_src = bat_path.read_text(encoding="utf-8", errors="replace")
+    assert "-m %GUI_MODULE%" in bat_src
+    assert 'GUI_MODULE=src.gui.eval_gui' in bat_src
+
+
 def test_history_panel_label_column_uses_provenance(withdrawn_root, tmp_path: Path):
     """History label column should show pack/config from provenance."""
     from src.gui.eval_panels.history_panel import HistoryPanel

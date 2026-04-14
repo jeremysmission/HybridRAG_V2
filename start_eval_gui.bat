@@ -14,7 +14,8 @@ set "PROJECT_ROOT=%CD%"
 set "VENV_PYTHON=%PROJECT_ROOT%\.venv\Scripts\python.exe"
 set "VENV_PYTHONW=%PROJECT_ROOT%\.venv\Scripts\pythonw.exe"
 set "VENV_ACTIVATE=%PROJECT_ROOT%\.venv\Scripts\activate.bat"
-set "GUI_SCRIPT=%PROJECT_ROOT%\scripts\eval_gui.py"
+set "GUI_SCRIPT=%PROJECT_ROOT%\src\gui\eval_gui.py"
+set "GUI_MODULE=src.gui.eval_gui"
 set "GUI_MODE=terminal"
 set "DRY_RUN=0"
 set "PASSTHROUGH_ARGS="
@@ -73,7 +74,7 @@ set "HYBRIDRAG_NETWORK_KILL_SWITCH=0"
 set "HYBRIDRAG_OFFLINE=0"
 
 REM Silence HF Hub 'unauthenticated requests' telemetry noise and let cached
-REM model loads succeed on air-gapped / offline workstations.
+REM model loads succeed on offline / offline workstations.
 set "HF_HUB_DISABLE_TELEMETRY=1"
 if not defined HF_HUB_ENABLE_HF_TRANSFER set "HF_HUB_ENABLE_HF_TRANSFER=0"
 if not defined TRANSFORMERS_NO_ADVISORY_WARNINGS set "TRANSFORMERS_NO_ADVISORY_WARNINGS=1"
@@ -95,14 +96,16 @@ if /I "%GUI_MODE%"=="detached" goto launch_detached
 
 echo [INFO] Launching HybridRAG V2 Eval GUI from "%PROJECT_ROOT%"
 echo [INFO] GPU: CUDA_VISIBLE_DEVICES=%CUDA_VISIBLE_DEVICES%
-"%LAUNCH_EXE%" "%GUI_SCRIPT%" !PASSTHROUGH_ARGS!
+echo [INFO] Python: %LAUNCH_EXE%
+echo [INFO] Module: %GUI_MODULE%
+"%LAUNCH_EXE%" -m %GUI_MODULE% !PASSTHROUGH_ARGS!
 set "EXIT_CODE=%ERRORLEVEL%"
 if not "%EXIT_CODE%"=="0" goto launch_failed
 goto end
 
 :launch_detached
 echo [INFO] Launching HybridRAG V2 Eval GUI (detached) from "%PROJECT_ROOT%"
-start "" "%LAUNCH_EXE%" "%GUI_SCRIPT%" !PASSTHROUGH_ARGS!
+start "" "%LAUNCH_EXE%" -m %GUI_MODULE% !PASSTHROUGH_ARGS!
 set "EXIT_CODE=%ERRORLEVEL%"
 if not "%EXIT_CODE%"=="0" goto launch_failed
 goto end
@@ -114,6 +117,7 @@ echo Project root:    %PROJECT_ROOT%
 echo Python exe:      %VENV_PYTHON%
 echo Pythonw exe:     %VENV_PYTHONW%
 echo Activate script: %VENV_ACTIVATE%
+echo GUI module:      %GUI_MODULE%
 echo GUI script:      %GUI_SCRIPT%
 echo Launch exe:      %LAUNCH_EXE%
 echo Launch mode:     %GUI_MODE%
