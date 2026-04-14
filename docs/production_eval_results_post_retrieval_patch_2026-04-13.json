@@ -1,0 +1,1918 @@
+{
+  "run_id": "20260413_183402",
+  "timestamp_utc": "2026-04-13T18:34:02.512909+00:00",
+  "store_chunks": 10435593,
+  "gpu_device": "physical GPU 1 -> cuda:0 (NVIDIA GeForce RTX 3090)",
+  "total_queries": 25,
+  "pass_count": 19,
+  "partial_count": 5,
+  "miss_count": 1,
+  "routing_correct": 10,
+  "p50_pure_retrieval_ms": 3541,
+  "p95_pure_retrieval_ms": 43250,
+  "p50_wall_clock_ms": 6241,
+  "p95_wall_clock_ms": 46316,
+  "p50_router_ms": 2446,
+  "p95_router_ms": 3969,
+  "per_persona": {
+    "Program Manager": {
+      "total": 5,
+      "PASS": 3,
+      "PARTIAL": 1,
+      "MISS": 1,
+      "routing_correct": 1
+    },
+    "Logistics Lead": {
+      "total": 5,
+      "PASS": 5,
+      "PARTIAL": 0,
+      "MISS": 0,
+      "routing_correct": 2
+    },
+    "Field Engineer": {
+      "total": 5,
+      "PASS": 4,
+      "PARTIAL": 1,
+      "MISS": 0,
+      "routing_correct": 3
+    },
+    "Network Admin / Cybersecurity": {
+      "total": 5,
+      "PASS": 4,
+      "PARTIAL": 1,
+      "MISS": 0,
+      "routing_correct": 2
+    },
+    "Aggregation / Cross-role": {
+      "total": 5,
+      "PASS": 3,
+      "PARTIAL": 2,
+      "MISS": 0,
+      "routing_correct": 2
+    }
+  },
+  "per_query_type": {
+    "TABULAR": {
+      "total": 6,
+      "PASS": 4,
+      "PARTIAL": 2,
+      "MISS": 0,
+      "routing_correct": 2
+    },
+    "SEMANTIC": {
+      "total": 5,
+      "PASS": 4,
+      "PARTIAL": 1,
+      "MISS": 0,
+      "routing_correct": 0
+    },
+    "ENTITY": {
+      "total": 4,
+      "PASS": 3,
+      "PARTIAL": 0,
+      "MISS": 1,
+      "routing_correct": 2
+    },
+    "COMPLEX": {
+      "total": 6,
+      "PASS": 6,
+      "PARTIAL": 0,
+      "MISS": 0,
+      "routing_correct": 3
+    },
+    "AGGREGATE": {
+      "total": 4,
+      "PASS": 2,
+      "PARTIAL": 2,
+      "MISS": 0,
+      "routing_correct": 3
+    }
+  },
+  "results": [
+    {
+      "id": "PQ-001",
+      "persona": "Program Manager",
+      "expected_query_type": "TABULAR",
+      "routed_query_type": "TABULAR",
+      "routing_correct": true,
+      "query": "Which CDRL deliverables in A001, A009, and A031 have the latest status updates?",
+      "expected_document_family": "CDRLs \u2014 1.5 enterprise program CDRLS (A001 through A025+, each with dedicated subfolder)",
+      "family_signals": [
+        "cdrl",
+        "a001",
+        "a009",
+        "a031",
+        "corrective action",
+        "monthly status",
+        "integrated master schedule"
+      ],
+      "top_in_family": false,
+      "any_top5_in_family": true,
+      "verdict": "PARTIAL",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 6012,
+      "router_ms": 2096,
+      "retrieval_ms": 3876,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "5bc9635a517a53e107947ac59f658be698ffc1ff8f56e2e6f1a8af1f353c4ff0",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\4.1 CCB\\CCSB\\IGS_ECP-001_NEXION_Digisonde-1.3.1\\CCSB Final Docs\\Signed - IGS ECP 001 - Digisonde Software Update to 1.3.1.pdf",
+          "short_source": "CCSB Final Docs/Signed - IGS ECP 001 - Digisonde Software Update to 1.3.1.pdf",
+          "score": 0.0,
+          "text_preview": "[SECTION] 34. DEVE LOPMENTAL REQUIREMENTS AND STATUS: N/A 35. TRADE-OFFS AND ALTERNATIVE SOLUTIONS: 36. DATE BY WHICH CONTRACTUAL AUTHORITY IS NEEDED: (DD-Mo...",
+          "in_family": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "776ef95c5f5deb95598992d312dfbf0c25a050ce9718fc5d528058f0141685e9",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A051 - PDP_RR\\WX29\\SEMS3D-40432 WX29 OY3 Project Development Plan (PDP) Final.pdf",
+          "short_source": "WX29/SEMS3D-40432 WX29 OY3 Project Development Plan (PDP) Final.pdf",
+          "score": 0.0,
+          "text_preview": "st reporting information. SEMS3D-40154 1p752.065 IGS Sustainment Proposal, SEMS3D- 40419 SEMS III WBS Dictionary, SEMS3D-40420 CDRL A019 Contract Work Breakd...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "8ebf806fb26fe0b704b38b68e9776f23ffef2cc151663f7d62d1361011498269",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\Delete After Time\\SEFGuide 01-01.pdf",
+          "short_source": "Delete After Time/SEFGuide 01-01.pdf",
+          "score": 0.0,
+          "text_preview": "[SECTION] INTEGRATED WITH THE MASTER PROGRAM PLANNING SCHEDULE SUBMITTED ON MAGNETIC MEDIA IN ACCORDANCE WITH DI-A-3007/T. PREPARED BY: DATE: APPROVED BY: DA...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "0b2baf56b1d0edba36ceb0d1344d02f470e5bae7bd00a30e1031246500ed1cc4",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\18 NG Pro\\NG Pro 3.7\\Signed Docs\\IGS WP Tailoring Report-2050507_Signed_old.pdf",
+          "short_source": "Signed Docs/IGS WP Tailoring Report-2050507_Signed_old.pdf",
+          "score": 0.0,
+          "text_preview": "s (TPMs) Handled through IPT and closeout briefings Program Management: Earned Value Management Deliverable PM-370 Work Authorization A008 Program Management...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "870a4708a661a93c384a2aa25f8bae583bbda0e1b043bb4c7e539aac5a95f897",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-Project_Closeout_Briefing\\WX28\\SEMS3D-37410 TOWX28 OS Upgrade Project Closeout Briefing (A001).pdf",
+          "short_source": "WX28/SEMS3D-37410 TOWX28 OS Upgrade Project Closeout Briefing (A001).pdf",
+          "score": 0.0,
+          "text_preview": "[SECTION] SEMS 3D-34821 Purchase request for Sensaphone Express II SEMS3D-34678 Purchase request for 90 day loaner of a DL160 Server SEMS III A029 Data Acces...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-002",
+      "persona": "Program Manager",
+      "expected_query_type": "SEMANTIC",
+      "routed_query_type": "TABULAR",
+      "routing_correct": false,
+      "query": "What schedule milestones and slips are shown in the latest PMR and Integrated Master Schedule?",
+      "expected_document_family": "Program Management \u2014 6.0 PMR (IGS_PMR_2026_FebR1.pptx, Schedule Performance, SubK Slides) + CDRL A031 Integrated Master Schedule",
+      "family_signals": [
+        "pmr",
+        "integrated master schedule",
+        "schedule performance",
+        "subk"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 3205,
+      "router_ms": 1302,
+      "retrieval_ms": 1852,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "90504cc8e311c24587e033c1b7f9d4145b978024f557c846509d2560ebb9561d",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\SEMP Examples\\E101-01-CSEMP-Template.docx",
+          "short_source": "SEMP Examples/E101-01-CSEMP-Template.docx",
+          "score": 0.0,
+          "text_preview": "le and Major Milestones {Guidance: Provide a summary level program plan. A top-level schedule including major program milestones. Program System Engineering ...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "02b5635c41594dfdb5ad71c22b6704b5104f75398a1187709640e8b6e682c5e7",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Management Indicators\\Stoplight Chart.xlsx",
+          "short_source": "Management Indicators/Stoplight Chart.xlsx",
+          "score": 0.0,
+          "text_preview": "the 3080 Integrated Schedule approach. Milestone dates will be updated to align with approach., : 2021-08-26T00:00:00 Program Priority Dashboard:: 8. Priorit...",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "c731603f1581aa512c0393e9e7b2ca1bc3ec09f5a0b75310b791ac97b006fe09",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\001_Project_Management\\Stoplight Chart.xlsx",
+          "short_source": "001_Project_Management/Stoplight Chart.xlsx",
+          "score": 0.0,
+          "text_preview": "the 3080 Integrated Schedule approach. Milestone dates will be updated to align with approach., : 2021-08-26T00:00:00 Program Priority Dashboard:: 8. Priorit...",
+          "in_family": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "b8e6148e43fb5e89bf112d1139377e292ecc3488733e466c4f1f7c21c68c71ec",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\PWS OS Upgrade\\BOE, Pricing and Scheduling Effort\\OS Upgrade Comment\\PWA-128288850-101116-0006-170 - VNguyen Comment.pdf",
+          "short_source": "OS Upgrade Comment/PWA-128288850-101116-0006-170 - VNguyen Comment.pdf",
+          "score": 0.0,
+          "text_preview": "entation of the Project Development Plan (PDP) / Requirements Review (A051). Exercised options will drive changes to the baseline which will be delivered to ...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "086144fa6aed27db3aee430a20c8a4ee5a4c37aecde50c371f8e38fc1f277c53",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\6.0 PMR\\Archive\\SP Sector PMR and IPRS Supporting Data Template.pptx",
+          "short_source": "Archive/SP Sector PMR and IPRS Supporting Data Template.pptx",
+          "score": 0.0,
+          "text_preview": "Point to and explain schedule variances. Point to and take credit for schedule margin. MANDATORY: Use box below to report measure if chart does not contain t...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-003",
+      "persona": "Program Manager",
+      "expected_query_type": "TABULAR",
+      "routed_query_type": "SEMANTIC",
+      "routing_correct": false,
+      "query": "How do the current FEP actuals compare to the funding plan and LDI burn-rate by OY3?",
+      "expected_document_family": "Program Management \u2014 1.0 FEP (enterprise program FEP w_DMEA_OY3, ITD Actuals, CEAC) + LDI budget/hours spreadsheets",
+      "family_signals": [
+        "fep",
+        "ldi",
+        "actuals",
+        "ceac",
+        "budget"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 6476,
+      "router_ms": 2705,
+      "retrieval_ms": 3675,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "d9c0dc4f75f475fd24b34e604bc37944a0ace479eb3d5c104a412e84d283f834",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\Delete After Time\\dag_08-05-10.pdf",
+          "short_source": "Delete After Time/dag_08-05-10.pdf",
+          "score": 0.0,
+          "text_preview": "s of current and prior resource allocations. Over time, metrics are being developed to support the execution review that will measure actual output versus pl...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "a29985a190b6fc1f08fbb9e4ff44bd91f6f6c6b54f38efcf336add490a574fe9",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\1.0 FEP\\CEAC\\Space CEAC_EAC- F380 Combined Template  Checklist_IGS_Q1 2025_FINAL.xlsx",
+          "short_source": "CEAC/Space CEAC_EAC- F380 Combined Template  Checklist_IGS_Q1 2025_FINAL.xlsx",
+          "score": 0.0,
+          "text_preview": "RP profit plan rate, will equal the last CEAC plus any modifications that impact the profit plan rate. : ITD Through Date, : Inception to date costs through ...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "e5199ead5c87e5386e072e05ba1c31f02dc5bfb949128cf4196434d67403d708",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\6.0 PMR\\IPRS\\2023 IPRS Metrics & Criteria_NGSP Jan 2023.pptx",
+          "short_source": "IPRS/2023 IPRS Metrics & Criteria_NGSP Jan 2023.pptx",
+          "score": 0.0,
+          "text_preview": "plan, and include an entry reflecting the performance against that temporary plan (along with a comment indicating what method was used and a date for when t...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "5b3571eb744074f8e50dd192c4b763bf9afda2f29ac54f7093f00f12a0476273",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\1.0 FEP\\CEAC\\Copy of Space CEAC_EAC- F380 Combined Template  Checklist_IGS_Q3 2024-original.xlsx",
+          "short_source": "CEAC/Copy of Space CEAC_EAC- F380 Combined Template  Checklist_IGS_Q3 2024-original.xlsx",
+          "score": 0.0,
+          "text_preview": "RP profit plan rate, will equal the last CEAC plus any modifications that impact the profit plan rate. : ITD Through Date, : Inception to date costs through ...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "8377592b25fb4c381a838fdfb0df28415f9c703e3364b9fe412e146a14c89798",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  ISTO Sites\\2_Drawings\\AFRL Artifact Documents\\Sites\\Diego Garcia\\Finance\\P00046.pdf",
+          "short_source": "Finance/P00046.pdf",
+          "score": 0.0,
+          "text_preview": "0401 through 0404, available funding amounts for Fiscal Year 2010 and the Fiscal Year 2011 amount that is subject to availability*: Note that the calculation...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-004",
+      "persona": "Program Manager",
+      "expected_query_type": "ENTITY",
+      "routed_query_type": "TABULAR",
+      "routing_correct": false,
+      "query": "What is the latest PMR briefing file name for the enterprise program?",
+      "expected_document_family": "Program Management \u2014 6.0 PMR (2022-2026 folders, Schedule Performance, SubK Slides)",
+      "family_signals": [
+        "pmr",
+        "schedule performance",
+        "subk"
+      ],
+      "top_in_family": false,
+      "any_top5_in_family": false,
+      "verdict": "MISS",
+      "entity_dependent": true,
+      "embed_retrieve_ms": 4552,
+      "router_ms": 1701,
+      "retrieval_ms": 2763,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "17102c396344ff357855506cffedc5ae1c29de1a62dc6139a7ab688c8d83b157",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\TCNOs\\TCNO - Working TCNO Repository\\NEXION\\WES Microsoft Patches from LDI\\WES2016\\2016-06\\readme.txt",
+          "short_source": "2016-06/readme.txt",
+          "score": 0.0,
+          "text_preview": "the Documentation folders with the February 2016 Security update rollup. SECURITY BULLETINS: The following is a list of applicable Security Bulletins and the...",
+          "in_family": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "27695a9d3f929b7a2d396f86169caae4b762b13dda0cbc32fafd6244a65c3928",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Eielson\\2015-07\\Thumb Drive_Eieslon_Jul 15\\Special Files_28 Jul 15\\Eielson Desktop Diary.txt",
+          "short_source": "Special Files_28 Jul 15/Eielson Desktop Diary.txt",
+          "score": 0.0,
+          "text_preview": "Eielson AFB NEXION Desktop Diary Please place latest entries at top of file. Eielson UDD file is 064.udd ************************************************* 28...",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "c05b10942c98aa2b2068148bcf7dd0fb58776c3e2ae62bdd2a306cc57c0ec353",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\TCNOs\\TCNO - Working TCNO Repository\\NEXION\\WES Microsoft Patches from LDI\\WES2016\\2016-07\\readme.txt",
+          "short_source": "2016-07/readme.txt",
+          "score": 0.0,
+          "text_preview": "the Documentation folders with the February 2016 Security update rollup. SECURITY BULLETINS: The following is a list of applicable Security Bulletins and the...",
+          "in_family": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "cb917d2c65fac8f0af7135473e037474ed3f0f594dd50c6539596b483ca7e8f7",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\NEXION Cybersecurity - Archive\\Security Files\\McAfee AV v8.8 Patch 5\\CM-183111-VSE880LMLRP4\\epo45_help_vse_880.zip",
+          "short_source": "CM-183111-VSE880LMLRP4/epo45_help_vse_880.zip",
+          "score": 0.0,
+          "text_preview": "tings enabled. Select the action option. You cannot customize any other scan settings. The system tray See System tray icons and how they work for VirusScan ...",
+          "in_family": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "a8a65e1b60d31d6377f3c6bf37e5880f9ff1714c16fb0f539ba5b4035c1632d1",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\TCNOs\\TCNO - Working TCNO Repository\\NEXION\\WES Microsoft Patches from LDI\\WES2016\\2016-08\\readme.txt",
+          "short_source": "2016-08/readme.txt",
+          "score": 0.0,
+          "text_preview": "the Documentation folders with the February 2016 Security update rollup. SECURITY BULLETINS: The following is a list of applicable Security Bulletins and the...",
+          "in_family": false
+        }
+      ],
+      "notes": "EXPECTED FAILURE: entity-dependent query; needs Tier 2 GLiNER / Tier 3 LLM extraction",
+      "error": ""
+    },
+    {
+      "id": "PQ-005",
+      "persona": "Program Manager",
+      "expected_query_type": "COMPLEX",
+      "routed_query_type": "TABULAR",
+      "routing_correct": false,
+      "query": "What staffing, suborganization, and budget risks are flagged across the latest PM brief and variance reports?",
+      "expected_document_family": "Program Management \u2014 #Follow-On materials + 6.0 PMR/SubK Slides + 2.0 Weekly Variance Reports + 1.0 FEP",
+      "family_signals": [
+        "pmr",
+        "subk",
+        "variance",
+        "fep",
+        "follow-on",
+        "staffing"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 4860,
+      "router_ms": 3031,
+      "retrieval_ms": 1783,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "03ded5ef7f165363629ca7cbf7af03cd85f73d377451307257ca338bf4e629c1",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-Project_Closeout_Briefing\\WX29-for OY2\\SEMS3D-40239 TOWX29 IGS Sustainment Project Cloeout (A001).pdf",
+          "short_source": "WX29-for OY2/SEMS3D-40239 TOWX29 IGS Sustainment Project Cloeout (A001).pdf",
+          "score": 0.0,
+          "text_preview": "view Cost/Schedule Variances 29 PO 7 Threshold Actual N/A N/A N/A N/A Performance Objective Deliverables/Results Efficient cost and schedule management (per ...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "d4bfb991fe69be7bed0b21f91f092e7facfafd98edf7cdd8ee2525c52c067d31",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\DM\\spacec2i_work_9_2009\\_2008_Working\\Documents_2\\_DRAFTS\\SEP_S2I6_DRAFT.doc",
+          "short_source": "_DRAFTS/SEP_S2I6_DRAFT.doc",
+          "score": 0.0,
+          "text_preview": "are/hardware components. The Software Engineering group designs, develops, and integrates the Commercial Off-The-Shelf (COTS), Government-furnished software,...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "c7c7f570e8a4789eb658df2ec7ffcc8b4ce85f93aaa122e3bde5965aea8d9381",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-Project_Closeout_Briefing\\WX29 OY3\\SEMS3D-41679 TOWX29 IGS Sustainment Project Closeout (A001).pdf",
+          "short_source": "WX29 OY3/SEMS3D-41679 TOWX29 IGS Sustainment Project Closeout (A001).pdf",
+          "score": 0.0,
+          "text_preview": "view Cost/Schedule Variances PO 7 Threshold Actual N/A N/A N/A N/A Performance Objective Deliverables/Results Efficient cost and schedule management (per Gov...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "12dba153adecdea852172904b9b1116332fcb44404219d15c769b7c268c5fdf0",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\Archive\\PMP\\15-0019_NEXION_PMP_(CDRL A081)_Rev 4_20 Apr 15_Final.pdf",
+          "short_source": "PMP/15-0019_NEXION_PMP_(CDRL A081)_Rev 4_20 Apr 15_Final.pdf",
+          "score": 0.0,
+          "text_preview": "vities. ? Each responsible task manager understands the budget established for the assigned activities. Task managers will report back to the PM if forecaste...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "71beab71052a8a6444517931748bfa25be6f2cd4d6390973f1453398a204397c",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\001_Project_Management\\SEMS Program Docs\\Archive\\Problem  Resolution and Management Plan .doc",
+          "short_source": "Archive/Problem  Resolution and Management Plan .doc",
+          "score": 0.0,
+          "text_preview": "ivities can be viewed on a spectrum of probability and corresponding actions, as shown in Fig. 3.2.4-1 below. Risks and problems can be identified any time o...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-006",
+      "persona": "Logistics Lead",
+      "expected_query_type": "TABULAR",
+      "routed_query_type": "COMPLEX",
+      "routing_correct": false,
+      "query": "What purchase orders are currently open and which vendors or CLINs are still outstanding?",
+      "expected_document_family": "Logistics / Procurement \u2014 5.0 Logistics/Procurement/001 - Open Purchases (iBuy GL lists with CLIN, Vendor, PO# columns)",
+      "family_signals": [
+        "procurement",
+        "open purchase",
+        "ibuy",
+        "open po",
+        "purchase order"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 7611,
+      "router_ms": 2446,
+      "retrieval_ms": 5062,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "ca5dc1499559a0adc0aa8beac76b95f367f1d6240b9e4a44a9050973c922ae02",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\4.0 Training\\03_Course Completion Certificates\\Dettler-James\\NG\\iBuy Training\\SAP ECC Procurement Users Manual (Section_05).pdf",
+          "short_source": "iBuy Training/SAP ECC Procurement Users Manual (Section_05).pdf",
+          "score": 0.0,
+          "text_preview": "13 January 2012 5-11 ? Click ? List will be sorted in Vendor number sequence. Section 5 13 January 2012 5-12 ? Click ? List will be sorted in read date seque...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "4c60bcda62e678be87755591cabf02d066282eafe3cf21775f0c749024124f02",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\1.0 FEP\\Matl\\2025.02 PR & PO_R2.xlsx",
+          "short_source": "Matl/2025.02 PR & PO_R2.xlsx",
+          "score": 0.0,
+          "text_preview": "q. Tracking Number: IGS, Plant: STMX, Storage Location: STXD, Order Quantity: 1, Order Unit: LO, Quantity in SKU: 0, Net Price: 2074, Currency: USD, Price Un...",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "f5d018e17ff791574d3231b193efbce01c0e7a7098ac3c71993cda1ec5280db4",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\4.0 Training\\03_Course Completion Certificates\\Dettler-James\\NG\\iBuy Training\\SAP ECC Procurement Users Manual (Section_06).pdf",
+          "short_source": "iBuy Training/SAP ECC Procurement Users Manual (Section_06).pdf",
+          "score": 0.0,
+          "text_preview": "Section 6 13 January 2012 6-1 SECTION 6 - Vendor Inquiry Transaction (XK03): ? Start the transaction by entering XK03 (Dis play Vendor) in the transaction bo...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "e365bb98447d0bba99f8a25ff9ff333ea244110eb56664e7556312f77e98cdea",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\1.0 FEP\\Matl\\2025.02 PR & PO_R2.xlsx",
+          "short_source": "Matl/2025.02 PR & PO_R2.xlsx",
+          "score": 0.0,
+          "text_preview": ": Material, Vendor Number: 90063941, Vendor Name: VETERANS TRADING COMPANY, PO Total Value: 19.24 PO Type: Material, Purchasing Document: 7201043705, Item: 1...",
+          "in_family": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "94c08f2804dd4506fadbe292b38d94eaf78e275a5b8342e7209924d4746cabf0",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\4.0 Training\\03_Course Completion Certificates\\Dettler-James\\NG\\iBuy Training\\SAP ECC Procurement Users Manual (Section_07).pdf",
+          "short_source": "iBuy Training/SAP ECC Procurement Users Manual (Section_07).pdf",
+          "score": 0.0,
+          "text_preview": "For this example, vendor number 90034261 will be used. ? You may choose to limit the search to a specific purchasing group, plant or document date(s) (PO iss...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-007",
+      "persona": "Logistics Lead",
+      "expected_query_type": "ENTITY",
+      "routed_query_type": "TABULAR",
+      "routing_correct": false,
+      "query": "Which site is named on the latest hand-carry packing list?",
+      "expected_document_family": "Logistics / Shipments \u2014 5.0 Logistics/Shipments (Hand Carry Packing List, NG Packing List Template, Shipping Request forms)",
+      "family_signals": [
+        "shipment",
+        "packing list",
+        "hand carry",
+        "hand-carry",
+        "shipping request"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": true,
+      "embed_retrieve_ms": 5381,
+      "router_ms": 1929,
+      "retrieval_ms": 3408,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "cc5c72ee5dbd025892c88d82093b5128d049536e157366ad3eea10b05c743832",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Export_Control\\dtr_part_v_515.pdf",
+          "short_source": "Export_Control/dtr_part_v_515.pdf",
+          "score": 0.0,
+          "text_preview": "ng List. A packing list is seller-prepared commercial document indicating the net and gross weights, dimensions, and contents of all shipping pieces (boxes, ...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "17003107605231c27842caaee09df47506ba8b48cab7ae0908092d8850b14610",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Shipments\\2024 - Shipments\\LLL\\2024_02_09 - LLL Return Comm\\NG Packing List - LLL.xlsx",
+          "short_source": "2024_02_09 - LLL Return Comm/NG Packing List - LLL.xlsx",
+          "score": 0.0,
+          "text_preview": "[SECTION] SERIAL NUMBER: 0, PART NUMBER: 0, SYSTEM: 0, NOMENCLATURE: 0, OEM: 0, MODEL NUMBER: 0, UM: 0, QTY: 0, LOCATION: 0, ALT LOCATION: 0, INVT: 0, BARCOD...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "4269e284cf0e18b7dd2c69a2faeef9927c631127b566e1cb847d16821ab2e254",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Wake\\2023-03-23 thru 04-06 (ASV-RTS)(Seagren-Sepp)\\Import-Export_EEMS\\Hand carry to Wake Island - SP-HW-23-007.msg",
+          "short_source": "Import-Export_EEMS/Hand carry to Wake Island - SP-HW-23-007.msg",
+          "score": 0.0,
+          "text_preview": "Subject: Hand carry to Wake Island - SP-HW-23-007 From: Kuo, Leoncio K [US] (SP) To: Seagren, Frank A [US] (SP) Body: Hello Frank, Please see attached commer...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "4914ce98e302369abb25495c089828d6442a9c243b72b85e01503aea4e3d965f",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Curacao\\2025-1-13 thru 17 (ASV)(Womelsdorff-Cogswell)\\Packing List\\NG Packing List - Curacao.xlsx",
+          "short_source": "Packing List/NG Packing List - Curacao.xlsx",
+          "score": 0.0,
+          "text_preview": "[SECTION] SERIAL NUMBER: 0, PART NUMBER: 0, SYSTEM: 0, NOMENCLATURE: 0, OEM: 0, MODEL NUMBER: 0, UM: 0, QTY: 0, LOCATION: 0, ALT LOCATION: 0, INVT: 0, BARCOD...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "7859ffbc665eb8f98d2ef000bbc15c392102ef2487bcb8ea2331b8df519f3d3b",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Export_Control\\dtr_part_v_515.pdf",
+          "short_source": "Export_Control/dtr_part_v_515.pdf",
+          "score": 0.0,
+          "text_preview": "ing List. A packing list is a seller-prepared commercial document indicating the net and gross weights, dimensions and contents of all shipping pieces (boxes...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-008",
+      "persona": "Logistics Lead",
+      "expected_query_type": "TABULAR",
+      "routed_query_type": "TABULAR",
+      "routing_correct": true,
+      "query": "What parts are on the recommended spares list and what are their part numbers, quantities, and OEMs?",
+      "expected_document_family": "Logistics / Parts \u2014 5.0 Logistics/Parts (Downloaded Information)/Recommended Spares Parts List .xlsx",
+      "family_signals": [
+        "recommended spares",
+        "spares parts",
+        "parts list",
+        "parts (downloaded"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 5164,
+      "router_ms": 1706,
+      "retrieval_ms": 3392,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "12f605ebfea9c2a91e4a5d32df683e5e42cfa4946f949cdb25fb9900e4dee328",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\VPN-GFE_Laptops\\Archive\\003.1_Document_Management\\01_Document_Templates\\Critical_Spares_Reports\\SEMS3D-xxxxx ISTO Critical Spares Planning Estimate (A001).docx",
+          "short_source": "Critical_Spares_Reports/SEMS3D-xxxxx ISTO Critical Spares Planning Estimate (A001).docx",
+          "score": 0.0,
+          "text_preview": "mmended spares parts lists. Table . Recommended Spares Parts List additional Spares Recommendations Recommended Additions to the Depot Spares Kit Table 7 sho...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "b0d4ec04faec315c63266cdad5d41e631ac2b705457cf6e1d4ffc514e4238ea0",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A054 - Maintenance Manual\\ISTO\\2022Update\\SEMS3D-41714 ISTO Maintenance Manual (CDRL A054)(Final).docx",
+          "short_source": "2022Update/SEMS3D-41714 ISTO Maintenance Manual (CDRL A054)(Final).docx",
+          "score": 0.0,
+          "text_preview": "ce the GPS antenna. Parts List Table 4 provides the ISTO system parts list including part number (PN), original equipment manufacturer (OEM), unit of measure...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "cec48bd2bf05a0f2be2b450a6e96a2cdce9cb83926be575719731d4bd284f4c7",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-Critical_Spares_Reports\\A001 - WX31 Critical Spares Planning Estimate\\SEMS3D-36712 Critical Spares Planning Estimate (A01).docx",
+          "short_source": "A001 - WX31 Critical Spares Planning Estimate/SEMS3D-36712 Critical Spares Planning Estimate (A01).docx",
+          "score": 0.0,
+          "text_preview": "d spares parts list Recommended Spares Parts List (RSPL) Table 6 is a list of NEXION/ISTO recommended spares parts lists. Table 6. Recommended Spares Parts L...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "263d7ea62870f71944eff1255812059b82e1ad6fbb73ea191458031b84ed74b1",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A054 - Maintenance Manual\\ISTO\\WX28\\SEMS3D-34620 ISTO Maintenance Manual (CDRL A054).docx",
+          "short_source": "WX28/SEMS3D-34620 ISTO Maintenance Manual (CDRL A054).docx",
+          "score": 0.0,
+          "text_preview": "ote that the receiver and antenna are COTS parts that cannot be repaired in the field. These items may be returned to the original equipment manufacturer (OE...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "fffce9611f4da49fb1112e25b9d36190be0a82d62d31ed7d2db8f59781af5788",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Technical Manuals\\DPS4D Manual Version 1-2-1\\Section6_Ver1-2-1.pdf",
+          "short_source": "DPS4D Manual Version 1-2-1/Section6_Ver1-2-1.pdf",
+          "score": 0.0,
+          "text_preview": "g of recommended maintenance spares showing manufacturer?s part number, quantity fitted in the system, recommended support sparing level, and recommended mai...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-009",
+      "persona": "Logistics Lead",
+      "expected_query_type": "SEMANTIC",
+      "routed_query_type": "COMPLEX",
+      "routing_correct": false,
+      "query": "Which equipment is due for calibration next, and what do the calibration audit folders show?",
+      "expected_document_family": "Logistics / Calibration \u2014 5.0 Logistics/Calibration (yearly folders 2022-2025, Material and Testing Equipment Calibration.pdf)",
+      "family_signals": [
+        "calibration",
+        "material and testing"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 7190,
+      "router_ms": 1951,
+      "retrieval_ms": 5159,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "411f9e43a2e0bd72c54ad4d4abf57cc02e0fe335031c91dbfeefe4f25b1cb9ef",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Calibration\\2022\\Calibration Checklist - Template.docx",
+          "short_source": "2022/Calibration Checklist - Template.docx",
+          "score": 0.0,
+          "text_preview": "Pre-Calibration Identify calibration items due Request quote for calibration Follow Procurement Checklist Segregate and stage calibration items so it will no...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "8368de6dd2de7661d08c7ad782b2216cd8710bce5267f0456b42f414e44f8c48",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\whatever.zip",
+          "short_source": "_WhatEver/whatever.zip",
+          "score": 0.0,
+          "text_preview": "t you are asking them to do? What systems are you using, both internally and to communicate externally? How are these systems administered and maintained? Ne...",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "929a36670137d32b2a2fcd36b5dab220e1b91c622b6375203821a294e54ab496",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A023 - Integrated Logistics Support Plan (ILS)\\Deliverables Report IGSI-1109 IGS Integrated Logistics Support Plan (ILSP) (A023).pdf",
+          "short_source": "A023 - Integrated Logistics Support Plan (ILS)/Deliverables Report IGSI-1109 IGS Integrated Logistics Support Plan (ILSP) (A023).pdf",
+          "score": 0.0,
+          "text_preview": "d from first use date of the equipment. M&TE due for calibration is identified at 90, 60, and 30 days out to ensure reca ll of equipment and preclude its use...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "08e982971b1ccd0d4f9088b0cfbc9a49fcbb4780d623d353dfae8b47f64e426e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\WARFIGHTER GUIDE 2006 Final Version[1].doc",
+          "short_source": "_WhatEver/WARFIGHTER GUIDE 2006 Final Version[1].doc",
+          "score": 0.0,
+          "text_preview": "t you are asking them to do? What systems are you using, both internally and to communicate externally? How are these systems administered and maintained? Ne...",
+          "in_family": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "30313ac089e16b64d66a9ad874c253e0db613c40c46993aa5204024594338d60",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Dashboard\\ILS Work Note.docx",
+          "short_source": "Dashboard/ILS Work Note.docx",
+          "score": 0.0,
+          "text_preview": "ate the property inventory and remove the item(s) from the baseline inventory. The Systems Form V106-01-MSF ? Loss Investigation Worksheet/Report is containe...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-010",
+      "persona": "Logistics Lead",
+      "expected_query_type": "COMPLEX",
+      "routed_query_type": "COMPLEX",
+      "routing_correct": true,
+      "query": "Which OCONUS shipments also required customs or export-control paperwork, and what did they contain?",
+      "expected_document_family": "Logistics / Shipments + Disposition + EEMS + DD250 records",
+      "family_signals": [
+        "shipment",
+        "eems",
+        "disposition",
+        "dd250",
+        "cbp",
+        "jurisdiction",
+        "classification"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 8357,
+      "router_ms": 2653,
+      "retrieval_ms": 5627,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "b44af3b6d6fabd4a98e9bf90900ff0e8991acbcd26301abe4e36e811dbfae6f7",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Government_Property\\NEXION GFP_GFE\\EAR Database\\740.txt",
+          "short_source": "EAR Database/740.txt",
+          "score": 0.0,
+          "text_preview": "may not be exported in transit from the United States under this paragraph (b)(1): (A) Commodities shipped to the United States under an International Import...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "a9575eb3e7830441c9e106429e4d8fa189e28dbdf803516c0d1a2783993cc515",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Government_Property\\NEXION GFP_GFE\\EAR Database\\750.txt",
+          "short_source": "EAR Database/750.txt",
+          "score": 0.0,
+          "text_preview": "be valid only for the export of the intransit shipment wholly of foreign origin and for which a Transportation and Exportation customs entry or an Immediate ...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "7d8c8baa56671a60de6e7e3b6ae3eb79b5d37acc9e6519633098d4df0e79ab13",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\Shipping Mode Information - T-TAC Account\\Defense Transportation Regulation-Part ii\\dtr_part_ii_202.pdf",
+          "short_source": "Defense Transportation Regulation-Part ii/dtr_part_ii_202.pdf",
+          "score": 0.0,
+          "text_preview": "Armed Services for their exclusive use, including shipments to armed services exchange systems.? A Destination Control Statement is required for all products...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "f86bbe218bda7c06b432ebe852a1b481ba2f75de3f9fcc6e59f82dfaab3812ec",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping\\From WD Drive\\References (DOD)\\AFI 24-203\\AFI24-203.pdf",
+          "short_source": "AFI 24-203/AFI24-203.pdf",
+          "score": 0.0,
+          "text_preview": "ng generated. Electrostatic Discharge (ESD) ?A transfer of electrostatic charge between bodies at different electrostatic potentials, caused by direct co nta...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "0b78311b6fd0d48242ee43215788c8a13b440ca88271f9170cfd655d4d0c34aa",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Government_Property\\NEXION GFP_GFE\\EAR Database\\734.txt",
+          "short_source": "EAR Database/734.txt",
+          "score": 0.0,
+          "text_preview": "of those U.S.- origin items would require a license from BIS if they were to be exported or reexported (in the form in which you received them) to the foreig...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-011",
+      "persona": "Field Engineer",
+      "expected_query_type": "AGGREGATE",
+      "routed_query_type": "AGGREGATE",
+      "routing_correct": true,
+      "query": "What parts have the highest failure rates across all sites based on the Part Failure Tracker and corrective action folders?",
+      "expected_document_family": "Asset Mgmt \u2014 Part Failure Tracker.xlsx + CDRL A001 CAP folders + A001 Failure Summary & Analysis Report DID",
+      "family_signals": [
+        "part failure",
+        "corrective action",
+        "cap",
+        "failure summary",
+        "asset management"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 6241,
+      "router_ms": 2706,
+      "retrieval_ms": 3385,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "214a36925ebb332faab1274078ad1a79b7db4dfc452e16567dea41db98909481",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\IUID Documents\\MIL-HDBK-263B.pdf",
+          "short_source": "IUID Documents/MIL-HDBK-263B.pdf",
+          "score": 0.0,
+          "text_preview": "percentage of removals caused by EOS and ESD events. 40. SUMMARY OF RESULTS 40.1 Summary of results. Over 2000 part failures from over 24 different military ...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "f99e5c236109f5b9a3f356c438dfc4a94b4ccf4ebdc1d3a1bb311fab8f9ce32b",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\NEXION Life Cycle Sustainment Plan.pdf",
+          "short_source": "Documents and Forms/NEXION Life Cycle Sustainment Plan.pdf",
+          "score": 0.0,
+          "text_preview": "esponsible for all supply issues that arise lAW the PWS. 5.8.3 Inventory Control Point (ICP) Analysis and Selection Not applicable. NEXION will be contractor...",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "dbf1e000e9b6d54e9b8a21c9c53e8faec66f73ba994c3e1326e608595f5f4a14",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\4.2 Asset Management\\Part Failure Tracker_1.xlsx",
+          "short_source": "4.2 Asset Management/Part Failure Tracker_1.xlsx",
+          "score": 0.0,
+          "text_preview": "[SHEET] Part Failure Tracker Status | MSR Number | Team Members | Location | System | Date | Purpose | Faulty (Yes/No) | Upgrade (Y/N) | Description | Mainte...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "544bc044270a2cf66b73260e647b1045e93db811e245be914613cff710666756",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\RMF\\RMF_Resources\\RMF_Training-NGC\\RMF Training\\Training Material\\Key Documents\\sp800-37-rev1-final.pdf",
+          "short_source": "Key Documents/sp800-37-rev1-final.pdf",
+          "score": 0.0,
+          "text_preview": "ity controls.66 Organizational strategies for plans of action and milestones are guided by the security categories of the respective information systems affe...",
+          "in_family": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "01006c67906e8d10a3f837597f3cdb13a2bd41db3e2f2d9071c531edb27c07fb",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\IUID Documents\\MIL-HDBK-263B.pdf",
+          "short_source": "IUID Documents/MIL-HDBK-263B.pdf",
+          "score": 0.0,
+          "text_preview": "mining the field failure rate of the piece part involved. One should keep in mind that these part failures are mostly from avionic 45 Downloaded from http://...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-012",
+      "persona": "Field Engineer",
+      "expected_query_type": "AGGREGATE",
+      "routed_query_type": "AGGREGATE",
+      "routing_correct": true,
+      "query": "What Maintenance Service Reports have been filed across all monitoring system sites, and what maintenance actions and part replacements do they document?",
+      "expected_document_family": "CDRL A002 \u2014 Maintenance Service Report (MSR) \u2014 site-specific subfolders",
+      "family_signals": [
+        "maintenance service report",
+        "msr",
+        "a002"
+      ],
+      "top_in_family": false,
+      "any_top5_in_family": true,
+      "verdict": "PARTIAL",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 4460,
+      "router_ms": 2286,
+      "retrieval_ms": 2002,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "cc3af033eea83b9a472c4d342d6f3c4fbe2e10c0bff9e70c55e27d66a87c0a84",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A027 - Cybersecurity\\A027 - WX29 OY2-4 Continuous Monitoring\\NEXION\\Annual Security Controls and Plans\\2019\\2019-Aug - SEMS3D-39814\\NEXION_Security Controls PS and CP 2019-10-23.xlsx",
+          "short_source": "2019-Aug - SEMS3D-39814/NEXION_Security Controls PS and CP 2019-10-23.xlsx",
+          "score": 0.0,
+          "text_preview": ") name of escort, if necessary; (iv) a description of the maintenance performed; and (v) information system components/equipment removed or replaced (includi...",
+          "in_family": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "b32f7b3ee7973f4871a7db7599188efad054ceb3d3a4a832d2781664fdebfc9f",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Continuous_Monitoring\\ISTO\\Annual Security Control and Plan Review\\2021\\2021-Jul\\NEXION_Security Controls AU 2021-Jul.xlsx",
+          "short_source": "2021-Jul/NEXION_Security Controls AU 2021-Jul.xlsx",
+          "score": 0.0,
+          "text_preview": ". the organization's risk management strategy to ensure the personnel or roles defined in MA-2, CCI 2874 have been designated to approve the removal of the i...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "878a5b89dab75261640b4c265edcd2945e5900d4b9413a98f54bc0798fbef16d",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A027 - Cybersecurity\\A027 - WX29 OY2-4 Continuous Monitoring\\NEXION\\Annual Security Controls and Plans\\2019\\2019-Dec - SEMS3D-39788\\NEXION_Security Controls IA, MP, IR, PE  2020-01-15.xlsx",
+          "short_source": "2019-Dec - SEMS3D-39788/NEXION_Security Controls IA, MP, IR, PE  2020-01-15.xlsx",
+          "score": 0.0,
+          "text_preview": ") name of escort, if necessary; (iv) a description of the maintenance performed; and (v) information system components/equipment removed or replaced (includi...",
+          "in_family": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "6fbbdac6de8c824a6a6f221c631d508f069217c050c0f94a7c3a1c63069de459",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A027 - Cybersecurity\\A027 - WX29 OY2-4 Continuous Monitoring\\NEXION\\Annual Security Controls and Plans\\2021\\2021-Sep - SEMS3D-42027\\SEMS3D-42027.zip",
+          "short_source": "2021-Sep - SEMS3D-42027/SEMS3D-42027.zip",
+          "score": 0.0,
+          "text_preview": ". the organization's risk management strategy to ensure the personnel or roles defined in MA-2, CCI 2874 have been designated to approve the removal of the i...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "6731eb2c2bbfa928b9403e073d900fb62c3b9b05681e667a3bb3bb5fdad1380e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A027 - Cybersecurity\\A027 - WX29 OY2-4 Continuous Monitoring\\NEXION\\Annual Security Controls and Plans\\2019\\2019-Aug - SEMS3D-39814\\SEMS3D-39814.zip",
+          "short_source": "2019-Aug - SEMS3D-39814/SEMS3D-39814.zip",
+          "score": 0.0,
+          "text_preview": ") name of escort, if necessary; (iv) a description of the maintenance performed; and (v) information system components/equipment removed or replaced (includi...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-013",
+      "persona": "Field Engineer",
+      "expected_query_type": "SEMANTIC",
+      "routed_query_type": "COMPLEX",
+      "routing_correct": false,
+      "query": "What site outages have been caused by power failures, UPS issues, or environmental damage, and what were the return-to-service procedures?",
+      "expected_document_family": "Systems Engineering \u2014 3_Site Outages Analysis + 4_Site Issues/Fairford + UPS and power-repair artifacts",
+      "family_signals": [
+        "outage",
+        "power",
+        "ups",
+        "site outage",
+        "site issue",
+        "return to service"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 9839,
+      "router_ms": 3973,
+      "retrieval_ms": 5772,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "01abb2e0be3ab606020d6beeeb7bc281d010a44418f3587776b84f1c117f0515",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Vandenberg-NEXION\\Deliverables Report IGSI-2066 Vandenberg-NEXION MSR (A002).docx",
+          "short_source": "Vandenberg-NEXION/Deliverables Report IGSI-2066 Vandenberg-NEXION MSR (A002).docx",
+          "score": 0.0,
+          "text_preview": "a fault condition on 1 February, where the UPS did not assume the load during a site power outage. Site personnel had assisted in cycling power to the NEXION...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "bd12acb11a45ac695ab860223bdd56f3648dfb2751b407e20c0ce2996988c500",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Ascension 2021 (12-30 Apr) ASV\\ISTO\\SEMS3D-40542 Ascension Island ISTO MSR (12-30 Apr 2021)-CDRL A001.pdf",
+          "short_source": "ISTO/SEMS3D-40542 Ascension Island ISTO MSR (12-30 Apr 2021)-CDRL A001.pdf",
+          "score": 0.0,
+          "text_preview": "red during future site visits. Due to the condition of the GPS connector and no available spare GPS antenna, it was best to leave the cable connected and not...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "57b9550190c03dfbc495ba048b5f586c9f3549976f1cbc3108b05b2f5f53c299",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A017_-_Meeting_Minutes\\A017_-_IPT_Minutes\\2020\\6-June\\SEMS3D-40446_IGS_IPT_Meeting Minutes_20200623.docx",
+          "short_source": "6-June/SEMS3D-40446_IGS_IPT_Meeting Minutes_20200623.docx",
+          "score": 0.0,
+          "text_preview": "being restored. Slide 37. Ms. Parsons asked how much time the site is down before it is considered an outage. Mr. Ventura stated it is typically 2 hours befo...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "2583bad5f825043e9876c4cbaadd12ee8fec61c56eba4f2e22ab40208c2401ab",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Alpena-NEXION\\47QFRA22F0009_IGSI-4017_MSR_Alpena-NEXION_2025-07-30.docx",
+          "short_source": "Alpena-NEXION/47QFRA22F0009_IGSI-4017_MSR_Alpena-NEXION_2025-07-30.docx",
+          "score": 0.0,
+          "text_preview": "p of the PDA. The photo showed that the -15V converter on the PDA had failed and the only way to resolve the issue was to replace the current PDA with a new ...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "4fede661440be71ad0d74e7add43d642df18de7c78d80130c6047bb43163df08",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\Archive\\Deliverables (Historical)\\Maintenance Service Reports\\2014\\San VIto ASV (13-20 Dec 14)\\Maintenance Service Report (MSR)_(CDRL A088)_San Vito ASV_(13-20 Dec 14)_(Final).pdf",
+          "short_source": "San VIto ASV (13-20 Dec 14)/Maintenance Service Report (MSR)_(CDRL A088)_San Vito ASV_(13-20 Dec 14)_(Final).pdf",
+          "score": 0.0,
+          "text_preview": "drawers that can cause overheating and premature component failure. Activities for 17 Dec 2014 (Wednesday): ? 0650Z Departed hotel in Brindisi and traveled t...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-014",
+      "persona": "Field Engineer",
+      "expected_query_type": "ENTITY",
+      "routed_query_type": "ENTITY",
+      "routing_correct": true,
+      "query": "Which site is associated with the latest Awase Okinawa installation package?",
+      "expected_document_family": "Site Visits \u2014 Awase (Okinawa JP) install folders + CDRL A006/A007 installation test artifacts",
+      "family_signals": [
+        "awase",
+        "okinawa",
+        "installation",
+        "a006",
+        "a007"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": true,
+      "embed_retrieve_ms": 7180,
+      "router_ms": 1410,
+      "retrieval_ms": 5728,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "f39f7a10c9edbf7fdbf556a4e2f025552d1341b7029c1439ca331c108ed18710",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\2.0 Weekly Variance Reports\\2023\\2023-07\\2023-07-28 IGS Weekly Hours Variance.xlsx",
+          "short_source": "2023-07/2023-07-28 IGS Weekly Hours Variance.xlsx",
+          "score": 0.0,
+          "text_preview": "INSTALLATION - Okinawa (Awase), Values: 60.800000000000004, : 120.5, : -59.699999999999996 : 0006a, : A1A267060, : NEXION PhII INSTALL - Misawa, Values: 15.2...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "2461b0c4724868b9484d6d4d5ac36f30ff2ec94cb8e7ea50b25004f41745b508",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Awase -Okinawa, Japan\\Site Survey_Okinawa\\Okinawa Site Survey.pdf",
+          "short_source": "Site Survey_Okinawa/Okinawa Site Survey.pdf",
+          "score": 0.0,
+          "text_preview": "e located at one of the suggested locations. Surveys of the sites were conducted 01-13 October 2021. This site survey report and associated preliminary drawi...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "7234ebf8aa3fbf82313a9960fc58c8f2e18dcd44324e8f48924f821de63bd851",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A031 - Integrated Master Schedule (IMS)\\2022\\Deliverables Report IGSI-147 IGS IMS 12_14_22 (A031).pdf",
+          "short_source": "2022/Deliverables Report IGSI-147 IGS IMS 12_14_22 (A031).pdf",
+          "score": 0.0,
+          "text_preview": "[SECTION] 179 25% 3.13.3 Okinawa Installation External Dependencies 112 days Tue 11/8/2 2 Wed 4/12/23 180 100% 3.13.3.5 IGSE-14 The Government will coordinat...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "ec8f20c457256659ad29addaa1542ee580f6231cf0ab529e42d2353445ed7677",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Awase -Okinawa, Japan\\System Install\\SIP\\Archive\\Draft_Site Installation Plan_Awase NEXION_(A003) 1.docx",
+          "short_source": "Archive/Draft_Site Installation Plan_Awase NEXION_(A003) 1.docx",
+          "score": 0.0,
+          "text_preview": "[SECTION] NAVFACSYSCOM FE/PWD/CFA Okinawa DSN: 315-634-8677 / Cell: +090-6864-2708 Email: Matthew.a.miles3.civ@us.navy.mil Shipping Address: ATTN: Matthew Mi...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "720699057fdef3047295ffa7da593d1568fe73ce7d0d675f4a0482954d56bd9e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\2.0 Weekly Variance Reports\\2023\\2023-11\\2023-11-17 IGS Weekly Hours Variance.xlsx",
+          "short_source": "2023-11/2023-11-17 IGS Weekly Hours Variance.xlsx",
+          "score": 0.0,
+          "text_preview": "- Okinawa (Awase), : 0, : 28.2, : -28.2 : 0006A, : A1A267060, : NEXION PHII INSTALL - Misawa, : 0, : 25.8, : -25.8 : 0010A, : A1A267064, : ISTO INSTALLATION ...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-015",
+      "persona": "Field Engineer",
+      "expected_query_type": "COMPLEX",
+      "routed_query_type": "ENTITY",
+      "routing_correct": false,
+      "query": "What installation acceptance tests were performed at the Awase Okinawa install, and what does the Site Installation Plan say about the phases?",
+      "expected_document_family": "Site Visits \u2014 Awase install folders + CDRL A003 Site Installation Plan + A006/A007 acceptance test artifacts",
+      "family_signals": [
+        "awase",
+        "okinawa",
+        "site installation plan",
+        "a003",
+        "a006",
+        "a007",
+        "acceptance test"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 6182,
+      "router_ms": 2563,
+      "retrieval_ms": 3541,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "3e44f3b8be2618d60354e5204adaac75a670cdf5844ee476abd84c6dce10be71",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A031 - Integrated Master Schedule (IMS)\\2022\\Deliverables Report IGSI-145 IGS IMS 10_6_22 (A031).pdf",
+          "short_source": "2022/Deliverables Report IGSI-145 IGS IMS 10_6_22 (A031).pdf",
+          "score": 0.0,
+          "text_preview": "Installation Acceptance Test Procedures 3 days Mon 3/13/23 Wed 3/15/23 184,185 187 187 0% 3.4.4.5.24 SVT - Site Cleanup and Return Shipping Preparation 1 day...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "f7dced2007b2dd6a3147b5892158b4b4607b9ddc540b3f62200b435377f1df6e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A007 - Installation Acceptance Test Report\\Deliverables Report IGSI-105 Installation Acceptance Test Report Awase Okinawa JP - NEXION (A007)\\_Scratch\\Please Review Me - Deliverables Report IGSI-105 Installation Acceptance Test Report Awase Okinawa JP - NEXION.docx",
+          "short_source": "_Scratch/Please Review Me - Deliverables Report IGSI-105 Installation Acceptance Test Report Awase Okinawa JP - NEXION.docx",
+          "score": 0.0,
+          "text_preview": "Installation Acceptance Test Report Awase, Okinawa, Japan NEXION 3 October 2023 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A007 Prepared For:...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "cc3a68c19544193a7fabf82ac229c35cf524ae0508f9bf4e2e8b163ca2066c91",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A009 - Monthly Status Report\\2023\\Deliverables Report IGSI-97 IGS Monthly Status Report - May23 (A009).pdf",
+          "short_source": "2023/Deliverables Report IGSI-97 IGS Monthly Status Report - May23 (A009).pdf",
+          "score": 0.0,
+          "text_preview": "ance Test Plan/Procedures ? Install/Site Acceptance Testing (6-17 Nov 23) ? Installation Acceptance Test Report ? Configuration Audit Report Palau Install Sl...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "f263282104469b4f18979c62b2c7d9ad658d1ba690c5affca4691ff9bd119531",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A007 - Installation Acceptance Test Report\\Deliverables Report IGSI-105 Installation Acceptance Test Report Awase Okinawa JP - NEXION (A007)\\Deliverables Report IGSI-105 Installation Acceptance Test Report Awase Okinawa JP - NEXION (A006).docx",
+          "short_source": "Deliverables Report IGSI-105 Installation Acceptance Test Report Awase Okinawa JP - NEXION (A007)/Deliverables Report IGSI-105 Installation Acceptance Test Report Awase Okinawa JP - NEXION (A006).docx",
+          "score": 0.0,
+          "text_preview": "Installation Acceptance Test Report Awase, Okinawa, Japan NEXION 4 October 2023 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A007 Prepared For:...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "5a8e6594ddec8c600fd5789cf964b899e7e6f9bd576d29bf3cfdebd6cf25eac4",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A009 - Monthly Status Report\\2023\\Deliverables Report IGSI-1056 IGS Monthly Status Report - July23 (A009).pdf",
+          "short_source": "2023/Deliverables Report IGSI-1056 IGS Monthly Status Report - July23 (A009).pdf",
+          "score": 0.0,
+          "text_preview": "ance Test Plan/Procedures ? Install/Site Acceptance Testing (2-15 Dec 23) ? Installation Acceptance Test Report ? Configuration Audit Report Palau Install Sl...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-016",
+      "persona": "Network Admin / Cybersecurity",
+      "expected_query_type": "SEMANTIC",
+      "routed_query_type": "AGGREGATE",
+      "routing_correct": false,
+      "query": "What ACAS scan results, SCAP scan results, and STIG review findings are documented for legacy monitoring system and monitoring systems?",
+      "expected_document_family": "Cybersecurity \u2014 A027 DAA Accreditation Support Data + 111023_STIG_Review.xlsx + CT&E-ST&E folders",
+      "family_signals": [
+        "acas",
+        "scap",
+        "stig",
+        "a027",
+        "ct&e",
+        "cte",
+        "cybersecurity"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 4497,
+      "router_ms": 1817,
+      "retrieval_ms": 2581,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "a0ea313dfed8b5b37c900f384243d5c1538043e285fb02b43e8a77c103edc62e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\7.0 Contracts\\Latest PWS\\Archive\\Memo to File_Mod 4 Attachment 1_IGS Oasis PWS FINAL_03.09.2023.pdf",
+          "short_source": "Archive/Memo to File_Mod 4 Attachment 1_IGS Oasis PWS FINAL_03.09.2023.pdf",
+          "score": 0.0,
+          "text_preview": "test version of corresponding Security Content Automation Protocol (SCAP) benchmarks available and complete all remaining manual STIG checklist items utilizi...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "990b647e6e851cdb162a4dc3bb798ad4281d7c8ab7fc25ce67114ef1585db889",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-Trip_Reports\\Thule ACAS and Data Collection (16-25 Oct 2019)\\SEMS3D-39312 Thule NEXION Trip Report - Data Collection and ACAS Scan (16-25 Oct 2019) (A001).docx",
+          "short_source": "Thule ACAS and Data Collection (16-25 Oct 2019)/SEMS3D-39312 Thule NEXION Trip Report - Data Collection and ACAS Scan (16-25 Oct 2019) (A001).docx",
+          "score": 0.0,
+          "text_preview": "ace from 16 ? 25 October 2019. TRAVELERS Mr. Frank Pitts and Mr. Vinh Nguyen travelled to Thule Air Base, Greenland. Refer to Table 1 for travel details. Tab...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "88edff105809087eaee08806ab3c7b5038090b5ac04274610a96598dd1d48208",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\7.0 Contracts\\Mod 4 - UDL_OKI PoP\\Memo to File_Mod 4 Attachment 1_IGS Oasis PWS FINAL_03.09.2023.pdf",
+          "short_source": "Mod 4 - UDL_OKI PoP/Memo to File_Mod 4 Attachment 1_IGS Oasis PWS FINAL_03.09.2023.pdf",
+          "score": 0.0,
+          "text_preview": "test version of corresponding Security Content Automation Protocol (SCAP) benchmarks available and complete all remaining manual STIG checklist items utilizi...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "3bd53f80eb2de5a4707a24990f22e3fdcde64297bbc840f498d1ab5ff759d758",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A027 - DAA Accreditation Support Data (CT&E Plan)\\47QFRA22F0009_IGSI-1809_CTE_Plan_Lajes-NEXION.pdf",
+          "short_source": "A027 - DAA Accreditation Support Data (CT&E Plan)/47QFRA22F0009_IGSI-1809_CTE_Plan_Lajes-NEXION.pdf",
+          "score": 0.0,
+          "text_preview": "monitor the effects of space weather on the Earth?s ionosphere, and support communication and navigation satellite operations, and HF through very high frequ...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "290a0122d5f16dcadb4cb1f6c48b6656edeb34fc5b210631506545ac505b7c6d",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#IGSCC\\Contracts\\Awarded\\Exhibit B_Conformed Award_47QFRA22F0009.pdf",
+          "short_source": "Awarded/Exhibit B_Conformed Award_47QFRA22F0009.pdf",
+          "score": 0.0,
+          "text_preview": "test version of corresponding Security Content Automation Protocol (SCAP) benchmarks available and complete all remaining manual STIG checklist items utilizi...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-017",
+      "persona": "Network Admin / Cybersecurity",
+      "expected_query_type": "ENTITY",
+      "routed_query_type": "ENTITY",
+      "routing_correct": true,
+      "query": "What system name is listed on the latest RMF Security Plan?",
+      "expected_document_family": "Cybersecurity \u2014 A027 RMF Security Plan / Security Authorization Package / System Authorization Boundary",
+      "family_signals": [
+        "rmf",
+        "security plan",
+        "authorization package",
+        "authorization boundary",
+        "a027"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": true,
+      "embed_retrieve_ms": 6628,
+      "router_ms": 1466,
+      "retrieval_ms": 5084,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "eb0c539246b43200d63f42ee8f88a371d539bcb3547f620e0790784a871742d2",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\RMF\\RMF_Resources\\RMF_Training-NGC\\RMF Training\\Training Material\\Key Documents\\sp800-37-rev1-final.pdf",
+          "short_source": "Key Documents/sp800-37-rev1-final.pdf",
+          "score": 0.0,
+          "text_preview": "Framework (RMF), illustrated in Figure 2-2, provides a disciplined and structured process that integrates information security and risk management activities...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "0b30c88e88d9e91d452eee3afe6118d577719bcbb26dbc1b7bd40396f34ce0d5",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\RMF\\RMF_Resources\\RMF_Training-NGC\\RMF Training\\Training Material\\Key Documents\\JSIG_Oct_2013 (2).pdf",
+          "short_source": "Key Documents/JSIG_Oct_2013 (2).pdf",
+          "score": 0.0,
+          "text_preview": "by the organization early in the system development life cycle and that the requirements and controls assigned are directly and explicitly related to the org...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "62fd0fe524516fa4fb3179721ff4ef352097b53370f042796554b338d37fb189",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\RMF\\RMF_Resources\\RMF_Training-NGC\\RMF Training\\Training Material\\Key Documents\\JSIG_TemplatesHandbook_20131014.docx",
+          "short_source": "Key Documents/JSIG_TemplatesHandbook_20131014.docx",
+          "score": 0.0,
+          "text_preview": "this System Security Plan (SSP) accurately reflects the security environment of the organization and system indicated below: ISO/PM/PD <Enter Name> PSO <Ente...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "318440b9032e27088345d983f94f5a5b0634884bc9ad3c7bf2b56514c405fbb6",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-Deliverables_Planning_Document\\SEMS3D-XXXXX W29OY4 Project Deliverable Planning.xlsx",
+          "short_source": "A001-Deliverables_Planning_Document/SEMS3D-XXXXX W29OY4 Project Deliverable Planning.xlsx",
+          "score": 0.0,
+          "text_preview": "lize during ITP, Finalize during Proposal, Refine during PDP/throughout execution: A027, : Security Authorization Package, : NLT 90 CDs prior to ATO expirati...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "a01aadd652f4069cc6da6c8cefb9eeed1f9d6bdcee32a2a823e6e02c24e5e6ad",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\RMF\\RMF_Resources\\RMF_Training-NGC\\RMF Training\\Training Material\\Key Documents\\fea_v2.pdf",
+          "short_source": "Key Documents/fea_v2.pdf",
+          "score": 0.0,
+          "text_preview": ", assess, and manage risks to their systems, applications, and infrastructures. The National Institute of Standards and Technology (NIST) is at the forefront...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-018",
+      "persona": "Network Admin / Cybersecurity",
+      "expected_query_type": "SEMANTIC",
+      "routed_query_type": "AGGREGATE",
+      "routing_correct": false,
+      "query": "What security events and cyber incidents have been documented, including the Fairford Russian event and the Alpena PPTP buffer overflow?",
+      "expected_document_family": "Cybersecurity / ISSO / Security Events (2017-05-03 Eielson IP Conflict, 2017-05-25 monitoring system Port Scan, 2017-08-11 Alpena PPTP Buffer Overflow, 2019-03-27 Russian Fairford)",
+      "family_signals": [
+        "security event",
+        "fairford",
+        "alpena",
+        "port scan",
+        "buffer overflow",
+        "cyber incident"
+      ],
+      "top_in_family": false,
+      "any_top5_in_family": true,
+      "verdict": "PARTIAL",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 4952,
+      "router_ms": 1987,
+      "retrieval_ms": 2870,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "1e53c83538220529f391f2351e430f70b6344e26ea44e6598ea293e6e4099f67",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\NEXION Cybersecurity - Archive\\2015 Annual IA Docs\\Information Assurance\\z DISS SSAAs\\Appendix K DISS-042303.doc",
+          "short_source": "z DISS SSAAs/Appendix K DISS-042303.doc",
+          "score": 0.0,
+          "text_preview": "s. Other adverse events include floods, fires, electrical outages, and excessive heat that cause system crashes. Adverse events such as these are not, howeve...",
+          "in_family": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "8d8c590cf03656c26826c83cf6df2832a96b7f8ee1e2ac2e6fabe6ca528e9c69",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  ISTO Sites\\5_Software\\GPS\\Analysis\\gpsScinda_1.80_summary.pdf",
+          "short_source": "Analysis/gpsScinda_1.80_summary.pdf",
+          "score": 0.0,
+          "text_preview": "on is especially important for issues which have previously been audited. No removed issues exist. Removed Audited Issues No removed audited issues exist. Ap...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "8e5aca1bc91ebbd74b4d3fe049e2a7bb7af8a5ceaafe8087f6b527a2e5070eea",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\NEXION Cybersecurity - Archive\\2015 Annual IA Docs\\Information Assurance\\z DISS SSAAs\\DISS SSAA and Attach._Type_1-2.zIP",
+          "short_source": "z DISS SSAAs/DISS SSAA and Attach._Type_1-2.zIP",
+          "score": 0.0,
+          "text_preview": "s. Other adverse events include floods, fires, electrical outages, and excessive heat that cause system crashes. Adverse events such as these are not, howeve...",
+          "in_family": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "8c9ff3bb82dec19117c96c0dd92d1b4c743341634eda5d2ead9388ba017afb2d",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A027 - Cybersecurity\\A027 - CT&E-ST&E\\A027 - NEXION TO5017 CT&E Report Hawaii\\SEMS3D-34891 CT&E Report - Hawaii Install (CDRL A027).zip",
+          "short_source": "A027 - NEXION TO5017 CT&E Report Hawaii/SEMS3D-34891 CT&E Report - Hawaii Install (CDRL A027).zip",
+          "score": 0.0,
+          "text_preview": "s.\" is checked. VXN Date Exported:: 495, : Title: McAfee VirusScan Buffer Overflow Protection Buffer Overflow Settings must be configured to display a dialog...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "bfb225b2c271608748c12f339c262ee3d962a8ca5874acf94ceea0bdcf228cb3",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\RMF\\RMF_Resources\\RMF_Training-NGC\\RMF Training\\Training Material\\Key Documents\\SP800-137-Final.pdf",
+          "short_source": "Key Documents/SP800-137-Final.pdf",
+          "score": 0.0,
+          "text_preview": "configuration and vulnerability management. D.1.2 EVENT AND INCIDENT MANAGEMENT Event management involves monitoring and responding to as necessary, observab...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-019",
+      "persona": "Network Admin / Cybersecurity",
+      "expected_query_type": "TABULAR",
+      "routed_query_type": "AGGREGATE",
+      "routing_correct": false,
+      "query": "What ATO re-authorization packages have been submitted and what system changes triggered them?",
+      "expected_document_family": "Cybersecurity / ATO-ATC Package Changes (18+ packages) + A027 authorization package artifacts",
+      "family_signals": [
+        "ato",
+        "ato-atc",
+        "authorization",
+        "a027",
+        "package change"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 20720,
+      "router_ms": 3420,
+      "retrieval_ms": 17216,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "f9fd47b3dcf82e518575429d56e676a1181ff52547d320d7a583cc80c9b83d6f",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\CT&E-ST&E\\ISTO\\2017-10-18 ISTO WX29\\STIG-ACAS-Results 2017-10-18\\STIG Checklist\\U_ASD_V4R3_STIG\\U_ASD_V4R3_Manual_STIG\\U_ASD_STIG_V4R3_Manual-xccdf.xml",
+          "short_source": "U_ASD_V4R3_Manual_STIG/U_ASD_STIG_V4R3_Manual-xccdf.xml",
+          "score": 0.0,
+          "text_preview": "nization-defined circumstances or situations require reauthentication. <VulnDiscussion>Without reauthentication, users may access resources or perform tasks ...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "9d85bcad91c5d18556385de955796995ec96302fdd3b1f38377062262ba3856e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\whatever.zip",
+          "short_source": "_WhatEver/whatever.zip",
+          "score": 0.0,
+          "text_preview": "and limitations. They must know how they communicate and how they can be re-tasked dynamically. They must have systems that show them in real time where the ...",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "09ac494f6209afb937151345339471dbe47dca0a3e5f705edf9b4a584181c751",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\CT&E-ST&E\\ISTO\\2018-01-19 ISTO OS Upgrade\\STIG-Benchmark\\U_ASD_V4R4_STIG.zip",
+          "short_source": "STIG-Benchmark/U_ASD_V4R4_STIG.zip",
+          "score": 0.0,
+          "text_preview": "nization-defined circumstances or situations require reauthentication. <VulnDiscussion>Without reauthentication, users may access resources or perform tasks ...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "a8e89f509488e680c5eed99ec84fd2b2a33940b20586a96553d244a2c40dc267",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\WARFIGHTER GUIDE 2006 Final Version[1].doc",
+          "short_source": "_WhatEver/WARFIGHTER GUIDE 2006 Final Version[1].doc",
+          "score": 0.0,
+          "text_preview": "and limitations. They must know how they communicate and how they can be re-tasked dynamically. They must have systems that show them in real time where the ...",
+          "in_family": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "edc33f62d7e80a4a30ea2f20ee53b7018cada047a241c5ee41f090981131fd12",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\CT&E-ST&E\\ISTO\\2023-09-25 ISTO American Samoa\\Pre CT&E\\SCAP\\U_ASD_V5R3_STIG (1)\\U_ASD_V5R3_Manual_STIG\\U_ASD_STIG_V5R3_Manual-xccdf.xml",
+          "short_source": "U_ASD_V5R3_Manual_STIG/U_ASD_STIG_V5R3_Manual-xccdf.xml",
+          "score": 0.0,
+          "text_preview": "nization-defined circumstances or situations require reauthentication. <VulnDiscussion>Without reauthentication, users may access resources or perform tasks ...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-020",
+      "persona": "Network Admin / Cybersecurity",
+      "expected_query_type": "COMPLEX",
+      "routed_query_type": "COMPLEX",
+      "routing_correct": true,
+      "query": "What monthly continuous monitoring audit results are documented for 2024, and what cybersecurity directives are active?",
+      "expected_document_family": "Cybersecurity \u2014 ISSO/Continuous_Monitoring/Monthly Audits-Archive/2024 + directives for Log4j, Wanna-Cry, and SPARTAN VIPER",
+      "family_signals": [
+        "continuous monitoring",
+        "monthly audit",
+        "log4j",
+        "wanna-cry",
+        "spartan viper",
+        "mto",
+        "taskord",
+        "opord",
+        "directive"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 29017,
+      "router_ms": 3165,
+      "retrieval_ms": 25707,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "387d4deadf8a4d7b4f4999fb68c5781fa39a943ac5942e21a421ceed68bdc885",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ATO-ATC Package Changes\\2022-02-03 ISTO ATO Re-Authorization\\Archived\\ISTO_Continuous_Monitoring_Plan_2022-Feb Comments.docx",
+          "short_source": "Archived/ISTO_Continuous_Monitoring_Plan_2022-Feb Comments.docx",
+          "score": 0.0,
+          "text_preview": "monitoring and continuously verified operating configurations where possible. Assisting government-wide and agency-specific efforts to provide adequate, risk...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "5380e8c55e3a0bf4390f03d123a7caeaa7ff548d0f083be10bc01d6e1b31ff74",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\RMF-WX29-Sustainment\\NEXION\\Artifacts-in-eMASS\\Archive\\NEXION_ISSP_2017-04-27.pdf",
+          "short_source": "Archive/NEXION_ISSP_2017-04-27.pdf",
+          "score": 0.0,
+          "text_preview": "calendar months. After the completion of those three calendar months and for the duration of its operational life, the unit will have its audit records revie...",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "85e0c749ad12e79c0d120a9e44ab2daec5bd3c82685898d5d535aa25684fe6a3",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ATO-ATC Package Changes\\2019-04-28_NEXION_Re-Authorization\\Completed-Pending Review\\Continuous Monitoring Plan\\archive\\NEXION Continuous Monitoring Plan 2019-03-18.docx",
+          "short_source": "archive/NEXION Continuous Monitoring Plan 2019-03-18.docx",
+          "score": 0.0,
+          "text_preview": "monitoring and continuously verified operating configurations where possible. Assisting government-wide and agency-specific efforts to provide adequate, risk...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "0156fe51c99ffbb99bda925970897a9b0d05682d4775abeec9af249a9d7730dd",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\DIACAP\\NEXION\\2015\\NEXION_ISSP_Rev_1dot3_20150820_signed.pdf",
+          "short_source": "2015/NEXION_ISSP_Rev_1dot3_20150820_signed.pdf",
+          "score": 0.0,
+          "text_preview": "calendar months. After the completion of those three calendar months and for the duration of its operational life, the unit will have its audit records revie...",
+          "in_family": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "fa1f8e883f6760f433fefa8396a6419fbdc401dbcbad0f96656cafdbe462a004",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\Air-Force-Guidance-Documents-Tools\\FOUO Guidance - IGS (Carey)\\eMASS\\archive\\DIACAP\\NEXION\\Reports\\NEXION_TRExport_24Feb2017 RMF.xlsx",
+          "short_source": "Reports/NEXION_TRExport_24Feb2017 RMF.xlsx",
+          "score": 0.0,
+          "text_preview": "d to provide information that is specific, measurable, actionable, relevant, and timely. Continuous monitoring activities are scaled in accordance with the s...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-021",
+      "persona": "Aggregation / Cross-role",
+      "expected_query_type": "AGGREGATE",
+      "routed_query_type": "AGGREGATE",
+      "routing_correct": true,
+      "query": "How many monitoring system and legacy monitoring system sites are there, where are they located, and which ones have had installations or maintenance visits in the last three years?",
+      "expected_document_family": "Cross-family \u2014 monitoring system Sites/1_Sites + legacy monitoring system sites + Site Visits + MSR folders",
+      "family_signals": [
+        "site",
+        "monitoring system",
+        "legacy monitoring system",
+        "visit",
+        "msr",
+        "install",
+        "thule",
+        "eglin",
+        "vandenberg",
+        "ascension",
+        "guam",
+        "misawa",
+        "awase"
+      ],
+      "top_in_family": false,
+      "any_top5_in_family": true,
+      "verdict": "PARTIAL",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 6367,
+      "router_ms": 3969,
+      "retrieval_ms": 2273,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "9dde908b5969f2d0b26478e7966aea0f7dcc5da0e72f0de69c49c474684b2fdc",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\4.0 Training\\03_Course Completion Certificates\\Dettler-James\\NG\\Controlled Unclassified Information (CUI) Training\\CUI Information (2021-12-01)\\NIST.SP.800-171r2.pdf",
+          "short_source": "CUI Information (2021-12-01)/NIST.SP.800-171r2.pdf",
+          "score": 0.0,
+          "text_preview": "activities in real time or by observing other system aspects such as access patterns, characteristics of access, and other actions. The monitoring objectives...",
+          "in_family": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "91c5eb16aa45baddc33ce2e94fd37d7bb2dd44f19fd9a55489c2fd34e7135084",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Thule AB - Greenland\\SiteSurveyTraining.docx",
+          "short_source": "Thule AB - Greenland/SiteSurveyTraining.docx",
+          "score": 0.0,
+          "text_preview": "system reliability, has minimum installation costs and is fully sustainable for many years. These systems will often be placed in remote and austere location...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "7e7da4001148f4fec4252af6b48989031aa18dd9a2687a60487d556ccb3c3c90",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\4.0 Training\\03_Course Completion Certificates\\Dettler-James\\Air Force Training\\DAF OPSEC Training\\OPSEC Training 4th Qtr (2015-09-11).pdf",
+          "short_source": "DAF OPSEC Training/OPSEC Training 4th Qtr (2015-09-11).pdf",
+          "score": 0.0,
+          "text_preview": "they can still track your whereabouts through Facebook. ? Foursquare has over 4 million users. ? Foursquare currently has iPhone, *Android, webOS, *Windows P...",
+          "in_family": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "a0f53d925b8a203db724de2220aaf5dfa41575e3c8a3a1385791d8074db99d81",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Poland\\Site Survey\\Ref Docs\\SiteSurveyTraining.docx",
+          "short_source": "Ref Docs/SiteSurveyTraining.docx",
+          "score": 0.0,
+          "text_preview": "system reliability, has minimum installation costs and is fully sustainable for many years. These systems will often be placed in remote and austere location...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "0d49ae23df66bf4a4e97b0ad13039ad1ec748e2e38bbbd5c5c7deb69eb3b9396",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\Archive\\ISTO and NEXION Manuals\\Notes\\Structured\\NEXION.docx",
+          "short_source": "Structured/NEXION.docx",
+          "score": 0.0,
+          "text_preview": "frequency interval list) Maintenance Resources There are several resources one can reference to check for maintenance of the system. More information is cont...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-022",
+      "persona": "Aggregation / Cross-role",
+      "expected_query_type": "COMPLEX",
+      "routed_query_type": "AGGREGATE",
+      "routing_correct": false,
+      "query": "Which sites have had Corrective Action Plans filed, what incident numbers and failure types were involved, and what parts were consumed?",
+      "expected_document_family": "Cross-family \u2014 A001 CAP folders + Part Failure Tracker + MSRs + spares lists",
+      "family_signals": [
+        "corrective action",
+        "cap",
+        "part failure",
+        "msr",
+        "fairford",
+        "misawa",
+        "learmonth",
+        "kwajalein",
+        "alpena",
+        "igsi"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 4532,
+      "router_ms": 2358,
+      "retrieval_ms": 2034,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "ac2e44d2cddea1ff747a0ef46b5becb2f4da91b82244bb4af185c25279c927da",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\JTAGS Plans\\FRACAS.docx",
+          "short_source": "JTAGS Plans/FRACAS.docx",
+          "score": 0.0,
+          "text_preview": "lish an FRB-approved workaround or temporary corrective action (C.A.). If the incident is not a known problem, engineers, technicians, SMEs, and vendors are ...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "01006c67906e8d10a3f837597f3cdb13a2bd41db3e2f2d9071c531edb27c07fb",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\IUID Documents\\MIL-HDBK-263B.pdf",
+          "short_source": "IUID Documents/MIL-HDBK-263B.pdf",
+          "score": 0.0,
+          "text_preview": "mining the field failure rate of the piece part involved. One should keep in mind that these part failures are mostly from avionic 45 Downloaded from http://...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "9802b0c7f46db9efde5172600c9b8bec95cb69a6dcfb62abc7092ae54f8fd37f",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A027 - Cybersecurity\\A027 - WX29 OY2-4 Continuous Monitoring\\NEXION\\Annual Security Controls and Plans\\2021\\2021-Apr - SEMS3D-40916\\SEMS3D-40916.zip",
+          "short_source": "2021-Apr - SEMS3D-40916/SEMS3D-40916.zip",
+          "score": 0.0,
+          "text_preview": "action reviews from incidents to identify lessons learned and will incorporate them into procedures, training, and testing/exercises. The organization must m...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "5c889062eaf03f65d4203edc947646358cf96d584e4865bb16a3ff5e7877b476",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A027 - Cybersecurity\\A027 - WX29 OY2-4 Continuous Monitoring\\ISTO\\Annual Security Controls and Plans\\2021\\2021-Nov - SEMS3D-42145\\SEMS3D-42145.zip",
+          "short_source": "2021-Nov - SEMS3D-42145/SEMS3D-42145.zip",
+          "score": 0.0,
+          "text_preview": "d how well intervention worked. The meeting should be held within several days of the end of the incident. Questions to be answered in the meeting include: E...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "e2a5bb49168de13c8ebe2bdd4cf896fc7b90b949f2adef1ed34439ca01903c88",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A027 - Cybersecurity\\A027 - WX29 OY2-4 Continuous Monitoring\\NEXION\\Annual Security Controls and Plans\\2021\\2021-Feb - SEMS3D-40912\\SEMS3D-40912.zip",
+          "short_source": "2021-Feb - SEMS3D-40912/SEMS3D-40912.zip",
+          "score": 0.0,
+          "text_preview": "action reviews from incidents to identify lessons learned and will incorporate them into procedures, training, and testing/exercises. The organization must m...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-023",
+      "persona": "Aggregation / Cross-role",
+      "expected_query_type": "TABULAR",
+      "routed_query_type": "SEMANTIC",
+      "routing_correct": false,
+      "query": "How many open purchase orders exist across all procurement records, what parts have been received versus outstanding, and what is the total CLIN coverage?",
+      "expected_document_family": "Cross-family \u2014 Procurement open/received folders + iBuy GL lists + A014 Priced Bill of Materials",
+      "family_signals": [
+        "procurement",
+        "open purchase",
+        "received",
+        "ibuy",
+        "clin",
+        "purchase order",
+        "a014"
+      ],
+      "top_in_family": false,
+      "any_top5_in_family": true,
+      "verdict": "PARTIAL",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 6233,
+      "router_ms": 2615,
+      "retrieval_ms": 3476,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "09250a5eca227bc8edd4d0926851d26f2cac3e9994368eb3c0194e4012f3b4ee",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\AN FMQ-22 AMS\\AFI 23-101 (Air Force Materiel Management (2013-08-08).pdf",
+          "short_source": "AN FMQ-22 AMS/AFI 23-101 (Air Force Materiel Management (2013-08-08).pdf",
+          "score": 0.0,
+          "text_preview": "fter completion of the count. 5.7.4.3. Open warehouse inventory. An open warehouse inventory is a method whereby normal receipt and issue transactions contin...",
+          "in_family": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "4601064a092c91e096f4a449e59f59d0fa368b39eecc658e09f155ba83e331e7",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\6.0 Systems_Engineering\\USSF_Dataflow_Tasker_2021\\TaskerDocuments\\USSF_Metadata Taskers_2June2021_v2.pptx",
+          "short_source": "TaskerDocuments/USSF_Metadata Taskers_2June2021_v2.pptx",
+          "score": 0.0,
+          "text_preview": "on the hierarchy than the Data Catalog tasker and represents the columns in the dataset. We should end up with the same number of Data Dictionary Templates a...",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "8dd1888732f3014d3f5279e3f72059d9a3fd6efd134597ee17e38623626f0692",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000367005)(Avery Weigh-Tronix)($315.00)rcvd 2019-02-20\\PO 7000367005.pdf",
+          "short_source": "WX29 (PO 7000367005)(Avery Weigh-Tronix)($315.00)rcvd 2019-02-20/PO 7000367005.pdf",
+          "score": 0.0,
+          "text_preview": "Electronic Components Distributed in the Open Market Definitions: (Reference AS5553) A. Documentation - Seller shall provide a summary report of all inspecti...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "579b3befcd5a7447a26e75548021c3d521ff089ce80caae2bbadc5e5a7189a4e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\RFBR\\STIG\\RFBR ASD STIG NG-SDL 2020-Aug-06.xlsx",
+          "short_source": "STIG/RFBR ASD STIG NG-SDL 2020-Aug-06.xlsx",
+          "score": 0.0,
+          "text_preview": "nd when. This will help testers to keep track of what has been tested and help to verify all functionality is tested. The developer makes sure that flaws are...",
+          "in_family": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "683460ef518bae3cd9bc51e85498bad32300723bb384287414361de680a080f5",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29O3 (PO 7000407953)(Climb Training)(PCPC Direct)($2,067.96)\\7000407953.pdf",
+          "short_source": "WX29O3 (PO 7000407953)(Climb Training)(PCPC Direct)($2,067.96)/7000407953.pdf",
+          "score": 0.0,
+          "text_preview": "Electronic Components Distributed in the Open Market Definitions: (Reference AS5553) A. Documentation - Seller shall provide a summary report of all inspecti...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-024",
+      "persona": "Aggregation / Cross-role",
+      "expected_query_type": "AGGREGATE",
+      "routed_query_type": "COMPLEX",
+      "routing_correct": false,
+      "query": "Summarize all shipment activity, parts disposition, and calibration actions across fiscal years 2022 through 2026.",
+      "expected_document_family": "Cross-family \u2014 Shipments year folders + Disposition year folders + Calibration year folders + AssetSmart snapshots",
+      "family_signals": [
+        "shipment",
+        "disposition",
+        "calibration",
+        "assetsmart"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 46316,
+      "router_ms": 2953,
+      "retrieval_ms": 43250,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "5c5a698b3c4c92f8b8d4c0bd1e4acbfb987c4799121c94629030c7148b28b087",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping\\From WD Drive\\References (DOD)\\AFI 24-203\\AFI24-203_AFSPCSUP_I.pdf",
+          "short_source": "AFI 24-203/AFI24-203_AFSPCSUP_I.pdf",
+          "score": 0.0,
+          "text_preview": "[SECTION] KOREA, SE A SIA AND OTHER AREAS 1 4 ORIGIN USAFE DESTINATION USAFE 1 1 CONUS 1 2 PACAF/SW ASIA/OTHER AREAS 1 4 ORIGIN PACAF DESTINATION PACAF 1 1 C...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "4b7a5491cb9a3c10cee61426e38167f5f04390a616367dc42a67805ee24a7c22",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Disposition\\DRMO Documents (Downloaded)\\DoDM 4160.21-Volume 2, 2015-10-22.pdf",
+          "short_source": "DRMO Documents (Downloaded)/DoDM 4160.21-Volume 2, 2015-10-22.pdf",
+          "score": 0.0,
+          "text_preview": "Transportation Division, DFAS, Indianapolis Center, Indianapolis, IN 46249-3001. The BOL will include the fund citation for the appropriate fiscal year as pr...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "e8989c9091900bece4f89043a583e57582d2302e630d5c11719697ce48f80c2f",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Mission Assurance\\Audits\\2025\\2025 Audit Schedule-NGPro 3.6 WPs-IGS.xlsx",
+          "short_source": "2025/2025 Audit Schedule-NGPro 3.6 WPs-IGS.xlsx",
+          "score": 0.0,
+          "text_preview": "[SECTION] 2025 Audit Schedule-IGS: Logistics/Supportability/ Field Engineering, : SEP-25 2025 Audit Schedule-IGS: A101-PGSO Control of Documented Information...",
+          "in_family": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "a85a89849edc131e0ee263c871398a0b46d762c35daec6608739b70e50016d63",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Disposition\\DRMO Documents (Downloaded)\\DoDM 4160.21-Volume 3, 2015-10-22.pdf",
+          "short_source": "DRMO Documents (Downloaded)/DoDM 4160.21-Volume 3, 2015-10-22.pdf",
+          "score": 0.0,
+          "text_preview": "procedures in Enclosure 5 to Volume 2 of this manual. These transactions are accomplished through an ISSA. 4. Pay for all services rendered, according to est...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "712b1fe9fba5a0504dc83e85a7345b47b768b89a620b7dc77b4481ebc380096c",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\Shipping Mode Information - T-TAC Account\\Defense Transportation Regulation-Part ii\\dtr_part_ii_203.pdf",
+          "short_source": "Defense Transportation Regulation-Part ii/dtr_part_ii_203.pdf",
+          "score": 0.0,
+          "text_preview": "the pieces, weight, and cube (rp 68-80) are left blank and a ?C? is entered in rp 53. The change in the content information is then entered in the same manne...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-025",
+      "persona": "Aggregation / Cross-role",
+      "expected_query_type": "COMPLEX",
+      "routed_query_type": "COMPLEX",
+      "routing_correct": true,
+      "query": "Give me a cross-program risk summary: what CDRLs are overdue, what ATO packages are pending, what cybersecurity directives remain active, and what parts have recurring failures?",
+      "expected_document_family": "Cross-family \u2014 CDRLs + ATO-ATC packages + directives + Part Failure Tracker + PMR + FEP",
+      "family_signals": [
+        "cdrl",
+        "ato",
+        "mto",
+        "taskord",
+        "directive",
+        "part failure",
+        "pmr",
+        "fep",
+        "variance",
+        "corrective action"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 59770,
+      "router_ms": 3576,
+      "retrieval_ms": 55937,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "43d6e7cb8f81c32627249d1af2b46cbf49b46c6e0c54d23303b42d26fad4b029",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\7.0 Contracts\\Latest PWS\\Memo to File_Mod 13 Attachment 1_IGS Oasis PWS Final_08.03.2023 (With TEC Language Added and SCAP removed).docx",
+          "short_source": "Latest PWS/Memo to File_Mod 13 Attachment 1_IGS Oasis PWS Final_08.03.2023 (With TEC Language Added and SCAP removed).docx",
+          "score": 0.0,
+          "text_preview": "Package. This package includes the Security Plan, Security Assessment Report (SAR), Plan of Action and Milestone (POAM), Authorization Decision Document (ATC...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "d3d75cc6b97c2e4d6e6a9e801ff65283a28947dd4be67d79dc0d449d22ea09b3",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\archive\\RMF\\RMF_Resources\\RMF_Training-NGC\\RMF Training\\Training Material\\Key Documents\\Cybersecurity Guidebook v1 08_signed.pdf",
+          "short_source": "Key Documents/Cybersecurity Guidebook v1 08_signed.pdf",
+          "score": 0.0,
+          "text_preview": "typically provided to PMs from their Program Executive Office (PEO) staff. Other external personnel with cybersecurity responsibilities are assigned by the S...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "0a87c833a6b96d704d2f86c52b61064a0904ad6512998a437cde23ef2fd37097",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\001_Project_Management\\SEMS Program Docs\\Archive\\Risk Management Plan.doc",
+          "short_source": "Archive/Risk Management Plan.doc",
+          "score": 0.0,
+          "text_preview": "ect, analyze, use, and report for visibility into the risk program. Configuration Management Plan (CMP) Defines the approach for handling controlled software...",
+          "in_family": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "d34147abf3dff042d3f3b65f9cacabcf6c7461db946950b9c0532c5c2aa185f1",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\3.0 Cybersecurity\\ISSO\\archive\\Status-Report\\Archive\\SEMS3D-XXXXX_IGS IPT Briefing Slides_(CDRL A001)_13 April 2017 - Bannister updates VXN.pptx",
+          "short_source": "Archive/SEMS3D-XXXXX_IGS IPT Briefing Slides_(CDRL A001)_13 April 2017 - Bannister updates VXN.pptx",
+          "score": 0.0,
+          "text_preview": "[SLIDE 1] NEXION OR Trend [SLIDE 2] Outages ? 2017 Cumulative [SLIDE 3] Outages ? ITD Cumulative [SLIDE 4] Cybersecurity All NEXION TCNOs reviewed through Ap...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "d4d2cd0d7ce12742c933229cbf53a49c616938d6ac548e5a7c79a36401176123",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#DMEA Program Management\\1.0 Contracts ATSP_DMEA\\Templates and Examples\\Examples\\RFP Dri-Bones Examples\\Enclosure 04a - CET 24-430_DRI-BONES_BOE.docx",
+          "short_source": "RFP Dri-Bones Examples/Enclosure 04a - CET 24-430_DRI-BONES_BOE.docx",
+          "score": 0.0,
+          "text_preview": "eptance test plan and procedures Provide and support a proactive Risk and Opportunity Management system to identify, assess, mitigate, and report risks for p...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    }
+  ]
+}
