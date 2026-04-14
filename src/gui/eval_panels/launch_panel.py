@@ -52,20 +52,24 @@ class LaunchPanel(tk.Frame):
         self._defaults_source = "saved" if saved else "shipped"
         self._defaults_saved_at = saved.get("saved_at", "") if saved else ""
 
-        self._var_queries = StringVar(value=saved.get("queries_path", str(DEFAULT_QUERIES)) if saved else str(DEFAULT_QUERIES))
-        self._var_config = StringVar(value=saved.get("config_path", str(DEFAULT_CONFIG)) if saved else str(DEFAULT_CONFIG))
-        self._var_report_md = StringVar(value=saved.get("report_md_template", "") if saved else self._default_report_md())
-        self._var_results_json = StringVar(value=saved.get("results_json_template", "") if saved else self._default_results_json())
+        self._var_queries = StringVar(
+            value=saved.get("queries_path", str(DEFAULT_QUERIES)) if saved else str(DEFAULT_QUERIES)
+        )
+        self._var_config = StringVar(
+            value=saved.get("config_path", str(DEFAULT_CONFIG)) if saved else str(DEFAULT_CONFIG)
+        )
+        # Output paths are deliberately NOT persisted in the defaults file --
+        # they always refresh to a new timestamped filename on every panel
+        # construction so day-2 runs write to a new artifact instead of
+        # overwriting day-1's. Older saved defaults files from the buggy v1
+        # may still contain 'report_md_template' / 'results_json_template'
+        # keys; we ignore them on load and only re-generate on save.
+        self._var_report_md = StringVar(value=self._default_report_md())
+        self._var_results_json = StringVar(value=self._default_results_json())
         self._var_gpu = StringVar(value=saved.get("gpu_index", "0") if saved else "0")
         self._var_max_q = StringVar(value=saved.get("max_queries", "") if saved else "")
         self._var_phase = StringVar(value="idle")
         self._var_defaults_status = StringVar(value=self._defaults_status_text())
-
-        # Fall back to shipped templates if the saved values are blank.
-        if not (self._var_report_md.get() or "").strip():
-            self._var_report_md.set(self._default_report_md())
-        if not (self._var_results_json.get() or "").strip():
-            self._var_results_json.set(self._default_results_json())
 
         self._build()
         self._set_running(False)
@@ -309,16 +313,22 @@ class LaunchPanel(tk.Frame):
             return {}
 
     def _on_save_defaults(self) -> None:
-        """Persist the current field values so next launch loads them."""
+        """Persist the current input-field values so next launch loads them.
+
+        Output paths (Report MD / Results JSON) are deliberately NOT saved --
+        they always refresh to a fresh timestamp on each panel construction
+        so repeated runs write to distinct artifacts. Persisting literal
+        timestamped paths would force every day-2 run to immediately hit
+        the overwrite confirmation, which defeats the whole 'just press
+        Start' flow this feature is supposed to enable.
+        """
         payload = {
             "queries_path": (self._var_queries.get() or "").strip(),
             "config_path": (self._var_config.get() or "").strip(),
-            "report_md_template": (self._var_report_md.get() or "").strip(),
-            "results_json_template": (self._var_results_json.get() or "").strip(),
             "gpu_index": (self._var_gpu.get() or "0").strip() or "0",
             "max_queries": (self._var_max_q.get() or "").strip(),
             "saved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "schema_version": 1,
+            "schema_version": 2,
         }
         try:
             DEFAULTS_FILE.parent.mkdir(parents=True, exist_ok=True)

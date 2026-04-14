@@ -357,7 +357,12 @@ def test_launcher_bat_uses_module_form():
 
 
 def test_launch_panel_save_and_load_operator_defaults(withdrawn_root, tmp_path: Path, monkeypatch):
-    """Save as defaults -> next-launch load round-trip."""
+    """Save as defaults -> next-launch load round-trip.
+
+    Persists the INPUT fields (query pack, config, GPU, max queries) across
+    panel construction. Deliberately does NOT persist the output paths --
+    those refresh to a fresh timestamped filename on every launch.
+    """
     import src.gui.eval_panels.launch_panel as lp_module
 
     fake_defaults = tmp_path / ".eval_gui_defaults.json"
@@ -372,8 +377,6 @@ def test_launch_panel_save_and_load_operator_defaults(withdrawn_root, tmp_path: 
 
     panel._var_queries.set(str(tmp_path / "my_queries.json"))
     panel._var_config.set(str(tmp_path / "my_config.yaml"))
-    panel._var_report_md.set(str(tmp_path / "my_report.md"))
-    panel._var_results_json.set(str(tmp_path / "my_results.json"))
     panel._var_gpu.set("0")
     panel._var_max_q.set("25")
 
@@ -384,8 +387,11 @@ def test_launch_panel_save_and_load_operator_defaults(withdrawn_root, tmp_path: 
     assert saved["queries_path"] == str(tmp_path / "my_queries.json")
     assert saved["config_path"] == str(tmp_path / "my_config.yaml")
     assert saved["max_queries"] == "25"
-    assert saved["schema_version"] == 1
+    assert saved["schema_version"] == 2
     assert saved.get("saved_at")
+    # Output paths are deliberately NOT persisted
+    assert "report_md_template" not in saved
+    assert "results_json_template" not in saved
     assert panel._defaults_source == "saved"
     assert "saved on" in panel._var_defaults_status.get()
 
@@ -399,6 +405,92 @@ def test_launch_panel_save_and_load_operator_defaults(withdrawn_root, tmp_path: 
     assert panel2._var_queries.get() == str(tmp_path / "my_queries.json")
     assert panel2._var_config.get() == str(tmp_path / "my_config.yaml")
     assert panel2._var_max_q.get() == "25"
+
+
+def test_launch_panel_output_paths_refresh_across_launches(
+    withdrawn_root, tmp_path: Path, monkeypatch
+):
+    """Day-2 relaunch must pick new timestamped output paths, not reuse day-1.
+
+    Regression: earlier version persisted the literal timestamped paths
+    into the defaults file, so every day-2 run immediately hit the
+    overwrite confirmation dialog.
+    """
+    import time
+    import src.gui.eval_panels.launch_panel as lp_module
+
+    fake_defaults = tmp_path / ".eval_gui_defaults.json"
+    monkeypatch.setattr(lp_module, "DEFAULTS_FILE", fake_defaults)
+
+    panel1 = lp_module.LaunchPanel(withdrawn_root)
+    panel1.pack()
+    withdrawn_root.update_idletasks()
+
+    day1_md = panel1._var_report_md.get()
+    day1_json = panel1._var_results_json.get()
+    panel1._on_save_defaults()
+    panel1.destroy()
+
+    # Force a different timestamp for the next launch.
+    time.sleep(1.05)
+
+    panel2 = lp_module.LaunchPanel(withdrawn_root)
+    panel2.pack()
+    withdrawn_root.update_idletasks()
+
+    day2_md = panel2._var_report_md.get()
+    day2_json = panel2._var_results_json.get()
+
+    assert day2_md != day1_md, (
+        "Day-2 Report MD must be a fresh timestamped path, "
+        f"got same value as day-1: {day1_md}"
+    )
+    assert day2_json != day1_json, (
+        "Day-2 Results JSON must be a fresh timestamped path, "
+        f"got same value as day-1: {day1_json}"
+    )
+    # Both should still live under docs/
+    assert "PRODUCTION_EVAL_RESULTS_GUI_" in day2_md
+    assert "production_eval_results_gui_" in day2_json
+
+
+def test_launch_panel_legacy_v1_defaults_file_is_read_safely(
+    withdrawn_root, tmp_path: Path, monkeypatch
+):
+    """A v1 defaults file (with the old output-template keys) must load
+    cleanly -- we ignore those keys and always render fresh output paths."""
+    import src.gui.eval_panels.launch_panel as lp_module
+
+    fake_defaults = tmp_path / ".eval_gui_defaults.json"
+    fake_defaults.write_text(
+        json.dumps(
+            {
+                "queries_path": str(tmp_path / "saved_q.json"),
+                "config_path": str(tmp_path / "saved_c.yaml"),
+                "report_md_template": str(tmp_path / "OLD_STALE.md"),
+                "results_json_template": str(tmp_path / "old_stale.json"),
+                "gpu_index": "0",
+                "max_queries": "10",
+                "saved_at": "2026-04-13 18:00:00",
+                "schema_version": 1,
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(lp_module, "DEFAULTS_FILE", fake_defaults)
+
+    panel = lp_module.LaunchPanel(withdrawn_root)
+    panel.pack()
+    withdrawn_root.update_idletasks()
+
+    # Input fields load from the v1 file
+    assert panel._var_queries.get() == str(tmp_path / "saved_q.json")
+    assert panel._var_config.get() == str(tmp_path / "saved_c.yaml")
+    assert panel._var_max_q.get() == "10"
+    # But the stale v1 output paths are ignored -- fresh timestamps instead
+    assert "OLD_STALE" not in panel._var_report_md.get()
+    assert "old_stale" not in panel._var_results_json.get()
+    assert "PRODUCTION_EVAL_RESULTS_GUI_" in panel._var_report_md.get()
 
 
 def test_launch_panel_reset_defaults_restores_shipped_values(

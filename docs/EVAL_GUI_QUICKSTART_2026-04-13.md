@@ -74,6 +74,9 @@ would change it.
 - **When to change it:** if you want a custom filename to make the run
   easy to identify later (e.g.
   `docs/PRODUCTION_EVAL_RESULTS_CAP_PATCH_BASELINE.md`).
+- **Not persisted by Save as defaults:** this field always refreshes to a
+  new timestamped filename on every GUI launch. Saving defaults does not
+  freeze it. A custom static filename has to be typed in each run.
 - **Safety net:** if the path you pick already exists on disk, the GUI
   pops a yes/no overwrite confirmation before starting. Default is **No**.
 
@@ -87,6 +90,8 @@ would change it.
 - **Browse button opens:** a save-as dialog in `docs/`.
 - **When to change it:** same rule as Report MD -- rename for clarity, or
   leave the timestamped default.
+- **Not persisted by Save as defaults:** same rule as Report MD -- fresh
+  timestamp every launch.
 - **Safety net:** same overwrite confirmation as the MD.
 
 ### 5. CUDA_VISIBLE_DEVICES
@@ -122,12 +127,20 @@ Five buttons sit right below the input fields:
   the current query finishes first, typically within 30-75 seconds).
 - **Clear log** -- wipes the live log window without affecting output
   files or stored results.
-- **Save as defaults** -- writes all six field values + GPU index + max
-  queries to `.eval_gui_defaults.json` at the repo root. Next time you
-  launch the GUI, those saved values load automatically instead of the
-  shipped ones. This is a per-checkout file -- it is gitignored and never
-  pushed. The small status line under the buttons shows whether you are
-  on `Defaults: shipped` or `Defaults: saved on <timestamp>`.
+- **Save as defaults** -- writes your input choices (query pack, config,
+  GPU index, max queries) to `.eval_gui_defaults.json` at the repo root.
+  Next time you launch the GUI, those saved values load automatically
+  instead of the shipped ones. This is a per-checkout file -- it is
+  gitignored and never pushed. The small status line under the buttons
+  shows whether you are on `Defaults: shipped` or
+  `Defaults: saved on <timestamp>`.
+
+  **Note:** the output paths (Report MD / Results JSON) are deliberately
+  NOT saved. They always refresh to a new timestamped filename on every
+  launch so day-2 runs write to a new artifact instead of immediately
+  hitting the overwrite guard on day-1's file. If you want a custom
+  static output filename, type it in the field before clicking Start
+  each run -- but that is the exception, not the default.
 - **Reset defaults** -- restores every field to the shipped values and
   deletes the saved defaults file. Pops a yes/no confirmation first.
 
