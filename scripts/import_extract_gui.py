@@ -22,7 +22,7 @@ import time
 import tkinter as tk
 from datetime import datetime
 from pathlib import Path
-from tkinter import filedialog, ttk
+from tkinter import filedialog, messagebox, ttk
 
 V2_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(V2_ROOT))
@@ -711,8 +711,18 @@ class ImportExtractGUI:
         self._timer_id = None
         self._chunks_total = 0
         self._chunks_processed = 0
+        self._config_path = str(V2_ROOT / "config" / "config.yaml")
+        self._config = None
+
+        try:
+            from src.config.schema import load_config
+
+            self._config = load_config(self._config_path)
+        except Exception as exc:
+            logger.warning("ImportExtractGUI config load failed: %s", exc)
 
         self._build_ui()
+        self._refresh_target_labels()
 
         # GPU info on startup
         gpu_info = _get_gpu_info()
@@ -806,6 +816,8 @@ class ImportExtractGUI:
 
         left_stats = [
             ("source_path", "Source:"),
+            ("import_target", "Import Target:"),
+            ("entity_target", "Entity Target:"),
             ("chunks_total", "Chunks Total:"),
             ("chunks_processed", "Processed:"),
             ("tier1_entities", "Tier 1 Entities:"),
@@ -882,6 +894,7 @@ class ImportExtractGUI:
     def _on_start(self):
         source = self._source_var.get().strip()
         skip_import = self._skip_import_var.get()
+        self._refresh_target_labels()
 
         # Skip Import path: source folder is explicitly not needed, because
         # we read chunks from the already-populated LanceDB. Fire an
@@ -922,6 +935,16 @@ class ImportExtractGUI:
                 )
                 return
 
+            target_warning = self._import_target_warning()
+            if target_warning:
+                proceed = messagebox.askyesno(
+                    "Import Target Warning",
+                    target_warning + "\n\nContinue anyway?",
+                )
+                if not proceed:
+                    self.append_log("Import cancelled after target warning.", "WARNING")
+                    return
+
         # Lock UI
         self._start_btn.configure(state="disabled")
         self._stop_btn.configure(state="normal")
@@ -933,16 +956,15 @@ class ImportExtractGUI:
         self._chunks_processed = 0
         self._start_time = time.time()
         for key in self._stat_values:
-            if key != "gpu_status":
+            if key not in {"gpu_status", "import_target", "entity_target"}:
                 self._stat_values[key].configure(text="--")
 
         # Start timer
         self._tick_timer()
 
         # Start runner
-        config_path = str(V2_ROOT / "config" / "config.yaml")
         self._runner = ImportExtractRunner(self)
-        self._runner.start(source, self._tier_var.get(), config_path, skip_import)
+        self._runner.start(source, self._tier_var.get(), self._config_path, skip_import)
 
     def _on_stop(self):
         if self._runner and self._runner.is_alive:
@@ -975,6 +997,83 @@ class ImportExtractGUI:
             except Exception:
                 pass
             self._timer_id = None
+
+    def _refresh_target_labels(self):
+        """Show the current configured import targets in the GUI."""
+        if self._config is None:
+            self.set_stat("import_target", "config load failed")
+            self.set_stat("entity_target", "config load failed")
+            return
+        self.set_stat("import_target", self._config.paths.lance_db)
+        self.set_stat("entity_target", self._config.paths.entity_db)
+
+    def _import_target_warning(self) -> str:
+        """Return a warning block if the configured target looks risky."""
+        if self._config is None:
+            return "Config failed to load; import target cannot be verified."
+
+        warnings: list[str] = []
+        lance_target = Path(self._config.paths.lance_db)
+        entity_target = Path(self._config.paths.entity_db)
+
+        if "sprint6" in str(lance_target).lower():
+            warnings.append(
+                f"Configured LanceDB target is a legacy sprint6 path:\n{lance_target}"
+            )
+
+        try:
+            from src.store.lance_store import LanceStore
+
+            if lance_target.exists():
+                store = LanceStore(str(lance_target))
+                existing_count = store.count()
+                store.close()
+                if existing_count > 0:
+                    warnings.append(
+                        f"Configured LanceDB target already contains {existing_count:,} chunks:\n"
+                        f"{lance_target}"
+                    )
+        except Exception as exc:
+            warnings.append(f"Could not inspect LanceDB target {lance_target}: {exc}")
+
+        entity_populated_count = self._entity_target_populated_count(entity_target)
+        if entity_populated_count > 0:
+            warnings.append(
+                f"Configured entity target already contains {entity_populated_count:,} entities:\n"
+                f"{entity_target}"
+            )
+
+        return "\n\n".join(warnings)
+
+    @staticmethod
+    def _entity_target_populated_count(entity_target: Path) -> int:
+        """Return the entity row count of an existing entity DB, or 0.
+
+        Non-destructive: opens the sqlite file in read-only URI mode so the
+        file is never created or mutated if it does not already exist in a
+        populated state. Returns 0 for any of: missing file, unreadable file,
+        missing ``entities`` table, empty ``entities`` table, or any unexpected
+        error during read. Missing/empty targets are not worth warning about —
+        they are the normal pre-import state the operator expects.
+        """
+        try:
+            if not entity_target.exists() or not entity_target.is_file():
+                return 0
+            import sqlite3
+            uri = entity_target.resolve().as_uri() + "?mode=ro"
+            with sqlite3.connect(uri, uri=True, timeout=1.0) as conn:
+                cursor = conn.execute(
+                    "SELECT name FROM sqlite_master WHERE type='table' AND name='entities'"
+                )
+                if cursor.fetchone() is None:
+                    return 0
+                cursor = conn.execute("SELECT COUNT(*) FROM entities")
+                row = cursor.fetchone()
+                if row is None:
+                    return 0
+                return int(row[0] or 0)
+        except Exception:
+            return 0
 
     # ---- Thread-safe update methods ----
 

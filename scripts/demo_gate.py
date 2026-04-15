@@ -4,9 +4,15 @@ Sprint 8 demo gate harness.
 Checks the promoted demo store, optional manifest-derived skip text, API health,
 streaming contract, and a simple live smoke query against the configured server.
 
+Default config is ``config/config.yaml`` (canonical current store). Legacy
+sprintN demo configs pointed at ``data/index/sprint6/lancedb`` which is a stale
+store and should not be targeted by a bare invocation. Pass ``--config`` to
+override if a legacy sprint config is intentionally required.
+
 Usage:
-    python scripts/demo_gate.py --config config/config.sprint8_demo.yaml
-    python scripts/demo_gate.py --config config/config.sprint8_demo.yaml --start-server
+    python scripts/demo_gate.py
+    python scripts/demo_gate.py --start-server
+    python scripts/demo_gate.py --config config/config.sprint8_demo.yaml  # legacy override
 """
 
 from __future__ import annotations
@@ -29,6 +35,25 @@ from src.config.schema import load_config
 from src.store.entity_store import EntityStore
 from src.store.lance_store import LanceStore
 from src.store.relationship_store import RelationshipStore
+
+
+def _warn_if_sprint6_lance(config_path: str) -> None:
+    """Warn loudly when the resolved config points at a legacy sprint6 Lance store."""
+    try:
+        resolved = load_config(config_path)
+    except Exception:
+        return
+    lance_db = getattr(resolved.paths, "lance_db", "") or ""
+    if "sprint6" in lance_db.lower():
+        bar = "=" * 72
+        print(bar, file=sys.stderr)
+        print("WARNING: explicit config points at a legacy sprint6 Lance store.", file=sys.stderr)
+        print(f"  config:    {config_path}", file=sys.stderr)
+        print(f"  lance_db:  {lance_db}", file=sys.stderr)
+        print("  This store is stale. Proceeding only because --config was", file=sys.stderr)
+        print("  supplied explicitly. Use the default config to target the", file=sys.stderr)
+        print("  canonical current store.", file=sys.stderr)
+        print(bar, file=sys.stderr)
 
 
 def load_json(path: Path) -> dict:
@@ -297,7 +322,15 @@ def print_report(report: dict) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Sprint 8 demo gate harness.")
-    parser.add_argument("--config", default="config/config.sprint8_demo.yaml", help="Config path.")
+    parser.add_argument(
+        "--config",
+        default="config/config.yaml",
+        help=(
+            "Config YAML path. Defaults to config/config.yaml (canonical current "
+            "store). Pass a legacy sprintN demo config only if that specific "
+            "store is intentionally required."
+        ),
+    )
     parser.add_argument("--server-url", default=None, help="Override API base URL.")
     parser.add_argument("--start-server", action="store_true", help="Start the V2 API server for this run.")
     parser.add_argument("--server-timeout", type=float, default=90.0, help="Seconds to wait for API health.")
@@ -310,6 +343,8 @@ def main() -> int:
     parser.add_argument("--skip-stream", action="store_true", help="Skip SSE probe.")
     parser.add_argument("--json-output", default=None, help="Optional JSON report path.")
     args = parser.parse_args()
+
+    _warn_if_sprint6_lance(args.config)
 
     config = load_config(args.config)
     base_url = args.server_url or f"http://{config.server.host}:{config.server.port}"

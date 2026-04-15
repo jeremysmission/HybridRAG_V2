@@ -29,6 +29,7 @@ What's locked in:
 
 from __future__ import annotations
 
+import sqlite3
 import sys
 import tempfile
 import tracemalloc
@@ -716,3 +717,45 @@ class TestRunnerSkipImportStats:
         assert any("Import phase skipped" in msg for _, msg in fake_gui.log_lines), (
             "Expected an operator-visible log line confirming the skip"
         )
+
+
+class TestEntityTargetProbe:
+    """Guard the non-destructive entity-target warning probe."""
+
+    def test_missing_file_returns_zero(self, tmp_path):
+        target = tmp_path / "missing.sqlite3"
+        assert gui_module.ImportExtractGUI._entity_target_populated_count(target) == 0
+
+    def test_plaintext_file_returns_zero(self, tmp_path):
+        target = tmp_path / "not_a_db.sqlite3"
+        target.write_text("definitely not sqlite", encoding="utf-8")
+        assert gui_module.ImportExtractGUI._entity_target_populated_count(target) == 0
+
+    def test_missing_entities_table_returns_zero(self, tmp_path):
+        target = tmp_path / "no_entities.sqlite3"
+        with sqlite3.connect(target) as conn:
+            conn.execute("CREATE TABLE other_table (id INTEGER PRIMARY KEY)")
+            conn.commit()
+        assert gui_module.ImportExtractGUI._entity_target_populated_count(target) == 0
+
+    def test_empty_entities_table_returns_zero(self, tmp_path):
+        target = tmp_path / "empty_entities.sqlite3"
+        with sqlite3.connect(target) as conn:
+            conn.execute("CREATE TABLE entities (id INTEGER PRIMARY KEY, text TEXT)")
+            conn.commit()
+        assert gui_module.ImportExtractGUI._entity_target_populated_count(target) == 0
+
+    def test_populated_small_entities_db_returns_actual_count(self, tmp_path):
+        target = tmp_path / "small_populated.sqlite3"
+        with sqlite3.connect(target) as conn:
+            conn.execute("CREATE TABLE entities (id INTEGER PRIMARY KEY, text TEXT)")
+            conn.executemany(
+                "INSERT INTO entities (text) VALUES (?)",
+                [("alpha",), ("beta",), ("gamma",)],
+            )
+            conn.commit()
+
+        assert target.stat().st_size < 16_384, (
+            "Regression guard assumes a small populated sqlite file"
+        )
+        assert gui_module.ImportExtractGUI._entity_target_populated_count(target) == 3
