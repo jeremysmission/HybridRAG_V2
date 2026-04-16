@@ -90,7 +90,17 @@ class RegressionPanel(tk.LabelFrame):
             bg=t["accent"], fg=t["accent_fg"], font=FONT_BOLD,
             relief=tk.FLAT, bd=0, padx=14, pady=4,
         )
-        self._run_btn.pack(side=tk.LEFT)
+        self._run_btn.pack(side=tk.LEFT, padx=(0, 6))
+
+        self._stop_btn = tk.Button(
+            row, text="Stop", command=self._on_stop,
+            bg=t["input_bg"], fg=t["fg"], font=FONT,
+            relief=tk.FLAT, bd=0, padx=12, pady=4,
+            state=tk.DISABLED,
+        )
+        self._stop_btn.pack(side=tk.LEFT)
+        self._stop_event = threading.Event()
+        self._worker_thread: threading.Thread | None = None
 
         # -- Section 2: summary --
         tk.Label(
@@ -165,7 +175,9 @@ class RegressionPanel(tk.LabelFrame):
 
     def _on_run(self):
         path = self._fixture_path_var.get().strip() or str(DEFAULT_FIXTURE_PATH)
+        self._stop_event.clear()
         self._run_btn.config(state=tk.DISABLED, text="Running...")
+        self._stop_btn.config(state=tk.NORMAL)
         self._set_text(self._fail_text, "")
         for iid in self._family_tree.get_children():
             self._family_tree.delete(iid)
@@ -174,12 +186,25 @@ class RegressionPanel(tk.LabelFrame):
         def _worker():
             try:
                 report = run_fixture(fixture_path=path)
-                safe_after(self, 0, lambda: self._apply_report(report))
+                if self._stop_event.is_set():
+                    safe_after(self, 0, lambda: self._apply_stopped())
+                else:
+                    safe_after(self, 0, lambda: self._apply_report(report))
             except Exception as exc:
                 logger.exception("regression run failed")
                 safe_after(self, 0, lambda: self._apply_error(str(exc)))
 
-        threading.Thread(target=_worker, daemon=True).start()
+        self._worker_thread = threading.Thread(target=_worker, daemon=True)
+        self._worker_thread.start()
+
+    def _on_stop(self):
+        self._stop_event.set()
+        self._stop_btn.config(state=tk.DISABLED)
+
+    def _apply_stopped(self):
+        self._run_btn.config(state=tk.NORMAL, text="Run Regression")
+        self._stop_btn.config(state=tk.DISABLED)
+        self._set_text(self._summary_text, "Stopped by operator.")
 
     # ------------------------------------------------------------------
     # Result rendering
@@ -213,6 +238,7 @@ class RegressionPanel(tk.LabelFrame):
     def _apply_report(self, report: Report):
         self._last_report = report
         self._run_btn.config(state=tk.NORMAL, text="Run Regression")
+        self._stop_btn.config(state=tk.DISABLED)
 
         verdict_word = "PASS" if report.failed == 0 else "FAIL"
         summary = (
@@ -262,6 +288,7 @@ class RegressionPanel(tk.LabelFrame):
 
     def _apply_error(self, msg: str):
         self._run_btn.config(state=tk.NORMAL, text="Run Regression")
+        self._stop_btn.config(state=tk.DISABLED)
         self._set_text(self._summary_text, "Run failed: {}".format(msg))
         self._set_text(self._fail_text, "")
 

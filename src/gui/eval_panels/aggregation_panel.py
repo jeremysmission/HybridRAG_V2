@@ -78,6 +78,9 @@ class AggregationPanel(tk.Frame):
         ctrl.pack(fill=tk.X, pady=(12, 6))
         self._btn_start = ttk.Button(ctrl, text="Start", style="Accent.TButton", command=self._on_start)
         self._btn_start.pack(side=tk.LEFT, padx=(0, 6))
+        self._btn_stop = ttk.Button(ctrl, text="Stop", style="Tertiary.TButton", command=self._on_stop)
+        self._btn_stop.pack(side=tk.LEFT, padx=(0, 6))
+        self._btn_stop.configure(state="disabled")
         self._btn_clear = ttk.Button(ctrl, text="Clear log", style="Tertiary.TButton", command=self._clear_log)
         self._btn_clear.pack(side=tk.LEFT, padx=(0, 6))
         self._btn_open = ttk.Button(ctrl, text="Open output", style="TButton", command=self._open_output)
@@ -240,8 +243,13 @@ class AggregationPanel(tk.Frame):
             min_pass_rate=min_pass_rate,
         )
 
+    def _on_stop(self) -> None:
+        if self._runner.is_alive:
+            self._runner.stop()
+
     def _set_running(self, running: bool) -> None:
         self._btn_start.configure(state="disabled" if running else "normal")
+        self._btn_stop.configure(state="normal" if running else "disabled")
 
     def _reset_progress(self) -> None:
         self._progress.configure(value=0, maximum=100)

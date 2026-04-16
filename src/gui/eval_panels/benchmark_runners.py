@@ -30,15 +30,26 @@ if str(V2_ROOT) not in sys.path:
 EventCallback = Callable[[str, dict], None]
 
 
+class _StopRequested(Exception):
+    """Raised inside a callback to cooperatively break out of a library loop."""
+
+
 class _ThreadRunnerBase:
     """Structured helper object used by the benchmark runners workflow."""
     def __init__(self, on_event: EventCallback):
         self._on_event = on_event
         self._thread: Optional[threading.Thread] = None
+        self._stop_event = threading.Event()
 
     @property
     def is_alive(self) -> bool:
         return self._thread is not None and self._thread.is_alive()
+
+    def stop(self) -> None:
+        if not self.is_alive:
+            return
+        self._stop_event.set()
+        self._emit("log", {"msg": "Stop requested -- finishing current item.", "level": "WARN"})
 
     def _emit(self, kind: str, payload: dict) -> None:
         try:
@@ -61,6 +72,7 @@ class AggregationBenchmarkRunner(_ThreadRunnerBase):
         if self.is_alive:
             self._emit("log", {"msg": "Aggregation runner already active.", "level": "WARN"})
             return
+        self._stop_event.clear()
         self._thread = threading.Thread(
             target=self._run,
             kwargs={
@@ -111,6 +123,10 @@ class AggregationBenchmarkRunner(_ThreadRunnerBase):
 
             results = []
             for idx, raw in enumerate(items, 1):
+                if self._stop_event.is_set():
+                    status = "STOPPED"
+                    self._emit("log", {"msg": "Stopped by operator.", "level": "WARN"})
+                    break
                 item = agg.BenchmarkItem(**raw)
                 actual_answer = (
                     item.expected_answer if self_check and item.id not in answer_map else answer_map.get(item.id)
@@ -215,6 +231,7 @@ class CountBenchmarkRunner(_ThreadRunnerBase):
         if self.is_alive:
             self._emit("log", {"msg": "Count runner already active.", "level": "WARN"})
             return
+        self._stop_event.clear()
         self._thread = threading.Thread(
             target=self._run,
             kwargs={
@@ -292,6 +309,10 @@ class CountBenchmarkRunner(_ThreadRunnerBase):
             results = []
             total = len(targets)
             for idx, target in enumerate(targets, 1):
+                if self._stop_event.is_set():
+                    status = "STOPPED"
+                    self._emit("log", {"msg": "Stopped by operator.", "level": "WARN"})
+                    break
                 self._emit(
                     "log",
                     {
@@ -434,6 +455,7 @@ class RagasEvalRunner(_ThreadRunnerBase):
         if self.is_alive:
             self._emit("log", {"msg": "RAGAS runner already active.", "level": "WARN"})
             return
+        self._stop_event.clear()
         self._thread = threading.Thread(
             target=self._run,
             kwargs={
@@ -527,23 +549,33 @@ class RagasEvalRunner(_ThreadRunnerBase):
                 self._emit("phase", {"phase": "RUN"})
 
                 def _progress(current: int, total: int, _query) -> None:
+                    if self._stop_event.is_set():
+                        raise _StopRequested()
                     self._emit("progress", {"current": current, "total": total or 1})
 
                 def _log(msg: str, level: str = "INFO") -> None:
                     self._emit("log", {"msg": msg, "level": level})
 
-                summaries, raw_skip_reasons, pipeline_info = ragas_eval.execute_metrics(
-                    queries=queries,
-                    readiness=readiness,
-                    probe=probe,
-                    top_k=top_k,
-                    limit=limit,
-                    progress_cb=_progress,
-                    log_cb=_log,
-                )
-                metric_summaries = ragas_eval.serialize_metric_summaries(summaries)
-                skip_reasons = dict(raw_skip_reasons)
-                status = "PASS"
+                try:
+                    summaries, raw_skip_reasons, pipeline_info = ragas_eval.execute_metrics(
+                        queries=queries,
+                        readiness=readiness,
+                        probe=probe,
+                        top_k=top_k,
+                        limit=limit,
+                        progress_cb=_progress,
+                        log_cb=_log,
+                    )
+                except _StopRequested:
+                    status = "STOPPED"
+                    self._emit("log", {"msg": "Stopped by operator.", "level": "WARN"})
+                    summaries = []
+                    raw_skip_reasons = {}
+
+                if status != "STOPPED":
+                    metric_summaries = ragas_eval.serialize_metric_summaries(summaries)
+                    skip_reasons = dict(raw_skip_reasons)
+                    status = "PASS"
                 for summary in metric_summaries:
                     self._emit(
                         "log",
