@@ -108,13 +108,14 @@ class EvalGUI(tk.Tk):
         super().__init__()
         self.title("HybridRAG V2 -- Eval GUI")
         self.geometry("1200x840")
-        self.minsize(980, 640)
+        self.minsize(800, 400)
         self.configure(bg=DARK["bg"])
         apply_ttk_styles(DARK)
 
         self._build_header()
-        self._build_tabs()
         self._build_status_bar()
+        self._build_scroll_area()
+        self._build_tabs()
         self._wire_panel_callbacks()
 
         self.protocol("WM_DELETE_WINDOW", self._on_close)
@@ -143,8 +144,45 @@ class EvalGUI(tk.Tk):
         )
         self._header_status.pack(side=tk.RIGHT, fill=tk.Y)
 
+    def _build_scroll_area(self) -> None:
+        """Create a vertically scrollable canvas between header and status bar."""
+        self._scroll_canvas = tk.Canvas(
+            self, bg=DARK["bg"], highlightthickness=0, borderwidth=0,
+        )
+        self._scrollbar = ttk.Scrollbar(
+            self, orient=tk.VERTICAL, command=self._scroll_canvas.yview,
+        )
+        self._scroll_inner = tk.Frame(self._scroll_canvas, bg=DARK["bg"])
+
+        self._scroll_inner.bind(
+            "<Configure>",
+            lambda _: self._scroll_canvas.configure(
+                scrollregion=self._scroll_canvas.bbox("all"),
+            ),
+        )
+        self._canvas_window = self._scroll_canvas.create_window(
+            (0, 0), window=self._scroll_inner, anchor="nw",
+        )
+        self._scroll_canvas.configure(yscrollcommand=self._scrollbar.set)
+
+        self._scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self._scroll_canvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        self._scroll_canvas.bind(
+            "<Configure>",
+            lambda e: self._scroll_canvas.itemconfigure(
+                self._canvas_window, width=e.width,
+            ),
+        )
+        self.bind_all(
+            "<MouseWheel>",
+            lambda e: self._scroll_canvas.yview_scroll(
+                int(-1 * (e.delta / 120)), "units",
+            ),
+        )
+
     def _build_tabs(self) -> None:
-        self._notebook = ttk.Notebook(self)
+        self._notebook = ttk.Notebook(self._scroll_inner)
         self._notebook.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=8, pady=(6, 0))
         self._panels = {}
         for label, cls in TABS:
