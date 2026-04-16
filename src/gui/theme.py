@@ -161,6 +161,16 @@ def apply_ttk_styles(theme_dict=None):
                           ("disabled", t["disabled_fg"])],
               foreground=[("disabled", t["bg"])])
 
+    # TEntry (text input fields -- dark field, white text)
+    style.configure("TEntry", fieldbackground=t["input_bg"],
+                     foreground=t["input_fg"], font=FONT,
+                     bordercolor=t["border"], insertcolor=t["fg"])
+    style.map("TEntry",
+              fieldbackground=[("readonly", t["panel_bg"]),
+                               ("disabled", t["panel_bg"])],
+              foreground=[("readonly", t["label_fg"]),
+                          ("disabled", t["disabled_fg"])])
+
     # TCombobox
     style.configure("TCombobox", fieldbackground=t["input_bg"],
                      background=t["input_bg"], foreground=t["input_fg"],
