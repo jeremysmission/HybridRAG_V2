@@ -332,6 +332,26 @@ class QAWorkbench(tk.Tk):
             fg=DARK["label_fg"],
             padx=16,
         ).pack(side=tk.RIGHT, fill=tk.Y)
+        tk.Button(
+            header,
+            text="Info",
+            command=self._open_user_guide,
+            bg=DARK["accent"],
+            fg=DARK["accent_fg"],
+            font=FONT_BOLD,
+            relief=tk.FLAT,
+            bd=0,
+            padx=14,
+            pady=4,
+        ).pack(side=tk.RIGHT, padx=(0, 8), pady=8)
+
+    def _open_user_guide(self) -> None:
+        guide = V2_ROOT / "docs" / "QA_WORKBENCH_USER_GUIDE.docx"
+        if not guide.exists():
+            from tkinter import messagebox
+            messagebox.showwarning("Info", f"User guide not found:\n{guide}\n\nRun: python scripts/build_user_guides.py")
+            return
+        os.startfile(str(guide))
 
     def _build_scroll_area(self) -> None:
         """Create a vertically scrollable canvas between header and status bar."""
