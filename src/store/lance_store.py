@@ -311,7 +311,7 @@ class LanceStore:
                 text=r.get("text", ""),
                 enriched_text=r.get("enriched_text") or None,
                 source_path=r.get("source_path", ""),
-                score=float(r.get("_distance", 0.0)),
+                score=float(r.get("_relevance_score", r.get("_distance", 0.0))),
                 chunk_index=r.get("chunk_index", 0),
                 parse_quality=r.get("parse_quality", 1.0),
             )
