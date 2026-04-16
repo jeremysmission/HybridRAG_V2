@@ -54,7 +54,7 @@ Source Files (420K files, 700GB, 60+ formats)
 [6] EMBED
     nomic-embed-text v1.5 (768 dimensions, CUDA)
     Token-budget batching with OOM backoff
-    Output: float16 vectors. Throughput: 305 chunks/sec on RTX 3090.
+    Output: float16 vectors. Throughput: 305 chunks/sec on NVIDIA workstation GPU.
     |
     v
 [7] ENTITY EXTRACTION (two-pass)

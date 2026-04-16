@@ -10,7 +10,7 @@
 
 ## Environment
 
-- Machine: primary workstation (dual RTX 3090 FE 24GB, GPU 1 = fast lane)
+- Machine: primary workstation (NVIDIA workstation desktop GPUs FE 24GB, GPU 1 = fast lane)
 - Python: `.venv\Scripts\python.exe` (repo-local venv)
 - Config under test: `config\config.tier1_clean_2026-04-13.yaml`
 - Live baseline store: `data\index\clean\tier1_clean_20260413\{entities,relationships}.sqlite3`

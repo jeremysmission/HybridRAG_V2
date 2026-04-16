@@ -8,7 +8,7 @@
 ## Store and GPU
 
 - LanceDB chunks: **10,435,593**
-- GPU: `physical GPU 1 -> cuda:0 (NVIDIA GeForce RTX 3090)`
+- GPU: `physical GPU 1 -> cuda:0 (NVIDIA workstation GPU)`
 - Top-K: **5**
 - Query pack: `tests/golden_eval/production_queries_2026-04-11.json`
 - Entity store: `data/index/clean/tier1_clean_20260413/entities.sqlite3`

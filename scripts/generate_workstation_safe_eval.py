@@ -115,6 +115,37 @@ PROGRAM_REPLACEMENTS = (
         pattern=re.compile(r"(?<![A-Za-z0-9])enterprise program(?![A-Za-z0-9])", re.IGNORECASE),
         replacement="enterprise program",
     ),
+    ReplacementRule(
+        name="rtx_3090",
+        pattern=re.compile(
+            r"(?<![A-Za-z0-9])(?:NVIDIA\s+GeForce\s+)?RTX\s*3090(?![A-Za-z0-9])",
+            re.IGNORECASE,
+        ),
+        replacement="NVIDIA workstation GPU",
+    ),
+    ReplacementRule(
+        name="geforce_rtx_3090",
+        pattern=re.compile(
+            r"(?<![A-Za-z0-9])NVIDIA\s+GeForce\s+RTX\s*3090(?![A-Za-z0-9])",
+            re.IGNORECASE,
+        ),
+        replacement="NVIDIA workstation GPU",
+    ),
+    ReplacementRule(
+        name="dual_3090",
+        pattern=re.compile(r"(?<![A-Za-z0-9])dual[- ]3090s?(?![A-Za-z0-9])", re.IGNORECASE),
+        replacement="NVIDIA workstation desktop GPUs",
+    ),
+    ReplacementRule(
+        name="single_3090",
+        pattern=re.compile(r"(?<![A-Za-z0-9])single\s+3090(?![A-Za-z0-9])", re.IGNORECASE),
+        replacement="single NVIDIA workstation GPU",
+    ),
+    ReplacementRule(
+        name="bare_3090",
+        pattern=re.compile(r"(?<![A-Za-z0-9])3090(?![A-Za-z0-9])", re.IGNORECASE),
+        replacement="NVIDIA workstation GPU",
+    ),
 )
 
 CLEANUP_REPLACEMENTS = (
@@ -130,6 +161,7 @@ DISALLOWED_TOKEN_PATTERNS = {
     "enterprise program": re.compile(r"(?<![A-Za-z0-9])enterprise program(?![A-Za-z0-9])", re.IGNORECASE),
     "legacy monitoring system": re.compile(r"(?<![A-Za-z0-9])legacy monitoring system(?![A-Za-z0-9])", re.IGNORECASE),
     "monitoring system": re.compile(r"(?<![A-Za-z0-9])monitoring system(?![A-Za-z0-9])", re.IGNORECASE),
+    "3090": re.compile(r"(?<![A-Za-z0-9])(?:NVIDIA\s+GeForce\s+)?RTX\s*3090|(?<![A-Za-z0-9])3090(?![A-Za-z0-9])", re.IGNORECASE),
 }
 
 

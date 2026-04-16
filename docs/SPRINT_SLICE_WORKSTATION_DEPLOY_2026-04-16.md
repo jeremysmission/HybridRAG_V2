@@ -37,8 +37,8 @@ install scripts work behind proxy, the system cannot be deployed at work.
 
 **Artifacts:**
 - `docs/Requested_Waivers_2026-04-16_RevC.md`
-- `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\WAIVER_VERSION_STRATEGY_2026-04-16.md`
-- `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\SOFTWARE_WAIVER_CROSSREF_2026-04-16.md`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\WAIVER_VERSION_STRATEGY_2026-04-16.md`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\SOFTWARE_WAIVER_CROSSREF_2026-04-16.md`
 
 ---
 
@@ -57,7 +57,7 @@ install scripts work behind proxy, the system cannot be deployed at work.
 - [ ] Operator pause points with status messages
 - [ ] Install manifest / inventory output
 
-**Test:** Fresh .venv with HTTPS_PROXY set on Beast. Main GUI launches and queries work.
+**Test:** Fresh .venv with HTTPS_PROXY set on primary workstation. Main GUI launches and queries work.
 
 ---
 
@@ -119,7 +119,7 @@ No new benchmark GUI needed for CorpusForge.
 
 - [ ] Create fresh .venv in `C:\HybridRAG_V2_version_test\`
 - [ ] Install ALL packages at the oldest-safe waiver versions (not latest)
-- [ ] Run full 50-query production eval -- compare results to Beast baseline
+- [ ] Run full 50-query production eval -- compare results to primary workstation baseline
 - [ ] Run RAGAS analysis-only -- verify metrics compute correctly
 - [ ] Run regression suite -- 50 frozen patterns must pass
 - [ ] Document any version incompatibilities
@@ -150,7 +150,7 @@ No new benchmark GUI needed for CorpusForge.
 - [ ] Check `scripts/import_embedengine.py` for numpy full-array loading
 - [ ] Fix streaming/batching if possible
 - [ ] Fix GUI label that displays RAM as VRAM
-- [ ] Test on Beast with nvidia-smi monitoring during import
+- [ ] Test on primary workstation with nvidia-smi monitoring during import
 
 ---
 

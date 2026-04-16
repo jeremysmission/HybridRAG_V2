@@ -2,7 +2,7 @@
   "run_id": "20260413_195019",
   "timestamp_utc": "2026-04-13T19:50:19.477001+00:00",
   "store_chunks": 10435593,
-  "gpu_device": "physical GPU 1 -> cuda:0 (NVIDIA GeForce RTX 3090)",
+  "gpu_device": "physical GPU 1 -> cuda:0 (NVIDIA workstation GPU)",
   "total_queries": 400,
   "pass_count": 226,
   "partial_count": 78,

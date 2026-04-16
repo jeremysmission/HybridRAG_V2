@@ -73,7 +73,7 @@
       "name": "tier_a_startup_log_mentions_skip_import",
       "passed": true,
       "details": {
-        "log_widget_content_excerpt": "GPU: GPU 0: NVIDIA GeForce RTX 3090 (24.5 / 25.8 GB) | GPU 1: NVIDIA GeForce RTX 3090 (24.5 / 25.8 GB)\nReady. Select a source folder and click Start, or check 'Skip Import' if the LanceDB is already populated.\n\n",
+        "log_widget_content_excerpt": "GPU: GPU 0: NVIDIA workstation GPU (24.5 / 25.8 GB) | GPU 1: NVIDIA workstation GPU (24.5 / 25.8 GB)\nReady. Select a source folder and click Start, or check 'Skip Import' if the LanceDB is already populated.\n\n",
         "mentions_skip_import": true
       }
     },

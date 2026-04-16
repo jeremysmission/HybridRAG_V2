@@ -8,7 +8,7 @@ This follow-up only adjusted retrieval-side metadata path probing after the init
 
 Canonical repo: `C:\HybridRAG_V2`
 
-Rerun hardware: `physical GPU 1 -> cuda:0 (NVIDIA GeForce RTX 3090)`
+Rerun hardware: `physical GPU 1 -> cuda:0 (NVIDIA workstation GPU)`
 
 ## What Changed
 

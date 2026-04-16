@@ -2,7 +2,7 @@
   "run_id": "20260416_050445",
   "timestamp_utc": "2026-04-16T05:04:45.398087+00:00",
   "store_chunks": 10435593,
-  "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (NVIDIA GeForce RTX 3090)",
+  "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (NVIDIA workstation GPU)",
   "total_queries": 1,
   "pass_count": 1,
   "partial_count": 0,
@@ -129,7 +129,7 @@
       "results_json": "C:\\HybridRAG_V2\\docs\\production_eval_results_gui_2026-04-15_230423.json",
       "report_md": "C:\\HybridRAG_V2\\docs\\PRODUCTION_EVAL_RESULTS_GUI_2026-04-15_230423.md"
     },
-    "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (NVIDIA GeForce RTX 3090)",
+    "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (NVIDIA workstation GPU)",
     "gpu_index_requested": "0",
     "max_queries_requested": null,
     "router_mode": "rule-based fallback",

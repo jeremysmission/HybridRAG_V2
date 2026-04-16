@@ -5,7 +5,7 @@
 **Scope:** Mainline operator-facing experience across `C:\CorpusForge` and `C:\HybridRAG_V2`
 **Repos / branches:** `C:\CorpusForge` on `master`; `C:\HybridRAG_V2` on `master`
 **Venvs:** `C:\CorpusForge\.venv`; `C:\HybridRAG_V2\.venv`
-**Hardware:** 2x NVIDIA GeForce RTX 3090
+**Hardware:** 2x NVIDIA workstation GPU
 **GPU choice:** `CUDA_VISIBLE_DEVICES=0`
 **GPU selection rationale:** At test start, GPU 0 was the lesser-used device (`12394 MiB / 24576 MiB`, `0%` util) and GPU 1 was saturated (`24270 MiB / 24576 MiB`, `100%` util).
 **OCR prerequisites:** `where.exe tesseract` -> not found; `where.exe pdftoppm` -> not found

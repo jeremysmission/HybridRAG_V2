@@ -1,7 +1,7 @@
 # V2 Import / Query / Retrieval Measurement — 2026-04-10
 
 **Author:** reviewer | **Lane:** V2 import/retrieval measurement
-**Hardware:** GPU 0 (RTX 3090, CUDA_VISIBLE_DEVICES=0), SSD-backed LanceDB
+**Hardware:** GPU 0 (NVIDIA workstation GPU, CUDA_VISIBLE_DEVICES=0), SSD-backed LanceDB
 **Source:** Clean Forge Run 6 export `C:\CorpusForge\data\production_output\export_20260409_0720` — 242,650 chunks, 768d fp16 vectors, nomic-embed-text-v1.5
 
 ---

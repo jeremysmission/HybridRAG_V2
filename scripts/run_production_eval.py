@@ -1001,8 +1001,7 @@ def main() -> int:
     print("=" * 72)
 
     assert torch.cuda.is_available(), "CUDA required for this eval"
-    gpu_name = torch.cuda.get_device_name(0)
-    gpu_device = f"physical GPU {_physical_gpu} -> cuda:0 ({gpu_name})"
+    gpu_device = f"physical GPU {_physical_gpu} -> cuda:0 (NVIDIA workstation GPU)"
     print(f"GPU: {gpu_device}")
 
     if not queries_path.exists():

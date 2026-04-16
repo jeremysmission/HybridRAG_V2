@@ -45,7 +45,7 @@ Tk
       TFrame
         TFrame
           Label text='GPU:' state='normal'
-          Label text='GPU 0: NVIDIA GeForce RTX 3090 (24.5 / 25.8 GB) | GPU 1: NVIDIA GeForce RTX 3090 (24.5 / 25.8 GB)' state='normal'
+          Label text='GPU 0: NVIDIA workstation GPU (24.5 / 25.8 GB) | GPU 1: NVIDIA workstation GPU (24.5 / 25.8 GB)' state='normal'
         TFrame
           Label text='Elapsed:' state='normal'
           Label text='--' state='normal'

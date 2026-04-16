@@ -340,7 +340,7 @@ class EvalRunner:
             per_query_type = rpe._scorecard(results, lambda r: r.expected_query_type)
             run_id = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
             timestamp_utc = datetime.now(timezone.utc).isoformat()
-            gpu_device = f"CUDA_VISIBLE_DEVICES={gpu_index} -> cuda:0 ({gpu_name})"
+            gpu_device = f"CUDA_VISIBLE_DEVICES={gpu_index} -> cuda:0 (NVIDIA workstation GPU)"
             run = rpe.EvalRun(
                 run_id=run_id,
                 timestamp_utc=timestamp_utc,

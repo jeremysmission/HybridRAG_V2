@@ -130,3 +130,56 @@ def test_validate_only_fails_when_sanitized_field_has_banned_token(tmp_path: Pat
     assert result.returncode == 1
     assert report["summary"]["disallowed_hits_in_sanitized_fields"] == 1
     assert report["disallowed_hits"][0]["field"] == "user_input"
+
+
+def test_generator_sanitizes_workstation_gpu_hardware_tokens(tmp_path: Path) -> None:
+    """Verify workstation hardware identifiers are scrubbed from sanitized fields."""
+    canonical = tmp_path / "canonical_gpu.json"
+    derived = tmp_path / "derived_gpu.json"
+    validation = tmp_path / "validation_gpu.json"
+
+    payload = [
+        {
+            "query_id": "PQ-902",
+            "user_input": "Show me the eval run captured on the RTX 3090 box.",
+            "reference": "GPU line: physical GPU 0 -> cuda:0 (NVIDIA GeForce RTX 3090).",
+            "reference_contexts": [],
+            "persona": "Operator",
+            "expected_query_type": "SEMANTIC",
+            "expected_document_family": "Eval",
+            "expected_source_patterns": [],
+            "difficulty": "easy",
+            "rationale": "Sanitize workstation hardware references.",
+            "expected_anchor_entities": {"RUN": ["20260416_154142"]},
+            "has_ground_truth": True,
+            "corpus_grounding_evidence": "Dual 3090 workstation output was copied into the report.",
+        }
+    ]
+    _write_json(canonical, payload)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--canonical",
+            str(canonical),
+            "--output-json",
+            str(derived),
+            "--validation-json",
+            str(validation),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+
+    derived_rows = json.loads(derived.read_text(encoding="utf-8"))
+    report = json.loads(validation.read_text(encoding="utf-8"))
+
+    assert "3090" not in derived_rows[0]["user_input"].lower()
+    assert "3090" not in derived_rows[0]["reference"].lower()
+    assert "3090" not in derived_rows[0]["corpus_grounding_evidence"].lower()
+    assert "NVIDIA workstation GPU" in derived_rows[0]["reference"]
+    assert report["summary"]["disallowed_hits_in_sanitized_fields"] == 0

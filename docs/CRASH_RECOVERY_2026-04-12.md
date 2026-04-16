@@ -168,7 +168,7 @@ reviewer task #16 (security standard regex fix)
 
 | Machine | GPU | RAM | Role |
 |---------|-----|-----|------|
-| primary workstation (here) | Dual RTX 3090 (24 GB each) | 64 GB | Dev/lab, running Tier 2 overnight |
+| primary workstation (here) | NVIDIA workstation desktop GPUs (24 GB each) | 64 GB | Dev/lab, running Tier 2 overnight |
 | Workstation Laptop (beside user) | RTX 3000 Pro (12 GB) | 64 GB | Running walk-away overnight, dev/query testing |
 | Workstation Desktop (10 min drive) | RTX A4000 (20 GB) | 64 GB | Tomorrow: pull latest, run clean production extraction unattended 24-48h |
 

@@ -4,7 +4,7 @@
 
 **Author:** Jeremy Randall (CoPilot+)
 **Date:** 2026-04-05 MDT
-**Tested on:** Windows 11, Python 3.12.x, CUDA 12.8, dual 3090
+**Tested on:** Windows 11, Python 3.12.x, CUDA 12.8, NVIDIA workstation desktop GPUs
 **Updated:** 2026-04-08 — Python version, Ollama note, troubleshooting
 
 ---

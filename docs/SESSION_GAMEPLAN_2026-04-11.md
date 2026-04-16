@@ -11,7 +11,7 @@
 
 | Machine | GPU | Role | Status |
 |---------|-----|------|--------|
-| primary workstation (here) | Dual RTX 3090 (24GB each), 64GB RAM | Dev/lab — validate architecture, tune, extract | ACTIVE |
+| primary workstation (here) | NVIDIA workstation desktop GPUs (24GB each), 64GB RAM | Dev/lab — validate architecture, tune, extract | ACTIVE |
 | Workstation Desktop | RTX A4000 (20GB), 64GB RAM | Clean production runs, 24-48h unattended, AWS access | AVAILABLE (10 min drive) |
 | Workstation Laptop | RTX 3000 Pro, 64GB RAM | V2 query testing, code review, AWS access | BESIDE USER |
 | AWS SageMaker | OSS-20B + OSS-120B (GovCloud) | Tier 3 heavy extraction, 150K TPM / 5M TPH | NEEDS WIRING |

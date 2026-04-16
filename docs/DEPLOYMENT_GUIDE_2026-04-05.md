@@ -93,7 +93,7 @@ Verify CUDA is available (GPU installs only):
 python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}, Device: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"CPU only\"}')"
 ```
 
-You should see `CUDA: True` and your GPU name (e.g., `NVIDIA GeForce RTX 3090`).
+You should see `CUDA: True` and your GPU name (e.g., `NVIDIA workstation GPU`).
 
 ### Step 3b: Install remaining dependencies
 

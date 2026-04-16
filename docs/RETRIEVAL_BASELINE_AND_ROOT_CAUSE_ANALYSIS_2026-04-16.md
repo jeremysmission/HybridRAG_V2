@@ -9,17 +9,17 @@
 
 ## Understanding the Numbers: Three Different Measurements
 
-The 64.0% baseline is **retrieval-only** (no LLM generation). It uses the V2 `QueryPipeline.retrieve_context` path -- embed query, vector search, FTS, hybrid fusion, rerank. The scoring checks whether the expected document family appears in the top-K results. No phi4, no Claude -- pure retrieval.
+The 64.0% baseline is **retrieval-only** (no LLM generation). It uses the V2 `QueryPipeline.retrieve_context` path -- embed query, vector search, FTS, hybrid fusion, rerank. The scoring checks whether the expected document family appears in the top-K results. No phi4, no CoPilot+ -- pure retrieval.
 
-This is DIFFERENT from the marathon's 85.1% which was Claude doing full extraction + answer generation. They're measuring different things:
+This is DIFFERENT from the marathon's 85.1% which was CoPilot+ doing full extraction + answer generation. They're measuring different things:
 
 | Measurement | What It Tests | Score |
 |---|---|---|
 | Today's baseline (64.0%) | Can retrieval FIND the right chunks? | 256/400 PASS |
-| Marathon Claude (85.1%) | Can Claude ANSWER correctly from found chunks? | 338/397 |
+| Marathon CoPilot+ (85.1%) | Can CoPilot+ ANSWER correctly from found chunks? | 338/397 |
 | Marathon phi4 (75.8%) | Can phi4 ANSWER correctly from found chunks? | 301/397 |
 
-The gap between 64% (retrieval finds it) and 85% (Claude answers correctly) means Claude is compensating for retrieval failures by reasoning across imperfect context. If we fix retrieval, both the retrieval-only score AND the Claude-assisted score improve.
+The gap between 64% (retrieval finds it) and 85% (CoPilot+ answers correctly) means CoPilot+ is compensating for retrieval failures by reasoning across imperfect context. If we fix retrieval, both the retrieval-only score AND the CoPilot+-assisted score improve.
 
 ---
 
@@ -101,7 +101,7 @@ This is why queries take 13-166 seconds and often return nothing useful.
 
 ### Why the Marathon's 85.1% Didn't Hit This Problem
 
-The marathon session measured Claude's extraction quality by giving Claude the RAW CHUNK TEXT directly, bypassing the entity store entirely. Claude read the chunks and extracted relationships on the fly. Our pipeline tries to use pre-computed entities and relationships from the store -- which is empty.
+The marathon session measured CoPilot+'s extraction quality by giving CoPilot+ the RAW CHUNK TEXT directly, bypassing the entity store entirely. CoPilot+ read the chunks and extracted relationships on the fly. Our pipeline tries to use pre-computed entities and relationships from the store -- which is empty.
 
 ---
 
@@ -129,7 +129,7 @@ The retrieval layer (vector search + FTS) works correctly at 49ms. The entity en
 - 400-query full report: `baselines/baseline_400q_report_2026-04-16.md`
 - 400-query raw results: `baselines/baseline_400q_results_2026-04-16.json`
 - Overnight mining results: `overnight_autonomous_runs/2026-04-16_full_corpus_recon/output/`
-- Marathon war room: `HYBRIDRAG_LOCAL_ONLY/Codex_Max_War_Room.txt`
+- Marathon review board: `HYBRIDRAG_LOCAL_ONLY/Codex_Max_War_Room.txt`
 - Marathon lessons: `HYBRIDRAG_LOCAL_ONLY/MarathonLessonsLearned_Impliciations.txt`
 
 ---
