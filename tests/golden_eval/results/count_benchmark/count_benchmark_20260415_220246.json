@@ -1,0 +1,274 @@
+{
+  "lane_name": "count_benchmark_tranche1_frozen",
+  "lane_date": "2026-04-15 MDT",
+  "targets_path": "C:\\HybridRAG_V2\\tests\\golden_eval\\count_benchmark_targets_2026-04-15.json",
+  "lance_db": "C:\\HybridRAG_V2\\data\\index\\lancedb",
+  "entity_db": "C:\\HybridRAG_V2\\data\\index\\entities.sqlite3",
+  "selected_target_count": 7,
+  "modes": [
+    "raw_mentions",
+    "unique_documents",
+    "unique_chunks",
+    "unique_rows"
+  ],
+  "predictions_json": null,
+  "summary": {
+    "selected_targets": 7,
+    "expected_total": 7,
+    "expected_exact": 7,
+    "prediction_total": 0,
+    "prediction_exact": 0,
+    "prediction_max_abs_error": null,
+    "per_mode_prediction_exact": null
+  },
+  "results": [
+    {
+      "target": "Eareckson Air Station, Shemya, AK",
+      "family": "location",
+      "deterministic_family": "chunk_exact",
+      "surface": "chunk_exact",
+      "tranche1_status": "audited",
+      "query": "Eareckson Air Station, Shemya, AK",
+      "counts": {
+        "raw_mentions": 1,
+        "unique_documents": 1,
+        "unique_chunks": 1,
+        "unique_rows": 0
+      },
+      "expected": {
+        "raw_mentions": 1,
+        "unique_documents": 1,
+        "unique_chunks": 1,
+        "unique_rows": 0
+      },
+      "expected_exact_match": true,
+      "predicted_counts": null,
+      "prediction_exact_match": null,
+      "prediction_max_abs_error": null,
+      "prediction_per_mode": null,
+      "sample_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Eareckson AS - Alaska,US\\PSIP\\AF Forms\\NG Dig Permit Foundations.tiff"
+      ],
+      "sample_chunks": [
+        "62b65fc0de87946a6eb4947551b3bd408d576ea4b03f0dbd5f12331ea69286e3"
+      ],
+      "notes": "Full exact site phrase; one-hit sanity check."
+    },
+    {
+      "target": "Pituffik Space Base",
+      "family": "location",
+      "deterministic_family": "chunk_exact",
+      "surface": "chunk_exact",
+      "tranche1_status": "audited",
+      "query": "Pituffik Space Base",
+      "counts": {
+        "raw_mentions": 383,
+        "unique_documents": 172,
+        "unique_chunks": 358,
+        "unique_rows": 0
+      },
+      "expected": {
+        "raw_mentions": 383,
+        "unique_documents": 172,
+        "unique_chunks": 358,
+        "unique_rows": 0
+      },
+      "expected_exact_match": true,
+      "predicted_counts": null,
+      "prediction_exact_match": null,
+      "prediction_max_abs_error": null,
+      "prediction_per_mode": null,
+      "sample_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\3.0 Travel Approval Forms\\T&M Expense Reports\\Concur Expense Reports\\IGS Concur Expense Report_1430_6473668799010912920.xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\3.0 Travel Approval Forms\\T&M Expense Reports\\Concur Expense Reports\\IGS Concur Expense Report_1430_6473668799010912920.xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\3.0 Travel Approval Forms\\T&M Expense Reports\\Concur Expense Reports\\IGS Concur Expense Report_1430_6473668799010912920.xlsx"
+      ],
+      "sample_chunks": [
+        "bcdd89ae12f0d9792f2c1eaab6a0e6147b276d0a937cbc07070b23deaa088ca4",
+        "60a9d2b767269c87c8ac5cdbd5e22515c197058dfa99bbabec8c8368a49a4182",
+        "dfa2bd75b13d42fd7d3b29bb93051a3a4c6958e769950871f292dbfe80190d69"
+      ],
+      "notes": "Modern canonical site phrase; high duplication risk but exact phrase is stable."
+    },
+    {
+      "target": "IGSI-754",
+      "family": "identifier",
+      "deterministic_family": "entity_exact",
+      "surface": "entity_exact",
+      "tranche1_status": "audited",
+      "query": "IGSI-754",
+      "counts": {
+        "raw_mentions": 28,
+        "unique_documents": 20,
+        "unique_chunks": 26,
+        "unique_rows": 0
+      },
+      "expected": {
+        "raw_mentions": 28,
+        "unique_documents": 20,
+        "unique_chunks": 26,
+        "unique_rows": 0
+      },
+      "expected_exact_match": true,
+      "predicted_counts": null,
+      "prediction_exact_match": null,
+      "prediction_max_abs_error": null,
+      "prediction_per_mode": null,
+      "sample_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A031 - Integrated Master Schedule (IMS)\\2023\\Deliverables Report IGSI-1146 IGS IMS_08_21_23 (A031).pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A031 - Integrated Master Schedule (IMS)\\2023\\Deliverables Report IGSI-1146 IGS IMS_08_21_23 (A031).pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A031 - Integrated Master Schedule (IMS)\\2023\\Deliverables Report IGSI-1147 IGS IMS_09_21_23 (A031).pdf"
+      ],
+      "sample_chunks": [
+        "09bd68e6f528531aa8ed570ecc3ee356c81c7205fa42764c70d91f60e2a3f40a",
+        "12e7d99279e957ba7f4000a1515b2719bc73770336b2182e45596907bd9458be",
+        "c321fe3e8b9ddc7a8fc011c265df5bd506220befb96950dc26b3a75db2585713"
+      ],
+      "notes": "Distinctive deliverable identifier; compact evidence bundle."
+    },
+    {
+      "target": "IGSI-755",
+      "family": "identifier",
+      "deterministic_family": "entity_exact",
+      "surface": "entity_exact",
+      "tranche1_status": "audited",
+      "query": "IGSI-755",
+      "counts": {
+        "raw_mentions": 30,
+        "unique_documents": 20,
+        "unique_chunks": 27,
+        "unique_rows": 0
+      },
+      "expected": {
+        "raw_mentions": 30,
+        "unique_documents": 20,
+        "unique_chunks": 27,
+        "unique_rows": 0
+      },
+      "expected_exact_match": true,
+      "predicted_counts": null,
+      "prediction_exact_match": null,
+      "prediction_max_abs_error": null,
+      "prediction_per_mode": null,
+      "sample_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A031 - Integrated Master Schedule (IMS)\\2023\\Deliverables Report IGSI-1146 IGS IMS_08_21_23 (A031).pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A031 - Integrated Master Schedule (IMS)\\2023\\Deliverables Report IGSI-1146 IGS IMS_08_21_23 (A031).pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\OASIS\\A031 - Integrated Master Schedule (IMS)\\2023\\Deliverables Report IGSI-1147 IGS IMS_09_21_23 (A031).pdf"
+      ],
+      "sample_chunks": [
+        "09bd68e6f528531aa8ed570ecc3ee356c81c7205fa42764c70d91f60e2a3f40a",
+        "12e7d99279e957ba7f4000a1515b2719bc73770336b2182e45596907bd9458be",
+        "1d02eabcb0fa0b39047c047e3c18e68b48a110bf946a0b7eb861ce2f825ab12b"
+      ],
+      "notes": "Distinctive deliverable identifier; compact evidence bundle."
+    },
+    {
+      "target": "IGSI-1803",
+      "family": "identifier",
+      "deterministic_family": "entity_exact",
+      "surface": "entity_exact",
+      "tranche1_status": "audited",
+      "query": "IGSI-1803",
+      "counts": {
+        "raw_mentions": 187,
+        "unique_documents": 20,
+        "unique_chunks": 185,
+        "unique_rows": 0
+      },
+      "expected": {
+        "raw_mentions": 187,
+        "unique_documents": 20,
+        "unique_chunks": 185,
+        "unique_rows": 0
+      },
+      "expected_exact_match": true,
+      "predicted_counts": null,
+      "prediction_exact_match": null,
+      "prediction_max_abs_error": null,
+      "prediction_per_mode": null,
+      "sample_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Azores\\5_Install\\Acceptance Testing\\47QFRA22F0009_ IGSI-1803_Lajes_NEXION_Installation_Acceptance_Test_Plan_Procedures_2024-04-18.pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Azores\\5_Install\\Acceptance Testing\\47QFRA22F0009_ IGSI-1803_Lajes_NEXION_Installation_Acceptance_Test_Plan_Procedures_2024-04-18.pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Azores\\5_Install\\Acceptance Testing\\47QFRA22F0009_ IGSI-1803_Lajes_NEXION_Installation_Acceptance_Test_Plan_Procedures_2024-04-18.pdf"
+      ],
+      "sample_chunks": [
+        "87a308d1318f0dbc92c03bb5a1d594689af84a5128385d5f0a58b745b0beeda0",
+        "ac710871d37b1e1faeb9cb89fd507907f1e17e665db91437184fa5c0d80f7298",
+        "0a2bc2b1be8532f9a372685b1b9ce558c01edb2b80fe9bde0e57cc410736546a"
+      ],
+      "notes": "Distinctive deliverable identifier; strong benchmark candidate."
+    },
+    {
+      "target": "IGSI-1804",
+      "family": "identifier",
+      "deterministic_family": "entity_exact",
+      "surface": "entity_exact",
+      "tranche1_status": "audited",
+      "query": "IGSI-1804",
+      "counts": {
+        "raw_mentions": 57,
+        "unique_documents": 17,
+        "unique_chunks": 55,
+        "unique_rows": 0
+      },
+      "expected": {
+        "raw_mentions": 57,
+        "unique_documents": 17,
+        "unique_chunks": 55,
+        "unique_rows": 0
+      },
+      "expected_exact_match": true,
+      "predicted_counts": null,
+      "prediction_exact_match": null,
+      "prediction_max_abs_error": null,
+      "prediction_per_mode": null,
+      "sample_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Azores\\4_SIP\\IGSI-1804_Final Site Installation Plan-Azores NEXION_(A003).pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Azores\\4_SIP\\IGSI-1804_Final Site Installation Plan-Azores NEXION_(A003).pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Azores\\4_SIP\\IGSI-1804_Final Site Installation Plan-Azores NEXION_(A003).pdf"
+      ],
+      "sample_chunks": [
+        "cdc28cf547df882c12864b4bbfdb96d3c2d56c1d6c5d0678d08b21a402d5581d",
+        "4d1b7608d497c464dfeeb3386b86b4dbd16229ff34fe78aa39eb1da970010bbd",
+        "4ec9f75a0307040b6e9d01d0966f7c9fccbf817994e042eaaaee0f21d639512d"
+      ],
+      "notes": "Distinctive deliverable identifier; strong benchmark candidate."
+    },
+    {
+      "target": "IGSI-1805",
+      "family": "identifier",
+      "deterministic_family": "chunk_exact",
+      "surface": "chunk_exact",
+      "tranche1_status": "audited",
+      "query": "IGSI-1805",
+      "counts": {
+        "raw_mentions": 25,
+        "unique_documents": 15,
+        "unique_chunks": 25,
+        "unique_rows": 0
+      },
+      "expected": {
+        "raw_mentions": 25,
+        "unique_documents": 15,
+        "unique_chunks": 25,
+        "unique_rows": 0
+      },
+      "expected_exact_match": true,
+      "predicted_counts": null,
+      "prediction_exact_match": null,
+      "prediction_max_abs_error": null,
+      "prediction_per_mode": null,
+      "sample_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Azores\\5_Install\\Acceptance Testing\\Test Report\\47QFRA22F0009_IGSI-1805_Lajes_NEXION_Installation_Acceptance_Test Report_(A007)_2024_06_28.pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Azores\\5_Install\\Acceptance Testing\\Test Report\\47QFRA22F0009_IGSI-1805_Lajes_NEXION_Installation_Acceptance_Test Report_(A007)_2024_06_28.pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Azores\\5_Install\\Acceptance Testing\\Test Report\\47QFRA22F0009_IGSI-1805_Lajes_NEXION_Installation_Acceptance_Test Report_(A007)_2024_06_28.pdf"
+      ],
+      "sample_chunks": [
+        "1a5d41ed5417fb5b105a9949020f64f1ca12691d19920859abc289130bc9bdc7",
+        "0ff382737c8d2161ed7eccd88f9d6b43975e23c05c787696239c6306c0747732",
+        "07b8f7042ac3f19cd57b364a160edd4ad0017d82332ea5a71d711ee75da8dbcf"
+      ],
+      "notes": "Exact chunk-text identifier with low collision."
+    }
+  ]
+}

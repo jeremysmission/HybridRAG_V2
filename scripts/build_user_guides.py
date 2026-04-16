@@ -106,7 +106,7 @@ def _add_ragas_section(doc: Document) -> None:
     _heading(doc, "LLM-Based vs Non-LLM Metrics", level=2)
     _para(doc, (
         "RAGAS metrics come in two variants. LLM-based metrics use a judge model (such as "
-        "GPT-4 or Claude) to evaluate semantic quality -- these require API access and incur cost. "
+        "GPT-4 or CoPilot+) to evaluate semantic quality -- these require API access and incur cost. "
         "Non-LLM metrics use algorithmic approaches (Levenshtein distance, fuzzy matching via "
         "rapidfuzz) to measure retrieval quality without any external API calls."
     ))
@@ -114,7 +114,7 @@ def _add_ragas_section(doc: Document) -> None:
     _bullet(doc, "NonLLMContextRecall -- Measures retrieval coverage using fuzzy string matching between retrieved and reference contexts. No API key needed.")
     _bullet(doc, "NonLLMContextPrecisionWithReference -- Measures retrieval precision using Levenshtein similarity against reference contexts. No API key needed.")
     _para(doc, (
-        "These are the correct choice for offline evaluation, air-gapped environments, and "
+        "These are the correct choice for offline evaluation, offline environments, and "
         "cost-controlled testing. LLM-based Faithfulness and Answer Relevancy require a judge "
         "model API and are a planned future enhancement for connected environments."
     ))
@@ -143,7 +143,7 @@ def _add_ragas_section(doc: Document) -> None:
         ["Context Recall", "NonLLMContextRecall", "ACTIVE",
          "Fuzzy match between retrieved and reference contexts. Runs offline."],
         ["Faithfulness", "Planned (LLM judge required)", "FUTURE",
-         "Requires external API (GPT-4/Claude). Measures claim-level grounding."],
+         "Requires external API (GPT-4/CoPilot+). Measures claim-level grounding."],
         ["Answer Relevancy", "Planned (LLM judge required)", "FUTURE",
          "Requires external API. Measures question-answer alignment."],
         ["Hallucination Rate", "Derived from Faithfulness", "FUTURE",
