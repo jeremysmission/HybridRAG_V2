@@ -39,10 +39,12 @@ from tools.run_mode_autotune import (
 
 
 def _print_status(level: str, message: str) -> None:
+    """Support this test module by handling the print status step."""
     print(f"[{level}] {message}", flush=True)
 
 
 def _selected_modes(mode: str) -> list[str]:
+    """Support this test module by handling the selected modes step."""
     raw = str(mode).strip().lower()
     if raw == "both":
         return ["offline", "online"]
@@ -52,6 +54,7 @@ def _selected_modes(mode: str) -> list[str]:
 
 
 def _expected_source_names(dataset_path: Path) -> set[str]:
+    """Support this test module by handling the expected source names step."""
     with open(dataset_path, "r", encoding="utf-8") as f:
         data = json.load(f)
     names: set[str] = set()
@@ -68,6 +71,7 @@ def _expected_source_names(dataset_path: Path) -> set[str]:
 
 
 def _preview_names(names: Iterable[str], *, limit: int = 6) -> str:
+    """Support this test module by handling the preview names step."""
     ordered = sorted({str(name) for name in names if str(name).strip()})
     if not ordered:
         return "(none)"
@@ -78,6 +82,7 @@ def _preview_names(names: Iterable[str], *, limit: int = 6) -> str:
 
 
 def _index_stats(db_path: Path) -> dict:
+    """Support this test module by handling the index stats step."""
     try:
         conn = sqlite3.connect(str(db_path))
     except Exception as exc:
@@ -106,6 +111,7 @@ def _index_stats(db_path: Path) -> dict:
 
 
 def _corpus_alignment(expected_sources: set[str], indexed_sources: set[str]) -> dict:
+    """Support this test module by handling the corpus alignment step."""
     if not expected_sources:
         return {
             "level": "WARN",
@@ -136,6 +142,7 @@ def _corpus_alignment(expected_sources: set[str], indexed_sources: set[str]) -> 
 
 
 def _ollama_model_tags(base_url: str) -> set[str] | None:
+    """Support this test module by handling the ollama model tags step."""
     url = (base_url or "http://127.0.0.1:11434").rstrip("/") + "/api/tags"
     try:
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -153,6 +160,7 @@ def _ollama_model_tags(base_url: str) -> set[str] | None:
 
 
 def _ollama_model_present(target_model: str, available: set[str]) -> bool:
+    """Support this test module by handling the ollama model present step."""
     target = str(target_model).strip().lower()
     if not target:
         return False
@@ -163,6 +171,7 @@ def _ollama_model_present(target_model: str, available: set[str]) -> bool:
 
 
 def _run_preflight(*, dataset_path: Path, config_path: Path, mode: str) -> int:
+    """Support this test module by handling the run preflight step."""
     cfg = _load_runtime_config(config_path)
     dataset_sources = _expected_source_names(dataset_path)
     source_folder = Path((getattr(getattr(cfg, "paths", None), "source_folder", "") or "").strip())
@@ -314,6 +323,7 @@ def _run_preflight(*, dataset_path: Path, config_path: Path, mode: str) -> int:
 
 
 def main() -> int:
+    """Run this helper module directly from the command line."""
     ap = argparse.ArgumentParser(description="Read-only preflight checker for HybridRAG autotune.")
     ap.add_argument(
         "--dataset",

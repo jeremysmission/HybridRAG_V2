@@ -34,7 +34,7 @@ The project did not begin as two separate applications.
 
 It started as a single HybridRAG effort, which I now refer to as `V1`. In that original form, ingest, preprocessing, retrieval, extraction, and answering were still too tightly coupled. That was workable for early proof-of-concept progress, but it made it too hard to tell which part of the system was actually trustworthy and which part was only appearing to work.
 
-Once I pushed V1 harder against the real IGS drive, it became clear that I needed a cleaner separation of responsibilities. That is why the project evolved into:
+Once I pushed V1 harder against the real enterprise program drive, it became clear that I needed a cleaner separation of responsibilities. That is why the project evolved into:
 
 - `CorpusForge`
   - the upstream corpus-preparation side
@@ -201,7 +201,7 @@ This effort is not only about an AI model. It affects multiple functional lanes 
   - the cleanup and gating work is what makes future procurement and material questions more trustworthy
 
 - **Cyber security / IA**
-  - a major part of the problem was that security identifiers such as STIG / DISA / MITRE / NIST-style codes were colliding with business fields
+  - a major part of the problem was that security identifiers such as STIG / DISA / MITRE / security standard-style codes were colliding with business fields
   - the current path explicitly protects against treating cyber/security identifiers as if they were logistics or program entities
   - this is also important for trust, because it preserves a cleaner boundary between cybersecurity artifacts and business data
 

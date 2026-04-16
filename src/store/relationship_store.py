@@ -48,6 +48,21 @@ class RelationshipResult:
     context: str
 
 
+def resolve_relationship_db_path(db_path: str | Path) -> Path:
+    """
+    Resolve the canonical relationship-store path.
+
+    The production contract is a sibling ``relationships.sqlite3`` next to the
+    entity store. Older runtime paths sometimes passed ``entities.sqlite3``
+    directly; normalize that mistake here so health, boot, serving, and
+    extraction all agree on the same store.
+    """
+    path = Path(db_path)
+    if path.name.lower() == "entities.sqlite3":
+        return path.with_name("relationships.sqlite3")
+    return path
+
+
 class RelationshipStore:
     """
     SQLite store for entity-relationship triples.
@@ -59,8 +74,8 @@ class RelationshipStore:
       - Multi-hop: 2-3 hop JOINs for relationship chains
     """
 
-    def __init__(self, db_path: str):
-        self.db_path = Path(db_path)
+    def __init__(self, db_path: str | Path):
+        self.db_path = resolve_relationship_db_path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         # GUI queries run on background threads, so the store must allow
         # access from outside the creating thread.

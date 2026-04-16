@@ -9,11 +9,14 @@ safe_after so the worker thread never touches widgets directly.
 from __future__ import annotations
 
 import json
+import os
+import sys
 from datetime import datetime
 from pathlib import Path
 from tkinter import StringVar, filedialog, messagebox
 import tkinter as tk
 from tkinter import ttk
+from typing import Callable, Optional
 
 from src.gui.theme import (
     DARK,
@@ -40,13 +43,22 @@ DEFAULT_DOCS = V2_ROOT / "docs"
 # operator-preferred values without polluting the shared repo state.
 DEFAULTS_FILE = V2_ROOT / ".eval_gui_defaults.json"
 
+RunCallback = Callable[[dict], None]
+
 
 class LaunchPanel(tk.Frame):
     """File pickers + Start/Stop + live stream for one eval run."""
 
-    def __init__(self, parent):
+    def __init__(
+        self,
+        parent,
+        on_run_start: Optional[RunCallback] = None,
+        on_run_done: Optional[RunCallback] = None,
+    ):
         super().__init__(parent, bg=DARK["bg"])
         self._runner = EvalRunner(self._on_runner_event)
+        self._on_run_start_cb = on_run_start
+        self._on_run_done_cb = on_run_done
 
         saved = self._load_saved_defaults()
         self._defaults_source = "saved" if saved else "shipped"
@@ -70,9 +82,13 @@ class LaunchPanel(tk.Frame):
         self._var_max_q = StringVar(value=saved.get("max_queries", "") if saved else "")
         self._var_phase = StringVar(value="idle")
         self._var_defaults_status = StringVar(value=self._defaults_status_text())
+        self._var_last_run = StringVar(value="No completed run yet.")
+        self._last_results_json: Optional[Path] = None
+        self._last_report_md: Optional[Path] = None
 
         self._build()
         self._set_running(False)
+        self._set_last_run_outputs()
 
     # ------------------------------------------------------------------
     # UI build
@@ -212,6 +228,40 @@ class LaunchPanel(tk.Frame):
             )
             value_lbl.grid(row=0, column=col + 1, padx=(0, 10), sticky="w")
             self._score_labels[key] = value_lbl
+
+        # Last-run summary keeps the unattended flow usable without forcing the
+        # operator to scroll the live log or switch tabs after completion.
+        summary_frame = ttk.LabelFrame(outer, text="Last Completed Run", style="TLabelframe", padding=8)
+        summary_frame.pack(fill=tk.X, pady=(0, 8))
+
+        self._last_run_label = tk.Label(
+            summary_frame,
+            textvariable=self._var_last_run,
+            font=FONT_MONO,
+            justify="left",
+            anchor="w",
+            wraplength=1100,
+            bg=DARK["bg"],
+            fg=DARK["fg"],
+        )
+        self._last_run_label.pack(anchor="w", fill=tk.X)
+
+        summary_btns = ttk.Frame(summary_frame, style="TFrame")
+        summary_btns.pack(fill=tk.X, pady=(8, 0))
+        self._btn_open_results = ttk.Button(
+            summary_btns,
+            text="Open results JSON",
+            style="TButton",
+            command=self._open_last_results_json,
+        )
+        self._btn_open_results.pack(side=tk.LEFT, padx=(0, 6))
+        self._btn_open_report = ttk.Button(
+            summary_btns,
+            text="Open report MD",
+            style="TButton",
+            command=self._open_last_report_md,
+        )
+        self._btn_open_report.pack(side=tk.LEFT)
 
         # Log window
         log_frame = ttk.LabelFrame(outer, text="Live log", style="TLabelframe", padding=4)
@@ -398,6 +448,15 @@ class LaunchPanel(tk.Frame):
         stamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
         return str(DEFAULT_DOCS / f"production_eval_results_gui_{stamp}.json")
 
+    def set_run_callbacks(
+        self,
+        *,
+        on_run_start: Optional[RunCallback] = None,
+        on_run_done: Optional[RunCallback] = None,
+    ) -> None:
+        self._on_run_start_cb = on_run_start
+        self._on_run_done_cb = on_run_done
+
     # ------------------------------------------------------------------
     # Controls
     # ------------------------------------------------------------------
@@ -447,6 +506,16 @@ class LaunchPanel(tk.Frame):
         if max_q is not None:
             self._append_log(f"Limiting to first {max_q} queries (smoke mode).", "WARN")
         self._set_running(True)
+        self._emit_run_start(
+            {
+                "queries_path": str(queries_path),
+                "config_path": str(config_path),
+                "report_md": str(report_md),
+                "results_json": str(results_json),
+                "gpu_index": (self._var_gpu.get() or "0").strip() or "0",
+                "max_queries": max_q,
+            }
+        )
 
         self._runner.start(
             queries_path=queries_path,
@@ -486,6 +555,118 @@ class LaunchPanel(tk.Frame):
         self._log.see(tk.END)
         self._log.configure(state="disabled")
 
+    def _set_last_run_outputs(
+        self,
+        *,
+        results_json: Optional[Path] = None,
+        report_md: Optional[Path] = None,
+    ) -> None:
+        self._last_results_json = results_json
+        self._last_report_md = report_md
+        self._btn_open_results.configure(
+            state="normal" if results_json and results_json.exists() else "disabled"
+        )
+        self._btn_open_report.configure(
+            state="normal" if report_md and report_md.exists() else "disabled"
+        )
+
+    def _open_output_path(self, path: Optional[Path]) -> None:
+        if path is None:
+            return
+        try:
+            if sys.platform.startswith("win") and path.exists():
+                os.startfile(str(path))  # type: ignore[attr-defined]
+            else:
+                messagebox.showinfo("Eval output", str(path))
+        except Exception as exc:
+            messagebox.showerror("Eval output", f"Could not open {path}:\n{exc}")
+
+    def _open_last_results_json(self) -> None:
+        self._open_output_path(self._last_results_json)
+
+    def _open_last_report_md(self) -> None:
+        self._open_output_path(self._last_report_md)
+
+    def _emit_run_start(self, payload: dict) -> None:
+        if self._on_run_start_cb is None:
+            return
+        try:
+            self._on_run_start_cb(payload)
+        except Exception:
+            pass
+
+    def _emit_run_done(self, payload: dict) -> None:
+        if self._on_run_done_cb is None:
+            return
+        try:
+            self._on_run_done_cb(payload)
+        except Exception:
+            pass
+
+    def _build_last_run_summary(self, payload: dict) -> str:
+        run_id = payload.get("run_id") or "?"
+        timestamp = payload.get("timestamp_utc") or "?"
+        status = payload.get("status") or "?"
+        pack_name = payload.get("queries_pack_name") or "?"
+        config_name = payload.get("config_name") or "?"
+        store_path = payload.get("store_path") or "?"
+        router_mode = payload.get("router_mode") or ""
+        provider = payload.get("provider") or ""
+        model = payload.get("model") or ""
+        strongest = payload.get("strongest_areas") or []
+        weakest = payload.get("weakest_areas") or []
+        score_summary = payload.get("score_summary") or {}
+        latency = payload.get("latency_summary") or {}
+        artifact_paths = payload.get("artifact_paths") or {}
+        results_json = artifact_paths.get("results_json") or payload.get("results_json") or "?"
+        report_md = artifact_paths.get("report_md") or payload.get("report_md") or "?"
+
+        lines = [
+            f"status:    {status}    run_id: {run_id}",
+            f"time:      {timestamp}",
+            f"queries:   {pack_name}",
+            f"config:    {config_name}",
+            f"store:     {store_path}",
+        ]
+        if router_mode or provider or model:
+            provider_bits = " / ".join(bit for bit in (provider, model) if bit)
+            if provider_bits:
+                lines.append(f"router:    {router_mode or 'llm'} ({provider_bits})")
+            else:
+                lines.append(f"router:    {router_mode}")
+        total = score_summary.get("total_queries")
+        if total:
+            lines.append(
+                "score:     "
+                f"PASS {score_summary.get('pass_count', 0)}/{total} "
+                f"({_fmt_pct(score_summary.get('pass_rate_pct'))})    "
+                f"PARTIAL {score_summary.get('partial_count', 0)}/{total}    "
+                f"MISS {score_summary.get('miss_count', 0)}/{total}    "
+                f"Routing {score_summary.get('routing_correct', 0)}/{total} "
+                f"({_fmt_pct(score_summary.get('routing_rate_pct'))})"
+            )
+        if strongest:
+            lines.append(f"strongest: {', '.join(strongest)}")
+        if weakest:
+            lines.append(f"weakest:   {', '.join(weakest)}")
+        if latency:
+            lines.append(
+                "latency:   "
+                f"retr {latency.get('p50_pure_retrieval_ms', '?')}/"
+                f"{latency.get('p95_pure_retrieval_ms', '?')} ms    "
+                f"wall {latency.get('p50_wall_clock_ms', '?')}/"
+                f"{latency.get('p95_wall_clock_ms', '?')} ms    "
+                f"router {latency.get('p50_router_ms', '?')}/"
+                f"{latency.get('p95_router_ms', '?')} ms    "
+                f"elapsed {payload.get('elapsed_s', latency.get('elapsed_s', '?'))}s"
+            )
+        lines.append(f"results@:  {results_json}")
+        lines.append(f"report@:   {report_md}")
+        err = payload.get("error")
+        if err:
+            lines.append(f"error:     {err}")
+        return "\n".join(lines)
+
     # ------------------------------------------------------------------
     # Runner callback (background thread -> safe_after -> main thread)
     # ------------------------------------------------------------------
@@ -518,6 +699,12 @@ class LaunchPanel(tk.Frame):
                 )
             elif kind == "scorecard":
                 self._fill_scorecard(payload)
+                strongest = payload.get("strongest_query_types") or []
+                weakest = payload.get("weakest_query_types") or []
+                if strongest:
+                    self._append_log(f"Strongest areas: {', '.join(strongest)}", "OK")
+                if weakest:
+                    self._append_log(f"Weakest areas: {', '.join(weakest)}", "WARN")
             elif kind == "done":
                 self._set_running(False)
                 status = payload.get("status", "?")
@@ -525,14 +712,82 @@ class LaunchPanel(tk.Frame):
                 level = "OK" if status == "PASS" else ("WARN" if status == "STOPPED" else "ERROR")
                 self._var_phase.set(f"done ({status})")
                 self._append_log(f"Run finished: {status} in {elapsed}s", level)
-                if status == "PASS":
-                    results_json = payload.get("results_json")
-                    report_md = payload.get("report_md")
+                run_id = payload.get("run_id")
+                timestamp = payload.get("timestamp_utc")
+                if run_id or timestamp:
+                    self._append_log(
+                        f"  run: {run_id or '?'} @ {timestamp or '?'}",
+                        "INFO",
+                    )
+                pack_name = payload.get("queries_pack_name")
+                config_name = payload.get("config_name")
+                store_path = payload.get("store_path")
+                if pack_name:
+                    self._append_log(f"  pack:   {pack_name}", "INFO")
+                if config_name:
+                    self._append_log(f"  config: {config_name}", "INFO")
+                if store_path:
+                    self._append_log(f"  store:  {store_path}", "INFO")
+
+                router_mode = payload.get("router_mode") or ""
+                provider = payload.get("provider") or ""
+                model = payload.get("model") or ""
+                if router_mode:
+                    if provider or model:
+                        provider_bits = " / ".join(bit for bit in (provider, model) if bit)
+                        self._append_log(f"  router: {router_mode} ({provider_bits})", "INFO")
+                    else:
+                        self._append_log(f"  router: {router_mode}", "INFO")
+
+                score_summary = payload.get("score_summary") or {}
+                total = score_summary.get("total_queries")
+                if total:
+                    self._append_log(
+                        "  score: "
+                        f"PASS {score_summary.get('pass_count', 0)}/{total} "
+                        f"({_fmt_pct(score_summary.get('pass_rate_pct'))})  "
+                        f"PARTIAL {score_summary.get('partial_count', 0)}/{total}  "
+                        f"MISS {score_summary.get('miss_count', 0)}/{total}  "
+                        f"Routing {score_summary.get('routing_correct', 0)}/{total} "
+                        f"({_fmt_pct(score_summary.get('routing_rate_pct'))})",
+                        "INFO",
+                    )
+                strongest = payload.get("strongest_areas") or []
+                weakest = payload.get("weakest_areas") or []
+                if strongest:
+                    self._append_log(f"  strongest: {', '.join(strongest)}", "OK")
+                if weakest:
+                    self._append_log(f"  weakest:   {', '.join(weakest)}", "WARN")
+
+                latency = payload.get("latency_summary") or {}
+                if latency:
+                    self._append_log(
+                        "  latency: "
+                        f"retr {latency.get('p50_pure_retrieval_ms', '?')}/"
+                        f"{latency.get('p95_pure_retrieval_ms', '?')} ms  "
+                        f"wall {latency.get('p50_wall_clock_ms', '?')}/"
+                        f"{latency.get('p95_wall_clock_ms', '?')} ms  "
+                        f"router {latency.get('p50_router_ms', '?')}/"
+                        f"{latency.get('p95_router_ms', '?')} ms",
+                        "INFO",
+                    )
+
+                artifact_paths = payload.get("artifact_paths") or {}
+                results_json = artifact_paths.get("results_json") or payload.get("results_json")
+                report_md = artifact_paths.get("report_md") or payload.get("report_md")
+                if results_json:
                     self._append_log(f"  results: {results_json}", "INFO")
+                if report_md:
                     self._append_log(f"  report:  {report_md}", "INFO")
                 err = payload.get("error")
                 if err:
                     self._append_log(f"  error: {err}", "ERROR")
+                self._var_last_run.set(self._build_last_run_summary(payload))
+                self._set_last_run_outputs(
+                    results_json=Path(results_json) if results_json else None,
+                    report_md=Path(report_md) if report_md else None,
+                )
+                self._emit_run_done(payload)
         except Exception as exc:
             self._append_log(f"dispatch error: {exc}", "ERROR")
 
@@ -557,3 +812,15 @@ class LaunchPanel(tk.Frame):
                 lbl.configure(text=f"{value}/{total}", foreground=color)
             else:
                 lbl.configure(text=str(value), foreground=color)
+
+
+def _fmt_pct(value) -> str:
+    """Turn internal values into human-readable text for the operator."""
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return "?"
+    text = f"{numeric:.1f}"
+    if text.endswith(".0"):
+        text = text[:-2]
+    return f"{text}%"

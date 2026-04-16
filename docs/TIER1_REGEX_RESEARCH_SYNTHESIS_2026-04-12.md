@@ -1,6 +1,6 @@
 # Tier 1 Regex Research Synthesis — 2026-04-12
 
-**Author:** Agent 4  
+**Author:** reviewer  
 **Repo:** `C:\HybridRAG_V2`  
 **Scope:** External research synthesis for the Tier 1 regex hardening lane, mapped onto the current `PART` / `PO` pollution problem in HybridRAG_V2.  
 **Primary local problem statement:** current Tier 1 extraction polluted `PO` and `PART` with security-control / STIG / baseline identifiers. See [NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md](./NIST_REGEX_OVER_MATCHING_INVESTIGATION_2026-04-12.md) and [V2_DEMO_READINESS_GAP_ANALYSIS_2026-04-12.md](./V2_DEMO_READINESS_GAP_ANALYSIS_2026-04-12.md).
@@ -20,7 +20,7 @@ That is the common shape across:
 - mature rule engines and IE toolkits such as spaCy, Stanford CoreNLP, and Microsoft Presidio
 - operational detection systems such as GitHub secret scanning
 - weak-supervision / data-centric systems such as Snorkel and skweak
-- official assessment and sampling guidance from NIST
+- official assessment and sampling guidance from security standard
 
 ### Bottom-line conclusion for HybridRAG_V2
 
@@ -37,8 +37,8 @@ For this project, the best defensible path is **hybrid rules + validators + slic
 
 ### High-confidence sources
 
-- **NIST SP 800-53 Rev. 5** and **SP 800-53A Rev. 5**: official control-family taxonomy plus staged assessment methodology. [E1] [E2]
-- **NIST/SEMATECH Engineering Statistics Handbook**: sample-size and confidence-interval guidance for proportion estimates. [E3] [E4]
+- **security standard SP 800-53 Rev. 5** and **SP 800-53A Rev. 5**: official control-family taxonomy plus staged assessment methodology. [E1] [E2]
+- **security standard/SEMATECH Engineering Statistics Handbook**: sample-size and confidence-interval guidance for proportion estimates. [E3] [E4]
 - **GitHub secret scanning docs**: concrete operational pattern for custom-pattern dry runs, reviewing false positives, and only then enabling blocking behavior. [E5] [E6]
 - **Microsoft Presidio docs**: explicit architecture support for regex + deny-list + context words + validation / invalidation hooks. [E7] [E8] [E9]
 - **spaCy** and **Stanford CoreNLP** docs: token-aware rule systems, overlap control, POS gating, and combining rules with broader NER pipelines. [E10] [E11] [E12]
@@ -63,7 +63,7 @@ For this project, the best defensible path is **hybrid rules + validators + slic
 The best-practice sequence is:
 
 1. **Freeze the failure taxonomy first.**
-   For us: `PO` pollution by control-family IDs, `PART` pollution by STIG / CCI / baseline IDs, plus OCR / table / archive-specific edge cases. NIST SP 800-53 and DISA / STIG documentation matter here because the false positives come from official governed namespaces, so the collision classes are knowable up front. [E1] [E20] [E21] [E22]
+   For us: `PO` pollution by control-family IDs, `PART` pollution by STIG / CCI / baseline IDs, plus OCR / table / archive-specific edge cases. security standard SP 800-53 and DISA / STIG documentation matter here because the false positives come from official governed namespaces, so the collision classes are knowable up front. [E1] [E20] [E21] [E22]
 2. **Move from raw regex to token-aware candidate generation.**
    spaCy and CoreNLP both emphasize token-aware rule systems over raw text regex because token attributes, overlap rules, and POS / context constraints reduce brittle matching. [E10] [E11] [E12]
 3. **Separate matching from validation.**
@@ -75,7 +75,7 @@ The best-practice sequence is:
 6. **Use a small trusted evaluation set before trusting weak supervision or heuristic rules.**
    Snorkel’s LF workflow explicitly reviews LF precision / coverage on a selected split; practitioner discussions say the same thing more bluntly. [E14] [P3] [P4]
 7. **Only then run the expensive full rerun.**
-   NIST’s assessment framing and GitHub’s push-protection sequencing both imply that blocking / production-scale actions come after dry-run evidence, not before. [E2] [E5]
+   security standard’s assessment framing and GitHub’s push-protection sequencing both imply that blocking / production-scale actions come after dry-run evidence, not before. [E2] [E5]
 
 ### Practical interpretation for this repo
 
@@ -96,7 +96,7 @@ Authorize a full Tier 1 rerun only if **all** of the following pass:
 3. **Top-frequency audit hard fail**
    In the shadow run, the top 50 most frequent `PO` values and top 50 most frequent `PART` values must contain **zero** known control-family / STIG / MITRE namespaces.
 4. **Manual precision audit by class**
-   Audit at least **385 extracted candidates per risky class** (`PO`, `PART`) if you want a worst-case ±5% margin at 95% confidence for a proportion estimate. This is an inference from NIST’s proportion sample-size guidance, using the conservative `p=.5` worst case. [E3] [E4]
+   Audit at least **385 extracted candidates per risky class** (`PO`, `PART`) if you want a worst-case ±5% margin at 95% confidence for a proportion estimate. This is an inference from security standard’s proportion sample-size guidance, using the conservative `p=.5` worst case. [E3] [E4]
 5. **Slice audit minimums**
    Audit at least **50 extracted hits per critical slice per risky class** even if the overall 385 sample is already satisfied. This is not for tight confidence intervals; it is to catch concentrated slice failures before rerun. [E15] [E16] [E17]
 6. **Precision floor**
@@ -224,14 +224,14 @@ For `BUSINESS_PO`, require stronger positive evidence:
 
 For `REPORT_ID`, keep explicit report families such as `FSR`, `UMR`, `ASV`, `RTS` separate from procurement numbers.
 
-Do **not** let `IR-*` remain inside the business-facing `PO` class. `IR` is an official NIST control-family prefix for Incident Response, so in this corpus it is a known collision namespace, not a safe business-ID family. [E1]
+Do **not** let `IR-*` remain inside the business-facing `PO` class. `IR` is an official security standard control-family prefix for Incident Response, so in this corpus it is a known collision namespace, not a safe business-ID family. [E1]
 
 #### For `PART`
 
 Keep generic part matching only if it is followed by validation:
 
 - reject official control / baseline / vulnerability namespaces like `CCI-`, `SV-`, `CVE-`, `CCE-`, `GPOS-`, `OS-`, `AS-`, `HS-`
-- use more careful NIST family blocking based on shape, not naive prefix-only blocking
+- use more careful security standard family blocking based on shape, not naive prefix-only blocking
 - require positive context for ambiguous short codes: `part`, `serial`, `qty`, `replace`, `removed`, `installed`, `NSN`, `model`, `cable`, `connector`, manufacturer names, BOM / spares / packing list headers
 
 This is exactly the pattern Presidio recommends for weak regexes: low-trust pattern + context words + validation hooks. [E7] [E8] [E9]
@@ -246,7 +246,7 @@ Use denylist or block-pattern logic when:
 
 That is true for:
 
-- NIST control-family identifiers from SP 800-53 [E1]
+- security standard control-family identifiers from SP 800-53 [E1]
 - DISA `CCI-*` identifiers [E20]
 - STIG `SV-*` and `SRG-...-GPOS-...` style identifiers [E21]
 - MITRE `CVE-*` syntax [E22]
@@ -259,7 +259,7 @@ It becomes brittle when:
 - the block rule is only prefix-based and ignores suffix length or context
 - you are using it to compensate for missing ontology separation
 
-This is why HybridRAG_V2 should prefer **regex-shaped invalidators** over raw prefix lists for NIST families. A blanket `PS-*` block would be too blunt if real parts like `PS-800` exist. A shape-aware rule like "NIST family + 1-2 digit control number with optional enhancement" is much safer.
+This is why HybridRAG_V2 should prefer **regex-shaped invalidators** over raw prefix lists for security standard families. A blanket `PS-*` block would be too blunt if real parts like `PS-800` exist. A shape-aware rule like "security standard family + 1-2 digit control number with optional enhancement" is much safer.
 
 ## 8. What Not To Waste Time On
 
@@ -299,7 +299,7 @@ Use official collision namespaces as first-class blocked shapes.
 
 Minimum immediate block families for business-facing `PO` / `PART`:
 
-- NIST SP 800-53 family identifiers in control-number shape
+- security standard SP 800-53 family identifiers in control-number shape
 - `CCI-*`
 - `SV-*`
 - `CVE-*`
@@ -371,20 +371,20 @@ That is not perfection. It is an auditable, data-centric, production-defensible 
 
 | Local problem | External best practice | HybridRAG_V2 implication |
 |---|---|---|
-| `IR-*` controls entering `PO` | NIST says `IR` is an official control-family namespace; do not let one regex represent both report IDs and business POs. [E1] | Remove `IR` from report-ID logic or route it through explicit disambiguation. |
+| `IR-*` controls entering `PO` | security standard says `IR` is an official control-family namespace; do not let one regex represent both report IDs and business POs. [E1] | Remove `IR` from report-ID logic or route it through explicit disambiguation. |
 | Generic `[A-Z]{2,}-\d{3,4}` matching STIG / DISA codes | Presidio-style weak regex should be followed by validation / invalidation and context checks. [E7] [E8] [E9] | Keep broad part matcher only if followed by official blocked-shape checks plus positive context. |
 | Desire to rerun the whole corpus immediately | GitHub custom-pattern workflow is dry-run first, review false positives, iterate, then enable. [E5] [E6] | Do a shadow Tier 1 run first, not a 10.4M blind rerun. |
 | Overall metrics may hide cyber-heavy failures | Slice-based monitoring literature says critical slices must be measured separately. [E15] [E16] [E17] | Audit cyber, procurement, maintenance, OCR, and table slices separately. |
-| Need to know whether the rules are "good enough" | NIST sampling guidance supports explicit precision audits with confidence bounds. [E3] [E4] | Report audited precision with CIs, not vibes. |
+| Need to know whether the rules are "good enough" | security standard sampling guidance supports explicit precision audits with confidence bounds. [E3] [E4] | Report audited precision with CIs, not vibes. |
 
 ## References
 
 ### External
 
-- [E1] NIST SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations. https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final
-- [E2] NIST SP 800-53A Rev. 5, Assessing Security and Privacy Controls in Information Systems and Organizations. https://csrc.nist.gov/pubs/sp/800/53/a/r5/final
-- [E3] NIST/SEMATECH e-Handbook: sample sizes required for proportions. https://www.itl.nist.gov/div898/handbook/prc/section2/old.prc272.htm
-- [E4] NIST/SEMATECH e-Handbook: confidence limits for proportions. https://www.itl.nist.gov/div898/handbook/prc/section2/old.prc271.htm
+- [E1] security standard SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations. https://csrc.security standard.gov/pubs/sp/800/53/r5/upd1/final
+- [E2] security standard SP 800-53A Rev. 5, Assessing Security and Privacy Controls in Information Systems and Organizations. https://csrc.security standard.gov/pubs/sp/800/53/a/r5/final
+- [E3] security standard/SEMATECH e-Handbook: sample sizes required for proportions. https://www.itl.security standard.gov/div898/handbook/prc/section2/old.prc272.htm
+- [E4] security standard/SEMATECH e-Handbook: confidence limits for proportions. https://www.itl.security standard.gov/div898/handbook/prc/section2/old.prc271.htm
 - [E5] GitHub Docs: defining custom patterns for secret scanning. https://docs.github.com/en/code-security/secret-scanning/using-advanced-secret-scanning-and-push-protection-features/custom-patterns/defining-custom-patterns-for-secret-scanning
 - [E6] GitHub Docs: supported secret scanning patterns. https://docs.github.com/code-security/secret-scanning/secret-scanning-patterns
 - [E7] Microsoft Presidio: developing recognizers. https://microsoft.github.io/presidio/analyzer/developing_recognizers/
@@ -400,7 +400,7 @@ That is not perfection. It is an auditable, data-centric, production-defensible 
 - [E17] Slice-based learning / slice finder references: https://arxiv.org/abs/1909.06349 and https://arxiv.org/abs/1807.06068
 - [E18] EASA FAQ: part number and serial number can be conclusively identified from record review. https://www.easa.europa.eu/en/faq/19492
 - [E19] FAA AC 43-9D: maintenance records, part number and serial number tracking. https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_43-9D.pdf
-- [E20] DoD Cyber Exchange: Control Correlation Identifier (CCI). https://public.cyber.mil/stigs/cci/
+- [E20] industry Cyber Exchange: Control Correlation Identifier (CCI). https://public.cyber.mil/stigs/cci/
 - [E21] STIG Viewer example showing `SV-*`, `CCI-*`, `GPOS-*` security identifiers. https://stigviewer.com/stigs/red_hat_enterprise_linux_8/2025-03-26/finding/V-230411
 - [E22] CVE FAQ: CVE ID syntax. https://www.cve.org/Resources/Media/Archives/OldWebsite/about/faqs.html
 - [E23] DISA briefing: CCI and SRG / STIG data model. https://www.disa.mil/~/media/files/disa/news/conference/cif/briefing/ia_stig_scap_and_data_metrics.pdf

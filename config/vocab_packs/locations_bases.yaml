@@ -1,0 +1,251 @@
+pack_id: locations_bases
+pack_name: Locations and Bases
+domain: locations_bases
+version: "2026-04-15"
+release_tier: deployable
+status: active
+description: >-
+  Sanitized controlled vocabulary for military installations — Space
+  Force bases, Air Force bases, and joint bases — with canonical names,
+  legacy names, service affiliation, type, and parent geography. Sources
+  are official public sites: US Space Force locations, Space Systems
+  Command "where we operate", and the Air Force base locator.
+
+provenance:
+  deployable_sources:
+    - source_id: ussf_locations
+      source_kind: official_public
+      citation: "https://www.spaceforce.mil/About-Us/Space-Force-Locations/I/"
+    - source_id: ssc_where_we_operate
+      source_kind: official_public
+      citation: "https://www.ssc.spaceforce.mil/About-Us/Where-We-Operate"
+    - source_id: usaf_base_locator
+      source_kind: official_public
+      citation: "https://www.airforce.com/ways-to-serve/locations"
+    - source_id: patrick_rename_announcement
+      source_kind: official_public
+      citation: "https://www.spaceforce.mil/News/Article-Display/Article/2445557/patrick-afb-cape-canaveral-afs-renamed-as-space-force-installations/"
+  notes: "Only deployable_sources ship with this pack artifact."
+
+entry_defaults:
+  regex_safe: false
+  retrieval_expand: true
+  collision_risk: medium
+  source_kind: official_public
+
+entries:
+  - term_id: locations.spaceforce.patrick_sfb
+    canonical: Patrick Space Force Base
+    kind: location
+    domain: locations_bases
+    category: installation
+    aliases: [Patrick SFB, Patrick Space Force Base, Patrick AFB]
+    regex_safe: false
+    retrieval_expand: true
+    collision_risk: medium
+    source_kind: official_public
+    service: Space Force
+    type: base
+    legacy_names: [Patrick AFB, Patrick Air Force Base]
+    parent_geography:
+      city: Cape Canaveral
+      state_or_province: Florida
+      country: United States
+    sources:
+      - source_id: ussf_locations
+        citation: "https://www.spaceforce.mil/About-Us/Space-Force-Locations/I/"
+      - source_id: patrick_rename_announcement
+        citation: "https://www.spaceforce.mil/News/Article-Display/Article/2445557/patrick-afb-cape-canaveral-afs-renamed-as-space-force-installations/"
+    notes: "Renamed from Patrick Air Force Base when transitioned to Space Force."
+
+  - term_id: locations.spaceforce.cape_canaveral_sfs
+    canonical: Cape Canaveral Space Force Station
+    kind: location
+    domain: locations_bases
+    category: installation
+    aliases: [Cape Canaveral SFS, CCSFS, Cape Canaveral Air Force Station, CCAFS]
+    regex_safe: false
+    retrieval_expand: true
+    collision_risk: medium
+    source_kind: official_public
+    service: Space Force
+    type: station
+    legacy_names: [Cape Canaveral Air Force Station, CCAFS]
+    parent_geography:
+      city: Cape Canaveral
+      state_or_province: Florida
+      country: United States
+    sources:
+      - source_id: patrick_rename_announcement
+        citation: "https://www.spaceforce.mil/News/Article-Display/Article/2445557/patrick-afb-cape-canaveral-afs-renamed-as-space-force-installations/"
+    notes: "Co-located with Patrick SFB; launch complex for many federal and commercial missions."
+
+  - term_id: locations.spaceforce.pituffik_sb
+    canonical: Pituffik Space Base
+    kind: location
+    domain: locations_bases
+    category: installation
+    aliases: [Pituffik SB, Thule Air Base, Thule AB]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    service: Space Force
+    type: base
+    legacy_names: [Thule Air Base, Thule AB]
+    parent_geography:
+      city: Pituffik
+      state_or_province: Avannaata
+      country: Greenland
+    sources:
+      - source_id: ussf_locations
+        citation: "https://www.spaceforce.mil/About-Us/Space-Force-Locations/I/"
+    notes: "Renamed from Thule AB in April 2023. Northernmost US military installation."
+
+  - term_id: locations.spaceforce.vandenberg_sfb
+    canonical: Vandenberg Space Force Base
+    kind: location
+    domain: locations_bases
+    category: installation
+    aliases: [Vandenberg SFB, Vandenberg AFB, Vandenberg Air Force Base]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    service: Space Force
+    type: base
+    legacy_names: [Vandenberg Air Force Base, Vandenberg AFB]
+    parent_geography:
+      city: Lompoc
+      state_or_province: California
+      country: United States
+    sources:
+      - source_id: ussf_locations
+        citation: "https://www.spaceforce.mil/About-Us/Space-Force-Locations/I/"
+
+  - term_id: locations.spaceforce.peterson_sfb
+    canonical: Peterson Space Force Base
+    kind: location
+    domain: locations_bases
+    category: installation
+    aliases: [Peterson SFB, Peterson AFB, Peterson Air Force Base]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    service: Space Force
+    type: base
+    legacy_names: [Peterson Air Force Base, Peterson AFB]
+    parent_geography:
+      city: Colorado Springs
+      state_or_province: Colorado
+      country: United States
+    sources:
+      - source_id: ussf_locations
+        citation: "https://www.spaceforce.mil/About-Us/Space-Force-Locations/I/"
+
+  - term_id: locations.spaceforce.schriever_sfb
+    canonical: Schriever Space Force Base
+    kind: location
+    domain: locations_bases
+    category: installation
+    aliases: [Schriever SFB, Schriever AFB, Schriever Air Force Base]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    service: Space Force
+    type: base
+    legacy_names: [Schriever Air Force Base, Schriever AFB]
+    parent_geography:
+      city: Colorado Springs
+      state_or_province: Colorado
+      country: United States
+    sources:
+      - source_id: ussf_locations
+        citation: "https://www.spaceforce.mil/About-Us/Space-Force-Locations/I/"
+
+  - term_id: locations.spaceforce.buckley_sfb
+    canonical: Buckley Space Force Base
+    kind: location
+    domain: locations_bases
+    category: installation
+    aliases: [Buckley SFB, Buckley AFB, Buckley Air Force Base]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    service: Space Force
+    type: base
+    legacy_names: [Buckley Air Force Base, Buckley AFB]
+    parent_geography:
+      city: Aurora
+      state_or_province: Colorado
+      country: United States
+    sources:
+      - source_id: ussf_locations
+        citation: "https://www.spaceforce.mil/About-Us/Space-Force-Locations/I/"
+
+  - term_id: locations.spaceforce.los_angeles_sfb
+    canonical: Los Angeles Space Force Base
+    kind: location
+    domain: locations_bases
+    category: installation
+    aliases: [Los Angeles SFB, LA SFB, Los Angeles AFB, LA AFB, Los Angeles Air Force Base]
+    regex_safe: false
+    retrieval_expand: true
+    collision_risk: medium
+    source_kind: official_public
+    service: Space Force
+    type: base
+    legacy_names: [Los Angeles Air Force Base, LA AFB]
+    parent_geography:
+      city: El Segundo
+      state_or_province: California
+      country: United States
+    sources:
+      - source_id: ssc_where_we_operate
+        citation: "https://www.ssc.spaceforce.mil/About-Us/Where-We-Operate"
+    notes: "Home to Space Systems Command headquarters."
+
+  - term_id: locations.airforce.eielson_afb
+    canonical: Eielson Air Force Base
+    kind: location
+    domain: locations_bases
+    category: installation
+    aliases: [Eielson AFB, Eielson]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    service: Air Force
+    type: base
+    legacy_names: []
+    parent_geography:
+      city: Fairbanks
+      state_or_province: Alaska
+      country: United States
+    sources:
+      - source_id: usaf_base_locator
+        citation: "https://www.airforce.com/ways-to-serve/locations"
+
+  - term_id: locations.airforce.kirtland_afb
+    canonical: Kirtland Air Force Base
+    kind: location
+    domain: locations_bases
+    category: installation
+    aliases: [Kirtland AFB]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    service: Air Force
+    type: base
+    legacy_names: []
+    parent_geography:
+      city: Albuquerque
+      state_or_province: New Mexico
+      country: United States
+    sources:
+      - source_id: usaf_base_locator
+        citation: "https://www.airforce.com/ways-to-serve/locations"

@@ -27,6 +27,7 @@ from src.llm.client import LLMClient
 from src.query.context_builder import ContextBuilder, GeneratorContext
 from src.query.generator import Generator, QueryResponse
 from src.query.vector_retriever import VectorRetriever
+from src.util import skip_signal
 
 logger = logging.getLogger(__name__)
 
@@ -193,61 +194,79 @@ class CRAGVerifier:
             logger.info("CRAG: answer graded INCORRECT (score=%.2f), returning NOT_FOUND", grade.relevance_score)
             return self._not_found_response(response, query_text)
 
-        # AMBIGUOUS path: try knowledge strip refinement, then re-retrieval
-        while retries < self.config.max_retries and grade.outcome == CRAGOutcome.AMBIGUOUS:
-            retries += 1
-            logger.info("CRAG retry %d/%d: AMBIGUOUS (score=%.2f)", retries, self.config.max_retries, grade.relevance_score)
-
-            # Step 1: Knowledge strip refinement
-            refined_context = self._refine_via_strips(context, query_text)
-            if refined_context is not None:
-                new_response = self.generator.generate(refined_context, query_text)
-                new_grade = self._grade_response(new_response.answer, refined_context.context_text, query_text)
-                logger.info(
-                    "CRAG post-strip-refinement: score=%.2f, outcome=%s",
-                    new_grade.relevance_score, new_grade.outcome.value,
-                )
-
-                if new_grade.outcome == CRAGOutcome.CORRECT:
-                    new_response.crag_verified = True
-                    new_response.crag_retries = retries
-                    new_response.sources = response.sources
-                    new_response.query_path = response.query_path
-                    return new_response
-
-                if new_grade.outcome == CRAGOutcome.INCORRECT:
-                    return self._not_found_response(response, query_text, retries)
-
-            # Step 2: Query rewrite + re-retrieval
-            rewritten_query = self._rewrite_query(query_text)
-            if rewritten_query and rewritten_query != query_text:
-                logger.info("CRAG query rewrite: '%s' -> '%s'", query_text, rewritten_query)
-                new_results = self.vector_retriever.search(rewritten_query, top_k=top_k)
-                if new_results:
-                    context = self.context_builder.build(new_results, query_text)
-                    new_response = self.generator.generate(context, query_text)
-                    grade = self._grade_response(new_response.answer, context.context_text, query_text)
+        # AMBIGUOUS path: try knowledge strip refinement, then re-retrieval.
+        # Wrapped in skip_signal.watching so an operator can press any key to
+        # abort the remaining retries and return the best-effort response.
+        skipped_by_operator = False
+        with skip_signal.watching("CRAG retry loop"):
+            while retries < self.config.max_retries and grade.outcome == CRAGOutcome.AMBIGUOUS:
+                if skip_signal.pressed():
+                    skipped_by_operator = True
                     logger.info(
-                        "CRAG post-re-retrieval: score=%.2f, outcome=%s",
-                        grade.relevance_score, grade.outcome.value,
+                        "CRAG: skip requested, exiting retry loop after %d/%d retries",
+                        retries, self.config.max_retries,
+                    )
+                    break
+                retries += 1
+                logger.info("CRAG retry %d/%d: AMBIGUOUS (score=%.2f)", retries, self.config.max_retries, grade.relevance_score)
+
+                # Step 1: Knowledge strip refinement
+                refined_context = self._refine_via_strips(context, query_text)
+                if refined_context is not None:
+                    new_response = self.generator.generate(refined_context, query_text)
+                    new_grade = self._grade_response(new_response.answer, refined_context.context_text, query_text)
+                    logger.info(
+                        "CRAG post-strip-refinement: score=%.2f, outcome=%s",
+                        new_grade.relevance_score, new_grade.outcome.value,
                     )
 
-                    if grade.outcome == CRAGOutcome.CORRECT:
+                    if new_grade.outcome == CRAGOutcome.CORRECT:
                         new_response.crag_verified = True
                         new_response.crag_retries = retries
+                        new_response.sources = response.sources
                         new_response.query_path = response.query_path
                         return new_response
 
-                    if grade.outcome == CRAGOutcome.INCORRECT:
+                    if new_grade.outcome == CRAGOutcome.INCORRECT:
                         return self._not_found_response(response, query_text, retries)
 
-                    # Still AMBIGUOUS — continue loop
-                    response = new_response
-                else:
-                    logger.info("CRAG re-retrieval returned no results")
+                # Step 2: Query rewrite + re-retrieval
+                rewritten_query = self._rewrite_query(query_text)
+                if rewritten_query and rewritten_query != query_text:
+                    logger.info("CRAG query rewrite: '%s' -> '%s'", query_text, rewritten_query)
+                    new_results = self.vector_retriever.search(rewritten_query, top_k=top_k)
+                    if new_results:
+                        context = self.context_builder.build(new_results, query_text)
+                        new_response = self.generator.generate(context, query_text)
+                        grade = self._grade_response(new_response.answer, context.context_text, query_text)
+                        logger.info(
+                            "CRAG post-re-retrieval: score=%.2f, outcome=%s",
+                            grade.relevance_score, grade.outcome.value,
+                        )
 
-        # Exhausted retries while still AMBIGUOUS — return best effort
-        logger.info("CRAG: exhausted %d retries, returning last response", retries)
+                        if grade.outcome == CRAGOutcome.CORRECT:
+                            new_response.crag_verified = True
+                            new_response.crag_retries = retries
+                            new_response.query_path = response.query_path
+                            return new_response
+
+                        if grade.outcome == CRAGOutcome.INCORRECT:
+                            return self._not_found_response(response, query_text, retries)
+
+                        # Still AMBIGUOUS — continue loop
+                        response = new_response
+                    else:
+                        logger.info("CRAG re-retrieval returned no results")
+
+        # Fell out of the loop: either operator-skip, retry budget exhausted,
+        # or the grade escaped AMBIGUOUS without a terminal return path.
+        if skipped_by_operator:
+            logger.info(
+                "CRAG: operator skip, returning last response after %d/%d retries",
+                retries, self.config.max_retries,
+            )
+        else:
+            logger.info("CRAG: exhausted %d retries, returning last response", retries)
         response.crag_verified = True
         response.crag_retries = retries
         return response

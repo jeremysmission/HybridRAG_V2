@@ -1,3 +1,4 @@
+"""GUI model layer. It exposes query state and store counts in a form that panels can observe."""
 # ============================================================================
 # HybridRAG V2 -- GUI Model Layer (src/gui/model.py)
 # ============================================================================
@@ -58,6 +59,9 @@ class GUIModel:
         self.entity_count: int = 0
         self.relationship_count: int = 0
         self.llm_available: bool = False
+        self.fts_ready: Optional[bool] = None
+        self.fts_state: str = "not checked"
+        self.fts_status_detail: str = "not checked"
 
         # Observer list
         self._observers: list[Callable[[], None]] = []
@@ -97,6 +101,7 @@ class GUIModel:
             self.chunk_count = self._lance_store.count() if self._lance_store else 0
         except Exception:
             self.chunk_count = 0
+        self._refresh_lance_health()
 
         try:
             self.entity_count = self._entity_store.count_entities() if self._entity_store else 0
@@ -111,6 +116,31 @@ class GUIModel:
             self.relationship_count = 0
 
         self._notify()
+
+    def _refresh_lance_health(self) -> None:
+        """Refresh FTS readiness for the attached LanceDB store."""
+        if self._lance_store is None:
+            self.fts_ready = None
+            self.fts_state = "unavailable"
+            self.fts_status_detail = "store not initialized"
+            return
+        try:
+            status = self._lance_store.fts_status()
+            self.fts_ready = bool(status.get("ready"))
+            self.fts_state = str(status.get("state") or ("ready" if self.fts_ready else "missing"))
+            if self.fts_ready:
+                probe_term = status.get("probe_term") or "n/a"
+                self.fts_status_detail = f"ready ({probe_term})"
+            elif self.fts_state == "index_present":
+                detail = status.get("error") or "FTS probe failed"
+                self.fts_status_detail = f"index present ({detail})"
+            else:
+                detail = status.get("error") or "FTS probe failed"
+                self.fts_status_detail = detail
+        except Exception as exc:
+            self.fts_ready = False
+            self.fts_state = "error"
+            self.fts_status_detail = str(exc)
 
     def _check_llm(self) -> None:
         """Check whether the LLM client appears configured."""

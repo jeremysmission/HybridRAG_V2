@@ -66,6 +66,7 @@ def _drain_ui_queue():
 
 
 def _format_elapsed(seconds: float) -> str:
+    """Turn internal values into human-readable text for the operator."""
     seconds = max(0, int(seconds))
     h, remainder = divmod(seconds, 3600)
     m, s = divmod(remainder, 60)
@@ -77,6 +78,10 @@ def _format_elapsed(seconds: float) -> str:
 
 
 def _format_count(n: int) -> str:
+    """Turn internal values into human-readable text for the operator."""
+    # FLAG: Likely dead code as of 2026-04-15. Repo-wide search only found the
+    # definition, so this helper is a good candidate for later cleanup if no
+    # external/manual usage exists.
     return f"{n:,}"
 
 
@@ -1166,6 +1171,7 @@ class ImportExtractGUI:
 
 
 def main():
+    """Parse command-line inputs and run the main import extract gui workflow."""
     root = tk.Tk()
     app = ImportExtractGUI(root)
 

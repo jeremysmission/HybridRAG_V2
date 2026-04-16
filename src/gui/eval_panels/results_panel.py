@@ -36,6 +36,45 @@ _V2_ROOT = Path(__file__).resolve().parents[3]
 _DEFAULT_RESULTS_DIR = _V2_ROOT / "docs"
 
 
+def _fmt_pct(value: Any) -> str:
+    """Turn internal values into human-readable text for the operator."""
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return "?"
+    text = f"{numeric:.1f}"
+    if text.endswith(".0"):
+        text = text[:-2]
+    return f"{text}%"
+
+
+def _stage_summary_line(stage_latency_summary: Dict[str, Any]) -> str:
+    """Support the results panel workflow by handling the stage summary line step."""
+    preferred = [
+        "vector_search",
+        "structured_lookup",
+        "entity_lookup",
+        "relationship_lookup",
+        "aggregate_lookup",
+        "tabular_lookup",
+        "rerank",
+        "context_build",
+    ]
+    parts: list[str] = []
+    for stage in preferred:
+        stats = stage_latency_summary.get(stage)
+        if not isinstance(stats, dict):
+            continue
+        p50 = stats.get("p50_ms")
+        p95 = stats.get("p95_ms")
+        count = stats.get("queries_with_stage")
+        if p50 is None or p95 is None:
+            continue
+        suffix = f", n={count}" if count not in (None, "") else ""
+        parts.append(f"{stage} {p50}/{p95} ms{suffix}")
+    return "    ".join(parts)
+
+
 class ResultsPanel(tk.Frame):
     """Filterable viewer for production eval result JSON files."""
 
@@ -398,6 +437,11 @@ class ResultsPanel(tk.Frame):
         """Populate the Run Info strip from loaded metadata + provenance."""
         meta = self._run_meta or {}
         prov = meta.get("provenance") or {}
+        summary = prov.get("run_summary") or {}
+        score_summary = summary.get("score_summary") or {}
+        latency_summary = summary.get("latency_summary") or {}
+        stage_latency_summary = summary.get("stage_latency_summary") or {}
+        artifact_paths = prov.get("artifact_paths") or {}
 
         run_id = meta.get("run_id") or "?"
         timestamp = meta.get("timestamp_utc") or "?"
@@ -407,14 +451,27 @@ class ResultsPanel(tk.Frame):
 
         queries_name = prov.get("queries_pack_name") or "?"
         config_name = prov.get("config_name") or "?"
-        lance_path = prov.get("lance_path") or "?"
+        lance_path = prov.get("store_path") or prov.get("lance_path") or "?"
         queries_path = prov.get("queries_path") or "?"
         config_path = prov.get("config_path") or "?"
+        router_mode = prov.get("router_mode") or ""
+        provider = prov.get("provider") or ""
+        model = prov.get("model") or ""
         elapsed = prov.get("elapsed_s")
         elapsed_text = f"{elapsed}s" if elapsed is not None else "?"
         max_q = prov.get("max_queries_requested")
         max_text = f"first {max_q}" if max_q else "all"
         run_status = prov.get("run_status") or "?"
+        overall_pass_rate = summary.get("overall_pass_rate_pct")
+        category_min = summary.get("category_min_pass_rate_pct")
+        strongest_qtypes = summary.get("strongest_query_types") or []
+        weakest_qtypes = summary.get("weakest_query_types") or []
+        strongest_personas = summary.get("strongest_personas") or []
+        weakest_personas = summary.get("weakest_personas") or []
+        strongest_areas = summary.get("strongest_areas") or []
+        weakest_areas = summary.get("weakest_areas") or []
+        results_json_path = artifact_paths.get("results_json") or prov.get("results_json_path") or "?"
+        report_md_path = artifact_paths.get("report_md") or prov.get("report_md_path") or "?"
 
         lines = [
             f"run_id:     {run_id}",
@@ -425,6 +482,59 @@ class ResultsPanel(tk.Frame):
             f"gpu:        {gpu_device}",
             f"total run:  {total} queries",
         ]
+        if router_mode or provider or model:
+            if provider or model:
+                router_text = " / ".join(part for part in (provider, model) if part)
+                lines.append(f"router:     {router_mode or 'llm'} ({router_text})")
+            else:
+                lines.append(f"router:     {router_mode}")
+        if score_summary:
+            lines.append(
+                "score:      "
+                f"PASS {score_summary.get('pass_count', meta.get('pass_count', 0))}/{total} "
+                f"({_fmt_pct(score_summary.get('pass_rate_pct'))})    "
+                f"PARTIAL {score_summary.get('partial_count', meta.get('partial_count', 0))}/{total}    "
+                f"MISS {score_summary.get('miss_count', meta.get('miss_count', 0))}/{total}    "
+                f"Routing {score_summary.get('routing_correct', meta.get('routing_correct', 0))}/{total} "
+                f"({_fmt_pct(score_summary.get('routing_rate_pct'))})"
+            )
+        if overall_pass_rate is not None or category_min is not None:
+            parts = []
+            if overall_pass_rate is not None:
+                parts.append(f"overall pass: {overall_pass_rate}%")
+            if category_min is not None:
+                parts.append(f"category-min: {category_min}%")
+            if parts:
+                lines.append("summary:    " + "    ".join(parts))
+        if latency_summary:
+            lines.append(
+                "latency:    "
+                f"retr {latency_summary.get('p50_pure_retrieval_ms', '?')}/"
+                f"{latency_summary.get('p95_pure_retrieval_ms', '?')} ms    "
+                f"wall {latency_summary.get('p50_wall_clock_ms', '?')}/"
+                f"{latency_summary.get('p95_wall_clock_ms', '?')} ms    "
+                f"router {latency_summary.get('p50_router_ms', '?')}/"
+                f"{latency_summary.get('p95_router_ms', '?')} ms"
+            )
+        stage_line = _stage_summary_line(stage_latency_summary)
+        if stage_line:
+            lines.append(f"stages:     {stage_line}")
+        if strongest_areas:
+            lines.append(f"strongest:  {', '.join(strongest_areas)}")
+        if weakest_areas:
+            lines.append(f"weakest:    {', '.join(weakest_areas)}")
+        if strongest_qtypes:
+            lines.append(f"strong q:   {', '.join(strongest_qtypes)}")
+        if weakest_qtypes:
+            lines.append(f"weak q:     {', '.join(weakest_qtypes)}")
+        if strongest_personas:
+            lines.append(f"strong p:   {', '.join(strongest_personas)}")
+        if weakest_personas:
+            lines.append(f"weak p:     {', '.join(weakest_personas)}")
+        if results_json_path != "?":
+            lines.append(f"results@:   {results_json_path}")
+        if report_md_path != "?":
+            lines.append(f"report@:    {report_md_path}")
         if queries_path != "?" and queries_path != queries_name:
             lines.append(f"queries@:   {queries_path}")
         if config_path != "?" and config_path != config_name:
@@ -619,6 +729,19 @@ class ResultsPanel(tk.Frame):
             f"  embed_retrieve_ms: {r.get('embed_retrieve_ms', '-')}\n",
             "mono",
         )
+        stage_timings = r.get("stage_timings_ms")
+        if isinstance(stage_timings, dict):
+            stage_lines = []
+            for stage, value in sorted(stage_timings.items()):
+                try:
+                    numeric_value = int(value or 0)
+                except (TypeError, ValueError):
+                    continue
+                if numeric_value <= 0:
+                    continue
+                stage_lines.append(f"  {stage:<17}: {numeric_value}\n")
+            if stage_lines:
+                self._details.insert("end", "".join(stage_lines), "mono")
 
         self._details.insert("end", "\nFlags\n", "section")
         self._details.insert(

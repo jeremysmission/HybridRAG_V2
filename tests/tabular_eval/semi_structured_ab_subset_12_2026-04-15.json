@@ -1,0 +1,122 @@
+[
+  {
+    "fixture_id": "clean_markdown_sites",
+    "bucket": "clean_labeled",
+    "chunk_id": "fixture-clean-markdown-sites",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Packing List\\site_parts.xlsx",
+    "expected_table_mode": "row_labeled",
+    "expected_family": "packing_list",
+    "min_rows": 2,
+    "text": "| Site | Part Number | Qty |\n| --- | --- | --- |\n| Thule Air Base | ARC-4471 | 2 |\n| Riverside Observatory | FM-220 | 1 |"
+  },
+  {
+    "fixture_id": "clean_markdown_shipments",
+    "bucket": "clean_labeled",
+    "chunk_id": "fixture-clean-markdown-shipments",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Bill of Materials\\shipments.xlsx",
+    "expected_table_mode": "row_labeled",
+    "expected_family": "bom",
+    "min_rows": 2,
+    "text": "| Line Item | Part Number | Destination |\n| --- | --- | --- |\n| 11 | ZFBT-4R2G-FT+ | Guam |\n| 12 | 775595-B21 | Niger |"
+  },
+  {
+    "fixture_id": "clean_bracket_po_rows",
+    "bucket": "clean_labeled",
+    "chunk_id": "fixture-clean-bracket-po",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Received\\po_rows.xlsx",
+    "expected_table_mode": "row_labeled",
+    "expected_family": "received_po",
+    "min_rows": 2,
+    "text": "[ROW 1] PO Number | Part Number | Qty | Destination\n[ROW 2] 5300058406 | SM-219 | 1 | Niger\n[ROW 3] 5300058407 | SW125-12-N | 2 | Guam"
+  },
+  {
+    "fixture_id": "clean_bracket_inventory_rows",
+    "bucket": "clean_labeled",
+    "chunk_id": "fixture-clean-bracket-inventory",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Spares Inventory\\rows.xlsx",
+    "expected_table_mode": "row_labeled",
+    "expected_family": "spares_report",
+    "min_rows": 2,
+    "text": "[ROW 1] Description | Part Number | Qty\n[ROW 2] Antenna Switch | AS-7020103 | 1\n[ROW 3] Bit Card | AS-5021108 | 1"
+  },
+  {
+    "fixture_id": "dense_pr_po_kv",
+    "bucket": "dense_semi_structured",
+    "chunk_id": "fixture-dense-pr-po",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Matl\\2024 03 PR & PO.xlsx",
+    "expected_table_mode": "table_heavy",
+    "expected_family": "received_po",
+    "min_rows": 2,
+    "text": "[SECTION] CLIN: 0009A,\nCLIN: 0010A, PR Number: 0031422527, PO Number: 5300058406, Sum of Allocation Amount in Local Currency: 2705.12\nCLIN: 0010A, PR Number: ##, PO Number: 7201042200, Sum of Allocation Amount in Local Currency: 753.25\n"
+  },
+  {
+    "fixture_id": "dense_pipe_joined_bom",
+    "bucket": "dense_semi_structured",
+    "chunk_id": "fixture-dense-pipe-bom",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Bill of Materials\\initial_spares.xlsx",
+    "expected_table_mode": "table_heavy",
+    "expected_family": "bom",
+    "min_rows": 2,
+    "text": "[SHEET] WX31 M4 BUYDOWN | TO | CLIN | Requirement | Line Item | Quote # | Site | Part Number | Part Description | UOM | Qty Required | Vendor Name | Shopping Cart | TO: WX31M4, Requirement: BOM, Line Item: 11, Quote #: Web Quote, Site: monitoring system Initial Spares Purchase, Part Number: ZFBT-4R2G-FT+, Part Description: Bias T, Wideband, 50 Ohms, UOM: EA, Qty Required: 6, Vendor Name: Mini Circuits, Shopping Cart: PO 7000353951 | TO: WX31M4, Requirement: BOM, Line Item: 12, Quote #: Q-00191352, Site: monitoring system Initial Spares Purchase, Part Number: 775595-B21, Part Description: Power Supply, Redundant, 900W, UOM: EA, Qty Required: 6, Vendor Name: Sterling Computers, Shopping Cart: PR 0031126723"
+  },
+  {
+    "fixture_id": "dense_dd250_rows",
+    "bucket": "dense_semi_structured",
+    "chunk_id": "fixture-dense-dd250",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\DD250\\Niger Parts List.xlsx",
+    "expected_table_mode": "table_heavy",
+    "expected_family": "dd250",
+    "min_rows": 2,
+    "text": "[SECTION] CONTAINER: INSTALLED,\nFIND NO.: 57, QTY.: 1, PART NUMBER: SM-219, DESCRIPTION: GPS RECEIVER, MANUFACTURER: ASTRA, Serial Number: 26\nCONTAINER: INSTALLED, FIND NO.: 58, QTY.: 1, PART NUMBER: SW125-12-N, DESCRIPTION: POWER SUPPLY, MANUFACTURER: ACME\n"
+  },
+  {
+    "fixture_id": "dense_inventory_rows",
+    "bucket": "dense_semi_structured",
+    "chunk_id": "fixture-dense-inventory",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Spares Inventory (Alpena).pdf",
+    "expected_table_mode": "table_heavy",
+    "expected_family": "spares_report",
+    "min_rows": 3,
+    "text": "Site: Spares Inventory - Alpena CRTC, MI\nDescription PN Rev SN Firm IUID? Qty New Qty\nAntenna Switch AS -7020103 C 64 1\nBit Card AS -5021108 79 1\nFuse, 8A 2\n"
+  },
+  {
+    "fixture_id": "ocr_markdown_sites",
+    "bucket": "ocr_damaged",
+    "chunk_id": "fixture-ocr-markdown-sites",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Packing List\\ocr_sites.xlsx",
+    "expected_table_mode": "row_labeled",
+    "expected_family": "packing_list",
+    "min_rows": 2,
+    "text": "| S1TE | Part Nurnber | Qty |\n| --- | --- | --- |\n| Thule Alr Base | ARC-4471 | 2 |\n| R1verside 0bs. | FM-220 | 1 |"
+  },
+  {
+    "fixture_id": "ocr_bracket_po_rows",
+    "bucket": "ocr_damaged",
+    "chunk_id": "fixture-ocr-bracket-po",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Received\\ocr_po_rows.xlsx",
+    "expected_table_mode": "row_labeled",
+    "expected_family": "received_po",
+    "min_rows": 2,
+    "text": "[ROW 1] P0 Number | Part Nurnber | Qty | Destinat1on\n[ROW 2] 5300058406 | SM-219 | 1 | N1ger\n[ROW 3] 5300058407 | SW125-12-N | 2 | Guarn"
+  },
+  {
+    "fixture_id": "ocr_dd250_kv",
+    "bucket": "ocr_damaged",
+    "chunk_id": "fixture-ocr-dd250",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\DD250\\ocr_parts.xlsx",
+    "expected_table_mode": "table_heavy",
+    "expected_family": "dd250",
+    "min_rows": 2,
+    "text": "[SECTION] C0NTAINER: INSTALLED,\nFIND N0.: 57, QTY.: 1, PART NUMBER: SM-219, DESCRIPTlON: GPS RECEIVER, MANUFACTURER: ASTRA\nFIND N0.: 58, QTY.: 1, PART NUMBER: SW125-12-N, DESCRIPTlON: POWER SUPPLY, MANUFACTURER: ACME\n"
+  },
+  {
+    "fixture_id": "ocr_pipe_joined_bom",
+    "bucket": "ocr_damaged",
+    "chunk_id": "fixture-ocr-pipe-bom",
+    "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Bill of Materials\\ocr_initial_spares.xlsx",
+    "expected_table_mode": "table_heavy",
+    "expected_family": "bom",
+    "min_rows": 2,
+    "text": "TO: WX31M4, Requ1rement: BOM, Line Item: 11, Part Number: ZFBT-4R2G-FT+, Part Description: Bias T, Wideband, 50 Ohms, Qty Required: 6 | TO: WX31M4, Requ1rement: BOM, Line Item: 12, Part Number: 775595-B21, Part Description: Power Supply, Redundant, 900W, Qty Required: 6 | note cell"
+  }
+]

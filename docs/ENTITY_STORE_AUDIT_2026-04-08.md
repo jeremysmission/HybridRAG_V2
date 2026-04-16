@@ -1,5 +1,8 @@
 # Entity Store Audit — V1 vs V2 Data Split
 
+> WARNING: Historical audit only. This file reflects an early, much smaller store state and is unsafe as current operator, demo, or aggregation truth.
+> For current counts and readiness boundaries, use `docs/AUTHORITATIVE_FACTS_AND_SOURCES_2026-04-12.md` and `docs/V2_DEMO_READINESS_GAP_ANALYSIS_2026-04-12.md`.
+
 **Date:** 2026-04-08 MDT
 **Author:** Jeremy Randall (CoPilot+)
 **Store:** data/index/entities.sqlite3

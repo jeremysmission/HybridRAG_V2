@@ -26,6 +26,7 @@ if str(ROOT) not in sys.path:
 
 
 class FakeCountStore:
+    """Small helper object used to keep tool state or expected values organized."""
     def __init__(self, value: int):
         self.value = value
 
@@ -37,6 +38,7 @@ class FakeCountStore:
 
 
 def parse_args() -> argparse.Namespace:
+    """Collect command-line options so the tool knows what evidence to capture."""
     parser = argparse.ArgumentParser(description="Capture targeted Lane 9.2 GUI evidence.")
     parser.add_argument("--visible", action="store_true", help="Show the Tk window instead of withdrawing it.")
     parser.add_argument("--output-dir", default="", help="Optional artifact directory.")
@@ -44,10 +46,12 @@ def parse_args() -> argparse.Namespace:
 
 
 def timestamp_slug() -> str:
+    """Create a timestamp string so output files are easy to sort and trace."""
     return datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 def ensure_output_dir(path_arg: str) -> Path:
+    """Create or resolve the output location this tool will write to."""
     if path_arg:
         out = Path(path_arg)
     else:
@@ -57,6 +61,7 @@ def ensure_output_dir(path_arg: str) -> Path:
 
 
 def widget_text(widget: tk.Misc) -> str:
+    """Inspect the GUI surface and return data that a reviewer can read later."""
     try:
         return str(widget.cget("text"))
     except Exception:
@@ -64,6 +69,7 @@ def widget_text(widget: tk.Misc) -> str:
 
 
 def collect_snapshot_lines(widget: tk.Misc, depth: int = 0) -> list[str]:
+    """Gather the evidence this tool needs to save for later review."""
     line = f"{'  ' * depth}{widget.winfo_class()}"
     text = widget_text(widget)
     if text:
@@ -81,6 +87,7 @@ def collect_snapshot_lines(widget: tk.Misc, depth: int = 0) -> list[str]:
 
 
 def write_snapshot(path: Path, title: str, widget: tk.Misc, extra: dict | None = None) -> None:
+    """Write the captured evidence to disk in a reusable form."""
     lines = [title, "=" * len(title), ""]
     if extra:
         for key, value in extra.items():
@@ -91,20 +98,24 @@ def write_snapshot(path: Path, title: str, widget: tk.Misc, extra: dict | None =
 
 
 def walk_widgets(widget: tk.Misc):
+    """Inspect the GUI surface and return data that a reviewer can read later."""
     yield widget
     for child in widget.winfo_children():
         yield from walk_widgets(child)
 
 
 def visible_texts(widget: tk.Misc) -> list[str]:
+    """Inspect the GUI surface and return data that a reviewer can read later."""
     return [text for w in walk_widgets(widget) if (text := widget_text(w))]
 
 
 def fail_record(name: str, message: str) -> dict:
+    """Build a consistent failure record so problems are easier to diagnose."""
     return {"name": name, "passed": False, "details": message}
 
 
 def capture_launch_gui_check() -> dict:
+    """Run one targeted capture scenario and return the resulting evidence."""
     import src.gui.launch_gui as launch_gui
     from src.config.schema import load_config as real_load_config
 
@@ -142,6 +153,7 @@ def capture_launch_gui_check() -> dict:
 
 
 def capture_gui_checks(output_dir: Path, visible: bool) -> tuple[list[dict], list[str]]:
+    """Run one targeted capture scenario and return the resulting evidence."""
     from src.config.schema import load_config
     from src.gui.app import HybridRAGApp
     from src.gui.model import GUIModel
@@ -255,6 +267,7 @@ def capture_gui_checks(output_dir: Path, visible: bool) -> tuple[list[dict], lis
 
 
 def main() -> int:
+    """Parse command-line inputs and run this tool end to end."""
     args = parse_args()
     output_dir = ensure_output_dir(args.output_dir)
     evidence = {

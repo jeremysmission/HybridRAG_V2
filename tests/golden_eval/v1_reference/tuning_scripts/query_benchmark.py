@@ -1,3 +1,4 @@
+"""This test module supports the query benchmark area of the repository."""
 #!/usr/bin/env python3
 # === NON-PROGRAMMER GUIDE ===
 # Purpose: Automates the query benchmark operational workflow for developers or operators.
@@ -379,6 +380,7 @@ def generate_chart_html(results, output_path):
 
 
 def main():
+    """Run this helper module directly from the command line."""
     print()
     print("=" * 60)
     print("  HYBRIDRAG QUERY MODE BENCHMARK")

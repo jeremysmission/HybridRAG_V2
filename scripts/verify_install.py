@@ -90,6 +90,7 @@ CRITICAL_IMPORTS: list[tuple[str, str, Callable | None]] = [
 
 
 def _get_version(mod) -> str:
+    """Support the verify install workflow by handling the get version step."""
     for attr in ("__version__", "VERSION", "version"):
         v = getattr(mod, attr, None)
         if v is None:
@@ -123,6 +124,7 @@ def check_one(display: str, import_name: str, extra_check: Callable | None) -> t
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main verify install workflow."""
     print("=" * 60)
     print("  HybridRAG V2 — Critical Install Verification")
     print("=" * 60)

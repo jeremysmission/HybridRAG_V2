@@ -1,3 +1,4 @@
+"""Query panel. It is the main operator screen for asking questions and viewing answers."""
 # ============================================================================
 # HybridRAG V2 -- Query Panel (src/gui/panels/query_panel.py)
 # ============================================================================

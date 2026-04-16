@@ -44,6 +44,7 @@ FAMILY_PRIORITY = {
 
 @dataclass
 class QueryRow:
+    """Structured helper object used by the report phase2c backfill targets workflow."""
     query_id: str
     user_input: str
     persona: str
@@ -54,12 +55,14 @@ class QueryRow:
 
 
 def _clean_text(value: Any) -> str:
+    """Normalize raw text into a simpler form that is easier to compare or display."""
     if value is None:
         return ""
     return str(value).strip()
 
 
 def load_queries(path: Path) -> list[QueryRow]:
+    """Load the data needed for the report phase2c backfill targets workflow."""
     with open(path, encoding="utf-8") as handle:
         raw = json.load(handle)
 
@@ -94,6 +97,7 @@ def load_queries(path: Path) -> list[QueryRow]:
 
 
 def parse_args() -> argparse.Namespace:
+    """Collect command-line options so the script can decide what work to run."""
     parser = argparse.ArgumentParser(
         description="Report live Phase 2C backfill targets for the production query corpus",
     )
@@ -113,6 +117,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main report phase2c backfill targets workflow."""
     args = parse_args()
     rows = load_queries(args.queries)
 

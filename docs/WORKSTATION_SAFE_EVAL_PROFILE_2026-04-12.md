@@ -21,10 +21,10 @@ The generator rewrites only workstation-facing narrative fields:
 
 Program-specific tokens are rewritten with the same intent as the repo sanitizer:
 
-- `IGS` -> `enterprise program`
-- `ISTO` -> `legacy monitoring system`
-- `NEXION` -> `monitoring system`
-- paired forms such as `IGS/NEXION` are rewritten before single-token fallthrough rules
+- `enterprise program` -> `enterprise program`
+- `legacy monitoring system` -> `legacy monitoring system`
+- `monitoring system` -> `monitoring system`
+- paired forms such as `enterprise program` are rewritten before single-token fallthrough rules
 
 ## What Remains Intentionally Unchanged
 
@@ -90,7 +90,7 @@ python .\scripts\generate_workstation_safe_eval.py `
 
 Passing validation means:
 
-- no disallowed `IGS` / `ISTO` / `NEXION` tokens remain in sanitized narrative fields
+- no disallowed `enterprise program` / `legacy monitoring system` / `monitoring system` tokens remain in sanitized narrative fields
 - any remaining exact-token hits are confined to preserved machine-grounding fields and are listed in the report
 
 ## Warning

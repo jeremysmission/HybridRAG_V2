@@ -59,7 +59,7 @@ set "PYTHONPATH=%PROJECT_ROOT%"
 set "PYTHONUTF8=1"
 set "PYTHONIOENCODING=utf-8"
 
-"%VENV_PYTHON%" -c "from src.gui.eval_gui import EvalGUI, main; from src.gui.eval_panels.runner import EvalRunner; from src.gui.eval_panels.launch_panel import LaunchPanel; from src.gui.eval_panels.results_panel import ResultsPanel; from src.gui.eval_panels.compare_panel import ComparePanel; from src.gui.eval_panels.history_panel import HistoryPanel; print('eval GUI imports OK')"
+"%VENV_PYTHON%" -c "from src.gui.eval_gui import EvalGUI, main; from src.gui.qa_workbench import QAWorkbench; from src.gui.eval_panels.runner import EvalRunner; from src.gui.eval_panels.launch_panel import LaunchPanel; from src.gui.eval_panels.results_panel import ResultsPanel; from src.gui.eval_panels.compare_panel import ComparePanel; from src.gui.eval_panels.history_panel import HistoryPanel; print('eval GUI + QA workbench imports OK')"
 set "VERIFY_EXIT=%ERRORLEVEL%"
 
 if not "%VERIFY_EXIT%"=="0" (
@@ -71,7 +71,8 @@ if not "%VERIFY_EXIT%"=="0" (
 
 echo.
 echo [OK] HybridRAG V2 Eval GUI install verified.
-echo     Launch with: start_eval_gui.bat
+echo     Launch with: start_qa_workbench.bat  [recommended management-facing shell]
+echo                  start_eval_gui.bat      [flat eval shell]
 echo.
 if /I not "%HYBRIDRAG_NO_PAUSE%"=="1" pause
 endlocal & exit /b 0

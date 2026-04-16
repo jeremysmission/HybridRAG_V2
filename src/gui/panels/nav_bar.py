@@ -1,3 +1,4 @@
+"""Navigation bar for switching between the major GUI panels."""
 # ============================================================================
 # HybridRAG V2 -- Navigation Bar (src/gui/panels/nav_bar.py)
 # ============================================================================

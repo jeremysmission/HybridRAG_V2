@@ -51,6 +51,7 @@ PRESERVED_FIELDS = (
 
 @dataclass(frozen=True)
 class ReplacementRule:
+    """Structured helper object used by the generate workstation safe eval workflow."""
     name: str
     pattern: re.Pattern[str]
     replacement: str
@@ -59,13 +60,13 @@ class ReplacementRule:
 PROGRAM_REPLACEMENTS = (
     ReplacementRule(
         name="igs_nexion",
-        pattern=re.compile(r"(?<![A-Za-z0-9])IGS[/ ]NEXION(?![A-Za-z0-9])", re.IGNORECASE),
+        pattern=re.compile(r"(?<![A-Za-z0-9])enterprise program[/ ]monitoring system(?![A-Za-z0-9])", re.IGNORECASE),
         replacement="enterprise program / monitoring system",
     ),
     ReplacementRule(
         name="isto_and_nexion",
         pattern=re.compile(
-            r"(?<![A-Za-z0-9])ISTO\s+and\s+NEXION\s+systems?(?![A-Za-z0-9])",
+            r"(?<![A-Za-z0-9])legacy monitoring system\s+and\s+monitoring system\s+systems?(?![A-Za-z0-9])",
             re.IGNORECASE,
         ),
         replacement="legacy monitoring system and monitoring system",
@@ -73,7 +74,7 @@ PROGRAM_REPLACEMENTS = (
     ReplacementRule(
         name="nexion_and_isto",
         pattern=re.compile(
-            r"(?<![A-Za-z0-9])NEXION\s+and\s+ISTO\s+systems?(?![A-Za-z0-9])",
+            r"(?<![A-Za-z0-9])monitoring system\s+and\s+legacy monitoring system\s+systems?(?![A-Za-z0-9])",
             re.IGNORECASE,
         ),
         replacement="monitoring system and legacy monitoring system",
@@ -81,7 +82,7 @@ PROGRAM_REPLACEMENTS = (
     ReplacementRule(
         name="isto_nexion",
         pattern=re.compile(
-            r"(?<![A-Za-z0-9])ISTO/NEXION(?![A-Za-z0-9])",
+            r"(?<![A-Za-z0-9])legacy monitoring system / monitoring system(?![A-Za-z0-9])",
             re.IGNORECASE,
         ),
         replacement="legacy monitoring system / monitoring system",
@@ -89,7 +90,7 @@ PROGRAM_REPLACEMENTS = (
     ReplacementRule(
         name="nexion_isto",
         pattern=re.compile(
-            r"(?<![A-Za-z0-9])NEXION/ISTO(?![A-Za-z0-9])",
+            r"(?<![A-Za-z0-9])monitoring system / legacy monitoring system(?![A-Za-z0-9])",
             re.IGNORECASE,
         ),
         replacement="monitoring system / legacy monitoring system",
@@ -100,18 +101,18 @@ PROGRAM_REPLACEMENTS = (
         replacement="enterprise program",
     ),
     ReplacementRule(
-        name="nexion",
-        pattern=re.compile(r"(?<![A-Za-z0-9])NEXION(?![A-Za-z0-9])", re.IGNORECASE),
+        name="monitoring system",
+        pattern=re.compile(r"(?<![A-Za-z0-9])monitoring system(?![A-Za-z0-9])", re.IGNORECASE),
         replacement="monitoring system",
     ),
     ReplacementRule(
-        name="isto",
-        pattern=re.compile(r"(?<![A-Za-z0-9])ISTO(?![A-Za-z0-9])", re.IGNORECASE),
+        name="legacy monitoring system",
+        pattern=re.compile(r"(?<![A-Za-z0-9])legacy monitoring system(?![A-Za-z0-9])", re.IGNORECASE),
         replacement="legacy monitoring system",
     ),
     ReplacementRule(
-        name="igs",
-        pattern=re.compile(r"(?<![A-Za-z0-9])IGS(?![A-Za-z0-9])", re.IGNORECASE),
+        name="enterprise program",
+        pattern=re.compile(r"(?<![A-Za-z0-9])enterprise program(?![A-Za-z0-9])", re.IGNORECASE),
         replacement="enterprise program",
     ),
 )
@@ -120,19 +121,20 @@ CLEANUP_REPLACEMENTS = (
     (re.compile(r"\benterprise program program\b", re.IGNORECASE), "enterprise program"),
     (re.compile(r"\bmonitoring system systems?\b", re.IGNORECASE), "monitoring system"),
     (
-        re.compile(r"\blegacy monitoring system systems?\b", re.IGNORECASE),
+        re.compile(r"\blegacy monitoring systems?\b", re.IGNORECASE),
         "legacy monitoring system",
     ),
 )
 
 DISALLOWED_TOKEN_PATTERNS = {
-    "IGS": re.compile(r"(?<![A-Za-z0-9])IGS(?![A-Za-z0-9])", re.IGNORECASE),
-    "ISTO": re.compile(r"(?<![A-Za-z0-9])ISTO(?![A-Za-z0-9])", re.IGNORECASE),
-    "NEXION": re.compile(r"(?<![A-Za-z0-9])NEXION(?![A-Za-z0-9])", re.IGNORECASE),
+    "enterprise program": re.compile(r"(?<![A-Za-z0-9])enterprise program(?![A-Za-z0-9])", re.IGNORECASE),
+    "legacy monitoring system": re.compile(r"(?<![A-Za-z0-9])legacy monitoring system(?![A-Za-z0-9])", re.IGNORECASE),
+    "monitoring system": re.compile(r"(?<![A-Za-z0-9])monitoring system(?![A-Za-z0-9])", re.IGNORECASE),
 }
 
 
 def _default_profile_paths(profile_date: str) -> tuple[Path, Path]:
+    """Support the generate workstation safe eval workflow by handling the default profile paths step."""
     profile_dir = PROFILE_ROOT
     derived = (
         profile_dir
@@ -143,6 +145,7 @@ def _default_profile_paths(profile_date: str) -> tuple[Path, Path]:
 
 
 def _load_query_rows(path: Path) -> list[dict[str, Any]]:
+    """Load the data needed for the generate workstation safe eval workflow."""
     with open(path, encoding="utf-8") as handle:
         payload = json.load(handle)
 
@@ -166,6 +169,7 @@ def _load_query_rows(path: Path) -> list[dict[str, Any]]:
 
 
 def _write_json(path: Path, payload: Any) -> None:
+    """Write the generated output so the workflow leaves behind a reusable artifact."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="\n") as handle:
         json.dump(payload, handle, indent=2, ensure_ascii=False)
@@ -173,6 +177,7 @@ def _write_json(path: Path, payload: Any) -> None:
 
 
 def _sha256(path: Path) -> str:
+    """Support the generate workstation safe eval workflow by handling the sha256 step."""
     digest = hashlib.sha256()
     with open(path, "rb") as handle:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
@@ -181,12 +186,14 @@ def _sha256(path: Path) -> str:
 
 
 def _excerpt(text: str, start: int, end: int, width: int = 36) -> str:
+    """Support the generate workstation safe eval workflow by handling the excerpt step."""
     left = max(0, start - width)
     right = min(len(text), end + width)
     return text[left:right].replace("\n", " ")
 
 
 def _iter_string_fragments(value: Any, field: str) -> Iterable[tuple[str, str]]:
+    """Support the generate workstation safe eval workflow by handling the iter string fragments step."""
     if isinstance(value, str):
         yield field, value
         return
@@ -200,6 +207,7 @@ def _iter_string_fragments(value: Any, field: str) -> Iterable[tuple[str, str]]:
 
 
 def _normalize_replacement_style(replacement: str, *, original: str, span: tuple[int, int]) -> str:
+    """Support the generate workstation safe eval workflow by handling the normalize replacement style step."""
     start, end = span
     prev_char = original[start - 1] if start > 0 else ""
     next_char = original[end] if end < len(original) else ""
@@ -209,6 +217,7 @@ def _normalize_replacement_style(replacement: str, *, original: str, span: tuple
 
 
 def sanitize_program_text(text: str) -> tuple[str, Counter[str]]:
+    """Support the generate workstation safe eval workflow by handling the sanitize program text step."""
     updated = text
     counts: Counter[str] = Counter()
 
@@ -234,6 +243,7 @@ def sanitize_program_text(text: str) -> tuple[str, Counter[str]]:
 def build_workstation_safe_profile(
     rows: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Assemble the structured object this workflow needs for its next step."""
     derived_rows = copy.deepcopy(rows)
     queries_changed = 0
     fields_changed = 0
@@ -281,6 +291,7 @@ def validate_workstation_safe_profile(
     derived_path: Path,
     transform_summary: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    """Validate the generated data before later steps rely on it."""
     disallowed_hits: list[dict[str, Any]] = []
     allowed_residual_hits: list[dict[str, Any]] = []
     allowed_residual_by_field: Counter[str] = Counter()
@@ -324,7 +335,7 @@ def validate_workstation_safe_profile(
         "sanitized_fields": list(SANITIZED_FIELDS),
         "preserved_machine_grounding_fields": list(PRESERVED_FIELDS),
         "banned_token_policy": {
-            "rewritten_program_tokens": ["IGS", "ISTO", "NEXION"],
+            "rewritten_program_tokens": ["enterprise program", "legacy monitoring system", "monitoring system"],
             "preserved_identifiers": [
                 "IGSI-*",
                 "IGSCC-*",
@@ -361,6 +372,7 @@ def validate_workstation_safe_profile(
 
 
 def parse_args() -> argparse.Namespace:
+    """Collect command-line options so the script can decide what work to run."""
     today = datetime.now().date().isoformat()
 
     parser = argparse.ArgumentParser(
@@ -404,6 +416,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def _resolve_paths(args: argparse.Namespace) -> tuple[Path, Path]:
+    """Resolve the final path or setting value that downstream code should use."""
     default_output, default_validation = _default_profile_paths(args.profile_date)
     output_path = (args.output_json or default_output).resolve()
     validation_path = (args.validation_json or default_validation).resolve()
@@ -411,6 +424,7 @@ def _resolve_paths(args: argparse.Namespace) -> tuple[Path, Path]:
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main generate workstation safe eval workflow."""
     args = parse_args()
     canonical_path = args.canonical.resolve()
     output_path, validation_path = _resolve_paths(args)

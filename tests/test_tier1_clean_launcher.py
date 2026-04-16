@@ -1,3 +1,4 @@
+"""Test module for the tier1 clean launcher behavior. The checks here explain what the repository expects to keep working."""
 from __future__ import annotations
 
 import json
@@ -15,10 +16,12 @@ from scripts.run_tier1_clean_launcher import (
 
 
 def test_run_id_stamp_uses_launcher_date():
+    """Verify that run id stamp uses launcher date behaves the way the team expects."""
     assert run_id_stamp(datetime(2026, 4, 13, 1, 2, 3)) == "20260413_010203"
 
 
 def test_build_run_plan_uses_clean_config_and_dated_names(tmp_path):
+    """Verify that build run plan uses clean config and dated names behaves the way the team expects."""
     plan = build_run_plan(DEFAULT_CONFIG, tmp_path, run_id="20260413_123456")
 
     assert plan.config_path.endswith("config.tier1_clean_2026-04-13.yaml")
@@ -32,6 +35,7 @@ def test_build_run_plan_uses_clean_config_and_dated_names(tmp_path):
 
 
 def test_make_manifest_tracks_targets_and_process_ids(tmp_path):
+    """Verify that make manifest tracks targets and process ids behaves the way the team expects."""
     plan = build_run_plan(DEFAULT_CONFIG, tmp_path, run_id="20260413_123456")
     manifest = make_manifest(
         plan,
@@ -55,6 +59,7 @@ def test_make_manifest_tracks_targets_and_process_ids(tmp_path):
 
 
 def test_main_dry_run_writes_manifest_without_launch(tmp_path):
+    """Verify that main dry run writes manifest without launch behaves the way the team expects."""
     log_dir = tmp_path / "tier1_clean_logs"
     rc = main(
         [

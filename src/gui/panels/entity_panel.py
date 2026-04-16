@@ -1,3 +1,4 @@
+"""Entity panel. It helps an operator inspect extracted entities and relationships stored by the system."""
 # ============================================================================
 # HybridRAG V2 -- Entity Panel (src/gui/panels/entity_panel.py)
 # ============================================================================

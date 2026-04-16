@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This is the active coordinator/work log for unattended Beast-side progress while the user is at work.
+This is the active coordinator/work log for unattended primary workstation-side progress while the user is at work.
 
 If the machine crashes or a new coordinator has to resume, start here.
 
@@ -26,9 +26,9 @@ The current execution order is:
 - Tier 1 research is complete enough
 - regex gate exists and is green-capable
 - shadow-slice tooling is being added
-- Beast now has a fast local copy of the V2 import/export package at:
+- primary workstation now has a fast local copy of the V2 import/export package at:
   - `C:\CorpusIndexEmbeddingsOnly\export_20260411_0720`
-- Beast does **not** have a full off-USB copy of the 700 GB raw source tree
+- primary workstation does **not** have a full off-USB copy of the 700 GB raw source tree
 - workstations have their own install/runbook:
   - [WORKSTATION_MANUAL_INSTALL_AND_WORKDAY_ACTIONS_2026-04-13.md](./WORKSTATION_MANUAL_INSTALL_AND_WORKDAY_ACTIONS_2026-04-13.md)
 
@@ -161,7 +161,7 @@ so the next engineering pass stays evidence-driven.
   - launcher:
     - `224776` (`C:\HybridRAG_V2\.venv\Scripts\python.exe`)
   - child:
-    - `240780` (`C:\Users\jerem\AppData\Local\Programs\Python\Python312\python.exe`)
+    - `240780` (`{USER_HOME}\AppData\Local\Programs\Python\Python312\python.exe`)
 - logs:
   - `logs\production_eval_post_cdrl_path_patch_400_20260413_125710.out.log`
   - `logs\production_eval_post_cdrl_path_patch_400_20260413_125710.err.log`
@@ -211,7 +211,7 @@ Run the current gate and capture a dated log artifact.
 
 ### Current Result
 
-- PASS on Beast
+- PASS on primary workstation
 - curated: `40/40`
 - sample: `120 selected / 1000 scanned`
 - dangerous PART/PO hits: `0`
@@ -269,7 +269,7 @@ Planned command:
   - `logs\tier1_shadow_slice_20260413_075912.json`
   - Result: strong improvement, but still leaked embedded/report-code tails
     such as `FSR-L22`, plus non-physical `PART` tails such as
-    `CVE-202`, `DO-0003`, `DO-0011`, `IGS-2522`, `MSR-029`, and
+    `CVE-202`, `DO-0003`, `DO-0011`, `enterprise program-2522`, `MSR-029`, and
     `DV-200`
 - Follow-on hardening landed locally:
   - wired `security_standard_exclude_patterns` through all shared Tier 1
@@ -471,7 +471,7 @@ Once a clean Tier 1 store exists, prepare the next 400-query baseline rerun agai
 - active eval PID:
   - `206972`
   - executable:
-    - `C:\Users\jerem\AppData\Local\Programs\Python\Python312\python.exe`
+    - `{USER_HOME}\AppData\Local\Programs\Python\Python312\python.exe`
   - CPU at checkpoint:
     - `628.33`
   - working set at checkpoint:
@@ -540,7 +540,7 @@ Best workstation tasks:
 
 ## Crash Recovery Notes
 
-If Beast crashes, the recovery order is:
+If primary workstation crashes, the recovery order is:
 
 1. open this file
 2. confirm latest remote state:
@@ -560,4 +560,4 @@ If Beast crashes, the recovery order is:
 
 ## Short Summary
 
-The unattended Beast-side mission has now cleared the major data-trust dependency. The replacement isolated clean Tier 1 rerun completed and the clean-store audit is a full PASS: blocked namespaces are gone from the audited `PO` / `PART` path, and both the PO and PART preserve sentinels survive in the corrected store. The follow-on clean-store 400-query baseline also completed successfully and is now frozen in local artifacts. The next immediate dependency is no longer “make Tier 1 clean.” It is “use the clean baseline to identify the highest-yield retrieval and routing fixes on the rebuilt store.”
+The unattended primary workstation-side mission has now cleared the major data-trust dependency. The replacement isolated clean Tier 1 rerun completed and the clean-store audit is a full PASS: blocked namespaces are gone from the audited `PO` / `PART` path, and both the PO and PART preserve sentinels survive in the corrected store. The follow-on clean-store 400-query baseline also completed successfully and is now frozen in local artifacts. The next immediate dependency is no longer “make Tier 1 clean.” It is “use the clean baseline to identify the highest-yield retrieval and routing fixes on the rebuilt store.”

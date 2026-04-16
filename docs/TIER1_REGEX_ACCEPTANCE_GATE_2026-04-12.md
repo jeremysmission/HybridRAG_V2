@@ -19,7 +19,7 @@ The current code already blocks the main collision classes that polluted
 Tier 1:
 
 - `PART` pollution from security-standard / STIG / MITRE identifiers
-  - NIST SP 800-53 Rev 5 control families
+  - security standard SP 800-53 Rev 5 control families
   - STIG baseline codes (`AS-`, `OS-`, `GPOS-`, `HS-`)
   - `CCI-`, `SV-`, `CVE-`, `CCE-`, `SP 800`
 - `PO` pollution from the old report-ID overmatch

@@ -41,12 +41,15 @@ AES_RE = re.compile(r"\bAES-512\b", re.I)
 
 def repo_root_from_scripts() -> Path:
     # scripts/ is inside repo_root/
+    """Support this test module by handling the repo root from scripts step."""
     return Path(__file__).resolve().parents[1]
 
 def safe_getattr(obj: Any, name: str, default=None):
+    """Support this test module by handling the safe getattr step."""
     return getattr(obj, name, default)
 
 def normalize_sources(sources: Any) -> List[str]:
+    """Support this test module by handling the normalize sources step."""
     out = []
     if isinstance(sources, list):
         for s in sources:
@@ -59,6 +62,7 @@ def normalize_sources(sources: Any) -> List[str]:
     return out
 
 def fact_score(answer: str, expected_facts: List[str]) -> float:
+    """Support this test module by handling the fact score step."""
     if not expected_facts:
         return 1.0
     a = (answer or "").lower()
@@ -66,6 +70,7 @@ def fact_score(answer: str, expected_facts: List[str]) -> float:
     return found / max(1, len(expected_facts))
 
 def behavior_score(qtype: str, answer: str) -> float:
+    """Support this test module by handling the behavior score step."""
     a = answer or ""
     if qtype == "unanswerable":
         return 1.0 if REFUSAL_RE.search(a) else 0.0
@@ -78,6 +83,7 @@ def behavior_score(qtype: str, answer: str) -> float:
     return 1.0
 
 def main():
+    """Run this helper module directly from the command line."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--golden", required=True, help="Path to golden dataset JSON")
     ap.add_argument("--out", default="eval_out.jsonl", help="Output JSONL path")

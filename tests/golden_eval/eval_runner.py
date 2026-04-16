@@ -196,6 +196,7 @@ def save_results(results: list[EvalResult]) -> None:
 
 
 def main():
+    """Run this helper module directly from the command line."""
     import argparse
     parser = argparse.ArgumentParser(description="Golden eval runner")
     parser.add_argument("--config", default="config/config.yaml")

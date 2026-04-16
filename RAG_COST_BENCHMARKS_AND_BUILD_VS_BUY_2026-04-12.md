@@ -33,7 +33,7 @@ Source:
 
 - https://clutch.co/developers/artificial-intelligence/pricing
 
-### 2. Specialized ML / AI contractor hourly benchmark
+### 2. Specialized ML / AI organization hourly benchmark
 
 Upwork's public machine learning engineer rate guide says:
 
@@ -43,7 +43,7 @@ Upwork's public machine learning engineer rate guide says:
 
 Interpretation:
 
-- A contractor capable of designing a custom RAG pipeline, evaluation harness, chunking strategy, data validation, and production workflow is not entry-level work.
+- A organization capable of designing a custom RAG pipeline, evaluation harness, chunking strategy, data validation, and production workflow is not entry-level work.
 - For a serious design/build effort, the relevant comparison is usually the advanced band.
 
 Source:
@@ -198,5 +198,5 @@ The tiered design pushes the most expensive AI work later in the pipeline and na
 
 ## Suggested One-Paragraph Explanation
 
-"Public benchmarks suggest that buying this as an outside AI project would likely mean a five-figure design/build effort plus recurring monthly platform and support costs. AWS's own sample RAG architecture is roughly $1,300/month at moderate usage, and public Red Hat AI pricing examples show platform support alone can be over $1,200/month before custom integration work. By comparison, I have roughly 80 hours invested so far, which is already equivalent to about $10K-$16K of specialist contractor time at public ML engineering rates. The reason I am doing the hard engineering work up front is to avoid locking the program into a high recurring-cost model later." 
+"Public benchmarks suggest that buying this as an outside AI project would likely mean a five-figure design/build effort plus recurring monthly platform and support costs. AWS's own sample RAG architecture is roughly $1,300/month at moderate usage, and public Red Hat AI pricing examples show platform support alone can be over $1,200/month before custom integration work. By comparison, I have roughly 80 hours invested so far, which is already equivalent to about $10K-$16K of specialist organization time at public ML engineering rates. The reason I am doing the hard engineering work up front is to avoid locking the program into a high recurring-cost model later." 
 

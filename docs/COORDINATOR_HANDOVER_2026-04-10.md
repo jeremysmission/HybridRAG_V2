@@ -2,6 +2,12 @@
 
 Purpose: preserve the cross-repo state before reset, separate durable work from local-only work, and define the next clean 4-lane split.
 
+Historical note:
+
+- This handover is useful context, not the current source of truth for readiness, counts, or operator posture.
+- For current truth, start with `docs/SOURCE_OF_TRUTH_MAP_2026-04-12.md`.
+- Any `{USER_HOME}\codex_tmp\...` repo copy is a study or recovery clone, not a canonical implementation root.
+
 ## Repo anchors
 
 - CorpusForge: `C:\CorpusForge`
@@ -113,10 +119,10 @@ Required checks:
 
 ## First files to open after reset
 
-1. `C:\HybridRAG_V2\docs\COORDINATOR_HANDOVER_2026-04-10.md`
-2. `C:\CorpusForge\docs\COORDINATOR_HANDOVER_2026-04-10.md`
-3. `C:\CorpusForge\docs\HANDOVER_2026-04-09.md`
-4. `C:\CorpusForge\docs\SPRINT_SYNC.md`
-5. `C:\HybridRAG_V2\docs\SPRINT_SYNC.md`
+1. `C:\HybridRAG_V2\docs\SOURCE_OF_TRUTH_MAP_2026-04-12.md`
+2. `C:\HybridRAG_V2\docs\REBOOT_HANDOVER_2026-04-13.md`
+3. `C:\HybridRAG_V2\docs\COORDINATOR_CONTINUITY_NOTES_2026-04-13.md`
+4. `C:\HybridRAG_V2\docs\SPRINT_SLICE_PRODUCT_COMPLETION_2026-04-13.md`
+5. `C:\CorpusForge\docs\HANDOVER_2026-04-09.md`
 
 Signed: CoPilot+ | Coordinator | 2026-04-10 MDT

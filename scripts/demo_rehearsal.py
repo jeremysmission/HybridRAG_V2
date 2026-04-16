@@ -440,6 +440,7 @@ def load_pipeline(config_path: str = "config/config.yaml"):
 # ---------------------------------------------------------------------------
 
 def main() -> int:
+    """Parse command-line inputs and run the main demo rehearsal workflow."""
     parser = argparse.ArgumentParser(
         description="HybridRAG V2 demo rehearsal — run and verify 10 demo queries."
     )

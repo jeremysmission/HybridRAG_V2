@@ -67,6 +67,7 @@ CATEGORIES = {
 
 @dataclass
 class ChunkSample:
+    """Structured input record that keeps one unit of work easy to pass around and inspect."""
     chunk_id: str
     text: str
     source_path: str
@@ -76,6 +77,7 @@ class ChunkSample:
 
 @dataclass
 class ExtractionMetrics:
+    """Structured helper object used by the ab extraction test workflow."""
     model_name: str
     chunk_id: str
     entity_count: int = 0
@@ -92,6 +94,7 @@ class ExtractionMetrics:
 
 @dataclass
 class ComparisonResult:
+    """Small structured record used to keep related results together as the workflow runs."""
     chunk_id: str
     category: str
     text_preview: str
@@ -399,6 +402,7 @@ def generate_report(results: list[ComparisonResult]) -> dict:
 # ---------------------------------------------------------------------------
 
 def main():
+    """Parse command-line inputs and run the main ab extraction test workflow."""
     parser = argparse.ArgumentParser(
         description="Clone1 A/B extraction quality test: phi4 vs GPT-4o (not the V2 LanceStore tiered_extract path)"
     )

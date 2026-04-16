@@ -60,6 +60,7 @@ if str(ROOT) not in sys.path:
 
 
 def parse_args() -> argparse.Namespace:
+    """Collect command-line options so the tool knows what evidence to capture."""
     parser = argparse.ArgumentParser(
         description="Capture Skip Import GUI evidence (Tiers A-C)."
     )
@@ -80,10 +81,12 @@ def parse_args() -> argparse.Namespace:
 
 
 def timestamp_slug() -> str:
+    """Create a timestamp string so output files are easy to sort and trace."""
     return datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 def ensure_output_dir(path_arg: str) -> Path:
+    """Create or resolve the output location this tool will write to."""
     if path_arg:
         out = Path(path_arg)
     else:
@@ -93,6 +96,7 @@ def ensure_output_dir(path_arg: str) -> Path:
 
 
 def widget_text(widget: tk.Misc) -> str:
+    """Inspect the GUI surface and return data that a reviewer can read later."""
     try:
         return str(widget.cget("text"))
     except Exception:
@@ -100,6 +104,7 @@ def widget_text(widget: tk.Misc) -> str:
 
 
 def collect_snapshot_lines(widget: tk.Misc, depth: int = 0) -> list[str]:
+    """Gather the evidence this tool needs to save for later review."""
     line = f"{'  ' * depth}{widget.winfo_class()}"
     text = widget_text(widget)
     if text:
@@ -117,6 +122,7 @@ def collect_snapshot_lines(widget: tk.Misc, depth: int = 0) -> list[str]:
 
 
 def write_snapshot(path: Path, title: str, widget: tk.Misc, extra: dict | None = None) -> None:
+    """Write the captured evidence to disk in a reusable form."""
     lines = [title, "=" * len(title), ""]
     if extra:
         for key, value in extra.items():
@@ -127,6 +133,7 @@ def write_snapshot(path: Path, title: str, widget: tk.Misc, extra: dict | None =
 
 
 def walk_widgets(widget: tk.Misc):
+    """Inspect the GUI surface and return data that a reviewer can read later."""
     yield widget
     for child in widget.winfo_children():
         yield from walk_widgets(child)
@@ -506,6 +513,7 @@ def tier_c_dumb_monkey(output_dir: Path, visible: bool, duration_seconds: int) -
 
 
 def main() -> int:
+    """Parse command-line inputs and run this tool end to end."""
     args = parse_args()
     output_dir = ensure_output_dir(args.output_dir)
     evidence: dict = {

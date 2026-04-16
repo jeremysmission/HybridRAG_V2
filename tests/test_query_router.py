@@ -22,15 +22,18 @@ from src.query.query_router import QueryRouter
 
 @dataclass
 class _StubResponse:
+    """Small helper object used to keep test setup or expected results organized."""
     text: str
 
 
 class _UnavailableLLM:
+    """Small helper object used to keep test setup or expected results organized."""
     available = False
     provider = "ollama"
 
 
 class _StubLLM:
+    """Small helper object used to keep test setup or expected results organized."""
     def __init__(self, payload: dict, provider: str = "ollama"):
         self.available = True
         self.provider = provider
@@ -41,6 +44,7 @@ class _StubLLM:
 
 
 def test_fallback_routes_po_status_to_tabular():
+    """Verify that fallback routes po status to tabular behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("What's the status of PO-2024-0501?")
@@ -52,6 +56,7 @@ def test_fallback_routes_po_status_to_tabular():
 
 
 def test_fallback_routes_contact_lookup_to_entity():
+    """Verify that fallback routes contact lookup to entity behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("What is Mike Torres's email?")
@@ -62,6 +67,7 @@ def test_fallback_routes_contact_lookup_to_entity():
 
 
 def test_fallback_routes_part_count_query_to_aggregate():
+    """Verify that fallback routes part count query to aggregate behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("How many times has ARC-4471 failed?")
@@ -72,6 +78,7 @@ def test_fallback_routes_part_count_query_to_aggregate():
 
 
 def test_fallback_routes_procedure_query_to_semantic():
+    """Verify that fallback routes procedure query to semantic behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("Describe the calibration procedure for the backup transmitter.")
@@ -82,6 +89,7 @@ def test_fallback_routes_procedure_query_to_semantic():
 
 
 def test_ollama_guard_overrides_type_for_high_signal_tabular_query():
+    """Verify that ollama guard overrides type for high signal tabular query behaves the way the team expects."""
     payload = {
         "query_type": "SEMANTIC",
         "sub_queries": [],
@@ -103,6 +111,7 @@ def test_ollama_guard_overrides_type_for_high_signal_tabular_query():
 
 
 def test_ollama_guard_builds_multi_hop_subqueries():
+    """Verify that ollama guard builds multi hop subqueries behaves the way the team expects."""
     payload = {
         "query_type": "SEMANTIC",
         "sub_queries": [],
@@ -130,6 +139,7 @@ def test_ollama_guard_builds_multi_hop_subqueries():
 
 
 def test_fallback_routes_corpus_tabular_lookup_to_tabular():
+    """Verify that fallback routes corpus tabular lookup to tabular behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("What does the enterprise program Weekly Hours Variance report show?")
@@ -138,6 +148,7 @@ def test_fallback_routes_corpus_tabular_lookup_to_tabular():
 
 
 def test_fallback_routes_corpus_aggregate_inventory_to_aggregate():
+    """Verify that fallback routes corpus aggregate inventory to aggregate behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("What procurement records exist for the monitoring system Sustainment option year 2 period?")
@@ -146,6 +157,7 @@ def test_fallback_routes_corpus_aggregate_inventory_to_aggregate():
 
 
 def test_fallback_routes_corpus_entity_single_record_lookup_to_entity():
+    """Verify that fallback routes corpus entity single record lookup to entity behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("Which CDRL is A002 and what maintenance service reports have been submitted under it?")
@@ -154,6 +166,7 @@ def test_fallback_routes_corpus_entity_single_record_lookup_to_entity():
 
 
 def test_fallback_routes_budget_query_to_tabular():
+    """Verify that fallback routes budget query to tabular behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("What is the LDI suborganization 2024 budget for ORG enterprise program and how is it organized by option year?")
@@ -162,6 +175,7 @@ def test_fallback_routes_budget_query_to_tabular():
 
 
 def test_fallback_routes_documented_under_query_to_aggregate():
+    """Verify that fallback routes documented under query to aggregate behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("What are the configuration change requests documented under CDRL A050?")
@@ -170,6 +184,7 @@ def test_fallback_routes_documented_under_query_to_aggregate():
 
 
 def test_fallback_routes_tracker_query_to_tabular():
+    """Verify that fallback routes tracker query to tabular behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("What is the Part Failure Tracker and what parts have been replaced?")
@@ -178,6 +193,7 @@ def test_fallback_routes_tracker_query_to_tabular():
 
 
 def test_fallback_routes_report_dated_query_to_entity():
+    """Verify that fallback routes report dated query to entity behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify(
@@ -188,6 +204,7 @@ def test_fallback_routes_report_dated_query_to_entity():
 
 
 def test_deterministic_guard_overrides_stubbed_llm_for_tabular_query():
+    """Verify that deterministic guard overrides stubbed llm for tabular query behaves the way the team expects."""
     payload = {
         "query_type": "SEMANTIC",
         "sub_queries": [],
@@ -208,6 +225,7 @@ def test_deterministic_guard_overrides_stubbed_llm_for_tabular_query():
 
 
 def test_deterministic_guard_applies_expansion_on_api_provider():
+    """Verify that deterministic guard applies expansion on api provider behaves the way the team expects."""
     payload = {
         "query_type": "SEMANTIC",
         "sub_queries": [],
@@ -233,6 +251,7 @@ def test_deterministic_guard_applies_expansion_on_api_provider():
 
 
 def test_deterministic_guard_applies_complex_subqueries_on_api_provider():
+    """Verify that deterministic guard applies complex subqueries on api provider behaves the way the team expects."""
     payload = {
         "query_type": "SEMANTIC",
         "sub_queries": [],
@@ -286,6 +305,7 @@ def test_deterministic_guard_applies_complex_subqueries_on_api_provider():
 def test_deterministic_guard_keeps_document_content_questions_semantic_on_api_provider(
     query, expected_fragment
 ):
+    """Verify that deterministic guard keeps document content questions semantic on api provider behaves the way the team expects."""
     payload = {
         "query_type": "ENTITY",
         "sub_queries": [],
@@ -306,6 +326,7 @@ def test_deterministic_guard_keeps_document_content_questions_semantic_on_api_pr
 
 
 def test_deterministic_guard_does_not_override_scan_report_contain_query():
+    """Verify that deterministic guard does not override scan report contain query behaves the way the team expects."""
     payload = {
         "query_type": "ENTITY",
         "sub_queries": [],
@@ -327,6 +348,7 @@ def test_deterministic_guard_does_not_override_scan_report_contain_query():
 
 
 def test_fallback_routes_deliverable_lookup_to_entity():
+    """Verify that fallback routes deliverable lookup to entity behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("What is deliverable IGSI-965?")
@@ -335,6 +357,7 @@ def test_fallback_routes_deliverable_lookup_to_entity():
 
 
 def test_fallback_routes_shipment_question_to_entity():
+    """Verify that fallback routes shipment question to entity behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify(
@@ -347,6 +370,7 @@ def test_fallback_routes_shipment_question_to_entity():
 
 
 def test_fallback_routes_which_listing_query_to_aggregate():
+    """Verify that fallback routes which listing query to aggregate behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("Which shipments occurred in August 2025?")
@@ -355,6 +379,7 @@ def test_fallback_routes_which_listing_query_to_aggregate():
 
 
 def test_fallback_routes_bill_of_materials_query_to_tabular():
+    """Verify that fallback routes bill of materials query to tabular behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify("What is the Priced Bill of Materials in CDRL A014 for the enterprise program?")
@@ -365,6 +390,7 @@ def test_fallback_routes_bill_of_materials_query_to_tabular():
 
 
 def test_cdrl_management_plan_query_adds_deliverable_bias_to_expanded_query():
+    """Verify that cdrl management plan query adds deliverable bias to expanded query behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify(
@@ -377,6 +403,7 @@ def test_cdrl_management_plan_query_adds_deliverable_bias_to_expanded_query():
 
 
 def test_exact_date_shipment_query_adds_path_friendly_date_tokens():
+    """Verify that exact date shipment query adds path friendly date tokens behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify(
@@ -389,6 +416,7 @@ def test_exact_date_shipment_query_adds_path_friendly_date_tokens():
 
 
 def test_compare_query_stays_semantic():
+    """Verify that compare query stays semantic behaves the way the team expects."""
     router = QueryRouter(_UnavailableLLM())
 
     result = router.classify(

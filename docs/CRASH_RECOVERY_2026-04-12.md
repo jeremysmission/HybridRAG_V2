@@ -1,5 +1,8 @@
 # Crash Recovery Document — 2026-04-11/12 Overnight Session
 
+> WARNING: Historical recovery snapshot only. This file is not safe as the current crash-recovery entrypoint because its store/entity assumptions are stale.
+> Start instead with `docs/SOURCE_OF_TRUTH_MAP_2026-04-12.md`, `docs/REBOOT_HANDOVER_2026-04-13.md`, and `docs/COORDINATOR_CONTINUITY_NOTES_2026-04-13.md`.
+
 **Purpose:** If the computer crashes, the session dies, or the user wakes up and needs to re-orient fast, this doc is the quickest path back to productive work.
 
 **Last updated:** 2026-04-11 late evening MDT

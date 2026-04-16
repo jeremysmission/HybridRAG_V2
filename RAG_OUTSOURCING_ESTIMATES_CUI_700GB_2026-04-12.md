@@ -1,19 +1,19 @@
-# RAG Outsourcing Estimates CUI 700GB 2026-04-12
+# RAG Outsourcing Estimates sensitive data 700GB 2026-04-12
 
 ## Purpose
 
-This note gives three realistic estimate scenarios for outsourcing a Retrieval-Augmented Generation (RAG) system for a defense-contractor program with:
+This note gives three realistic estimate scenarios for outsourcing a Retrieval-Augmented Generation (RAG) system for a enterprise program with:
 
 - about `700 GB` of mixed-format historical data
 - about `15 years` of accumulated content
-- CUI handling requirements
+- sensitive data handling requirements
 - design/build work, hardware or cloud capacity, and recurring maintenance
 
-These are not vendor-issued quotes. Public Colorado-region, CUI-capable fixed-price quotes are generally not posted online. These scenarios are therefore built from public rate cards, public cloud pricing, and public platform pricing so there is at least a defensible back-pocket benchmark.
+These are not vendor-issued quotes. Public Colorado-region, sensitive data-capable fixed-price quotes are generally not posted online. These scenarios are therefore built from public rate cards, public cloud pricing, and public platform pricing so there is at least a defensible back-pocket benchmark.
 
 ## Important Framing
 
-- CUI and defense-contractor constraints usually push prices up, not down.
+- sensitive data and enterprise constraints usually push prices up, not down.
 - Colorado/Front Range does not materially change the economics in your favor; the better public benchmark is national AI consulting rates plus government-style labor categories.
 - For this kind of problem, the hard part is not just "standing up a chatbot." It is data preparation, chunking, indexing, extraction, evaluation, security handling, and operational support.
 
@@ -109,7 +109,7 @@ Interpretation:
 
 - This is the cheapest plausible outsourced path.
 - It is still a serious five-figure effort.
-- For CUI handling, this is the low-end scenario, not the conservative one.
+- For sensitive data handling, this is the low-end scenario, not the conservative one.
 
 ## Quote 2: Government-style integrator on AWS managed RAG
 
@@ -144,7 +144,7 @@ Estimated first-year total:
 
 Interpretation:
 
-- This is more realistic than Quote 1 if the buyer wants cloud-managed services and CUI-compatible discipline from day one.
+- This is more realistic than Quote 1 if the buyer wants cloud-managed services and sensitive data-compatible discipline from day one.
 - It still does not include every possible security, accreditation, or custom integration surcharge.
 
 ## Quote 3: Red Hat / OpenShift AI platform-first enterprise stack
@@ -212,5 +212,5 @@ That means the current internal effort is already equivalent to a meaningful out
 
 ## Suggested One-Paragraph Talking Point
 
-"For a 700 GB, 15-year, mixed-format corpus with CUI handling requirements, the public market data points to a serious outside-services cost, not a small software purchase. A lean specialist build with one AI workstation is still roughly a $50K-$100K first-year effort. A cloud-managed AWS path is more like roughly $70K-$140K in year one. A Red Hat/OpenShift AI enterprise stack can push into the low six figures in year one once platform subscriptions, hardware, and support are included. By comparison, the work done in-house so far is roughly equivalent to a low five-figure specialist-services bill, while also aiming at a much cheaper long-term maintenance model." 
+"For a 700 GB, 15-year, mixed-format corpus with sensitive data handling requirements, the public market data points to a serious outside-services cost, not a small software purchase. A lean specialist build with one AI workstation is still roughly a $50K-$100K first-year effort. A cloud-managed AWS path is more like roughly $70K-$140K in year one. A Red Hat/OpenShift AI enterprise stack can push into the low six figures in year one once platform subscriptions, hardware, and support are included. By comparison, the work done in-house so far is roughly equivalent to a low five-figure specialist-services bill, while also aiming at a much cheaper long-term maintenance model." 
 

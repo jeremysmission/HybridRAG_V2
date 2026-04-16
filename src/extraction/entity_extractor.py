@@ -25,10 +25,22 @@ from dataclasses import dataclass
 from json import JSONDecodeError
 
 from src.llm.client import LLMClient
+from src.extraction.tabular_substrate import (
+    DeterministicTableExtractor,
+    build_table_prompt_context,
+)
 from src.store.entity_store import Entity, TableRow
 from src.store.relationship_store import Relationship
+from src.util import skip_signal
 
 logger = logging.getLogger(__name__)
+_TABLE_EXTRACTOR = DeterministicTableExtractor()
+TABLE_PROMPT_MODE_BASELINE = "baseline"
+TABLE_PROMPT_MODE_SYNOPSIS_ROW_PROVENANCE = "synopsis_row_provenance"
+_VALID_TABLE_PROMPT_MODES = {
+    TABLE_PROMPT_MODE_BASELINE,
+    TABLE_PROMPT_MODE_SYNOPSIS_ROW_PROVENANCE,
+}
 
 # Structured outputs JSON schema for entity extraction
 ENTITY_SCHEMA = {
@@ -180,6 +192,7 @@ class EntityExtractor:
         text: str,
         chunk_id: str,
         source_path: str,
+        table_prompt_mode: str = TABLE_PROMPT_MODE_BASELINE,
     ) -> ExtractionResult:
         """
         Extract entities, relationships, and table rows from a single chunk.
@@ -189,20 +202,27 @@ class EntityExtractor:
         if not text.strip():
             return ExtractionResult([], [], [])
 
-        result = ExtractionResult([], [], [])
-        if self.llm.available:
-            try:
-                raw = self._call_extraction(text)
-                result = self._parse_result(raw, chunk_id, source_path)
-            except Exception as e:
-                logger.error("Extraction failed for chunk %s: %s", chunk_id, e)
-        else:
-            logger.warning("LLM not available — deterministic table extraction only for %s", chunk_id)
         deterministic_rows = self._extract_deterministic_table_rows(
             text=text,
             chunk_id=chunk_id,
             source_path=source_path,
         )
+        prompt = self._build_extraction_prompt(
+            text=text,
+            chunk_id=chunk_id,
+            source_path=source_path,
+            table_prompt_mode=table_prompt_mode,
+            deterministic_rows=deterministic_rows,
+        )
+        result = ExtractionResult([], [], [])
+        if self.llm.available:
+            try:
+                raw = self._call_extraction(prompt)
+                result = self._parse_result(raw, chunk_id, source_path)
+            except Exception as e:
+                logger.error("Extraction failed for chunk %s: %s", chunk_id, e)
+        else:
+            logger.warning("LLM not available — deterministic table extraction only for %s", chunk_id)
         if deterministic_rows:
             result.table_rows = self._merge_table_rows(result.table_rows, deterministic_rows)
         return result
@@ -210,6 +230,7 @@ class EntityExtractor:
     def extract_batch(
         self,
         chunks: list[dict],
+        table_prompt_mode: str = TABLE_PROMPT_MODE_BASELINE,
     ) -> list[ExtractionResult]:
         """
         Extract entities from a batch of chunks.
@@ -223,41 +244,92 @@ class EntityExtractor:
                 text=chunk["text"],
                 chunk_id=chunk["chunk_id"],
                 source_path=chunk["source_path"],
+                table_prompt_mode=table_prompt_mode,
             )
             results.append(result)
         return results
 
-    def _call_extraction(self, text: str) -> dict:
+    def _call_extraction(self, prompt: str) -> dict:
         """Call LLM with structured output for entity extraction."""
-        prompt = f"Extract all entities and relationships from this text:\n\n{text}"
         token_budget = max(4096, getattr(self.llm, "max_tokens", 4096))
 
-        for attempt in range(2):
-            llm_response = self.llm.call(
-                prompt=prompt,
-                system_prompt=EXTRACTION_SYSTEM_PROMPT,
-                temperature=0,
-                max_tokens=token_budget,
-                response_format=ENTITY_SCHEMA,
-            )
-
-            self._last_input_tokens = llm_response.input_tokens
-            self._last_output_tokens = llm_response.output_tokens
-
-            try:
-                return json.loads(llm_response.text)
-            except JSONDecodeError:
-                truncated = llm_response.output_tokens >= token_budget
-                if attempt == 0 and truncated:
-                    logger.warning(
-                        "Extraction response hit token budget (%d); retrying with a larger limit",
-                        token_budget,
+        with skip_signal.watching("entity extraction retry"):
+            for attempt in range(2):
+                if attempt > 0 and skip_signal.pressed():
+                    logger.info(
+                        "entity extraction: skip requested, aborting before retry attempt %d", attempt
                     )
-                    token_budget = min(max(token_budget * 2, 8192), 16384)
-                    continue
-                raise
+                    raise RuntimeError("Extraction retry loop skipped by operator")
+
+                llm_response = self.llm.call(
+                    prompt=prompt,
+                    system_prompt=EXTRACTION_SYSTEM_PROMPT,
+                    temperature=0,
+                    max_tokens=token_budget,
+                    response_format=ENTITY_SCHEMA,
+                )
+
+                self._last_input_tokens = llm_response.input_tokens
+                self._last_output_tokens = llm_response.output_tokens
+
+                try:
+                    return json.loads(llm_response.text)
+                except JSONDecodeError:
+                    truncated = llm_response.output_tokens >= token_budget
+                    if attempt == 0 and truncated:
+                        logger.warning(
+                            "Extraction response hit token budget (%d); retrying with a larger limit",
+                            token_budget,
+                        )
+                        token_budget = min(max(token_budget * 2, 8192), 16384)
+                        continue
+                    raise
 
         raise RuntimeError("Extraction retry loop exhausted")
+
+    def _build_extraction_prompt(
+        self,
+        text: str,
+        chunk_id: str,
+        source_path: str,
+        table_prompt_mode: str,
+        deterministic_rows: list[TableRow],
+    ) -> str:
+        """Build either the unchanged baseline prompt or the opt-in treatment."""
+        baseline_prompt = f"Extract all entities and relationships from this text:\n\n{text}"
+        if table_prompt_mode not in _VALID_TABLE_PROMPT_MODES:
+            raise ValueError(
+                f"Unknown table_prompt_mode={table_prompt_mode!r}; "
+                f"expected one of {sorted(_VALID_TABLE_PROMPT_MODES)!r}"
+            )
+        if table_prompt_mode == TABLE_PROMPT_MODE_BASELINE:
+            return baseline_prompt
+
+        prompt_context = build_table_prompt_context(
+            text=text,
+            chunk_id=chunk_id,
+            source_path=source_path,
+            rows=deterministic_rows,
+        )
+        if prompt_context is None:
+            return baseline_prompt
+
+        # The treatment stays prompt-local for the first A/B lane. Recent
+        # semi-structured table work emphasizes preserving row/header
+        # structure and schema-guided normalization instead of relying on
+        # flatten-only text. Sources:
+        # https://arxiv.org/abs/2508.13404
+        # https://arxiv.org/abs/2602.07034
+        return (
+            "Extract all entities and relationships from the original chunk.\n"
+            "If the table synopsis is present, use it as row/header grounding in addition "
+            "to the chunk text. Do not invent rows, headers, or predicates that are not "
+            "supported by the original chunk or the synopsis.\n\n"
+            "[ORIGINAL CHUNK]\n"
+            f"{text}\n"
+            "[/ORIGINAL CHUNK]\n\n"
+            f"{prompt_context.render()}"
+        )
 
     def _parse_result(
         self, raw: dict, chunk_id: str, source_path: str
@@ -315,10 +387,7 @@ class EntityExtractor:
         source_path: str,
     ) -> list[TableRow]:
         """Parse obvious table layouts directly from the chunk text."""
-        rows = []
-        rows.extend(self._extract_markdown_tables(text, chunk_id, source_path))
-        rows.extend(self._extract_bracket_row_tables(text, chunk_id, source_path))
-        return rows
+        return _TABLE_EXTRACTOR.extract(text=text, chunk_id=chunk_id, source_path=source_path)
 
     def _extract_markdown_tables(
         self,
@@ -540,7 +609,7 @@ class RegexPreExtractor:
         re.compile(r"^CNSSI-\d+$"),
         re.compile(r"^DD-\d{4}$"),
         re.compile(r"^DO-\d{4}$"),
-        re.compile(r"^IGS(?:I|CC)?-\d{3,5}$"),
+        re.compile(r"^enterprise program(?:I|CC)?-\d{3,5}$"),
         re.compile(r"^MSR-\d+$"),
         re.compile(r"^DV-\d{2,4}$"),
         re.compile(r"^IEEE-\d+$"),

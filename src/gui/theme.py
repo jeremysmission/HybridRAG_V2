@@ -1,3 +1,4 @@
+"""Theme definitions for the desktop interface, including colors, fonts, and widget styling rules."""
 # ============================================================================
 # HybridRAG V2 -- GUI Theme Engine (src/gui/theme.py)
 # ============================================================================

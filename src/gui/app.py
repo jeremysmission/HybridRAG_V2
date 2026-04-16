@@ -1,3 +1,4 @@
+"""Desktop application shell. It creates the main window, swaps panels in and out, and keeps shared GUI state wired together."""
 # ============================================================================
 # HybridRAG V2 -- Main GUI Application (src/gui/app.py)
 # ============================================================================

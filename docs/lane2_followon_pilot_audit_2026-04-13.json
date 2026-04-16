@@ -1,0 +1,98 @@
+{
+  "config_path": "C:\\HybridRAG_V2\\config\\config.tier1_clean_2026-04-13.yaml",
+  "tier": 1,
+  "dry_run": true,
+  "table_mode": "logistics",
+  "table_limit": 30000,
+  "table_source_like": [],
+  "baseline_entity_path": "C:\\HybridRAG_V2\\data\\index\\clean\\tier1_clean_20260413\\entities.sqlite3",
+  "baseline_relationship_path": "C:\\HybridRAG_V2\\data\\index\\clean\\tier1_clean_20260413\\relationships.sqlite3",
+  "runtime_entity_path": "C:\\HybridRAG_V2\\data\\index\\clean\\tier1_clean_20260413\\entities.sqlite3",
+  "runtime_relationship_path": "C:\\HybridRAG_V2\\data\\index\\clean\\tier1_clean_20260413\\relationships.sqlite3",
+  "stage_dir": null,
+  "before": {
+    "entity_count": 5781766,
+    "entity_types": {
+      "CONTACT": 2540033,
+      "DATE": 2713472,
+      "PART": 316184,
+      "PERSON": 4788,
+      "PO": 119812,
+      "SITE": 87477
+    },
+    "table_row_count": 0,
+    "relationship_count": 59,
+    "predicate_counts": {
+      "CONSUMED_AT": 2,
+      "FAILED_AT": 2,
+      "MAINTAINED_BY": 19,
+      "POC_FOR": 19,
+      "WORKS_AT": 17
+    }
+  },
+  "tier1": {
+    "chunks_processed": 1,
+    "raw_entity_count": 0,
+    "raw_relationship_count": 0,
+    "inserted_entity_count": 0,
+    "inserted_relationship_count": 0,
+    "entity_types": {},
+    "relationship_predicates": {},
+    "inserted_entity_types": {},
+    "inserted_relationship_predicates": {}
+  },
+  "table_pilot": {
+    "scanned_chunks": 30000,
+    "candidate_chunks": 30000,
+    "matched_chunks": 29873,
+    "raw_row_count": 69719,
+    "inserted_row_count": 0,
+    "family_candidate_chunks": {
+      "bom": 1667,
+      "dd250": 2,
+      "received_po": 28331
+    },
+    "family_row_counts": {
+      "bom": 2242,
+      "dd250": 1,
+      "received_po": 67476
+    },
+    "family_source_counts": {
+      "bom": 6,
+      "dd250": 1,
+      "received_po": 17
+    },
+    "source_patterns": [
+      "Packing List",
+      "BOM",
+      "PR & PO",
+      "Space Report",
+      "DD250",
+      "Calibration",
+      "Spares",
+      "Received"
+    ],
+    "duration_seconds": 6.33
+  },
+  "after": {
+    "entity_count": 5781766,
+    "entity_types": {
+      "CONTACT": 2540033,
+      "DATE": 2713472,
+      "PART": 316184,
+      "PERSON": 4788,
+      "PO": 119812,
+      "SITE": 87477
+    },
+    "table_row_count": 0,
+    "relationship_count": 59,
+    "predicate_counts": {
+      "CONSUMED_AT": 2,
+      "FAILED_AT": 2,
+      "MAINTAINED_BY": 19,
+      "POC_FOR": 19,
+      "WORKS_AT": 17
+    }
+  },
+  "duration_seconds": 7.15
+}

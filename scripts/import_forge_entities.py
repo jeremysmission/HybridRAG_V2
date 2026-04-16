@@ -114,6 +114,7 @@ def build_source_map(export_dir: Path) -> dict[str, str]:
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main import forge entities workflow."""
     parser = argparse.ArgumentParser(
         description="Import CorpusForge entity exports into V2 entity store."
     )

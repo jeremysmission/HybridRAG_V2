@@ -279,6 +279,7 @@ def print_leaderboard(results: list[ConfigResult]) -> None:
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main tune retrieval workflow."""
     parser = argparse.ArgumentParser(
         description="Overnight retrieval parameter sweep."
     )

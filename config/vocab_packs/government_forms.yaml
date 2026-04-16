@@ -1,0 +1,207 @@
+pack_id: government_forms
+pack_name: Government Forms
+domain: government_forms
+version: "2026-04-15"
+release_tier: deployable
+status: active
+description: >-
+  Sanitized controlled vocabulary for federal forms commonly encountered
+  in DoD logistics, personnel, and security workflows. Each entry
+  captures canonical form number, title, aliases, common fields, and
+  structural cues useful for form-aware extraction. Sources are the
+  GSA Forms Library, DoW Forms Management Program, and OPM federal
+  forms references.
+
+provenance:
+  deployable_sources:
+    - source_id: gsa_forms_library
+      source_kind: official_public
+      citation: "https://www.gsa.gov/reference/forms"
+    - source_id: whs_dd_forms
+      source_kind: official_public
+      citation: "https://www.esd.whs.mil/Directives/forms/fmo_poc/"
+    - source_id: opm_federal_investigation_forms
+      source_kind: official_public
+      citation: "https://www.opm.gov/forms/federal-investigation-forms/"
+    - source_id: opm_personnel_documentation
+      source_kind: official_public
+      citation: "https://www.opm.gov/policy-data-oversight/data-analysis-documentation/personnel-documentation/"
+  notes: "Only deployable_sources ship with this pack artifact."
+
+entry_defaults:
+  regex_safe: true
+  retrieval_expand: true
+  collision_risk: low
+  source_kind: official_public
+
+entries:
+  - term_id: forms.dd.1149
+    canonical: DD Form 1149
+    kind: form
+    domain: government_forms
+    category: shipping_and_invoice
+    aliases: [DD1149, "DD Form 1149", "Requisition and Invoice/Shipping Document"]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    form_number: "DD Form 1149"
+    form_title: "Requisition and Invoice/Shipping Document"
+    common_fields:
+      - ship_to
+      - bill_to
+      - requisition_number
+      - quantity
+      - unit_price
+      - nsn
+      - item_description
+      - signature_block
+    structural_cues:
+      - line_items_table
+      - signature_block
+      - routing_block
+      - header_requisition_number
+    sources:
+      - source_id: whs_dd_forms
+        citation: "https://www.esd.whs.mil/Directives/forms/fmo_poc/"
+    notes: "High-value logistics form in DoD supply chain workflows."
+
+  - term_id: forms.dd.250
+    canonical: DD Form 250
+    kind: form
+    domain: government_forms
+    category: material_inspection_receiving
+    aliases: [DD250, "DD Form 250", "Material Inspection and Receiving Report"]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    form_number: "DD Form 250"
+    form_title: "Material Inspection and Receiving Report"
+    common_fields:
+      - contract_number
+      - shipment_number
+      - item_description
+      - quantity_shipped
+      - quantity_received
+      - acceptance_signature
+      - inspection_date
+    structural_cues:
+      - line_items_table
+      - acceptance_block
+      - inspection_block
+      - contract_header
+    sources:
+      - source_id: whs_dd_forms
+        citation: "https://www.esd.whs.mil/Directives/forms/fmo_poc/"
+    notes: "Used to document inspection, acceptance, and shipment of supplies and services."
+
+  - term_id: forms.sf.50
+    canonical: SF-50
+    kind: form
+    domain: government_forms
+    category: personnel_action
+    aliases: [SF 50, "SF-50", "Standard Form 50", "Notification of Personnel Action"]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    form_number: "SF-50"
+    form_title: "Notification of Personnel Action"
+    common_fields:
+      - employee_name
+      - effective_date
+      - nature_of_action
+      - position_title
+      - pay_plan
+      - grade
+      - salary
+      - organization
+    structural_cues:
+      - boxed_field_layout
+      - numbered_action_codes
+      - effective_date_field
+    sources:
+      - source_id: opm_personnel_documentation
+        citation: "https://www.opm.gov/policy-data-oversight/data-analysis-documentation/personnel-documentation/"
+    notes: "Canonical federal civilian personnel action record."
+
+  - term_id: forms.sf.52
+    canonical: SF-52
+    kind: form
+    domain: government_forms
+    category: personnel_action
+    aliases: [SF 52, "SF-52", "Standard Form 52", "Request for Personnel Action"]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    form_number: "SF-52"
+    form_title: "Request for Personnel Action"
+    common_fields:
+      - requested_action
+      - proposed_effective_date
+      - position_title
+      - requesting_official
+      - approving_official
+    structural_cues:
+      - action_requested_block
+      - approval_signature_block
+      - routing_block
+    sources:
+      - source_id: opm_personnel_documentation
+        citation: "https://www.opm.gov/policy-data-oversight/data-analysis-documentation/personnel-documentation/"
+    notes: "Precursor to an SF-50; used to initiate personnel actions."
+
+  - term_id: forms.sf.86
+    canonical: SF-86
+    kind: form
+    domain: government_forms
+    category: security_clearance
+    aliases: [SF 86, "SF-86", "Standard Form 86", "Questionnaire for National Security Positions"]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    form_number: "SF-86"
+    form_title: "Questionnaire for National Security Positions"
+    common_fields:
+      - personal_information
+      - residence_history
+      - employment_history
+      - foreign_contacts
+      - financial_record
+      - investigations_history
+    structural_cues:
+      - long_multi_section_questionnaire
+      - certification_signature_block
+      - release_authorization
+    sources:
+      - source_id: opm_federal_investigation_forms
+        citation: "https://www.opm.gov/forms/federal-investigation-forms/"
+    notes: "National-security-position background investigation questionnaire."
+
+  - term_id: forms.sf.85
+    canonical: SF-85
+    kind: form
+    domain: government_forms
+    category: security_clearance
+    aliases: [SF 85, "SF-85", "Standard Form 85", "Questionnaire for Non-Sensitive Positions"]
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    form_number: "SF-85"
+    form_title: "Questionnaire for Non-Sensitive Positions"
+    common_fields:
+      - personal_information
+      - residence_history
+      - employment_history
+      - certification_signature
+    structural_cues:
+      - multi_section_questionnaire
+      - certification_signature_block
+    sources:
+      - source_id: opm_federal_investigation_forms
+        citation: "https://www.opm.gov/forms/federal-investigation-forms/"
+    notes: "Non-sensitive position background investigation questionnaire."

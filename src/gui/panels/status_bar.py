@@ -1,8 +1,9 @@
+"""Status bar. It gives a constant at-a-glance summary of system readiness at the bottom of the window."""
 # ============================================================================
 # HybridRAG V2 -- Status Bar (src/gui/panels/status_bar.py)
 # ============================================================================
-# Bottom status bar showing: chunks loaded, entities loaded, LLM status,
-# and query path of last query. Refreshes every 15 seconds.
+# Bottom status bar showing: chunks loaded, FTS readiness, entities loaded,
+# LLM status, and query path of last query. Refreshes every 15 seconds.
 # ============================================================================
 
 import tkinter as tk
@@ -19,6 +20,7 @@ class StatusBar(tk.Frame):
 
     Displays:
       - Chunks loaded (from LanceDB)
+      - FTS readiness for the configured LanceDB store
       - Entities loaded (from EntityStore)
       - LLM status (available / not configured)
       - Last query path (SEMANTIC/ENTITY/AGGREGATE/TABULAR/COMPLEX)
@@ -48,6 +50,16 @@ class StatusBar(tk.Frame):
 
         self._sep1 = tk.Frame(self, width=1, bg=t["separator"])
         self._sep1.pack(side=tk.LEFT, fill=tk.Y, padx=8, pady=4)
+
+        # -- FTS indicator --
+        self.fts_label = tk.Label(
+            self, text="FTS: --", anchor=tk.W,
+            padx=8, pady=4, bg=t["panel_bg"], fg=t["gray"], font=FONT,
+        )
+        self.fts_label.pack(side=tk.LEFT)
+
+        self._sep_fts = tk.Frame(self, width=1, bg=t["separator"])
+        self._sep_fts.pack(side=tk.LEFT, fill=tk.Y, padx=8, pady=4)
 
         # -- Entities indicator --
         self.entities_label = tk.Label(
@@ -111,6 +123,7 @@ class StatusBar(tk.Frame):
         try:
             if self._model is None:
                 self.chunks_label.config(text="Chunks: --", fg=t["gray"])
+                self.fts_label.config(text="FTS: --", fg=t["gray"])
                 self.entities_label.config(text="Entities: --", fg=t["gray"])
                 self.llm_label.config(text="LLM: not initialized", fg=t["gray"])
                 return
@@ -121,6 +134,17 @@ class StatusBar(tk.Frame):
                 text="Chunks: {:,}".format(count),
                 fg=t["green"] if count > 0 else t["gray"],
             )
+
+            # FTS readiness on the configured store
+            if self._model.fts_ready is True:
+                self.fts_label.config(text="FTS: ready", fg=t["green"])
+            elif self._model.fts_ready is False:
+                if getattr(self._model, "fts_state", "") == "index_present":
+                    self.fts_label.config(text="FTS: present", fg=t["orange"])
+                else:
+                    self.fts_label.config(text="FTS: missing", fg=t["red"])
+            else:
+                self.fts_label.config(text="FTS: checking...", fg=t["gray"])
 
             # Entities
             ent_count = self._model.entity_count
@@ -142,10 +166,10 @@ class StatusBar(tk.Frame):
     def apply_theme(self, t):
         """Re-apply theme colors to all widgets."""
         self.configure(bg=t["panel_bg"])
-        for w in (self.chunks_label, self.entities_label,
+        for w in (self.chunks_label, self.fts_label, self.entities_label,
                   self.llm_label, self.path_label):
             w.configure(bg=t["panel_bg"])
-        for sep in (self._sep1, self._sep2, self._sep3):
+        for sep in (self._sep1, self._sep_fts, self._sep2, self._sep3):
             sep.configure(bg=t["separator"])
         self._refresh_status()
 

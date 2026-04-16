@@ -1,3 +1,4 @@
+"""GUI launcher. It opens the desktop app quickly and finishes the heavy backend startup work in the background."""
 # ============================================================================
 # HybridRAG V2 -- GUI Launcher (src/gui/launch_gui.py)
 # ============================================================================
@@ -96,7 +97,29 @@ def _load_backends(app, config, logger):
             if not os.path.isabs(lance_path):
                 lance_path = os.path.join(_project_root, lance_path)
             lance_store = LanceStore(lance_path)
-            logger.info("[OK] LanceDB opened (%d chunks)", lance_store.count())
+            chunk_count = lance_store.count()
+            logger.info("[OK] LanceDB opened (%d chunks)", chunk_count)
+            fts_status = lance_store.fts_status()
+            if fts_status.get("ready"):
+                logger.info(
+                    "[OK] LanceDB FTS ready (probe=%s, path=%s)",
+                    fts_status.get("probe_term"),
+                    lance_path,
+                )
+            elif fts_status.get("state") == "index_present":
+                logger.warning(
+                    "[WARN] LanceDB FTS index present but probe failed at %s: %s",
+                    lance_path,
+                    fts_status.get("error") or "FTS probe failed",
+                )
+            else:
+                logger.warning(
+                    "[WARN] LanceDB FTS missing/unreadable at %s: %s. "
+                    "Rebuild with scripts/import_embedengine.py --create-index "
+                    "or LanceStore.create_fts_index().",
+                    lance_path,
+                    fts_status.get("error") or "FTS probe failed",
+                )
         except Exception as exc:
             logger.warning("[WARN] LanceDB init failed: %s", exc)
 

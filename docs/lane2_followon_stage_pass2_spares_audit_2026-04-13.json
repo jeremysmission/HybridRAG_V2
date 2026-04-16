@@ -1,0 +1,46 @@
+{
+  "source_patterns": [
+    "Initial Spares",
+    "Recommended Spares",
+    "Spares"
+  ],
+  "limit": 5000,
+  "dry_run": false,
+  "entity_db": "data/index/clean/lane2_followon_stage_20260413/entities.sqlite3",
+  "result": {
+    "scanned_chunks": 1517,
+    "candidate_chunks": 1517,
+    "matched_chunks": 825,
+    "raw_row_count": 4060,
+    "inserted_row_count": 4048,
+    "family_candidate_chunks": {
+      "bom": 53,
+      "spares_report": 1080,
+      "received_po": 344,
+      "packing_list": 27,
+      "dd250": 6,
+      "calibration": 7
+    },
+    "family_row_counts": {
+      "bom": 64,
+      "spares_report": 3785,
+      "received_po": 114,
+      "dd250": 12,
+      "packing_list": 27,
+      "calibration": 58
+    },
+    "family_source_counts": {
+      "bom": 6,
+      "spares_report": 70,
+      "received_po": 34,
+      "dd250": 1,
+      "packing_list": 2,
+      "calibration": 5
+    },
+    "source_patterns": [
+      "Initial Spares",
+      "Recommended Spares",
+      "Spares"
+    ]
+  }
+}

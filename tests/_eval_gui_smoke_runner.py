@@ -25,6 +25,7 @@ from src.gui.eval_panels.runner import EvalRunner  # noqa: E402
 
 
 def main() -> int:
+    """Run this helper module directly from the command line."""
     events: list[tuple[str, dict]] = []
     done_evt = threading.Event()
 

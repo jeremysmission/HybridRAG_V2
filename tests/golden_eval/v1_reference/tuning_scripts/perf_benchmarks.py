@@ -1,3 +1,4 @@
+"""This test module supports the perf benchmarks area of the repository."""
 # === NON-PROGRAMMER GUIDE ===
 # Purpose: Implements the perf benchmarks part of the application runtime.
 # What to read first: Start at the top-level function/class definitions and follow calls downward.
@@ -28,6 +29,7 @@ from . import PerfMetric, benchmark, PROJ_ROOT
 
 
 def _get_db_path() -> str:
+    """Support this test module by handling the get db path step."""
     from src.core.config import load_config
     return getattr(load_config(str(PROJ_ROOT)).paths, "database", "")
 

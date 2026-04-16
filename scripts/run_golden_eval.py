@@ -34,6 +34,7 @@ RESULTS_DIR = V2_ROOT / "tests" / "golden_eval" / "results"
 
 @dataclass
 class QueryScore:
+    """Structured helper object used by the run golden eval workflow."""
     query_id: str
     query: str
     expected_type: str
@@ -57,6 +58,7 @@ class QueryScore:
 
 @dataclass
 class EvalSummary:
+    """Small structured record used to keep related results together as the workflow runs."""
     run_id: str
     timestamp: str
     total_queries: int
@@ -390,6 +392,7 @@ def _print_comparison(current: EvalSummary, previous_path: str) -> None:
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main run golden eval workflow."""
     parser = argparse.ArgumentParser(description="HybridRAG V2 golden evaluation runner")
     parser.add_argument("--config", default=str(V2_ROOT / "config" / "config.yaml"))
     parser.add_argument("--retrieval-only", action="store_true",

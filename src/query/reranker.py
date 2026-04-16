@@ -71,8 +71,12 @@ class FlashReranker:
         filenames, or exact identifiers.
         """
         parts = []
+        if result.score < 0:
+            parts.append("High-signal metadata path match.")
         if result.source_path:
             parts.append(f"Source path: {result.source_path}")
+            source_name = result.source_path.rsplit("/", 1)[-1].rsplit("\\", 1)[-1]
+            parts.append(f"Source file: {source_name}")
         if result.enriched_text:
             parts.append(result.enriched_text)
         elif result.text:

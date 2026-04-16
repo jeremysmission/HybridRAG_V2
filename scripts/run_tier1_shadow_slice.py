@@ -36,6 +36,7 @@ from scripts.audit_tier1_regex_gate import sample_chunks_from_store
 
 
 def build_extractor(config_path: str) -> RegexPreExtractor:
+    """Assemble the structured object this workflow needs for its next step."""
     config = load_config(config_path)
     return RegexPreExtractor(
         part_patterns=config.extraction.part_patterns,
@@ -44,10 +45,12 @@ def build_extractor(config_path: str) -> RegexPreExtractor:
 
 
 def ensure_parent(path: Path) -> None:
+    """Support the run tier1 shadow slice workflow by handling the ensure parent step."""
     path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def reset_shadow_dbs(entity_db: Path, rel_db: Path) -> None:
+    """Support the run tier1 shadow slice workflow by handling the reset shadow dbs step."""
     if entity_db.exists():
         entity_db.unlink()
     if rel_db.exists():
@@ -55,6 +58,7 @@ def reset_shadow_dbs(entity_db: Path, rel_db: Path) -> None:
 
 
 def query_top_entities(entity_db: Path, entity_type: str, limit: int = 20) -> list[dict]:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     if not entity_db.exists():
         return []
     conn = sqlite3.connect(entity_db)
@@ -77,6 +81,7 @@ def query_top_entities(entity_db: Path, entity_type: str, limit: int = 20) -> li
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main run tier1 shadow slice workflow."""
     parser = argparse.ArgumentParser(description="Run an isolated Tier 1 shadow slice.")
     parser.add_argument("--config", default="config/config.tier1_shadow_2026-04-13.yaml")
     parser.add_argument("--sample-limit", type=int, default=5000)

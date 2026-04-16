@@ -1,0 +1,353 @@
+pack_id: program_management_terms
+pack_name: Program Management Terms
+domain: pmi_evm
+version: "2026-04-15"
+release_tier: deployable
+status: active
+description: >-
+  Sanitized controlled vocabulary for program management, earned value
+  management, and federal acquisition program-control terminology.
+  Sources are official/public: PMI Lexicon, DAU Glossary, NASA PP&C
+  Glossary, and FAR 2.101. Entries that are collision-prone as raw
+  regex (AC, EV, PV) are marked regex_safe false and retained as
+  retrieval expansions only.
+
+provenance:
+  deployable_sources:
+    - source_id: pmi_lexicon
+      source_kind: official_public
+      citation: "https://www.pmi.org/pmbok-guide-standards/lexicon"
+    - source_id: dau_glossary
+      source_kind: official_public
+      citation: "https://www.dau.edu/glossary"
+    - source_id: nasa_ppc_glossary
+      source_kind: official_public
+      citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+    - source_id: far_2_101
+      source_kind: official_public
+      citation: "https://www.acquisition.gov/far/2.101"
+  notes: "Only deployable_sources ship with this pack artifact."
+
+entry_defaults:
+  regex_safe: false
+  retrieval_expand: true
+  collision_risk: medium
+  source_kind: official_public
+
+entries:
+  - term_id: pmi.general.pmi
+    canonical: PMI
+    kind: acronym
+    domain: pmi_evm
+    category: organization
+    expansion: Project Management Institute
+    aliases: [Project Management Institute]
+    definition_short: "Professional association that publishes the PMBOK Guide and PMI Lexicon."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    source_kind: official_public
+    sources:
+      - source_id: pmi_lexicon
+        citation: "https://www.pmi.org/pmbok-guide-standards/lexicon"
+
+  - term_id: pmi.general.pmp
+    canonical: PMP
+    kind: acronym
+    domain: pmi_evm
+    category: certification
+    expansion: Project Management Professional
+    aliases: [Project Management Professional, PMP certification]
+    definition_short: "Credential issued by PMI for project managers."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: pmi_lexicon
+        citation: "https://www.pmi.org/pmbok-guide-standards/lexicon"
+
+  - term_id: pmi.general.pmbok
+    canonical: PMBOK
+    kind: acronym
+    domain: pmi_evm
+    category: standard
+    expansion: Project Management Body of Knowledge
+    aliases: [PMBOK Guide, "PMBOK Guide"]
+    definition_short: "PMI's foundational guide to project management practices."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: pmi_lexicon
+        citation: "https://www.pmi.org/pmbok-guide-standards/lexicon"
+
+  - term_id: pmi.general.pmo
+    canonical: PMO
+    kind: acronym
+    domain: pmi_evm
+    category: organization
+    expansion: Project Management Office
+    aliases: [Project Management Office, Program Management Office]
+    definition_short: "Organizational function that standardizes project governance."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: pmi_lexicon
+        citation: "https://www.pmi.org/pmbok-guide-standards/lexicon"
+      - source_id: dau_glossary
+        citation: "https://www.dau.edu/glossary"
+
+  - term_id: pmi.evm.evm
+    canonical: EVM
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: Earned Value Management
+    aliases: [Earned Value Management, earned-value management]
+    definition_short: "Project-control methodology integrating scope, schedule, and cost."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+      - source_id: dau_glossary
+        citation: "https://www.dau.edu/glossary"
+
+  - term_id: pmi.evm.ev
+    canonical: EV
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: Earned Value
+    aliases: [Earned Value, BCWP, Budgeted Cost of Work Performed]
+    definition_short: "Budgeted cost of work performed at a point in time."
+    regex_safe: false
+    retrieval_expand: true
+    collision_risk: high
+    sources:
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+    notes: "Two-letter acronym collides in normal text. Keep as retrieval expansion only."
+
+  - term_id: pmi.evm.pv
+    canonical: PV
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: Planned Value
+    aliases: [Planned Value, BCWS, Budgeted Cost of Work Scheduled]
+    definition_short: "Authorized budget assigned to scheduled work."
+    regex_safe: false
+    retrieval_expand: true
+    collision_risk: high
+    sources:
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+    notes: "Two-letter acronym collides with photovoltaic and other terms."
+
+  - term_id: pmi.evm.ac
+    canonical: AC
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: Actual Cost
+    aliases: [Actual Cost, ACWP, Actual Cost of Work Performed]
+    definition_short: "Realized cost incurred for work performed."
+    regex_safe: false
+    retrieval_expand: true
+    collision_risk: high
+    sources:
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+    notes: "Two-letter acronym collides with 'AC' (alternating current, air conditioning)."
+
+  - term_id: pmi.evm.cpi
+    canonical: CPI
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: Cost Performance Index
+    aliases: [Cost Performance Index]
+    definition_short: "Ratio of earned value to actual cost; cost efficiency."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: pmi_lexicon
+        citation: "https://www.pmi.org/pmbok-guide-standards/lexicon"
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+
+  - term_id: pmi.evm.spi
+    canonical: SPI
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: Schedule Performance Index
+    aliases: [Schedule Performance Index]
+    definition_short: "Ratio of earned value to planned value; schedule efficiency."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: pmi_lexicon
+        citation: "https://www.pmi.org/pmbok-guide-standards/lexicon"
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+
+  - term_id: pmi.evm.bac
+    canonical: BAC
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: Budget at Completion
+    aliases: [Budget at Completion]
+    definition_short: "Total budget authorized for all work on the project."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+
+  - term_id: pmi.evm.eac
+    canonical: EAC
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: Estimate at Completion
+    aliases: [Estimate at Completion]
+    definition_short: "Expected total cost to complete all work."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+
+  - term_id: pmi.evm.etc
+    canonical: ETC
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: Estimate to Complete
+    aliases: [Estimate to Complete]
+    definition_short: "Expected remaining cost to finish all outstanding work."
+    regex_safe: false
+    retrieval_expand: true
+    collision_risk: medium
+    sources:
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+    notes: "Collides with common 'etc.' abbreviation."
+
+  - term_id: pmi.evm.vac
+    canonical: VAC
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: Variance at Completion
+    aliases: [Variance at Completion]
+    definition_short: "Difference between BAC and EAC at project completion."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+
+  - term_id: pmi.evm.tcpi
+    canonical: TCPI
+    kind: acronym
+    domain: pmi_evm
+    category: earned_value
+    expansion: To-Complete Performance Index
+    aliases: [To-Complete Performance Index]
+    definition_short: "Cost performance index required to achieve a stated goal."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: pmi_lexicon
+        citation: "https://www.pmi.org/pmbok-guide-standards/lexicon"
+
+  - term_id: pmi.structure.wbs
+    canonical: WBS
+    kind: acronym
+    domain: pmi_evm
+    category: structure
+    expansion: Work Breakdown Structure
+    aliases: [Work Breakdown Structure]
+    definition_short: "Hierarchical decomposition of project scope into deliverables."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: pmi_lexicon
+        citation: "https://www.pmi.org/pmbok-guide-standards/lexicon"
+      - source_id: nasa_ppc_glossary
+        citation: "https://www.nasa.gov/ocfo/ppc-corner/ppc-glossary/"
+
+  - term_id: pmi.schedule.ims
+    canonical: IMS
+    kind: acronym
+    domain: pmi_evm
+    category: schedule
+    expansion: Integrated Master Schedule
+    aliases: [Integrated Master Schedule]
+    definition_short: "Networked schedule integrating all work products for a program."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: dau_glossary
+        citation: "https://www.dau.edu/glossary"
+
+  - term_id: pmi.deliverables.cdrl
+    canonical: CDRL
+    kind: acronym
+    domain: pmi_evm
+    category: contract_deliverable
+    expansion: Contract Data Requirements List
+    aliases: [Contract Data Requirements List]
+    definition_short: "Contract deliverable data requirements list under DoD acquisition."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: dau_glossary
+        citation: "https://www.dau.edu/glossary"
+
+  - term_id: pmi.risk.raid
+    canonical: RAID
+    kind: acronym
+    domain: pmi_evm
+    category: risk_log
+    expansion: Risks, Assumptions, Issues, Dependencies
+    aliases: [RAID log, "Risks Assumptions Issues Dependencies"]
+    definition_short: "Program tracking log for risks, assumptions, issues, and dependencies."
+    regex_safe: false
+    retrieval_expand: true
+    collision_risk: medium
+    sources:
+      - source_id: pmi_lexicon
+        citation: "https://www.pmi.org/pmbok-guide-standards/lexicon"
+    notes: "Collides with RAID as disk storage acronym; use with context."
+
+  - term_id: pmi.risk.poam
+    canonical: POAM
+    kind: acronym
+    domain: pmi_evm
+    category: action_tracker
+    expansion: Plan of Action and Milestones
+    aliases: [POA&M, "Plan of Action and Milestones", "Plan of Actions and Milestones"]
+    definition_short: "Action plan tracking corrective actions and milestones."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: dau_glossary
+        citation: "https://www.dau.edu/glossary"
+    notes: "Also heavily used in cybersecurity (NIST RMF) — cross-listed in cyber_terms pack."

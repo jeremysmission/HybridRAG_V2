@@ -25,11 +25,13 @@ import sys
 
 
 def run(cmd):
+    """Support this test module by handling the run step."""
     print(">", " ".join(cmd))
     subprocess.run(cmd, check=True)
 
 
 def main() -> int:
+    """Run this helper module directly from the command line."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--manifest", default="Eval/role_sets/manifest.json")
     ap.add_argument("--config", default="config/config.yaml")

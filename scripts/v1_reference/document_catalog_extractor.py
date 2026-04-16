@@ -216,6 +216,7 @@ def match_document_catalog_filters(
 
 
 def _load_known_terms(conn: sqlite3.Connection) -> tuple[list[str], list[str]]:
+    """Load the data needed for the document catalog extractor workflow."""
     site_rows = conn.execute(
         "SELECT DISTINCT site_canonical FROM document_catalog "
         "WHERE site_canonical != '' AND report_family = 'MSR'"
@@ -231,6 +232,7 @@ def _load_known_terms(conn: sqlite3.Connection) -> tuple[list[str], list[str]]:
 
 
 def _build_document_where(filters: dict[str, Any]) -> tuple[str, list[Any]]:
+    """Assemble the structured object this workflow needs for its next step."""
     clauses = ["report_family = 'MSR'"]
     params: list[Any] = []
 
@@ -272,6 +274,7 @@ def _build_document_where(filters: dict[str, Any]) -> tuple[str, list[Any]]:
 
 
 def _format_document_sources(rows: list[sqlite3.Row]) -> list[dict[str, Any]]:
+    """Turn internal values into human-readable text for the operator."""
     sources: list[dict[str, Any]] = []
     seen: set[str] = set()
     for row in rows:
@@ -315,6 +318,7 @@ def _ensure_document_catalog_populated(
 
 
 def _query_site_list(conn: sqlite3.Connection, where_sql: str, params: list[Any]) -> DocumentCatalogQueryResult | None:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     rows = conn.execute(
         f"""
         SELECT site_canonical, country_canonical, COUNT(*) AS doc_count
@@ -345,6 +349,7 @@ def _query_follow_on_actions(
     where_sql: str,
     params: list[Any],
 ) -> DocumentCatalogQueryResult | None:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     rows = conn.execute(
         f"""
         SELECT report_id, report_date_iso, site_canonical, country_canonical,
@@ -376,6 +381,7 @@ def _query_point_of_contact(
     where_sql: str,
     params: list[Any],
 ) -> DocumentCatalogQueryResult | None:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     rows = conn.execute(
         f"""
         SELECT report_id, report_date_iso, site_canonical, country_canonical,
@@ -421,6 +427,7 @@ def _query_filtered_summary_scope(
     params: list[Any],
     filters: dict[str, Any],
 ) -> DocumentCatalogQueryResult | None:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     limit_docs = clamp_top_n(filters.get("top_n"), default=24, maximum=60)
     rows = conn.execute(
         f"""

@@ -55,12 +55,14 @@ EXACT_MATCH_TOKENS = {
 
 
 def _ascii(s: str) -> str:
+    """Normalize raw text into a simpler form that is easier to compare or display."""
     if not s:
         return ""
     return s.encode("ascii", "replace").decode("ascii")
 
 
 def _short_src(path: str) -> str:
+    """Normalize raw text into a simpler form that is easier to compare or display."""
     if not path:
         return ""
     parts = path.replace("\\", "/").split("/")
@@ -68,6 +70,7 @@ def _short_src(path: str) -> str:
 
 
 def format_result(r, idx):
+    """Turn internal values into human-readable text for the operator."""
     source = r.get("source_path", "?")
     short_src = _ascii(_short_src(source))
     preview = (r.get("text", "") or "")[:100].replace("\n", " ").strip()
@@ -77,6 +80,7 @@ def format_result(r, idx):
 
 
 def vector_only_search(table, query_vec, top_k=5):
+    """Support the retrieval baseline probe v2 workflow by handling the vector only search step."""
     vec = query_vec.astype("float32").flatten().tolist()
     try:
         return table.search(vec).limit(top_k).to_list(), None
@@ -85,6 +89,7 @@ def vector_only_search(table, query_vec, top_k=5):
 
 
 def fts_only_search(table, query_text, top_k=5):
+    """Support the retrieval baseline probe v2 workflow by handling the fts only search step."""
     try:
         return table.search(query_text, query_type="fts").limit(top_k).to_list(), None
     except Exception as e:
@@ -92,6 +97,7 @@ def fts_only_search(table, query_text, top_k=5):
 
 
 def hybrid_search(table, query_vec, query_text, top_k=5):
+    """Support the retrieval baseline probe v2 workflow by handling the hybrid search step."""
     vec = query_vec.astype("float32").flatten().tolist()
     try:
         results = (
@@ -124,6 +130,7 @@ def judge_hit(results, exact_tokens):
 
 
 def percentile(arr, p):
+    """Compute a percentile so latency or scoring distributions are easier to interpret."""
     if not arr:
         return 0
     s = sorted(arr)
@@ -132,6 +139,7 @@ def percentile(arr, p):
 
 
 def main():
+    """Parse command-line inputs and run the main retrieval baseline probe v2 workflow."""
     print("=" * 70)
     print("RETRIEVAL BASELINE PROBE V2 (post-FTS) - reviewer - 2026-04-11")
     print("=" * 70)
@@ -484,6 +492,7 @@ def main():
 
 
 def _hit_str(v):
+    """Support the retrieval baseline probe v2 workflow by handling the hit str step."""
     if v is True:
         return "HIT"
     if v is False:

@@ -72,6 +72,7 @@ def _make_psutil(affinity_side_effect=None, nice_side_effect=None):
 # ---------------------------------------------------------------------------
 
 class TestThreadCapMath:
+    """Small helper object used to keep test setup or expected results organized."""
 
     @pytest.mark.parametrize("cpu_count, expected_threads", [
         (16, 14),
@@ -98,6 +99,7 @@ class TestThreadCapMath:
 
 class TestPsutilMissing:
 
+    """Small helper object used to keep test setup or expected results organized."""
     def test_affinity_and_priority_skip_without_psutil(self, monkeypatch):
         fake_torch = MagicMock()
 
@@ -117,6 +119,7 @@ class TestPsutilMissing:
 
 class TestEnvVars:
 
+    """Small helper object used to keep test setup or expected results organized."""
     def test_env_vars_set_to_thread_cap(self, monkeypatch):
         fake_psutil, _ = _make_psutil()
         fake_torch = MagicMock()
@@ -145,6 +148,7 @@ class TestEnvVars:
 
 class TestSilentFailures:
 
+    """Small helper object used to keep test setup or expected results organized."""
     def test_affinity_oserror_does_not_crash(self, monkeypatch):
         fake_psutil, proc = _make_psutil(
             affinity_side_effect=OSError("Permission denied"))
@@ -190,6 +194,7 @@ class TestSilentFailures:
 
 class TestLayerStatusReporting:
 
+    """Small helper object used to keep test setup or expected results organized."""
     def test_all_layers_ok_on_full_system(self, monkeypatch):
         fake_psutil, _ = _make_psutil()
         fake_torch = MagicMock()

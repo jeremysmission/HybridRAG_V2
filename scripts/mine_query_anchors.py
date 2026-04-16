@@ -54,10 +54,12 @@ NIST_CONTROL_PREFIXES = (
 
 
 def _open_entity_db() -> sqlite3.Connection:
+    """Support the mine query anchors workflow by handling the open entity db step."""
     return sqlite3.connect(f"file:{ENTITY_DB.as_posix()}?mode=ro", uri=True)
 
 
 def _short_src(path: str) -> str:
+    """Normalize raw text into a simpler form that is easier to compare or display."""
     if not path:
         return ""
     parts = path.replace("\\", "/").split("/")
@@ -65,6 +67,7 @@ def _short_src(path: str) -> str:
 
 
 def _is_nist_control(text: str) -> bool:
+    """Support the mine query anchors workflow by handling the is nist control step."""
     upper = (text or "").upper()
     return any(upper.startswith(p) for p in NIST_CONTROL_PREFIXES)
 
@@ -262,6 +265,7 @@ def cmd_ground_truth(args) -> None:
 # Output
 # ---------------------------------------------------------------------------
 def _emit(args, rows) -> None:
+    """Support the mine query anchors workflow by handling the emit step."""
     if args.out:
         Path(args.out).parent.mkdir(parents=True, exist_ok=True)
         with open(args.out, "w", encoding="utf-8") as f:
@@ -275,6 +279,7 @@ def _emit(args, rows) -> None:
 # CLI
 # ---------------------------------------------------------------------------
 def main() -> int:
+    """Parse command-line inputs and run the main mine query anchors workflow."""
     parser = argparse.ArgumentParser(
         description="Query anchor miner for RAGAS-compatible eval query authoring"
     )

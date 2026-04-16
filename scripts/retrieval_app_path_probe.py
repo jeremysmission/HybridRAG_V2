@@ -38,12 +38,14 @@ REPORT_MD = v2_root / "docs" / "RETRIEVAL_BASELINE_PROBE_V2_2026-04-11.md"
 
 
 def _ascii(s: str) -> str:
+    """Normalize raw text into a simpler form that is easier to compare or display."""
     if not s:
         return ""
     return s.encode("ascii", "replace").decode("ascii")
 
 
 def _short_src(path: str) -> str:
+    """Normalize raw text into a simpler form that is easier to compare or display."""
     if not path:
         return ""
     parts = path.replace("\\", "/").split("/")
@@ -52,6 +54,9 @@ def _short_src(path: str) -> str:
 
 def _chunk_id_or_src(item):
     """Stable identifier for a result — prefer chunk_id, fall back to src+preview."""
+    # FLAG: Likely dead code as of 2026-04-15. Current repo search found no
+    # references beyond this definition. Preserve until a retrieval-probe
+    # cleanup pass decides whether to delete or wire it back in.
     if isinstance(item, dict):
         cid = item.get("chunk_id") or ""
         src = item.get("source_path") or ""
@@ -66,6 +71,7 @@ def _chunk_id_or_src(item):
 
 
 def percentile(arr, p):
+    """Compute a percentile so latency or scoring distributions are easier to interpret."""
     if not arr:
         return 0
     s = sorted(arr)
@@ -74,6 +80,7 @@ def percentile(arr, p):
 
 
 def main():
+    """Parse command-line inputs and run the main retrieval app path probe workflow."""
     print("=" * 70)
     print("RETRIEVAL APP-PATH PROBE - reviewer - 2026-04-11")
     print("=" * 70)

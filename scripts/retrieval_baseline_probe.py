@@ -126,6 +126,7 @@ def format_result(r, idx):
 
 
 def main():
+    """Parse command-line inputs and run the main retrieval baseline probe workflow."""
     print("=" * 70)
     print("RETRIEVAL BASELINE PROBE — reviewer — 2026-04-11")
     print(f"GPU: CUDA_VISIBLE_DEVICES={os.environ.get('CUDA_VISIBLE_DEVICES', 'not set')}")

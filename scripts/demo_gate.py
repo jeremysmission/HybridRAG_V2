@@ -57,6 +57,7 @@ def _warn_if_sprint6_lance(config_path: str) -> None:
 
 
 def load_json(path: Path) -> dict:
+    """Load the data needed for the demo gate workflow."""
     with open(path, encoding="utf-8-sig") as handle:
         return json.load(handle)
 
@@ -177,6 +178,7 @@ def build_skip_ack(manifest_path: Path | None, skip_manifest_path: Path | None) 
 
 
 def probe_health(base_url: str) -> dict:
+    """Probe the current environment or system behavior and capture the result."""
     with httpx.Client(timeout=10.0) as client:
         resp = client.get(f"{base_url.rstrip('/')}/health")
         resp.raise_for_status()
@@ -321,6 +323,7 @@ def print_report(report: dict) -> None:
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main demo gate workflow."""
     parser = argparse.ArgumentParser(description="Sprint 8 demo gate harness.")
     parser.add_argument(
         "--config",

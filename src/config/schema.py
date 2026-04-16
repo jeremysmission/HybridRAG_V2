@@ -137,7 +137,7 @@ class ExtractionConfig(BaseModel):
             r"^CNSSI-\d+$",
             r"^DD-\d{4}$",
             r"^DO-\d{4}$",
-            r"^IGS(?:I|CC)?-\d{3,5}$",
+            r"^enterprise program(?:I|CC)?-\d{3,5}$",
             r"^MSR-\d+$",
             r"^DV-\d{2,4}$",
             r"^IEEE-\d+$",

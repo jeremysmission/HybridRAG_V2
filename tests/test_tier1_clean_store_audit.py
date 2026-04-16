@@ -1,3 +1,4 @@
+"""Test module for the tier1 clean store audit behavior. The checks here explain what the repository expects to keep working."""
 from __future__ import annotations
 
 import sqlite3
@@ -13,6 +14,7 @@ from scripts.audit_tier1_clean_store import (
 
 
 def _init_entity_db(db_path: Path, rows: list[tuple[str, str, str, str]]) -> None:
+    """Support this test module by handling the init entity db step."""
     conn = sqlite3.connect(db_path)
     conn.executescript(
         """
@@ -53,6 +55,7 @@ def _init_entity_db(db_path: Path, rows: list[tuple[str, str, str, str]]) -> Non
 
 
 def _init_relationship_db(db_path: Path, rows: list[tuple[str, str, str, str, str, float, str, str, str]]) -> None:
+    """Support this test module by handling the init relationship db step."""
     conn = sqlite3.connect(db_path)
     conn.executescript(
         """
@@ -85,6 +88,7 @@ def _init_relationship_db(db_path: Path, rows: list[tuple[str, str, str, str, st
 
 
 def test_resolve_store_paths_infers_relationship_sibling(tmp_path):
+    """Verify that resolve store paths infers relationship sibling behaves the way the team expects."""
     entity_db = tmp_path / "entities.sqlite3"
     entity_db.touch()
     relationship_db = tmp_path / "relationships.sqlite3"
@@ -97,6 +101,7 @@ def test_resolve_store_paths_infers_relationship_sibling(tmp_path):
 
 
 def test_clean_store_audit_passes_on_clean_fixture(tmp_path):
+    """Verify that clean store audit passes on clean fixture behaves the way the team expects."""
     entity_db = tmp_path / "entities.sqlite3"
     rel_db = tmp_path / "relationships.sqlite3"
     rows = []
@@ -137,6 +142,7 @@ def test_clean_store_audit_passes_on_clean_fixture(tmp_path):
 
 
 def test_clean_store_audit_flags_blocked_top_values(tmp_path):
+    """Verify that clean store audit flags blocked top values behaves the way the team expects."""
     entity_db = tmp_path / "entities.sqlite3"
     rel_db = tmp_path / "relationships.sqlite3"
     rows = [

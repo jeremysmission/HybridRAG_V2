@@ -22,6 +22,11 @@ from pathlib import Path
 import lancedb
 import numpy as np
 
+from src.store.retrieval_metadata_store import (
+    RetrievalMetadataStore,
+    resolve_retrieval_metadata_db_path,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -125,6 +130,9 @@ class LanceStore:
         self.db_path = Path(db_path)
         self.db_path.mkdir(parents=True, exist_ok=True)
         self.db = lancedb.connect(str(self.db_path))
+        self.metadata_store = RetrievalMetadataStore(
+            resolve_retrieval_metadata_db_path(self.db_path)
+        )
         self._table = None
         self._search_nprobes: int | None = None
         self._search_refine_factor: int | None = None
@@ -314,6 +322,7 @@ class LanceStore:
         self,
         path_terms: list[str],
         limit: int = 10,
+        allow_tail_fallback: bool = True,
     ) -> list[ChunkResult]:
         """Return chunks whose ``source_path`` matches all supplied path terms.
 
@@ -336,37 +345,115 @@ class LanceStore:
         if not clauses:
             return []
 
+        where_clause = " AND ".join(clauses)
+        desired = max(1, int(limit))
+        merged: list[ChunkResult] = []
+        seen_sources: set[str] = set()
+
+        def _append_unique(rows: list[dict]) -> bool:
+            for r in rows:
+                source_path = r.get("source_path", "")
+                if not source_path or source_path in seen_sources:
+                    continue
+                seen_sources.add(source_path)
+                merged.append(
+                    ChunkResult(
+                        chunk_id=r.get("chunk_id", ""),
+                        text=r.get("text", ""),
+                        enriched_text=r.get("enriched_text") or None,
+                        source_path=source_path,
+                        score=-1.0,
+                        chunk_index=r.get("chunk_index", 0),
+                        parse_quality=r.get("parse_quality", 1.0),
+                    )
+                )
+                if len(merged) >= desired:
+                    return True
+            return False
+
         try:
-            rows = (
-                self._table.search()
-                .where(" AND ".join(clauses))
-                .select([
-                    "chunk_id",
-                    "text",
-                    "enriched_text",
-                    "source_path",
-                    "chunk_index",
-                    "parse_quality",
-                ])
-                .limit(limit)
-                .to_list()
+            # Prefer first chunks so metadata path recall surfaces distinct files
+            # instead of many neighboring chunks from one workbook or PDF.
+            head_rows = self._metadata_path_rows(
+                f"{where_clause} AND chunk_index = 0",
+                limit=max(desired * 4, 16),
             )
+            if allow_tail_fallback and not _append_unique(head_rows):
+                tail_rows = self._metadata_path_rows(
+                    where_clause,
+                    limit=max(desired * 8, 32),
+                )
+                _append_unique(tail_rows)
+            else:
+                _append_unique(head_rows)
         except Exception as e:
             logger.warning("Metadata path search failed for %s: %s", path_terms, e)
             return []
 
-        return [
-            ChunkResult(
-                chunk_id=r.get("chunk_id", ""),
-                text=r.get("text", ""),
-                enriched_text=r.get("enriched_text") or None,
-                source_path=r.get("source_path", ""),
-                score=-1.0,
-                chunk_index=r.get("chunk_index", 0),
-                parse_quality=r.get("parse_quality", 1.0),
+        return merged[:desired]
+
+    def _metadata_path_rows(self, where_clause: str, limit: int) -> list[dict]:
+        """Fetch raw metadata-search rows for a source-path filter."""
+        return (
+            self._table.search()
+            .where(where_clause)
+            .select([
+                "chunk_id",
+                "text",
+                "enriched_text",
+                "source_path",
+                "chunk_index",
+                "parse_quality",
+            ])
+            .limit(limit)
+            .to_list()
+        )
+
+    def fetch_source_head_chunks(
+        self,
+        source_paths: list[str],
+        limit: int = 10,
+    ) -> list[ChunkResult]:
+        """Fetch one representative chunk per exact source_path."""
+        if self._table is None or not source_paths:
+            return []
+
+        desired = max(1, int(limit))
+        results: list[ChunkResult] = []
+        seen: set[str] = set()
+
+        for source_path in source_paths:
+            normalized = str(source_path or "").strip()
+            if not normalized or normalized in seen:
+                continue
+            seen.add(normalized)
+            escaped = self._sql_quote(normalized)
+            head_rows = self._metadata_path_rows(
+                f"source_path = '{escaped}' AND chunk_index = 0",
+                limit=1,
             )
-            for r in rows
-        ]
+            if not head_rows:
+                head_rows = self._metadata_path_rows(
+                    f"source_path = '{escaped}'",
+                    limit=1,
+                )
+            for row in head_rows:
+                results.append(
+                    ChunkResult(
+                        chunk_id=row.get("chunk_id", ""),
+                        text=row.get("text", ""),
+                        enriched_text=row.get("enriched_text") or None,
+                        source_path=row.get("source_path", ""),
+                        score=-2.0,
+                        chunk_index=row.get("chunk_index", 0),
+                        parse_quality=row.get("parse_quality", 1.0),
+                    )
+                )
+                break
+            if len(results) >= desired:
+                break
+
+        return results[:desired]
 
     def count(self) -> int:
         """Total chunks in the store."""
@@ -501,6 +588,46 @@ class LanceStore:
             return [item if isinstance(item, dict) else {"value": str(item)} for item in raw]
         except Exception:
             return []
+
+    def has_fts_index(self) -> bool:
+        """Whether the table currently exposes any FTS/inverted index metadata."""
+        markers = ("fts", "inverted", "text_idx")
+        for item in self.list_indices():
+            lowered = str(item).lower()
+            if any(marker in lowered for marker in markers):
+                return True
+        return False
+
+    def fts_status(self) -> dict:
+        """Best-effort readiness probe for the configured FTS path."""
+        status = {
+            "path": str(self.db_path),
+            "table_present": self._table is not None,
+            "index_present": False,
+            "state": "missing",
+            "probe_term": None,
+            "probe_ok": False,
+            "ready": False,
+            "error": "",
+        }
+        if self._table is None:
+            status["error"] = "chunks table missing"
+            return status
+
+        status["index_present"] = self.has_fts_index()
+        probe_term = self._fts_probe_term()
+        status["probe_term"] = probe_term
+        try:
+            self._table.search(probe_term, query_type="fts").limit(1).to_list()
+            status["probe_ok"] = True
+            status["ready"] = True
+            status["state"] = "ready"
+            return status
+        except Exception as e:
+            status["error"] = str(e)
+            if status["index_present"]:
+                status["state"] = "index_present"
+            return status
 
     def has_vector_index(self) -> bool:
         """Whether the table currently has a vector index."""
@@ -641,8 +768,11 @@ class LanceStore:
             logger.warning("FTS index creation failed: %s", e)
 
     def close(self) -> None:
-        """No-op for LanceDB (embedded, no connection to close)."""
-        pass
+        """Close any sidecar state. LanceDB itself is embedded/no-op."""
+        try:
+            self.metadata_store.close()
+        except Exception:
+            logger.debug("Failed closing retrieval metadata store", exc_info=True)
 
     def _vector_dim(self) -> int:
         """Best-effort vector dimensionality for the current table."""
@@ -662,6 +792,21 @@ class LanceStore:
         except Exception:
             pass
         return 768
+
+    def _fts_probe_term(self) -> str:
+        """Return a safe token from the table for FTS health probing."""
+        fallback = "maintenance"
+        if self._table is None:
+            return fallback
+        try:
+            sample_rows = self._table.search().select(["text"]).limit(3).to_list()
+            for row in sample_rows:
+                text = row.get("text", "")
+                for token in re.findall(r"[A-Za-z0-9]{3,}", text):
+                    return token.lower()
+        except Exception:
+            logger.debug("FTS probe-term derivation failed", exc_info=True)
+        return fallback
 
     def _default_num_sub_vectors(self, vector_dim: int) -> int:
         """Choose a PQ subdivision that cleanly divides the vector dimension."""
@@ -687,3 +832,7 @@ class LanceStore:
         if tuned_refine is not None and hasattr(builder, "refine_factor"):
             builder = builder.refine_factor(tuned_refine)
         return builder
+
+    def _sql_quote(self, value: str) -> str:
+        """Escape a string for use in a simple Lance where clause."""
+        return str(value).replace("\\", "\\\\").replace("'", "''")

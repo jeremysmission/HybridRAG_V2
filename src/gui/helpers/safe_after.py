@@ -1,3 +1,4 @@
+"""Safe scheduling helpers for Tkinter. These functions make it harder for background threads to update the screen incorrectly."""
 # ============================================================================
 # safe_after -- schedule tkinter callbacks that survive widget destruction.
 #

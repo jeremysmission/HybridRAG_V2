@@ -331,6 +331,7 @@ def resolve_source_selection(args: argparse.Namespace) -> tuple[Path, dict[str, 
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main stage forge import workflow."""
     parser = argparse.ArgumentParser(
         description="Stage and execute explicit Forge->V2 import workflows with durable artifacts."
     )

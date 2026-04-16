@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This is the Beast-local inventory of repo surfaces that a coordinator might
+This is the primary workstation-local inventory of repo surfaces that a coordinator might
 mistake for valid scratch space.
 
 The point is to stop future coordinators from assuming every `_Dev` or
@@ -10,7 +10,7 @@ side-copy tree is safe, current, or authoritative.
 
 ## Authoritative Repos
 
-These are the active source-of-truth working repos on Beast:
+These are the active source-of-truth working repos on primary workstation:
 
 | Path | Role | Current Use |
 |---|---|---|
@@ -32,7 +32,7 @@ These are the active source-of-truth working repos on Beast:
   - `src/store/entity_store.py`
   - `src/store/relationship_store.py`
   - several eval artifacts
-  - deleted `CLAUDE.md`
+  - deleted `CoPilot+.md`
 
 **Use:** not safe to assume clean scratch space without deliberate cleanup.
 
@@ -50,7 +50,7 @@ These are the active source-of-truth working repos on Beast:
 
 **Use:** not safe to assume clean scratch space without deliberate cleanup.
 
-### `C:\Users\jerem\CorpusForge_Hustle`
+### `{USER_HOME}\CorpusForge_Hustle`
 
 - branch: `master`
 - HEAD at inspection time: `90ad7db`
@@ -72,7 +72,7 @@ These are the active source-of-truth working repos on Beast:
 
 ## Short Summary
 
-Beast has multiple repo-shaped directories, but only `C:\HybridRAG_V2` and
+primary workstation has multiple repo-shaped directories, but only `C:\HybridRAG_V2` and
 `C:\CorpusForge` should be treated as authoritative by default. The `_Dev`
 trees are currently dirty, and `CorpusForge_Hustle` is explicitly not the
 Forge source-of-truth.

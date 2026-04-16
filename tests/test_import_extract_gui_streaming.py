@@ -179,6 +179,7 @@ def tempdir_store(tmp_path):
 
 @pytest.fixture
 def fake_gui():
+    """Support this test module by handling the fake gui step."""
     return FakeGUI()
 
 
@@ -267,6 +268,7 @@ class TestSourceContract:
 # ---------------------------------------------------------------------------
 
 class TestImportGuardChain:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_gui_import_triggers_streaming_api_guard(self, monkeypatch):
         """Importing the GUI module must chain through to
         scripts.tiered_extract, whose module-level
@@ -372,6 +374,7 @@ def _invoke_run(
 
 
 class TestTier1Streaming:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_tier1_runs_end_to_end_on_real_store(self, tmp_path, fake_gui, monkeypatch):
         _build_real_store(tmp_path, n_chunks=200, prose_ratio=1.0).close()
 
@@ -437,6 +440,7 @@ class TestTier1Streaming:
 
 
 class TestTier2Streaming:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_tier2_opens_second_streaming_pass(self, tmp_path, fake_gui, monkeypatch):
         _build_real_store(tmp_path, n_chunks=120, prose_ratio=1.0).close()
 
@@ -490,6 +494,7 @@ class TestTier2Streaming:
 
 
 class TestGuiUpdates:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_runner_uses_safe_after_for_updates(self, tmp_path, fake_gui, monkeypatch):
         """Every log / progress / stat call must route through
         _safe_after(root, 0, fn, ...). FakeRoot records those calls."""

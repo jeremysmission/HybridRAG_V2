@@ -152,6 +152,7 @@ def step_golden_eval() -> dict:
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main canonical rebuild workflow."""
     parser = argparse.ArgumentParser(
         description="Canonical rebuild: Forge export -> V2 store -> verify."
     )

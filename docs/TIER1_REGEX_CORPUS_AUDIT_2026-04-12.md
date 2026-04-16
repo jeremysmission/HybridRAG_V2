@@ -72,7 +72,7 @@ Concrete evidence:
 
 Concrete evidence:
 
-- `pam_faillock` comes from `A027 - Cybersecurity Assessment Test Report-RHEL 8 ISTO`.
+- `pam_faillock` comes from `A027 - Cybersecurity Assessment Test Report-RHEL 8 legacy monitoring system`.
 - `unconfined_u` and `unconfined_r` come from `...Monthly Audits-Archive...audit.log`.
 - `RHSA-2018` appears in scan result titles like `RHEL 6 / 7 : microcode_ctl (RHSA-2018:0093)`.
 - `APP-0001` / `APP-0003` / `APP-0004` appear as `SRG-APP-000014`, `SRG-APP-000231`, etc.

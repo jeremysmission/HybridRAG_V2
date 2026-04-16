@@ -24,6 +24,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.config.schema import load_config
 from src.store.lance_store import LanceStore
+from src.store.retrieval_metadata_store import (
+    RetrievalMetadataStore,
+    derive_source_metadata,
+    resolve_retrieval_metadata_db_path,
+)
 
 
 DIVIDER = "=" * 55
@@ -412,6 +417,93 @@ def write_import_report(
     return report_path
 
 
+def _print_metadata_summary(metadata_db: Path, summary: dict[str, int]) -> None:
+    """Show operator-visible typed metadata coverage for this export/import."""
+    print(f"  Metadata DB: {metadata_db}")
+    print(f"  Metadata:   {summary.get('source_count', 0):,} source rows upserted")
+    print(
+        "              "
+        f"cdrl={summary.get('with_cdrl_code', 0):,}, "
+        f"incident={summary.get('with_incident_id', 0):,}, "
+        f"po={summary.get('with_po_number', 0):,}, "
+        f"contract={summary.get('with_contract_number', 0):,}, "
+        f"site={summary.get('with_site', 0):,}"
+    )
+    print(
+        "              "
+        f"reference_dids={summary.get('reference_dids', 0):,}, "
+        f"filed_deliverables={summary.get('filed_deliverables', 0):,}"
+    )
+
+
+def summarize_retrieval_metadata(chunks: list[dict]) -> dict[str, int]:
+    """Estimate typed metadata coverage without writing the sidecar DB."""
+    unique_sources: dict[str, dict[str, object]] = {}
+    for chunk in chunks:
+        source_path = str(chunk.get("source_path") or "").strip()
+        if not source_path or source_path in unique_sources:
+            continue
+        derived = derive_source_metadata(source_path, chunk)
+        unique_sources[source_path] = {
+            "cdrl_code": derived.cdrl_code,
+            "incident_id": derived.incident_id,
+            "po_number": derived.po_number,
+            "contract_number": derived.contract_number,
+            "site_token": derived.site_token,
+            "is_reference_did": derived.is_reference_did,
+            "is_filed_deliverable": derived.is_filed_deliverable,
+        }
+
+    values = list(unique_sources.values())
+    return {
+        "source_count": len(values),
+        "with_cdrl_code": sum(1 for row in values if row["cdrl_code"]),
+        "with_incident_id": sum(1 for row in values if row["incident_id"]),
+        "with_po_number": sum(1 for row in values if row["po_number"]),
+        "with_contract_number": sum(1 for row in values if row["contract_number"]),
+        "with_site": sum(1 for row in values if row["site_token"]),
+        "reference_dids": sum(1 for row in values if row["is_reference_did"]),
+        "filed_deliverables": sum(1 for row in values if row["is_filed_deliverable"]),
+    }
+
+
+def run_metadata_backfill(
+    export_dir: Path,
+    chunks: list[dict],
+    manifest: dict,
+    config_path: str,
+) -> dict[str, object]:
+    """Backfill typed retrieval metadata without touching LanceDB chunks/vectors."""
+    config = load_config(config_path)
+    metadata_db = resolve_retrieval_metadata_db_path(config.paths.lance_db)
+    metadata_store = RetrievalMetadataStore(metadata_db)
+    summary = metadata_store.upsert_from_chunks(chunks)
+    metadata_store.close()
+
+    print(DIVIDER)
+    print("  HybridRAG V2 -- Retrieval Metadata Backfill")
+    print(DIVIDER)
+    print(f"  Source:     {export_dir}")
+    _print_metadata_summary(metadata_db, summary)
+    report_path = write_import_report(
+        export_dir,
+        chunks,
+        np.zeros((len(chunks), 0), dtype=np.float16),
+        manifest,
+        mode="metadata_only",
+        target_db=metadata_db,
+    )
+    print(DIVIDER)
+    print("  Metadata backfill complete.")
+    print(DIVIDER)
+    return {
+        "mode": "metadata_only",
+        "metadata_db": str(metadata_db),
+        "metadata_summary": summary,
+        "report_path": str(report_path),
+    }
+
+
 def run_dry_run(
     export_dir: Path,
     chunks: list[dict],
@@ -429,6 +521,10 @@ def run_dry_run(
     print_export_summary(export_dir, chunks, vectors, manifest, skip_manifest)
     print()
     print(f"  Target DB:  {config.paths.lance_db}")
+    _print_metadata_summary(
+        resolve_retrieval_metadata_db_path(config.paths.lance_db),
+        summarize_retrieval_metadata(chunks),
+    )
     print(f"  Would insert up to {len(chunks):,} chunks (duplicates auto-skipped)")
     report_path = write_import_report(
         export_dir, chunks, vectors, manifest,
@@ -531,6 +627,9 @@ def run_import(
         )
         t_idx = time.perf_counter() - t_idx_start
 
+    metadata_db = resolve_retrieval_metadata_db_path(config.paths.lance_db)
+    metadata_summary = store.metadata_store.upsert_from_chunks(chunks)
+
     after_count = store.count()
     vector_index_stats = store.vector_index_stats()
     vector_index_ready = store.vector_index_ready()
@@ -546,6 +645,7 @@ def run_import(
     if duplicates > 0:
         print(f"  Duplicates: {duplicates:,} skipped (already in store)")
     print(f"  After:      {after_count:,} chunks in store")
+    _print_metadata_summary(metadata_db, metadata_summary)
     print()
     print(f"  Timing:")
     print(f"    Ingest:       {t_ingest:6.2f}s")
@@ -608,6 +708,7 @@ def run_import(
     return {
         "mode": "import",
         "target_db": config.paths.lance_db,
+        "metadata_db": str(metadata_db),
         "before_count": before_count,
         "inserted": inserted,
         "duplicates": duplicates,
@@ -620,11 +721,13 @@ def run_import(
         "vector_index_stats": vector_index_stats if vector_index_stats else {},
         "vector_index_ready": vector_index_ready,
         "ingest_integrity": integrity.to_dict(),
+        "metadata_summary": metadata_summary,
         "report_path": str(report_path),
     }
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main import embedengine workflow."""
     parser = argparse.ArgumentParser(
         description="Import CorpusForge export into HybridRAG V2 LanceDB store."
     )
@@ -648,6 +751,11 @@ def main() -> None:
         "--dry-run",
         action="store_true",
         help="Show what would be imported without writing to the store.",
+    )
+    parser.add_argument(
+        "--metadata-only",
+        action="store_true",
+        help="Backfill typed retrieval metadata from chunks.jsonl without touching LanceDB rows.",
     )
     parser.add_argument(
         "--create-index",
@@ -709,6 +817,11 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    if args.metadata_only and args.dry_run:
+        parser.error("--metadata-only cannot be combined with --dry-run")
+    if args.metadata_only and args.create_index:
+        parser.error("--metadata-only cannot be combined with --create-index")
+
     export_dir = Path(args.source)
     export_dir = resolve_export_dir(export_dir)
 
@@ -763,7 +876,9 @@ def main() -> None:
         # Make the absence of a filter equally visible.
         print("  No --exclude-source-glob filter active.")
 
-    if args.dry_run:
+    if args.metadata_only:
+        run_metadata_backfill(export_dir, chunks, manifest, args.config)
+    elif args.dry_run:
         run_dry_run(export_dir, chunks, vectors, manifest, skip_manifest, args.config)
     else:
         run_import(

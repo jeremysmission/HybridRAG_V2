@@ -1,0 +1,135 @@
+{
+  "total_chunks": 10435593,
+  "patterns": [
+    {
+      "name": "packing_list_space",
+      "needle": "Packing List",
+      "count": 1499085
+    },
+    {
+      "name": "packing_list_nospace",
+      "needle": "PackingList",
+      "count": 59
+    },
+    {
+      "name": "packing_slip",
+      "needle": "Packing Slip",
+      "count": 1019
+    },
+    {
+      "name": "bom",
+      "needle": "BOM",
+      "count": 667409
+    },
+    {
+      "name": "bill_of_material",
+      "needle": "Bill of Material",
+      "count": 248
+    },
+    {
+      "name": "pr_and_po",
+      "needle": "PR & PO",
+      "count": 25115
+    },
+    {
+      "name": "pr_po_nospace",
+      "needle": "PR&PO",
+      "count": 0
+    },
+    {
+      "name": "received",
+      "needle": "Received",
+      "count": 30525
+    },
+    {
+      "name": "received_po",
+      "needle": "Received PO",
+      "count": 0
+    },
+    {
+      "name": "rcvd",
+      "needle": "Rcvd",
+      "count": 20875
+    },
+    {
+      "name": "space_report",
+      "needle": "Space Report",
+      "count": 17602
+    },
+    {
+      "name": "dd250_space",
+      "needle": "DD 250",
+      "count": 8
+    },
+    {
+      "name": "dd250_nospace",
+      "needle": "DD250",
+      "count": 612
+    },
+    {
+      "name": "calibration",
+      "needle": "Calibration",
+      "count": 5408
+    },
+    {
+      "name": "calibration_tracker",
+      "needle": "Calibration Tracker",
+      "count": 63
+    },
+    {
+      "name": "calib_short",
+      "needle": "Calib",
+      "count": 5408
+    },
+    {
+      "name": "spare",
+      "needle": "Spare",
+      "count": 1714
+    },
+    {
+      "name": "spares",
+      "needle": "Spares",
+      "count": 1517
+    },
+    {
+      "name": "inventory",
+      "needle": "Inventory",
+      "count": 268006
+    },
+    {
+      "name": "shipment",
+      "needle": "Shipment",
+      "count": 961126
+    },
+    {
+      "name": "shipping",
+      "needle": "Shipping",
+      "count": 392182
+    },
+    {
+      "name": "purchase_order",
+      "needle": "Purchase Order",
+      "count": 367
+    },
+    {
+      "name": "po_xls",
+      "needle": "PO.xls",
+      "count": 20229
+    },
+    {
+      "name": "xlsx",
+      "needle": ".xlsx",
+      "count": 6530920
+    },
+    {
+      "name": "xls",
+      "needle": ".xls",
+      "count": 6664070
+    },
+    {
+      "name": "csv",
+      "needle": ".csv",
+      "count": 139651
+    }
+  ]
+}

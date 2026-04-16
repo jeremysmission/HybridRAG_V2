@@ -95,3 +95,53 @@ benchmark_results_*.json
 
 # Eval GUI per-operator persisted defaults (live runtime state, not shared)
 /.eval_gui_defaults.json
+
+# Local-only agentic references, private manifests, and dev-only notes
+/LOCAL_ONLY/
+
+# Provider-specific development bakeoffs should live outside the repo.
+/data/dev_extraction_runs/
+/docs/CLAUDE_MAX_DEV_BAKEOFF_*.md
+/docs/CODEX_DEV_BAKEOFF_*.md
+/scripts/build_dev_hard_chunk_pack.py
+/scripts/run_local_baseline_dev.py
+/scripts/run_claude_dev_extraction_bakeoff.py
+/scripts/run_claude_dev_enrichment_bakeoff.py
+/scripts/compare_dev_extraction_bakeoff.py
+/scripts/summarize_claude_cli_usage.py
+/schemas/dev_tier3_extraction_response.schema.json
+/CLAUDE_MAX_*.md
+/CODEX_*_DEV_BAKEOFF_*.md
+/OVERNIGHT_AGENT_COPY_PASTE_AND_AFTER_STEPS_*.md
+
+# Temp GUI runtime artifacts (stderr/stdout captures, temp eval dirs)
+tmp_*.txt
+/tmp_gpu1_diag/
+/eval_gui_overwrite_*/
+/hybridrag_eval_gui_stop_*/
+
+# Local-only session pointers, handovers, and dev notes (not for remote)
+/BIG_HANDOVER_*.md
+/COORDINATOR_FIRST_READ_HANDOVER_*.md
+/COORDINATOR_ONBOARDING_COPY_PASTE_*.md
+/CURRENT_LOCAL_ONLY_DEV_POINTER_*.md
+/DEVELOPMENT_ORACLE_LESSONS_LEARNED_*.md
+/LOCAL_ONLY_POLICY_*.md
+/MEATY_SIDECAR_PROMPTS_*.md
+/MORNING_CHECK_OUTSIDE_REPO_FIRST_*.md
+/PHI4_COMPARISON_POINTER_*.md
+/SUBSCRIPTION_CLI_DEVELOPMENT_PLAYBOOK_*.md
+/TONIGHT_*_POINTER_*.md
+/docs/REBOOT_HANDOVER_*.md
+
+# Team launchers (machine-specific, not for remote)
+/HybridRAG_V2_Team_Launcher.bat
+/launch_team.ps1
+
+# Agent team config (local orchestration, not for remote)
+/config/agent_team.yaml
+
+# Coordination-only docs (agent prompts, coordinator notes — not product docs)
+/docs/AGENT_PROMPTS_*.md
+/docs/COORDINATOR_CONTINUITY_NOTES_*.md
+/docs/LATEST_READABLE_NOTE_*.md

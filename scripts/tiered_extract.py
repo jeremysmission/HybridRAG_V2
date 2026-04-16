@@ -40,9 +40,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import sys
 import time
-from collections import Counter
+from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -57,11 +58,32 @@ from src.extraction.entity_extractor import (
     EventBlockParser,
     RegexRelationshipExtractor,
 )
-from src.store.relationship_store import RelationshipStore, Relationship
+from src.extraction.tabular_substrate import (
+    DeterministicTableExtractor,
+    detect_logistics_table_families,
+    pick_primary_logistics_family,
+)
+from src.store.relationship_store import (
+    RelationshipStore,
+    Relationship,
+    resolve_relationship_db_path,
+)
 
 DIVIDER = "=" * 60
 TIER1_ENTITY_FLUSH_SIZE = 1000
 TIER1_REL_FLUSH_SIZE = 1000
+TABLE_ROW_FLUSH_SIZE = 500
+TIER2_PROMOTION_TYPES = {"PERSON", "ORG", "SITE"}
+LOGISTICS_TABLE_SOURCE_PATTERNS = (
+    "Packing List",
+    "BOM",
+    "PR & PO",
+    "Space Report",
+    "DD250",
+    "Calibration",
+    "Spares",
+    "Received",
+)
 
 
 def _assert_streaming_api_available() -> None:
@@ -102,7 +124,11 @@ def _assert_streaming_api_available() -> None:
 _assert_streaming_api_available()
 
 
-def load_chunks(store: LanceStore, limit: int = 0) -> list[dict]:
+def load_chunks(
+    store: LanceStore,
+    limit: int = 0,
+    where_sql: str | None = None,
+) -> list[dict]:
     """Load chunks from LanceDB for extraction.
 
     WARNING: This loads ALL chunks into memory. For 10M+ corpora, use
@@ -112,10 +138,13 @@ def load_chunks(store: LanceStore, limit: int = 0) -> list[dict]:
     if tbl is None:
         return []
     columns = ["chunk_id", "text", "source_path"]
+    search = tbl.search()
+    if where_sql:
+        search = search.where(where_sql)
     if limit > 0:
-        result = tbl.search().select(columns).limit(limit).to_arrow()
+        result = search.select(columns).limit(limit).to_arrow()
     else:
-        result = tbl.search().select(columns).limit(store.count()).to_arrow()
+        result = search.select(columns).limit(store.count()).to_arrow()
     chunks = []
     for i in range(result.num_rows):
         chunks.append({
@@ -131,6 +160,7 @@ def iter_chunk_batches(
     batch_size: int = 10000,
     limit: int = 0,
     allow_load_fallback: bool = False,
+    where_sql: str | None = None,
 ):
     """Stream chunks from LanceDB in batches without loading all into memory.
 
@@ -184,6 +214,10 @@ def iter_chunk_batches(
         (which materializes the entire result set). Default: False.
         Only set this to True for small stores (< 100K chunks) where the
         memory cost is acceptable, e.g. short-lived unit tests.
+    where_sql:
+        Optional SQL-like filter passed to LanceDB ``where(...)`` before
+        batching. Used by the logistics-first table pilot so it scans only
+        known table-heavy source families instead of the whole corpus.
     """
     tbl = store._table
     if tbl is None:
@@ -201,8 +235,11 @@ def iter_chunk_batches(
         return
 
     try:
+        search = tbl.search()
+        if where_sql:
+            search = search.where(where_sql)
         reader = (
-            tbl.search()
+            search
             .select(columns)
             .limit(total_rows)
             .to_batches(batch_size)
@@ -216,7 +253,7 @@ def iter_chunk_batches(
                 f"module docstring). Original error: {e!r}"
             ) from e
         # Explicit opt-in path for callers who know their data is small.
-        all_chunks = load_chunks(store, limit=limit)
+        all_chunks = load_chunks(store, limit=limit, where_sql=where_sql)
         for i in range(0, len(all_chunks), batch_size):
             yield all_chunks[i:i + batch_size]
         return
@@ -445,26 +482,7 @@ def _is_tier2_candidate(chunk: dict, min_chunk_len: int) -> bool:
     return alpha_ratio >= 0.3
 
 
-def _resolve_gliner_device(device: str) -> str | None:
-    """Pick a CUDA device for GLiNER or return None if Tier 2 must abort."""
-    import torch
-    resolved = device
-    if "cuda" in device:
-        if not torch.cuda.is_available():
-            print(f"  ERROR: CUDA requested ({device}) but not available. Aborting Tier 2.")
-            print("  GLiNER on CPU is too slow for production. Fix CUDA or skip Tier 2.")
-            return None
-        requested_idx = int(device.split(":")[1]) if ":" in device else 0
-        if requested_idx >= torch.cuda.device_count():
-            resolved = "cuda:0"
-            print(f"  NOTE: {device} not available (only {torch.cuda.device_count()} GPU(s)). Using {resolved}.")
-        elif torch.cuda.device_count() > 1 and device == "cuda:1":
-            free_0 = torch.cuda.mem_get_info(0)[0]
-            free_1 = torch.cuda.mem_get_info(1)[0]
-            if free_0 > free_1 * 1.5:
-                resolved = "cuda:0"
-                print(f"  NOTE: GPU 0 has significantly more free VRAM ({free_0/1e9:.1f}GB vs {free_1/1e9:.1f}GB). Using {resolved}.")
-    return resolved
+from src.util.gpu_resolver import resolve_gliner_device as _resolve_gliner_device  # noqa: E402
 
 
 def _is_cuda_oom(exc: Exception) -> bool:
@@ -495,12 +513,199 @@ def _counter_delta(after: Counter[str], before: Counter[str]) -> Counter[str]:
     })
 
 
+def _table_row_count(entity_store: EntityStore) -> int:
+    """Return the current extracted-table row count."""
+    return entity_store.count_table_rows()
+
+
+def _counts_snapshot(entity_store: EntityStore, rel_store: RelationshipStore) -> dict[str, object]:
+    """Capture current structured-store counts for audit artifacts."""
+    entity_total, entity_types = _entity_store_counts(entity_store)
+    return {
+        "entity_count": entity_total,
+        "entity_types": dict(entity_types),
+        "table_row_count": _table_row_count(entity_store),
+        "relationship_count": rel_store.count(),
+        "predicate_counts": rel_store.predicate_summary(),
+    }
+
+
+def _looks_like_clean_tier1_baseline(entity_db_path: Path) -> bool:
+    """Detect the known clean Tier 1 baseline path so we do not mutate it casually."""
+    haystack = str(entity_db_path).replace("\\", "/").lower()
+    return haystack.endswith("/data/index/clean/tier1_clean_20260413/entities.sqlite3")
+
+
+def _resolve_runtime_store_paths(
+    entity_db_path: str | Path,
+    *,
+    stage_dir: str | None = None,
+    materialize_stage: bool = False,
+) -> tuple[Path, Path, str | None]:
+    """
+    Resolve entity/relationship store paths, optionally staging a writable copy.
+
+    ``stage_dir`` is the audited promotion path: copy the baseline stores to a
+    new directory, mutate that stage, then audit before any later promotion.
+    """
+    entity_path = Path(entity_db_path)
+    relationship_path = resolve_relationship_db_path(entity_path)
+
+    if not stage_dir:
+        return entity_path, relationship_path, None
+
+    stage_root = Path(stage_dir)
+    if not stage_root.is_absolute():
+        stage_root = V2_ROOT / stage_root
+    stage_entity_path = stage_root / "entities.sqlite3"
+    stage_relationship_path = stage_root / "relationships.sqlite3"
+
+    if materialize_stage:
+        if stage_entity_path.exists() or stage_relationship_path.exists():
+            raise SystemExit(
+                f"Refusing to reuse populated stage dir {stage_root}. "
+                "Choose a fresh --stage-dir so the audit stays attributable."
+            )
+        stage_root.mkdir(parents=True, exist_ok=True)
+        if entity_path.exists():
+            shutil.copy2(entity_path, stage_entity_path)
+        if relationship_path.exists():
+            shutil.copy2(relationship_path, stage_relationship_path)
+
+    return stage_entity_path, stage_relationship_path, str(stage_root)
+
+
+def _build_logistics_table_where_sql(source_patterns: list[str]) -> str:
+    """Build a LanceDB ``where`` clause for the logistics-first pilot."""
+    clauses = []
+    for pattern in source_patterns:
+        escaped = pattern.replace("'", "''")
+        clauses.append(f"source_path LIKE '%{escaped}%'")
+    return " OR ".join(clauses)
+
+
+def _stream_logistics_tables(
+    store: LanceStore,
+    entity_store: EntityStore,
+    *,
+    limit: int = 0,
+    dry_run: bool = False,
+    batch_size: int = 5000,
+    row_flush_size: int = TABLE_ROW_FLUSH_SIZE,
+    source_patterns: list[str] | None = None,
+    on_progress=None,
+) -> dict[str, object]:
+    """
+    Recover deterministic table rows from logistics-heavy source families.
+
+    This keeps table promotion narrow and measurable: spreadsheets, packing
+    lists, BOMs, received-PO records, DD250s, calibration logs, and spares
+    reports.
+    """
+    extractor = DeterministicTableExtractor()
+    row_buffer = []
+    scanned_chunks = 0
+    candidate_chunks = 0
+    matched_chunks = 0
+    raw_row_count = 0
+    inserted_row_count = 0
+    family_candidate_chunks: Counter[str] = Counter()
+    family_row_counts: Counter[str] = Counter()
+    family_source_paths: defaultdict[str, set[str]] = defaultdict(set)
+    source_patterns = source_patterns or list(LOGISTICS_TABLE_SOURCE_PATTERNS)
+    where_sql = _build_logistics_table_where_sql(source_patterns)
+
+    def flush_rows(force: bool = False) -> None:
+        nonlocal inserted_row_count
+        if not row_buffer:
+            return
+        if dry_run:
+            row_buffer.clear()
+            return
+        if not force and len(row_buffer) < row_flush_size:
+            return
+        before = _table_row_count(entity_store)
+        entity_store.insert_table_rows(row_buffer)
+        after = _table_row_count(entity_store)
+        inserted_row_count += after - before
+        row_buffer.clear()
+
+    for batch in iter_chunk_batches(
+        store,
+        batch_size=batch_size,
+        limit=limit,
+        where_sql=where_sql,
+    ):
+        for chunk in batch:
+            scanned_chunks += 1
+            families = detect_logistics_table_families(chunk["source_path"], chunk["text"])
+            primary_family = pick_primary_logistics_family(families)
+            if primary_family is None:
+                continue
+
+            candidate_chunks += 1
+            family_candidate_chunks[primary_family] += 1
+            rows = extractor.extract(
+                text=chunk["text"],
+                chunk_id=chunk["chunk_id"],
+                source_path=chunk["source_path"],
+            )
+            if not rows:
+                continue
+
+            matched_chunks += 1
+            raw_row_count += len(rows)
+            family_row_counts[primary_family] += len(rows)
+            family_source_paths[primary_family].add(chunk["source_path"])
+            row_buffer.extend(rows)
+            if len(row_buffer) >= row_flush_size:
+                flush_rows(force=True)
+
+        if on_progress is not None:
+            on_progress(
+                scanned_chunks,
+                candidate_chunks,
+                raw_row_count,
+                len(row_buffer),
+            )
+
+    flush_rows(force=True)
+
+    return {
+        "scanned_chunks": scanned_chunks,
+        "candidate_chunks": candidate_chunks,
+        "matched_chunks": matched_chunks,
+        "raw_row_count": raw_row_count,
+        "inserted_row_count": inserted_row_count,
+        "family_candidate_chunks": dict(family_candidate_chunks),
+        "family_row_counts": dict(family_row_counts),
+        "family_source_counts": {
+            family: len(source_paths)
+            for family, source_paths in family_source_paths.items()
+        },
+        "source_patterns": source_patterns,
+    }
+
+
+def _write_audit_json(audit_report: dict[str, object], output_path: str | None) -> str | None:
+    """Persist the structured audit artifact when requested."""
+    if not output_path:
+        return None
+    path = Path(output_path)
+    if not path.is_absolute():
+        path = V2_ROOT / path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(audit_report, indent=2), encoding="utf-8", newline="\n")
+    return str(path)
+
+
 def _stream_tier2_gliner(
     store: LanceStore,
     device: str,
     model_name: str,
     min_chunk_len: int,
     min_confidence: float,
+    allowed_types: set[str] | None = None,
     limit: int = 0,
     stream_batch_size: int = 10000,
     gliner_batch_size: int = 8,
@@ -602,6 +807,8 @@ def _stream_tier2_gliner(
         for chunk, entities in zip(pending, batch_results):
             for ent in entities:
                 v2_type = label_map.get(ent["label"], ent["label"])
+                if allowed_types is not None and v2_type not in allowed_types:
+                    continue
                 entity_batch.append(Entity(
                     entity_type=v2_type,
                     text=ent["text"].strip(),
@@ -659,6 +866,7 @@ def run_tier2_gliner(
     model_name: str,
     min_chunk_len: int,
     min_confidence: float,
+    allowed_types: set[str] | None = None,
     limit: int = 0,
     stream_batch_size: int = 10000,
     gliner_batch_size: int = 8,
@@ -719,6 +927,7 @@ def run_tier2_gliner(
         model_name=model_name,
         min_chunk_len=min_chunk_len,
         min_confidence=min_confidence,
+        allowed_types=allowed_types,
         limit=limit,
         stream_batch_size=stream_batch_size,
         gliner_batch_size=gliner_batch_size,
@@ -731,11 +940,45 @@ def run_tier2_gliner(
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main tiered extract workflow."""
     parser = argparse.ArgumentParser(description="Tiered entity extraction.")
     parser.add_argument("--tier", type=int, default=1, choices=[1, 2, 3],
                        help="Max tier to run (1=regex, 2=+GLiNER, 3=+LLM).")
     parser.add_argument("--config", default="config/config.yaml")
     parser.add_argument("--limit", type=int, default=0, help="Max chunks to process (0=all).")
+    parser.add_argument(
+        "--table-mode",
+        choices=["off", "logistics"],
+        default="off",
+        help="Optional deterministic table extraction pass.",
+    )
+    parser.add_argument(
+        "--table-limit",
+        type=int,
+        default=0,
+        help="Max table-candidate chunks to process for the table pilot (0=all matching sources).",
+    )
+    parser.add_argument(
+        "--table-source-like",
+        action="append",
+        default=[],
+        help="Additional source_path LIKE fragment for the logistics table pilot. Repeatable.",
+    )
+    parser.add_argument(
+        "--stage-dir",
+        default="",
+        help="Optional staged entity/relationship store directory for audited Tier 2 or table promotion.",
+    )
+    parser.add_argument(
+        "--allow-baseline-write",
+        action="store_true",
+        help="Permit Tier 2 or table writes directly into the clean Tier 1 baseline store.",
+    )
+    parser.add_argument(
+        "--audit-json",
+        default="",
+        help="Optional path for a JSON audit artifact summarizing before/after counts and phase deltas.",
+    )
     parser.add_argument("--benchmark", action="store_true",
                        help="Benchmark GLiNER CPU vs GPU on 1000 chunks.")
     parser.add_argument("--dry-run", action="store_true", help="Count only, don't write.")
@@ -744,22 +987,66 @@ def main() -> None:
     t0 = time.perf_counter()
 
     config = load_config(args.config)
-    store = LanceStore(str(V2_ROOT / config.paths.lance_db))
-    entity_store = EntityStore(str(V2_ROOT / config.paths.entity_db))
-    rel_store = RelationshipStore(str(V2_ROOT / config.paths.entity_db).replace(
-        "entities.sqlite3", "relationships.sqlite3"
-    ))
+    needs_guard = args.tier >= 2 or args.table_mode != "off"
+    baseline_entity_path = Path(config.paths.entity_db)
+    stage_dir = args.stage_dir if args.stage_dir and not args.dry_run else None
+
+    if (
+        needs_guard
+        and not args.dry_run
+        and stage_dir is None
+        and _looks_like_clean_tier1_baseline(baseline_entity_path)
+        and not args.allow_baseline_write
+    ):
+        raise SystemExit(
+            "Refusing to mutate the clean Tier 1 baseline with Tier 2 or table promotion. "
+            "Use --dry-run to audit, or --stage-dir to materialize a staged copy, or "
+            "--allow-baseline-write if you explicitly intend to overwrite the baseline."
+        )
+
+    runtime_entity_path, runtime_relationship_path, materialized_stage_dir = _resolve_runtime_store_paths(
+        baseline_entity_path,
+        stage_dir=stage_dir,
+        materialize_stage=bool(stage_dir),
+    )
+
+    store = LanceStore(config.paths.lance_db)
+    entity_store = EntityStore(str(runtime_entity_path))
+    rel_store = RelationshipStore(runtime_relationship_path)
+    before_snapshot = _counts_snapshot(entity_store, rel_store)
+    audit_report: dict[str, object] = {
+        "config_path": str(Path(args.config).resolve()),
+        "tier": args.tier,
+        "dry_run": args.dry_run,
+        "table_mode": args.table_mode,
+        "table_limit": args.table_limit,
+        "table_source_like": args.table_source_like,
+        "baseline_entity_path": str(baseline_entity_path),
+        "baseline_relationship_path": str(resolve_relationship_db_path(baseline_entity_path)),
+        "runtime_entity_path": str(runtime_entity_path),
+        "runtime_relationship_path": str(runtime_relationship_path),
+        "stage_dir": materialized_stage_dir,
+        "before": before_snapshot,
+    }
 
     print(DIVIDER)
     print("  HybridRAG V2 -- Tiered Entity Extraction")
     print(DIVIDER)
     print(f"  Store:       {store.count():,} chunks")
-    print(f"  Entities:    {entity_store.count_entities():,} existing")
-    print(f"  Rels:        {rel_store.count():,} existing")
+    print(f"  Entity DB:   {runtime_entity_path}")
+    print(f"  Rel DB:      {runtime_relationship_path}")
+    if materialized_stage_dir:
+        print(f"  Stage dir:   {materialized_stage_dir}")
+    print(f"  Entities:    {before_snapshot['entity_count']:,} existing")
+    print(f"  Tables:      {before_snapshot['table_row_count']:,} existing")
+    print(f"  Rels:        {before_snapshot['relationship_count']:,} existing")
     print(f"  Max tier:    {args.tier}")
     print(f"  Limit:       {args.limit or 'all'}")
+    print(f"  Table mode:  {args.table_mode}")
     print(f"  Threads:     {config.extraction.max_concurrent}")
     print(f"  Dry run:     {args.dry_run}")
+    if args.benchmark:
+        print("  NOTE: benchmark flag is reserved; the audited extraction path runs normally.")
 
     # --- Tier 1: Regex + Event Blocks + Relationships (streaming) ---
     total_chunks = store.count()
@@ -814,19 +1101,89 @@ def main() -> None:
     t1_types = Counter(t1_result["entity_types"])
     t1_preds = Counter(t1_result["relationship_preds"])
     t1_inserted_rel_total = int(t1_result["inserted_relationship_count"])
+    t1_inserted_entity_total = int(t1_result["inserted_entity_count"])
+    audit_report["tier1"] = {
+        "chunks_processed": int(t1_result["chunks_processed"]),
+        "raw_entity_count": t1_entity_total,
+        "raw_relationship_count": t1_rel_total,
+        "inserted_entity_count": t1_inserted_entity_total,
+        "inserted_relationship_count": t1_inserted_rel_total,
+        "entity_types": dict(t1_types),
+        "relationship_predicates": dict(t1_preds),
+        "inserted_entity_types": dict(Counter(t1_result["inserted_entity_types"])),
+        "inserted_relationship_predicates": dict(Counter(t1_result["inserted_relationship_preds"])),
+    }
     print(f"  [TIER 1] {t1_entity_total:,} entities ({t1_elapsed:.2f}s)")
     print(f"           Types: {dict(t1_types)}")
     print(f"           Rels:  {t1_rel_total:,} -- {dict(t1_preds)}")
     print(f"           Rate: {int(t1_result['chunks_processed'])/max(t1_elapsed, 0.001):,.0f} chunks/sec")
     print()
 
-    total_entity_count = t1_entity_total if args.dry_run else int(t1_result["inserted_entity_count"])
+    total_entity_count = t1_entity_total if args.dry_run else t1_inserted_entity_total
     total_types = Counter(t1_types) if args.dry_run else Counter(t1_result["inserted_entity_types"])
     if not args.dry_run:
         print(
-            f"  [TIER 1] persisted {int(t1_result['inserted_entity_count']):,} entities "
+            f"  [TIER 1] persisted {t1_inserted_entity_total:,} entities "
             f"and {t1_inserted_rel_total:,} relationships"
         )
+        print()
+
+    # --- Logistics-first deterministic table pilot ---
+    table_raw_count = 0
+    table_inserted_count = 0
+    if args.table_mode == "logistics":
+        table_limit = args.table_limit or 0
+        table_source_patterns = list(LOGISTICS_TABLE_SOURCE_PATTERNS)
+        if args.table_source_like:
+            table_source_patterns.extend(args.table_source_like)
+
+        print("  [TABLES] Logistics-first deterministic table extraction...")
+        table_start = time.perf_counter()
+
+        def _table_progress(
+            scanned_chunks: int,
+            candidate_chunks: int,
+            row_total: int,
+            buffered_rows: int,
+        ) -> None:
+            elapsed = time.perf_counter() - table_start
+            rate = scanned_chunks / max(elapsed, 0.001)
+            print(
+                f"  Tables: {scanned_chunks:,} candidate chunks scanned "
+                f"({rate:,.0f} chunks/sec, {candidate_chunks:,} family hits, "
+                f"{row_total:,} rows; buffered {buffered_rows:,})"
+            )
+
+        table_result = _stream_logistics_tables(
+            store=store,
+            entity_store=entity_store,
+            limit=table_limit,
+            dry_run=args.dry_run,
+            source_patterns=table_source_patterns,
+            on_progress=_table_progress,
+        )
+        table_elapsed = time.perf_counter() - table_start
+        table_raw_count = int(table_result["raw_row_count"])
+        table_inserted_count = (
+            int(table_result["inserted_row_count"]) if not args.dry_run else 0
+        )
+        audit_report["table_pilot"] = {
+            "scanned_chunks": int(table_result["scanned_chunks"]),
+            "candidate_chunks": int(table_result["candidate_chunks"]),
+            "matched_chunks": int(table_result["matched_chunks"]),
+            "raw_row_count": table_raw_count,
+            "inserted_row_count": table_inserted_count,
+            "family_candidate_chunks": dict(table_result["family_candidate_chunks"]),
+            "family_row_counts": dict(table_result["family_row_counts"]),
+            "family_source_counts": dict(table_result["family_source_counts"]),
+            "source_patterns": list(table_result["source_patterns"]),
+            "duration_seconds": round(table_elapsed, 2),
+        }
+        print(
+            f"  [TABLES] {table_raw_count:,} rows raw, {table_inserted_count:,} new after dedup "
+            f"({table_elapsed:.1f}s)"
+        )
+        print(f"           Family rows: {dict(table_result['family_row_counts'])}")
         print()
 
     # --- Tier 2: GLiNER (second streaming pass over the store) ---
@@ -834,7 +1191,8 @@ def main() -> None:
     t2_types: Counter[str] = Counter()
     t2_new_count = 0
     if args.tier >= 2:
-        print(f"  [TIER 2] GLiNER extraction via second streaming pass...")
+        print("  [TIER 2] GLiNER extraction via second streaming pass...")
+        print(f"           Promotion types: {sorted(TIER2_PROMOTION_TYPES)}")
         t2_start = time.perf_counter()
         tier2_flush_buffer: list[Entity] = []
         tier2_store_flush_size = 1000
@@ -854,6 +1212,7 @@ def main() -> None:
             model_name=config.extraction.gliner_model,
             min_chunk_len=config.extraction.gliner_min_chunk_len,
             min_confidence=config.extraction.min_confidence,
+            allowed_types=TIER2_PROMOTION_TYPES,
             limit=args.limit,
             on_entity_batch=handle_tier2_batch,
         )
@@ -882,6 +1241,15 @@ def main() -> None:
             total_entity_count += t2_raw_count
             total_types.update(t2_types)
 
+        audit_report["tier2"] = {
+            "allowed_types": sorted(TIER2_PROMOTION_TYPES),
+            "scanned_chunks": int(t2_result["scanned"]),
+            "candidate_chunks": int(t2_result["candidates"]),
+            "raw_entity_count": t2_raw_count,
+            "new_entity_count": t2_new_count,
+            "type_counts": dict(t2_types),
+            "duration_seconds": round(t2_elapsed, 2),
+        }
         print(f"  [TIER 2] {t2_raw_count:,} entities raw, {t2_new_count:,} new after dedup ({t2_elapsed:.1f}s)")
         print(f"           Types: {dict(t2_types)}")
         print()
@@ -893,25 +1261,36 @@ def main() -> None:
 
     total_relationship_count = t1_rel_total if args.dry_run else t1_inserted_rel_total
     total_preds = Counter(t1_preds) if args.dry_run else Counter(t1_result["inserted_relationship_preds"])
+    final_table_total = table_raw_count if args.dry_run else _table_row_count(entity_store)
 
     if args.dry_run:
         print(
             f"  DRY RUN:     would extract up to {total_entity_count:,} raw "
-            f"entities (pre-dedup; Tier 1 + Tier 2 raw), {t1_rel_total:,} rels"
+            f"entities (pre-dedup; Tier 1 + Tier 2 raw), {t1_rel_total:,} rels, "
+            f"{table_raw_count:,} table rows"
         )
 
     total_label = "Total entities (raw, pre-dedup)" if args.dry_run else "Total entities (inserted)"
     breakdown_label = "Entity breakdown (raw)" if args.dry_run else "Entity breakdown (inserted)"
+    after_snapshot = _counts_snapshot(entity_store, rel_store)
+    audit_report["after"] = after_snapshot
+    audit_report["duration_seconds"] = round(time.perf_counter() - t0, 2)
     print()
     print(DIVIDER)
     print(f"  {total_label}: {total_entity_count:,}")
     print(f"  {breakdown_label}: {dict(total_types)}")
+    print(f"  Total table rows:    {final_table_total:,}")
     print(f"  Total relationships: {total_relationship_count:,}")
     print(f"  Rel breakdown:       {dict(total_preds)}")
     print(f"  Total time:          {time.perf_counter()-t0:.1f}s")
     print(DIVIDER)
 
+    audit_json_path = _write_audit_json(audit_report, args.audit_json or None)
+    if audit_json_path:
+        print(f"  Audit JSON:          {audit_json_path}")
+
     store.close()
+    entity_store.close()
     rel_store.close()
 
 

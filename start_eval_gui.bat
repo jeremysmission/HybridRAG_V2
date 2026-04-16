@@ -11,6 +11,8 @@ setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
 
 set "PROJECT_ROOT=%CD%"
+set "PREFLIGHT_HELPER=%PROJECT_ROOT%\scripts\gui_runtime_preflight_2026-04-15.ps1"
+set "PREFLIGHT_ENV_CMD=%TEMP%\hybridrag_eval_gui_preflight_%RANDOM%%RANDOM%.cmd"
 set "VENV_PYTHON=%PROJECT_ROOT%\.venv\Scripts\python.exe"
 set "VENV_PYTHONW=%PROJECT_ROOT%\.venv\Scripts\pythonw.exe"
 set "VENV_ACTIVATE=%PROJECT_ROOT%\.venv\Scripts\activate.bat"
@@ -18,6 +20,7 @@ set "GUI_SCRIPT=%PROJECT_ROOT%\src\gui\eval_gui.py"
 set "GUI_MODULE=src.gui.eval_gui"
 set "GUI_MODE=terminal"
 set "DRY_RUN=0"
+set "DEBUG_ENV=0"
 set "PASSTHROUGH_ARGS="
 
 :parse_args
@@ -37,6 +40,11 @@ if /I "%~1"=="--dry-run" (
   shift
   goto parse_args
 )
+if /I "%~1"=="--debug-env" (
+  set "DEBUG_ENV=1"
+  shift
+  goto parse_args
+)
 set "PASSTHROUGH_ARGS=!PASSTHROUGH_ARGS! "%~1""
 shift
 goto parse_args
@@ -48,44 +56,38 @@ if /I "%GUI_MODE%"=="detached" set "LAUNCH_EXE=%VENV_PYTHONW%"
 
 if not defined CUDA_VISIBLE_DEVICES set "CUDA_VISIBLE_DEVICES=0"
 
-if "%DRY_RUN%"=="1" goto dry_run
-
 REM --- Pre-flight checks ---
 if not exist "%VENV_PYTHON%" goto missing_venv
 if not exist "%GUI_SCRIPT%" goto missing_gui_script
+if not exist "%PREFLIGHT_HELPER%" goto missing_preflight_helper
 for %%A in ("%VENV_PYTHON%") do if %%~zA EQU 0 goto broken_venv
 "%VENV_PYTHON%" -c "import sys" >nul 2>nul
 if errorlevel 1 goto broken_venv
 
+REM --- Shared runtime preflight ---
+powershell -NoProfile -ExecutionPolicy Bypass -File "%PREFLIGHT_HELPER%" -ProjectRoot "%PROJECT_ROOT%" -LauncherName "start_eval_gui.bat" -EmitCmd > "%PREFLIGHT_ENV_CMD%"
+if errorlevel 1 goto preflight_failed
+call "%PREFLIGHT_ENV_CMD%"
+del "%PREFLIGHT_ENV_CMD%" >nul 2>nul
+
 REM --- Environment setup ---
 set "PYTHONPATH=%PROJECT_ROOT%"
-set "HYBRIDRAG_PROJECT_ROOT=%PROJECT_ROOT%"
-set "PYTHONUTF8=1"
-set "PYTHONIOENCODING=utf-8"
-
-REM ---- Proxy hardening (mirrors start_gui.bat + HybridRAG3 canonical pattern)
-REM Keep loopback direct and let any inherited HTTPS_PROXY / HTTP_PROXY pass
-REM through to Python + requests + huggingface_hub + openai client untouched.
-REM Operator is expected to set HTTPS_PROXY / HTTP_PROXY at the shell or
-REM system level before launching on a proxied work network.
-set "NO_PROXY=localhost,127.0.0.1"
-set "no_proxy=localhost,127.0.0.1"
 set "HYBRIDRAG_NETWORK_KILL_SWITCH=0"
 set "HYBRIDRAG_OFFLINE=0"
-
-REM Silence HF Hub 'unauthenticated requests' telemetry noise and let cached
-REM model loads succeed on offline / offline workstations.
-set "HF_HUB_DISABLE_TELEMETRY=1"
-if not defined HF_HUB_ENABLE_HF_TRANSFER set "HF_HUB_ENABLE_HF_TRANSFER=0"
-if not defined TRANSFORMERS_NO_ADVISORY_WARNINGS set "TRANSFORMERS_NO_ADVISORY_WARNINGS=1"
 
 REM Single-CUDA-GPU workstation default. Override before launch if needed.
 if not defined CUDA_VISIBLE_DEVICES set "CUDA_VISIBLE_DEVICES=0"
 
+echo [INFO] Runtime preflight: %HYBRIDRAG_RUNTIME_PREFLIGHT% via %HYBRIDRAG_RUNTIME_PREFLIGHT_LAUNCHER%
 echo [INFO] Proxy:    HTTPS_PROXY=%HTTPS_PROXY%
 echo [INFO] Proxy:    HTTP_PROXY=%HTTP_PROXY%
+echo [INFO] Proxy:    ALL_PROXY=%ALL_PROXY%
 echo [INFO] Proxy:    NO_PROXY=%NO_PROXY%
+echo [INFO] Proxy:    inherited=%HYBRIDRAG_RUNTIME_PROXY_PRESENT% cert_env=%HYBRIDRAG_RUNTIME_CERT_ENV_PRESENT%
+echo [INFO] UTF-8:    PYTHONUTF8=%PYTHONUTF8% PYTHONIOENCODING=%PYTHONIOENCODING%
 echo [INFO] Offline:  HYBRIDRAG_OFFLINE=%HYBRIDRAG_OFFLINE%  KILL_SWITCH=%HYBRIDRAG_NETWORK_KILL_SWITCH%
+if "%DEBUG_ENV%"=="1" goto debug_env
+if "%DRY_RUN%"=="1" goto dry_run
 
 REM Activate venv
 if exist "%VENV_ACTIVATE%" call "%VENV_ACTIVATE%" >nul 2>nul
@@ -122,8 +124,22 @@ echo GUI script:      %GUI_SCRIPT%
 echo Launch exe:      %LAUNCH_EXE%
 echo Launch mode:     %GUI_MODE%
 echo CUDA devices:    %CUDA_VISIBLE_DEVICES%
+echo Preflight:       %PREFLIGHT_HELPER%
+echo Proxy present:   %HYBRIDRAG_RUNTIME_PROXY_PRESENT%
+echo Cert env:        %HYBRIDRAG_RUNTIME_CERT_ENV_PRESENT%
+echo HTTP_PROXY:      %HTTP_PROXY%
+echo HTTPS_PROXY:     %HTTPS_PROXY%
+echo ALL_PROXY:       %ALL_PROXY%
+echo NO_PROXY:        %NO_PROXY%
 echo Args:            !PASSTHROUGH_ARGS!
 exit /b 0
+
+:debug_env
+echo [INFO] Debug env requested before launch.
+echo [INFO] REQUESTS_CA_BUNDLE=%REQUESTS_CA_BUNDLE%
+echo [INFO] SSL_CERT_FILE=%SSL_CERT_FILE%
+echo [INFO] HTTPS_PROXY_CA=%HTTPS_PROXY_CA%
+if "%DRY_RUN%"=="1" goto dry_run
 
 :missing_venv
 echo.
@@ -154,9 +170,29 @@ echo [FAIL] Eval GUI entrypoint not found.
 echo Expected file:
 echo   "%GUI_SCRIPT%"
 echo.
-echo The repo may be incomplete. Re-clone or restore scripts\eval_gui.py.
+echo The repo may be incomplete. Re-clone or restore src\gui\eval_gui.py.
 call :maybe_pause
 exit /b 3
+
+:missing_preflight_helper
+echo.
+echo [FAIL] Shared GUI runtime preflight helper not found.
+echo Expected file:
+echo   "%PREFLIGHT_HELPER%"
+echo.
+echo Restore the repo-side helper before launching this GUI.
+call :maybe_pause
+exit /b 5
+
+:preflight_failed
+echo.
+echo [FAIL] Shared GUI runtime preflight failed.
+echo Helper:
+echo   "%PREFLIGHT_HELPER%"
+echo.
+echo Check PowerShell availability and proxy/cert environment state.
+call :maybe_pause
+exit /b 6
 
 :launch_failed
 echo.
@@ -168,11 +204,16 @@ echo Common checks:
 echo   - Is the LanceDB store present? (config.paths.lance_db)
 echo   - Does the query pack JSON exist?
 echo   - Is CUDA available? (nvidia-smi)
+echo   - Canonical GUI path: %GUI_SCRIPT%
+echo   - Canonical module: %GUI_MODULE%
 echo.
 echo Proxy / network debug:
 echo   - HTTPS_PROXY=%HTTPS_PROXY%
 echo   - HTTP_PROXY=%HTTP_PROXY%
+echo   - ALL_PROXY=%ALL_PROXY%
 echo   - NO_PROXY=%NO_PROXY%
+echo   - inherited proxy=%HYBRIDRAG_RUNTIME_PROXY_PRESENT%
+echo   - cert env=%HYBRIDRAG_RUNTIME_CERT_ENV_PRESENT%
 echo   - If HuggingFace model download is failing on first run, set
 echo     HTTPS_PROXY and HTTP_PROXY in your shell BEFORE launching,
 echo     or pre-cache the embedder/reranker to %%USERPROFILE%%\.cache\huggingface.

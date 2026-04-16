@@ -32,6 +32,7 @@ ACTIVE_PS1 = V2_ROOT / "tools" / "setup_workstation_2026-04-12.ps1"
 
 
 def _read_text(path: Path) -> str:
+    """Support this test module by handling the read text step."""
     return path.read_text(encoding="utf-8")
 
 
@@ -51,6 +52,7 @@ def _build_minimal_installer_tree(root: Path) -> None:
 
 
 def _have_py312() -> bool:
+    """Support this test module by handling the have py312 step."""
     try:
         result = subprocess.run(
             ["py", "-3.12", "--version"],
@@ -65,23 +67,27 @@ def _have_py312() -> bool:
 
 
 def test_install_workstation_points_to_current_dated_wrapper():
+    """Verify that install workstation points to current dated wrapper behaves the way the team expects."""
     text = _read_text(INSTALL_BAT)
     assert r'tools\setup_workstation_2026-04-12.bat' in text
     assert r'tools\setup_workstation_2026-04-06.bat' not in text
 
 
 def test_active_wrapper_points_to_current_dated_ps1():
+    """Verify that active wrapper points to current dated ps1 behaves the way the team expects."""
     text = _read_text(ACTIVE_BAT)
     assert 'setup_workstation_2026-04-12.ps1' in text
 
 
 def test_legacy_wrapper_is_compatibility_shim_to_current_ps1():
+    """Verify that legacy wrapper is compatibility shim to current ps1 behaves the way the team expects."""
     text = _read_text(LEGACY_BAT)
     assert 'setup_workstation_2026-04-12.bat' in text
     assert 'compatibility' in text.lower()
 
 
 def test_active_ps1_keeps_gliner_on_the_install_path():
+    """Verify that active ps1 keeps gliner on the install path behaves the way the team expects."""
     text = _read_text(ACTIVE_PS1)
     assert "pip-system-certs" in text
     assert '"gliner"' in text
@@ -90,6 +96,7 @@ def test_active_ps1_keeps_gliner_on_the_install_path():
 
 
 def test_pip_stage_streams_live_output_instead_of_buffering():
+    """Verify that pip stage streams live output instead of buffering behaves the way the team expects."""
     text = _read_text(ACTIVE_PS1)
     assert "& $VenvPython -m pip install --upgrade pip @TrustedHosts" in text
     assert "& $VenvPip install pip-system-certs @TrustedHosts" in text
@@ -99,12 +106,14 @@ def test_pip_stage_streams_live_output_instead_of_buffering():
 
 
 def test_existing_healthy_venv_skips_pip_repair():
+    """Verify that existing healthy venv skips pip repair behaves the way the team expects."""
     text = _read_text(ACTIVE_PS1)
     assert 'pip already present in existing venv -- skipping upgrade' in text
     assert 'pip-system-certs already installed -- skipping' in text
 
 
 def test_existing_healthy_torch_skips_reinstall():
+    """Verify that existing healthy torch skips reinstall behaves the way the team expects."""
     text = _read_text(ACTIVE_PS1)
     assert '$torchHealthyForLane' in text
     assert 'torch CUDA already healthy' in text
@@ -124,6 +133,7 @@ def test_existing_healthy_torch_skips_reinstall():
     ],
 )
 def test_launcher_dryrun_smoke(launcher: str, expected_line: str):
+    """Verify that launcher dryrun smoke behaves the way the team expects."""
     result = subprocess.run(
         ["cmd", "/c", launcher, "-DryRun", "-NoPause"],
         cwd=V2_ROOT,
@@ -144,6 +154,7 @@ def test_launcher_dryrun_smoke(launcher: str, expected_line: str):
     reason="Windows cmd.exe and py -3.12 are required for installer smoke runs",
 )
 def test_fresh_checkout_dryrun_does_not_create_venv():
+    """Verify that fresh checkout dryrun does not create venv behaves the way the team expects."""
     with tempfile.TemporaryDirectory(prefix="v2_install_dryrun_") as tmpdir:
         root = Path(tmpdir)
         _build_minimal_installer_tree(root)

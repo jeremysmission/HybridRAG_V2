@@ -130,6 +130,7 @@ GENERATION_BUNDLES = [
 
 @dataclass
 class BundleResult:
+    """Small helper object used to keep test setup or expected results organized."""
     name: str
     settings: Dict[str, Any]
     scores: List[float] = field(default_factory=list)
@@ -338,6 +339,7 @@ def run_sweep(args):
 
 
 def main():
+    """Run this helper module directly from the command line."""
     parser = argparse.ArgumentParser(description="Generation-side autotune sweep")
     parser.add_argument("--questions", type=int, default=20,
                         help="Number of eval questions per bundle (default: 20)")

@@ -1,3 +1,4 @@
+"""This test module supports the mode autotune reporting area of the repository."""
 from __future__ import annotations
 
 import copy
@@ -7,6 +8,7 @@ from typing import Any, Dict, Iterable, List
 
 
 def _sort_key(row: Dict[str, Any]) -> tuple:
+    """Support this test module by handling the sort key step."""
     failed = 1 if row.get("status") != "ok" else 0
     gate_failed = 1 if row.get("gate_failed") else 0
     return (
@@ -26,6 +28,7 @@ def rank_rows(
     min_unanswerable_proxy: float,
     min_injection_proxy: float,
 ) -> List[Dict[str, Any]]:
+    """Support this test module by handling the rank rows step."""
     ranked = []
     for row in rows:
         clone = dict(row)
@@ -46,6 +49,7 @@ def rank_rows(
 
 
 def leaderboard_fieldnames() -> List[str]:
+    """Support this test module by handling the leaderboard fieldnames step."""
     return [
         "mode",
         "stage",
@@ -71,6 +75,7 @@ def leaderboard_fieldnames() -> List[str]:
 
 
 def write_leaderboard_csv(path: Path, rows: Iterable[Dict[str, Any]]) -> None:
+    """Support this test module by handling the write leaderboard csv step."""
     fieldnames = leaderboard_fieldnames()
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -80,11 +85,13 @@ def write_leaderboard_csv(path: Path, rows: Iterable[Dict[str, Any]]) -> None:
 
 
 def _best_row(rows: Iterable[Dict[str, Any]]) -> Dict[str, Any] | None:
+    """Support this test module by handling the best row step."""
     ranked = sorted((dict(row) for row in rows), key=_sort_key)
     return ranked[0] if ranked else None
 
 
 def build_bundle_summary_rows(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Assemble the test data needed for the scenario being checked."""
     grouped: Dict[tuple[str, str, str], Dict[str, Any]] = {}
     for row in rows:
         mode = str(row.get("mode", "") or "")
@@ -153,6 +160,7 @@ def build_bundle_summary_rows(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, 
 
 
 def bundle_summary_fieldnames() -> List[str]:
+    """Support this test module by handling the bundle summary fieldnames step."""
     return [
         "mode",
         "stage",
@@ -172,6 +180,7 @@ def bundle_summary_fieldnames() -> List[str]:
 
 
 def write_bundle_summary_csv(path: Path, rows: Iterable[Dict[str, Any]]) -> None:
+    """Support this test module by handling the write bundle summary csv step."""
     fieldnames = bundle_summary_fieldnames()
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -181,6 +190,7 @@ def write_bundle_summary_csv(path: Path, rows: Iterable[Dict[str, Any]]) -> None
 
 
 def _stage_quality(stage_rows: List[Dict[str, Any]]) -> tuple[int, tuple]:
+    """Support this test module by handling the stage quality step."""
     if not stage_rows:
         return (3, (1, 1, "", 0, 0.0))
     has_gate_pass = any(
@@ -199,6 +209,7 @@ def _stage_quality(stage_rows: List[Dict[str, Any]]) -> tuple[int, tuple]:
 
 
 def _preferred_stage(mode_rows: List[Dict[str, Any]]) -> str:
+    """Support this test module by handling the preferred stage step."""
     stage_rows: Dict[str, List[Dict[str, Any]]] = {}
     for row in mode_rows:
         stage = str(row.get("stage", "") or "")
@@ -218,6 +229,7 @@ def _preferred_stage(mode_rows: List[Dict[str, Any]]) -> str:
 
 
 def _winner_set_row(row: Dict[str, Any], *, mode_rank: int) -> Dict[str, Any]:
+    """Support this test module by handling the winner set row step."""
     compact = {
         "mode": str(row.get("mode", "") or ""),
         "stage": str(row.get("stage", "") or ""),
@@ -245,6 +257,7 @@ def _winner_set_row(row: Dict[str, Any], *, mode_rank: int) -> Dict[str, Any]:
 
 
 def build_winner_set(rows: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
+    """Assemble the test data needed for the scenario being checked."""
     grouped: Dict[str, List[Dict[str, Any]]] = {}
     for row in rows:
         mode = str(row.get("mode", "") or "")
@@ -273,6 +286,7 @@ def build_winner_set(rows: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
 
 
 def winner_set_fieldnames() -> List[str]:
+    """Support this test module by handling the winner set fieldnames step."""
     return [
         "mode",
         "stage",
@@ -294,6 +308,7 @@ def winner_set_fieldnames() -> List[str]:
 
 
 def write_winner_set_csv(path: Path, rows: Iterable[Dict[str, Any]]) -> None:
+    """Support this test module by handling the write winner set csv step."""
     fieldnames = winner_set_fieldnames()
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)

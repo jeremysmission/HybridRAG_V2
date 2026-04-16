@@ -79,14 +79,22 @@ from src.gui.theme import (  # noqa: E402
     apply_ttk_styles,
 )
 from src.gui.helpers.safe_after import drain_ui_queue  # noqa: E402
+from src.gui.eval_panels.aggregation_panel import AggregationPanel  # noqa: E402
+from src.gui.eval_panels.count_panel import CountPanel  # noqa: E402
 from src.gui.eval_panels.launch_panel import LaunchPanel  # noqa: E402
+from src.gui.eval_panels.ragas_panel import RagasPanel  # noqa: E402
 from src.gui.eval_panels.results_panel import ResultsPanel  # noqa: E402
 from src.gui.eval_panels.compare_panel import ComparePanel  # noqa: E402
 from src.gui.eval_panels.history_panel import HistoryPanel  # noqa: E402
+from src.gui.eval_panels.overview_panel import OverviewPanel  # noqa: E402
 
 
 TABS = [
+    ("Overview", OverviewPanel),
     ("Launch", LaunchPanel),
+    ("Aggregation", AggregationPanel),
+    ("Count", CountPanel),
+    ("RAGAS", RagasPanel),
     ("Results", ResultsPanel),
     ("Compare", ComparePanel),
     ("History", HistoryPanel),
@@ -107,6 +115,7 @@ class EvalGUI(tk.Tk):
         self._build_header()
         self._build_tabs()
         self._build_status_bar()
+        self._wire_panel_callbacks()
 
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         self._drain_pump()
@@ -142,6 +151,20 @@ class EvalGUI(tk.Tk):
             panel = cls(self._notebook)
             self._notebook.add(panel, text=label)
             self._panels[label] = panel
+
+    def _wire_panel_callbacks(self) -> None:
+        launch = self._panels.get("Launch")
+        if launch and hasattr(launch, "set_run_callbacks"):
+            launch.set_run_callbacks(
+                on_run_start=self._on_launch_run_start,
+                on_run_done=self._on_launch_run_done,
+            )
+        ragas = self._panels.get("RAGAS")
+        if ragas and hasattr(ragas, "set_run_callbacks"):
+            ragas.set_run_callbacks(
+                on_run_start=self._on_ragas_run_start,
+                on_run_done=self._on_ragas_run_done,
+            )
 
     def _build_status_bar(self) -> None:
         bar = tk.Frame(self, bg=DARK["panel_bg"], height=24)
@@ -183,6 +206,47 @@ class EvalGUI(tk.Tk):
             pass
         self.after(50, self._drain_pump)
 
+    def _on_launch_run_start(self, payload: dict) -> None:
+        queries_name = Path(payload.get("queries_path") or "").name or "?"
+        config_name = Path(payload.get("config_path") or "").name or "?"
+        self._header_status.configure(text=f"Running: {queries_name} / {config_name}")
+
+    def _on_launch_run_done(self, payload: dict) -> None:
+        status = payload.get("status") or "?"
+        run_id = payload.get("run_id") or "?"
+        self._header_status.configure(text=f"Last run: {status} ({run_id})")
+
+        results_json = (
+            (payload.get("artifact_paths") or {}).get("results_json")
+            or payload.get("results_json")
+            or ""
+        )
+        if results_json:
+            results_panel = self._panels.get("Results")
+            try:
+                results_path = Path(results_json)
+                if results_panel and results_path.exists():
+                    results_panel.load_file(results_path)
+            except Exception:
+                pass
+
+        history_panel = self._panels.get("History")
+        try:
+            if history_panel:
+                history_panel.refresh()
+        except Exception:
+            pass
+
+    def _on_ragas_run_start(self, payload: dict) -> None:
+        queries_name = Path(payload.get("queries_path") or "").name or "?"
+        mode = "analysis-only" if payload.get("analysis_only") else "execute"
+        self._header_status.configure(text=f"Running RAGAS: {queries_name} / {mode}")
+
+    def _on_ragas_run_done(self, payload: dict) -> None:
+        status = payload.get("status") or "?"
+        run_id = payload.get("run_id") or "?"
+        self._header_status.configure(text=f"Last RAGAS: {status} ({run_id})")
+
     def _on_close(self) -> None:
         launch = self._panels.get("Launch")
         try:
@@ -194,6 +258,7 @@ class EvalGUI(tk.Tk):
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main eval gui workflow."""
     app = EvalGUI()
     app.mainloop()
     return 0

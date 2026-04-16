@@ -1,0 +1,419 @@
+{
+  "run_id": "20260414_040416",
+  "timestamp_utc": "2026-04-14T04:04:16.595864+00:00",
+  "store_chunks": 10435593,
+  "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (NVIDIA GeForce RTX 3090)",
+  "total_queries": 5,
+  "pass_count": 3,
+  "partial_count": 1,
+  "miss_count": 1,
+  "routing_correct": 4,
+  "p50_pure_retrieval_ms": 5228,
+  "p95_pure_retrieval_ms": 7021,
+  "p50_wall_clock_ms": 6773,
+  "p95_wall_clock_ms": 8728,
+  "p50_router_ms": 1451,
+  "p95_router_ms": 2188,
+  "per_persona": {
+    "Program Manager": {
+      "total": 5,
+      "PASS": 3,
+      "PARTIAL": 1,
+      "MISS": 1,
+      "routing_correct": 4
+    }
+  },
+  "per_query_type": {
+    "TABULAR": {
+      "total": 1,
+      "PASS": 1,
+      "PARTIAL": 0,
+      "MISS": 0,
+      "routing_correct": 1
+    },
+    "AGGREGATE": {
+      "total": 1,
+      "PASS": 1,
+      "PARTIAL": 0,
+      "MISS": 0,
+      "routing_correct": 1
+    },
+    "ENTITY": {
+      "total": 1,
+      "PASS": 0,
+      "PARTIAL": 0,
+      "MISS": 1,
+      "routing_correct": 1
+    },
+    "SEMANTIC": {
+      "total": 2,
+      "PASS": 1,
+      "PARTIAL": 1,
+      "MISS": 0,
+      "routing_correct": 1
+    }
+  },
+  "results": [
+    {
+      "id": "PQ-101",
+      "persona": "Program Manager",
+      "expected_query_type": "TABULAR",
+      "routed_query_type": "TABULAR",
+      "routing_correct": true,
+      "query": "What is the latest enterprise program weekly hours variance for fiscal year 2024?",
+      "expected_document_family": "Program Management",
+      "family_signals": [
+        "program management",
+        "program",
+        "management"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 8728,
+      "router_ms": 1571,
+      "retrieval_ms": 7021,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "0e6dad5171a531d258f88ef0bccadf03d5e2ff13615d183062f606b2e1e293d0",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\Delete After Time\\,DanaInfo=www.dau.mil+ARJ53_rev2.pdf",
+          "short_source": "Delete After Time/,DanaInfo=www.dau.mil+ARJ53_rev2.pdf",
+          "score": 0.0,
+          "text_preview": "he data more relevant to the average S&E?s activities, we normalized the data into the standard 40-hour work week, thus creating the picture of an average S&...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "db4af0c6fae5f21288b08feb22d1b0acc0ed5d5e66e6b547ee269b3e0dee4966",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\2.0 Weekly Variance Reports\\2024\\2024-03\\2024-03-01 IGS Weekly Hours Variance.xlsx",
+          "short_source": "2024-03/2024-03-01 IGS Weekly Hours Variance.xlsx",
+          "score": 0.0,
+          "text_preview": "[SHEET] _com.sap.ip.bi.xl.hiddensheet [SHEET] Pivot Reporting Month: | 2024-02-01T00:00:00 | | | | | | | | | | | | | Fiscal Year | 2024 | | | | | | | Reporti...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "84ac167c8a42160a56c1fcb7fa0212ba81551cf8157b1c7b6fb0e6113f10e67f",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\EVMgoldversion.doc",
+          "short_source": "_WhatEver/EVMgoldversion.doc",
+          "score": 0.0,
+          "text_preview": "ment actions. Earned value analysis segregates schedule and cost problems for early and improved visibility of program performance. 1.6.1 Analyze Significant...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "28de8d6bd643e43204246030b51b97192a8947b5a45dfb7060ad1b449e73ce21",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\2.0 Weekly Variance Reports\\2024\\2024-01\\2024-01-19 IGS Weekly Hours Variance.xlsx",
+          "short_source": "2024-01/2024-01-19 IGS Weekly Hours Variance.xlsx",
+          "score": 0.0,
+          "text_preview": "[SHEET] _com.sap.ip.bi.xl.hiddensheet [SHEET] Pivot Reporting Month: | 2024-01-01T00:00:00 | | | | | | | | | | | | | Fiscal Year | 2024 | | | | | | | Reporti...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "428f3945c3b97e89cd998e4979f08a4a8c2f783809d81c9b359a275dca12489e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\EVMgoldversion.doc",
+          "short_source": "_WhatEver/EVMgoldversion.doc",
+          "score": 0.0,
+          "text_preview": "less otherwise specified in contracts, standardized reports and formats may be used for customer reports on subcontracts or Government contracts per mutual a...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-102",
+      "persona": "Program Manager",
+      "expected_query_type": "AGGREGATE",
+      "routed_query_type": "AGGREGATE",
+      "routing_correct": true,
+      "query": "What are the FEP monthly actuals for 2024 and how do they roll up across months?",
+      "expected_document_family": "Program Management",
+      "family_signals": [
+        "program management",
+        "program",
+        "management"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 6773,
+      "router_ms": 1451,
+      "retrieval_ms": 5228,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "fff01f1bb4e8c6a18730380d7b6816e3fcfcb58aeae27ba389596c720fefc753",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\001_Project_Management\\SEMS Program Docs\\Archive\\Program Management Plan.doc",
+          "short_source": "Archive/Program Management Plan.doc",
+          "score": 0.0,
+          "text_preview": "Expenditure Plan The FEP displays a time-phased estimate of expected spending profiles for active task orders, enabling the calculation of an estimated cost ...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "af7b5fa1a6b0f18f206b8fca66c1d3ccdfe064f29dd5a8d7df50dda2f3a678a2",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Mission Assurance\\Audits\\2025\\Metrology Management\\Evidence\\Authorized Product Listing.xlsx",
+          "short_source": "Evidence/Authorized Product Listing.xlsx",
+          "score": 0.0,
+          "text_preview": "ct_Description: The Amergint Soft FEP (Front End Processor) performs Frame Synchronization of Telemetry. The softFEP T&C Front End Processor receives serial ...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "0ca6a3bfe491dd429708fbb43f56db8a4717429b48d54c7575c05c78dcde57e8",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A008 - Management Plan (Program Management Plan - (Systems Mgt Plan)\\Archive\\Deliverables Report IGSI-XX IGS Program Management Plan (A008) - Copy.docx",
+          "short_source": "Archive/Deliverables Report IGSI-XX IGS Program Management Plan (A008) - Copy.docx",
+          "score": 0.0,
+          "text_preview": "the PM. The BEP is the baseline against which performance is measured and is the direct source of the Budgeted Cost of Work Scheduled and Budgeted Cost of Wo...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "4446a66c0099febcee1f1c09029f1b787d448d1a09ef1358cee7215a88412a7a",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Mission Assurance\\Audits\\2025\\Metrology Management\\Evidence\\Authorized Product Listing.xlsx",
+          "short_source": "Evidence/Authorized Product Listing.xlsx",
+          "score": 0.0,
+          "text_preview": "ols/power-design-manager.html, E2E_Review: 2024-05-20T00:00:00, Next_Review: 2027-05-20T00:00:00, Original_EAP_Review_Requestor: Luis Landy, VSM_Request_or_R...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "1f25212965beec3569c14d0138a01c3a93e02599f0f1a7a44a1e448d88a22d0a",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A008 - Management Plan (Program Management Plan - (Systems Mgt Plan)\\Deliverables Report IGSI-63 IGS Program Management Plan (A008).docx",
+          "short_source": "A008 - Management Plan (Program Management Plan - (Systems Mgt Plan)/Deliverables Report IGSI-63 IGS Program Management Plan (A008).docx",
+          "score": 0.0,
+          "text_preview": "the PM. The BEP is the baseline against which performance is measured and is the direct source of the Budgeted Cost of Work Scheduled and Budgeted Cost of Wo...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-103",
+      "persona": "Program Manager",
+      "expected_query_type": "ENTITY",
+      "routed_query_type": "ENTITY",
+      "routing_correct": true,
+      "query": "Which CDRL is A002 and what maintenance service reports have been submitted under it?",
+      "expected_document_family": "CDRLs",
+      "family_signals": [
+        "cdrls"
+      ],
+      "top_in_family": false,
+      "any_top5_in_family": false,
+      "verdict": "MISS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 8251,
+      "router_ms": 2188,
+      "retrieval_ms": 5966,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "4dc47c4056bca4fad0a6be806b35e6cdb4dc0537876d7d3b283548d632543544",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\DIDs\\CDRL DIDs\\A002--Maintenance Service Report\\DI-MGMT-80995A.pdf",
+          "short_source": "A002--Maintenance Service Report/DI-MGMT-80995A.pdf",
+          "score": 0.0,
+          "text_preview": "DATA ITEM DESCRIPTION Title: Maintenance Service Report Number: DI-MGMT-80995A Approval Date: 08 NOV 2006 AMSC Number: 7626 Limitation: N/A DTIC Applicable: ...",
+          "in_family": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "fac128bc8210451e9a565a187192d04052963b3310946852e4411f5dadeeb90b",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\IGSCC\\A002 - Maintenance Service Report (MSR)\\Wake Island\\FA881525FB002_IGSCC-1_MSR_Wake-NEXION_2025-11-7.pdf",
+          "short_source": "Wake Island/FA881525FB002_IGSCC-1_MSR_Wake-NEXION_2025-11-7.pdf",
+          "score": 0.0,
+          "text_preview": "................................................... 10 Table 6. ASV Parts Installed ............................................................................",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "c6ad40bccab1eee9882e35903642dbf0c29898830695b8203239cc1f569a0186",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\Data Item Description (DID) Reference\\A088_DI_MGMT_80995A.PDF",
+          "short_source": "Data Item Description (DID) Reference/A088_DI_MGMT_80995A.PDF",
+          "score": 0.0,
+          "text_preview": "DATA ITEM DESCRIPTION Title: Maintenance Service Report Number: DI-MGMT-80995A Approval Date: 08 NOV 2006 AMSC Number: 7626 Limitation: N/A DTIC Applicable: ...",
+          "in_family": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "a408eada5f6c86f8dfca2a2487c7eebf42276b2434c47a0b217e829c94d72f2b",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\Archive\\Deliverables (Historical)\\Maintenance Service Reports\\2012\\Guam_Dec2012_(Restoral)\\Maintenance Service Report_(13-0004)_Guam_Final_23Jan13_Updated.pdf",
+          "short_source": "Guam_Dec2012_(Restoral)/Maintenance Service Report_(13-0004)_Guam_Final_23Jan13_Updated.pdf",
+          "score": 0.0,
+          "text_preview": "[SECTION] TABLE 1. MAINTENANCE DOCUMENTS .......................................................... ............................................................",
+          "in_family": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "056a5832ce31510faf2664ad8e1e5d612986b323f26d1cb6f3c07a717a817aac",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#IGSCC\\Contracts\\Awarded\\Exhibit A_OASIS_SB_8(a)_Pool_2_Contract_Conformed Copy_.pdf",
+          "short_source": "Awarded/Exhibit A_OASIS_SB_8(a)_Pool_2_Contract_Conformed Copy_.pdf",
+          "score": 0.0,
+          "text_preview": "to meet the following deliverables, reports, or compliance standards may result in activation of Dormant Status and/or result in a Contractor being Off-Rampe...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-104",
+      "persona": "Program Manager",
+      "expected_query_type": "SEMANTIC",
+      "routed_query_type": "ENTITY",
+      "routing_correct": false,
+      "query": "What is the enterprise program Integrated Master Schedule deliverable and where is it tracked?",
+      "expected_document_family": "CDRLs",
+      "family_signals": [
+        "cdrls"
+      ],
+      "top_in_family": false,
+      "any_top5_in_family": true,
+      "verdict": "PARTIAL",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 6028,
+      "router_ms": 1435,
+      "retrieval_ms": 4538,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "31c8ad807ceca4f314e8f2b12d0bda280c2472a8fe902e84a7cd6b645474470c",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\SEMP Examples\\OLD_E-01.01 061615 SEMP Rev00 1.pdf",
+          "short_source": "SEMP Examples/OLD_E-01.01 061615 SEMP Rev00 1.pdf",
+          "score": 0.0,
+          "text_preview": "ram. The MPP includes an Integrated Master Plan (IMP) and other associated narratives that define the program architecture and contractual commitments based ...",
+          "in_family": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "13e058f754871e21e41ed4809b51fb42451a2af7054da41af8415cdd53c45d57",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\SMORS Plans\\SMORS Program Management Plan.doc",
+          "short_source": "SMORS Plans/SMORS Program Management Plan.doc",
+          "score": 0.0,
+          "text_preview": "other programs. Schedule Management The IMS, located on SMORSNet, provides the total program summary schedule and is the top scheduling document to which all...",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "bc447cdf8650dff94d8fb57a22dfc1725d483ff376bd38212547a72c3a8f4653",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\EVMgoldversion.doc",
+          "short_source": "_WhatEver/EVMgoldversion.doc",
+          "score": 0.0,
+          "text_preview": "m. (See Guidelines Discussion Paragraph 1.2.1) The scheduling system containing a program master schedule reflecting contractual requirements, significant de...",
+          "in_family": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "f4e3516427126140d15e554ba8a8431edea0aa7c9b4831f68fdabf1ca61d2eb6",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Mission Assurance\\Audits\\2024\\04 - Program Planning\\Program Planning audit checklist.xlsx",
+          "short_source": "04 - Program Planning/Program Planning audit checklist.xlsx",
+          "score": 0.0,
+          "text_preview": "pport, : Satisfactory, : The IMS is a monthly deliverable to the gov't. All schedule are located here: \\\\rsmcoc-fps01\\#RSMCOC-FPS01\\Group2\\IGS\\1.5 IGS CDRLS\\...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "34e710633a4b432c4af11554d91d8c6c6cd6f1fd68a894a06ff6478442ea7e74",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\DM\\Close Outs\\DO5034\\SEP\\SEP_S2I3_8Dec04.doc",
+          "short_source": "SEP/SEP_S2I3_8Dec04.doc",
+          "score": 0.0,
+          "text_preview": "Engineering, supported by Software Engineering, also provides training. 3.1.3.2 Personnel Resources SWAFS Project staffing is based on the integrated staffin...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-105",
+      "persona": "Program Manager",
+      "expected_query_type": "SEMANTIC",
+      "routed_query_type": "SEMANTIC",
+      "routing_correct": true,
+      "query": "What are the cost and schedule variances reported in the latest Program Management Review?",
+      "expected_document_family": "Program Management",
+      "family_signals": [
+        "program management",
+        "program",
+        "management"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 3310,
+      "router_ms": 1024,
+      "retrieval_ms": 2254,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "096e13743a792886bdc3ba09255a12d9a07b9f0584225d307433852fecd19c40",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\1.0 DMEA CDRLS\\PMP\\Archive\\DMEA__IGS-Program-Management-Plan.docx",
+          "short_source": "Archive/DMEA__IGS-Program-Management-Plan.docx",
+          "score": 0.0,
+          "text_preview": "d are elevated to IGSEP PM and through Contracts to the Contracting Officer, as appropriate. This information is then reported as appropriate to the PRA at p...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "bbadd454d5b9b95d1cc64effd08d8851edb517f9476a7e6d32c2010d541fc76c",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\1.0 DMEA CDRLS\\PMP\\Archive\\DMEA__IGS-Program-Management-Plan-Final.docx",
+          "short_source": "Archive/DMEA__IGS-Program-Management-Plan-Final.docx",
+          "score": 0.0,
+          "text_preview": "d are elevated to IGSEP PM and through Contracts to the Contracting Officer, as appropriate. This information is then reported as appropriate to the PRA at p...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "605372bca0d1d855f7ec47c78ff9ba7e8548bf90d71f1a7bb25edbb9d2382b3d",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\1.0 DMEA CDRLS\\PMP\\DMEA__IGS-Program-Management-Plan-FinalR1.docx",
+          "short_source": "PMP/DMEA__IGS-Program-Management-Plan-FinalR1.docx",
+          "score": 0.0,
+          "text_preview": "d are elevated to IGSEP PM and through Contracts to the Contracting Officer, as appropriate. This information is then reported as appropriate to the PRA at p...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "eb602caa43d7c858ce27c137d1e3f851c74b4c75b9af37329639f51d4e760eff",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\IGSCC\\A008 - Management Plan (Program Management Plan - (Systems Mgt Plan)\\FA881525FB002_IGSCC-103_Program-Mngt-Plan_A008_2025-09-29.pdf",
+          "short_source": "A008 - Management Plan (Program Management Plan - (Systems Mgt Plan)/FA881525FB002_IGSCC-103_Program-Mngt-Plan_A008_2025-09-29.pdf",
+          "score": 0.0,
+          "text_preview": "d and controlled through a series of program reviews and meetings. Individual projects are monitored and controlled by interfacing with Government stakeholde...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "c0b6d9f33ae89059caf997e99f822bf9c0fd2953425afaf9e4b63c00382126f6",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Mission Assurance\\DMEA Program\\DMEA__IGS-Program-Management-Plan_2024-09-27-MA Redlines.docx",
+          "short_source": "DMEA Program/DMEA__IGS-Program-Management-Plan_2024-09-27-MA Redlines.docx",
+          "score": 0.0,
+          "text_preview": "d are elevated to IGSEP PM and through Contracts to the Contracting Officer, as appropriate. This information is then reported as appropriate to the PRA at p...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    }
+  ],
+  "provenance": {
+    "queries_path": "C:\\HybridRAG_V2\\tests\\golden_eval\\production_queries_400_2026-04-12.json",
+    "queries_pack_name": "production_queries_400_2026-04-12.json",
+    "config_path": "C:\\HybridRAG_V2\\config\\config.tier1_clean_2026-04-13.yaml",
+    "config_name": "config.tier1_clean_2026-04-13.yaml",
+    "lance_path": "C:\\HybridRAG_V2\\data\\index\\lancedb",
+    "report_md_path": "C:\\HybridRAG_V2\\docs\\PRODUCTION_EVAL_RESULTS_GUI_2026-04-13_220328.md",
+    "results_json_path": "C:\\HybridRAG_V2\\docs\\production_eval_results_gui_2026-04-13_220328.json",
+    "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (NVIDIA GeForce RTX 3090)",
+    "gpu_index_requested": "0",
+    "max_queries_requested": 5,
+    "run_status": "PASS",
+    "elapsed_s": 48.2,
+    "runner_source": "src.gui.eval_panels.runner.EvalRunner"
+  }
+}

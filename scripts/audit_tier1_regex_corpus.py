@@ -104,10 +104,12 @@ PROCUREMENT_PO_RE = re.compile(
 
 
 def open_entity_db() -> sqlite3.Connection:
+    """Support the audit tier1 regex corpus workflow by handling the open entity db step."""
     return sqlite3.connect(f"file:{ENTITY_DB.as_posix()}?mode=ro", uri=True)
 
 
 def short_path(path: str, keep: int = 3) -> str:
+    """Support the audit tier1 regex corpus workflow by handling the short path step."""
     parts = (path or "").replace("\\", "/").split("/")
     if len(parts) <= keep:
         return path
@@ -115,6 +117,7 @@ def short_path(path: str, keep: int = 3) -> str:
 
 
 def classify(text: str, patterns: tuple[tuple[str, re.Pattern[str]], ...]) -> str:
+    """Support the audit tier1 regex corpus workflow by handling the classify step."""
     for family, pattern in patterns:
         if pattern.match(text):
             return family
@@ -126,6 +129,7 @@ def summarize_families(
     entity_type: str,
     patterns: tuple[tuple[str, re.Pattern[str]], ...],
 ) -> dict:
+    """Condense detailed results into a shorter summary that is easier to review."""
     cur = conn.cursor()
     cur.execute(
         """
@@ -171,6 +175,7 @@ def sample_entity_rows(
     text: str,
     limit: int = 3,
 ) -> list[dict]:
+    """Support the audit tier1 regex corpus workflow by handling the sample entity rows step."""
     cur = conn.cursor()
     cur.execute(
         """
@@ -200,6 +205,7 @@ def top_survivor_candidates(
     patterns: tuple[tuple[str, re.Pattern[str]], ...],
     limit: int = 25,
 ) -> list[dict]:
+    """Support the audit tier1 regex corpus workflow by handling the top survivor candidates step."""
     cur = conn.cursor()
     cur.execute(
         """
@@ -222,6 +228,7 @@ def top_survivor_candidates(
 
 
 def scan_procurement_paths(limit: int = 30) -> dict:
+    """Support the audit tier1 regex corpus workflow by handling the scan procurement paths step."""
     counts: Counter[str] = Counter()
     examples: dict[str, str] = {}
     length_counts: Counter[int] = Counter()
@@ -258,6 +265,7 @@ def scan_procurement_paths(limit: int = 30) -> dict:
 
 
 def maybe_chunk_hits(queries: tuple[str, ...], limit: int = 2) -> dict[str, list[dict]]:
+    """Support the audit tier1 regex corpus workflow by handling the maybe chunk hits step."""
     sys.path.insert(0, str(REPO_ROOT))
     try:
         from src.store.lance_store import LanceStore
@@ -287,6 +295,7 @@ def maybe_chunk_hits(queries: tuple[str, ...], limit: int = 2) -> dict[str, list
 
 
 def build_report() -> dict:
+    """Assemble the structured object this workflow needs for its next step."""
     conn = open_entity_db()
     try:
         po_summary = summarize_families(conn, "PO", PO_FAMILY_PATTERNS)
@@ -324,6 +333,7 @@ def build_report() -> dict:
 
 
 def render_text(report: dict) -> str:
+    """Render the collected results into a report-friendly format."""
     lines = []
     lines.append("Tier 1 Regex Corpus Audit")
     lines.append("=========================")
@@ -362,6 +372,7 @@ def render_text(report: dict) -> str:
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main audit tier1 regex corpus workflow."""
     parser = argparse.ArgumentParser(description="Mine Tier 1 PO/PART confusion sets.")
     parser.add_argument("--json", action="store_true", help="Print machine-readable JSON.")
     parser.add_argument("--out", help="Optional file path for the JSON report.")

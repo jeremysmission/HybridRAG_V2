@@ -24,9 +24,9 @@ The dominant clean-baseline confusions were:
 
 | Expected | Routed | Count | Pattern |
 | --- | --- | ---: | --- |
-| `SEMANTIC` | `ENTITY` | 37 | Document-content questions over-classified as single-item lookups |
+| `SEMANTIC` | `ENTITY` | 37 | Document-content questions over-restricted as single-item lookups |
 | `ENTITY` | `TABULAR` | 25 | Shipment / packing-list / report-template lookups treated like spreadsheet queries |
-| `SEMANTIC` | `TABULAR` | 15 | Review / response / report-content questions over-classified as structured lookups |
+| `SEMANTIC` | `TABULAR` | 15 | Review / response / report-content questions over-restricted as structured lookups |
 | `SEMANTIC` | `AGGREGATE` | 8 | Content questions with collection language (`documents`, `actions`, `results`, etc.) |
 | `TABULAR` | `ENTITY` | 6 | Some structured lookups still look like single-item factual queries |
 

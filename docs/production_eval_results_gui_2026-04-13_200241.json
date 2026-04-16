@@ -1,0 +1,449 @@
+{
+  "run_id": "20260414_020335",
+  "timestamp_utc": "2026-04-14T02:03:35.025531+00:00",
+  "store_chunks": 10435593,
+  "gpu_device": "CUDA_VISIBLE_DEVICES=1 -> cuda:0 (NVIDIA GeForce RTX 3090)",
+  "total_queries": 5,
+  "pass_count": 4,
+  "partial_count": 1,
+  "miss_count": 0,
+  "routing_correct": 4,
+  "p50_pure_retrieval_ms": 4386,
+  "p95_pure_retrieval_ms": 17569,
+  "p50_wall_clock_ms": 7190,
+  "p95_wall_clock_ms": 20719,
+  "p50_router_ms": 2124,
+  "p95_router_ms": 2755,
+  "per_persona": {
+    "Program Manager": {
+      "total": 5,
+      "PASS": 4,
+      "PARTIAL": 1,
+      "MISS": 0,
+      "routing_correct": 4
+    }
+  },
+  "per_query_type": {
+    "TABULAR": {
+      "total": 1,
+      "PASS": 1,
+      "PARTIAL": 0,
+      "MISS": 0,
+      "routing_correct": 1
+    },
+    "AGGREGATE": {
+      "total": 1,
+      "PASS": 1,
+      "PARTIAL": 0,
+      "MISS": 0,
+      "routing_correct": 1
+    },
+    "ENTITY": {
+      "total": 1,
+      "PASS": 1,
+      "PARTIAL": 0,
+      "MISS": 0,
+      "routing_correct": 1
+    },
+    "SEMANTIC": {
+      "total": 2,
+      "PASS": 1,
+      "PARTIAL": 1,
+      "MISS": 0,
+      "routing_correct": 1
+    }
+  },
+  "results": [
+    {
+      "id": "PQ-101",
+      "persona": "Program Manager",
+      "expected_query_type": "TABULAR",
+      "routed_query_type": "TABULAR",
+      "routing_correct": true,
+      "query": "What is the latest enterprise program weekly hours variance for fiscal year 2024?",
+      "expected_document_family": "Program Management",
+      "family_signals": [
+        "program management",
+        "program",
+        "management"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 7190,
+      "router_ms": 2755,
+      "retrieval_ms": 4386,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "0e6dad5171a531d258f88ef0bccadf03d5e2ff13615d183062f606b2e1e293d0",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\Delete After Time\\,DanaInfo=www.dau.mil+ARJ53_rev2.pdf",
+          "short_source": "Delete After Time/,DanaInfo=www.dau.mil+ARJ53_rev2.pdf",
+          "score": 0.0,
+          "text_preview": "he data more relevant to the average S&E?s activities, we normalized the data into the standard 40-hour work week, thus creating the picture of an average S&...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "db4af0c6fae5f21288b08feb22d1b0acc0ed5d5e66e6b547ee269b3e0dee4966",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\2.0 Weekly Variance Reports\\2024\\2024-03\\2024-03-01 IGS Weekly Hours Variance.xlsx",
+          "short_source": "2024-03/2024-03-01 IGS Weekly Hours Variance.xlsx",
+          "score": 0.0,
+          "text_preview": "[SHEET] _com.sap.ip.bi.xl.hiddensheet [SHEET] Pivot Reporting Month: | 2024-02-01T00:00:00 | | | | | | | | | | | | | Fiscal Year | 2024 | | | | | | | Reporti...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "84ac167c8a42160a56c1fcb7fa0212ba81551cf8157b1c7b6fb0e6113f10e67f",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\EVMgoldversion.doc",
+          "short_source": "_WhatEver/EVMgoldversion.doc",
+          "score": 0.0,
+          "text_preview": "ment actions. Earned value analysis segregates schedule and cost problems for early and improved visibility of program performance. 1.6.1 Analyze Significant...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "28de8d6bd643e43204246030b51b97192a8947b5a45dfb7060ad1b449e73ce21",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\2.0 Weekly Variance Reports\\2024\\2024-01\\2024-01-19 IGS Weekly Hours Variance.xlsx",
+          "short_source": "2024-01/2024-01-19 IGS Weekly Hours Variance.xlsx",
+          "score": 0.0,
+          "text_preview": "[SHEET] _com.sap.ip.bi.xl.hiddensheet [SHEET] Pivot Reporting Month: | 2024-01-01T00:00:00 | | | | | | | | | | | | | Fiscal Year | 2024 | | | | | | | Reporti...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "428f3945c3b97e89cd998e4979f08a4a8c2f783809d81c9b359a275dca12489e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\EVMgoldversion.doc",
+          "short_source": "_WhatEver/EVMgoldversion.doc",
+          "score": 0.0,
+          "text_preview": "less otherwise specified in contracts, standardized reports and formats may be used for customer reports on subcontracts or Government contracts per mutual a...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-102",
+      "persona": "Program Manager",
+      "expected_query_type": "AGGREGATE",
+      "routed_query_type": "AGGREGATE",
+      "routing_correct": true,
+      "query": "What are the FEP monthly actuals for 2024 and how do they roll up across months?",
+      "expected_document_family": "Program Management",
+      "family_signals": [
+        "program management",
+        "program",
+        "management"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 4204,
+      "router_ms": 1899,
+      "retrieval_ms": 2247,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "e9e38bfda7f62719e83aece554b9f468bf6c9b401039cfe36e9fc6b6cc7b56d6",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\#GSA_OASIS\\PM101\\PM101_Business Acumen .pptx",
+          "short_source": "PM101/PM101_Business Acumen .pptx",
+          "score": 0.0,
+          "text_preview": "inancial Forecasts & Trends Detailed AOP Financial Forecast (Near-Term) LRSP Financial Forecast (Long-Term) NG CognosDatabase Leads Qualification Process Fin...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "625220a48bef7134e358d1f0e0d9604ae3b082dfc513429ff119da95632f9c42",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\Delete After Time\\,DanaInfo=www.itsmacademy.com+itSMF_ITILV3_Intro_Overview.pdf",
+          "short_source": "Delete After Time/,DanaInfo=www.itsmacademy.com+itSMF_ITILV3_Intro_Overview.pdf",
+          "score": 0.0,
+          "text_preview": "t the core of the ITIL V3 lifecycle. It sets out guidance to all IT service providers and their customers, to help them operate and thrive in the long term b...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "be011b2a94bf6f83be545895ba2be4a0b8d08212766ea62189c363bc7ad9da74",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\1.0 DMEA CDRLS\\A001_Monthly-Status-Report\\TO 25FE035 CET 25-523 IGSEP CDRL A001 MSR due 20260120.docx",
+          "short_source": "A001_Monthly-Status-Report/TO 25FE035 CET 25-523 IGSEP CDRL A001 MSR due 20260120.docx",
+          "score": 0.0,
+          "text_preview": "flects the actual spend through December 2025 along with the forecast spend through October 2026 (NG accounting month ends 25 Sept 2026, so there are 3 days ...",
+          "in_family": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "85c571fda5d98bae788a06b09d8086922db68f20d0c71de413ced6e1a1efb5f7",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\Archive\\PMP\\15-0019_NEXION_PMP_(CDRL A081)_Rev 4_20 Apr 15_ISO.doc",
+          "short_source": "PMP/15-0019_NEXION_PMP_(CDRL A081)_Rev 4_20 Apr 15_ISO.doc",
+          "score": 0.0,
+          "text_preview": "anges, unforeseen events that resultresulting in changes to the plan for execution, or because the project has deviated significantly from the baseline sched...",
+          "in_family": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "65d4ca6f94ceee72e390d47b2e2a237132127829dff03722ccd9286e0bb1b36f",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Poland\\Soils Analysis\\Bids\\2024260_ngc_slupsk_poland_24062024.pdf",
+          "short_source": "Bids/2024260_ngc_slupsk_poland_24062024.pdf",
+          "score": 0.0,
+          "text_preview": "4.) DEADLINE PERFORMANCE BY SCHEDULE: 10 th of September, 2024 Each party may be released from liability for performance in its contractual obligations/order...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-103",
+      "persona": "Program Manager",
+      "expected_query_type": "ENTITY",
+      "routed_query_type": "ENTITY",
+      "routing_correct": true,
+      "query": "Which CDRL is A002 and what maintenance service reports have been submitted under it?",
+      "expected_document_family": "CDRLs",
+      "family_signals": [
+        "cdrls"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 20719,
+      "router_ms": 2124,
+      "retrieval_ms": 17569,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "335ed6577db465a438c5dfaa510729156e3f71672f17e02b4f245e23e401ccf5",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Alpena-NEXION\\Deliverables Report IGSI-59 Alpena NEXION MSR R2 (A002).docx",
+          "short_source": "Alpena-NEXION/Deliverables Report IGSI-59 Alpena NEXION MSR R2 (A002).docx",
+          "score": -1.0,
+          "text_preview": "Maintenance Service Report Alpena NEXION 19 May 2023 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A002 Prepared For: Space Systems Command (SSC...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "09aa846e61a1c96769edc5d22d6eefd415181172f8bda58ef62f3be2a552c37e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Curacao-ISTO\\Deliverables Report IGSI-1204 Curacao-ISTO MSR (A002).docx",
+          "short_source": "Curacao-ISTO/Deliverables Report IGSI-1204 Curacao-ISTO MSR (A002).docx",
+          "score": -1.0,
+          "text_preview": "Maintenance Service Report Curacao ISTO 29 January 2024 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A002 Prepared For: Space Systems Command (...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "a88f85e31ed2c6d415f7aaaaa6059b35d65f7003b4d9abcc33d68c7b7ba46c07",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Diego Garcia-ISTO\\Deliverables Report IGSI-1203 Diego Garcia-ISTO MSR (A002).docx",
+          "short_source": "Diego Garcia-ISTO/Deliverables Report IGSI-1203 Diego Garcia-ISTO MSR (A002).docx",
+          "score": -1.0,
+          "text_preview": "Maintenance Service Report Diego Garcia ISTO 24 October 2023 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A002 Prepared For: Space Systems Comm...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "dcd95c5a5da45f748d97eba6c81e6a589e6b41cd3e488fb0a6674a6ef2291906",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Eareckson-NEXION\\Deliverables Report IGSI-737 Eareckson-NEXION MSR (A002).docx",
+          "short_source": "Eareckson-NEXION/Deliverables Report IGSI-737 Eareckson-NEXION MSR (A002).docx",
+          "score": -1.0,
+          "text_preview": "Maintenance Service Report Eareckson NEXION 14 June 2023 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A002 Prepared For: Space Systems Command ...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "4b5f232c5ce88225513527f29ae334235f206531a00ae04fd62b5eaf9d8fcd0e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\A002 - Maintenance Service Report (MSR)\\Eglin-NEXION\\Deliverables Report IGSI-2089 Eglin NEXION MSR (A002)\\Deliverables Report IGSI-2089 Eglin NEXION MSR (A002).docx",
+          "short_source": "Deliverables Report IGSI-2089 Eglin NEXION MSR (A002)/Deliverables Report IGSI-2089 Eglin NEXION MSR (A002).docx",
+          "score": -1.0,
+          "text_preview": "Maintenance Service Report (MSR) Eglin NEXION 14 March 2024 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A002 Prepared For: Space Systems Comma...",
+          "in_family": true
+        },
+        {
+          "rank": 6,
+          "chunk_id": "9acb21ed6c08cadd00dd6ab5e37b5de4f20e25b26fe90ea58ea31810d3bfc160",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\Archive\\CM\\STD2549.pdf",
+          "short_source": "CM/STD2549.pdf",
+          "score": 0.0,
+          "text_preview": "be ordered only if the Government desires to track delivery and disposition of technical data or includes the requirement for on-line review and comment on d...",
+          "in_family": false
+        },
+        {
+          "rank": 7,
+          "chunk_id": "c77229c964ff6d267713062897fca1689266882df70b4e5982cf24cb0dd695f1",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\8.0 Software\\Amy\\Searching for File Paths for NEXION Deliverable Control Log\\Report.Eglin.manifest_20180523.txt",
+          "short_source": "Searching for File Paths for NEXION Deliverable Control Log/Report.Eglin.manifest_20180523.txt",
+          "score": 0.0,
+          "text_preview": "EXION (20-24 Mar 17).docx I:\\# 003 Deliverables\\TO WX29 Deliverables\\MSR_CDRL A001\\Eglin ASV (20-24 Mar 17)\\SEMS3D-XXXXX_Maintenance Service Report (MSR)_(CD...",
+          "in_family": false
+        },
+        {
+          "rank": 8,
+          "chunk_id": "8fc11b6e025d83330dd2ad8b32a355eaaa991cfaca4e9ed5937a3794fe7bcfde",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\MIL-STD-2549 (DoD Interface Standard) (Config Mngmnt Data Interface) (1997-06-30).pdf",
+          "short_source": "DOCUMENTS LIBRARY/MIL-STD-2549 (DoD Interface Standard) (Config Mngmnt Data Interface) (1997-06-30).pdf",
+          "score": 0.0,
+          "text_preview": "be ordered only if the Government desires to track delivery and disposition of technical data or includes the requirement for on-line review and comment on d...",
+          "in_family": false
+        },
+        {
+          "rank": 9,
+          "chunk_id": "fac128bc8210451e9a565a187192d04052963b3310946852e4411f5dadeeb90b",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\IGSCC\\A002 - Maintenance Service Report (MSR)\\Wake Island\\FA881525FB002_IGSCC-1_MSR_Wake-NEXION_2025-11-7.pdf",
+          "short_source": "Wake Island/FA881525FB002_IGSCC-1_MSR_Wake-NEXION_2025-11-7.pdf",
+          "score": 0.0,
+          "text_preview": "................................................... 10 Table 6. ASV Parts Installed ............................................................................",
+          "in_family": false
+        },
+        {
+          "rank": 10,
+          "chunk_id": "8ebf806fb26fe0b704b38b68e9776f23ffef2cc151663f7d62d1361011498269",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\Delete After Time\\SEFGuide 01-01.pdf",
+          "short_source": "Delete After Time/SEFGuide 01-01.pdf",
+          "score": 0.0,
+          "text_preview": "[SECTION] INTEGRATED WITH THE MASTER PROGRAM PLANNING SCHEDULE SUBMITTED ON MAGNETIC MEDIA IN ACCORDANCE WITH DI-A-3007/T. PREPARED BY: DATE: APPROVED BY: DA...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-104",
+      "persona": "Program Manager",
+      "expected_query_type": "SEMANTIC",
+      "routed_query_type": "ENTITY",
+      "routing_correct": false,
+      "query": "What is the enterprise program Integrated Master Schedule deliverable and where is it tracked?",
+      "expected_document_family": "CDRLs",
+      "family_signals": [
+        "cdrls"
+      ],
+      "top_in_family": false,
+      "any_top5_in_family": true,
+      "verdict": "PARTIAL",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 7979,
+      "router_ms": 2191,
+      "retrieval_ms": 5717,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "31c8ad807ceca4f314e8f2b12d0bda280c2472a8fe902e84a7cd6b645474470c",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\SEMP Examples\\OLD_E-01.01 061615 SEMP Rev00 1.pdf",
+          "short_source": "SEMP Examples/OLD_E-01.01 061615 SEMP Rev00 1.pdf",
+          "score": 0.0,
+          "text_preview": "ram. The MPP includes an Integrated Master Plan (IMP) and other associated narratives that define the program architecture and contractual commitments based ...",
+          "in_family": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "13e058f754871e21e41ed4809b51fb42451a2af7054da41af8415cdd53c45d57",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Example Program Plans\\SMORS Plans\\SMORS Program Management Plan.doc",
+          "short_source": "SMORS Plans/SMORS Program Management Plan.doc",
+          "score": 0.0,
+          "text_preview": "other programs. Schedule Management The IMS, located on SMORSNet, provides the total program summary schedule and is the top scheduling document to which all...",
+          "in_family": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "f4e3516427126140d15e554ba8a8431edea0aa7c9b4831f68fdabf1ca61d2eb6",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Mission Assurance\\Audits\\2024\\04 - Program Planning\\Program Planning audit checklist.xlsx",
+          "short_source": "04 - Program Planning/Program Planning audit checklist.xlsx",
+          "score": 0.0,
+          "text_preview": "pport, : Satisfactory, : The IMS is a monthly deliverable to the gov't. All schedule are located here: \\\\rsmcoc-fps01\\#RSMCOC-FPS01\\Group2\\IGS\\1.5 IGS CDRLS\\...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "bc447cdf8650dff94d8fb57a22dfc1725d483ff376bd38212547a72c3a8f4653",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\EVMgoldversion.doc",
+          "short_source": "_WhatEver/EVMgoldversion.doc",
+          "score": 0.0,
+          "text_preview": "m. (See Guidelines Discussion Paragraph 1.2.1) The scheduling system containing a program master schedule reflecting contractual requirements, significant de...",
+          "in_family": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "34e710633a4b432c4af11554d91d8c6c6cd6f1fd68a894a06ff6478442ea7e74",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\DM\\Close Outs\\DO5034\\SEP\\SEP_S2I3_8Dec04.doc",
+          "short_source": "SEP/SEP_S2I3_8Dec04.doc",
+          "score": 0.0,
+          "text_preview": "Engineering, supported by Software Engineering, also provides training. 3.1.3.2 Personnel Resources SWAFS Project staffing is based on the integrated staffin...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    },
+    {
+      "id": "PQ-105",
+      "persona": "Program Manager",
+      "expected_query_type": "SEMANTIC",
+      "routed_query_type": "SEMANTIC",
+      "routing_correct": true,
+      "query": "What are the cost and schedule variances reported in the latest Program Management Review?",
+      "expected_document_family": "Program Management",
+      "family_signals": [
+        "program management",
+        "program",
+        "management"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 3484,
+      "router_ms": 1182,
+      "retrieval_ms": 2263,
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "096e13743a792886bdc3ba09255a12d9a07b9f0584225d307433852fecd19c40",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\1.0 DMEA CDRLS\\PMP\\Archive\\DMEA__IGS-Program-Management-Plan.docx",
+          "short_source": "Archive/DMEA__IGS-Program-Management-Plan.docx",
+          "score": 0.0,
+          "text_preview": "d are elevated to IGSEP PM and through Contracts to the Contracting Officer, as appropriate. This information is then reported as appropriate to the PRA at p...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "bbadd454d5b9b95d1cc64effd08d8851edb517f9476a7e6d32c2010d541fc76c",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\1.0 DMEA CDRLS\\PMP\\Archive\\DMEA__IGS-Program-Management-Plan-Final.docx",
+          "short_source": "Archive/DMEA__IGS-Program-Management-Plan-Final.docx",
+          "score": 0.0,
+          "text_preview": "d are elevated to IGSEP PM and through Contracts to the Contracting Officer, as appropriate. This information is then reported as appropriate to the PRA at p...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "605372bca0d1d855f7ec47c78ff9ba7e8548bf90d71f1a7bb25edbb9d2382b3d",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.5 IGS CDRLS\\1.0 DMEA CDRLS\\PMP\\DMEA__IGS-Program-Management-Plan-FinalR1.docx",
+          "short_source": "PMP/DMEA__IGS-Program-Management-Plan-FinalR1.docx",
+          "score": 0.0,
+          "text_preview": "d are elevated to IGSEP PM and through Contracts to the Contracting Officer, as appropriate. This information is then reported as appropriate to the PRA at p...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "eb602caa43d7c858ce27c137d1e3f851c74b4c75b9af37329639f51d4e760eff",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\IGSCC\\A008 - Management Plan (Program Management Plan - (Systems Mgt Plan)\\FA881525FB002_IGSCC-103_Program-Mngt-Plan_A008_2025-09-29.pdf",
+          "short_source": "A008 - Management Plan (Program Management Plan - (Systems Mgt Plan)/FA881525FB002_IGSCC-103_Program-Mngt-Plan_A008_2025-09-29.pdf",
+          "score": 0.0,
+          "text_preview": "d and controlled through a series of program reviews and meetings. Individual projects are monitored and controlled by interfacing with Government stakeholde...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "c0b6d9f33ae89059caf997e99f822bf9c0fd2953425afaf9e4b63c00382126f6",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\Mission Assurance\\DMEA Program\\DMEA__IGS-Program-Management-Plan_2024-09-27-MA Redlines.docx",
+          "short_source": "DMEA Program/DMEA__IGS-Program-Management-Plan_2024-09-27-MA Redlines.docx",
+          "score": 0.0,
+          "text_preview": "d are elevated to IGSEP PM and through Contracts to the Contracting Officer, as appropriate. This information is then reported as appropriate to the PRA at p...",
+          "in_family": true
+        }
+      ],
+      "notes": "",
+      "error": ""
+    }
+  ]
+}

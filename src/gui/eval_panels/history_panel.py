@@ -1,3 +1,4 @@
+"""Evaluation history panel. It shows prior benchmark runs so an operator can compare what changed over time."""
 # ============================================================================
 # HybridRAG V2 -- Eval History Panel (src/gui/eval_panels/history_panel.py)
 # ============================================================================
@@ -31,6 +32,45 @@ _V2_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_DOCS_DIR = _V2_ROOT / "docs"
 EVAL_GLOB = "production_eval_results*.json"
 
+
+def _fmt_pct(value) -> str:
+    """Turn internal values into human-readable text for the operator."""
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return "?"
+    text = f"{numeric:.1f}"
+    if text.endswith(".0"):
+        text = text[:-2]
+    return f"{text}%"
+
+
+def _stage_summary_line(stage_latency_summary: dict) -> str:
+    """Support the history panel workflow by handling the stage summary line step."""
+    preferred = [
+        "vector_search",
+        "structured_lookup",
+        "entity_lookup",
+        "relationship_lookup",
+        "aggregate_lookup",
+        "tabular_lookup",
+        "rerank",
+        "context_build",
+    ]
+    parts: list[str] = []
+    for stage in preferred:
+        stats = stage_latency_summary.get(stage)
+        if not isinstance(stats, dict):
+            continue
+        p50 = stats.get("p50_ms")
+        p95 = stats.get("p95_ms")
+        count = stats.get("queries_with_stage")
+        if p50 is None or p95 is None:
+            continue
+        suffix = f", n={count}" if count not in (None, "") else ""
+        parts.append(f"{stage} {p50}/{p95} ms{suffix}")
+    return "    ".join(parts)
+
 COLUMNS = (
     "run_id",
     "timestamp",
@@ -41,6 +81,8 @@ COLUMNS = (
     "miss",
     "routing",
     "p50",
+    "strongest",
+    "weakest",
     "filename",
 )
 
@@ -54,6 +96,8 @@ COLUMN_LABELS = {
     "miss": "MISS",
     "routing": "Routing",
     "p50": "p50 (ms)",
+    "strongest": "Strongest",
+    "weakest": "Weakest",
     "filename": "File",
 }
 
@@ -67,6 +111,8 @@ COLUMN_WIDTHS = {
     "miss": 60,
     "routing": 80,
     "p50": 70,
+    "strongest": 180,
+    "weakest": 180,
     "filename": 320,
 }
 
@@ -82,6 +128,7 @@ class HistoryPanel(tk.Frame):
         self._skipped: list[str] = []
         self._sort_state: dict[str, bool] = {}  # column -> ascending?
         self._iid_to_record: dict[str, dict] = {}
+        self._detail_var = tk.StringVar(value="Select a run to inspect its benchmark summary.")
 
         # Make sure ttk styles are applied (idempotent, safe to re-run).
         try:
@@ -224,10 +271,32 @@ class HistoryPanel(tk.Frame):
 
         self._tree.bind("<Double-1>", self._on_double_click)
         self._tree.bind("<Button-3>", self._on_right_click)
+        self._tree.bind("<<TreeviewSelect>>", self._on_select_row)
 
-        # ---- Right -- Timeline -----------------------------------------
+        # ---- Right -- Selected run + timeline --------------------------
         right = tk.Frame(paned, bg=DARK["panel_bg"])
         paned.add(right, minsize=300, stretch="always")
+
+        tk.Label(
+            right,
+            text="Selected run",
+            bg=DARK["panel_bg"],
+            fg=DARK["accent"],
+            font=FONT_SECTION,
+            anchor="w",
+        ).pack(side="top", fill="x", padx=12, pady=(8, 4))
+
+        self._detail_label = tk.Label(
+            right,
+            textvariable=self._detail_var,
+            bg=DARK["panel_bg"],
+            fg=DARK["fg"],
+            font=FONT_MONO,
+            justify="left",
+            anchor="w",
+            wraplength=520,
+        )
+        self._detail_label.pack(side="top", fill="x", padx=12, pady=(0, 8))
 
         tk.Label(
             right,
@@ -375,6 +444,11 @@ class HistoryPanel(tk.Frame):
             ts = data.get("timestamp_utc") or mtime_iso or ""
 
             prov = data.get("provenance") or {}
+            run_summary = prov.get("run_summary") or {}
+            score_summary = run_summary.get("score_summary") or {}
+            latency_summary = run_summary.get("latency_summary") or {}
+            stage_latency_summary = run_summary.get("stage_latency_summary") or {}
+            artifact_paths = prov.get("artifact_paths") or {}
             queries_pack = (
                 prov.get("queries_pack_name")
                 or (Path(prov.get("queries_path", "")).name if prov.get("queries_path") else "")
@@ -399,10 +473,17 @@ class HistoryPanel(tk.Frame):
             rec = {
                 "run_id": str(data.get("run_id", "") or ""),
                 "timestamp_utc": str(data.get("timestamp_utc", "") or ""),
+                "run_status": prov.get("run_status") or score_summary.get("status") or "",
                 "label": label,
                 "queries_pack": queries_pack,
+                "queries_path": prov.get("queries_path") or "",
                 "config_name": config_name,
+                "config_path": prov.get("config_path") or "",
+                "store_path": prov.get("store_path") or prov.get("lance_path") or "",
                 "store_chunks": data.get("store_chunks"),
+                "router_mode": prov.get("router_mode") or "",
+                "provider": prov.get("provider") or "",
+                "model": prov.get("model") or "",
                 "gpu_device": prov.get("gpu_device") or data.get("gpu_device", ""),
                 "total_queries": int(data.get("total_queries") or 0),
                 "pass_count": int(data.get("pass_count") or 0),
@@ -411,6 +492,17 @@ class HistoryPanel(tk.Frame):
                 "routing_correct": int(data.get("routing_correct") or 0),
                 "p50_pure_retrieval_ms": data.get("p50_pure_retrieval_ms"),
                 "p95_pure_retrieval_ms": data.get("p95_pure_retrieval_ms"),
+                "strongest_summary": ", ".join(
+                    (run_summary.get("strongest_areas") or run_summary.get("strongest_query_types") or [])[:2]
+                ),
+                "weakest_summary": ", ".join(
+                    (run_summary.get("weakest_areas") or run_summary.get("weakest_query_types") or [])[:2]
+                ),
+                "strongest_areas": run_summary.get("strongest_areas") or [],
+                "weakest_areas": run_summary.get("weakest_areas") or [],
+                "score_summary": score_summary,
+                "latency_summary": latency_summary,
+                "stage_latency_summary": stage_latency_summary,
                 "elapsed": prov.get("elapsed_s")
                 or data.get("elapsed_seconds")
                 or data.get("elapsed_sec")
@@ -418,6 +510,8 @@ class HistoryPanel(tk.Frame):
                 or "",
                 "filename": fp.name,
                 "path": str(fp),
+                "results_json_path": artifact_paths.get("results_json") or prov.get("results_json_path") or str(fp),
+                "report_md_path": artifact_paths.get("report_md") or prov.get("report_md_path") or "",
                 "_sort_ts": ts,
             }
             return rec
@@ -453,6 +547,7 @@ class HistoryPanel(tk.Frame):
         self._iid_to_record = {}
 
         if not self._records:
+            self._detail_var.set("Select a run to inspect its benchmark summary.")
             return
 
         max_pass = max((r["pass_count"] for r in self._records), default=0)
@@ -479,6 +574,8 @@ class HistoryPanel(tk.Frame):
                 rec["miss_count"],
                 rec["routing_correct"],
                 p50_disp,
+                rec.get("strongest_summary") or "",
+                rec.get("weakest_summary") or "",
                 rec["filename"],
             )
 
@@ -493,6 +590,12 @@ class HistoryPanel(tk.Frame):
                 "", "end", iid=iid, values=values, tags=tuple(tags)
             )
             self._iid_to_record[iid] = rec
+
+        latest_iid = next(reversed(self._iid_to_record), None)
+        if latest_iid:
+            self._tree.selection_set(latest_iid)
+            self._tree.focus(latest_iid)
+            self._render_selected_record(self._iid_to_record[latest_iid])
 
     def _render_timeline(self):
         self._timeline.configure(state="normal")
@@ -542,6 +645,72 @@ class HistoryPanel(tk.Frame):
 
         self._timeline.configure(state="disabled")
 
+    def _render_selected_record(self, rec: dict | None):
+        if not rec:
+            self._detail_var.set("Select a run to inspect its benchmark summary.")
+            return
+
+        total = rec.get("total_queries") or 0
+        score_summary = rec.get("score_summary") or {}
+        latency_summary = rec.get("latency_summary") or {}
+        stage_latency_summary = rec.get("stage_latency_summary") or {}
+        strongest = rec.get("strongest_areas") or []
+        weakest = rec.get("weakest_areas") or []
+        router_mode = rec.get("router_mode") or ""
+        provider = rec.get("provider") or ""
+        model = rec.get("model") or ""
+
+        lines = [
+            f"run_id:    {rec.get('run_id') or '(no id)'}",
+            f"time:      {rec.get('timestamp_utc') or '?'}    status: {rec.get('run_status') or '?'}",
+            f"pack:      {rec.get('queries_pack') or '?'}",
+            f"config:    {rec.get('config_name') or '?'}",
+            f"store:     {rec.get('store_path') or '?'}",
+        ]
+        if router_mode or provider or model:
+            if provider or model:
+                lines.append(
+                    f"router:    {router_mode or 'llm'} ({' / '.join(part for part in (provider, model) if part)})"
+                )
+            else:
+                lines.append(f"router:    {router_mode}")
+        if total:
+            lines.append(
+                "score:     "
+                f"PASS {rec.get('pass_count', 0)}/{total} "
+                f"({_fmt_pct(score_summary.get('pass_rate_pct'))})    "
+                f"PARTIAL {rec.get('partial_count', 0)}/{total}    "
+                f"MISS {rec.get('miss_count', 0)}/{total}    "
+                f"Routing {rec.get('routing_correct', 0)}/{total} "
+                f"({_fmt_pct(score_summary.get('routing_rate_pct'))})"
+            )
+        if strongest:
+            lines.append(f"strongest: {', '.join(strongest)}")
+        if weakest:
+            lines.append(f"weakest:   {', '.join(weakest)}")
+        if latency_summary:
+            lines.append(
+                "latency:   "
+                f"retr {latency_summary.get('p50_pure_retrieval_ms', '?')}/"
+                f"{latency_summary.get('p95_pure_retrieval_ms', '?')} ms    "
+                f"wall {latency_summary.get('p50_wall_clock_ms', '?')}/"
+                f"{latency_summary.get('p95_wall_clock_ms', '?')} ms    "
+                f"router {latency_summary.get('p50_router_ms', '?')}/"
+                f"{latency_summary.get('p95_router_ms', '?')} ms    "
+                f"elapsed {latency_summary.get('elapsed_s', rec.get('elapsed') or '?')}s"
+            )
+        stage_line = _stage_summary_line(stage_latency_summary)
+        if stage_line:
+            lines.append(f"stages:    {stage_line}")
+        lines.append(f"json@:     {rec.get('results_json_path') or rec.get('path') or '?'}")
+        lines.append(f"report@:   {rec.get('report_md_path') or '?'}")
+        if rec.get("queries_path"):
+            lines.append(f"queries@:  {rec['queries_path']}")
+        if rec.get("config_path"):
+            lines.append(f"config@:   {rec['config_path']}")
+
+        self._detail_var.set("\n".join(lines))
+
     # --------------------------------------------------------------- Sort --
     def _sort_by(self, col: str):
         if not self._records:
@@ -567,6 +736,10 @@ class HistoryPanel(tk.Frame):
             if col == "p50":
                 v = r.get("p50_pure_retrieval_ms")
                 return -1 if v is None else v
+            if col == "strongest":
+                return r.get("strongest_summary") or ""
+            if col == "weakest":
+                return r.get("weakest_summary") or ""
             if col == "filename":
                 return r["filename"]
             if col == "label":
@@ -620,11 +793,13 @@ class HistoryPanel(tk.Frame):
         rec = self._current_ctx_record()
         if not rec:
             return
-        path = rec.get("path") or ""
-        if path.lower().endswith(".json"):
-            md_path = path[:-5] + ".md"
-        else:
-            md_path = path + ".md"
+        md_path = rec.get("report_md_path") or ""
+        if not md_path:
+            path = rec.get("path") or ""
+            if path.lower().endswith(".json"):
+                md_path = path[:-5] + ".md"
+            else:
+                md_path = path + ".md"
         self._open_path(md_path)
 
     def _ctx_copy_path(self):
@@ -645,6 +820,13 @@ class HistoryPanel(tk.Frame):
         if sel:
             return self._iid_to_record.get(sel[0])
         return None
+
+    def _on_select_row(self, _event=None):
+        sel = self._tree.selection()
+        if not sel:
+            self._render_selected_record(None)
+            return
+        self._render_selected_record(self._iid_to_record.get(sel[0]))
 
     def _open_path(self, path: str | None):
         if not path:

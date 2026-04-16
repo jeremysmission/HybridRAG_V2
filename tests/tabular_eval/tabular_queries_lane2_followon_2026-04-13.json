@@ -1,0 +1,87 @@
+{
+  "pack": "lane2_followon_tabular_v1",
+  "date": "2026-04-13",
+  "owner": "Jeremy Randall / CoPilot+",
+  "stage_config": "config/config.lane2_followon_stage_2026-04-13.yaml",
+  "frozen_baseline_untouched": true,
+  "note": "Deterministic row-level lookups against the staged Lane 2 follow-on entity store. Measured via src.store.entity_store.EntityStore.query_tables — NOT via the LLM query pipeline. This slice proves row data is retrievable and addressable at the substrate layer. It does NOT claim retrieval/routing/aggregation improvement on the 400-pack. The 400-pack is frozen; do not edit it.",
+  "queries": [
+    {
+      "id": "T-01",
+      "family": "received_po",
+      "kind": "exact_po_lookup",
+      "question_plain": "Find the row for PO Number 5300045239.",
+      "query_tables": {"value_contains": "5300045239"},
+      "expect_min_rows": 1,
+      "expect_any_header": ["PO Number"],
+      "expect_any_source_contains": ["PR & PO"]
+    },
+    {
+      "id": "T-02",
+      "family": "spares_report",
+      "kind": "exact_part_lookup",
+      "question_plain": "Find the spares row for Part Number ZFBT-4R2G-FT+.",
+      "query_tables": {"value_contains": "ZFBT-4R2G-FT+"},
+      "expect_min_rows": 1,
+      "expect_any_header": ["Part Number"],
+      "expect_any_source_contains": ["Spares"]
+    },
+    {
+      "id": "T-03",
+      "family": "spares_report",
+      "kind": "description_lookup",
+      "question_plain": "Find the spares row for a Power Supply, Redundant, 900W.",
+      "query_tables": {"value_contains": "Power Supply, Redundant, 900W"},
+      "expect_min_rows": 1,
+      "expect_any_header": ["Part Description"],
+      "expect_any_source_contains": ["Spares"]
+    },
+    {
+      "id": "T-04",
+      "family": "received_po",
+      "kind": "header_enumeration",
+      "question_plain": "How many PR Number rows were captured from the PR & PO spreadsheet?",
+      "query_tables": {"source_pattern": "PR & PO", "header_contains": "PR Number"},
+      "expect_min_rows": 20,
+      "expect_any_header": ["PR Number"],
+      "expect_any_source_contains": ["PR & PO"]
+    },
+    {
+      "id": "T-05",
+      "family": "spares_report",
+      "kind": "source_enumeration",
+      "question_plain": "How many rows were captured from Initial Spares sources?",
+      "query_tables": {"source_pattern": "Initial Spares"},
+      "expect_min_rows": 50,
+      "expect_any_source_contains": ["Initial Spares"]
+    },
+    {
+      "id": "T-06",
+      "family": "received_po",
+      "kind": "exact_pr_lookup",
+      "question_plain": "Find the row for PR Number 0031393862.",
+      "query_tables": {"value_contains": "0031393862"},
+      "expect_min_rows": 1,
+      "expect_any_header": ["PR Number"],
+      "expect_any_source_contains": ["PR & PO"]
+    },
+    {
+      "id": "T-07",
+      "family": "spares_report",
+      "kind": "pipe_joined_row_lookup",
+      "question_plain": "Confirm the pipe-joined extractor produced at least one row (table_id contains _pipekv_).",
+      "query_tables": {"source_pattern": "Spares"},
+      "expect_min_rows": 1,
+      "expect_any_table_id_contains": ["_pipekv_"]
+    },
+    {
+      "id": "T-08",
+      "family": "spares_report",
+      "kind": "vendor_lookup",
+      "question_plain": "Find spares rows for vendor Sterling Computers.",
+      "query_tables": {"value_contains": "Sterling Computers"},
+      "expect_min_rows": 1,
+      "expect_any_header": ["Vendor Name"]
+    }
+  ]
+}

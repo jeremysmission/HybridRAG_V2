@@ -15,6 +15,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
+sys.path.insert(0, str(PROJECT_ROOT))
 
 # ---------------------------------------------------------------------------
 # Result types
@@ -28,6 +29,7 @@ results: list[dict] = []
 
 
 def record(level: str, label: str, detail: str = ""):
+    """Support the validate setup workflow by handling the record step."""
     results.append({"level": level, "label": label, "detail": detail})
 
 
@@ -43,6 +45,7 @@ def mask_key(key: str) -> str:
 # ===================================================================
 
 def check_python_version():
+    """Run a validation check and return whether the expected condition is true."""
     v = sys.version_info
     version_str = f"{v.major}.{v.minor}.{v.micro}"
     if v.major == 3 and v.minor in (11, 12):
@@ -56,16 +59,22 @@ def check_python_version():
 
 
 def check_venv():
+    """Run a validation check and return whether the expected condition is true."""
     venv = os.environ.get("VIRTUAL_ENV", "")
+    repo_venv = (PROJECT_ROOT / ".venv").resolve()
+    exe_path = Path(sys.executable).resolve()
     if venv:
         name = Path(venv).name
         record(PASS, "Virtual environment", f"active ({name})")
+    elif repo_venv in exe_path.parents:
+        record(PASS, "Virtual environment", "repo-local .venv interpreter")
     else:
         record(WARN, "Virtual environment",
                "not active — activate .venv before running")
 
 
 def check_core_packages():
+    """Run a validation check and return whether the expected condition is true."""
     packages = {
         "openai": "openai",
         "pydantic": "pydantic",
@@ -88,6 +97,7 @@ def check_core_packages():
 
 
 def check_torch_cuda():
+    """Run a validation check and return whether the expected condition is true."""
     try:
         import torch
         ver = torch.__version__
@@ -107,6 +117,7 @@ def check_torch_cuda():
 
 
 def check_sentence_transformers():
+    """Run a validation check and return whether the expected condition is true."""
     try:
         import sentence_transformers
         ver = getattr(sentence_transformers, "__version__", "unknown")
@@ -117,6 +128,7 @@ def check_sentence_transformers():
 
 
 def check_lancedb():
+    """Run a validation check and return whether the expected condition is true."""
     try:
         import lancedb
         ver = getattr(lancedb, "__version__", "unknown")
@@ -127,6 +139,7 @@ def check_lancedb():
 
 
 def check_flashrank():
+    """Run a validation check and return whether the expected condition is true."""
     try:
         import flashrank  # noqa: F401
         record(PASS, "FlashRank", "installed")
@@ -136,6 +149,7 @@ def check_flashrank():
 
 
 def check_ollama():
+    """Run a validation check and return whether the expected condition is true."""
     try:
         import httpx
         resp = httpx.get("http://localhost:11434/api/tags", timeout=5)
@@ -171,6 +185,7 @@ def check_ollama():
 
 
 def check_tesseract():
+    """Run a validation check and return whether the expected condition is true."""
     path = shutil.which("tesseract")
     if path:
         try:
@@ -186,6 +201,7 @@ def check_tesseract():
 
 
 def check_poppler():
+    """Run a validation check and return whether the expected condition is true."""
     path = shutil.which("pdftoppm")
     if path:
         record(PASS, "Poppler (pdftoppm)", f"found at {path}")
@@ -196,6 +212,7 @@ def check_poppler():
 
 def check_api_credentials():
     # Check all the key env vars the LLM client uses
+    """Run a validation check and return whether the expected condition is true."""
     key_vars = ["HYBRIDRAG_API_KEY", "AZURE_OPENAI_API_KEY", "OPENAI_API_KEY"]
     endpoint_vars = ["HYBRIDRAG_API_ENDPOINT", "AZURE_OPENAI_ENDPOINT"]
 
@@ -260,6 +277,7 @@ def check_api_credentials():
 
 
 def check_config_file():
+    """Run a validation check and return whether the expected condition is true."""
     config_path = PROJECT_ROOT / "config" / "config.yaml"
     if not config_path.exists():
         record(FAIL, "Config file", f"not found at {config_path}")
@@ -280,6 +298,7 @@ def check_config_file():
 
 
 def check_data_directories(fix: bool = False):
+    """Run a validation check and return whether the expected condition is true."""
     dirs = [
         PROJECT_ROOT / "data" / "index",
         PROJECT_ROOT / "data" / "source",
@@ -303,26 +322,43 @@ def check_data_directories(fix: bool = False):
 
 
 def check_lancedb_store():
-    lance_path = PROJECT_ROOT / "data" / "index" / "lancedb"
+    """Run a validation check and return whether the expected condition is true."""
+    lance_path = _resolve_lancedb_store_path()
     if not lance_path.exists():
-        record(INFO, "LanceDB store", "no store yet (run import_embedengine.py)")
+        record(INFO, "LanceDB store", f"no store yet at {lance_path} (run import_embedengine.py)")
         return
     try:
-        import lancedb
-        db = lancedb.connect(str(lance_path))
-        try:
-            tables = list(db.table_names())
-        except Exception:
-            tables = list(db.list_tables()) if hasattr(db, "list_tables") else []
-        if not tables:
-            record(INFO, "LanceDB store", "0 tables (run import_embedengine.py)")
-            return
-        # Try to count rows in the first table (likely "chunks")
-        target = "chunks" if "chunks" in tables else tables[0]
-        tbl = db.open_table(target)
-        count = tbl.count_rows()
-        record(INFO, "LanceDB store",
-               f"{count} chunks loaded (table: {target})")
+        from src.store.lance_store import LanceStore
+
+        store = LanceStore(str(lance_path))
+        count = store.count()
+        record(INFO, "LanceDB store", f"{count:,} chunks loaded ({lance_path})")
+        fts_status = store.fts_status()
+        if fts_status.get("ready"):
+            record(
+                PASS,
+                "LanceDB FTS",
+                f"ready (probe={fts_status.get('probe_term')}, path={lance_path})",
+            )
+        elif fts_status.get("state") == "index_present":
+            record(
+                WARN,
+                "LanceDB FTS",
+                "index present but probe failed at "
+                f"{lance_path} — {fts_status.get('error') or 'FTS probe failed'}; "
+                "rebuild with scripts/import_embedengine.py --create-index "
+                "or LanceStore.create_fts_index()",
+            )
+        else:
+            record(
+                WARN,
+                "LanceDB FTS",
+                "missing or unreadable at "
+                f"{lance_path} — {fts_status.get('error') or 'FTS probe failed'}; "
+                "rebuild with scripts/import_embedengine.py --create-index "
+                "or LanceStore.create_fts_index()",
+            )
+        store.close()
     except ImportError:
         record(INFO, "LanceDB store",
                "directory exists but lancedb not installed — cannot inspect")
@@ -330,7 +366,30 @@ def check_lancedb_store():
         record(WARN, "LanceDB store", f"error reading store: {e}")
 
 
+def _resolve_lancedb_store_path() -> Path:
+    """Return the primary configured LanceDB path, falling back to the canonical default."""
+    default_path = PROJECT_ROOT / "data" / "index" / "lancedb"
+    config_path = PROJECT_ROOT / "config" / "config.yaml"
+    if not config_path.exists():
+        return default_path
+    try:
+        import yaml
+
+        with open(config_path, "r", encoding="utf-8") as f:
+            cfg = yaml.safe_load(f) or {}
+        lance_value = ((cfg.get("paths") or {}).get("lance_db") or "").strip()
+        if not lance_value:
+            return default_path
+        resolved = Path(lance_value)
+        if not resolved.is_absolute():
+            resolved = PROJECT_ROOT / resolved
+        return resolved
+    except Exception:
+        return default_path
+
+
 def check_entity_store():
+    """Run a validation check and return whether the expected condition is true."""
     entity_path = PROJECT_ROOT / "data" / "index" / "entities.sqlite3"
     if not entity_path.exists():
         record(INFO, "Entity store",
@@ -360,6 +419,7 @@ def check_entity_store():
 
 
 def check_disk_space():
+    """Run a validation check and return whether the expected condition is true."""
     drive = PROJECT_ROOT.anchor  # e.g. "C:\\"
     try:
         usage = shutil.disk_usage(drive)
@@ -398,6 +458,7 @@ LEVEL_PLAIN = {
 
 
 def supports_color() -> bool:
+    """Support the validate setup workflow by handling the supports color step."""
     if os.environ.get("NO_COLOR"):
         return False
     if platform.system() == "Windows":
@@ -413,6 +474,7 @@ def supports_color() -> bool:
 
 
 def print_results(quiet: bool = False):
+    """Render a readable summary for the person running the tool."""
     use_color = supports_color()
     symbols = LEVEL_SYMBOLS if use_color else LEVEL_PLAIN
 
@@ -455,6 +517,7 @@ def print_results(quiet: bool = False):
 
 
 def print_json():
+    """Render a readable summary for the person running the tool."""
     counts = {PASS: 0, FAIL: 0, WARN: 0, INFO: 0}
     for r in results:
         counts[r["level"]] += 1
@@ -472,6 +535,7 @@ def print_json():
 # ===================================================================
 
 def main():
+    """Parse command-line inputs and run the main validate setup workflow."""
     parser = argparse.ArgumentParser(
         description="HybridRAG V2 -- Setup Validation")
     parser.add_argument("--fix", action="store_true",

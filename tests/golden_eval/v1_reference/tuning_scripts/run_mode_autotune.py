@@ -262,6 +262,7 @@ FIXED_KNOBS = {
 
 @dataclass
 class Candidate:
+    """Small helper object used to keep test setup or expected results organized."""
     mode: str
     name: str
     bundle: str
@@ -269,14 +270,17 @@ class Candidate:
 
 
 def _print(msg: str) -> None:
+    """Support this test module by handling the print step."""
     print(msg, flush=True)
 
 
 def _normalize_mode(mode: str) -> str:
+    """Support this test module by handling the normalize mode step."""
     return "online" if str(mode).strip().lower() == "online" else "offline"
 
 
 def _selected_modes(mode: str) -> List[str]:
+    """Support this test module by handling the selected modes step."""
     raw = str(mode).strip().lower()
     if raw == "both":
         return ["offline", "online"]
@@ -284,6 +288,7 @@ def _selected_modes(mode: str) -> List[str]:
 
 
 def _resolve_existing_path(raw: str, *, prefer_config_dir: bool = False) -> Path:
+    """Support this test module by handling the resolve existing path step."""
     if not raw:
         raise SystemExit("Expected a non-empty path")
     path = Path(raw)
@@ -302,6 +307,7 @@ def _resolve_existing_path(raw: str, *, prefer_config_dir: bool = False) -> Path
 
 
 def _config_filename_from_path(config_path: Path) -> str:
+    """Support this test module by handling the config filename from path step."""
     config_dir = (PROJECT_ROOT / "config").resolve()
     try:
         return str(config_path.resolve().relative_to(config_dir)).replace("\\", "/")
@@ -310,12 +316,14 @@ def _config_filename_from_path(config_path: Path) -> str:
 
 
 def _load_config_dict(config_path: Path) -> Dict[str, Any]:
+    """Load the fixture data used by the test."""
     with open(config_path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f) or {}
     return data if isinstance(data, dict) else {}
 
 
 def _load_runtime_config(config_path: Path):
+    """Load the fixture data used by the test."""
     return load_config(str(PROJECT_ROOT), _config_filename_from_path(config_path))
 
 
@@ -324,6 +332,7 @@ def _credential_runtime_config_dict(
     *,
     config_dict: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
+    """Support this test module by handling the credential runtime config dict step."""
     if config_dict is not None:
         user_modes = load_user_modes_data(str(PROJECT_ROOT))
         runtime = build_runtime_config_dict(config_dict, user_modes)
@@ -332,6 +341,7 @@ def _credential_runtime_config_dict(
 
 
 def _git_head() -> str:
+    """Support this test module by handling the git head step."""
     try:
         result = subprocess.run(
             ["git", "rev-parse", "--short", "HEAD"],
@@ -346,10 +356,12 @@ def _git_head() -> str:
 
 
 def _timestamp_slug() -> str:
+    """Support this test module by handling the timestamp slug step."""
     return time.strftime("%Y%m%d_%H%M%S")
 
 
 def _candidate_name(mode: str, values: Dict[str, Any], bundle: str) -> str:
+    """Support this test module by handling the candidate name step."""
     min_score = int(round(float(values["min_score"]) * 100))
     if mode == "offline":
         base = (
@@ -371,6 +383,7 @@ def _candidate_name(mode: str, values: Dict[str, Any], bundle: str) -> str:
 
 
 def _candidate_sections(mode: str, values: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    """Support this test module by handling the candidate sections step."""
     retrieval = {
         "top_k": int(values["top_k"]),
         "min_score": float(values["min_score"]),
@@ -409,6 +422,7 @@ def _candidate_sections(mode: str, values: Dict[str, Any]) -> Dict[str, Dict[str
 
 
 def _candidate_snapshot(candidate: Candidate) -> Dict[str, Any]:
+    """Support this test module by handling the candidate snapshot step."""
     return {
         "mode": candidate.mode,
         "candidate": candidate.name,
@@ -419,14 +433,17 @@ def _candidate_snapshot(candidate: Candidate) -> Dict[str, Any]:
 
 
 def _bundle_definitions(mode: str, grid_name: str) -> List[Dict[str, Any]]:
+    """Support this test module by handling the bundle definitions step."""
     return copy.deepcopy(QUERY_GENERATION_BUNDLES[grid_name][_normalize_mode(mode)])
 
 
 def _retrieval_grid(mode: str, grid_name: str) -> Dict[str, List[Any]]:
+    """Support this test module by handling the retrieval grid step."""
     return copy.deepcopy(GRID_PRESETS[grid_name][_normalize_mode(mode)])
 
 
 def build_candidates(mode: str, grid_name: str) -> List[Candidate]:
+    """Assemble the test data needed for the scenario being checked."""
     mode = _normalize_mode(mode)
     preset = _retrieval_grid(mode, grid_name)
     bundles = _bundle_definitions(mode, grid_name)
@@ -455,6 +472,7 @@ def _build_candidate_config(
     mode: str,
     candidate_values: Dict[str, Any],
 ) -> Dict[str, Any]:
+    """Assemble the test data needed for the scenario being checked."""
     mode = _normalize_mode(mode)
     data = copy.deepcopy(base_config)
     data["mode"] = mode
@@ -475,18 +493,21 @@ def _build_candidate_config(
 
 
 def _write_yaml(path: Path, data: Dict[str, Any]) -> None:
+    """Support this test module by handling the write yaml step."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         yaml.safe_dump(data, f, default_flow_style=False, sort_keys=False)
 
 
 def _write_json(path: Path, data: Any) -> None:
+    """Support this test module by handling the write json step."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
 
 
 def _command_log_text(cmd: List[str], result: subprocess.CompletedProcess[str]) -> str:
+    """Support this test module by handling the command log text step."""
     return (
         "COMMAND\n"
         + " ".join(cmd)
@@ -500,6 +521,7 @@ def _command_log_text(cmd: List[str], result: subprocess.CompletedProcess[str]) 
 
 
 def _run_command(cmd: List[str], *, cwd: Path, log_path: Path) -> subprocess.CompletedProcess[str]:
+    """Support this test module by handling the run command step."""
     result = subprocess.run(
         cmd,
         cwd=str(cwd),
@@ -523,6 +545,7 @@ def _candidate_row_from_summary(
     status: str,
     error: str = "",
 ) -> Dict[str, Any]:
+    """Support this test module by handling the candidate row from summary step."""
     overall = summary.get("overall", {}) if isinstance(summary, dict) else {}
     gates = summary.get("acceptance_gates", {}) if isinstance(summary, dict) else {}
     row = {
@@ -556,6 +579,7 @@ def _candidate_row_from_summary(
 
 
 def _read_summary_json(path: Path) -> Dict[str, Any]:
+    """Support this test module by handling the read summary json step."""
     if not path.exists():
         return {}
     with open(path, "r", encoding="utf-8") as f:
@@ -563,6 +587,7 @@ def _read_summary_json(path: Path) -> Dict[str, Any]:
 
 
 def _candidate_from_ranked_row(mode: str, row: Dict[str, Any]) -> Candidate:
+    """Support this test module by handling the candidate from ranked row step."""
     return Candidate(
         mode=mode,
         name=str(row["candidate"]),
@@ -572,12 +597,14 @@ def _candidate_from_ranked_row(mode: str, row: Dict[str, Any]) -> Candidate:
 
 
 def _dataset_count(dataset_path: Path) -> int:
+    """Support this test module by handling the dataset count step."""
     with open(dataset_path, "r", encoding="utf-8") as f:
         data = json.load(f)
     return len(data) if isinstance(data, list) else 0
 
 
 def _database_ready(config_path: Path) -> tuple[bool, str]:
+    """Support this test module by handling the database ready step."""
     cfg = _load_runtime_config(config_path)
     db_path = (getattr(getattr(cfg, "paths", None), "database", "") or "").strip()
     if not db_path:
@@ -593,6 +620,7 @@ def _database_ready(config_path: Path) -> tuple[bool, str]:
 
 
 def _ollama_available(base_url: str) -> bool:
+    """Support this test module by handling the ollama available step."""
     import urllib.request
 
     url = (base_url or "http://127.0.0.1:11434").rstrip("/")
@@ -606,6 +634,7 @@ def _ollama_available(base_url: str) -> bool:
 
 
 def _offline_ready(config_path: Path) -> tuple[bool, str]:
+    """Support this test module by handling the offline ready step."""
     db_ready, db_reason = _database_ready(config_path)
     if not db_ready:
         return False, db_reason
@@ -626,6 +655,7 @@ def _online_ready(
     *,
     config_dict: Dict[str, Any] | None = None,
 ) -> tuple[bool, str]:
+    """Support this test module by handling the online ready step."""
     db_ready, db_reason = _database_ready(config_path)
     if not db_ready:
         return False, db_reason
@@ -654,6 +684,7 @@ def _apply_candidate_to_mode_store(
     values: Dict[str, Any],
     lock_winner: bool,
 ) -> Dict[str, Any]:
+    """Support this test module by handling the apply candidate to mode store step."""
     store = ModeTuningStore(str(PROJECT_ROOT))
     cfg = load_config(str(PROJECT_ROOT), "config.yaml")
     applied = {}
@@ -671,6 +702,7 @@ def _winner_from_mode_rows(
     rows: List[Dict[str, Any]],
     workflow: str,
 ) -> Dict[str, Any]:
+    """Support this test module by handling the winner from mode rows step."""
     winner_set = build_winner_set(rows)
     mode_entry = winner_set.get("modes", {}).get(mode, {})
     ranked = mode_entry.get("ranked", [])
@@ -696,6 +728,7 @@ def _apply_winners(
     lock_winner: bool,
     run_dir: Path,
 ) -> Dict[str, Any]:
+    """Support this test module by handling the apply winners step."""
     config_path = PROJECT_ROOT / "config" / "config.yaml"
     backup_path = run_dir / "config_backup.yaml"
     if config_path.exists():
@@ -733,6 +766,7 @@ def _apply_winners(
 
 
 def _write_next_steps(path: Path, args: argparse.Namespace, winners: Dict[str, Any]) -> None:
+    """Support this test module by handling the write next steps step."""
     lines = [
         "HybridRAG3 autotune run complete.",
         "",
@@ -796,6 +830,7 @@ def run_stage(
     min_unanswerable_proxy: float,
     min_injection_proxy: float,
 ) -> List[Dict[str, Any]]:
+    """Support this test module by handling the run stage step."""
     stage_dir = run_dir / mode / stage
     stage_dir.mkdir(parents=True, exist_ok=True)
     stage_rows: List[Dict[str, Any]] = []
@@ -909,6 +944,7 @@ def run_stage(
 
 
 def _parse_args() -> argparse.Namespace:
+    """Support this test module by handling the parse args step."""
     ap = argparse.ArgumentParser()
     ap.add_argument(
         "--mode",
@@ -987,6 +1023,7 @@ def _parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    """Run this helper module directly from the command line."""
     args = _parse_args()
     if args.screen_limit <= 0:
         raise SystemExit("--screen-limit must be > 0")

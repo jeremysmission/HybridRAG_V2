@@ -1,3 +1,4 @@
+"""Test module for the stage forge import behavior. The checks here explain what the repository expects to keep working."""
 from __future__ import annotations
 
 import json
@@ -14,6 +15,7 @@ from scripts.stage_forge_import import (
 
 
 def _write_min_export(export_dir: Path, chunk_count: int = 4, dim: int = 8) -> tuple[list[dict], np.ndarray]:
+    """Support this test module by handling the write min export step."""
     export_dir.mkdir(parents=True, exist_ok=True)
     chunks = []
     for i in range(chunk_count):
@@ -37,6 +39,7 @@ def _write_min_export(export_dir: Path, chunk_count: int = 4, dim: int = 8) -> t
 
 
 def test_select_latest_export_uses_deterministic_tie_break(tmp_path: Path):
+    """Verify that select latest export uses deterministic tie break behaves the way the team expects."""
     root = tmp_path / "exports"
     a = root / "export_alpha"
     b = root / "export_bravo"
@@ -54,6 +57,7 @@ def test_select_latest_export_uses_deterministic_tie_break(tmp_path: Path):
 
 
 def test_build_canary_export_writes_subset_and_manifest(tmp_path: Path):
+    """Verify that build canary export writes subset and manifest behaves the way the team expects."""
     parent = tmp_path / "export_parent"
     chunks, vectors = _write_min_export(parent, chunk_count=5, dim=6)
 
@@ -83,6 +87,7 @@ def test_build_canary_export_writes_subset_and_manifest(tmp_path: Path):
 
 
 def test_compute_delta_baseline():
+    """Verify that compute delta baseline behaves the way the team expects."""
     current = {
         "export_dir": "C:/exports/export_1",
         "chunk_count": 100,
@@ -96,6 +101,7 @@ def test_compute_delta_baseline():
 
 
 def test_compute_delta_detects_count_and_model_changes():
+    """Verify that compute delta detects count and model changes behaves the way the team expects."""
     previous = {
         "export_dir": "C:/exports/export_prev",
         "chunk_count": 90,

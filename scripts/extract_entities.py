@@ -28,6 +28,7 @@ from src.extraction.quality_gate import QualityGate
 
 
 def main():
+    """Parse command-line inputs and run the main extract entities workflow."""
     parser = argparse.ArgumentParser(description="Extract entities from indexed chunks")
     parser.add_argument("--config", default="config/config.yaml")
     parser.add_argument("--batch-size", type=int, default=10, help="Chunks per batch")

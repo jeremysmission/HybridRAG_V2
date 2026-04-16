@@ -1,3 +1,4 @@
+"""Panel registry. It defines which screens exist and how the app imports them on demand."""
 # ============================================================================
 # HybridRAG V2 -- Panel Registry (src/gui/panels/panel_registry.py)
 # ============================================================================
@@ -52,6 +53,12 @@ _PANEL_DEFS = [
         "label": "Entities",
         "module": "src.gui.panels.entity_panel",
         "cls": "EntityPanel",
+    },
+    {
+        "key": "regression",
+        "label": "Regression",
+        "module": "src.gui.panels.regression_panel",
+        "cls": "RegressionPanel",
     },
     {
         "key": "settings",

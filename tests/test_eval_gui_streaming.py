@@ -45,6 +45,7 @@ from src.gui.eval_panels.runner import EvalRunner  # noqa: E402
 
 
 def _collect_events(runner_kwargs: dict) -> list[tuple[str, dict]]:
+    """Support this test module by handling the collect events step."""
     events: list[tuple[str, dict]] = []
     done = threading.Event()
 
@@ -61,6 +62,7 @@ def _collect_events(runner_kwargs: dict) -> list[tuple[str, dict]]:
 
 
 def test_eval_runner_missing_query_pack_emits_failed_done(tmp_path: Path):
+    """Verify that eval runner missing query pack emits failed done behaves the way the team expects."""
     missing_queries = tmp_path / "does_not_exist.json"
     config = V2_ROOT / "config" / "config.tier1_clean_2026-04-13.yaml"
     if not config.exists():
@@ -84,6 +86,7 @@ def test_eval_runner_missing_query_pack_emits_failed_done(tmp_path: Path):
 
 
 def test_eval_runner_missing_config_emits_failed_done(tmp_path: Path):
+    """Verify that eval runner missing config emits failed done behaves the way the team expects."""
     queries_file = V2_ROOT / "tests" / "golden_eval" / "production_queries_400_2026-04-12.json"
     if not queries_file.exists():
         pytest.skip("production 400-query pack not present")
@@ -109,6 +112,7 @@ def test_eval_runner_missing_config_emits_failed_done(tmp_path: Path):
 
 @pytest.fixture
 def withdrawn_root():
+    """Support this test module by handling the withdrawn root step."""
     try:
         root = tk.Tk()
     except tk.TclError:
@@ -125,9 +129,12 @@ def withdrawn_root():
 
 
 def test_launch_panel_renders_and_dispatches(withdrawn_root):
+    """Verify that launch panel renders and dispatches behaves the way the team expects."""
     from src.gui.eval_panels.launch_panel import LaunchPanel
 
-    panel = LaunchPanel(withdrawn_root)
+    done_payloads = []
+
+    panel = LaunchPanel(withdrawn_root, on_run_done=done_payloads.append)
     panel.pack()
     withdrawn_root.update_idletasks()
 
@@ -171,6 +178,34 @@ def test_launch_panel_renders_and_dispatches(withdrawn_root):
             "report_md": "x.md",
             "error": None,
             "elapsed_s": 1.5,
+            "run_id": "20260415_120000",
+            "timestamp_utc": "2026-04-15T12:00:00+00:00",
+            "queries_pack_name": "production_queries_400_2026-04-12.json",
+            "config_name": "config.tier1_clean_2026-04-13.yaml",
+            "store_path": "C:/HybridRAG_V2/data/index/lancedb",
+            "provider": "openai",
+            "model": "gpt-4o",
+            "router_mode": "llm",
+            "score_summary": {
+                "total_queries": 5,
+                "pass_count": 3,
+                "partial_count": 1,
+                "miss_count": 1,
+                "routing_correct": 4,
+                "pass_rate_pct": 60.0,
+                "routing_rate_pct": 80.0,
+            },
+            "strongest_areas": ["query_type: SEMANTIC (100%, n=2)"],
+            "weakest_areas": ["query_type: AGGREGATE (0%, n=1)"],
+            "latency_summary": {
+                "p50_pure_retrieval_ms": 40,
+                "p95_pure_retrieval_ms": 80,
+                "p50_wall_clock_ms": 50,
+                "p95_wall_clock_ms": 90,
+                "p50_router_ms": 10,
+                "p95_router_ms": 20,
+            },
+            "artifact_paths": {"results_json": "x.json", "report_md": "x.md"},
         },
     )
 
@@ -181,6 +216,18 @@ def test_launch_panel_renders_and_dispatches(withdrawn_root):
     assert panel._progress_label.cget("text") == "3 / 5"
     # Scorecard PASS label shows "3/5".
     assert panel._score_labels["pass"].cget("text") == "3/5"
+    log_text = panel._log.get("1.0", "end")
+    assert "router: llm (openai / gpt-4o)" in log_text
+    assert "strongest: query_type: SEMANTIC (100%, n=2)" in log_text
+    assert "results: x.json" in log_text
+    last_run_text = panel._var_last_run.get()
+    assert "status:    PASS    run_id: 20260415_120000" in last_run_text
+    assert "queries:   production_queries_400_2026-04-12.json" in last_run_text
+    assert "config:    config.tier1_clean_2026-04-13.yaml" in last_run_text
+    assert "strongest: query_type: SEMANTIC (100%, n=2)" in last_run_text
+    assert "results@:  x.json" in last_run_text
+    assert len(done_payloads) == 1
+    assert done_payloads[0]["status"] == "PASS"
 
 
 # ---------------------------------------------------------------------------
@@ -189,12 +236,14 @@ def test_launch_panel_renders_and_dispatches(withdrawn_root):
 
 
 def _find_any_results_json() -> Path | None:
+    """Support this test module by handling the find any results json step."""
     docs = V2_ROOT / "docs"
     candidates = sorted(docs.glob("production_eval_results*.json"))
     return candidates[0] if candidates else None
 
 
 def test_results_panel_loads_real_eval_json(withdrawn_root):
+    """Verify that results panel loads real eval json behaves the way the team expects."""
     from src.gui.eval_panels.results_panel import ResultsPanel
 
     results_path = _find_any_results_json()
@@ -209,6 +258,7 @@ def test_results_panel_loads_real_eval_json(withdrawn_root):
 
 
 def test_compare_panel_constructs_clean(withdrawn_root):
+    """Verify that compare panel constructs clean behaves the way the team expects."""
     from src.gui.eval_panels.compare_panel import ComparePanel
 
     panel = ComparePanel(withdrawn_root)
@@ -250,6 +300,7 @@ def test_compare_panel_headline_signs_are_correct(withdrawn_root):
 
 
 def test_history_panel_scans_docs_without_crash(withdrawn_root):
+    """Verify that history panel scans docs without crash behaves the way the team expects."""
     from src.gui.eval_panels.history_panel import HistoryPanel
 
     panel = HistoryPanel(withdrawn_root, docs_dir=V2_ROOT / "docs")
@@ -296,16 +347,58 @@ def test_results_panel_renders_provenance_block(withdrawn_root, tmp_path: Path):
             "queries_pack_name": "production_queries_smoke3.json",
             "config_path": "config/config.tier1_clean_2026-04-13.yaml",
             "config_name": "config.tier1_clean_2026-04-13.yaml",
+            "store_path": "data/index/lancedb",
             "lance_path": "data/index/lancedb",
             "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (stub)",
             "gpu_index_requested": "0",
             "max_queries_requested": 3,
+            "router_mode": "llm",
+            "provider": "openai",
+            "model": "gpt-4o",
             "run_status": "PASS",
             "elapsed_s": 116.8,
+            "artifact_paths": {
+                "results_json": "docs/production_eval_results_gui_2026-04-15_120000.json",
+                "report_md": "docs/PRODUCTION_EVAL_RESULTS_GUI_2026-04-15_120000.md",
+            },
+            "run_summary": {
+                "overall_pass_rate_pct": 66.7,
+                "category_min_pass_rate_pct": 50.0,
+                "score_summary": {
+                    "total_queries": 3,
+                    "pass_count": 2,
+                    "partial_count": 0,
+                    "miss_count": 1,
+                    "routing_correct": 3,
+                    "pass_rate_pct": 66.7,
+                    "routing_rate_pct": 100.0,
+                },
+                "latency_summary": {
+                    "p50_pure_retrieval_ms": 120,
+                    "p95_pure_retrieval_ms": 4000,
+                    "p50_wall_clock_ms": 150,
+                    "p95_wall_clock_ms": 4200,
+                    "p50_router_ms": 10,
+                    "p95_router_ms": 30,
+                    "elapsed_s": 116.8,
+                },
+                "stage_latency_summary": {
+                    "vector_search": {"p50_ms": 90, "p95_ms": 110, "max_ms": 130, "queries_with_stage": 3},
+                    "structured_lookup": {"p50_ms": 12, "p95_ms": 20, "max_ms": 21, "queries_with_stage": 1},
+                    "rerank": {"p50_ms": 8, "p95_ms": 12, "max_ms": 12, "queries_with_stage": 3},
+                    "context_build": {"p50_ms": 5, "p95_ms": 8, "max_ms": 9, "queries_with_stage": 3},
+                },
+                "strongest_areas": ["query_type: SEMANTIC (100%, n=2)", "persona: PM (66.7%, n=3)"],
+                "weakest_areas": ["query_type: AGGREGATE (0%, n=1)"],
+                "strongest_query_types": ["SEMANTIC (100%)", "KEYWORD (100%)"],
+                "weakest_query_types": ["AGGREGATE (0%)"],
+                "strongest_personas": ["PM (67%)"],
+                "weakest_personas": ["PM (67%)"],
+            },
         },
         "results": [
             {"id": "PQ-101", "verdict": "PASS", "persona": "PM", "routing_correct": True,
-             "retrieval_ms": 100},
+             "retrieval_ms": 100, "stage_timings_ms": {"vector_search": 88, "rerank": 7, "context_build": 4}},
             {"id": "PQ-102", "verdict": "PASS", "persona": "PM", "routing_correct": True,
              "retrieval_ms": 200},
             {"id": "PQ-103", "verdict": "MISS", "persona": "PM", "routing_correct": True,
@@ -326,6 +419,19 @@ def test_results_panel_renders_provenance_block(withdrawn_root, tmp_path: Path):
     assert "20260413_200000" in run_info_text
     assert "PASS" in run_info_text
     assert "first 3" in run_info_text
+    assert "router:     llm (openai / gpt-4o)" in run_info_text
+    assert "score:      PASS 2/3 (66.7%)" in run_info_text
+    assert "latency:    retr 120/4000 ms" in run_info_text
+    assert "stages:     vector_search 90/110 ms, n=3" in run_info_text
+    assert "strongest:  query_type: SEMANTIC (100%, n=2), persona: PM (66.7%, n=3)" in run_info_text
+    assert "results@:   docs/production_eval_results_gui_2026-04-15_120000.json" in run_info_text
+    assert "overall pass: 66.7%" in run_info_text
+    assert "strong q:   SEMANTIC (100%), KEYWORD (100%)" in run_info_text
+    assert "weak q:     AGGREGATE (0%)" in run_info_text
+    panel._render_details(sample["results"][0])
+    details_text = panel._details.get("1.0", "end")
+    assert "vector_search" in details_text
+    assert "context_build" in details_text
 
 
 def test_canonical_module_entry_point_exposes_main_and_evalgui():
@@ -344,6 +450,56 @@ def test_canonical_module_entry_point_exposes_main_and_evalgui():
         "scripts/eval_gui.py must forward to src.gui.eval_gui.main -- "
         "any other structure re-introduces the interpreter-split bug."
     )
+
+
+def test_eval_gui_tab_switch_during_active_run_keeps_runner_live_and_close_stops_it():
+    """Switching tabs during an active run should not interrupt the run.
+
+    The close handler should still stop the active launch runner before
+    destroying the window.
+    """
+    try:
+        from src.gui.eval_gui import EvalGUI
+    except tk.TclError:
+        pytest.skip("no Tk display available")
+
+    app = EvalGUI()
+
+    class FakeRunner:
+        def __init__(self) -> None:
+            self.is_alive = True
+            self.stop_called = False
+
+        def stop(self) -> None:
+            self.stop_called = True
+
+    try:
+        launch = app._panels["Launch"]
+        fake_runner = FakeRunner()
+        launch._runner = fake_runner
+
+        app._on_launch_run_start(
+            {
+                "queries_path": "queries.json",
+                "config_path": "config.yaml",
+            }
+        )
+
+        results_panel = app._panels["Results"]
+        app._notebook.select(results_panel)
+        app.update_idletasks()
+
+        assert app._notebook.select() == str(results_panel)
+        assert app._header_status.cget("text") == "Running: queries.json / config.yaml"
+
+        app._on_close()
+
+        assert fake_runner.stop_called is True
+    finally:
+        try:
+            app.destroy()
+        except Exception:
+            pass
 
 
 def test_launcher_bat_uses_module_form():
@@ -554,10 +710,49 @@ def test_launch_panel_corrupt_defaults_file_does_not_block_launch(
     assert panel._var_queries.get() == str(lp_module.DEFAULT_QUERIES)
 
 
+def test_launch_panel_start_emits_run_start_callback(withdrawn_root, tmp_path: Path):
+    """Start should emit the run-start callback with concrete output paths."""
+    import src.gui.eval_panels.launch_panel as lp_module
+
+    queries_path = tmp_path / "queries.json"
+    config_path = tmp_path / "config.yaml"
+    queries_path.write_text("[]", encoding="utf-8")
+    config_path.write_text("llm: {}\npaths: {}\n", encoding="utf-8")
+
+    start_payloads = []
+
+    panel = lp_module.LaunchPanel(withdrawn_root, on_run_start=start_payloads.append)
+    panel.pack()
+    withdrawn_root.update_idletasks()
+    panel._var_queries.set(str(queries_path))
+    panel._var_config.set(str(config_path))
+    panel._var_report_md.set(str(tmp_path / "report.md"))
+    panel._var_results_json.set(str(tmp_path / "results.json"))
+
+    runner_calls = {}
+
+    def fake_start(**kwargs):
+        runner_calls.update(kwargs)
+
+    panel._runner.start = fake_start  # type: ignore[method-assign]
+
+    panel._on_start()
+
+    assert len(start_payloads) == 1
+    payload = start_payloads[0]
+    assert payload["queries_path"] == str(queries_path)
+    assert payload["config_path"] == str(config_path)
+    assert payload["report_md"] == str(tmp_path / "report.md")
+    assert payload["results_json"] == str(tmp_path / "results.json")
+    assert runner_calls["queries_path"] == queries_path
+    assert runner_calls["config_path"] == config_path
+
+
 def test_history_panel_label_column_uses_provenance(withdrawn_root, tmp_path: Path):
     """History label column should show pack/config from provenance."""
     from src.gui.eval_panels.history_panel import HistoryPanel
 
+    p = tmp_path / "production_eval_results_smoke_2026-04-13.json"
     sample = {
         "run_id": "20260413_200000",
         "timestamp_utc": "2026-04-13T20:00:00+00:00",
@@ -568,11 +763,48 @@ def test_history_panel_label_column_uses_provenance(withdrawn_root, tmp_path: Pa
         "routing_correct": 3,
         "provenance": {
             "queries_pack_name": "production_queries_400_2026-04-12.json",
+            "queries_path": "tests/golden_eval/production_queries_400_2026-04-12.json",
             "config_name": "config.tier1_clean_2026-04-13.yaml",
+            "config_path": "config/config.tier1_clean_2026-04-13.yaml",
+            "store_path": "data/index/lancedb",
+            "router_mode": "llm",
+            "provider": "openai",
+            "model": "gpt-4o",
+            "artifact_paths": {
+                "results_json": str(p),
+                "report_md": str(tmp_path / "PRODUCTION_EVAL_RESULTS_GUI_2026-04-13.md"),
+            },
+            "run_summary": {
+                "score_summary": {
+                    "total_queries": 3,
+                    "pass_count": 2,
+                    "partial_count": 0,
+                    "miss_count": 1,
+                    "routing_correct": 3,
+                    "pass_rate_pct": 66.7,
+                    "routing_rate_pct": 100.0,
+                },
+                "latency_summary": {
+                    "p50_pure_retrieval_ms": 120,
+                    "p95_pure_retrieval_ms": 4000,
+                    "p50_wall_clock_ms": 150,
+                    "p95_wall_clock_ms": 4200,
+                    "p50_router_ms": 10,
+                    "p95_router_ms": 30,
+                    "elapsed_s": 116.8,
+                },
+                "stage_latency_summary": {
+                    "vector_search": {"p50_ms": 90, "p95_ms": 110, "max_ms": 130, "queries_with_stage": 3},
+                    "structured_lookup": {"p50_ms": 12, "p95_ms": 20, "max_ms": 21, "queries_with_stage": 1},
+                },
+                "strongest_areas": ["query_type: SEMANTIC (100%, n=2)", "persona: PM (66.7%, n=3)"],
+                "weakest_areas": ["query_type: AGGREGATE (0%, n=1)", "persona: PM (66.7%, n=3)"],
+                "strongest_query_types": ["SEMANTIC (100%)", "KEYWORD (100%)"],
+                "weakest_query_types": ["AGGREGATE (0%)", "COMPLEX (20%)"],
+            },
         },
         "results": [],
     }
-    p = tmp_path / "production_eval_results_smoke_2026-04-13.json"
     p.write_text(json.dumps(sample), encoding="utf-8")
 
     panel = HistoryPanel(withdrawn_root, docs_dir=tmp_path)
@@ -584,3 +816,9 @@ def test_history_panel_label_column_uses_provenance(withdrawn_root, tmp_path: Pa
     label = rec.get("label") or ""
     assert "production_queries_400_2026-04-12" in label
     assert "config.tier1_clean_2026-04-13" in label
+    assert rec.get("strongest_summary") == "query_type: SEMANTIC (100%, n=2), persona: PM (66.7%, n=3)"
+    assert rec.get("weakest_summary") == "query_type: AGGREGATE (0%, n=1), persona: PM (66.7%, n=3)"
+    detail_text = panel._detail_var.get()
+    assert "router:    llm (openai / gpt-4o)" in detail_text
+    assert "stages:    vector_search 90/110 ms, n=3" in detail_text
+    assert "json@:" in detail_text

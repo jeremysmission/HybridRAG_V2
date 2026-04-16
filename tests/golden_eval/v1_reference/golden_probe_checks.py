@@ -1,3 +1,4 @@
+"""This test module supports the golden probe checks area of the repository."""
 # === NON-PROGRAMMER GUIDE ===
 # Purpose: Implements the golden probe checks part of the application runtime.
 # What to read first: Start at the top-level function/class definitions and follow calls downward.

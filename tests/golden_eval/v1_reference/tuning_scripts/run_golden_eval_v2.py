@@ -18,6 +18,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def main():
+    """Run this helper module directly from the command line."""
     parser = argparse.ArgumentParser(description="Run golden eval")
     parser.add_argument("--mode", default="online", choices=["offline", "online"])
     parser.add_argument("--golden", default="Eval/golden_dataset_v2.json")

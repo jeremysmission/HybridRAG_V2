@@ -1,3 +1,4 @@
+"""Reusable scrolling containers for GUI layouts that need to handle long content."""
 # ============================================================================
 # HybridRAG V2 -- ScrollableFrame (src/gui/scrollable.py)
 # ============================================================================

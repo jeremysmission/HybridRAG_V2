@@ -41,12 +41,14 @@ PHONE_CANDIDATE_RE = re.compile(
 
 @dataclass(frozen=True)
 class GateExpectation:
+    """Structured helper object used by the audit tier1 regex gate workflow."""
     entity_type: str
     text: str
 
 
 @dataclass(frozen=True)
 class GateCase:
+    """Structured input record that keeps one unit of work easy to pass around and inspect."""
     name: str
     text: str
     must_have: tuple[GateExpectation, ...] = ()
@@ -56,6 +58,7 @@ class GateCase:
 
 @dataclass(frozen=True)
 class SampleChunk:
+    """Structured helper object used by the audit tier1 regex gate workflow."""
     chunk_id: str
     source_path: str
     text: str
@@ -64,6 +67,7 @@ class SampleChunk:
 
 @dataclass
 class SampleSelection:
+    """Structured helper object used by the audit tier1 regex gate workflow."""
     chunks: list[SampleChunk]
     scanned_chunks: int
     sample_mode: str
@@ -72,6 +76,7 @@ class SampleSelection:
 
 @dataclass
 class CaseOutcome:
+    """Structured helper object used by the audit tier1 regex gate workflow."""
     name: str
     ok: bool
     source_ref: str
@@ -80,6 +85,7 @@ class CaseOutcome:
 
 @dataclass
 class SampleOutcome:
+    """Structured helper object used by the audit tier1 regex gate workflow."""
     total_chunks: int
     scanned_chunks: int
     sample_mode: str
@@ -98,6 +104,7 @@ class SampleOutcome:
 
 @dataclass
 class GateReport:
+    """Small structured record used to keep related results together as the workflow runs."""
     curated_total: int
     curated_pass: int
     curated_fail: int
@@ -356,6 +363,7 @@ def curated_cases() -> list[GateCase]:
 
 
 def build_extractor() -> RegexPreExtractor:
+    """Assemble the structured object this workflow needs for its next step."""
     config = load_config(str(v2_root / "config" / "config.yaml"))
     return RegexPreExtractor(
         part_patterns=config.extraction.part_patterns,
@@ -364,6 +372,7 @@ def build_extractor() -> RegexPreExtractor:
 
 
 def _has_entity(entities, entity_type: str, expected_text: str) -> bool:
+    """Support the audit tier1 regex gate workflow by handling the has entity step."""
     return any(
         entity.entity_type == entity_type and entity.text == expected_text
         for entity in entities
@@ -374,6 +383,7 @@ def evaluate_curated_cases(
     extractor: RegexPreExtractor,
     cases: Iterable[GateCase] | None = None,
 ) -> list[CaseOutcome]:
+    """Support the audit tier1 regex gate workflow by handling the evaluate curated cases step."""
     outcomes: list[CaseOutcome] = []
     for idx, case in enumerate(cases or curated_cases(), start=1):
         entities = extractor.extract(case.text, f"curated-{idx}", "curated.txt")
@@ -399,6 +409,7 @@ def evaluate_curated_cases(
 
 
 def classify_chunk_stratum(text: str, extractor: RegexPreExtractor) -> str:
+    """Support the audit tier1 regex gate workflow by handling the classify chunk stratum step."""
     upper = text.upper()
     for token in re.findall(r"[A-Z0-9().-]+", upper):
         candidate = token.strip(",;:!?[]{}<>\"'")
@@ -418,6 +429,7 @@ def _reservoir_add(
     capacity: int,
     rng: random.Random,
 ) -> int:
+    """Support the audit tier1 regex gate workflow by handling the reservoir add step."""
     seen_count += 1
     if capacity <= 0:
         return seen_count
@@ -431,6 +443,7 @@ def _reservoir_add(
 
 
 def _iter_offset_rows(store, offsets: list[int], batch_size: int):
+    """Support the audit tier1 regex gate workflow by handling the iter offset rows step."""
     table = store._table
     if table is None:
         return
@@ -454,6 +467,7 @@ def sample_chunks_from_store(
     max_scan_chunks: int,
     batch_size: int = 2048,
 ) -> SampleSelection:
+    """Support the audit tier1 regex gate workflow by handling the sample chunks from store step."""
     if sample_limit <= 0:
         return SampleSelection(
             chunks=[],
@@ -575,6 +589,7 @@ def evaluate_sample_selection(
     extractor: RegexPreExtractor,
     selection: SampleSelection,
 ) -> SampleOutcome:
+    """Support the audit tier1 regex gate workflow by handling the evaluate sample selection step."""
     dangerous_hits: list[str] = []
     invalid_phone_hits: list[str] = []
     top_entities: list[dict] = []
@@ -637,6 +652,7 @@ def run_gate(
     sample_mode: str = "stratified",
     max_scan_chunks: int = 1000,
 ) -> GateReport:
+    """Execute one complete stage of the workflow and return its results."""
     extractor = build_extractor()
     outcomes = evaluate_curated_cases(extractor)
     curated_pass = sum(1 for outcome in outcomes if outcome.ok)
@@ -667,6 +683,7 @@ def run_gate(
 
 
 def _print_report(report: GateReport) -> None:
+    """Render a readable summary for the person running the tool."""
     print("=" * 72)
     print("TIER 1 REGEX ACCEPTANCE GATE")
     print("=" * 72)
@@ -702,6 +719,7 @@ def _print_report(report: GateReport) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Parse command-line inputs and run the main audit tier1 regex gate workflow."""
     parser = argparse.ArgumentParser(description="Tier 1 regex acceptance gate")
     parser.add_argument(
         "--sample-limit",

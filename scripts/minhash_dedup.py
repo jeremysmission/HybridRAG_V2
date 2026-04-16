@@ -299,6 +299,7 @@ def write_export(
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main minhash dedup workflow."""
     parser = argparse.ArgumentParser(description="MinHash deduplicate a CorpusForge export")
     parser.add_argument("--source", required=True, help="CorpusForge export directory or latest pointer file.")
     parser.add_argument(

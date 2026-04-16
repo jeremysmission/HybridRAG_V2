@@ -3,7 +3,7 @@
 ## Purpose
 
 Freeze the next post-clean-baseline retrieval slice before it is merged into the
-mainline Beast repo.
+mainline primary workstation repo.
 
 This slice extends metadata path recall for CDRL-heavy queries by:
 
@@ -59,7 +59,7 @@ Query:
 
 Observed top result after the slice:
 
-- `1.5 IGS CDRLS\A002 - Maintenance Service Report (MSR)\Alpena-NEXION\Deliverables Report IGSI-59 Alpena NEXION MSR R2 (A002).docx`
+- `1.5 enterprise program CDRLS\A002 - Maintenance Service Report (MSR)\Alpena-monitoring system\Deliverables Report IGSI-59 Alpena monitoring system MSR R2 (A002).docx`
 
 Interpretation:
 
@@ -73,7 +73,7 @@ Query:
 
 Observed top result after the slice:
 
-- `1.5 IGS CDRLS\A014 - Priced Bill of Materials\47QFRA22F0009_IGSI-2233_IGS_EMSI_PBOM_2024-04-22.xlsx`
+- `1.5 enterprise program CDRLS\A014 - Priced Bill of Materials\47QFRA22F0009_IGSI-2233_IGS_EMSI_PBOM_2024-04-22.xlsx`
 
 Interpretation:
 
@@ -87,7 +87,7 @@ Query:
 
 Observed top result after the slice:
 
-- `1.5 IGS CDRLS\A023 - Integrated Logistics Support Plan (ILS)\IGSI-XX Integrated Logistics Support Plan (ILSP) (A023).docx`
+- `1.5 enterprise program CDRLS\A023 - Integrated Logistics Support Plan (ILS)\IGSI-XX Integrated Logistics Support Plan (ILSP) (A023).docx`
 
 Interpretation:
 
@@ -101,7 +101,7 @@ Query:
 
 Observed top result after the slice:
 
-- `1.5 IGS CDRLS\A025 - Computer Operation Manual and Software User Manual (User’s Manual)\Deliverables Repot IGSI-72 ISTO Computer Operations Manual (COM) and Software Users Manual (SUM) (A025).docx`
+- `1.5 enterprise program CDRLS\A025 - Computer Operation Manual and Software User Manual (User’s Manual)\Deliverables Repot IGSI-72 legacy monitoring system Computer Operations Manual (COM) and Software Users Manual (SUM) (A025).docx`
 
 Interpretation:
 
@@ -115,7 +115,7 @@ Query:
 
 Observed top result after the slice:
 
-- `1.5 IGS CDRLS\A027 - DAA Accreditation Support Data (ACAS Scan Results)\2025\47QFRA22F0009_IGSI-2553_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_July-2025.xlsx`
+- `1.5 enterprise program CDRLS\A027 - DAA Accreditation Support Data (ACAS Scan Results)\2025\47QFRA22F0009_IGSI-2553_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_July-2025.xlsx`
 
 Interpretation:
 
@@ -129,7 +129,7 @@ Query:
 
 Observed top result after the slice:
 
-- `1.5 IGS CDRLS\A027 - Cybersecurity Assessment Test Report\A027- Cybersecurity Assessment Test Report-RHEL 8 ISTO\47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx`
+- `1.5 enterprise program CDRLS\A027 - Cybersecurity Assessment Test Report\A027- Cybersecurity Assessment Test Report-RHEL 8 legacy monitoring system\47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx`
 
 Interpretation:
 
@@ -150,7 +150,7 @@ Result:
 
 ## Recommended Next Step
 
-Once the currently running post-metadata-path baseline on Beast finishes:
+Once the currently running post-metadata-path baseline on primary workstation finishes:
 
 1. cherry-pick this slice into the main repo
 2. rerun the 400-query baseline

@@ -22,7 +22,7 @@ import json
 import statistics
 import sys
 from collections import Counter, defaultdict
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -36,6 +36,7 @@ DEFAULT_TOP_K = 5
 
 @dataclass
 class QueryDefinition:
+    """Structured helper object used by the run ragas eval workflow."""
     row_index: int
     query_id: str
     has_query_id: bool
@@ -52,6 +53,7 @@ class QueryDefinition:
 
 @dataclass
 class ReadinessRecord:
+    """Small structured record used to keep related results together as the workflow runs."""
     query_id: str
     eligible_for_retrieval_metrics: bool
     fully_phase2c_enriched: bool
@@ -60,6 +62,7 @@ class ReadinessRecord:
 
 @dataclass
 class DependencyProbe:
+    """Structured helper object used by the run ragas eval workflow."""
     ragas_installed: bool
     ragas_version: str | None
     rapidfuzz_installed: bool
@@ -70,6 +73,7 @@ class DependencyProbe:
 
 @dataclass
 class MetricSummary:
+    """Small structured record used to keep related results together as the workflow runs."""
     name: str
     count: int
     mean: float | None
@@ -79,7 +83,55 @@ class MetricSummary:
     errors: int
 
 
+def build_readiness_summary(
+    queries: list[QueryDefinition],
+    readiness: list[ReadinessRecord],
+    metadata_blocks: int,
+    queries_path: Path,
+) -> dict[str, Any]:
+    """Assemble the structured object this workflow needs for its next step."""
+    total = len(queries)
+    eligible = sum(1 for record in readiness if record.eligible_for_retrieval_metrics)
+    phase2c_ready = sum(1 for record in readiness if record.fully_phase2c_enriched)
+    blocked_missing_contexts = sum(
+        1 for record in readiness if "missing_reference_contexts" in record.reasons
+    )
+
+    reason_counts = Counter(reason for record in readiness for reason in record.reasons)
+    per_type_ready = Counter(
+        query.expected_query_type
+        for query, record in zip(queries, readiness, strict=True)
+        if record.eligible_for_retrieval_metrics
+    )
+
+    return {
+        "queries_path": str(queries_path),
+        "metadata_blocks": metadata_blocks,
+        "total_queries": total,
+        "eligible_for_retrieval_metrics": eligible,
+        "eligible_rate": (eligible / total) if total else 0.0,
+        "blocked_missing_reference_contexts": blocked_missing_contexts,
+        "fully_phase2c_enriched": phase2c_ready,
+        "phase2c_ready_rate": (phase2c_ready / total) if total else 0.0,
+        "reason_counts": dict(reason_counts),
+        "per_type_ready": dict(per_type_ready),
+    }
+
+
+def build_dependency_summary(probe: DependencyProbe) -> dict[str, Any]:
+    """Assemble the structured object this workflow needs for its next step."""
+    return {
+        "ragas_installed": probe.ragas_installed,
+        "ragas_version": probe.ragas_version,
+        "rapidfuzz_installed": probe.rapidfuzz_installed,
+        "single_turn_import_path": probe.single_turn_import_path,
+        "supported_metrics": dict(probe.supported_metrics),
+        "blockers": list(probe.blockers),
+    }
+
+
 def _normalize_string_list(value: Any) -> list[str]:
+    """Support the run ragas eval workflow by handling the normalize string list step."""
     if value is None:
         return []
     if isinstance(value, str):
@@ -96,12 +148,14 @@ def _normalize_string_list(value: Any) -> list[str]:
 
 
 def _clean_text(value: str | None) -> str:
+    """Normalize raw text into a simpler form that is easier to compare or display."""
     if not value:
         return ""
     return " ".join(value.split())
 
 
 def load_queries(path: Path) -> tuple[list[QueryDefinition], int]:
+    """Load the data needed for the run ragas eval workflow."""
     with open(path, encoding="utf-8") as handle:
         raw = json.load(handle)
 
@@ -165,6 +219,7 @@ def load_queries(path: Path) -> tuple[list[QueryDefinition], int]:
 
 
 def analyze_readiness(queries: list[QueryDefinition]) -> list[ReadinessRecord]:
+    """Support the run ragas eval workflow by handling the analyze readiness step."""
     records: list[ReadinessRecord] = []
     for query in queries:
         reasons: list[str] = []
@@ -200,6 +255,7 @@ def analyze_readiness(queries: list[QueryDefinition]) -> list[ReadinessRecord]:
 
 
 def probe_dependencies() -> DependencyProbe:
+    """Probe the current environment or system behavior and capture the result."""
     ragas_spec = importlib.util.find_spec("ragas")
     rapidfuzz_spec = importlib.util.find_spec("rapidfuzz")
 
@@ -233,19 +289,31 @@ def probe_dependencies() -> DependencyProbe:
             blockers.append("single_turn_sample_import_failed")
 
     try:
-        metrics_module = importlib.import_module("ragas.metrics")
-        if hasattr(metrics_module, "NonLLMContextRecall"):
-            supported_metrics["nonllm_context_recall"] = (
-                "ragas.metrics.NonLLMContextRecall"
-            )
-        else:
-            blockers.append("nonllm_context_recall_metric_missing")
+        metrics_modules = []
+        try:
+            metrics_modules.append(importlib.import_module("ragas.metrics.collections"))
+        except Exception:
+            metrics_modules.append(importlib.import_module("ragas.metrics"))
 
-        if hasattr(metrics_module, "NonLLMContextPrecisionWithReference"):
-            supported_metrics["nonllm_context_precision_with_reference"] = (
-                "ragas.metrics.NonLLMContextPrecisionWithReference"
-            )
-        else:
+        for metrics_module in metrics_modules:
+            if (
+                "nonllm_context_recall" not in supported_metrics
+                and hasattr(metrics_module, "NonLLMContextRecall")
+            ):
+                supported_metrics["nonllm_context_recall"] = (
+                    f"{metrics_module.__name__}.NonLLMContextRecall"
+                )
+            if (
+                "nonllm_context_precision_with_reference" not in supported_metrics
+                and hasattr(metrics_module, "NonLLMContextPrecisionWithReference")
+            ):
+                supported_metrics["nonllm_context_precision_with_reference"] = (
+                    f"{metrics_module.__name__}.NonLLMContextPrecisionWithReference"
+                )
+
+        if "nonllm_context_recall" not in supported_metrics:
+            blockers.append("nonllm_context_recall_metric_missing")
+        if "nonllm_context_precision_with_reference" not in supported_metrics:
             blockers.append("nonllm_context_precision_metric_missing")
     except Exception:
         blockers.append("ragas_metrics_import_failed")
@@ -269,6 +337,7 @@ def print_readiness_summary(
     metadata_blocks: int,
     query_path: Path,
 ) -> None:
+    """Render a readable summary for the person running the tool."""
     total = len(queries)
     eligible = sum(1 for r in readiness if r.eligible_for_retrieval_metrics)
     phase2c_ready = sum(1 for r in readiness if r.fully_phase2c_enriched)
@@ -316,6 +385,7 @@ def print_readiness_summary(
 
 
 def print_dependency_summary(probe: DependencyProbe) -> None:
+    """Render a readable summary for the person running the tool."""
     print("=" * 72)
     print("  DEPENDENCY PROBE")
     print("=" * 72)
@@ -339,6 +409,7 @@ def print_dependency_summary(probe: DependencyProbe) -> None:
 
 
 def _build_retrieval_lane(top_k: int):
+    """Assemble the structured object this workflow needs for its next step."""
     sys.path.insert(0, str(REPO_ROOT))
 
     import torch  # noqa: WPS433
@@ -372,6 +443,7 @@ def _build_retrieval_lane(top_k: int):
 
 
 def _load_single_turn_sample_class():
+    """Load the data needed for the run ragas eval workflow."""
     ragas = importlib.import_module("ragas")
     if hasattr(ragas, "SingleTurnSample"):
         return ragas.SingleTurnSample
@@ -379,18 +451,21 @@ def _load_single_turn_sample_class():
 
 
 def _instantiate_metric(metric_path: str):
+    """Support the run ragas eval workflow by handling the instantiate metric step."""
     module_name, class_name = metric_path.rsplit(".", 1)
     metric_cls = getattr(importlib.import_module(module_name), class_name)
     return metric_cls()
 
 
 def _extract_metric_value(result: Any) -> float:
+    """Support the run ragas eval workflow by handling the extract metric value step."""
     if hasattr(result, "value"):
         return float(result.value)
     return float(result)
 
 
 def _score_metric(metric: Any, sample: Any, sample_kwargs: dict[str, Any]) -> float:
+    """Calculate a score that summarizes how well the system performed."""
     if hasattr(metric, "single_turn_score"):
         return _extract_metric_value(metric.single_turn_score(sample))
 
@@ -411,6 +486,7 @@ def _retrieved_contexts_from_query(
     query_text: str,
     top_k: int,
 ) -> list[str]:
+    """Support the run ragas eval workflow by handling the retrieved contexts from query step."""
     raw_results = retriever.search(query_text, top_k=top_k)
 
     contexts: list[str] = []
@@ -425,6 +501,7 @@ def _retrieved_contexts_from_query(
 
 
 def _summarize_metric(name: str, values: list[float], errors: int) -> MetricSummary:
+    """Condense detailed results into a shorter summary that is easier to review."""
     if not values:
         return MetricSummary(
             name=name,
@@ -452,7 +529,10 @@ def execute_metrics(
     probe: DependencyProbe,
     top_k: int,
     limit: int | None,
-) -> tuple[list[MetricSummary], Counter[str]]:
+    progress_cb: callable | None = None,
+    log_cb: callable | None = None,
+) -> tuple[list[MetricSummary], Counter[str], dict[str, Any]]:
+    """Support the run ragas eval workflow by handling the execute metrics step."""
     if not probe.ragas_installed:
         raise RuntimeError("ragas_not_installed")
 
@@ -474,6 +554,11 @@ def execute_metrics(
     print(f"Retrieval mode: {pipeline_info['retrieval_mode']}")
     print(f"Reranker configured in app config: {pipeline_info['reranker_enabled']}")
     print()
+    if log_cb:
+        log_cb(f"Store chunks: {pipeline_info['store_chunks']:,}")
+        log_cb(f"Embedder device: {pipeline_info['device']}")
+        log_cb(f"Retrieval mode: {pipeline_info['retrieval_mode']}")
+        log_cb(f"Reranker configured: {pipeline_info['reranker_enabled']}")
 
     metric_values: dict[str, list[float]] = defaultdict(list)
     metric_errors: Counter[str] = Counter()
@@ -487,7 +572,10 @@ def execute_metrics(
     if limit is not None:
         eligible_pairs = eligible_pairs[:limit]
 
-    for query, _record in eligible_pairs:
+    total_pairs = len(eligible_pairs)
+    for idx, (query, _record) in enumerate(eligible_pairs, 1):
+        if progress_cb:
+            progress_cb(idx - 1, total_pairs, query)
         try:
             retrieved_contexts = _retrieved_contexts_from_query(
                 retriever=retriever,
@@ -496,10 +584,18 @@ def execute_metrics(
             )
         except Exception:
             skip_reasons["retrieval_execution_failed"] += 1
+            if log_cb:
+                log_cb(f"[{idx}/{total_pairs}] {query.query_id}: retrieval execution failed", "WARN")
+            if progress_cb:
+                progress_cb(idx, total_pairs, query)
             continue
 
         if not retrieved_contexts:
             skip_reasons["no_retrieved_contexts"] += 1
+            if log_cb:
+                log_cb(f"[{idx}/{total_pairs}] {query.query_id}: no retrieved contexts", "WARN")
+            if progress_cb:
+                progress_cb(idx, total_pairs, query)
             continue
 
         sample_kwargs = {
@@ -519,12 +615,27 @@ def execute_metrics(
                 metric_values[metric_name].append(score)
             except Exception:
                 metric_errors[metric_name] += 1
+        if log_cb:
+            log_cb(
+                (
+                    f"[{idx}/{total_pairs}] {query.query_id}: "
+                    f"retrieved={len(retrieved_contexts)} contexts"
+                ),
+                "INFO",
+            )
+        if progress_cb:
+            progress_cb(idx, total_pairs, query)
 
     summaries = [
         _summarize_metric(name, metric_values.get(name, []), metric_errors.get(name, 0))
         for name in sorted(supported_paths)
     ]
-    return summaries, skip_reasons
+    return summaries, skip_reasons, pipeline_info
+
+
+def serialize_metric_summaries(summaries: list[MetricSummary]) -> list[dict[str, Any]]:
+    """Support the run ragas eval workflow by handling the serialize metric summaries step."""
+    return [asdict(summary) for summary in summaries]
 
 
 def print_metric_summaries(
@@ -532,6 +643,7 @@ def print_metric_summaries(
     skip_reasons: Counter[str],
     evaluated_limit: int | None,
 ) -> None:
+    """Render a readable summary for the person running the tool."""
     print("=" * 72)
     print("  METRIC OUTPUT")
     print("=" * 72)
@@ -553,6 +665,7 @@ def print_metric_summaries(
 
 
 def parse_args() -> argparse.Namespace:
+    """Collect command-line options so the script can decide what work to run."""
     parser = argparse.ArgumentParser(
         description="Read-only RAGAS readiness + execution runner for HybridRAG V2",
     )
@@ -583,6 +696,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main run ragas eval workflow."""
     args = parse_args()
     queries, metadata_blocks = load_queries(args.queries)
     readiness = analyze_readiness(queries)
@@ -599,7 +713,7 @@ def main() -> int:
         return 2
 
     try:
-        summaries, skip_reasons = execute_metrics(
+        summaries, skip_reasons, _pipeline_info = execute_metrics(
             queries=queries,
             readiness=readiness,
             probe=probe,

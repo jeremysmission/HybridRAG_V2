@@ -1,3 +1,4 @@
+"""Settings panel. It shows important runtime settings and lets the operator verify how the app is configured."""
 # ============================================================================
 # HybridRAG V2 -- Settings Panel (src/gui/panels/settings_panel.py)
 # ============================================================================
@@ -11,7 +12,7 @@
 # ============================================================================
 
 import tkinter as tk
-from tkinter import ttk
+from tkinter import messagebox, ttk
 import logging
 
 from src.gui.theme import current_theme, FONT, FONT_BOLD, FONT_SECTION, FONT_MONO
@@ -145,6 +146,13 @@ class SettingsPanel(tk.LabelFrame):
         )
         self._refresh_btn.pack(side=tk.LEFT)
 
+        self._health_btn = tk.Button(
+            btn_frame, text="Check Store Health", command=self._on_health_check,
+            font=FONT, bg=t["input_bg"], fg=t["fg"],
+            relief=tk.FLAT, bd=0, padx=16, pady=6,
+        )
+        self._health_btn.pack(side=tk.LEFT, padx=(8, 0))
+
         self._counts_label = tk.Label(
             btn_frame, text="", font=FONT_MONO,
             bg=t["panel_bg"], fg=t["gray"],
@@ -203,6 +211,53 @@ class SettingsPanel(tk.LabelFrame):
                     self._model.relationship_count,
                 )
             )
+
+    def _on_health_check(self):
+        """Show the current store health for the configured retrieval path."""
+        if not self._model or not self._model.lance_store:
+            messagebox.showwarning("Store Health", "LanceDB store is not initialized yet.")
+            return
+
+        lance_store = self._model.lance_store
+        fts_status = lance_store.fts_status()
+        vector_present = lance_store.has_vector_index()
+        vector_ready = lance_store.vector_index_ready()
+        vector_stats = lance_store.vector_index_stats()
+
+        if vector_present:
+            vector_text = "ready" if vector_ready else ("stale" if vector_ready is False else "present")
+            indexed = vector_stats.get("num_indexed_rows")
+            unindexed = vector_stats.get("num_unindexed_rows")
+            if indexed is not None or unindexed is not None:
+                vector_text += f" ({indexed or 0} indexed, {unindexed or 0} unindexed)"
+        else:
+            vector_text = "absent"
+
+        fts_state = fts_status.get("state") or ("ready" if fts_status.get("ready") else "missing")
+        if fts_status.get("ready"):
+            fts_text = f"ready (probe={fts_status.get('probe_term')})"
+        elif fts_state == "index_present":
+            fts_text = f"present, probe failed ({fts_status.get('error') or 'FTS probe failed'})"
+        else:
+            fts_text = f"missing/unreadable ({fts_status.get('error') or 'FTS probe failed'})"
+
+        summary = "\n".join([
+            f"LanceDB: {lance_store.db_path}",
+            f"Chunks: {self._model.chunk_count:,}",
+            f"Vector index: {vector_text}",
+            f"FTS: {fts_text}",
+            f"Entities: {self._model.entity_count:,}",
+            f"Relationships: {self._model.relationship_count:,}",
+        ])
+
+        self._counts_label.config(
+            text=f"FTS: {'ready' if fts_status.get('ready') else ('present' if fts_state == 'index_present' else 'missing')} | Vector: {vector_text}"
+        )
+
+        if fts_status.get("ready") and vector_present:
+            messagebox.showinfo("Store Health", summary)
+        else:
+            messagebox.showwarning("Store Health", summary)
 
     # ------------------------------------------------------------------
     # Theme

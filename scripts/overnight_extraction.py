@@ -154,6 +154,7 @@ def print_status(progress_path: str):
 
 
 def main():
+    """Parse command-line inputs and run the main overnight extraction workflow."""
     parser = argparse.ArgumentParser(
         description="Clone1 / phi4 overnight extraction runner (not the V2 LanceStore tiered_extract path)"
     )

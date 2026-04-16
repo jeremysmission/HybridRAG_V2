@@ -1,3 +1,4 @@
+"""Utility script for comparing two production evaluation result files and summarizing what improved or regressed."""
 from __future__ import annotations
 
 import argparse
@@ -7,14 +8,17 @@ from pathlib import Path
 
 
 def _load(path: str | Path) -> dict:
+    """Load the data needed for the compare production eval results workflow."""
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
 def _results_by_id(payload: dict) -> dict[str, dict]:
+    """Support the compare production eval results workflow by handling the results by id step."""
     return {row["id"]: row for row in payload.get("results", [])}
 
 
 def _delta(a: int | float, b: int | float) -> str:
+    """Support the compare production eval results workflow by handling the delta step."""
     diff = b - a
     sign = "+" if diff >= 0 else ""
     if isinstance(a, float) or isinstance(b, float):
@@ -23,6 +27,7 @@ def _delta(a: int | float, b: int | float) -> str:
 
 
 def _summary_lines(base: dict, new: dict, overlap: list[tuple[dict, dict]]) -> list[str]:
+    """Support the compare production eval results workflow by handling the summary lines step."""
     lines: list[str] = []
     lines.append("# Production Eval Delta")
     lines.append("")
@@ -110,6 +115,7 @@ def _summary_lines(base: dict, new: dict, overlap: list[tuple[dict, dict]]) -> l
 
 
 def _family_counts(payload: dict) -> dict[str, Counter]:
+    """Support the compare production eval results workflow by handling the family counts step."""
     counts: dict[str, Counter] = defaultdict(Counter)
     for row in payload.get("results", []):
         counts[row.get("expected_document_family", "unknown")][row["verdict"]] += 1
@@ -117,10 +123,12 @@ def _family_counts(payload: dict) -> dict[str, Counter]:
 
 
 def _rank(verdict: str) -> int:
+    """Support the compare production eval results workflow by handling the rank step."""
     return {"MISS": 0, "PARTIAL": 1, "PASS": 2}.get(verdict, -1)
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main compare production eval results workflow."""
     parser = argparse.ArgumentParser(description="Compare two production-eval JSON result files.")
     parser.add_argument("--baseline", required=True, help="Older JSON result file")
     parser.add_argument("--new", required=True, help="Newer JSON result file")

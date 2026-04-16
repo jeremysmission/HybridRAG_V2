@@ -31,7 +31,7 @@ To make the rest of this update easier to follow, I want to define the main term
 
 I need to reset expectations from the earlier V1 status.
 
-V1 proved that the program's data could be indexed and retrieved with AI techniques, but it did **not** prove that the system could support trustworthy business-facing answers. Once I pushed V1 harder against the real IGS drive and real aggregation-style questions, I found that it was closer to a retrieval demo than to a trustworthy system.
+V1 proved that the program's data could be indexed and retrieved with AI techniques, but it did **not** prove that the system could support trustworthy business-facing answers. Once I pushed V1 harder against the real enterprise program drive and real aggregation-style questions, I found that it was closer to a retrieval demo than to a trustworthy system.
 
 Rather than force a brittle demo, I kept the parts that were actually working, split the architecture into cleaner upstream and downstream applications, and rebuilt the path around quality gates, measurable evaluation, and staged promotion.
 
@@ -43,7 +43,7 @@ The project did not originally begin as two separate applications.
 
 It started as a single HybridRAG effort, which I now refer to as `V1`. In that original form, ingest, preprocessing, retrieval, extraction, and answering were still too tightly coupled. That was enough to make early proof-of-concept progress, but it made it too easy for the system to look closer to done than it really was.
 
-Once I pushed V1 harder against the real IGS drive, it became clear that I needed a cleaner separation of responsibilities. That is why the project evolved into:
+Once I pushed V1 harder against the real enterprise program drive, it became clear that I needed a cleaner separation of responsibilities. That is why the project evolved into:
 
 - `CorpusForge`
   - the upstream corpus-preparation side
@@ -56,7 +56,7 @@ So the move from a single HybridRAG code path into `CorpusForge` plus `HybridRAG
 
 ## What Failed In V1
 
-The major turning point came when I used V1 on the real IGS drive for the kind of answers that matter to the program, not just document retrieval.
+The major turning point came when I used V1 on the real enterprise program drive for the kind of answers that matter to the program, not just document retrieval.
 
 That is where I found the hard limitation:
 
@@ -65,14 +65,14 @@ That is where I found the hard limitation:
 
 This was not a small tuning issue. It was a structural issue.
 
-On the actual IGS data, many identifiers look similar even when they mean very different things. Purchase orders, part numbers, technical report IDs, security-control identifiers, cyber-governance codes, and security/vulnerability identifiers all coexist in the same legacy drive. V1 could find related documents, but when I pushed it toward counts, rollups, and structured answers, the first-pass extraction layer was still confusing some of those categories.
+On the actual enterprise program data, many identifiers look similar even when they mean very different things. Purchase orders, part numbers, technical report IDs, security-control identifiers, cyber-governance codes, and security/vulnerability identifiers all coexist in the same legacy drive. V1 could find related documents, but when I pushed it toward counts, rollups, and structured answers, the first-pass extraction layer was still confusing some of those categories.
 
 That meant the system could produce answers that looked plausible while still being semantically wrong.
 
 The biggest examples were:
 
 - purchase-order-style fields being polluted by security-control and report-code patterns
-- part-number-style fields being polluted by STIG / DISA / MITRE / NIST-style identifiers
+- part-number-style fields being polluted by STIG / DISA / MITRE / security standard-style identifiers
 - aggregation-style answers looking more mature on the surface than they really were underneath
 
 That is the key reason I stopped treating V1 as “almost done.”
@@ -239,7 +239,7 @@ So part of the value here is being resourceful and using the temporary company c
 
 This project is also being built under a deliberate cost-control strategy.
 
-A more typical outside or cloud-heavy path for this kind of effort could involve meaningful up-front and recurring cost. Public benchmark scenarios already documented for a `700 GB`, `15-year`, mixed-format, `CUI`-sensitive RAG effort suggest:
+A more typical outside or cloud-heavy path for this kind of effort could involve meaningful up-front and recurring cost. Public benchmark scenarios already documented for a `700 GB`, `15-year`, mixed-format, `sensitive data`-sensitive RAG effort suggest:
 
 - a lean specialist / boutique path:
   - about `$53K-$116K+` in the first year
@@ -278,7 +278,7 @@ This effort is not only about an AI model. It affects multiple functional lanes 
   - the cleanup and gating work is what makes future procurement and material questions more trustworthy
 
 - **Cyber security / IA**
-  - a major part of the problem was that security identifiers such as STIG / DISA / MITRE / NIST-style codes were colliding with business fields
+  - a major part of the problem was that security identifiers such as STIG / DISA / MITRE / security standard-style codes were colliding with business fields
   - the current path explicitly protects against treating cyber/security identifiers as if they were logistics or program entities
   - this is also important for trust, because it preserves a cleaner boundary between cybersecurity artifacts and business data
 

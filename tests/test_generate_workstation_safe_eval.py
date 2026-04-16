@@ -1,3 +1,4 @@
+"""Test module for the generate workstation safe eval behavior. The checks here explain what the repository expects to keep working."""
 from __future__ import annotations
 
 import json
@@ -11,10 +12,12 @@ SCRIPT = REPO_ROOT / "scripts" / "generate_workstation_safe_eval.py"
 
 
 def _write_json(path: Path, payload: object) -> None:
+    """Support this test module by handling the write json step."""
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
 def test_generator_produces_workstation_safe_profile(tmp_path: Path) -> None:
+    """Verify that generator produces workstation safe profile behaves the way the team expects."""
     canonical = tmp_path / "canonical.json"
     derived = tmp_path / "derived.json"
     validation = tmp_path / "validation.json"
@@ -22,7 +25,7 @@ def test_generator_produces_workstation_safe_profile(tmp_path: Path) -> None:
     payload = [
         {
             "query_id": "PQ-900",
-            "user_input": "Show me the IGS PMR and the NEXION ACAS scan.",
+            "user_input": "Show me the enterprise program PMR and the monitoring system ACAS scan.",
             "reference": (
                 "Use IGS_PMR_2026_FebR1.pptx and "
                 "IGSI-2553_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_July-2025.xlsx."
@@ -36,7 +39,7 @@ def test_generator_produces_workstation_safe_profile(tmp_path: Path) -> None:
             "expected_document_family": "Program Management",
             "expected_source_patterns": ["%IGS_PMR%", "%NEXION_July-2025%"],
             "difficulty": "medium",
-            "rationale": "Tests IGS to NEXION handoff wording.",
+            "rationale": "Tests enterprise program to monitoring system handoff wording.",
             "expected_anchor_entities": {"DELIVERABLE": ["IGSI-2553", "IGSCC-532"]},
             "has_ground_truth": True,
             "corpus_grounding_evidence": (
@@ -80,6 +83,7 @@ def test_generator_produces_workstation_safe_profile(tmp_path: Path) -> None:
 
 
 def test_validate_only_fails_when_sanitized_field_has_banned_token(tmp_path: Path) -> None:
+    """Verify that validate only fails when sanitized field has banned token behaves the way the team expects."""
     derived = tmp_path / "derived.json"
     validation = tmp_path / "validation.json"
     canonical = tmp_path / "canonical.json"
@@ -87,7 +91,7 @@ def test_validate_only_fails_when_sanitized_field_has_banned_token(tmp_path: Pat
     payload = [
         {
             "query_id": "PQ-901",
-            "user_input": "Show me the NEXION scan report.",
+            "user_input": "Show me the monitoring system scan report.",
             "reference": "Safe reference.",
             "reference_contexts": [],
             "persona": "Cybersecurity",

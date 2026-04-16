@@ -32,6 +32,7 @@ DIVIDER = "=" * 60
 
 
 def log(msg: str) -> None:
+    """Support the run full import and extract workflow by handling the log step."""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"[{timestamp}] {msg}", flush=True)
 
@@ -72,6 +73,7 @@ def run_step(name: str, cmd: list[str], timeout: int = 0) -> int:
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main run full import and extract workflow."""
     parser = argparse.ArgumentParser(
         description="Walk-away: import CorpusForge export + run tiered extraction."
     )

@@ -256,6 +256,7 @@ def print_report(report: dict) -> None:
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main canonical rebuild preflight workflow."""
     parser = argparse.ArgumentParser(
         description="Preflight check for CorpusForge export before canonical rebuild."
     )

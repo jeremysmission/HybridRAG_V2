@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from src.config.schema import load_config
 from src.store.lance_store import LanceStore
 from src.store.entity_store import EntityStore
-from src.store.relationship_store import RelationshipStore
+from src.store.relationship_store import RelationshipStore, resolve_relationship_db_path
 from src.llm.client import LLMClient
 from src.query.embedder import Embedder
 from src.query.vector_retriever import VectorRetriever
@@ -47,7 +47,8 @@ def create_app(config_path: str = "config/config.yaml") -> FastAPI:
     # Initialize stores
     lance_store = LanceStore(config.paths.lance_db)
     entity_store = EntityStore(config.paths.entity_db)
-    relationship_store = RelationshipStore(config.paths.entity_db)
+    relationship_path = resolve_relationship_db_path(config.paths.entity_db)
+    relationship_store = RelationshipStore(relationship_path)
 
     # Initialize embedder (for query embedding)
     embedder = Embedder(
@@ -120,13 +121,14 @@ def create_app(config_path: str = "config/config.yaml") -> FastAPI:
     crag_status = "enabled" if config.crag.enabled else "disabled"
     print(
         f"V2 server ready: {chunks} chunks, {entities} entities, "
-        f"{rels} relationships, LLM={llm_status}, CRAG={crag_status}"
+        f"{rels} relationships ({relationship_path}), LLM={llm_status}, CRAG={crag_status}"
     )
 
     return app
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main server workflow."""
     parser = argparse.ArgumentParser(description="HybridRAG V2 API server")
     parser.add_argument("--config", default="config/config.yaml")
     parser.add_argument("--host", default=None)

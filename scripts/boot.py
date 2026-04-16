@@ -14,6 +14,7 @@ from types import SimpleNamespace
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.config.schema import load_config, V2Config
+from src.store.relationship_store import resolve_relationship_db_path
 
 
 def boot_system(config: V2Config | str | Path | None = None) -> SimpleNamespace:
@@ -32,7 +33,7 @@ def boot_system(config: V2Config | str | Path | None = None) -> SimpleNamespace:
 
     from src.store.lance_store import LanceStore
     from src.store.entity_store import EntityStore
-    from src.store.relationship_store import RelationshipStore
+    from src.store.relationship_store import RelationshipStore, resolve_relationship_db_path
     from src.query.embedder import Embedder
     from src.llm.client import LLMClient
     from src.query.query_router import QueryRouter
@@ -45,7 +46,8 @@ def boot_system(config: V2Config | str | Path | None = None) -> SimpleNamespace:
 
     lance_store = LanceStore(cfg.paths.lance_db)
     entity_store = EntityStore(cfg.paths.entity_db)
-    relationship_store = RelationshipStore(cfg.paths.entity_db)
+    relationship_path = resolve_relationship_db_path(cfg.paths.entity_db)
+    relationship_store = RelationshipStore(relationship_path)
     embedder = Embedder(
         model_name="nomic-ai/nomic-embed-text-v1.5",
         dim=768,
@@ -121,6 +123,7 @@ def boot_system(config: V2Config | str | Path | None = None) -> SimpleNamespace:
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main boot workflow."""
     parser = argparse.ArgumentParser(description="HybridRAG V2 boot validation")
     parser.add_argument(
         "--config",
@@ -145,7 +148,23 @@ def main() -> None:
     print(f"  Server:    {config.server.host}:{config.server.port}")
     print(f"  LanceDB:   {config.paths.lance_db}")
     print(f"  Entity DB: {config.paths.entity_db}")
+    print(f"  Rel DB:    {resolve_relationship_db_path(config.paths.entity_db)}")
     print(f"  Import:    {config.paths.embedengine_output}")
+    try:
+        from src.store.lance_store import LanceStore
+
+        lance_store = LanceStore(config.paths.lance_db)
+        fts_status = lance_store.fts_status()
+        lance_store.close()
+        if fts_status.get("ready"):
+            fts_summary = f"READY (probe={fts_status.get('probe_term')})"
+        elif fts_status.get("state") == "index_present":
+            fts_summary = f"PRESENT ({fts_status.get('error') or 'FTS probe failed'})"
+        else:
+            fts_summary = f"MISSING ({fts_status.get('error') or 'FTS probe failed'})"
+    except Exception as exc:
+        fts_summary = f"ERROR ({exc})"
+    print(f"  FTS:       {fts_summary}")
     api_status = "SET" if config.llm.api_base else "NOT SET (required for queries)"
     print(f"  API Base:  {api_status}")
     print("=" * 50)

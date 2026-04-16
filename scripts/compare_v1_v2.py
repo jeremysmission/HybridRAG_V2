@@ -22,6 +22,7 @@ TIMEOUT = 30.0
 
 
 def _check_facts(expected: list[str], text: str) -> tuple[list[str], list[str]]:
+    """Run a validation check and return whether the expected condition is true."""
     lower = text.lower()
     found = [f for f in expected if f.lower() in lower]
     missing = [f for f in expected if f.lower() not in lower]
@@ -29,6 +30,7 @@ def _check_facts(expected: list[str], text: str) -> tuple[list[str], list[str]]:
 
 
 def _fact_coverage(expected: list[str], text: str) -> float:
+    """Support the compare v1 v2 workflow by handling the fact coverage step."""
     if not expected:
         return 1.0
     found, _ = _check_facts(expected, text)
@@ -64,16 +66,19 @@ def _query_api(client: httpx.Client, base_url: str, payload: dict,
 
 
 def _query_v1(client: httpx.Client, base_url: str, query: str) -> dict:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     return _query_api(client, base_url, {"question": query},
                       {"tokens_in": 0, "tokens_out": 0})
 
 
 def _query_v2(client: httpx.Client, base_url: str, query: str) -> dict:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     return _query_api(client, base_url, {"query": query},
                       {"confidence": "", "query_path": "", "input_tokens": 0, "output_tokens": 0})
 
 
 def _judge_pair(query: str, v1_answer: str, v2_answer: str) -> dict:
+    """Support the compare v1 v2 workflow by handling the judge pair step."""
     api_key = os.environ.get("OPENAI_API_KEY") or os.environ.get("AZURE_OPENAI_API_KEY")
     if not api_key:
         return {"preference": "SKIP", "reasoning": "No OPENAI_API_KEY set."}
@@ -101,6 +106,7 @@ def _judge_pair(query: str, v1_answer: str, v2_answer: str) -> dict:
 
 
 def _score_query(qdef: dict, v1: dict | None, v2: dict | None) -> dict:
+    """Calculate a score that summarizes how well the system performed."""
     expected = qdef["expected_facts"]
     rec: dict = {"id": qdef["id"], "query": qdef["query"],
                  "query_type": qdef["query_type"], "expected_facts": expected}
@@ -147,6 +153,7 @@ def _score_query(qdef: dict, v1: dict | None, v2: dict | None) -> dict:
 
 
 def _print_table(records: list[dict], v1_avail: bool) -> None:
+    """Render a readable summary for the person running the tool."""
     sep = "-" * 110
     print(f"\n{sep}\n  V1 vs V2 COMPARISON\n{sep}")
     if v1_avail:
@@ -168,6 +175,7 @@ def _print_table(records: list[dict], v1_avail: bool) -> None:
 
 
 def _print_summary(records: list[dict], v1_avail: bool) -> None:
+    """Render a readable summary for the person running the tool."""
     total = len(records)
     v2fc = sum(r["v2_fact_coverage"] for r in records) / max(total, 1)
     v2lat = sum(r["v2_latency_ms"] for r in records) / max(total, 1)
@@ -206,6 +214,7 @@ def _print_summary(records: list[dict], v1_avail: bool) -> None:
 
 
 def _generate_markdown(records: list[dict], v1_avail: bool, path: Path) -> None:
+    """Support the compare v1 v2 workflow by handling the generate markdown step."""
     total = len(records)
     v2fc = sum(r["v2_fact_coverage"] for r in records) / max(total, 1)
     v2lat = sum(r["v2_latency_ms"] for r in records) / max(total, 1)
@@ -253,6 +262,7 @@ def _generate_markdown(records: list[dict], v1_avail: bool, path: Path) -> None:
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main compare v1 v2 workflow."""
     ap = argparse.ArgumentParser(description="V1 vs V2 comparison harness")
     ap.add_argument("--v1", default="http://localhost:8000", help="V1 base URL")
     ap.add_argument("--v2", default="http://localhost:8001", help="V2 base URL")

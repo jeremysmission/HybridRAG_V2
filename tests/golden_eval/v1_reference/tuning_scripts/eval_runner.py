@@ -37,6 +37,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.core.config import apply_mode_to_config, load_config
 
 def safe_getattr(obj: Any, name: str, default=None):
+    """Support this test module by handling the safe getattr step."""
     return getattr(obj, name, default)
 
 
@@ -96,6 +97,7 @@ def _runtime_config_filename(config_arg: str | None) -> str:
 
 
 def _load_runtime_config(config_arg: str | None, mode_arg: str | None):
+    """Load the fixture data used by the test."""
     config_filename = _runtime_config_filename(config_arg)
     project_root = str(PROJECT_ROOT)
     cfg = load_config(project_dir=project_root, config_filename=config_filename)
@@ -116,6 +118,7 @@ def _load_runtime_config(config_arg: str | None, mode_arg: str | None):
 
 
 def _normalize_expected_fact(expected_answer: str) -> list[str]:
+    """Support this test module by handling the normalize expected fact step."""
     text = str(expected_answer or "").strip()
     if not text:
         return []
@@ -127,6 +130,7 @@ def _normalize_expected_fact(expected_answer: str) -> list[str]:
 
 
 def _load_dataset(dataset_path: str) -> List[Dict[str, Any]]:
+    """Load the fixture data used by the test."""
     with open(dataset_path, "r", encoding="utf-8") as f:
         payload = json.load(f)
 
@@ -283,6 +287,7 @@ def check_regression_gate(summary: Dict[str, Any]) -> List[str]:
 
 
 def main():
+    """Run this helper module directly from the command line."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", required=True, help="Path to golden dataset JSON")
     ap.add_argument("--outdir", default="eval_out", help="Output directory")

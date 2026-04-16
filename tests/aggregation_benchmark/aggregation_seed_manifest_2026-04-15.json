@@ -1,0 +1,168 @@
+{
+  "benchmark_id": "aggregation_benchmark_2026-04-15",
+  "title": "HybridRAG V2 frozen aggregation seed set",
+  "source_docs": [
+    "TODAY_MEGATASKS_AND_DELIVERABLES_2026-04-15.md",
+    "SOURCE_GROUND_TRUTH_MAP_2026-04-15.md",
+    "AGGREGATION_QUESTION_CANDIDATES_2026-04-15.md",
+    "GOLD_AGGREGATION_SEED_SET_2026-04-15.md",
+    "COUNTING_RULES_AND_SCORING_NOTES_2026-04-15.md"
+  ],
+  "gate_policy": {
+    "pass_rule": "all_items_pass",
+    "notes": "Use this frozen manifest as the promotion gate for the narrow aggregation lane."
+  },
+  "rules": {
+    "count_only_named_scope": true,
+    "use_manifest_as_source_of_truth_when_explicit": true,
+    "dedup_by_named_identity": true,
+    "date_tagged_paths_are_date_scoped": true,
+    "reconcile_manifest_and_filesystem_instead_of_averaging": true
+  },
+  "items": [
+    {
+      "id": "AGG-001",
+      "family": "confabulation",
+      "question": "How many files are in `research_benchmarks/confabulations/questions`?",
+      "answer_kind": "exact_count",
+      "expected_answer": 76,
+      "scope_rule": "Count files directly under the questions folder only; do not recurse.",
+      "dedup_rule": "Count each file path once.",
+      "counting_note": "Direct filesystem count from the frozen on-disk slice.",
+      "source_reference": "research_benchmarks/confabulations/questions/ slice",
+      "evidence_notes": "README benchmark summary is not the answer source for this item."
+    },
+    {
+      "id": "AGG-002",
+      "family": "confabulation",
+      "question": "How many total response files are under `responses_possible_v2_post`?",
+      "answer_kind": "exact_count",
+      "expected_answer": 624,
+      "scope_rule": "Recurse through all provider folders under responses_possible_v2_post.",
+      "dedup_rule": "Count by full file path.",
+      "counting_note": "Recursive filesystem file count.",
+      "source_reference": "research_benchmarks/confabulations/responses/responses_possible_v2_post/",
+      "evidence_notes": "The tree is stable at 39 providers with 16 files each."
+    },
+    {
+      "id": "AGG-003",
+      "family": "confabulation",
+      "question": "How many distinct response basenames are represented under `responses_possible_v2_post`?",
+      "answer_kind": "exact_count",
+      "expected_answer": 16,
+      "scope_rule": "Dedup by basename only, not by folder path.",
+      "dedup_rule": "Treat each `question_merged_*.txt` basename as the identity.",
+      "counting_note": "Prompt-inventory count, not file-inventory count.",
+      "source_reference": "research_benchmarks/confabulations/responses/responses_possible_v2_post/",
+      "evidence_notes": "This is the clean answer-key inventory count."
+    },
+    {
+      "id": "AGG-004",
+      "family": "confabulation",
+      "question": "How many lines are in `research_benchmarks/confabulations/articles/list.txt`?",
+      "answer_kind": "exact_count",
+      "expected_answer": 2197,
+      "scope_rule": "Count all lines in the file as written.",
+      "dedup_rule": "No deduplication.",
+      "counting_note": "Single-file line count.",
+      "source_reference": "research_benchmarks/confabulations/articles/list.txt",
+      "evidence_notes": "Use the file contents only."
+    },
+    {
+      "id": "AGG-005",
+      "family": "cross_slice_rollup",
+      "question": "How many provider entities were tallied across the three cross-slice runs?",
+      "answer_kind": "exact_count",
+      "expected_answer": 1367,
+      "scope_rule": "Use the provider_entities total from the summary JSON.",
+      "dedup_rule": "Rely on the manifest aggregate; do not re-sum the per-run files unless reconciling the manifest.",
+      "counting_note": "Manifest-backed aggregate.",
+      "source_reference": "cross_slice_rollups/2026-04-14_claude_extraction_rollup/CROSS_SLICE_SUMMARY_2026-04-14.json",
+      "evidence_notes": "This is the clean cross-corpus aggregation question from the rollup."
+    },
+    {
+      "id": "AGG-006",
+      "family": "query_pack",
+      "question": "How many rows are in `query_pack_400_manifest_v11`?",
+      "answer_kind": "exact_count",
+      "expected_answer": 397,
+      "scope_rule": "Use the manifest field `n_pack_rows`.",
+      "dedup_rule": "No deduplication.",
+      "counting_note": "Top-level pack size.",
+      "source_reference": "eval/query_pack_400/query_pack_400_manifest_v11.json",
+      "evidence_notes": "This is the denominator for the split counts."
+    },
+    {
+      "id": "AGG-007",
+      "family": "query_pack",
+      "question": "How many rows have both `question_context_entities` and `answer_entities`?",
+      "answer_kind": "exact_count",
+      "expected_answer": 134,
+      "scope_rule": "Use the manifest split partition `both_question_context_and_answer`.",
+      "dedup_rule": "Each row counts once even if it carries multiple entities.",
+      "counting_note": "Mixed-case reconciliation bucket.",
+      "source_reference": "eval/query_pack_400/query_pack_400_manifest_v11.json",
+      "evidence_notes": "This is the cleanest shared-entity partition."
+    },
+    {
+      "id": "AGG-008",
+      "family": "query_pack",
+      "question": "How many rows have `question_context_only` entities?",
+      "answer_kind": "exact_count",
+      "expected_answer": 148,
+      "scope_rule": "Use the manifest split partition `question_context_only`.",
+      "dedup_rule": "Each row counts once.",
+      "counting_note": "Question-context-only partition.",
+      "source_reference": "eval/query_pack_400/query_pack_400_manifest_v11.json",
+      "evidence_notes": "This partition was previously sensitive to label echo."
+    },
+    {
+      "id": "AGG-009",
+      "family": "query_pack",
+      "question": "How many rows have `answer_entities_only`?",
+      "answer_kind": "exact_count",
+      "expected_answer": 55,
+      "scope_rule": "Use the manifest split partition `answer_entities_only`.",
+      "dedup_rule": "Each row counts once.",
+      "counting_note": "Answer-only partition.",
+      "source_reference": "eval/query_pack_400/query_pack_400_manifest_v11.json",
+      "evidence_notes": "Clean answer-bearing rows with no question-context echo."
+    },
+    {
+      "id": "AGG-010",
+      "family": "query_pack",
+      "question": "How many rows have `no_gold_entities`?",
+      "answer_kind": "exact_count",
+      "expected_answer": 60,
+      "scope_rule": "Use the manifest split partition `no_gold_entities`.",
+      "dedup_rule": "Each row counts once.",
+      "counting_note": "Trick / unanswerable bucket.",
+      "source_reference": "eval/query_pack_400/query_pack_400_manifest_v11.json",
+      "evidence_notes": "This bucket is intentionally ungrounded."
+    },
+    {
+      "id": "AGG-011",
+      "family": "hardtail",
+      "question": "How many rows are in the `2026-04-14` three-way adjudication set?",
+      "answer_kind": "exact_count",
+      "expected_answer": 10,
+      "scope_rule": "Count rows in the dated adjudication folder only.",
+      "dedup_rule": "Dedup by `chunk_id`.",
+      "counting_note": "Date-scoped adjudication count.",
+      "source_reference": "provider_runs/hardtail_v1_10_adjudication/three_way/2026-04-14/",
+      "evidence_notes": "Use the dated folder only."
+    },
+    {
+      "id": "AGG-012",
+      "family": "hardtail",
+      "question": "How many rows in that three-way set have `relationship_agreement = none`?",
+      "answer_kind": "exact_count",
+      "expected_answer": 1,
+      "scope_rule": "Count the `none` rows only in the dated adjudication slice.",
+      "dedup_rule": "Dedup by `chunk_id`.",
+      "counting_note": "Failure-counting question in the adjudication slice.",
+      "source_reference": "provider_runs/hardtail_v1_10_adjudication/three_way/2026-04-14/",
+      "evidence_notes": "This is the cleanest disagreement-count benchmark."
+    }
+  ]
+}

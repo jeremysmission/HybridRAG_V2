@@ -1,5 +1,8 @@
 # Environment Assumptions for Demo Day
 
+> WARNING: Historical only. This file is unsafe as current operator or demo truth because it contains stale environment, count, and relationship assumptions.
+> Start instead with `docs/SOURCE_OF_TRUTH_MAP_2026-04-12.md`, `docs/REBOOT_HANDOVER_2026-04-13.md`, and `docs/LANE3_OPERATOR_INSTALLER_PREFLIGHT_EVIDENCE_2026-04-13.md`.
+
 **Author:** Jeremy Randall (CoPilot+)
 **Date:** 2026-04-08 MDT
 

@@ -25,6 +25,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 @dataclass
 class ExportAudit:
+    """Structured helper object used by the structured progress audit workflow."""
     path: str
     manifest_path: str | None = None
     chunk_count: int = 0
@@ -38,6 +39,7 @@ class ExportAudit:
 
 @dataclass
 class StoreAudit:
+    """Structured helper object used by the structured progress audit workflow."""
     lance_path: str
     lance_tables: list[str] = field(default_factory=list)
     lance_chunk_count: int | str = 0
@@ -52,6 +54,7 @@ class StoreAudit:
 
 
 def parse_args() -> argparse.Namespace:
+    """Collect command-line options so the script can decide what work to run."""
     parser = argparse.ArgumentParser(description="Audit structured-store and export progress.")
     parser.add_argument(
         "--config",
@@ -89,6 +92,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def _load_config(config_path: Path):
+    """Load the data needed for the structured progress audit workflow."""
     import sys
 
     sys.path.insert(0, str(ROOT))
@@ -98,6 +102,7 @@ def _load_config(config_path: Path):
 
 
 def _human_bytes(num: int) -> str:
+    """Support the structured progress audit workflow by handling the human bytes step."""
     for unit in ("B", "KB", "MB", "GB", "TB"):
         if abs(num) < 1024:
             return f"{num:.0f} {unit}" if unit == "B" else f"{num:.1f} {unit}"
@@ -106,6 +111,7 @@ def _human_bytes(num: int) -> str:
 
 
 def _default_export_dirs(limit: int) -> list[Path]:
+    """Support the structured progress audit workflow by handling the default export dirs step."""
     base = ROOT.parent / "CorpusForge" / "data" / "output"
     if not base.exists():
         return []
@@ -139,6 +145,7 @@ def _default_export_dirs(limit: int) -> list[Path]:
 
 
 def _collect_store(cfg) -> StoreAudit:
+    """Support the structured progress audit workflow by handling the collect store step."""
     store = StoreAudit(
         lance_path=str(Path(cfg.paths.lance_db)),
         entity_path=str(Path(cfg.paths.entity_db)),
@@ -193,6 +200,7 @@ def _collect_store(cfg) -> StoreAudit:
 
 
 def _source_dir_key(source_path: str) -> str:
+    """Support the structured progress audit workflow by handling the source dir key step."""
     p = Path(source_path)
     parent = p.parent
     parts = parent.parts
@@ -202,6 +210,7 @@ def _source_dir_key(source_path: str) -> str:
 
 
 def _collect_export(export_dir: Path) -> ExportAudit:
+    """Support the structured progress audit workflow by handling the collect export step."""
     audit = ExportAudit(path=str(export_dir))
     chunks_path = export_dir / "chunks.jsonl"
     manifest_path = export_dir / "manifest.json"
@@ -251,6 +260,7 @@ def _collect_export(export_dir: Path) -> ExportAudit:
 
 
 def _format_md(report: dict[str, Any]) -> str:
+    """Turn internal values into human-readable text for the operator."""
     store = report["store"]
     exports = report["exports"]
     lines = [
@@ -298,6 +308,7 @@ def _format_md(report: dict[str, Any]) -> str:
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main structured progress audit workflow."""
     args = parse_args()
     config_path = Path(args.config)
     if not config_path.is_absolute():

@@ -22,7 +22,7 @@ The project did not originally begin as two separate applications.
 
 It started as a single HybridRAG effort, which I now refer to as `V1`. In that original form, ingest, preprocessing, retrieval, extraction, and answering were still too tightly coupled. That was enough to make early proof-of-concept progress, but it also made it too easy for the system to look closer to done than it really was.
 
-Once I pushed V1 harder against the real IGS drive, it became clear that I needed a cleaner separation of responsibilities. That is why the project evolved into:
+Once I pushed V1 harder against the real enterprise program drive, it became clear that I needed a cleaner separation of responsibilities. That is why the project evolved into:
 
 - `CorpusForge`
   - the upstream corpus-preparation side
@@ -39,7 +39,7 @@ The short version is:
 
 - V1 proved that the program's data could be searched and retrieved with AI techniques
 - V1 did **not** prove that the system could answer business-facing questions reliably
-- once I tested it more seriously against the real IGS drive and real aggregation-style questions, I found issues that would have made a demo look better than the underlying system really was
+- once I tested it more seriously against the real enterprise program drive and real aggregation-style questions, I found issues that would have made a demo look better than the underlying system really was
 - rather than force a brittle demo, I split the work into a cleaner architecture and rebuilt the path around quality gates and measurable progress
 
 ## Where I Started
@@ -69,7 +69,7 @@ In other words, I did not start this effort with a clean, fully approved, fully 
 
 ## What Failed In V1
 
-The major turning point came when I pushed V1 harder against the real IGS drive and tried to use it for the kind of answers that matter to the program, not just document retrieval.
+The major turning point came when I pushed V1 harder against the real enterprise program drive and tried to use it for the kind of answers that matter to the program, not just document retrieval.
 
 That is where I found the hard limitation:
 
@@ -78,14 +78,14 @@ That is where I found the hard limitation:
 
 This was not a small tuning issue. It was a structural issue.
 
-On the actual IGS data, many identifiers look similar even when they mean very different things. Purchase orders, part numbers, technical report IDs, security-control identifiers, and cyber-governance codes all coexist in the same legacy drive. V1 was capable of finding related documents, but when I pushed it toward counting, rollups, and structured answers, the first-pass extraction layer was still confusing some of those categories.
+On the actual enterprise program data, many identifiers look similar even when they mean very different things. Purchase orders, part numbers, technical report IDs, security-control identifiers, and cyber-governance codes all coexist in the same legacy drive. V1 was capable of finding related documents, but when I pushed it toward counting, rollups, and structured answers, the first-pass extraction layer was still confusing some of those categories.
 
 That meant the system could produce answers that looked plausible while still being semantically wrong.
 
 The biggest examples were:
 
 - purchase-order style fields being polluted by security-control and report-code patterns
-- part-number style fields being polluted by STIG / DISA / MITRE / NIST-style identifiers
+- part-number style fields being polluted by STIG / DISA / MITRE / security standard-style identifiers
 - aggregation-style answers looking more mature on the surface than they really were underneath
 
 That is the key reason I stopped treating V1 as "almost done."
@@ -146,7 +146,7 @@ This matters for two reasons:
 1. it reduces the chance of polluting the system with bad extracted data
 2. it reduces both startup cost and long-term maintenance cost
 
-That cost discipline is important because outsourcing or cloud-first approaches for a CUI-sensitive RAG effort of this size can become expensive quickly. I am trying to build something that is more affordable to sustain over time, not just something flashy in the short term.
+That cost discipline is important because outsourcing or cloud-first approaches for a sensitive data-sensitive RAG effort of this size can become expensive quickly. I am trying to build something that is more affordable to sustain over time, not just something flashy in the short term.
 
 ## What I Mean By "Tiers"
 
@@ -285,7 +285,7 @@ This work is not only relevant to the AI lane.
 
 - For **program management**, it creates a more measurable and supportable path instead of a prototype that only looked close.
 - For **logistics and material analysis**, it directly improves trust in purchase-order-like data, part numbers, inventories, packing lists, and procurement evidence.
-- For **cyber security**, it prevents STIG / DISA / MITRE / NIST-style identifiers from being mistaken for business entities, which preserves a cleaner trust boundary.
+- For **cyber security**, it prevents STIG / DISA / MITRE / security standard-style identifiers from being mistaken for business entities, which preserves a cleaner trust boundary.
 - For **field engineers**, it strengthens retrieval and future structured use of site-install records, inventories, acceptance artifacts, and field documentation.
 - For **network and infrastructure roles**, it explains why workstation reliability, proxy-aware installs, GPU/CUDA compatibility, and government AWS integration were real parts of the engineering work, not side distractions.
 
@@ -297,7 +297,7 @@ The simplest honest explanation is this:
 
 - I was closer to a demo than I was to a trustworthy system
 
-Once I found that V1 could retrieve but not aggregate reliably enough, and once I found that the real IGS drive still contained enough identifier collisions to poison structured answers, the responsible move was to stop and harden the system instead of presenting something that would be hard to trust.
+Once I found that V1 could retrieve but not aggregate reliably enough, and once I found that the real enterprise program drive still contained enough identifier collisions to poison structured answers, the responsible move was to stop and harden the system instead of presenting something that would be hard to trust.
 
 It is also important to understand that this kind of AI preprocessing work is not like installing a normal legacy software program. To make a large legacy corpus usable inside an AI system, it has to be chunked, embedded, enriched, indexed, extracted, audited, and revalidated. On a corpus of this size, those are compute-intensive one-time builds and conversions that can take days or weeks even before the final question-answering layer is ready.
 
@@ -333,10 +333,10 @@ What it does not mean:
 
 If I had to explain this in the simplest possible way:
 
-This has turned into the normal growing pains of a first AI project built on top of many years of legacy data. The old data was never designed for AI use, so it contains inconsistent naming, mixed document styles, and codes that look alike even when they mean very different things. I found that the earlier version could find documents, but it could not yet support trustworthy counting and structured answers on the real IGS drive. Rather than force a fragile demo, I split the system into cleaner parts, added quality gates, and rebuilt the path so future data can be screened before it reaches production. The extra time has gone into making the system dependable rather than just impressive on the surface.
+This has turned into the normal growing pains of a first AI project built on top of many years of legacy data. The old data was never designed for AI use, so it contains inconsistent naming, mixed document styles, and codes that look alike even when they mean very different things. I found that the earlier version could find documents, but it could not yet support trustworthy counting and structured answers on the real enterprise program drive. Rather than force a fragile demo, I split the system into cleaner parts, added quality gates, and rebuilt the path so future data can be screened before it reaches production. The extra time has gone into making the system dependable rather than just impressive on the surface.
 
 ## Very Short Manager Version
 
 If a shorter version is needed:
 
-"I found that the original path was closer to a retrieval demo than to a trustworthy production-style AI system. On the real IGS drive, it could retrieve documents but could not aggregate reliably enough for business-facing answers because some business fields were still being polluted by technical and security identifiers. I reset the architecture into two cleaner applications, built quality gates and a grounded evaluation set, and I am now at the point where I can do one controlled clean rerun instead of wasting more time on blind reruns. My current estimate is about two weeks to get to a trustworthy demo candidate on the rebuilt path."
+"I found that the original path was closer to a retrieval demo than to a trustworthy production-style AI system. On the real enterprise program drive, it could retrieve documents but could not aggregate reliably enough for business-facing answers because some business fields were still being polluted by technical and security identifiers. I reset the architecture into two cleaner applications, built quality gates and a grounded evaluation set, and I am now at the point where I can do one controlled clean rerun instead of wasting more time on blind reruns. My current estimate is about two weeks to get to a trustworthy demo candidate on the rebuilt path."

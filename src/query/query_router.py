@@ -278,6 +278,7 @@ class QueryRouter:
         person_name = self._extract_person_name(query)
         date_match = re.search(r"\b20\d{2}-\d{2}-\d{2}\b", q)
         cdrl_code = self._extract_cdrl_code(q)
+        po_number = self._extract_purchase_order_number(q)
         base = current or query
 
         if "general condition" in q and "recent visit" in q:
@@ -328,6 +329,12 @@ class QueryRouter:
             if "cancelled" in q:
                 return "PO Number Status CANCELLED Destination Notes purchase order spreadsheet"
             return query
+
+        if po_number and self._looks_like_procurement_query(q):
+            extras = [po_number, "purchase order"]
+            if "received" in q:
+                extras.append("received")
+            return self._append_search_terms(base, extras)
 
         if cdrl_code:
             extras = ["contract data requirements list", cdrl_code, "deliverables report"]
@@ -494,6 +501,15 @@ class QueryRouter:
         if self._is_document_content_question(q):
             return "SEMANTIC"
 
+        if self._is_document_location_question(q):
+            return "SEMANTIC"
+
+        if q.startswith("show me the purchase order") or q.startswith("show me purchase order"):
+            return "ENTITY"
+
+        if self._is_narrow_temporal_shipment_lookup(q):
+            return "ENTITY"
+
         if self._has_any(q, ["which cdrl is", "which contract is", "which deliverable is"]):
             return "ENTITY"
 
@@ -649,6 +665,37 @@ class QueryRouter:
                     return True
 
         return False
+
+    def _is_document_location_question(self, query: str) -> bool:
+        """Return True for folder-organization questions, not exact file lookup."""
+        if not re.search(r"^where are .+\b(documents|files|deliverables)\b", query):
+            return False
+        if "stored" not in query and "located" not in query:
+            return False
+        return self._has_any(
+            query,
+            [
+                "cdrl",
+                "a027",
+                "plans and controls",
+                "plan and controls",
+                "deliverable family",
+            ],
+        )
+
+    def _is_narrow_temporal_shipment_lookup(self, query: str) -> bool:
+        """Detect a single dated/site shipment lookup rather than a corpus-wide list."""
+        if not self._looks_like_shipment_lookup(query):
+            return False
+        if query.startswith("show me") and "packing list" in query:
+            return False
+        if query.startswith("cross-reference:") or query.startswith("cross reference:"):
+            return False
+        if self._has_any(query, ["how many", "across all", "across every", "timeline of all"]):
+            return False
+        if not self._temporal_search_terms(query):
+            return False
+        return query.startswith("what ")
 
     def _aggregate_signal_score(self, query: str) -> int:
         """High-signal cues for multi-document listing/counting questions."""
@@ -998,6 +1045,20 @@ class QueryRouter:
         )
         return has_contact_lookup and has_dependent_clause and has_order_cue
 
+    def _looks_like_procurement_query(self, query: str) -> bool:
+        return self._has_any(
+            query,
+            [
+                "purchase order",
+                "received on po",
+                "bought from",
+                "did we buy",
+                "supplied",
+                "supplier",
+                "cost",
+            ],
+        ) or bool(self._extract_purchase_order_number(query))
+
     def _extract_cdrl_code(self, query: str) -> str | None:
         """Extract a CDRL code such as A014 from the query when present."""
         match = re.search(r"\bcdrl\s+(a\d{3})\b", query, re.IGNORECASE)
@@ -1006,6 +1067,12 @@ class QueryRouter:
         match = re.search(r"\b(a\d{3})\b", query, re.IGNORECASE)
         if match and "cdrl" in query:
             return match.group(1).upper()
+        return None
+
+    def _extract_purchase_order_number(self, query: str) -> str | None:
+        match = re.search(r"\b(?:po[-\s]*)?(5\d{9}|7\d{9})\b", query, re.IGNORECASE)
+        if match:
+            return match.group(1)
         return None
 
     def _looks_like_shipment_lookup(self, query: str) -> bool:

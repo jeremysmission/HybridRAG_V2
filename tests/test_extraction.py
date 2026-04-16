@@ -15,17 +15,29 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+import sys
 import tempfile
 from pathlib import Path
 
 import pytest
 
+V2_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(V2_ROOT))
+
 from src.store.entity_store import Entity, EntityStore, TableRow
-from src.store.relationship_store import Relationship, RelationshipStore
+from src.store.relationship_store import (
+    Relationship,
+    RelationshipStore,
+    resolve_relationship_db_path,
+)
 from src.extraction.entity_extractor import (
     RegexPreExtractor,
     EventBlockParser,
     RegexRelationshipExtractor,
+)
+from src.extraction.tabular_substrate import (
+    DeterministicTableExtractor,
+    detect_logistics_table_families,
 )
 
 
@@ -561,7 +573,7 @@ class TestSecurityStandardExclusion:
             "DD-2842",
             "DO-0003",
             "DO-0011",
-            "IGS-2522",
+            "enterprise program-2522",
             "IGSI-2466",
             "MSR-029",
             "DV-200",
@@ -855,7 +867,7 @@ class TestSecurityStandardExclusion:
         assert ex._is_security_standard_identifier("CNSSI-4009")
         assert ex._is_security_standard_identifier("DD-2842")
         assert ex._is_security_standard_identifier("DO-0003")
-        assert ex._is_security_standard_identifier("IGS-2522")
+        assert ex._is_security_standard_identifier("enterprise program-2522")
         assert ex._is_security_standard_identifier("IGSI-2466")
         assert ex._is_security_standard_identifier("MSR-029")
         assert ex._is_security_standard_identifier("DV-200")
@@ -962,7 +974,7 @@ class TestEventBlockParserSecurityStandardExclusion:
 
     def test_event_block_parser_rejects_additional_cyber_noise(self):
         parser = EventBlockParser(part_patterns=[r"[A-Z]{2,}-\d{3,4}"])
-        for fake in ["RHSA-2018", "APP-0001", "SERVICE_STOP", "SNMP", "CNSSI-4009", "DD-2842", "DO-0003", "IGS-2522", "MSR-029", "DV-200", "IEEE-1394", "SNOW", "CVE-202"]:
+        for fake in ["RHSA-2018", "APP-0001", "SERVICE_STOP", "SNMP", "CNSSI-4009", "DD-2842", "DO-0003", "enterprise program-2522", "MSR-029", "DV-200", "IEEE-1394", "SNOW", "CVE-202"]:
             text = (
                 f"1. Part#: {fake}\n"
                 "   Action: Replaced\n"
@@ -1215,6 +1227,224 @@ class TestRelationshipStore:
         summary = rel_store.predicate_summary()
         assert summary["POC_FOR"] == 1
         assert summary["WORKS_AT"] == 1
+
+    def test_resolve_relationship_db_path_swaps_entity_db_filename(self, tmp_path):
+        entity_path = tmp_path / "entities.sqlite3"
+        resolved = resolve_relationship_db_path(entity_path)
+        assert resolved == tmp_path / "relationships.sqlite3"
+
+    def test_entity_db_path_opens_sibling_relationship_store(self, tmp_path):
+        rel_path = tmp_path / "relationships.sqlite3"
+        entity_path = tmp_path / "entities.sqlite3"
+
+        store = RelationshipStore(str(rel_path))
+        store.insert_relationships([self._make_rel()])
+        store.close()
+
+        rebound = RelationshipStore(str(entity_path))
+        try:
+            assert rebound.db_path == rel_path
+            assert rebound.count() == 1
+        finally:
+            rebound.close()
+
+
+class TestDeterministicTableSubstrate:
+    """Small helper object used to keep test setup or expected results organized."""
+    def test_detects_logistics_family_from_source_path(self):
+        families = detect_logistics_table_families(
+            r"D:\CorpusTransfr\verified\IGS\5.0 Logistics\Shipments\Packing List\NG Packing List - Guam.xlsx",
+            "",
+        )
+        assert "packing_list" in families
+        assert "spreadsheet" in families
+
+    def test_extracts_pr_po_key_value_rows(self):
+        extractor = DeterministicTableExtractor()
+        text = (
+            "[SECTION] CLIN: 0009A,\n"
+            "CLIN: 0010A, PR Number: 0031422527, PO Number: 5300058406, "
+            "Sum of Allocation Amount in Local Currency: 2705.12\n"
+            "CLIN: 0010A, PR Number: ##, PO Number: 7201042200, "
+            "Sum of Allocation Amount in Local Currency: 753.25\n"
+        )
+        rows = extractor.extract(
+            text=text,
+            chunk_id="chunk-prpo",
+            source_path=r"D:\CorpusTransfr\verified\IGS\Matl\2024 03 PR & PO.xlsx",
+        )
+        assert len(rows) == 2
+        first = json.loads(rows[0].values)
+        assert "0031422527" in first
+        assert "5300058406" in first
+
+    def test_extracts_dd250_rows(self):
+        extractor = DeterministicTableExtractor()
+        text = (
+            "[SECTION] CONTAINER: INSTALLED,\n"
+            "FIND NO.: 57, QTY.: 1, PART NUMBER: SM-219, DESCRIPTION: GPS RECEIVER, "
+            "MANUFACTURER: ASTRA, Serial Number: 26\n"
+            "CONTAINER: INSTALLED, FIND NO.: 58, QTY.: 1, PART NUMBER: SW125-12-N, "
+            "DESCRIPTION: POWER SUPPLY, MANUFACTURER: sensitive data INC.\n"
+        )
+        rows = extractor.extract(
+            text=text,
+            chunk_id="chunk-dd250",
+            source_path=r"D:\CorpusTransfr\verified\IGS\DD250\Niger Parts List.xlsx",
+        )
+        assert len(rows) == 2
+        headers = json.loads(rows[0].headers)
+        values = json.loads(rows[0].values)
+        assert "PART NUMBER" in headers
+        assert "SM-219" in values
+
+    def test_extracts_calibration_projection_table(self):
+        extractor = DeterministicTableExtractor()
+        text = (
+            "Date Standard Count Standard Count\n"
+            "6/1/2019 861 898\n"
+            "7/1/2019 1857 1895\n"
+            "8/1/2019 853 891\n"
+        )
+        rows = extractor.extract(
+            text=text,
+            chunk_id="chunk-cal",
+            source_path=r"D:\CorpusTransfr\verified\IGS\Calibration\024679_Calibration_report.pdf",
+        )
+        assert len(rows) == 3
+        assert json.loads(rows[1].values) == ["7/1/2019", "1857", "1895"]
+
+    def test_extracts_inventory_rows(self):
+        extractor = DeterministicTableExtractor()
+        text = (
+            "Site: Spares Inventory - Alpena CRTC, MI\n"
+            "Description PN Rev SN Firm IUID? Qty New Qty\n"
+            "Antenna Switch AS -7020103 C 64 1\n"
+            "Bit Card AS -5021108 79 1\n"
+            "Fuse, 8A 2\n"
+        )
+        rows = extractor.extract(
+            text=text,
+            chunk_id="chunk-spares",
+            source_path=r"D:\CorpusTransfr\verified\IGS\Spares Inventory (Alpena).pdf",
+        )
+        assert len(rows) == 3
+        first = json.loads(rows[0].values)
+        assert first[1] == "AS-7020103"
+        assert first[2] == "1"
+
+    def test_pipe_joined_kv_extracts_one_row_per_segment(self):
+        # Lane 2 follow-on: SEMS3D Initial Spares / BOM export shape.
+        # Two logical rows packed onto one chunked line with ``|`` separators.
+        # The legacy line-oriented KV extractor collapses these into one
+        # mega-row with duplicate-suffixed labels; this pipe-first path
+        # must emit one TableRow per logical record instead.
+        extractor = DeterministicTableExtractor()
+        text = (
+            "[SHEET] WX31 M4 BUYDOWN | TO | CLIN | Requirement | Line Item "
+            "| Quote # | Site | Part Number | Part Description | UOM "
+            "| Qty Required | Vendor Name | Shopping Cart "
+            "| TO: WX31M4, Requirement: BOM, Line Item: 11, "
+            "Quote #: Web Quote, Site: monitoring system / legacy monitoring system Initial Spares Purchase, "
+            "Part Number: ZFBT-4R2G-FT+, Part Description: Bias T, Wideband, 50 Ohms, "
+            "UOM: EA, Qty Required: 6, Vendor Name: Mini Circuits, "
+            "Shopping Cart: PO 7000353951 "
+            "| TO: WX31M4, Requirement: BOM, Line Item: 12, "
+            "Quote #: Q-00191352, Site: monitoring system / legacy monitoring system Initial Spares Purchase, "
+            "Part Number: 775595-B21, Part Description: Power Supply, Redundant, 900W, "
+            "UOM: EA, Qty Required: 6, Vendor Name: Sterling Computers, "
+            "Shopping Cart: PR 0031126723"
+        )
+        rows = extractor.extract(
+            text=text,
+            chunk_id="chunk-spares-initial",
+            source_path=(
+                r"D:\CorpusTransfr\verified\IGS\1.0 enterprise program DM - Restricted\SEMS3D"
+                r"\Non-CDRL Deliverables\legacy monitoring system monitoring system Initial Spares"
+                r"\SEMS3D-37125 monitoring system-legacy monitoring system Initial Spares.xlsx"
+            ),
+        )
+        # Exactly 2 logical records, no collapsed duplicate-label garbage.
+        assert len(rows) == 2
+        assert all(r.table_id.endswith("_pipekv_1") for r in rows)
+        first = json.loads(rows[0].values)
+        second = json.loads(rows[1].values)
+        # Row 0 is line item 11, row 1 is line item 12 — distinct, not merged.
+        assert "ZFBT-4R2G-FT+" in first
+        assert "775595-B21" in second
+        assert "11" in first
+        assert "12" in second
+        # No label was duplicated with a numeric suffix ("Part Number 2" etc.);
+        # that's the exact failure mode this extractor exists to fix.
+        headers = json.loads(rows[0].headers)
+        assert all(not h.endswith(" 2") for h in headers)
+        assert all(not h.endswith(" 3") for h in headers)
+        # Values with internal commas (Part Description, Shopping Cart) stay intact
+        part_desc_idx = headers.index("Part Description")
+        assert first[part_desc_idx] == "Bias T, Wideband, 50 Ohms"
+        assert second[part_desc_idx] == "Power Supply, Redundant, 900W"
+
+    def test_pipe_joined_kv_suppresses_legacy_kv_mega_row(self):
+        # Regression guard: the pipe-first extractor must gate the legacy
+        # line-oriented KV path for the same chunk, otherwise we emit both
+        # the clean rows AND the collapsed mega-row with "Label 2" suffixes.
+        extractor = DeterministicTableExtractor()
+        text = (
+            "PO: 11111, Vendor: Acme, Qty: 5 "
+            "| PO: 22222, Vendor: Beta, Qty: 7 "
+            "| PO: 33333, Vendor: Gamma, Qty: 9"
+        )
+        rows = extractor.extract(
+            text=text,
+            chunk_id="chunk-pipe",
+            source_path=r"D:\CorpusTransfr\verified\IGS\fake_vendors.xlsx",
+        )
+        assert len(rows) == 3
+        for r in rows:
+            headers = json.loads(r.headers)
+            # Legacy path would have produced a row with PO, Vendor, Qty,
+            # PO 2, Vendor 2, Qty 2, PO 3, Vendor 3, Qty 3 — reject that.
+            assert set(headers) == {"PO", "Vendor", "Qty"}
+
+    def test_pipe_joined_kv_ignores_segments_below_label_threshold(self):
+        # Negative: pipe segments that are just prose or single-token cells
+        # must not be emitted as rows.
+        extractor = DeterministicTableExtractor()
+        text = (
+            "| Some narrative text | just a header cell "
+            "| PO: 12345, Vendor: Acme Corp, Qty: 3 "
+            "| trailing comment"
+        )
+        rows = extractor.extract(
+            text=text,
+            chunk_id="chunk-mixed",
+            source_path=r"D:\CorpusTransfr\verified\IGS\mixed.xlsx",
+        )
+        # Only the fully-labeled segment survives.
+        assert len(rows) == 1
+        values = json.loads(rows[0].values)
+        assert "12345" in values
+        assert "Acme Corp" in values
+
+    def test_pipe_joined_kv_not_triggered_on_non_pipe_text(self):
+        # Regression guard: plain line-oriented KV text must still go through
+        # the legacy path so existing PR & PO / DD250 tests keep passing.
+        extractor = DeterministicTableExtractor()
+        text = (
+            "[SECTION] CLIN: 0010A, PR Number: 0031422527, "
+            "PO Number: 5300058406, Amount: 2705.12\n"
+            "CLIN: 0010A, PR Number: ##, PO Number: 7201042200, Amount: 753.25\n"
+        )
+        rows = extractor.extract(
+            text=text,
+            chunk_id="chunk-legacy",
+            source_path=r"D:\CorpusTransfr\verified\IGS\Matl\legacy.xlsx",
+        )
+        # Both records come out via the legacy _kvtable path, not pipekv.
+        assert len(rows) == 2
+        assert all("_kvtable_" in r.table_id for r in rows)
+        first_values = json.loads(rows[0].values)
+        assert "0031422527" in first_values
 
 
 # ===================================================================

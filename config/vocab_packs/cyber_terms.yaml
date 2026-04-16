@@ -1,0 +1,255 @@
+pack_id: cyber_terms
+pack_name: Cybersecurity Terms
+domain: cyber
+version: "2026-04-15"
+release_tier: deployable
+status: active
+description: >-
+  Sanitized controlled vocabulary for cybersecurity, Security+ domain
+  language, and federal information security terminology. Sources are
+  official/public: NIST CSRC Glossary, CISA NICCS vocabulary, and
+  CompTIA Security+ public topic references.
+
+provenance:
+  deployable_sources:
+    - source_id: nist_csrc_glossary
+      source_kind: official_public
+      citation: "https://csrc.nist.gov/Glossary"
+    - source_id: cisa_niccs_vocabulary
+      source_kind: official_public
+      citation: "https://niccs.cisa.gov/cybersecurity-career-resources/vocabulary"
+    - source_id: comptia_sec_plus
+      source_kind: official_public
+      citation: "https://www.comptia.org/faq/security/what-is-on-the-comptia-security-exam"
+    - source_id: nist_ir_7298
+      source_kind: official_public
+      citation: "https://www.nist.gov/publications/glossary-key-information-security-terms-1"
+  notes: "Only deployable_sources ship with this pack artifact."
+
+entry_defaults:
+  regex_safe: false
+  retrieval_expand: true
+  collision_risk: medium
+  source_kind: official_public
+
+entries:
+  - term_id: cyber.scan.acas
+    canonical: ACAS
+    kind: acronym
+    domain: cyber
+    category: vulnerability_scanning
+    expansion: Assured Compliance Assessment Solution
+    aliases: [Assured Compliance Assessment Solution]
+    definition_short: "DoD enterprise vulnerability scanning and assessment capability."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+
+  - term_id: cyber.config.stig
+    canonical: STIG
+    kind: acronym
+    domain: cyber
+    category: configuration_baseline
+    expansion: Security Technical Implementation Guide
+    aliases: [Security Technical Implementation Guide, STIGs]
+    definition_short: "DoD configuration standards for hardening IT systems."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+
+  - term_id: cyber.rmf.poam
+    canonical: POAM
+    kind: acronym
+    domain: cyber
+    category: risk_management
+    expansion: Plan of Action and Milestones
+    aliases: [POA&M, "Plan of Action and Milestones"]
+    definition_short: "NIST RMF action plan for tracking remediation of findings."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+      - source_id: nist_ir_7298
+        citation: "https://www.nist.gov/publications/glossary-key-information-security-terms-1"
+    notes: "Cross-listed with program_management_terms pack."
+
+  - term_id: cyber.ops.siem
+    canonical: SIEM
+    kind: acronym
+    domain: cyber
+    category: security_operations
+    expansion: Security Information and Event Management
+    aliases: [Security Information and Event Management]
+    definition_short: "Centralized collection, correlation, and analysis of security events."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+      - source_id: comptia_sec_plus
+        citation: "https://www.comptia.org/faq/security/what-is-on-the-comptia-security-exam"
+
+  - term_id: cyber.ops.soar
+    canonical: SOAR
+    kind: acronym
+    domain: cyber
+    category: security_operations
+    expansion: Security Orchestration, Automation, and Response
+    aliases: [Security Orchestration Automation and Response]
+    definition_short: "Platforms that orchestrate and automate security response workflows."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: cisa_niccs_vocabulary
+        citation: "https://niccs.cisa.gov/cybersecurity-career-resources/vocabulary"
+
+  - term_id: cyber.threat.ioc
+    canonical: IOC
+    kind: acronym
+    domain: cyber
+    category: threat_intelligence
+    expansion: Indicator of Compromise
+    aliases: [Indicator of Compromise, IOCs, Indicators of Compromise]
+    definition_short: "Observable artifact indicating system intrusion or compromise."
+    regex_safe: false
+    retrieval_expand: true
+    collision_risk: medium
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+    notes: "Three-letter acronym; collision risk with International Olympic Committee in non-cyber text."
+
+  - term_id: cyber.threat.ttp
+    canonical: TTP
+    kind: acronym
+    domain: cyber
+    category: threat_intelligence
+    expansion: Tactics, Techniques, and Procedures
+    aliases: [Tactics Techniques and Procedures, TTPs]
+    definition_short: "Threat actor behavior patterns, derived from MITRE ATT&CK framework."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+
+  - term_id: cyber.vuln.cve
+    canonical: CVE
+    kind: acronym
+    domain: cyber
+    category: vulnerability
+    expansion: Common Vulnerabilities and Exposures
+    aliases: [Common Vulnerabilities and Exposures]
+    definition_short: "Public dictionary of known cybersecurity vulnerabilities."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+
+  - term_id: cyber.vuln.cwe
+    canonical: CWE
+    kind: acronym
+    domain: cyber
+    category: vulnerability
+    expansion: Common Weakness Enumeration
+    aliases: [Common Weakness Enumeration]
+    definition_short: "Community classification of software and hardware weakness types."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+
+  - term_id: cyber.endpoint.edr
+    canonical: EDR
+    kind: acronym
+    domain: cyber
+    category: endpoint_security
+    expansion: Endpoint Detection and Response
+    aliases: [Endpoint Detection and Response]
+    definition_short: "Endpoint tooling that continuously monitors, detects, and responds to threats."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: cisa_niccs_vocabulary
+        citation: "https://niccs.cisa.gov/cybersecurity-career-resources/vocabulary"
+      - source_id: comptia_sec_plus
+        citation: "https://www.comptia.org/faq/security/what-is-on-the-comptia-security-exam"
+
+  - term_id: cyber.network.ids
+    canonical: IDS
+    kind: acronym
+    domain: cyber
+    category: network_security
+    expansion: Intrusion Detection System
+    aliases: [Intrusion Detection System]
+    definition_short: "System that monitors network or host activity for malicious behavior."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+
+  - term_id: cyber.network.ips
+    canonical: IPS
+    kind: acronym
+    domain: cyber
+    category: network_security
+    expansion: Intrusion Prevention System
+    aliases: [Intrusion Prevention System]
+    definition_short: "System that detects and actively blocks malicious network or host activity."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+
+  - term_id: cyber.endpoint.xdr
+    canonical: XDR
+    kind: acronym
+    domain: cyber
+    category: endpoint_security
+    expansion: Extended Detection and Response
+    aliases: [Extended Detection and Response]
+    definition_short: "Unified detection and response across endpoint, network, and identity."
+    regex_safe: true
+    retrieval_expand: true
+    collision_risk: low
+    sources:
+      - source_id: cisa_niccs_vocabulary
+        citation: "https://niccs.cisa.gov/cybersecurity-career-resources/vocabulary"
+
+  - term_id: cyber.architecture.zero_trust
+    canonical: Zero Trust
+    kind: term
+    domain: cyber
+    category: security_architecture
+    aliases: [zero trust, ZTA, Zero Trust Architecture, zero-trust]
+    expansion: Zero Trust Architecture
+    definition_short: "Security model assuming no implicit trust; verify every access request."
+    regex_safe: false
+    retrieval_expand: true
+    collision_risk: medium
+    sources:
+      - source_id: nist_csrc_glossary
+        citation: "https://csrc.nist.gov/Glossary"
+      - source_id: cisa_niccs_vocabulary
+        citation: "https://niccs.cisa.gov/cybersecurity-career-resources/vocabulary"
+    notes: "Multi-word term; canonical form varies in casing. Use case-insensitive matching."

@@ -29,6 +29,7 @@ MIN_CHUNK_LEN = 50
 
 
 def load_chunks(store: LanceStore, limit: int) -> list[dict]:
+    """Load the data needed for the benchmark gliner workflow."""
     tbl = store._table
     if tbl is None:
         return []
@@ -50,6 +51,7 @@ def load_chunks(store: LanceStore, limit: int) -> list[dict]:
 
 
 def run_benchmark(model, chunks: list[dict], device_label: str) -> tuple[float, int]:
+    """Execute one complete stage of the workflow and return its results."""
     total_entities = 0
     t0 = time.perf_counter()
     for i in range(0, len(chunks), BATCH_SIZE):
@@ -68,6 +70,7 @@ def run_benchmark(model, chunks: list[dict], device_label: str) -> tuple[float, 
 
 
 def main() -> None:
+    """Parse command-line inputs and run the main benchmark gliner workflow."""
     import torch
     from gliner import GLiNER
 
@@ -100,9 +103,19 @@ def main() -> None:
     print()
 
     # --- GPU benchmark ---
-    device = config.extraction.gliner_device
-    if not torch.cuda.is_available():
+    from src.util.gpu_resolver import resolve_gliner_device
+
+    requested_device = config.extraction.gliner_device
+    device = resolve_gliner_device(requested_device)
+    if device is None:
         print("  CUDA not available -- skipping GPU benchmark")
+        store.close()
+        return
+    if not device.startswith("cuda"):
+        # Resolver returned "cpu" (or another non-CUDA device) as-is — the GPU
+        # benchmark is meaningless in that case. Exit cleanly instead of
+        # calling torch.cuda.get_device_name on a CPU-only box.
+        print(f"  Non-CUDA device requested ({device}) -- skipping GPU benchmark")
         store.close()
         return
 

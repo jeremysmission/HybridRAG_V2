@@ -1,5 +1,8 @@
 # Demo Day Checklist — 2026-05-02
 
+> WARNING: Historical only. This checklist is unsafe for current demo, operator, or recovery use because it contains stale counts and older readiness assumptions.
+> Start instead with `docs/SOURCE_OF_TRUTH_MAP_2026-04-12.md`, `docs/REBOOT_HANDOVER_2026-04-13.md`, and `docs/MAY2_CANONICAL_DEMO_PACKET_2026-04-12.md`.
+
 **Author:** Jeremy Randall (CoPilot+)
 **System:** HybridRAG V2 on the local development workstation (64GB RAM)
 

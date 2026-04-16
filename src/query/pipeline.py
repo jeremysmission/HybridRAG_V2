@@ -29,6 +29,20 @@ from src.store.lance_store import ChunkResult
 logger = logging.getLogger(__name__)
 
 
+def _merge_stage_timings(*timing_maps: dict[str, int] | None) -> dict[str, int]:
+    """Support the pipeline workflow by handling the merge stage timings step."""
+    merged: dict[str, int] = {}
+    for timing_map in timing_maps:
+        if not timing_map:
+            continue
+        for key, value in timing_map.items():
+            try:
+                merged[key] = merged.get(key, 0) + int(value or 0)
+            except (TypeError, ValueError):
+                continue
+    return merged
+
+
 class QueryPipeline:
     """
     Unified query pipeline with router-based dispatch.
@@ -143,6 +157,8 @@ class QueryPipeline:
         else:
             context = self._handle_semantic(classification, top_k)
         stage_timings["retrieval"] = int((time.perf_counter() - step_start) * 1000)
+        if context is not None:
+            stage_timings = _merge_stage_timings(stage_timings, context.stage_timings_ms)
 
         return classification, context, stage_timings
 
@@ -151,20 +167,37 @@ class QueryPipeline:
     ) -> GeneratorContext | None:
         """Pure vector retrieval for semantic queries."""
         guarded_results = self._guarded_semantic_results(c, top_k)
+        vector_search_ms = 0
         if guarded_results is not None:
+            vector_search_ms = 0
             if not guarded_results:
                 return None
-            return self.context_builder.build(guarded_results, c.original_query)
+            context, build_timings = self.context_builder.build_with_timings(
+                guarded_results,
+                c.original_query,
+            )
+            context.stage_timings_ms = _merge_stage_timings(
+                {"vector_search": vector_search_ms},
+                build_timings,
+            )
+            return context
 
         search_query = c.expanded_query or c.original_query
+        search_start = time.perf_counter()
         results = self.vector_retriever.search(
             search_query,
             top_k=top_k,
             candidate_pool=self._retrieval_candidate_pool(top_k),
         )
+        vector_search_ms = int((time.perf_counter() - search_start) * 1000)
         if not results:
             return None
-        return self.context_builder.build(results, c.original_query)
+        context, build_timings = self.context_builder.build_with_timings(results, c.original_query)
+        context.stage_timings_ms = _merge_stage_timings(
+            {"vector_search": vector_search_ms},
+            build_timings,
+        )
+        return context
 
     def _handle_structured(
         self, c: QueryClassification, top_k: int
@@ -176,21 +209,39 @@ class QueryPipeline:
         falls back to vector search. If both have results, merges them.
         """
         structured_context = None
+        structured_timings: dict[str, int] = {}
         if self.entity_retriever:
+            structured_start = time.perf_counter()
             structured_result = self.entity_retriever.search(c)
+            structured_lookup_ms = int((time.perf_counter() - structured_start) * 1000)
             if structured_result:
                 structured_context = structured_result
+                structured_timings = _merge_stage_timings(
+                    {"structured_lookup": structured_lookup_ms},
+                    structured_result.stage_timings_ms,
+                )
+            else:
+                structured_timings = {"structured_lookup": structured_lookup_ms}
 
         # Always also do vector search for additional context
         search_query = c.expanded_query or c.original_query
+        vector_start = time.perf_counter()
         vector_results = self.vector_retriever.search(
             search_query,
             top_k=top_k,
             candidate_pool=self._retrieval_candidate_pool(top_k),
         )
+        vector_search_ms = int((time.perf_counter() - vector_start) * 1000)
         vector_context = None
         if vector_results:
-            vector_context = self.context_builder.build(vector_results, c.original_query)
+            vector_context, build_timings = self.context_builder.build_with_timings(
+                vector_results,
+                c.original_query,
+            )
+            vector_context.stage_timings_ms = _merge_stage_timings(
+                {"vector_search": vector_search_ms},
+                build_timings,
+            )
 
         # Merge contexts
         if structured_context and vector_context:
@@ -209,6 +260,11 @@ class QueryPipeline:
                 sources=merged_sources,
                 chunk_count=structured_context.result_count + vector_context.chunk_count,
                 query_text=c.original_query,
+                stage_timings_ms=_merge_stage_timings(
+                    structured_timings,
+                    vector_context.stage_timings_ms,
+                    {"context_merge": 0},
+                ),
             )
         elif structured_context:
             return GeneratorContext(
@@ -216,6 +272,7 @@ class QueryPipeline:
                 sources=structured_context.sources,
                 chunk_count=structured_context.result_count,
                 query_text=c.original_query,
+                stage_timings_ms=structured_timings,
             )
         elif vector_context:
             return vector_context
@@ -233,6 +290,10 @@ class QueryPipeline:
         """
         structured_complex = self._handle_complex_structured(c)
         if structured_complex is not None:
+            structured_complex.stage_timings_ms = _merge_stage_timings(
+                {"complex_structured": 0},
+                structured_complex.stage_timings_ms,
+            )
             return structured_complex
 
         if not c.sub_queries:
@@ -242,6 +303,7 @@ class QueryPipeline:
         parts = []
         all_sources = []
         total_chunks = 0
+        merged_timings: dict[str, int] = {}
 
         for i, sq in enumerate(c.sub_queries, 1):
             sub_classification = QueryClassification(
@@ -259,6 +321,7 @@ class QueryPipeline:
                 parts.append(f"### Sub-query {i}: {sq.query_text}\n\n{ctx.context_text}\n")
                 all_sources.extend(ctx.sources)
                 total_chunks += ctx.chunk_count
+                merged_timings = _merge_stage_timings(merged_timings, ctx.stage_timings_ms)
 
         if not parts:
             return None
@@ -269,6 +332,7 @@ class QueryPipeline:
             sources=merged_sources,
             chunk_count=total_chunks,
             query_text=c.original_query,
+            stage_timings_ms=merged_timings,
         )
 
     def _handle_complex_structured(
@@ -351,12 +415,12 @@ class QueryPipeline:
                 not any(token in lower for token in ("test_corpus", "thule_fixture"))
             )
             looks_like_visit_artifact = int(
-                not any(token in lower for token in ("maintenance", "report", "email", "log"))
+                any(token in lower for token in ("maintenance", "report", "email", "log"))
             )
-            field_manual = int("field_engineer" in lower)
-            return (in_curated_corpus, looks_like_visit_artifact, field_manual)
+            field_visit_corpus = int("field_engineer" in lower)
+            return (in_curated_corpus, looks_like_visit_artifact, field_visit_corpus)
 
-        return sorted(results, key=priority)
+        return sorted(results, key=priority, reverse=True)
 
     def _cap_results_per_source(
         self, results: list[ChunkResult], per_source_limit: int

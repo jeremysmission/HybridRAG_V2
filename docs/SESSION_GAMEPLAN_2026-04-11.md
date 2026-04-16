@@ -1,5 +1,8 @@
 # Session Game Plan — 2026-04-11
 
+> WARNING: Historical recovery note. Useful context, but not the current source of truth for readiness, recovery sequence, or demo posture.
+> Start instead with `docs/SOURCE_OF_TRUTH_MAP_2026-04-12.md` and `docs/REBOOT_HANDOVER_2026-04-13.md`.
+
 **Purpose:** Crash-safe recovery doc. If the session or machine dies, this is the quickest way to resume.
 
 ---
@@ -78,8 +81,8 @@
 1. Open this file
 2. Check task list status
 3. If import was interrupted: `data/index/lancedb_pre_10M_20260411` is the safe rollback
-4. Reopen: `C:\HybridRAG_V2\docs\SPRINT_SYNC.md`
-5. Resume from the first incomplete task
+4. Open: `C:\HybridRAG_V2\docs\SOURCE_OF_TRUTH_MAP_2026-04-12.md`
+5. Resume from the first incomplete task after checking `C:\HybridRAG_V2\docs\REBOOT_HANDOVER_2026-04-13.md`
 
 ## Key Reference Files
 

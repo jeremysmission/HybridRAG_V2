@@ -28,6 +28,7 @@ VECTOR_DIM = 8
 
 
 def _make_chunks(n: int, prefix: str = "chunk") -> tuple[list[dict], np.ndarray]:
+    """Create a small test object so the scenario stays readable."""
     chunks = [
         {
             "chunk_id": f"{prefix}-{i:06d}",
@@ -50,6 +51,7 @@ def _make_chunks(n: int, prefix: str = "chunk") -> tuple[list[dict], np.ndarray]
 
 
 class TestCleanIngest:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_fresh_store_ingest_passes(self, tmp_path):
         store = LanceStore(str(tmp_path / "lancedb"))
         chunks, vectors = _make_chunks(100)
@@ -122,6 +124,7 @@ class TestCleanIngest:
 
 
 class TestIntegrityMismatch:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_flags_net_delta_vs_expected_mismatch(self, tmp_path):
         """Simulate the laptop 10M: caller claims 10,435,593 inserted but
         the store only grew by 10,000,000. The helper must surface it."""
@@ -203,6 +206,7 @@ class TestIntegrityMismatch:
 
 
 class TestEdgeCases:
+    """Structured test record that keeps one example easy to understand and reuse."""
     def test_empty_store_zero_attempted_is_clean(self, tmp_path):
         store = LanceStore(str(tmp_path / "lancedb"))
         # Empty store, empty ingest

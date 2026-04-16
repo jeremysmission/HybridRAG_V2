@@ -53,6 +53,7 @@ def _warn_if_sprint6_lance(config_path: str) -> None:
 
 
 def percentile(values: list[int], pct: float) -> int:
+    """Compute a percentile so latency or scoring distributions are easier to interpret."""
     if not values:
         return 0
     ordered = sorted(values)
@@ -61,6 +62,7 @@ def percentile(values: list[int], pct: float) -> int:
 
 
 def summarize(values: list[int]) -> dict[str, int | float]:
+    """Support the profile demo latency workflow by handling the summarize step."""
     if not values:
         return {"count": 0, "avg_ms": 0, "p50_ms": 0, "p95_ms": 0, "min_ms": 0, "max_ms": 0}
     return {
@@ -74,6 +76,7 @@ def summarize(values: list[int]) -> dict[str, int | float]:
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main profile demo latency workflow."""
     parser = argparse.ArgumentParser(description="Profile warm demo latency by pipeline stage.")
     parser.add_argument(
         "--config",

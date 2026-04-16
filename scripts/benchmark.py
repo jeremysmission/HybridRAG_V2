@@ -368,6 +368,7 @@ def print_summary(all_results: dict) -> None:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
+    """Parse command-line inputs and run the main benchmark workflow."""
     parser = argparse.ArgumentParser(description="HybridRAG V2 Performance Benchmark")
     parser.add_argument("--config", default="config/config.yaml", help="Config YAML path")
     parser.add_argument("--rounds", type=int, default=10, help="Repetitions per benchmark")

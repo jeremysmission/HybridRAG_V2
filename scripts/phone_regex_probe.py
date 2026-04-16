@@ -51,6 +51,7 @@ def old_phone_count(text: str) -> tuple[int, int]:
 
 
 def main():
+    """Parse command-line inputs and run the main phone regex probe workflow."""
     limit = 100_000
     if "--limit" in sys.argv:
         i = sys.argv.index("--limit")

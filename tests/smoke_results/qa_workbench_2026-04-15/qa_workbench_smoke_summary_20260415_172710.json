@@ -1,0 +1,37 @@
+{
+  "launcher_dry_run": {
+    "ok": true,
+    "headline": "HybridRAG V2 QA Workbench launcher -- dry run"
+  },
+  "aggregation_self_check": {
+    "ok": true,
+    "pass_count": 12,
+    "total_items": 12,
+    "output_json": "C:\\HybridRAG_V2\\tests\\smoke_results\\qa_workbench_2026-04-15\\aggregation_self_check_2026-04-15.json"
+  },
+  "count_benchmark": {
+    "ok": true,
+    "selected_targets": 7,
+    "expected_exact": 7,
+    "expected_total": 7,
+    "output_json": "C:\\HybridRAG_V2\\tests\\smoke_results\\qa_workbench_2026-04-15\\count_benchmark_20260415_172709.json",
+    "output_md": "C:\\HybridRAG_V2\\tests\\smoke_results\\qa_workbench_2026-04-15\\count_benchmark_20260415_172709.md"
+  },
+  "regression_fixture": {
+    "ok": true,
+    "fixture_id": "schema_pattern_regression_2026_04_15",
+    "passed": 50,
+    "total": 50
+  },
+  "tk_shell": {
+    "ok": true,
+    "tab_order": [
+      "Overview",
+      "Baseline",
+      "Aggregation",
+      "Count",
+      "Regression",
+      "History / Ledger"
+    ]
+  }
+}

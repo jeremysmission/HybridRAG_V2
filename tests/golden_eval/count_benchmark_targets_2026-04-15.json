@@ -1,0 +1,199 @@
+{
+  "name": "count_benchmark_tranche1_frozen",
+  "date": "2026-04-15 MDT",
+  "scope": "high-specificity identifiers/entities only",
+  "targets": [
+    {
+      "target": "Eareckson Air Station, Shemya, AK",
+      "family": "location",
+      "deterministic_family": "chunk_exact",
+      "trust": "high",
+      "tranche1_status": "audited",
+      "surface": "chunk_exact",
+      "query": "Eareckson Air Station, Shemya, AK",
+      "expected": {
+        "raw_mentions": 1,
+        "unique_documents": 1,
+        "unique_chunks": 1,
+        "unique_rows": 0
+      },
+      "notes": "Full exact site phrase; one-hit sanity check."
+    },
+    {
+      "target": "Lajes Field, Azores, Portugal",
+      "family": "location",
+      "deterministic_family": "chunk_exact",
+      "trust": "high",
+      "tranche1_status": "deferred",
+      "surface": "chunk_exact",
+      "query": "Lajes Field, Azores, Portugal",
+      "notes": "Exact phrase is trustworthy but deferred after tranche-1 runtime cap."
+    },
+    {
+      "target": "Pituffik Space Base",
+      "family": "location",
+      "deterministic_family": "chunk_exact",
+      "trust": "high",
+      "tranche1_status": "audited",
+      "surface": "chunk_exact",
+      "query": "Pituffik Space Base",
+      "expected": {
+        "raw_mentions": 383,
+        "unique_documents": 172,
+        "unique_chunks": 358,
+        "unique_rows": 0
+      },
+      "notes": "Modern canonical site phrase; high duplication risk but exact phrase is stable."
+    },
+    {
+      "target": "IGSI-754",
+      "family": "identifier",
+      "deterministic_family": "entity_exact",
+      "trust": "high",
+      "tranche1_status": "audited",
+      "surface": "entity_exact",
+      "query": "IGSI-754",
+      "expected": {
+        "raw_mentions": 28,
+        "unique_documents": 20,
+        "unique_chunks": 26,
+        "unique_rows": 0
+      },
+      "notes": "Distinctive deliverable identifier; compact evidence bundle."
+    },
+    {
+      "target": "IGSI-755",
+      "family": "identifier",
+      "deterministic_family": "entity_exact",
+      "trust": "high",
+      "tranche1_status": "audited",
+      "surface": "entity_exact",
+      "query": "IGSI-755",
+      "expected": {
+        "raw_mentions": 30,
+        "unique_documents": 20,
+        "unique_chunks": 27,
+        "unique_rows": 0
+      },
+      "notes": "Distinctive deliverable identifier; compact evidence bundle."
+    },
+    {
+      "target": "IGSI-1803",
+      "family": "identifier",
+      "deterministic_family": "entity_exact",
+      "trust": "high",
+      "tranche1_status": "audited",
+      "surface": "entity_exact",
+      "query": "IGSI-1803",
+      "expected": {
+        "raw_mentions": 187,
+        "unique_documents": 20,
+        "unique_chunks": 185,
+        "unique_rows": 0
+      },
+      "notes": "Distinctive deliverable identifier; strong benchmark candidate."
+    },
+    {
+      "target": "IGSI-1804",
+      "family": "identifier",
+      "deterministic_family": "entity_exact",
+      "trust": "high",
+      "tranche1_status": "audited",
+      "surface": "entity_exact",
+      "query": "IGSI-1804",
+      "expected": {
+        "raw_mentions": 57,
+        "unique_documents": 17,
+        "unique_chunks": 55,
+        "unique_rows": 0
+      },
+      "notes": "Distinctive deliverable identifier; strong benchmark candidate."
+    },
+    {
+      "target": "IGSI-1805",
+      "family": "identifier",
+      "deterministic_family": "chunk_exact",
+      "trust": "high",
+      "tranche1_status": "audited",
+      "surface": "chunk_exact",
+      "query": "IGSI-1805",
+      "expected": {
+        "raw_mentions": 25,
+        "unique_documents": 15,
+        "unique_chunks": 25,
+        "unique_rows": 0
+      },
+      "notes": "Exact chunk-text identifier with low collision."
+    },
+    {
+      "target": "IGSI-1806",
+      "family": "identifier",
+      "deterministic_family": "chunk_exact",
+      "trust": "high",
+      "tranche1_status": "deferred",
+      "surface": "chunk_exact",
+      "query": "IGSI-1806",
+      "notes": "Exact chunk-text identifier; deferred after tranche-1 runtime cap."
+    },
+    {
+      "target": "IGSI-1130",
+      "family": "identifier",
+      "deterministic_family": "entity_exact",
+      "trust": "high",
+      "tranche1_status": "deferred",
+      "surface": "entity_exact",
+      "query": "IGSI-1130",
+      "notes": "Distinctive deliverable identifier; deferred after tranche-1 runtime cap."
+    },
+    {
+      "target": "IGSI-1129",
+      "family": "identifier",
+      "deterministic_family": "entity_exact",
+      "trust": "high",
+      "tranche1_status": "deferred",
+      "surface": "entity_exact",
+      "query": "IGSI-1129",
+      "notes": "Distinctive deliverable identifier; deferred after tranche-1 runtime cap."
+    },
+    {
+      "target": "ES-9032",
+      "family": "part_number",
+      "deterministic_family": "entity_exact",
+      "trust": "high",
+      "tranche1_status": "deferred",
+      "surface": "entity_exact",
+      "query": "ES-9032",
+      "notes": "Exact part identifier with moderate evidence volume; deferred after tranche-1 runtime cap."
+    },
+    {
+      "target": "ITAR",
+      "family": "acronym",
+      "deterministic_family": "entity_exact",
+      "trust": "medium",
+      "tranche1_status": "deferred",
+      "surface": "entity_exact",
+      "query": "ITAR",
+      "notes": "Entity exact-hit family is tractable, but aliasing/raw text overcount risk remains."
+    },
+    {
+      "target": "DD Form 1149",
+      "family": "form",
+      "deterministic_family": "chunk_exact",
+      "trust": "medium",
+      "tranche1_status": "deferred",
+      "surface": "chunk_exact",
+      "query": "DD Form 1149",
+      "notes": "Phrase is exact, but alias family DD1149 means phrase-only counts understate total form family."
+    },
+    {
+      "target": "Requisition and Invoice/Shipping Document",
+      "family": "form",
+      "deterministic_family": "chunk_exact",
+      "trust": "high",
+      "tranche1_status": "deferred",
+      "surface": "chunk_exact",
+      "query": "Requisition and Invoice/Shipping Document",
+      "notes": "Long form title is exact and low-collision; deferred after tranche-1 runtime cap."
+    }
+  ]
+}

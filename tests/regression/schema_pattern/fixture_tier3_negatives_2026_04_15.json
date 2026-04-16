@@ -1,0 +1,50 @@
+{
+  "fixture_id": "schema_pattern_regression_tier3_negatives_2026_04_15",
+  "tier": "tier3_negative",
+  "purpose": "Lock in current classifier behavior at the rule edges -- adversarial inputs that probe plurals, prefixes, format gaps, near-miss casing, and entity-type defaults. Every expected verdict here matches what the live classifier returns today; the fixture is a contract test so any future rule tightening or loosening is detected.",
+  "source_mining": "FULL_INDEX_SCHEMA_PATTERN_MINING_2026-04-15.md",
+  "frozen_at": "2026-04-15",
+  "families": [
+    "site_generic_placeholder_labels",
+    "person_role_common_noun_leakage",
+    "contact_numeric_junk_split",
+    "date_header_label_leakage",
+    "org_generic_bucket_and_case"
+  ],
+  "cases": [
+    {"id": "site_neg_websites_plural", "family": "site_generic_placeholder_labels", "text": "WEBSITES", "entity_type": "SITE", "expected": "keep", "why": "rule is exact-match WEBSITE only; plural falls through"},
+    {"id": "site_neg_cabinet_no_digit", "family": "site_generic_placeholder_labels", "text": "Cabinet", "entity_type": "SITE", "expected": "keep", "why": "CABINET rule requires a trailing digit"},
+    {"id": "site_neg_cabinet_99", "family": "site_generic_placeholder_labels", "text": "Cabinet 99", "entity_type": "SITE", "expected": "drop", "why": "CABINET \\d+ matches multi-digit"},
+    {"id": "site_neg_server_room", "family": "site_generic_placeholder_labels", "text": "Server Room", "entity_type": "SITE", "expected": "drop", "why": "matches `server rooms?` group"},
+    {"id": "site_neg_server_rooms_plural", "family": "site_generic_placeholder_labels", "text": "server rooms", "entity_type": "SITE", "expected": "drop", "why": "plural variant of server room"},
+    {"id": "site_neg_alternate_processing_sites", "family": "site_generic_placeholder_labels", "text": "alternate processing sites", "entity_type": "SITE", "expected": "drop", "why": "matches alternate processing site cluster"},
+    {"id": "site_neg_organizational_facilities", "family": "site_generic_placeholder_labels", "text": "organizational facilities", "entity_type": "SITE", "expected": "drop", "why": "explicit member of generic facilities group"},
+    {"id": "site_neg_websites_obsolescence", "family": "site_generic_placeholder_labels", "text": "websites obsolescence", "entity_type": "SITE", "expected": "keep", "why": "word order swap escapes the WEBSITE/OBSOLESCENCE WEBSITE patterns"},
+
+    {"id": "person_neg_use_no_s", "family": "person_role_common_noun_leakage", "text": "Use", "entity_type": "PERSON", "expected": "keep", "why": "user(s)? rule needs the r"},
+    {"id": "person_neg_cfo_plural", "family": "person_role_common_noun_leakage", "text": "CFOs", "entity_type": "PERSON", "expected": "keep", "why": "CFO rule is singular only"},
+    {"id": "person_neg_system_administrators", "family": "person_role_common_noun_leakage", "text": "system administrators", "entity_type": "PERSON", "expected": "drop", "why": "matches system administrators? group"},
+    {"id": "person_neg_system_network_administrator", "family": "person_role_common_noun_leakage", "text": "system/network administrator", "entity_type": "PERSON", "expected": "drop", "why": "matches system/network administrators? variant"},
+    {"id": "person_neg_organizational_personnel_isr", "family": "person_role_common_noun_leakage", "text": "organizational personnel with information security responsibilities", "entity_type": "PERSON", "expected": "drop", "why": "explicit long-form variant in mining doc"},
+    {"id": "person_neg_attacker", "family": "person_role_common_noun_leakage", "text": "attacker", "entity_type": "PERSON", "expected": "drop", "why": "named member of role-noun group"},
+
+    {"id": "contact_neg_5_digit_numeric", "family": "contact_numeric_junk_split", "text": "12345", "entity_type": "CONTACT", "expected": "keep", "why": "below the 8-digit numeric-junk threshold"},
+    {"id": "contact_neg_12_digit_numeric", "family": "contact_numeric_junk_split", "text": "123456789012", "entity_type": "CONTACT", "expected": "keep", "why": "above the 10-digit numeric-junk threshold"},
+    {"id": "contact_neg_short_phone_no_area", "family": "contact_numeric_junk_split", "text": "555-1234", "entity_type": "CONTACT", "expected": "keep", "why": "rule does not require an area code; falls through to default keep"},
+    {"id": "contact_neg_intl_format_unmatched", "family": "contact_numeric_junk_split", "text": "+1 555 123 4567", "entity_type": "CONTACT", "expected": "keep", "why": "international format outside the US phone regex; default keep"},
+    {"id": "contact_neg_email_subdomain", "family": "contact_numeric_junk_split", "text": "first.last@mail.example.co", "entity_type": "CONTACT", "expected": "keep", "why": "email regex tolerates subdomain + 2-letter TLD"},
+    {"id": "contact_neg_paren_phone_no_space", "family": "contact_numeric_junk_split", "text": "(555)123-4567", "entity_type": "CONTACT", "expected": "keep", "why": "phone regex tolerates zero-space after the closing paren"},
+
+    {"id": "date_neg_iso_single_digit_month", "family": "date_header_label_leakage", "text": "2024-1-1", "entity_type": "DATE", "expected": "keep", "why": "iso regex requires zero-padded month/day; falls through to default keep"},
+    {"id": "date_neg_eol_no_date_word", "family": "date_header_label_leakage", "text": "EOL", "entity_type": "DATE", "expected": "keep", "why": "header rule requires trailing DATE word"},
+    {"id": "date_neg_eol_dates_plural", "family": "date_header_label_leakage", "text": "EOL DATES", "entity_type": "date", "expected": "keep", "why": "header rule is singular DATE only; lowercase entity_type also exercises classify() upcasing"},
+    {"id": "date_neg_slash_short_year", "family": "date_header_label_leakage", "text": "01/01/24", "entity_type": "DATE", "expected": "keep", "why": "slash regex accepts 2-digit year"},
+    {"id": "date_neg_dash_month_2digit_year", "family": "date_header_label_leakage", "text": "9-Feb-16", "entity_type": "DATE", "expected": "keep", "why": "dash-month regex requires 4-digit year; falls through"},
+
+    {"id": "org_neg_org_acronym", "family": "org_generic_bucket_and_case", "text": "ORG", "entity_type": "ORG", "expected": "keep", "why": "no rule matches bare ORG token; default keep"},
+    {"id": "org_neg_an_organization", "family": "org_generic_bucket_and_case", "text": "an organization", "entity_type": "ORG", "expected": "keep", "why": "rule matches only `(the )?organizations?` -- `an` falls through"},
+    {"id": "org_neg_organisation_british", "family": "org_generic_bucket_and_case", "text": "Organisation", "entity_type": "ORG", "expected": "keep", "why": "British spelling not in the bucket rule"},
+    {"id": "org_neg_the_organizations_plural", "family": "org_generic_bucket_and_case", "text": "the organizations", "entity_type": "ORG", "expected": "drop", "why": "rule covers `(the )?organizations?` so the+plural matches"}
+  ],
+  "normalization_clusters": []
+}

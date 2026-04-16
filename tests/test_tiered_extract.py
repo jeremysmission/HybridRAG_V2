@@ -36,6 +36,9 @@ from src.store.lance_store import LanceStore
 from src.store.relationship_store import Relationship, RelationshipStore
 from scripts.tiered_extract import (
     _is_tier2_candidate,
+    _looks_like_clean_tier1_baseline,
+    _resolve_runtime_store_paths,
+    _stream_logistics_tables,
     _stream_tier1,
     iter_chunk_batches,
     load_chunks,
@@ -91,6 +94,49 @@ def _build_real_store(tmp_path: Path, n_chunks: int, prose_ratio: float = 1.0) -
     return store
 
 
+def _build_logistics_store(tmp_path: Path) -> LanceStore:
+    """Create a tiny store with logistics-table candidate chunks."""
+    db_path = str(tmp_path / "lancedb")
+    store = LanceStore(db_path)
+    chunks = [
+        {
+            "chunk_id": "packing-001",
+            "text": (
+                "PART NUMBER: RFN-1000-1S, SYSTEM: monitoring system, NOMENCLATURE: ADAPTER, "
+                "PO PART NUMBER: RFN-1000-1S, ACQUISITION DOCUMENT NUMBER (PO): 7000385827"
+            ),
+            "source_path": r"D:\CorpusTransfr\verified\IGS\Packing List\NG Packing List - ALPENA.xlsx",
+            "chunk_index": 0,
+            "parse_quality": 1.0,
+        },
+        {
+            "chunk_id": "dd250-001",
+            "text": (
+                "CONTAINER: INSTALLED, FIND NO.: 57, QTY.: 1, PART NUMBER: SM-219, "
+                "DESCRIPTION: GPS RECEIVER, MANUFACTURER: ASTRA\n"
+                "CONTAINER: INSTALLED, FIND NO.: 58, QTY.: 1, PART NUMBER: SW125-12-N, "
+                "DESCRIPTION: POWER SUPPLY, MANUFACTURER: sensitive data INC."
+            ),
+            "source_path": r"D:\CorpusTransfr\verified\IGS\DD250\Niger Parts List.xlsx",
+            "chunk_index": 1,
+            "parse_quality": 1.0,
+        },
+        {
+            "chunk_id": "plain-001",
+            "text": "This is a plain narrative document with no tabular substrate.",
+            "source_path": r"D:\CorpusTransfr\verified\IGS\Reports\trip_report.docx",
+            "chunk_index": 2,
+            "parse_quality": 1.0,
+        },
+    ]
+
+    rng = np.random.default_rng(seed=7)
+    vectors = rng.standard_normal(size=(len(chunks), VECTOR_DIM)).astype(np.float32)
+    vectors /= np.linalg.norm(vectors, axis=1, keepdims=True) + 1e-9
+    store.ingest_chunks(chunks, vectors, batch_size=len(chunks))
+    return store
+
+
 @pytest.fixture
 def tiny_store(tmp_path):
     """10-chunk store, all prose."""
@@ -140,6 +186,7 @@ class FakeGLiNERModel:
 # ---------------------------------------------------------------------------
 
 class TestIsTier2Candidate:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_accepts_prose(self):
         chunk = {"text": "The site lead inspected the tower after the storm."}
         assert _is_tier2_candidate(chunk, min_chunk_len=20) is True
@@ -270,6 +317,7 @@ class TestIterChunkBatchesReal:
 # ---------------------------------------------------------------------------
 
 class TestTier1StreamingFlush:
+    """Small helper object used to keep test setup or expected results organized."""
     def _fake_chunk_batches(self):
         return [
             [
@@ -535,11 +583,94 @@ class TestRunTier2Streaming:
             store.close()
 
 
+class TestLogisticsTablePilot:
+    """Small helper object used to keep test setup or expected results organized."""
+    def test_where_sql_filters_source_paths(self, tmp_path):
+        store = _build_logistics_store(tmp_path)
+        try:
+            batches = list(
+                iter_chunk_batches(
+                    store,
+                    batch_size=10,
+                    where_sql="source_path LIKE '%Packing List%'",
+                )
+            )
+            total = sum(len(batch) for batch in batches)
+            assert total == 1
+            assert batches[0][0]["chunk_id"] == "packing-001"
+        finally:
+            store.close()
+
+    def test_stream_logistics_tables_inserts_rows(self, tmp_path):
+        store = _build_logistics_store(tmp_path)
+        entity_store = EntityStore(str(tmp_path / "entities.sqlite3"))
+        try:
+            result = _stream_logistics_tables(
+                store=store,
+                entity_store=entity_store,
+                dry_run=False,
+                source_patterns=["Packing List", "DD250"],
+            )
+            assert result["candidate_chunks"] == 2
+            assert result["matched_chunks"] == 2
+            assert result["raw_row_count"] >= 3
+            assert result["inserted_row_count"] >= 3
+            assert entity_store.count_table_rows() == result["inserted_row_count"]
+        finally:
+            entity_store.close()
+            store.close()
+
+    def test_stage_dir_copies_baseline_stores(self, tmp_path):
+        baseline_entity = tmp_path / "entities.sqlite3"
+        baseline_rel = tmp_path / "relationships.sqlite3"
+        stage_dir = tmp_path / "stage"
+
+        entity_store = EntityStore(str(baseline_entity))
+        entity_store.insert_entities([
+            Entity("PART", "ARC-4471", "ARC-4471", 1.0, "c1", "doc.txt", ""),
+        ])
+        entity_store.close()
+
+        rel_store = RelationshipStore(str(baseline_rel))
+        rel_store.insert_relationships([
+            Relationship("PERSON", "Webb", "POC_FOR", "SITE", "Thule", 1.0, "doc.txt", "c1", ""),
+        ])
+        rel_store.close()
+
+        stage_entity, stage_rel, stage_root = _resolve_runtime_store_paths(
+            baseline_entity,
+            stage_dir=str(stage_dir),
+            materialize_stage=True,
+        )
+
+        assert stage_root == str(stage_dir)
+        assert stage_entity.exists()
+        assert stage_rel.exists()
+
+        staged_entities = EntityStore(str(stage_entity))
+        staged_rels = RelationshipStore(str(stage_rel))
+        try:
+            assert staged_entities.count_entities() == 1
+            assert staged_rels.count() == 1
+        finally:
+            staged_entities.close()
+            staged_rels.close()
+
+    def test_clean_baseline_guard_recognizes_canonical_path(self):
+        assert _looks_like_clean_tier1_baseline(
+            Path(r"C:\HybridRAG_V2\data\index\clean\tier1_clean_20260413\entities.sqlite3")
+        )
+        assert not _looks_like_clean_tier1_baseline(
+            Path(r"C:\HybridRAG_V2\data\index\staged\entities.sqlite3")
+        )
+
+
 # ---------------------------------------------------------------------------
 # Canonical helper exports (locked because the GUI imports them)
 # ---------------------------------------------------------------------------
 
 class TestModuleImports:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_canonical_helpers_exported(self):
         from scripts import tiered_extract as te
         assert hasattr(te, "_is_tier2_candidate")

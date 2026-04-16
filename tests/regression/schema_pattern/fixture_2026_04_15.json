@@ -1,0 +1,86 @@
+{
+  "fixture_id": "schema_pattern_regression_2026_04_15",
+  "source_mining": "FULL_INDEX_SCHEMA_PATTERN_MINING_2026-04-15.md",
+  "source_seeds": "FULL_INDEX_SCHEMA_BENCHMARK_SEEDS_2026-04-15.json",
+  "frozen_at": "2026-04-15",
+  "store_snapshot": {
+    "entities_total": 19959604,
+    "ORG": 5840183,
+    "DATE": 4651727,
+    "PERSON": 2851865,
+    "PART": 2830083,
+    "CONTACT": 2540033,
+    "SITE": 1095111,
+    "PO": 150602
+  },
+  "families": [
+    "site_generic_placeholder_labels",
+    "person_role_common_noun_leakage",
+    "contact_numeric_junk_split",
+    "date_header_label_leakage",
+    "org_generic_bucket_and_case"
+  ],
+  "cases": [
+    {"id": "site_drop_website", "family": "site_generic_placeholder_labels", "text": "WEBSITE", "entity_type": "SITE", "expected": "drop", "why": "generic header/placeholder", "hits": 181343, "docs": 228},
+    {"id": "site_drop_obsolescence_website", "family": "site_generic_placeholder_labels", "text": "OBSOLESCENCE WEBSITE", "entity_type": "SITE", "expected": "drop", "why": "generic header/placeholder", "hits": 74970, "docs": 281},
+    {"id": "site_drop_facility", "family": "site_generic_placeholder_labels", "text": "facility", "entity_type": "SITE", "expected": "drop", "why": "generic noun", "hits": 21472, "docs": 840},
+    {"id": "site_drop_wh", "family": "site_generic_placeholder_labels", "text": "WH", "entity_type": "SITE", "expected": "drop", "why": "abbreviation/placeholder", "hits": 15673, "docs": 326},
+    {"id": "site_drop_site_lower", "family": "site_generic_placeholder_labels", "text": "site", "entity_type": "SITE", "expected": "drop", "why": "literal generic noun", "hits": 13388, "docs": 3093},
+    {"id": "site_drop_cabinet_2", "family": "site_generic_placeholder_labels", "text": "CABINET 2", "entity_type": "SITE", "expected": "drop", "why": "asset placeholder", "hits": 12236, "docs": 211},
+    {"id": "site_drop_location", "family": "site_generic_placeholder_labels", "text": "LOCATION", "entity_type": "SITE", "expected": "drop", "why": "generic header", "hits": 9999, "docs": 386},
+    {"id": "site_drop_cabinet_1", "family": "site_generic_placeholder_labels", "text": "CABINET 1", "entity_type": "SITE", "expected": "drop", "why": "asset placeholder", "hits": 6347, "docs": 209},
+    {"id": "site_keep_peterson_afb", "family": "site_generic_placeholder_labels", "text": "Peterson AFB", "entity_type": "SITE", "expected": "keep", "why": "specific base", "hits": 3351, "docs": 2463},
+    {"id": "site_keep_eglin_afb", "family": "site_generic_placeholder_labels", "text": "Eglin AFB", "entity_type": "SITE", "expected": "keep", "why": "specific base", "hits": 2477, "docs": 1126},
+    {"id": "site_keep_ascension_island", "family": "site_generic_placeholder_labels", "text": "Ascension Island", "entity_type": "SITE", "expected": "keep", "why": "specific location", "hits": 2533, "docs": 1076},
+
+    {"id": "person_drop_org_personnel_title", "family": "person_role_common_noun_leakage", "text": "Organizational personnel", "entity_type": "PERSON", "expected": "drop", "why": "role label", "hits": 191447, "docs": 385},
+    {"id": "person_drop_cfo", "family": "person_role_common_noun_leakage", "text": "CFO", "entity_type": "PERSON", "expected": "drop", "why": "role, not person name", "hits": 187333, "docs": 324},
+    {"id": "person_drop_root", "family": "person_role_common_noun_leakage", "text": "root", "entity_type": "PERSON", "expected": "drop", "why": "account label", "hits": 145451, "docs": 1530},
+    {"id": "person_drop_org_personnel_lower", "family": "person_role_common_noun_leakage", "text": "organizational personnel", "entity_type": "PERSON", "expected": "drop", "why": "role label", "hits": 132192, "docs": 565},
+    {"id": "person_drop_user", "family": "person_role_common_noun_leakage", "text": "user", "entity_type": "PERSON", "expected": "drop", "why": "common noun", "hits": 69454, "docs": 2616},
+    {"id": "person_drop_individuals", "family": "person_role_common_noun_leakage", "text": "individuals", "entity_type": "PERSON", "expected": "drop", "why": "common noun", "hits": 48934, "docs": 1361},
+    {"id": "person_drop_personnel", "family": "person_role_common_noun_leakage", "text": "personnel", "entity_type": "PERSON", "expected": "drop", "why": "common noun", "hits": 29241, "docs": 1625},
+    {"id": "person_drop_users", "family": "person_role_common_noun_leakage", "text": "users", "entity_type": "PERSON", "expected": "drop", "why": "common noun", "hits": 23496, "docs": 1742},
+    {"id": "person_keep_jane_doe", "family": "person_role_common_noun_leakage", "text": "Jane Doe", "entity_type": "PERSON", "expected": "keep", "why": "true given+surname", "hits": 0, "docs": 0},
+    {"id": "person_keep_ryan_hamel", "family": "person_role_common_noun_leakage", "text": "Ryan Hamel", "entity_type": "PERSON", "expected": "keep", "why": "true given+surname", "hits": 0, "docs": 0},
+
+    {"id": "contact_drop_uint32_max", "family": "contact_numeric_junk_split", "text": "4294967295", "entity_type": "CONTACT", "expected": "drop", "why": "numeric junk (uint32 sentinel)", "hits": 269181, "docs": 885},
+    {"id": "contact_drop_numeric_3926909988", "family": "contact_numeric_junk_split", "text": "3926909988", "entity_type": "CONTACT", "expected": "drop", "why": "bare numeric code", "hits": 34467, "docs": 522},
+    {"id": "contact_drop_numeric_3926909985", "family": "contact_numeric_junk_split", "text": "3926909985", "entity_type": "CONTACT", "expected": "drop", "why": "bare numeric code", "hits": 32025, "docs": 465},
+    {"id": "contact_drop_numeric_7326908688", "family": "contact_numeric_junk_split", "text": "7326908688", "entity_type": "CONTACT", "expected": "drop", "why": "bare numeric code", "hits": 26888, "docs": 517},
+    {"id": "contact_keep_phone_dashed", "family": "contact_numeric_junk_split", "text": "719-393-8115", "entity_type": "CONTACT", "expected": "keep", "why": "real phone (dash format)", "hits": 183175, "docs": 954},
+    {"id": "contact_keep_email_ryan", "family": "contact_numeric_junk_split", "text": "ryan.hamel@digisonde.com", "entity_type": "CONTACT", "expected": "keep", "why": "real email", "hits": 11140, "docs": 524},
+    {"id": "contact_keep_phone_paren", "family": "contact_numeric_junk_split", "text": "(972) 833-0641", "entity_type": "CONTACT", "expected": "keep", "why": "real phone (paren format)", "hits": 10783, "docs": 390},
+    {"id": "contact_keep_email_timothy", "family": "contact_numeric_junk_split", "text": "timothy.wilson@hpe.com", "entity_type": "CONTACT", "expected": "keep", "why": "real email", "hits": 10617, "docs": 390},
+
+    {"id": "date_drop_eos_date", "family": "date_header_label_leakage", "text": "EOS DATE", "entity_type": "DATE", "expected": "drop", "why": "header label", "hits": 318484, "docs": 288},
+    {"id": "date_drop_eol_date", "family": "date_header_label_leakage", "text": "EOL DATE", "entity_type": "DATE", "expected": "drop", "why": "header label", "hits": 265773, "docs": 288},
+    {"id": "date_drop_acquisition_date", "family": "date_header_label_leakage", "text": "ACQUISITION DATE", "entity_type": "DATE", "expected": "drop", "why": "header label", "hits": 146725, "docs": 353},
+    {"id": "date_drop_obsolescence_date", "family": "date_header_label_leakage", "text": "OBSOLESCENCE DATE", "entity_type": "DATE", "expected": "drop", "why": "header label", "hits": 118690, "docs": 283},
+    {"id": "date_keep_dash_month", "family": "date_header_label_leakage", "text": "17-Feb-2016", "entity_type": "DATE", "expected": "keep", "why": "calendar value (dd-Mon-yyyy)", "hits": 25172, "docs": 463},
+    {"id": "date_keep_iso", "family": "date_header_label_leakage", "text": "2015-12-27", "entity_type": "DATE", "expected": "keep", "why": "calendar value (iso)", "hits": 24417, "docs": 229},
+    {"id": "date_keep_slash", "family": "date_header_label_leakage", "text": "09/09/22", "entity_type": "DATE", "expected": "keep", "why": "calendar value (slash short)", "hits": 22417, "docs": 237},
+
+    {"id": "org_drop_organization", "family": "org_generic_bucket_and_case", "text": "organization", "entity_type": "ORG", "expected": "drop", "why": "generic bucket", "hits": 669908, "docs": 1787},
+    {"id": "org_drop_the_organization", "family": "org_generic_bucket_and_case", "text": "The organization", "entity_type": "ORG", "expected": "drop", "why": "generic bucket", "hits": 110351, "docs": 533},
+    {"id": "org_drop_organizations_lower", "family": "org_generic_bucket_and_case", "text": "organizations", "entity_type": "ORG", "expected": "drop", "why": "generic bucket plural", "hits": 74960, "docs": 1096},
+    {"id": "org_drop_organizations_upper", "family": "org_generic_bucket_and_case", "text": "Organizations", "entity_type": "ORG", "expected": "drop", "why": "generic bucket plural", "hits": 68241, "docs": 793},
+    {"id": "org_keep_nexion", "family": "org_generic_bucket_and_case", "text": "NEXION", "entity_type": "ORG", "expected": "keep", "why": "trusted ORG", "hits": 71144, "docs": 6610},
+    {"id": "org_normalize_mcmaster_upper", "family": "org_generic_bucket_and_case", "text": "MCMASTER-CARR", "entity_type": "ORG", "expected": "normalize", "canonical": "McMaster-Carr", "why": "case variant", "hits": 86466, "docs": 1041},
+    {"id": "org_normalize_mcmaster_proper", "family": "org_generic_bucket_and_case", "text": "McMaster-Carr", "entity_type": "ORG", "expected": "normalize", "canonical": "McMaster-Carr", "why": "canonical form", "hits": 52765, "docs": 412},
+
+    {"id": "site_normalize_onsite_canonical", "family": "site_generic_placeholder_labels", "text": "Onsite", "entity_type": "SITE", "expected": "normalize", "canonical": "Onsite", "why": "case cluster", "hits": 26375, "docs": 113},
+    {"id": "site_normalize_onsite_camel", "family": "site_generic_placeholder_labels", "text": "OnSite", "entity_type": "SITE", "expected": "normalize", "canonical": "Onsite", "why": "case cluster", "hits": 5168, "docs": 16},
+    {"id": "site_normalize_onsite_lower", "family": "site_generic_placeholder_labels", "text": "onsite", "entity_type": "SITE", "expected": "normalize", "canonical": "Onsite", "why": "case cluster", "hits": 45, "docs": 36},
+    {"id": "site_normalize_on_site_hyphen", "family": "site_generic_placeholder_labels", "text": "on-site", "entity_type": "SITE", "expected": "normalize", "canonical": "Onsite", "why": "hyphen variant", "hits": 90, "docs": 78},
+    {"id": "site_normalize_on_site_hyphen_caps", "family": "site_generic_placeholder_labels", "text": "On-Site", "entity_type": "SITE", "expected": "normalize", "canonical": "Onsite", "why": "hyphen variant", "hits": 22, "docs": 15},
+
+    {"id": "po_normalize_ir4a_upper", "family": "org_generic_bucket_and_case", "text": "IR-4A", "entity_type": "PO", "expected": "normalize", "canonical": "IR-4A", "why": "canonical form", "hits": 964, "docs": 483},
+    {"id": "po_normalize_ir4a_lower", "family": "org_generic_bucket_and_case", "text": "IR-4a", "entity_type": "PO", "expected": "normalize", "canonical": "IR-4A", "why": "case variant", "hits": 0, "docs": 0}
+  ],
+  "normalization_clusters": [
+    {"canonical": "Onsite", "entity_type": "SITE", "variants": ["Onsite", "OnSite", "onsite", "on-site", "On-Site"]},
+    {"canonical": "McMaster-Carr", "entity_type": "ORG", "variants": ["MCMASTER-CARR", "McMaster-Carr"]},
+    {"canonical": "IR-4A", "entity_type": "PO", "variants": ["IR-4A", "IR-4a"]}
+  ]
+}

@@ -89,6 +89,7 @@ def make_valid_chunks(n: int = 5, dim: int = 768) -> tuple[list[dict], np.ndarra
 
 
 class TestValidateChunks:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_all_valid(self):
         chunks, _ = make_valid_chunks(3)
         valid, rejected = validate_chunks(chunks)
@@ -133,6 +134,7 @@ class TestValidateChunks:
 
 
 class TestValidateManifest:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_valid_manifest(self):
         vectors = np.zeros((10, 768), dtype=np.float16)
         manifest = {"schema_version": 1, "vector_dim": 768, "chunk_count": 10}
@@ -169,6 +171,7 @@ class TestValidateManifest:
 
 
 class TestLoadExport:
+    """Small helper object used to keep test setup or expected results organized."""
     def test_valid_export(self, tmp_path):
         chunks, vectors = make_valid_chunks(5)
         export_dir = make_export_dir(

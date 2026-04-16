@@ -1,3 +1,4 @@
+"""Test module for the tier1 regex gate behavior. The checks here explain what the repository expects to keep working."""
 from scripts.audit_tier1_regex_gate import (
     SampleChunk,
     SampleSelection,
@@ -10,6 +11,7 @@ from src.store.entity_store import Entity
 
 
 def test_curated_regex_gate_passes():
+    """Verify that curated regex gate passes behaves the way the team expects."""
     extractor = build_extractor()
     outcomes = evaluate_curated_cases(extractor)
 
@@ -20,6 +22,7 @@ def test_curated_regex_gate_passes():
 
 
 def test_chunk_strata_classification_uses_risk_buckets():
+    """Verify that chunk strata classification uses risk buckets behaves the way the team expects."""
     extractor = build_extractor()
 
     assert classify_chunk_stratum("Control AS-5021 applies.", extractor) == "security_candidate"
@@ -28,6 +31,7 @@ def test_chunk_strata_classification_uses_risk_buckets():
 
 
 def test_sample_selection_passes_when_outputs_are_clean():
+    """Verify that sample selection passes when outputs are clean behaves the way the team expects."""
     extractor = build_extractor()
     selection = SampleSelection(
         chunks=[
@@ -62,6 +66,7 @@ def test_sample_selection_passes_when_outputs_are_clean():
 
 
 def test_sample_selection_flags_dangerous_outputs(monkeypatch):
+    """Verify that sample selection flags dangerous outputs behaves the way the team expects."""
     extractor = build_extractor()
     selection = SampleSelection(
         chunks=[

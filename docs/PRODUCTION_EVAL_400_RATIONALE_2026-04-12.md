@@ -1,5 +1,8 @@
 # Production Eval 400-Query Set — Rationale
 
+> WARNING: Historical eval-design rationale. Still useful for query methodology, but unsafe as the current source of store counts, contamination totals, or readiness posture.
+> For current measured truth, use `docs/PRODUCTION_EVAL_RESULTS_POST_CDRL_PATH_PATCH_400_2026-04-13.md`, `docs/PRODUCTION_EVAL_RESULTS_CLEAN_TIER1_2026-04-13.md`, and `docs/AUTHORITATIVE_FACTS_AND_SOURCES_2026-04-12.md`.
+
 **Agent:** reviewer | **Repo:** HybridRAG_V2 | **Date:** 2026-04-12 MDT
 **Target file:** `tests/golden_eval/production_queries_400_2026-04-12.json`
 **Schema:** RAGAS v0.3 `SingleTurnSample` compatible (user_input, reference, reference_contexts) + reviewer eval metadata.

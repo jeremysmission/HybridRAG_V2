@@ -158,6 +158,7 @@ ENTITY_DEPENDENT = {
 # ---------------------------------------------------------------------------
 @dataclass
 class TopResult:
+    """Small structured record used to keep related results together as the workflow runs."""
     rank: int
     chunk_id: str
     source_path: str
@@ -169,6 +170,7 @@ class TopResult:
 
 @dataclass
 class QueryEvalResult:
+    """Small structured record used to keep related results together as the workflow runs."""
     id: str
     persona: str
     expected_query_type: str
@@ -184,6 +186,7 @@ class QueryEvalResult:
     embed_retrieve_ms: int
     router_ms: int
     retrieval_ms: int
+    stage_timings_ms: dict[str, int] = field(default_factory=dict)
     top_results: list[dict] = field(default_factory=list)
     notes: str = ""
     error: str = ""
@@ -191,6 +194,7 @@ class QueryEvalResult:
 
 @dataclass
 class EvalRun:
+    """Structured helper object used by the run production eval workflow."""
     run_id: str
     timestamp_utc: str
     store_chunks: int
@@ -214,6 +218,7 @@ class EvalRun:
     p95_router_ms: int
     per_persona: dict
     per_query_type: dict
+    stage_latency_summary: dict = field(default_factory=dict)
     results: list[dict] = field(default_factory=list)
 
 
@@ -221,6 +226,7 @@ class EvalRun:
 # Helpers
 # ---------------------------------------------------------------------------
 def _short_src(path: str) -> str:
+    """Normalize raw text into a simpler form that is easier to compare or display."""
     if not path:
         return ""
     parts = path.replace("\\", "/").split("/")
@@ -228,6 +234,7 @@ def _short_src(path: str) -> str:
 
 
 def _ascii(s: str) -> str:
+    """Normalize raw text into a simpler form that is easier to compare or display."""
     if not s:
         return ""
     return s.encode("ascii", "replace").decode("ascii")
@@ -300,6 +307,7 @@ def _family_signals_for_query(qdef: dict) -> list[str]:
 
 
 def _percentile(arr: list[int], p: int) -> int:
+    """Compute a percentile so latency or scoring distributions are easier to interpret."""
     if not arr:
         return 0
     s = sorted(arr)
@@ -307,7 +315,35 @@ def _percentile(arr: list[int], p: int) -> int:
     return s[min(idx, len(s) - 1)]
 
 
+def _summarize_stage_timings(results: list[QueryEvalResult]) -> dict[str, dict[str, int]]:
+    """Condense detailed results into a shorter summary that is easier to review."""
+    stage_values: dict[str, list[int]] = {}
+    for result in results:
+        if result.error:
+            continue
+        for stage, raw_value in (result.stage_timings_ms or {}).items():
+            try:
+                value = int(raw_value or 0)
+            except (TypeError, ValueError):
+                continue
+            if value <= 0:
+                continue
+            stage_values.setdefault(stage, []).append(value)
+
+    summary: dict[str, dict[str, int]] = {}
+    for stage in sorted(stage_values):
+        values = stage_values[stage]
+        summary[stage] = {
+            "p50_ms": _percentile(values, 50),
+            "p95_ms": _percentile(values, 95),
+            "max_ms": max(values),
+            "queries_with_stage": len(values),
+        }
+    return summary
+
+
 def _verdict(top_in_family: bool, any_top5_in_family: bool) -> str:
+    """Support the run production eval workflow by handling the verdict step."""
     if top_in_family:
         return "PASS"
     if any_top5_in_family:
@@ -348,6 +384,7 @@ def run_query(
     qdef: dict,
     pipeline: QueryPipeline,
 ) -> QueryEvalResult:
+    """Execute one complete stage of the workflow and return its results."""
     qid = _get_query_id(qdef) or "UNKNOWN"
     query_text = _get_query_text(qdef) or ""
     persona = qdef.get("persona", "Unknown")
@@ -360,6 +397,7 @@ def run_query(
     routing_correct = False
     router_ms = 0
     retrieval_ms = 0
+    stage_timings: dict[str, int] = {}
     top_in_family = False
     any_top5_in_family = False
     top_results_out: list[TopResult] = []
@@ -427,6 +465,7 @@ def run_query(
         embed_retrieve_ms=embed_retrieve_ms,
         router_ms=router_ms,
         retrieval_ms=retrieval_ms,
+        stage_timings_ms=stage_timings,
         top_results=[asdict(tr) for tr in top_results_out],
         notes=" | ".join(notes),
         error=error,
@@ -437,6 +476,7 @@ def run_query(
 # Report writing
 # ---------------------------------------------------------------------------
 def _scorecard(results: list[QueryEvalResult], bucket_key) -> dict:
+    """Calculate a score that summarizes how well the system performed."""
     buckets: dict[str, dict] = {}
     for r in results:
         key = bucket_key(r)
@@ -449,6 +489,7 @@ def _scorecard(results: list[QueryEvalResult], bucket_key) -> dict:
 
 
 def write_json_results(run: EvalRun) -> None:
+    """Write the generated output so the workflow leaves behind a reusable artifact."""
     RESULTS_JSON.parent.mkdir(parents=True, exist_ok=True)
     with open(RESULTS_JSON, "w", encoding="utf-8") as f:
         json.dump(asdict(run), f, indent=2, default=str)
@@ -513,6 +554,7 @@ def write_markdown_report(
     run: EvalRun,
     results: list[QueryEvalResult],
 ) -> None:
+    """Write the generated output so the workflow leaves behind a reusable artifact."""
     lines: list[str] = []
     lines.append("# Production Golden Eval Results")
     lines.append("")
@@ -612,6 +654,19 @@ def write_markdown_report(
     if wall_clock:
         lines.append(f"| Wall clock (router+retrieval) | {p50_wall}ms | {p95_wall}ms | {min(wall_clock)}ms | {max(wall_clock)}ms |")
     lines.append("")
+
+    stage_latency_summary = run.stage_latency_summary or _summarize_stage_timings(results)
+    if stage_latency_summary:
+        lines.append("## Stage Timing Breakdown")
+        lines.append("")
+        lines.append("| Stage | P50 | P95 | Max | Queries |")
+        lines.append("|-------|----:|----:|----:|--------:|")
+        for stage, stats in stage_latency_summary.items():
+            lines.append(
+                f"| {stage} | {stats.get('p50_ms', 0)}ms | {stats.get('p95_ms', 0)}ms | "
+                f"{stats.get('max_ms', 0)}ms | {stats.get('queries_with_stage', 0)} |"
+            )
+        lines.append("")
 
     # -----------------------------------------------------------------------
     # 5-category breakdown from the brief
@@ -741,6 +796,14 @@ def write_markdown_report(
         lines.append(f"**Expected family:** {_ascii(r.expected_document_family)}")
         lines.append("")
         lines.append(f"**Latency:** embed+retrieve {r.embed_retrieve_ms}ms (router {r.router_ms}ms, retrieval {r.retrieval_ms}ms)")
+        if r.stage_timings_ms:
+            stage_parts = [
+                f"{stage}={value}ms"
+                for stage, value in sorted(r.stage_timings_ms.items())
+                if int(value or 0) > 0
+            ]
+            if stage_parts:
+                lines.append(f"**Stage timings:** {', '.join(stage_parts)}")
         lines.append("")
         if r.error:
             lines.append(f"**Error:** `{_ascii(r.error)}`")
@@ -871,6 +934,7 @@ def _rebuild_report_from_json() -> int:
                 embed_retrieve_ms=d["embed_retrieve_ms"],
                 router_ms=d["router_ms"],
                 retrieval_ms=d["retrieval_ms"],
+                stage_timings_ms=d.get("stage_timings_ms", {}),
                 top_results=cleaned_top,
                 notes=d.get("notes", ""),
                 error=d.get("error", ""),
@@ -901,6 +965,7 @@ def _rebuild_report_from_json() -> int:
         p95_router_ms=_percentile(router_latencies, 95),
         per_persona=raw["per_persona"],
         per_query_type=raw["per_query_type"],
+        stage_latency_summary=_summarize_stage_timings(reconstructed_results),
         results=[asdict(r) for r in reconstructed_results],
     )
     # Rewrite both the JSON (with new schema) and the MD report.
@@ -918,6 +983,7 @@ def _rebuild_report_from_json() -> int:
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main run production eval workflow."""
     global REPORT_MD, RESULTS_JSON, REPORT_QUERY_LABEL, REPORT_ENTITY_DB_LABEL, REPORT_CONFIG_LABEL
 
     queries_path = _resolve_cli_path("--queries", PRODUCTION_JSON)
@@ -1065,6 +1131,7 @@ def main() -> int:
         p95_router_ms=_percentile(router_latencies, 95),
         per_persona=per_persona,
         per_query_type=per_query_type,
+        stage_latency_summary=_summarize_stage_timings(results),
         results=[asdict(r) for r in results],
     )
 
@@ -1093,6 +1160,7 @@ def main() -> int:
 
 
 def _resolve_cli_path(flag: str, default: Path) -> Path:
+    """Resolve the final path or setting value that downstream code should use."""
     if flag not in sys.argv:
         return default
     idx = sys.argv.index(flag)

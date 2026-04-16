@@ -10,7 +10,8 @@ from __future__ import annotations
 import json
 import logging
 import re
-from dataclasses import dataclass
+import time
+from dataclasses import dataclass, field
 
 from src.store.entity_store import EntityStore, EntityResult, TableResult
 from src.store.relationship_store import RelationshipStore, RelationshipResult
@@ -32,6 +33,7 @@ class StructuredResult:
     sources: list[str]
     result_count: int
     query_path: str
+    stage_timings_ms: dict[str, int] = field(default_factory=dict)
 
 
 class EntityRetriever:
@@ -151,12 +153,15 @@ class EntityRetriever:
         parts = []
         sources = set()
         rels: list[RelationshipResult] = []
+        entity_lookup_ms = 0
+        relationship_lookup_ms = 0
 
         # Entity lookup
         entity_type = self._normalize_entity_type(c.entity_type, c.original_query)
         text_pattern = f"%{c.text_pattern}%" if c.text_pattern else None
         source_filter = c.site_filter if c.site_filter else None
 
+        entity_start = time.perf_counter()
         entities = self.entity_store.lookup_entities(
             entity_type=entity_type,
             text_pattern=text_pattern,
@@ -164,18 +169,22 @@ class EntityRetriever:
             min_confidence=self.min_confidence,
             limit=20,
         )
+        entity_lookup_ms = int((time.perf_counter() - entity_start) * 1000)
 
         if (
             not entities
             and entity_type == "CONTACT"
             and text_pattern
         ):
+            entity_start = time.perf_counter()
             entities = self._lookup_contact_for_person(
                 person_pattern=text_pattern,
                 source_filter=source_filter,
             )
+            entity_lookup_ms += int((time.perf_counter() - entity_start) * 1000)
 
         if not entities and text_pattern and entity_type is not None:
+            entity_start = time.perf_counter()
             entities = self.entity_store.lookup_entities(
                 entity_type=None,
                 text_pattern=text_pattern,
@@ -183,6 +192,7 @@ class EntityRetriever:
                 min_confidence=self.min_confidence,
                 limit=20,
             )
+            entity_lookup_ms += int((time.perf_counter() - entity_start) * 1000)
 
         if entities:
             parts.append("## Entity Results\n")
@@ -197,11 +207,13 @@ class EntityRetriever:
         # Relationship traversal — search for related entities
         search_text = c.text_pattern or c.site_filter or c.original_query
         if search_text:
+            rel_start = time.perf_counter()
             rels = self.relationship_store.find_related(
                 text=search_text,
                 min_confidence=self.min_confidence,
                 limit=20,
             )
+            relationship_lookup_ms = int((time.perf_counter() - rel_start) * 1000)
 
             if rels:
                 parts.append("\n## Relationship Results\n")
@@ -221,15 +233,29 @@ class EntityRetriever:
             sources=list(sources),
             result_count=len(entities) + len(rels),
             query_path="ENTITY",
+            stage_timings_ms={
+                "entity_lookup": entity_lookup_ms,
+                "relationship_lookup": relationship_lookup_ms,
+                "structured_lookup": entity_lookup_ms + relationship_lookup_ms,
+            },
         )
 
     def _aggregate_query(self, c: QueryClassification) -> StructuredResult | None:
         """Count and list entity occurrences across documents."""
+        aggregate_start = time.perf_counter()
         custom = (
             self._aggregate_sites_for_part(c)
             or self._aggregate_unique_part_numbers(c)
         )
         if custom:
+            custom.stage_timings_ms.setdefault(
+                "aggregate_lookup",
+                int((time.perf_counter() - aggregate_start) * 1000),
+            )
+            custom.stage_timings_ms.setdefault(
+                "structured_lookup",
+                custom.stage_timings_ms["aggregate_lookup"],
+            )
             return custom
 
         entity_type = self._normalize_entity_type(c.entity_type, c.original_query)
@@ -263,10 +289,15 @@ class EntityRetriever:
             sources=list(sources),
             result_count=len(agg),
             query_path="AGGREGATE",
+            stage_timings_ms={
+                "aggregate_lookup": int((time.perf_counter() - aggregate_start) * 1000),
+                "structured_lookup": int((time.perf_counter() - aggregate_start) * 1000),
+            },
         )
 
     def _tabular_query(self, c: QueryClassification) -> StructuredResult | None:
         """Query extracted table rows."""
+        table_start = time.perf_counter()
         # Use text_pattern to search values, site_filter for source
         rows = self.entity_store.query_tables(
             source_pattern=c.site_filter if c.site_filter else None,
@@ -292,6 +323,10 @@ class EntityRetriever:
             sources=list(sources),
             result_count=len(rows),
             query_path="TABULAR",
+            stage_timings_ms={
+                "tabular_lookup": int((time.perf_counter() - table_start) * 1000),
+                "structured_lookup": int((time.perf_counter() - table_start) * 1000),
+            },
         )
 
     def _normalize_entity_type(self, raw: str, query: str) -> str | None:
@@ -412,6 +447,7 @@ class EntityRetriever:
             sources=list(sources),
             result_count=len(ordered_sites),
             query_path="AGGREGATE",
+            stage_timings_ms={},
         )
 
     def _aggregate_unique_part_numbers(
@@ -450,6 +486,7 @@ class EntityRetriever:
             sources=sorted({src for srcs in canonical_sources.values() for src in srcs}),
             result_count=len(canonical_sources),
             query_path="AGGREGATE",
+            stage_timings_ms={},
         )
 
     def _row_to_mapping(self, headers: list[str], values: list[str]) -> dict[str, str]:

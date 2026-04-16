@@ -18,6 +18,7 @@ from src.query.context_builder import ContextBuilder
 
 
 def main():
+    """Parse command-line inputs and run the main test retrieval workflow."""
     config = load_config(str(v2_root / "config" / "config.yaml"))
 
     store = LanceStore(str(v2_root / config.paths.lance_db))

@@ -107,6 +107,7 @@ def md_to_docx(md_path: Path, docx_path: Path):
 
 
 def main():
+    """Parse command-line inputs and run the main convert docs to docx workflow."""
     docs_dir = Path(__file__).parent.parent / 'docs'
     md_files = sorted(docs_dir.glob('*.md'))
 

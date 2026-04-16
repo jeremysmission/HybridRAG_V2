@@ -83,18 +83,21 @@ PART_SENTINELS: tuple[str, ...] = (
 
 @dataclass(frozen=True)
 class StorePaths:
+    """Structured helper object used by the audit tier1 clean store workflow."""
     entity_db: str
     relationship_db: str
 
 
 @dataclass(frozen=True)
 class EntityTypeCount:
+    """Structured record used to hold a computed statistic for reporting."""
     entity_type: str
     count: int
 
 
 @dataclass(frozen=True)
 class RelationshipPredicateCount:
+    """Structured record used to hold a computed statistic for reporting."""
     predicate: str
     count: int
     distinct_sources: int
@@ -103,6 +106,7 @@ class RelationshipPredicateCount:
 
 @dataclass(frozen=True)
 class TopValue:
+    """Structured helper object used by the audit tier1 clean store workflow."""
     entity_type: str
     text: str
     rows: int
@@ -112,6 +116,7 @@ class TopValue:
 
 @dataclass(frozen=True)
 class BlockedHit:
+    """Structured helper object used by the audit tier1 clean store workflow."""
     entity_type: str
     namespace: str
     text: str
@@ -122,6 +127,7 @@ class BlockedHit:
 
 @dataclass(frozen=True)
 class SentinelResult:
+    """Small structured record used to keep related results together as the workflow runs."""
     entity_type: str
     text: str
     present: bool
@@ -132,6 +138,7 @@ class SentinelResult:
 
 @dataclass
 class CleanStoreAudit:
+    """Structured helper object used by the audit tier1 clean store workflow."""
     entity_db: str
     relationship_db: str
     entity_total: int
@@ -153,6 +160,7 @@ class CleanStoreAudit:
 
 
 def _default_entity_db() -> Path:
+    """Support the audit tier1 clean store workflow by handling the default entity db step."""
     if DEFAULT_ENTITY_DB.exists():
         return DEFAULT_ENTITY_DB
     return REPO_ROOT / "data" / "index" / "entities.sqlite3"
@@ -162,12 +170,14 @@ def resolve_store_paths(
     entity_db: str | Path | None,
     relationship_db: str | Path | None = None,
 ) -> StorePaths:
+    """Resolve the final path or setting value that downstream code should use."""
     entity_path = Path(entity_db) if entity_db else _default_entity_db()
     rel_path = Path(relationship_db) if relationship_db else entity_path.with_name("relationships.sqlite3")
     return StorePaths(entity_db=str(entity_path), relationship_db=str(rel_path))
 
 
 def _open_ro_sqlite(db_path: str | Path) -> sqlite3.Connection:
+    """Support the audit tier1 clean store workflow by handling the open ro sqlite step."""
     path = Path(db_path)
     conn = sqlite3.connect(f"file:{path.as_posix()}?mode=ro", uri=True)
     conn.row_factory = sqlite3.Row
@@ -175,11 +185,13 @@ def _open_ro_sqlite(db_path: str | Path) -> sqlite3.Connection:
 
 
 def _count_scalar(conn: sqlite3.Connection, sql: str) -> int:
+    """Support the audit tier1 clean store workflow by handling the count scalar step."""
     row = conn.execute(sql).fetchone()
     return int(row[0]) if row and row[0] is not None else 0
 
 
 def load_entity_type_counts(conn: sqlite3.Connection) -> list[EntityTypeCount]:
+    """Load the data needed for the audit tier1 clean store workflow."""
     rows = conn.execute(
         "SELECT entity_type, COUNT(*) AS n FROM entities GROUP BY entity_type"
     ).fetchall()
@@ -192,6 +204,7 @@ def load_top_values(
     entity_type: str,
     limit: int,
 ) -> list[TopValue]:
+    """Load the data needed for the audit tier1 clean store workflow."""
     rows = conn.execute(
         """
         SELECT
@@ -223,6 +236,7 @@ def load_relationship_predicates(
     conn: sqlite3.Connection,
     limit: int,
 ) -> list[RelationshipPredicateCount]:
+    """Load the data needed for the audit tier1 clean store workflow."""
     rows = conn.execute(
         """
         SELECT
@@ -249,6 +263,7 @@ def load_relationship_predicates(
 
 
 def _classify_blocked(entity_type: str, text: str) -> str | None:
+    """Support the audit tier1 clean store workflow by handling the classify blocked step."""
     patterns = PO_BLOCKED_PATTERNS if entity_type == "PO" else PART_BLOCKED_PATTERNS
     for namespace, pattern in patterns:
         if pattern.match(text):
@@ -261,6 +276,7 @@ def _load_sentinel_results(
     entity_type: str,
     sentinels: Iterable[str],
 ) -> list[SentinelResult]:
+    """Load the data needed for the audit tier1 clean store workflow."""
     results: list[SentinelResult] = []
     for sentinel in sentinels:
         row = conn.execute(
@@ -289,6 +305,7 @@ def _load_sentinel_results(
 
 
 def _blocked_hits_from_top_values(top_values: Iterable[TopValue]) -> list[BlockedHit]:
+    """Support the audit tier1 clean store workflow by handling the blocked hits from top values step."""
     hits: list[BlockedHit] = []
     for item in top_values:
         namespace = _classify_blocked(item.entity_type, item.text)
@@ -313,6 +330,7 @@ def audit_clean_store(
     top_part_limit: int = 30,
     relationship_predicate_limit: int = 10,
 ) -> CleanStoreAudit:
+    """Support the audit tier1 clean store workflow by handling the audit clean store step."""
     paths = resolve_store_paths(entity_db, relationship_db)
     entity_path = Path(paths.entity_db)
     rel_path = Path(paths.relationship_db)
@@ -405,6 +423,7 @@ def audit_clean_store(
 
 
 def render_markdown(report: CleanStoreAudit) -> str:
+    """Render the collected results into a report-friendly format."""
     lines: list[str] = []
     lines.append("# Tier 1 Clean Rerun Store Audit")
     lines.append("")
@@ -515,6 +534,7 @@ def render_markdown(report: CleanStoreAudit) -> str:
 
 
 def _print_text(report: CleanStoreAudit) -> None:
+    """Render a readable summary for the person running the tool."""
     print("=" * 72)
     print("TIER 1 CLEAN RERUN STORE AUDIT")
     print("=" * 72)
@@ -579,6 +599,7 @@ def _print_text(report: CleanStoreAudit) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Parse command-line inputs and run the main audit tier1 clean store workflow."""
     parser = argparse.ArgumentParser(description="Post-rerun clean-store audit for Tier 1.")
     parser.add_argument("--entity-db", help="Path to the entities.sqlite3 file to audit.")
     parser.add_argument(

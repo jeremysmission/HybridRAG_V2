@@ -166,6 +166,7 @@ def ensure_service_events_schema(conn: sqlite3.Connection) -> None:
 
 
 def _extract_field_map(block_text: str) -> dict[str, str]:
+    """Support the service event extractor workflow by handling the extract field map step."""
     fields: dict[str, str] = {}
     for match in _FIELD_VALUE_RE.finditer(str(block_text or "")):
         label = normalize_whitespace(match.group("label")).lower()
@@ -179,6 +180,7 @@ def _extract_field_map(block_text: str) -> dict[str, str]:
 
 
 def _derive_heading(block_text: str) -> str:
+    """Support the service event extractor workflow by handling the derive heading step."""
     first_line = next(
         (line.strip() for line in str(block_text or "").splitlines() if line.strip()),
         "",
@@ -206,6 +208,7 @@ def _iter_event_blocks(text: str) -> list[str]:
 
 
 def _is_power_text(text: str) -> tuple[int, int]:
+    """Support the service event extractor workflow by handling the is power text step."""
     normalized = normalize_whitespace(text).lower()
     is_lightning = int("lightning" in normalized)
     is_power = int(
@@ -216,6 +219,7 @@ def _is_power_text(text: str) -> tuple[int, int]:
 
 
 def _extract_serial(value: str) -> str:
+    """Support the service event extractor workflow by handling the extract serial step."""
     match = _SERIAL_RE.search(str(value or ""))
     if match:
         return normalize_whitespace(match.group(0))
@@ -223,6 +227,7 @@ def _extract_serial(value: str) -> str:
 
 
 def _coerce_qty(value: str) -> int | None:
+    """Support the service event extractor workflow by handling the coerce qty step."""
     match = _QTY_RE.search(str(value or ""))
     if match:
         return int(match.group(1))
@@ -237,6 +242,7 @@ def _normalize_event_row(
     chunk_id: str,
     chunk_index: int,
 ) -> dict[str, Any]:
+    """Support the service event extractor workflow by handling the normalize event row step."""
     fields = _extract_field_map(block_text)
     heading = _derive_heading(block_text)
     part_number = normalize_whitespace(fields.get("part_number", ""))
@@ -508,6 +514,7 @@ def extract_all_service_events(db_path: str) -> int:
 
 
 def _load_known_terms(conn: sqlite3.Connection) -> tuple[list[str], list[str]]:
+    """Load the data needed for the service event extractor workflow."""
     site_rows = conn.execute(
         "SELECT DISTINCT site_canonical FROM service_events WHERE site_canonical != ''"
     ).fetchall()
@@ -521,6 +528,7 @@ def _load_known_terms(conn: sqlite3.Connection) -> tuple[list[str], list[str]]:
 
 
 def _build_event_where(filters: dict[str, Any]) -> tuple[str, list[Any]]:
+    """Assemble the structured object this workflow needs for its next step."""
     clauses = ["report_family = 'MSR'"]
     params: list[Any] = []
 
@@ -582,6 +590,7 @@ def is_aggregation_query(question: str) -> bool:
 
 
 def _format_sources(rows: list[sqlite3.Row]) -> list[dict[str, Any]]:
+    """Turn internal values into human-readable text for the operator."""
     seen: set[str] = set()
     sources: list[dict[str, Any]] = []
     for row in rows:
@@ -625,6 +634,7 @@ def _query_top_failed_parts(
     params: list[Any],
     top_n: int,
 ) -> dict[str, Any] | None:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     rows = conn.execute(
         f"""
         SELECT COALESCE(NULLIF(part_number, ''), NULLIF(installed_part_number, ''), NULLIF(removed_part_number, ''), NULLIF(component_name, '')) AS part_key,
@@ -660,6 +670,7 @@ def _query_site_issue_ranking(
     params: list[Any],
     top_n: int,
 ) -> dict[str, Any] | None:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     rows = conn.execute(
         f"""
         SELECT site_canonical,
@@ -691,6 +702,7 @@ def _query_power_sites(
     where_sql: str,
     params: list[Any],
 ) -> dict[str, Any] | None:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     rows = conn.execute(
         f"""
         SELECT site_canonical,
@@ -725,6 +737,7 @@ def _query_parts_by_action(
     params: list[Any],
     action_types: list[str],
 ) -> dict[str, Any] | None:
+    """Run a focused lookup against the underlying stores and return the matching data."""
     placeholders = ", ".join("?" for _ in action_types)
     rows = conn.execute(
         f"""

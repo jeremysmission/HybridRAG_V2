@@ -1,3 +1,4 @@
+"""Test module for the llm client behavior. The checks here explain what the repository expects to keep working."""
 import sys
 from pathlib import Path
 from types import SimpleNamespace
@@ -10,6 +11,7 @@ from src.llm import client as llm_client
 
 
 class _FakeKeyring:
+    """Small helper object used to keep test setup or expected results organized."""
     def __init__(self, mapping):
         self.mapping = mapping
 
@@ -18,11 +20,13 @@ class _FakeKeyring:
 
 
 class _FakeOpenAI:
+    """Small helper object used to keep test setup or expected results organized."""
     def __init__(self, **kwargs):
         self.kwargs = kwargs
 
 
 def test_llm_client_uses_legacy_hybridrag_keyring_entries(monkeypatch):
+    """Verify that llm client uses legacy hybridrag keyring entries behaves the way the team expects."""
     mapping = {
         ("hybridrag", "azure_api_key"): "sk-test-legacy-key",
         ("hybridrag", "azure_endpoint"): "https://api.openai.com/v1",
@@ -53,6 +57,7 @@ def test_llm_client_uses_legacy_hybridrag_keyring_entries(monkeypatch):
 
 
 def test_validate_setup_reports_legacy_hybridrag_keyring_key(monkeypatch):
+    """Verify that validate setup reports legacy hybridrag keyring key behaves the way the team expects."""
     mapping = {
         ("hybridrag", "azure_api_key"): "sk-test-legacy-key",
     }

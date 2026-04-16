@@ -56,6 +56,7 @@ DEFAULT_QUERIES = [
 
 
 def _runtime_config_filename(config_arg: str | None) -> str:
+    """Support this test module by handling the runtime config filename step."""
     if not config_arg:
         return "config.yaml"
 
@@ -81,10 +82,12 @@ def _runtime_config_filename(config_arg: str | None) -> str:
 
 
 def _now_stamp() -> str:
+    """Support this test module by handling the now stamp step."""
     return datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 def _json_safe_hit(hit: Any, rank: int) -> dict[str, Any]:
+    """Support this test module by handling the json safe hit step."""
     text = getattr(hit, "text", "")
     return {
         "rank": rank,
@@ -96,6 +99,7 @@ def _json_safe_hit(hit: Any, rank: int) -> dict[str, Any]:
 
 
 def _normalize_path(value: str) -> str:
+    """Support this test module by handling the normalize path step."""
     raw = str(value or "").strip()
     if not raw:
         return ""
@@ -106,6 +110,7 @@ def _normalize_path(value: str) -> str:
 
 
 def _is_relative_to(path: Path, root: Path) -> bool:
+    """Support this test module by handling the is relative to step."""
     try:
         path.resolve().relative_to(root.resolve())
         return True
@@ -114,6 +119,7 @@ def _is_relative_to(path: Path, root: Path) -> bool:
 
 
 def _flag_source_paths(hits: list[Any], expected_source_root: str) -> dict[str, Any]:
+    """Support this test module by handling the flag source paths step."""
     suspicious_sources: list[dict[str, Any]] = []
     normalized_root = _normalize_path(expected_source_root)
     root_path = Path(normalized_root) if normalized_root else None
@@ -150,6 +156,7 @@ def _flag_source_paths(hits: list[Any], expected_source_root: str) -> dict[str, 
 
 
 def _prompt_budget_snapshot(engine, query: str, trimmed_context: str) -> dict[str, Any]:
+    """Support this test module by handling the prompt budget snapshot step."""
     ctx_window, output_budget = _qe_resolve_prompt_budget(engine)
     prompt_overhead_tokens = 800 + (len(query) // 4) + output_budget
     max_context_tokens = max(ctx_window - prompt_overhead_tokens, 512)
@@ -165,6 +172,7 @@ def _prompt_budget_snapshot(engine, query: str, trimmed_context: str) -> dict[st
 
 
 def _router_snapshot(engine, creds) -> dict[str, Any]:
+    """Support this test module by handling the router snapshot step."""
     router = engine.llm_router
     cfg = engine.config
     mode = str(cfg.mode).strip().lower()
@@ -197,6 +205,7 @@ def _router_snapshot(engine, creds) -> dict[str, Any]:
 
 
 def _mode_readiness(engine, creds) -> dict[str, Any]:
+    """Support this test module by handling the mode readiness step."""
     mode = str(engine.config.mode).strip().lower()
     ollama_ready = False
     ollama_error = ""
@@ -222,6 +231,7 @@ def _mode_readiness(engine, creds) -> dict[str, Any]:
 
 
 def _manual_pipeline_probe(engine, query: str, expected_source_root: str) -> dict[str, Any]:
+    """Support this test module by handling the manual pipeline probe step."""
     retriever = engine.retriever
     retriever.refresh_settings()
 
@@ -321,6 +331,7 @@ def _manual_pipeline_probe(engine, query: str, expected_source_root: str) -> dic
 
 
 def _run_end_to_end(engine, query: str, readiness: dict[str, Any], invoke_llm: bool) -> dict[str, Any]:
+    """Support this test module by handling the run end to end step."""
     if not invoke_llm:
         return {"attempted": False, "skipped_reason": "invoke_llm disabled"}
     if not readiness["can_invoke_llm"]:
@@ -350,6 +361,7 @@ def _run_end_to_end(engine, query: str, readiness: dict[str, Any], invoke_llm: b
 
 
 def _build_engine(mode: str, config_filename: str, args) -> dict[str, Any]:
+    """Assemble the test data needed for the scenario being checked."""
     project_root = str(PROJECT_ROOT)
     cfg = load_config(project_dir=project_root, config_filename=config_filename)
     cfg = copy.deepcopy(cfg)
@@ -390,6 +402,7 @@ def _build_engine(mode: str, config_filename: str, args) -> dict[str, Any]:
 
 
 def _close_engine(bundle: dict[str, Any]) -> None:
+    """Support this test module by handling the close engine step."""
     try:
         bundle["store"].close()
     except Exception:
@@ -397,6 +410,7 @@ def _close_engine(bundle: dict[str, Any]) -> None:
 
 
 def _warm_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
+    """Support this test module by handling the warm bundle step."""
     engine = bundle["engine"]
     t0 = time.perf_counter()
     error = ""
@@ -417,6 +431,7 @@ def _run_mode_query_probe(
     creds,
     invoke_llm: bool,
 ) -> dict[str, Any]:
+    """Support this test module by handling the run mode query probe step."""
     engine = bundle["engine"]
     readiness = _mode_readiness(engine, creds)
     expected_source_root = str(
@@ -437,6 +452,7 @@ def _run_mode_query_probe(
 
 
 def _write_markdown_summary(out_path: Path, report: dict[str, Any]) -> None:
+    """Support this test module by handling the write markdown summary step."""
     lines = []
     lines.append("# Query Path Probe Summary")
     lines.append("")
@@ -518,6 +534,7 @@ def _write_markdown_summary(out_path: Path, report: dict[str, Any]) -> None:
 
 
 def _load_queries(args) -> list[str]:
+    """Load the fixture data used by the test."""
     queries: list[str] = []
     for query in args.query:
         q = str(query).strip()
@@ -535,6 +552,7 @@ def _load_queries(args) -> list[str]:
 
 
 def main() -> None:
+    """Run this helper module directly from the command line."""
     ap = argparse.ArgumentParser(description="Trace query architecture across offline/online modes.")
     ap.add_argument("--config", default="config/config.yaml", help="Config filename/path inside repo config/.")
     ap.add_argument("--engine", choices=("grounded", "base"), default="grounded", help="Use the guarded query engine or the plain core query engine.")

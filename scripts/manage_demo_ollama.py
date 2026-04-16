@@ -28,6 +28,7 @@ RUNTIME_DIR = ROOT / "results" / "demo_ollama"
 
 
 def state_path(port: int) -> Path:
+    """Support the manage demo ollama workflow by handling the state path step."""
     return RUNTIME_DIR / f"demo_ollama_{port}.json"
 
 
@@ -174,6 +175,7 @@ def start_service(args: argparse.Namespace) -> int:
 
 
 def read_state(port: int) -> dict | None:
+    """Read a file or artifact and return it in a form later steps can use."""
     path = state_path(port)
     if not path.exists():
         return None
@@ -209,6 +211,7 @@ def stop_service(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Assemble the structured object this workflow needs for its next step."""
     parser = argparse.ArgumentParser(description="Manage dedicated Ollama service for demo work.")
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -237,6 +240,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    """Parse command-line inputs and run the main manage demo ollama workflow."""
     parser = build_parser()
     args = parser.parse_args()
     return int(args.func(args))

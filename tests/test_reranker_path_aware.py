@@ -1,3 +1,4 @@
+"""Test module for the reranker path aware behavior. The checks here explain what the repository expects to keep working."""
 from __future__ import annotations
 
 from src.query import reranker as reranker_mod
@@ -6,12 +7,14 @@ from src.store.lance_store import ChunkResult
 
 
 class _FakeRerankRequest:
+    """Small helper object used to keep test setup or expected results organized."""
     def __init__(self, query, passages):
         self.query = query
         self.passages = passages
 
 
 class _FakeRanker:
+    """Small helper object used to keep test setup or expected results organized."""
     def __init__(self, model_name: str = "fake"):
         self.model_name = model_name
         self.last_request = None
@@ -26,6 +29,7 @@ class _FakeRanker:
 
 
 def test_reranker_passages_include_source_path(monkeypatch):
+    """Verify that reranker passages include source path behaves the way the team expects."""
     fake_ranker = _FakeRanker()
     monkeypatch.setattr(reranker_mod, "Ranker", lambda model_name="fake": fake_ranker)
     monkeypatch.setattr(reranker_mod, "RerankRequest", _FakeRerankRequest)

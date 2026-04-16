@@ -4,7 +4,7 @@
 
 This is the practical fallback guide for the workstation laptop and workstation desktop if the batch installer does not complete cleanly.
 
-It also lists the productive, safe work that can be done on those workstations today without interfering with the current Beast-side Tier 1 cleanup path.
+It also lists the productive, safe work that can be done on those workstations today without interfering with the current primary workstation-side Tier 1 cleanup path.
 
 ## Bottom Line
 
@@ -82,6 +82,51 @@ if (!(Test-Path .venv)) { py -3.12 -m venv .venv }
 .venv\Scripts\python.exe -m pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --no-deps gliner==0.2.26
 ```
 
+### 5b. If the `--trusted-host` fallback still connection-errors (fully proxy-hardened)
+
+When even the `--trusted-host` fallback cannot reach pypi.org (proxy strips the
+connection), install gliner from a pre-built offline bundle. No pip network
+call, no HuggingFace network call.
+
+**On a builder machine with internet access** (e.g. primary workstation):
+
+```powershell
+cd C:\HybridRAG_V2
+git pull origin master
+.\tools\build_gliner_offline_bundle.ps1
+```
+
+This produces `C:\HybridRAG_V2\vendor\gliner_offline.zip` containing:
+
+- `wheels\` — gliner 0.2.26 + huggingface_hub, onnxruntime, sentencepiece, tqdm, transformers
+- `hf_home\` — snapshot of `urchade/gliner_medium-v2.1`
+- `manifest.json` — builder host, Python version, wheel count
+
+**On the proxy-hardened workstation**:
+
+1. Copy the zip to `C:\HybridRAG_V2\vendor\gliner_offline.zip`
+2. Run the offline installer:
+
+```powershell
+cd C:\HybridRAG_V2
+.\INSTALL_GLINER_OFFLINE.bat
+```
+
+The installer unpacks the zip, does `pip install --no-index --find-links` against
+the local wheels directory, imports gliner to confirm, runs `scripts\verify_install.py`,
+and writes `vendor\gliner_offline\env.cmd` — a small helper that sets `HF_HOME`
+to the bundled model cache.
+
+**Important**: at runtime, extraction will try to fetch the model from
+`huggingface.co` unless `HF_HOME` is set. Any bat/script that runs gliner on
+the workstation must either:
+
+- `call vendor\gliner_offline\env.cmd` before launching Python, or
+- have the operator pre-export `HF_HOME=C:\HybridRAG_V2\vendor\gliner_offline\hf_home`
+
+The Python minor version on the builder and workstation must match (both 3.12);
+otherwise the wheels won't be `--no-index`-installable.
+
 ### 6. Verify the install
 
 ```powershell
@@ -120,7 +165,7 @@ cd C:\CorpusForge
 
 ## Safe Workstation Actions For Today
 
-These are productive and safe while Beast is handling the Tier 1 critical path.
+These are productive and safe while primary workstation is handling the Tier 1 critical path.
 
 ### Safe Action 1: Get both repos current
 
@@ -233,10 +278,10 @@ Do **not** do these unless explicitly told to:
 
 - do not run a blind full Tier 1 rerun
 - do not run full Tier 2 GLiNER on a dirty store
-- do not mutate the authoritative Beast store assumptions
+- do not mutate the authoritative primary workstation store assumptions
 - do not improvise regex changes locally
 
-The current Beast-side critical path is:
+The current primary workstation-side critical path is:
 
 1. run Tier 1 regex gate
 2. run shadow Tier 1 slice

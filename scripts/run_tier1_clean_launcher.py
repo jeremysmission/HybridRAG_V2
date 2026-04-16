@@ -31,14 +31,17 @@ TIER1_SCRIPT = V2_ROOT / "scripts" / "tiered_extract.py"
 
 
 def utc_stamp() -> str:
+    """Support the run tier1 clean launcher workflow by handling the utc stamp step."""
     return datetime.now().astimezone().isoformat(timespec="seconds")
 
 
 def run_id_stamp(now: datetime | None = None) -> str:
+    """Execute one complete stage of the workflow and return its results."""
     return (now or datetime.now()).strftime("%Y%m%d_%H%M%S")
 
 
 def resolve_path(raw: str | Path) -> Path:
+    """Resolve the final path or setting value that downstream code should use."""
     path = Path(raw)
     if not path.is_absolute():
         path = V2_ROOT / path
@@ -46,11 +49,13 @@ def resolve_path(raw: str | Path) -> Path:
 
 
 def sibling_relationship_db(entity_db: Path) -> Path:
+    """Support the run tier1 clean launcher workflow by handling the sibling relationship db step."""
     return entity_db.with_name("relationships.sqlite3")
 
 
 @dataclass(frozen=True)
 class RunPlan:
+    """Structured helper object used by the run tier1 clean launcher workflow."""
     run_id: str
     config_path: str
     entity_db: str
@@ -62,6 +67,7 @@ class RunPlan:
 
 
 def build_run_plan(config_path: Path, log_dir: Path, run_id: str | None = None) -> RunPlan:
+    """Assemble the structured object this workflow needs for its next step."""
     from src.config.schema import load_config
 
     config = load_config(str(config_path))
@@ -97,6 +103,7 @@ def build_run_plan(config_path: Path, log_dir: Path, run_id: str | None = None) 
 
 
 def write_json_atomic(path: Path, payload: dict) -> None:
+    """Write the generated output so the workflow leaves behind a reusable artifact."""
     path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = path.with_suffix(path.suffix + ".tmp")
     temp_path.write_text(
@@ -116,6 +123,7 @@ def make_manifest(
     finished_at: str | None = None,
     return_code: int | None = None,
 ) -> dict:
+    """Support the run tier1 clean launcher workflow by handling the make manifest step."""
     payload = asdict(plan)
     payload.update(
         {
@@ -134,12 +142,14 @@ def make_manifest(
 
 
 def emit(log_file, message: str) -> None:
+    """Support the run tier1 clean launcher workflow by handling the emit step."""
     print(message, flush=True)
     log_file.write(message + "\n")
     log_file.flush()
 
 
 def stream_child_output(proc: subprocess.Popen[str], log_file) -> int:
+    """Support the run tier1 clean launcher workflow by handling the stream child output step."""
     assert proc.stdout is not None
     for line in proc.stdout:
         print(line, end="", flush=True)
@@ -149,6 +159,7 @@ def stream_child_output(proc: subprocess.Popen[str], log_file) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Parse command-line inputs and run the main run tier1 clean launcher workflow."""
     parser = argparse.ArgumentParser(
         description="Launch an isolated clean Tier 1 run with dated logs and a manifest."
     )

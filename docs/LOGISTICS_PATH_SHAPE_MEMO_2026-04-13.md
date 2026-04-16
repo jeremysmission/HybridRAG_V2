@@ -25,32 +25,32 @@ These are the master-compatible path patterns actually observed in the current c
 - `5.0 Logistics\\Procurement\\002 - Received\\1-Received\\WX29 (PO 7000372377)(Newark)(RG-58 Cable)($388.24)Rcvd 2019-04-08\\PO 7000372377.pdf`
 - `5.0 Logistics\\Procurement\\002 - Received\\1-Received\\WX39 (PO 7000367469)(Newark)(RG-213 1000')($2,204.09)rcvd 2019-02-13\\PO 7000367469.pdf`
 - `5.0 Logistics\\Procurement\\001 - Open Purchases\\Soldering Material COCO1\\Received\\PO - 5000665726, PR 3000187518 Solvents\\PO 5000665726 - 01.27.2026 - Lines 1-2 (P).pdf`
-- `zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2011 PRs\\PR 121401 (R) (LDI) (Sys 06-08 Plus Sys 30) (DPS-4D - Spares)\\PR 121401 (LDI) (PO 250788).pdf`
-- `zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2011 PRs\\PR 121414 (R) (TCI) (3 Each Towers-Antennas)\\PR 121414 (TCI) (PO 1st Sent).pdf`
-- `zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2014 PRs\\PR 396307 (B&H Photo) (500GB Hard Drives)\\BH_478322790.pdf`
+- `zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\monitoring system Purchases Rcvd (PO Type) (ARINC-BAH)\\2011 PRs\\PR 121401 (R) (LDI) (Sys 06-08 Plus Sys 30) (DPS-4D - Spares)\\PR 121401 (LDI) (PO 250788).pdf`
+- `zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\monitoring system Purchases Rcvd (PO Type) (ARINC-BAH)\\2011 PRs\\PR 121414 (R) (TCI) (3 Each Towers-Antennas)\\PR 121414 (TCI) (PO 1st Sent).pdf`
+- `zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\monitoring system Purchases Rcvd (PO Type) (ARINC-BAH)\\2014 PRs\\PR 396307 (B&H Photo) (500GB Hard Drives)\\BH_478322790.pdf`
 
 ### DD250 / transfer forms
 
-- `1.0 IGS DM - Restricted\\OASIS\\A004 - Technical Report – DD250 (Transfer Equipment to Government)\\Deliverables Report IGSI-443 A004 Technical Report DD250 (Transfer Equipment to Government) Niger.zip`
+- `1.0 enterprise program DM - Restricted\\OASIS\\A004 - Technical Report – DD250 (Transfer Equipment to Government)\\Deliverables Report IGSI-443 A004 Technical Report DD250 (Transfer Equipment to Government) Niger.zip`
 
 ### Shipping / return-shipping / hand-carry
 
 - `! Site Visits\\(01) Sites\\San Vito\\2022-02-02 thru 02-09 (RTS)(Seagren-Dexter)\\Shipping and Hand-Carry\\Return Shipping List.docx`
 - `! Site Visits\\(01) Sites\\San Vito\\2022-02-02 thru 02-09 (RTS)(Seagren-Dexter)\\Shipping and Hand-Carry\\Packing List.docx`
-- `NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\Shipping\\MIL-STD-129P_NOT_1.pdf`
-- `NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\Archive\\PHS&T\\MIL-STD-129P w Chg 3.pdf`
-- `NEXION\\Documents and Forms\\DOCUMENTS LIBRARY\\MIL-STD-129P w Chg 3 (DoD Standard Practice) (Military Marking for Shipment and Storage) (2004-10-29).pdf`
-- `zzSEMS ARCHIVE\\005_ILS\\Shipping\\Shipping Mode Information - T-TAC Account\\Defense Transportation Regulation-Part ii\\dtr_part_ii_205.pdf`
+- `monitoring system\\Documents and Forms\\DOCUMENTS LIBRARY\\Shipping\\industry standardP_NOT_1.pdf`
+- `monitoring system\\Documents and Forms\\DOCUMENTS LIBRARY\\Archive\\PHS&T\\industry standardP w Chg 3.pdf`
+- `monitoring system\\Documents and Forms\\DOCUMENTS LIBRARY\\industry standardP w Chg 3 (industry Standard Practice) (Military Marking for Shipment and Storage) (2004-10-29).pdf`
+- `zzSEMS ARCHIVE\\005_ILS\\Shipping\\Shipping Mode Information - T-TAC Account\\enterprise Transportation Regulation-Part ii\\dtr_part_ii_205.pdf`
 - `zzSEMS ARCHIVE\\005_ILS\\Shipping\\2018 Completed\\2018-04-25(WX28)(NG-Upgrade Kits & Tower Parts)(NG to Patrick)(2936.21)\\Archive\\DD Form 1149 3of3 TCN FB25008115X503XXX (2018-04-25) (Signed).pdf`
 
 ### Parts catalogs / spares / coax / cable
 
-- `1.5 IGS CDRLS\\A041 - Commercial-Off-the- Shelf (COTS) Manuals and Supplemental Data\\ISTO\\ISTO COTS Manuals\\P240-270VDG Preamplifier Data Sheet.pdf`
-- `1.5 IGS CDRLS\\A054 - Trouble Shooting Aids and Guides\\47QFRA22F0009_ IGSI-1140_OY1_IGS_Troubleshooting_Aides_Guides-ISTO_2024_06_26.docx`
-- `3.0 Cybersecurity\\archive\\VPN-GFE_Laptops\\Archive\\003.1_Document_Management\\01_Document_Templates\\Critical_Spares_Reports\\SEMS3D-xxxxx ISTO Critical Spares Planning Estimate (A001).docx`
-- `1.0 IGS DM - Restricted\\SEMS3D\\A001-Critical_Spares_Reports\\A001 - WX31 Critical Spares Planning Estimate\\SEMS3D-36712 Critical Spares Planning Estimate (A01).docx`
-- `zzSEMS ARCHIVE\\005_ILS\\Government_Property\\NEXION GFP_GFE\\Archive\\User Manual for RedBeam Asset Tracking v5 5.pdf`
-- `zzSEMS ARCHIVE\\005_ILS\\Export_Control\\ISTO Jurisdiction and Classification Requests\\MS-JC-17-01498 (Fieldfox RF Analyzer) (N9913A) (Keysight)\\KT Data Sheet (N9913A) (5990-9783EN).pdf`
+- `1.5 enterprise program CDRLS\\A041 - Commercial-Off-the- Shelf (COTS) Manuals and Supplemental Data\\legacy monitoring system\\legacy monitoring system COTS Manuals\\P240-270VDG Preamplifier Data Sheet.pdf`
+- `1.5 enterprise program CDRLS\\A054 - Trouble Shooting Aids and Guides\\47QFRA22F0009_ IGSI-1140_OY1_IGS_Troubleshooting_Aides_Guides-ISTO_2024_06_26.docx`
+- `3.0 Cybersecurity\\archive\\VPN-GFE_Laptops\\Archive\\003.1_Document_Management\\01_Document_Templates\\Critical_Spares_Reports\\SEMS3D-xxxxx legacy monitoring system Critical Spares Planning Estimate (A001).docx`
+- `1.0 enterprise program DM - Restricted\\SEMS3D\\A001-Critical_Spares_Reports\\A001 - WX31 Critical Spares Planning Estimate\\SEMS3D-36712 Critical Spares Planning Estimate (A01).docx`
+- `zzSEMS ARCHIVE\\005_ILS\\Government_Property\\monitoring system GFP_GFE\\Archive\\User Manual for RedBeam Asset Tracking v5 5.pdf`
+- `zzSEMS ARCHIVE\\005_ILS\\Export_Control\\legacy monitoring system Jurisdiction and Classification Requests\\MS-JC-17-01498 (Fieldfox RF Analyzer) (N9913A) (Keysight)\\KT Data Sheet (N9913A) (5990-9783EN).pdf`
 
 ## Strongest Path Terms
 
@@ -75,7 +75,7 @@ These are the path tokens that show up repeatedly in Logistics misses/partials a
 - `RG-`
 - `LMR-`
 - `DD250`
-- `MIL-STD-129`
+- `industry standard`
 - `catalog`
 - `asset tracking`
 
@@ -92,7 +92,7 @@ In the miss/partial top-5 paths, the most common terms were:
 - `return shipping list`
 - `packing list`
 - `critical spares`
-- `MIL-STD-129`
+- `industry standard`
 - `open purchases`
 - `purchase order`
 - `DD250`
@@ -101,15 +101,15 @@ In the miss/partial top-5 paths, the most common terms were:
 
 These are high-frequency path tokens that are useful for corpus navigation but too broad to trust on their own:
 
-- `IGS`
-- `NEXION`
-- `ISTO`
+- `enterprise program`
+- `monitoring system`
+- `legacy monitoring system`
 - `SEMS3D`
 - `OASIS`
 - `Archive`
 - `DM_Backup`
 - `5.0 Logistics`
-- `1.0 IGS DM - Restricted`
+- `1.0 enterprise program DM - Restricted`
 - `! Site Visits`
 - `Documents and Forms`
 - `DOCUMENTS LIBRARY`
@@ -144,7 +144,7 @@ When the query contains a PO number, `purchase order`, `open purchase`, `receive
 
 - `5.0 Logistics\\Procurement\\001 - Open Purchases\\...`
 - `5.0 Logistics\\Procurement\\002 - Received\\1-Received\\...`
-- `zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\...`
+- `zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\monitoring system Purchases Rcvd (PO Type) (ARINC-BAH)\\...`
 - filenames containing:
   - `PO `
   - `PO-`
@@ -168,7 +168,7 @@ If the query mentions `parts catalog`, `spares`, `coax`, `cable`, `RG-`, `LMR-`,
 - `Parts (Downloaded Information)`
 - `Critical_Spares_Reports`
 - `COTS Manuals and Supplemental Data`
-- `Government_Property\\NEXION GFP_GFE`
+- `Government_Property\\monitoring system GFP_GFE`
 - `Shipping` / `Procurement` folders that also contain `RG-` / `LMR-` / `cable` / `spares`
 
 ### 4. Keep shipping / return-shipping terms paired with their real folder shapes
@@ -178,7 +178,7 @@ Queries with `shipping`, `shipment`, `return shipping`, `packing list`, or `hand
 - `Shipping and Hand-Carry`
 - `Return Shipping List.docx`
 - `Packing List.docx`
-- `MIL-STD-129P` / `MIL-STD-129N`
+- `industry standardP` / `industry standardN`
 - `Shipment Confirmation`
 - `DD Form 1149`
 

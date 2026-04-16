@@ -1,5 +1,8 @@
 # V1 vs V2 Comparison Report
 
+> WARNING: Historical comparison only. This file contains stale store counts and early capability framing, and is unsafe for current demo/operator narration.
+> Start instead with `docs/MAY2_CANONICAL_DEMO_PACKET_2026-04-12.md` and `docs/V2_DEMO_READINESS_GAP_ANALYSIS_2026-04-12.md`.
+
 **Date:** 2026-04-07 MDT
 **Author:** Jeremy Randall (CoPilot+)
 

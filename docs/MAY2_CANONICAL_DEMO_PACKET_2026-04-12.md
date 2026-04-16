@@ -46,10 +46,11 @@
 
 - Do **not** claim broad corpus-wide `PO` or `PART` counts are trustworthy.
 - Do **not** say aggregation is solved or that V1's failure mode is fully closed.
-- Do **not** sell the router as production-grade; latest documented routing accuracy is **12/25 correct (48%)**.
+- Do **not** sell the router as production-grade; latest measured 400-query routing accuracy is **298/400 correct (74.5%)**, which is improved but still not stage-safe for open-ended use.
 - Do **not** promise "ask anything" or open audience-choice early.
 - Do **not** imply relationship-backed reasoning is complete while relationships remain thin.
 - Do **not** use "restricted-ready," "GovCloud-ready," or "zero-cost" language unless separately re-verified for the actual demo environment.
+- Do **not** use any query listed in `docs/QUERIES_TO_AVOID_FOR_DEMO_2026-04-13.md` as a live stage query without explicit re-verification.
 
 ## Safest Demo Shape Right Now
 
@@ -98,9 +99,12 @@ Stop and re-freeze the packet if any of the following happen:
 
 ## Source Basis
 
-- `docs/COORDINATOR_STATE_2026-04-11.md`
-- `docs/CRASH_RECOVERY_2026-04-12.md`
+- `docs/SOURCE_OF_TRUTH_MAP_2026-04-12.md`
+- `docs/REBOOT_HANDOVER_2026-04-13.md`
+- `docs/AUTHORITATIVE_FACTS_AND_SOURCES_2026-04-12.md`
+- `docs/PRODUCTION_EVAL_RESULTS_POST_CDRL_PATH_PATCH_400_2026-04-13.md`
 - `docs/V2_DEMO_READINESS_GAP_ANALYSIS_2026-04-12.md`
 - `docs/DEMO_DAY_RESEARCH_2026-04-12.md`
 - `docs/CANARY_INJECTION_METHODOLOGY_2026-04-12.md`
+- `docs/QUERIES_TO_AVOID_FOR_DEMO_2026-04-13.md`
 - Live probe on 2026-04-12 late evening: LanceDB count plus SQLite entity, relationship, and extracted-table counts from `C:\HybridRAG_V2\data\index`
