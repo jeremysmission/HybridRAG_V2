@@ -209,20 +209,77 @@ the approved Anaconda environment. rapidfuzz has zero known CVEs.
 
 ---
 
-## Waiver Priority
+## Status Legend
 
-| Priority | Package | Blocking? | Phase Needed | Status |
+| Color | Meaning |
+|-------|---------|
+| GREEN | Pre-approved on the 922-item approved software list |
+| YELLOW | Waiver application submitted or pending |
+| RED | Banned -- NDAA non-compliant (Chinese origin) or explicitly denied |
+
+---
+
+## Software Stack by Application
+
+### HybridRAG V2 -- Core Query/Retrieval System
+
+| Package | License | Origin | App Role | Status |
+|---------|---------|--------|----------|--------|
+| Python (Anaconda3) | BSD-3 | USA | Runtime | GREEN (approved 3.12.7) |
+| PowerShell 7 | MIT | USA (Microsoft) | Install/launch scripts | GREEN (approved 7.6.0) |
+| torch (PyTorch) | BSD-3 | USA (Meta) | GPU compute for embeddings | YELLOW (via Anaconda pip) |
+| sentence-transformers | Apache 2.0 | Germany (NATO) | Embedding model loader | YELLOW (via Anaconda pip) |
+| lancedb | Apache 2.0 | USA (SF, YC) | Vector + FTS database | YELLOW (waiver submitted) |
+| flashrank | Apache 2.0 | Open source | Reranker (4MB model, CPU) | YELLOW (waiver submitted) |
+| gliner | Apache 2.0 | France (NATO) | Entity extraction (NER) | YELLOW (waiver submitted) |
+| docling | MIT | USA (IBM) | Table extraction from PDFs | YELLOW (waiver submitted) |
+| pydantic | MIT | Open source | Config validation | GREEN (via Anaconda) |
+| numpy / scipy | BSD-3 | USA | Numeric compute | GREEN (via Anaconda) |
+| openpyxl | MIT | Open source | Excel file handling | GREEN (via Anaconda) |
+
+### QA Workbench + Eval GUI -- Evaluation System
+
+| Package | License | Origin | App Role | Status |
+|---------|---------|--------|----------|--------|
+| ragas | Apache 2.0 | Open source (arXiv) | RAG evaluation metrics | YELLOW (apply today) |
+| rapidfuzz | MIT | Germany (NATO) | String matching for RAGAS | YELLOW (apply today) |
+| scikit-learn | BSD-3 | Open source | Eval statistics | GREEN (via Anaconda) |
+| pytest | MIT | Open source | Regression test suite | GREEN (via Anaconda) |
+
+### CorpusForge -- Ingest/Chunking Pipeline
+
+| Package | License | Origin | App Role | Status |
+|---------|---------|--------|----------|--------|
+| Python (Anaconda3) | BSD-3 | USA | Runtime | GREEN (approved 3.12.7) |
+| torch (PyTorch) | BSD-3 | USA (Meta) | GPU embedding at chunk time | YELLOW (via Anaconda pip) |
+| sentence-transformers | Apache 2.0 | Germany (NATO) | Embedding model | YELLOW (via Anaconda pip) |
+| pdfminer.six | MIT | Open source | PDF text extraction | GREEN (via Anaconda pip) |
+| python-docx | MIT | Open source | DOCX parsing | GREEN (via Anaconda pip) |
+
+### Explicitly NOT Used (RED)
+
+| Package | Origin | Why Banned |
+|---------|--------|-----------|
+| DeepSeek | China | NDAA non-compliant |
+| Qwen | China (Alibaba) | NDAA non-compliant |
+| Any Chinese-origin LLM | China | NDAA non-compliant |
+
+---
+
+## Waiver Application Priority
+
+| Priority | Package | App | Blocking? | Status |
 |---|---|---|---|---|
-| 1 | lancedb | Yes — core storage | Sprint 1 (Week 1) | Waiver submitted |
-| 2 | flashrank | No — LanceDB fallback | Sprint 1 (Week 1) | Waiver submitted |
-| 3 | gliner | No — GPT-4o fallback | Sprint 2 (Week 3) | Waiver submitted |
-| 4 | docling | No — openpyxl fallback | Sprint 2 (Week 3) | Waiver submitted |
-| **5** | **ragas** | **Yes — blocks QA/Eval GUIs** | **Now (demo prep)** | **NEW — apply today** |
-| **6** | **rapidfuzz** | **Yes — RAGAS dependency** | **Now (demo prep)** | **NEW — apply today** |
+| 1 | lancedb | V2 Core | Yes -- core storage | YELLOW (submitted) |
+| 2 | flashrank | V2 Core | No -- LanceDB fallback | YELLOW (submitted) |
+| 3 | gliner | V2 Core | No -- GPT-4o fallback | YELLOW (submitted) |
+| 4 | docling | V2 Core | No -- openpyxl fallback | YELLOW (submitted) |
+| **5** | **ragas** | **QA/Eval GUIs** | **Yes -- blocks eval** | **YELLOW (apply today)** |
+| **6** | **rapidfuzz** | **QA/Eval GUIs** | **Yes -- RAGAS dep** | **YELLOW (apply today)** |
 
 Development proceeds with or without waiver approval. Each package has a documented fallback using already-approved software.
 
-**Note:** Python (Anaconda3 2024.10-1) and PowerShell 7.6.0 are pre-approved on the 922-item approved software list. pip packages installed inside the approved Anaconda environment are extensions of the approved platform.
+**Key argument for all YELLOW packages:** They install as pip packages inside the pre-approved Anaconda 3.12.7 environment. They are extensions of an approved platform, not standalone software. All are open-source (MIT or Apache 2.0), all from USA or NATO ally countries, all run locally with zero data exfiltration.
 
 ---
 
