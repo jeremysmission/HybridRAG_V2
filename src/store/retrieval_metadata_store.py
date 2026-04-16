@@ -18,7 +18,10 @@ logger = logging.getLogger(__name__)
 
 
 _CDRL_RE = re.compile(r"(?<![A-Z0-9])(A\d{3})(?!\d)", re.IGNORECASE)
-_INCIDENT_RE = re.compile(r"\b(enterprise program(?:I|CC))[-_ ]?(\d+)\b", re.IGNORECASE)
+_INCIDENT_RE = re.compile(
+    r"\b(?:(enterprise program(?:I|CC))[-_ ]?(\d+)|(igsi|igscc)[-_ ]?(\d+))\b",
+    re.IGNORECASE,
+)
 _PO_RE = re.compile(r"\b(?:PO[-_ ]*)?(5\d{9}|7\d{9})\b", re.IGNORECASE)
 _CONTRACT_RE = re.compile(
     r"\b(FA[A-Z0-9]{11}|47QFRA[A-Z0-9]{7}|[A-Z]{2}\d{4}-\d{2}-[A-Z]-\d{4})\b",
@@ -57,6 +60,72 @@ _SHIPMENT_MODE_TERMS: dict[str, tuple[str, ...]] = {
     "comm": ("comm", "commercial"),
 }
 
+_CONTRACT_PERIOD_TERMS: tuple[tuple[str, str], ...] = (
+    ("oy1", "OY1"),
+    ("oy2", "OY2"),
+    ("base year", "Base Year"),
+)
+
+_PROGRAM_NAME_TERMS: tuple[tuple[str, str], ...] = (
+    ("monitoring system", "monitoring system"),
+    ("legacy monitoring system", "legacy monitoring system"),
+)
+
+_DOCUMENT_TYPE_TERMS: tuple[tuple[tuple[str, ...], str], ...] = (
+    (("packing list",), "Packing List"),
+    (("bom archive", "bill of materials", "priced bill of materials", "bom"), "BOM"),
+    (("shipping", "shipments", "shipment"), "Shipping"),
+)
+
+_DOCUMENT_CATEGORY_TERMS: tuple[tuple[tuple[str, ...], str], ...] = (
+    (
+        (
+            "plans and controls",
+            "annual security controls",
+            "annual security control and plan review",
+            "annual security controls and plans",
+            "rmf authorization",
+            "security plan",
+            "cybersecurity",
+            "scap",
+            "stig",
+            "monthly tcno-iavm",
+            "monthly scans-poams",
+            "information assurance",
+            "system security files",
+        ),
+        "Security",
+    ),
+    (
+        (
+            "10.0 program management",
+            "program management",
+            "001_project_management",
+            "project_management",
+            "weekly variance reports",
+            "travel approval forms",
+            "expense reports",
+            "contract deliverable documents",
+        ),
+        "PM",
+    ),
+    (
+        (
+            "5.0 logistics",
+            "logistics",
+            "packing list",
+            "shipping",
+            "shipments",
+            "purchases",
+            "open_purchases",
+            "government_property",
+            "gfp_gfe",
+            "iuid",
+        ),
+        "Logistics",
+    ),
+)
+
 
 @dataclass
 class SourceMetadata:
@@ -72,6 +141,10 @@ class SourceMetadata:
     is_reference_did: bool = False
     is_filed_deliverable: bool = False
     shipment_mode: str = ""
+    contract_period: str = ""
+    program_name: str = ""
+    document_type: str = ""
+    document_category: str = ""
     source_doc_hash: str = ""
 
     def to_row(self) -> tuple:
@@ -87,6 +160,10 @@ class SourceMetadata:
             int(self.is_reference_did),
             int(self.is_filed_deliverable),
             self.shipment_mode,
+            self.contract_period,
+            self.program_name,
+            self.document_type,
+            self.document_category,
             self.source_doc_hash,
         )
 
@@ -120,7 +197,10 @@ def _normalize_incident(value: str) -> str:
         return ""
     match = _INCIDENT_RE.search(raw)
     if match:
-        return f"{match.group(1).upper()}-{match.group(2)}"
+        if match.group(1) and match.group(2):
+            return f"{match.group(1).upper()}-{match.group(2)}"
+        if match.group(3) and match.group(4):
+            return f"{match.group(3).upper()}-{match.group(4)}"
     return raw.upper().replace("_", "-")
 
 
@@ -169,6 +249,10 @@ def _merge_metadata(base: SourceMetadata, new: SourceMetadata) -> SourceMetadata
         is_reference_did=base.is_reference_did or new.is_reference_did,
         is_filed_deliverable=base.is_filed_deliverable or new.is_filed_deliverable,
         shipment_mode=base.shipment_mode or new.shipment_mode,
+        contract_period=base.contract_period or new.contract_period,
+        program_name=base.program_name or new.program_name,
+        document_type=base.document_type or new.document_type,
+        document_category=base.document_category or new.document_category,
         source_doc_hash=base.source_doc_hash or new.source_doc_hash,
     )
 
@@ -185,6 +269,35 @@ def _detect_site(source_path: str) -> tuple[str, str]:
         return "", ""
     _, _, token, full_name = max(matches)
     return token, full_name
+
+
+def _detect_first_label(source_path: str, candidates: tuple[tuple[str, str], ...]) -> str:
+    """Pick the last occurring canonical label from the path when multiple match."""
+    lower = source_path.lower()
+    matches: list[tuple[int, int, str]] = []
+    for needle, label in candidates:
+        idx = lower.rfind(needle)
+        if idx >= 0:
+            matches.append((idx, len(needle), label))
+    if not matches:
+        return ""
+    _, _, label = max(matches)
+    return label
+
+
+def _detect_group_label(source_path: str, candidates: tuple[tuple[tuple[str, ...], str], ...]) -> str:
+    """Pick the last occurring grouped label from the path when multiple match."""
+    lower = source_path.lower()
+    matches: list[tuple[int, int, str]] = []
+    for needles, label in candidates:
+        for needle in needles:
+            idx = lower.rfind(needle)
+            if idx >= 0:
+                matches.append((idx, len(needle), label))
+    if not matches:
+        return ""
+    _, _, label = max(matches)
+    return label
 
 
 def derive_source_metadata(source_path: str, chunk: dict | None = None) -> SourceMetadata:
@@ -226,13 +339,25 @@ def derive_source_metadata(source_path: str, chunk: dict | None = None) -> Sourc
         if any(token in lower for token in tokens):
             shipment_mode = canonical
             break
+    contract_period = _detect_first_label(lower, _CONTRACT_PERIOD_TERMS)
+    program_name = _detect_first_label(lower, _PROGRAM_NAME_TERMS)
+    document_type = _detect_group_label(lower, _DOCUMENT_TYPE_TERMS)
+    document_category = _detect_group_label(lower, _DOCUMENT_CATEGORY_TERMS)
 
     derived = SourceMetadata(
         source_path=raw_path,
         source_ext=_normalize_ext(path_obj.suffix.lower()),
         cdrl_code=_normalize_cdrl(cdrl_match.group(1) if cdrl_match else ""),
         incident_id=_normalize_incident(
-            f"{incident_match.group(1)}-{incident_match.group(2)}" if incident_match else ""
+            (
+                f"{incident_match.group(1)}-{incident_match.group(2)}"
+                if incident_match and incident_match.group(1) and incident_match.group(2)
+                else (
+                    f"{incident_match.group(3)}-{incident_match.group(4)}"
+                    if incident_match and incident_match.group(3) and incident_match.group(4)
+                    else ""
+                )
+            )
         ),
         po_number=str(po_match.group(1)) if po_match else "",
         contract_number=_normalize_contract(contract_match.group(1) if contract_match else ""),
@@ -241,6 +366,10 @@ def derive_source_metadata(source_path: str, chunk: dict | None = None) -> Sourc
         is_reference_did=is_reference_did,
         is_filed_deliverable=is_filed_deliverable,
         shipment_mode=shipment_mode,
+        contract_period=contract_period,
+        program_name=program_name,
+        document_type=document_type,
+        document_category=document_category,
         source_doc_hash=str(chunk.get("source_doc_hash") or chunk.get("doc_hash") or "").strip(),
     )
 
@@ -256,6 +385,10 @@ def derive_source_metadata(source_path: str, chunk: dict | None = None) -> Sourc
         is_reference_did=_as_bool(chunk.get("is_reference_did")),
         is_filed_deliverable=_as_bool(chunk.get("is_filed_deliverable")),
         shipment_mode=str(chunk.get("shipment_mode") or "").strip().lower(),
+        contract_period=str(chunk.get("contract_period") or "").strip(),
+        program_name=str(chunk.get("program_name") or "").strip().upper(),
+        document_type=str(chunk.get("document_type") or "").strip(),
+        document_category=str(chunk.get("document_category") or "").strip(),
         source_doc_hash=str(chunk.get("source_doc_hash") or chunk.get("doc_hash") or "").strip(),
     )
     return _merge_metadata(chunk_supplied, derived)
@@ -289,6 +422,10 @@ class RetrievalMetadataStore:
                 is_reference_did INTEGER NOT NULL DEFAULT 0,
                 is_filed_deliverable INTEGER NOT NULL DEFAULT 0,
                 shipment_mode TEXT NOT NULL DEFAULT '',
+                contract_period TEXT NOT NULL DEFAULT '',
+                program_name TEXT NOT NULL DEFAULT '',
+                document_type TEXT NOT NULL DEFAULT '',
+                document_category TEXT NOT NULL DEFAULT '',
                 source_doc_hash TEXT NOT NULL DEFAULT '',
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
@@ -302,8 +439,28 @@ class RetrievalMetadataStore:
             CREATE INDEX IF NOT EXISTS idx_source_metadata_ref_did ON source_metadata(is_reference_did);
             CREATE INDEX IF NOT EXISTS idx_source_metadata_filed ON source_metadata(is_filed_deliverable);
             CREATE INDEX IF NOT EXISTS idx_source_metadata_ext ON source_metadata(source_ext);
+            CREATE INDEX IF NOT EXISTS idx_source_metadata_contract_period ON source_metadata(contract_period);
+            CREATE INDEX IF NOT EXISTS idx_source_metadata_program_name ON source_metadata(program_name);
+            CREATE INDEX IF NOT EXISTS idx_source_metadata_document_type ON source_metadata(document_type);
+            CREATE INDEX IF NOT EXISTS idx_source_metadata_document_category ON source_metadata(document_category);
             """
         )
+        existing_columns = {
+            str(row[1])
+            for row in self._conn.execute("PRAGMA table_info(source_metadata)").fetchall()
+        }
+        for column_name in (
+            "contract_period",
+            "program_name",
+            "document_type",
+            "document_category",
+        ):
+            if column_name in existing_columns:
+                continue
+            self._conn.execute(
+                f"ALTER TABLE source_metadata ADD COLUMN {column_name} TEXT NOT NULL DEFAULT ''"
+            )
+        self._conn.commit()
 
     def upsert_from_chunks(self, chunks: list[dict]) -> dict[str, int]:
         """Derive and upsert one metadata row per unique source_path."""
@@ -326,6 +483,10 @@ class RetrievalMetadataStore:
                 "with_site": 0,
                 "reference_dids": 0,
                 "filed_deliverables": 0,
+                "with_contract_period": 0,
+                "with_program_name": 0,
+                "with_document_type": 0,
+                "with_document_category": 0,
             }
 
         rows = [record.to_row() for record in unique.values()]
@@ -343,9 +504,13 @@ class RetrievalMetadataStore:
                 is_reference_did,
                 is_filed_deliverable,
                 shipment_mode,
+                contract_period,
+                program_name,
+                document_type,
+                document_category,
                 source_doc_hash
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(source_path) DO UPDATE SET
                 source_ext = excluded.source_ext,
                 cdrl_code = excluded.cdrl_code,
@@ -357,6 +522,10 @@ class RetrievalMetadataStore:
                 is_reference_did = excluded.is_reference_did,
                 is_filed_deliverable = excluded.is_filed_deliverable,
                 shipment_mode = excluded.shipment_mode,
+                contract_period = excluded.contract_period,
+                program_name = excluded.program_name,
+                document_type = excluded.document_type,
+                document_category = excluded.document_category,
                 source_doc_hash = CASE
                     WHEN excluded.source_doc_hash != '' THEN excluded.source_doc_hash
                     ELSE source_metadata.source_doc_hash
@@ -377,6 +546,10 @@ class RetrievalMetadataStore:
             "with_site": sum(1 for row in values if row.site_token),
             "reference_dids": sum(1 for row in values if row.is_reference_did),
             "filed_deliverables": sum(1 for row in values if row.is_filed_deliverable),
+            "with_contract_period": sum(1 for row in values if row.contract_period),
+            "with_program_name": sum(1 for row in values if row.program_name),
+            "with_document_type": sum(1 for row in values if row.document_type),
+            "with_document_category": sum(1 for row in values if row.document_category),
         }
 
     def find_source_paths(
@@ -391,6 +564,10 @@ class RetrievalMetadataStore:
         is_filed_deliverable: bool | None = None,
         source_exts: list[str] | None = None,
         shipment_mode: str | None = None,
+        contract_period: str | None = None,
+        program_name: str | None = None,
+        document_type: str | None = None,
+        document_category: str | None = None,
         limit: int = 10,
     ) -> list[str]:
         """Return matching source paths for typed retrieval filters."""
@@ -418,6 +595,18 @@ class RetrievalMetadataStore:
         if shipment_mode:
             clauses.append("shipment_mode = ?")
             params.append(str(shipment_mode).strip().lower())
+        if contract_period:
+            clauses.append("contract_period = ?")
+            params.append(str(contract_period).strip())
+        if program_name:
+            clauses.append("program_name = ?")
+            params.append(str(program_name).strip().upper())
+        if document_type:
+            clauses.append("document_type = ?")
+            params.append(str(document_type).strip())
+        if document_category:
+            clauses.append("document_category = ?")
+            params.append(str(document_category).strip())
         if source_exts:
             normalized_exts = [_normalize_ext(ext) for ext in source_exts if ext]
             if normalized_exts:

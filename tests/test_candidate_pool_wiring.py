@@ -98,6 +98,15 @@ class _FakeMetadataStore:
             return [
                 r"D:\CorpusTransfr\verified\IGS\1.5 enterprise program CDRLS\A001 - Corrective Action Plan\Fairford\Deliverables Report IGSI-1811 Corrective Action Plan (A001)\Deliverables Report IGSI-1811 Fairford CAP 2024-09.docx"
             ]
+        if (
+            filters.get("contract_period") == "OY2"
+            and filters.get("program_name") == "monitoring system"
+            and filters.get("document_type") == "Packing List"
+            and filters.get("document_category") == "Logistics"
+        ):
+            return [
+                r"D:\CorpusTransfr\verified\IGS\monitoring system\OY2\5.0 Logistics\Packing List\Guam\PO - 5000338041 Packing List.pdf"
+            ]
         return []
 
 
@@ -138,6 +147,9 @@ class _FakeContextBuilder:
             chunk_count=len(results),
             query_text=query,
         )
+
+    def build_with_timings(self, results, query):
+        return self.build(results, query), {"context_build": 0}
 
 
 class _FakeGenerator:
@@ -286,6 +298,44 @@ def test_vector_retriever_builds_typed_filed_deliverable_filters():
     )
 
     assert {"cdrl_code": "A002", "is_filed_deliverable": True} in groups
+
+
+def test_vector_retriever_builds_path_metadata_filters_for_explicit_folder_signals():
+    """Verify explicit path-signal queries turn into typed metadata filters."""
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._metadata_filter_groups(
+        "Show me the OY2 monitoring system packing list logistics documents for Guam."
+    )
+
+    assert {
+        "contract_period": "OY2",
+        "program_name": "monitoring system",
+        "document_type": "Packing List",
+        "document_category": "Logistics",
+        "site_terms": ["guam"],
+    } in groups
+
+
+def test_vector_retriever_prefers_typed_metadata_hits_for_explicit_path_signals():
+    """Verify explicit path-signal queries use the retrieval metadata sidecar."""
+    store = _FakeStore()
+    store.metadata_store = _FakeMetadataStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    results = retriever.search(
+        "Show me the OY2 monitoring system packing list logistics documents for Guam.",
+        top_k=10,
+        candidate_pool=30,
+    )
+
+    assert store.metadata_store.calls
+    assert results[0].chunk_id == "typed-0"
+    assert store.metadata_store.calls[0]["filters"]["contract_period"] == "OY2"
+    assert store.metadata_store.calls[0]["filters"]["program_name"] == "monitoring system"
+    assert store.metadata_store.calls[0]["filters"]["document_type"] == "Packing List"
+    assert store.metadata_store.calls[0]["filters"]["document_category"] == "Logistics"
 
 
 def test_vector_retriever_builds_cdrl_deliverable_hints_for_submitted_reports():

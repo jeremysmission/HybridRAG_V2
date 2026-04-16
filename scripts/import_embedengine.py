@@ -434,6 +434,13 @@ def _print_metadata_summary(metadata_db: Path, summary: dict[str, int]) -> None:
         f"reference_dids={summary.get('reference_dids', 0):,}, "
         f"filed_deliverables={summary.get('filed_deliverables', 0):,}"
     )
+    print(
+        "              "
+        f"contract_period={summary.get('with_contract_period', 0):,}, "
+        f"program={summary.get('with_program_name', 0):,}, "
+        f"doc_type={summary.get('with_document_type', 0):,}, "
+        f"doc_category={summary.get('with_document_category', 0):,}"
+    )
 
 
 def summarize_retrieval_metadata(chunks: list[dict]) -> dict[str, int]:
@@ -452,6 +459,10 @@ def summarize_retrieval_metadata(chunks: list[dict]) -> dict[str, int]:
             "site_token": derived.site_token,
             "is_reference_did": derived.is_reference_did,
             "is_filed_deliverable": derived.is_filed_deliverable,
+            "contract_period": derived.contract_period,
+            "program_name": derived.program_name,
+            "document_type": derived.document_type,
+            "document_category": derived.document_category,
         }
 
     values = list(unique_sources.values())
@@ -464,6 +475,10 @@ def summarize_retrieval_metadata(chunks: list[dict]) -> dict[str, int]:
         "with_site": sum(1 for row in values if row["site_token"]),
         "reference_dids": sum(1 for row in values if row["is_reference_did"]),
         "filed_deliverables": sum(1 for row in values if row["is_filed_deliverable"]),
+        "with_contract_period": sum(1 for row in values if row["contract_period"]),
+        "with_program_name": sum(1 for row in values if row["program_name"]),
+        "with_document_type": sum(1 for row in values if row["document_type"]),
+        "with_document_category": sum(1 for row in values if row["document_category"]),
     }
 
 

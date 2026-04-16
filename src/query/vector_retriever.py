@@ -218,6 +218,10 @@ class VectorRetriever:
         wants_reference_did = self._is_reference_did_query(lower)
         wants_filed = self._has_deliverable_intent(lower) or "filed deliverable" in lower
         source_exts = self._requested_source_exts(lower)
+        contract_periods = self._extract_contract_periods(lower)
+        program_names = self._extract_program_names(lower)
+        document_types = self._extract_document_types(lower)
+        document_categories = self._extract_document_categories(lower)
 
         groups: list[dict[str, object]] = []
 
@@ -298,6 +302,32 @@ class VectorRetriever:
             if source_exts:
                 shipment_group["source_exts"] = source_exts
             groups.append(shipment_group)
+
+        metadata_only_group: dict[str, object] = {}
+        if contract_periods:
+            metadata_only_group["contract_period"] = contract_periods[0]
+        if program_names:
+            metadata_only_group["program_name"] = program_names[0]
+        if document_types:
+            metadata_only_group["document_type"] = document_types[0]
+        if document_categories:
+            metadata_only_group["document_category"] = document_categories[0]
+        if site and metadata_only_group:
+            metadata_only_group["site_terms"] = [site]
+        if source_exts and metadata_only_group:
+            metadata_only_group["source_exts"] = source_exts
+        if metadata_only_group:
+            groups.append(metadata_only_group)
+
+        for group in groups:
+            if contract_periods and "contract_period" not in group:
+                group["contract_period"] = contract_periods[0]
+            if program_names and "program_name" not in group:
+                group["program_name"] = program_names[0]
+            if document_types and "document_type" not in group:
+                group["document_type"] = document_types[0]
+            if document_categories and "document_category" not in group:
+                group["document_category"] = document_categories[0]
 
         return self._dedupe_filter_groups(groups)
 
@@ -546,6 +576,106 @@ class VectorRetriever:
         if match:
             return match.group(1)
         return None
+
+    def _extract_contract_periods(self, query: str) -> list[str]:
+        periods: list[str] = []
+        if re.search(r"\boy1\b", query):
+            periods.append("OY1")
+        if re.search(r"\boy2\b", query):
+            periods.append("OY2")
+        if "base year" in query:
+            periods.append("Base Year")
+        deduped: list[str] = []
+        seen: set[str] = set()
+        for period in periods:
+            if period in seen:
+                continue
+            seen.add(period)
+            deduped.append(period)
+        return deduped
+
+    def _extract_program_names(self, query: str) -> list[str]:
+        programs: list[str] = []
+        if "monitoring system" in query:
+            programs.append("monitoring system")
+        if "legacy monitoring system" in query:
+            programs.append("legacy monitoring system")
+        deduped: list[str] = []
+        seen: set[str] = set()
+        for program in programs:
+            if program in seen:
+                continue
+            seen.add(program)
+            deduped.append(program)
+        return deduped
+
+    def _extract_document_types(self, query: str) -> list[str]:
+        document_types: list[str] = []
+        if "packing list" in query:
+            document_types.append("Packing List")
+        if "bill of materials" in query or re.search(r"\bbom\b", query):
+            document_types.append("BOM")
+        if any(token in query for token in ("shipping", "shipment", "shipments")):
+            document_types.append("Shipping")
+        deduped: list[str] = []
+        seen: set[str] = set()
+        for document_type in document_types:
+            if document_type in seen:
+                continue
+            seen.add(document_type)
+            deduped.append(document_type)
+        return deduped
+
+    def _extract_document_categories(self, query: str) -> list[str]:
+        categories: list[str] = []
+        if any(
+            token in query
+            for token in (
+                "security",
+                "rmf",
+                "cybersecurity",
+                "plans and controls",
+                "security plan",
+                "scap",
+                "stig",
+                "information assurance",
+            )
+        ):
+            categories.append("Security")
+        if any(
+            token in query
+            for token in (
+                "program management",
+                "project management",
+                "pm ",
+                " pm",
+                "variance report",
+                "travel approval",
+            )
+        ):
+            categories.append("PM")
+        if any(
+            token in query
+            for token in (
+                "logistics",
+                "packing list",
+                "shipping",
+                "shipment",
+                "shipments",
+                "purchases",
+                "procurement",
+                "government property",
+            )
+        ):
+            categories.append("Logistics")
+        deduped: list[str] = []
+        seen: set[str] = set()
+        for category in categories:
+            if category in seen:
+                continue
+            seen.add(category)
+            deduped.append(category)
+        return deduped
 
     def _cdrl_title_hints(self, query: str) -> list[str]:
         hints: list[str] = []
