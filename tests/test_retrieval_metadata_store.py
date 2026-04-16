@@ -29,7 +29,7 @@ def test_derive_source_metadata_for_reference_did():
 def test_derive_source_metadata_for_filed_deliverable():
     """Verify that derive source metadata for filed deliverable behaves the way the team expects."""
     metadata = derive_source_metadata(
-        r"D:\CorpusTransfr\verified\IGS\1.5 IGS CDRLS\A001 - Corrective Action Plan\Fairford\Deliverables Report IGSI-1811 Corrective Action Plan (A001)\Deliverables Report IGSI-1811 Fairford CAP 2024-09.docx"
+        r"D:\CorpusTransfr\verified\IGS\1.5 enterprise program CDRLS\A001 - Corrective Action Plan\Fairford\Deliverables Report IGSI-1811 Corrective Action Plan (A001)\Deliverables Report IGSI-1811 Fairford CAP 2024-09.docx"
     )
 
     assert metadata.source_ext == ".docx"
@@ -53,7 +53,7 @@ def test_store_finds_source_paths_by_typed_filters(tmp_path):
         {
             "chunk_id": "cap-1",
             "text": "Filed CAP",
-            "source_path": r"D:\CorpusTransfr\verified\IGS\1.5 IGS CDRLS\A001 - Corrective Action Plan\Fairford\Deliverables Report IGSI-1811 Corrective Action Plan (A001)\Deliverables Report IGSI-1811 Fairford CAP 2024-09.docx",
+            "source_path": r"D:\CorpusTransfr\verified\IGS\1.5 enterprise program CDRLS\A001 - Corrective Action Plan\Fairford\Deliverables Report IGSI-1811 Corrective Action Plan (A001)\Deliverables Report IGSI-1811 Fairford CAP 2024-09.docx",
         },
         {
             "chunk_id": "po-1",
@@ -99,7 +99,7 @@ def test_summarize_and_backfill_metadata_without_reembedding(tmp_path):
         {
             "chunk_id": "c2",
             "text": "Filed CAP",
-            "source_path": r"D:\CorpusTransfr\verified\IGS\1.5 IGS CDRLS\A001 - Corrective Action Plan\Fairford\Deliverables Report IGSI-1811 Corrective Action Plan (A001)\Deliverables Report IGSI-1811 Fairford CAP 2024-09.docx",
+            "source_path": r"D:\CorpusTransfr\verified\IGS\1.5 enterprise program CDRLS\A001 - Corrective Action Plan\Fairford\Deliverables Report IGSI-1811 Corrective Action Plan (A001)\Deliverables Report IGSI-1811 Fairford CAP 2024-09.docx",
         },
     ]
 

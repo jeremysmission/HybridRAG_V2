@@ -1,3 +1,9 @@
+@REM === NON-PROGRAMMER GUIDE ===
+@REM Purpose: Runs the import plus extraction workflow in one walk-away step.
+@REM How to follow: Point it at an export folder and then follow the printed progress lines.
+@REM Inputs: A source export directory or the --skip-import flag.
+@REM Outputs: Imported chunks plus extracted entities and relationships.
+@REM ============================
 @echo off
 setlocal
 

@@ -214,6 +214,7 @@ def get_tracked_files():
 
 
 def parse_args():
+    """Support this test module by handling the parse args step."""
     parser = argparse.ArgumentParser(
         description="Sanitize tracked text files before pushing to remote."
     )
@@ -239,6 +240,7 @@ def archive_original(path: Path, rel_path: str, archive_root: Path) -> None:
 
 
 def main():
+    """Run this helper module directly from the command line."""
     args = parse_args()
     apply = bool(args.apply)
     mode = "APPLY" if apply else "DRY-RUN"

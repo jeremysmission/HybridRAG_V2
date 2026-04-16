@@ -65,7 +65,7 @@
     {"id": "org_drop_the_organization", "family": "org_generic_bucket_and_case", "text": "The organization", "entity_type": "ORG", "expected": "drop", "why": "generic bucket", "hits": 110351, "docs": 533},
     {"id": "org_drop_organizations_lower", "family": "org_generic_bucket_and_case", "text": "organizations", "entity_type": "ORG", "expected": "drop", "why": "generic bucket plural", "hits": 74960, "docs": 1096},
     {"id": "org_drop_organizations_upper", "family": "org_generic_bucket_and_case", "text": "Organizations", "entity_type": "ORG", "expected": "drop", "why": "generic bucket plural", "hits": 68241, "docs": 793},
-    {"id": "org_keep_nexion", "family": "org_generic_bucket_and_case", "text": "NEXION", "entity_type": "ORG", "expected": "keep", "why": "trusted ORG", "hits": 71144, "docs": 6610},
+    {"id": "org_keep_nexion", "family": "org_generic_bucket_and_case", "text": "monitoring system", "entity_type": "ORG", "expected": "keep", "why": "trusted ORG", "hits": 71144, "docs": 6610},
     {"id": "org_normalize_mcmaster_upper", "family": "org_generic_bucket_and_case", "text": "MCMASTER-CARR", "entity_type": "ORG", "expected": "normalize", "canonical": "McMaster-Carr", "why": "case variant", "hits": 86466, "docs": 1041},
     {"id": "org_normalize_mcmaster_proper", "family": "org_generic_bucket_and_case", "text": "McMaster-Carr", "entity_type": "ORG", "expected": "normalize", "canonical": "McMaster-Carr", "why": "canonical form", "hits": 52765, "docs": 412},
 

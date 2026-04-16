@@ -36,7 +36,7 @@ That combination makes the lane result untrustworthy even before score compariso
    - One uses the repo-local interpreter:
      - `C:\HybridRAG_V2\.venv\Scripts\python.exe`
    - One uses system Python:
-     - `C:\Users\jerem\AppData\Local\Programs\Python\Python312\python.exe`
+     - `{USER_HOME}\AppData\Local\Programs\Python\Python312\python.exe`
    - The lane prompt explicitly requires the repo-local `.venv`.
 
 4. **Output trust is compromised by duplicate concurrent writers**

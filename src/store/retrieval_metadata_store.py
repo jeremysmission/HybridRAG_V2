@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 _CDRL_RE = re.compile(r"(?<![A-Z0-9])(A\d{3})(?!\d)", re.IGNORECASE)
-_INCIDENT_RE = re.compile(r"\b(IGS(?:I|CC))[-_ ]?(\d+)\b", re.IGNORECASE)
+_INCIDENT_RE = re.compile(r"\b(enterprise program(?:I|CC))[-_ ]?(\d+)\b", re.IGNORECASE)
 _PO_RE = re.compile(r"\b(?:PO[-_ ]*)?(5\d{9}|7\d{9})\b", re.IGNORECASE)
 _CONTRACT_RE = re.compile(
     r"\b(FA[A-Z0-9]{11}|47QFRA[A-Z0-9]{7}|[A-Z]{2}\d{4}-\d{2}-[A-Z]-\d{4})\b",
@@ -212,8 +212,8 @@ def derive_source_metadata(source_path: str, chunk: dict | None = None) -> Sourc
         and any(
             token in lower
             for token in (
-                "\\1.5 igs cdrls\\",
-                "/1.5 igs cdrls/",
+                "\\1.5 enterprise program cdrls\\",
+                "/1.5 enterprise program cdrls/",
                 "deliverables report",
                 "\\contract deliverable documents\\",
                 "/contract deliverable documents/",

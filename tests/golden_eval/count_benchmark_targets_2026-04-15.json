@@ -166,13 +166,13 @@
       "notes": "Exact part identifier with moderate evidence volume; deferred after tranche-1 runtime cap."
     },
     {
-      "target": "ITAR",
+      "target": "regulatory",
       "family": "acronym",
       "deterministic_family": "entity_exact",
       "trust": "medium",
       "tranche1_status": "deferred",
       "surface": "entity_exact",
-      "query": "ITAR",
+      "query": "regulatory",
       "notes": "Entity exact-hit family is tractable, but aliasing/raw text overcount risk remains."
     },
     {

@@ -7,14 +7,14 @@ status: active
 description: >-
   Sanitized controlled vocabulary for cybersecurity, Security+ domain
   language, and federal information security terminology. Sources are
-  official/public: NIST CSRC Glossary, CISA NICCS vocabulary, and
+  official/public: security standard CSRC Glossary, CISA NICCS vocabulary, and
   CompTIA Security+ public topic references.
 
 provenance:
   deployable_sources:
     - source_id: nist_csrc_glossary
       source_kind: official_public
-      citation: "https://csrc.nist.gov/Glossary"
+      citation: "https://csrc.security standard.gov/Glossary"
     - source_id: cisa_niccs_vocabulary
       source_kind: official_public
       citation: "https://niccs.cisa.gov/cybersecurity-career-resources/vocabulary"
@@ -23,7 +23,7 @@ provenance:
       citation: "https://www.comptia.org/faq/security/what-is-on-the-comptia-security-exam"
     - source_id: nist_ir_7298
       source_kind: official_public
-      citation: "https://www.nist.gov/publications/glossary-key-information-security-terms-1"
+      citation: "https://www.security standard.gov/publications/glossary-key-information-security-terms-1"
   notes: "Only deployable_sources ship with this pack artifact."
 
 entry_defaults:
@@ -40,13 +40,13 @@ entries:
     category: vulnerability_scanning
     expansion: Assured Compliance Assessment Solution
     aliases: [Assured Compliance Assessment Solution]
-    definition_short: "DoD enterprise vulnerability scanning and assessment capability."
+    definition_short: "industry enterprise vulnerability scanning and assessment capability."
     regex_safe: true
     retrieval_expand: true
     collision_risk: low
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
 
   - term_id: cyber.config.stig
     canonical: STIG
@@ -55,13 +55,13 @@ entries:
     category: configuration_baseline
     expansion: Security Technical Implementation Guide
     aliases: [Security Technical Implementation Guide, STIGs]
-    definition_short: "DoD configuration standards for hardening IT systems."
+    definition_short: "industry configuration standards for hardening IT systems."
     regex_safe: true
     retrieval_expand: true
     collision_risk: low
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
 
   - term_id: cyber.rmf.poam
     canonical: POAM
@@ -70,15 +70,15 @@ entries:
     category: risk_management
     expansion: Plan of Action and Milestones
     aliases: [POA&M, "Plan of Action and Milestones"]
-    definition_short: "NIST RMF action plan for tracking remediation of findings."
+    definition_short: "security standard RMF action plan for tracking remediation of findings."
     regex_safe: true
     retrieval_expand: true
     collision_risk: low
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
       - source_id: nist_ir_7298
-        citation: "https://www.nist.gov/publications/glossary-key-information-security-terms-1"
+        citation: "https://www.security standard.gov/publications/glossary-key-information-security-terms-1"
     notes: "Cross-listed with program_management_terms pack."
 
   - term_id: cyber.ops.siem
@@ -94,7 +94,7 @@ entries:
     collision_risk: low
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
       - source_id: comptia_sec_plus
         citation: "https://www.comptia.org/faq/security/what-is-on-the-comptia-security-exam"
 
@@ -126,7 +126,7 @@ entries:
     collision_risk: medium
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
     notes: "Three-letter acronym; collision risk with International Olympic Committee in non-cyber text."
 
   - term_id: cyber.threat.ttp
@@ -142,7 +142,7 @@ entries:
     collision_risk: low
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
 
   - term_id: cyber.vuln.cve
     canonical: CVE
@@ -157,7 +157,7 @@ entries:
     collision_risk: low
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
 
   - term_id: cyber.vuln.cwe
     canonical: CWE
@@ -172,7 +172,7 @@ entries:
     collision_risk: low
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
 
   - term_id: cyber.endpoint.edr
     canonical: EDR
@@ -204,7 +204,7 @@ entries:
     collision_risk: low
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
 
   - term_id: cyber.network.ips
     canonical: IPS
@@ -219,7 +219,7 @@ entries:
     collision_risk: low
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
 
   - term_id: cyber.endpoint.xdr
     canonical: XDR
@@ -249,7 +249,7 @@ entries:
     collision_risk: medium
     sources:
       - source_id: nist_csrc_glossary
-        citation: "https://csrc.nist.gov/Glossary"
+        citation: "https://csrc.security standard.gov/Glossary"
       - source_id: cisa_niccs_vocabulary
         citation: "https://niccs.cisa.gov/cybersecurity-career-resources/vocabulary"
     notes: "Multi-word term; canonical form varies in casing. Use case-insensitive matching."

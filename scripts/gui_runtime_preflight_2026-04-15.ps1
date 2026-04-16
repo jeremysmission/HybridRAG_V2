@@ -1,3 +1,9 @@
+# NON-PROGRAMMER GUIDE
+# Purpose: Prepares environment variables so the GUI launchers inherit safe runtime settings.
+# How to follow: It is usually called by a launcher, but you can run it directly to inspect the resolved environment.
+# Inputs: An optional project root and launcher name.
+# Outputs: A printed or emitted set of environment values for GUI startup.
+#
 [CmdletBinding()]
 param(
     [string]$ProjectRoot = "",

@@ -1,3 +1,9 @@
+# NON-PROGRAMMER GUIDE
+# Purpose: Installs the RAGAS-related dependencies using the repo's proxy-aware setup rules.
+# How to follow: Use it when the eval stack needs RAGAS on a controlled network.
+# Inputs: This repo and any proxy settings required by your environment.
+# Outputs: A RAGAS-ready local environment.
+#
 #Requires -Version 5.1
 <#
 .SYNOPSIS

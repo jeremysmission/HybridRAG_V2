@@ -761,10 +761,10 @@ class VectorRetriever:
 
     def _system_family_hints(self, query: str) -> list[str]:
         hints: list[str] = []
-        if "legacy monitoring system" in query or "isto" in query:
-            hints.append("isto")
-        if "monitoring system" in query or "nexion" in query:
-            hints.append("nexion")
+        if "legacy monitoring system" in query or "legacy monitoring system" in query:
+            hints.append("legacy monitoring system")
+        if "monitoring system" in query or "monitoring system" in query:
+            hints.append("monitoring system")
         deduped: list[str] = []
         seen: set[str] = set()
         for hint in hints:
@@ -923,8 +923,8 @@ class VectorRetriever:
                 any(
                     token in source
                     for token in (
-                        "\\1.5 igs cdrls\\",
-                        "\\1.0 igs dm - restricted\\oasis\\",
+                        "\\1.5 enterprise program cdrls\\",
+                        "\\1.0 enterprise program dm - restricted\\oasis\\",
                         "\\4.0 configuration_management - restricted\\cm_igs-documents\\contract deliverable documents\\",
                         "\\5.0 logistics\\shipments\\",
                         "\\5.0 logistics\\procurement\\",

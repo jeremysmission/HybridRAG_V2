@@ -70,7 +70,7 @@ Representative header sets recovered from the staged entity store's `extracted_t
 - `LOE`, `CLIN`, `Network`, `PR Number`, `PO Number`, `Shopping Cart Number`
 - `LOE`, `Count PO#`, `PO Invoice Completed Indicator`, `PO Number`, `Shopping Cart Number`, `G/L Account Number`
 
-**SEMS3D Initial Spares BOM shape** (`SEMS3D-37218 ISTO Spares`):
+**SEMS3D Initial Spares BOM shape** (`SEMS3D-37218 legacy monitoring system Spares`):
 - `TO`, `Requirement`, `Line Item`, `Quote #`, `Site`, `Part Number`, `Part Description`, `UOM`, `Qty Required`, `Vendor Name`, `Shopping Cart`
 
 Values with internal commas (`Bias T, Wideband, 50 Ohms`, `Power Supply, Redundant, 900W`) are preserved intact by the label-anchored regex; they are not shredded by naive comma splitting. Verified in `tests/test_extraction.py::TestDeterministicTableSubstrate::test_pipe_joined_kv_extracts_one_row_per_segment` and again in live query T-03 below.
@@ -98,9 +98,9 @@ The 4 new tests are:
 3. `test_pipe_joined_kv_ignores_segments_below_label_threshold` — negative: pipe segments that are prose or single-cell content are not promoted to rows
 4. `test_pipe_joined_kv_not_triggered_on_non_pipe_text` — regression guard: plain line-oriented KV text still goes through the legacy `_kvtable` path so existing PR & PO / DD250 tests keep passing
 
-**The 2 failing tests are NOT introduced by this lane.** They are `TestSecurityStandardExclusion::test_additional_cyber_noise_rejected` and `TestSecurityStandardExclusion::test_validator_helper_direct`, both of which failed because the sanitizer rewrote the literal domain term `IGS` to `enterprise program` inside:
+**The 2 failing tests are NOT introduced by this lane.** They are `TestSecurityStandardExclusion::test_additional_cyber_noise_rejected` and `TestSecurityStandardExclusion::test_validator_helper_direct`, both of which failed because the sanitizer rewrote the literal domain term `enterprise program` to `enterprise program` inside:
 
-- `src/extraction/entity_extractor.py` line 542 (regex: `^IGS(?:I|CC)?-\d{3,5}$` → `^enterprise program(?:I|CC)?-\d{3,5}$`)
+- `src/extraction/entity_extractor.py` line 542 (regex: `^enterprise program(?:I|CC)?-\d{3,5}$` → `^enterprise program(?:I|CC)?-\d{3,5}$`)
 - `tests/test_extraction.py` multiple lines (test inputs and comments)
 
 This is the known sanitizer over-reach documented in `feedback_sanitizer_scope.md`: "only AI attribution + employer + paths — NEVER touch domain terms that are the app's purpose." Verified by stashing `src/extraction/entity_extractor.py` and re-running: `130 passed, 1 failed` — proving the entity_extractor sanitization regresses `test_additional_cyber_noise_rejected` and the test file sanitization regresses `test_validator_helper_direct` independently. **Filed as a finding for the coordinator to address in a separate sanitizer-cleanup lane. Lane 2 follow-on deliberately does not touch either file to fix the sanitizer bug.**
@@ -223,7 +223,7 @@ Explicit non-claims, in the spirit of "prefer one or two families done honestly 
 
 ## Remaining Limitations
 
-1. **The sanitizer over-reach is real and in-tree.** `src/extraction/entity_extractor.py` and `tests/test_extraction.py` now contain `enterprise program` where they should contain `IGS` — the regex `^IGS(?:I|CC)?-\d{3,5}$` that blocks security-standard identifiers in PART/PO columns has been corrupted. This is a **P1 finding for a separate sanitizer lane**, not something Lane 2 follow-on should patch. Filed for coordinator escalation. The same rewrite also touched my test fixtures (`NEXION/ISTO` → `monitoring system / legacy monitoring system`), but my assertions are shape-based (part numbers, internal commas, table_id prefixes) and survive the rewrite, so my 4 new tests still pass.
+1. **The sanitizer over-reach is real and in-tree.** `src/extraction/entity_extractor.py` and `tests/test_extraction.py` now contain `enterprise program` where they should contain `enterprise program` — the regex `^enterprise program(?:I|CC)?-\d{3,5}$` that blocks security-standard identifiers in PART/PO columns has been corrupted. This is a **P1 finding for a separate sanitizer lane**, not something Lane 2 follow-on should patch. Filed for coordinator escalation. The same rewrite also touched my test fixtures (`monitoring system / legacy monitoring system` → `monitoring system / legacy monitoring system`), but my assertions are shape-based (part numbers, internal commas, table_id prefixes) and survive the rewrite, so my 4 new tests still pass.
 
 2. **Default-OR `--table-source-like` appends rather than replaces.** The `scripts/tiered_extract.py` CLI's `--table-source-like` flag extends `LOGISTICS_TABLE_SOURCE_PATTERNS` rather than replacing it, so a targeted per-family audit needs either a one-off probe script (this lane's approach via `lane2_spares_probe.py`) or a future `--table-source-like-only` flag. Not added in this lane to keep the surface narrow and respect the frozen CLI contract; recommended for the next follow-on.
 
@@ -233,7 +233,7 @@ Explicit non-claims, in the spirit of "prefer one or two families done honestly 
 
 5. **Row counts reported are per-probe, not per-full-corpus.** The staged store contains 9,133 rows from 3,000 default-OR chunks + 5,000 spares-targeted chunks. A full-corpus staged promotion across all 10.4M chunks would yield materially more rows but was intentionally out of scope to keep this slice fast and auditable.
 
-6. **`ZFBT-4R2G-FT+` was found in the staged store via a `_kvtable_3` (legacy path) table_id, not `_pipekv_`.** This is expected: the SEMS3D-37218 ISTO Spares chunk that contains this value is NOT flattened onto a single pipe-separated line in that specific chunk — the chunker split it across newlines, so the legacy path handles it correctly. The pipe-joined path fires on other spares chunks that ARE flattened. T-07 proves pipe-joined rows exist; T-02 proves the Part Number is findable regardless of which extractor saw it. Both are honest signals.
+6. **`ZFBT-4R2G-FT+` was found in the staged store via a `_kvtable_3` (legacy path) table_id, not `_pipekv_`.** This is expected: the SEMS3D-37218 legacy monitoring system Spares chunk that contains this value is NOT flattened onto a single pipe-separated line in that specific chunk — the chunker split it across newlines, so the legacy path handles it correctly. The pipe-joined path fires on other spares chunks that ARE flattened. T-07 proves pipe-joined rows exist; T-02 proves the Part Number is findable regardless of which extractor saw it. Both are honest signals.
 
 ## Validation Against Dispatch Success Criteria
 

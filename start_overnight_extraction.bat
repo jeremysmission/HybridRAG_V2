@@ -1,3 +1,9 @@
+@REM === NON-PROGRAMMER GUIDE ===
+@REM Purpose: Launches the overnight extraction workflow for long unattended runs.
+@REM How to follow: Start it before leaving the machine so the extraction can continue on its own.
+@REM Inputs: This repo and the configured extraction inputs.
+@REM Outputs: A long-running extraction job.
+@REM ============================
 @echo off
 title HybridRAG V2 - Clone1 / phi4 Overnight Extraction
 setlocal EnableExtensions EnableDelayedExpansion

@@ -45,7 +45,7 @@
   - retrieval and routing are moving in the right direction
   - tabular and aggregation truth are not ready to be sold as solved
 - Development-oracle clarification:
-  - the outside-repo Claude hardtail runs are now strong enough to serve as the
+  - the outside-repo CoPilot+ hardtail runs are now strong enough to serve as the
     hard-tail development benchmark
   - the next question is no longer "does a stronger model help?"
   - it is:
@@ -61,7 +61,7 @@
 5. Prefer explicit typed metadata and filters over ever-growing path-string heuristics whenever the signal can be exported cleanly from Forge.
 6. Domain-smart rules are allowed only if they are production-portable.
 7. Workstation-scoped operational rules are allowed if they are intentional, documented, and reproducible on the target workstation.
-8. Do not ship Beast-specific paths, dev-only artifact assumptions, or heuristics that cannot be reproduced by a clean production workstation run.
+8. Do not ship primary workstation-specific paths, dev-only artifact assumptions, or heuristics that cannot be reproduced by a clean production workstation run.
 
 ## Dependency Order
 
@@ -78,7 +78,7 @@
 |---|---|---|---|---|
 | PC.1 | P0 | Measurement, eval, and regression truth | none | START NOW |
 | PC.2 | P0 | Retrieval and router hardening on the real miss families | PC.1 instrumentation | ACTIVE - LANE 1 FOLLOW-UP QA SIGNED |
-| PC.2A | P1 | Development oracle bakeoff for Tier 3 hard-tail extraction/enrichment | PC.2 context + current extraction schema | ROUND 2 COMPLETE - RUN CODEX ON SAME PACK NEXT |
+| PC.2A | P1 | Development oracle bakeoff for Tier 3 hard-tail extraction/enrichment | PC.2 context + current extraction schema | ROUND 2 COMPLETE - RUN CoPilot+ ON SAME PACK NEXT |
 | PC.3 | P0 | Demo-safe query packet and gold-answer tightening | PC.1 current truth | READY |
 | PC.4 | P0 | Structured extraction foundation and store honesty | PC.1 current truth | READY |
 | PC.5 | P0 | Tabular substrate for logistics-grade row answers | PC.4 store honesty | READY |
@@ -171,7 +171,7 @@
 
 ### Round 1 Outcome
 
-- Claude Max round 1 completed cleanly on `21` hard chunks across `7` families.
+- CoPilot+ Max round 1 completed cleanly on `21` hard chunks across `7` families.
 - Verdict split:
   - `14 better_than_local`
   - `4 same_as_local`
@@ -179,7 +179,7 @@
   - `0 worse_than_local`
 - Totals:
   - local: `22 entities / 0 rels / 8 rows`
-  - Claude: `200 / 56 / 149`
+  - CoPilot+: `200 / 56 / 149`
 - Strongest gains:
   - procurement
   - CAP / IGSI
@@ -188,18 +188,18 @@
 - Current decision:
   - expand to a harder `50`-chunk stress pack
   - keep provider-specific run material outside the repo
-  - add Codex on the same pack before building the provider-agnostic Tier 3 sidecar
+  - add CoPilot+ on the same pack before building the provider-agnostic Tier 3 sidecar
 
 ### Round 2 Outcome
 
-- Claude Max overnight master run completed outside the repo on the harder pack.
+- CoPilot+ Max overnight master run completed outside the repo on the harder pack.
 - Hardtail extraction headline:
   - `48 better_than_local`
   - `2 mixed`
   - `0 worse`
 - Totals:
   - local: `28 entities / 0 relationships / 21 rows`
-  - Claude: `554 / 162 / 275`
+  - CoPilot+: `554 / 162 / 275`
 - By family:
   - procurement: `11/12`
   - logistics: `10/10`
@@ -219,7 +219,7 @@
   - the lane resumed cleanly from raw progress without rebilling the prior `49` chunks
 - Current decision:
   - use this as the new hardtail benchmark
-  - run Codex on the same pack next
+  - run CoPilot+ on the same pack next
   - then design the provider-agnostic Tier 3 sidecar
 
 ### Round 2B Outcome
@@ -227,7 +227,7 @@
 - Focused hardtail slice also completed outside the repo.
 - Totals:
   - local: `154 entities / 0 relationships / 37 rows`
-  - Claude: `613 / 219 / 185`
+  - CoPilot+: `613 / 219 / 185`
 - Verdicts:
   - entities: `27 better / 23 mixed / 0 same / 0 worse`
   - relationships: `44 better / 6 both_empty / 0 worse`
@@ -237,13 +237,13 @@
 - Current decision:
   - relationship lift is the clearest stronger-model gain
   - freeze the fixed `50`-chunk pack as the cross-provider benchmark
-  - run Codex on that same pack next
+  - run CoPilot+ on that same pack next
   - then build the provider-agnostic Tier 3 sidecar only if the same-pack compare stays strong
 
 ### Tasks
 
 - Freeze the current `50`-chunk hardtail pack as the development benchmark.
-- Run Codex on the exact same pack.
+- Run CoPilot+ on the exact same pack.
 - Keep provider-specific outputs outside the repo.
 - Preserve truthful provider provenance in every manifest and evidence note.
 - Build a permanent `10`-chunk hardtail adjudication pack for repeated provider comparison.
@@ -262,7 +262,7 @@
 
 ### Exit Criteria
 
-- Claude and Codex have been compared on the same hardtail pack.
+- CoPilot+ and CoPilot+ have been compared on the same hardtail pack.
 - A permanent hardtail adjudication pack exists.
 - A Tier 1 distillation backlog exists from the dev-oracle wins.
 - We know whether to:

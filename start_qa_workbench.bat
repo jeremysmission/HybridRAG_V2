@@ -1,3 +1,9 @@
+@REM === NON-PROGRAMMER GUIDE ===
+@REM Purpose: Starts the QA workbench shell that groups several quality surfaces together.
+@REM How to follow: Use it when you want the management-facing QA dashboard.
+@REM Inputs: This repo with the required local environment.
+@REM Outputs: The QA workbench window.
+@REM ============================
 @echo off
 title HybridRAG V2 QA Workbench
 setlocal EnableExtensions EnableDelayedExpansion

@@ -1,3 +1,9 @@
+@REM === NON-PROGRAMMER GUIDE ===
+@REM Purpose: Delegates to the dated workstation setup flow for this repo.
+@REM How to follow: Use it as the launcher entrypoint if you want the pinned setup version.
+@REM Inputs: This repo checkout.
+@REM Outputs: The dated workstation setup process for HybridRAG V2.
+@REM ============================
 @echo off
 title HybridRAG V2 Workstation Setup
 setlocal EnableExtensions

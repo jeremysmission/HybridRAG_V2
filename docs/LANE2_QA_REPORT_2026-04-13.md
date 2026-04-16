@@ -10,7 +10,7 @@
 
 ## Environment
 
-- Machine: Beast (dual RTX 3090 FE 24GB, GPU 1 = fast lane)
+- Machine: primary workstation (dual RTX 3090 FE 24GB, GPU 1 = fast lane)
 - Python: `.venv\Scripts\python.exe` (repo-local venv)
 - Config under test: `config\config.tier1_clean_2026-04-13.yaml`
 - Live baseline store: `data\index\clean\tier1_clean_20260413\{entities,relationships}.sqlite3`
@@ -30,13 +30,13 @@ Rationale for scope: the user's QA checklist is narrow (path agreement, count tr
 
 | Surface | File | Line(s) | Call site |
 |---|---|---|---|
-| Path resolver | `src/store/relationship_store.py` | 51–63, 78 | `resolve_relationship_db_path()` normalizes `entities.sqlite3` → sibling `relationships.sqlite3`; `RelationshipStore.__init__` also calls it on every construction as a defense-in-depth fallback for non-owned callers |
+| Path resolver | `src/store/relationship_store.py` | 51–63, 78 | `resolve_relationship_db_path()` normalizes `entities.sqlite3` → sibling `relationships.sqlite3`; `RelationshipStore.__init__` also calls it on every construction as a enterprise-in-depth fallback for non-owned callers |
 | Health check | `scripts/health_check.py` | 43, 78, 172–174 | imports `resolve_relationship_db_path`, calls it in `collect_stores()` and `collect_disk()` |
 | Boot | `scripts/boot.py` | 17, 36, 49–50, 150 | `boot_system()` resolves and prints real `Rel DB` path |
 | API server | `src/api/server.py` | 24, 50–51 | `create_app()` resolves via helper before instantiating `RelationshipStore` |
 | Tiered extraction | `scripts/tiered_extract.py` | 67–69, 574, 1046 | `_resolve_runtime_store_paths()` resolves baseline, stages via copy if `--stage-dir` set |
 
-**Result:** **PASS.** All owned surfaces agree. The defense-in-depth normalization in `RelationshipStore.__init__` means non-owned callers that still pass `entities.sqlite3` land on the right file — the evidence memo's admission of residual non-owned-caller risk is effectively neutralized by the constructor-level fallback. No misrouting possible.
+**Result:** **PASS.** All owned surfaces agree. The enterprise-in-depth normalization in `RelationshipStore.__init__` means non-owned callers that still pass `entities.sqlite3` land on the right file — the evidence memo's admission of residual non-owned-caller risk is effectively neutralized by the constructor-level fallback. No misrouting possible.
 
 ---
 
@@ -187,7 +187,7 @@ None blocking.
 
 ## Verdict
 
-- [x] **PASS** — all five items in the user's QA checklist verified. Path agreement is consistent and defense-in-depth. Reported count matches direct probe exactly (59 = 59). Audit artifacts exist and reproduce every cited number. Tabular substrate is wired, executed, and measured on real corpus data. Aggregation claims are scope-disciplined and the discipline is enforced at the code level by the clean-baseline write guard, not just by documentation.
+- [x] **PASS** — all five items in the user's QA checklist verified. Path agreement is consistent and enterprise-in-depth. Reported count matches direct probe exactly (59 = 59). Audit artifacts exist and reproduce every cited number. Tabular substrate is wired, executed, and measured on real corpus data. Aggregation claims are scope-disciplined and the discipline is enforced at the code level by the clean-baseline write guard, not just by documentation.
 
 - [ ] CONDITIONAL
 - [ ] FAIL

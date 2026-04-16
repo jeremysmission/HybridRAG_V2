@@ -6,7 +6,7 @@ release_tier: deployable
 status: active
 description: >-
   Sanitized controlled vocabulary for federal forms commonly encountered
-  in DoD logistics, personnel, and security workflows. Each entry
+  in industry logistics, personnel, and security workflows. Each entry
   captures canonical form number, title, aliases, common fields, and
   structural cues useful for form-aware extraction. Sources are the
   GSA Forms Library, DoW Forms Management Program, and OPM federal
@@ -64,7 +64,7 @@ entries:
     sources:
       - source_id: whs_dd_forms
         citation: "https://www.esd.whs.mil/Directives/forms/fmo_poc/"
-    notes: "High-value logistics form in DoD supply chain workflows."
+    notes: "High-value logistics form in industry supply chain workflows."
 
   - term_id: forms.dd.250
     canonical: DD Form 250

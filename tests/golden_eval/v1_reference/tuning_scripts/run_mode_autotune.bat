@@ -1,3 +1,9 @@
+@REM === NON-PROGRAMMER GUIDE ===
+@REM Purpose: Starts one of the archived autotuning helper flows kept under test references.
+@REM How to follow: Treat it as a historical or reference launcher rather than part of the mainline operator workflow.
+@REM Inputs: The referenced tuning scripts and a working Python environment.
+@REM Outputs: The archived tuning workflow requested by the script.
+@REM ============================
 @echo off
 setlocal EnableDelayedExpansion
 for /f "tokens=2 delims=:." %%A in ('chcp') do set "_PREV_CP=%%A"

@@ -5,9 +5,9 @@
 # Lock-in for Finding #1 from RETRIEVAL_KNOB_WIRING_AUDIT_ADDENDUM_2026-04-15.md.
 #
 # Status: documented bug, NOT yet patched in this session.
-# Owner of the patch: needs explicit Codex Max routing because the fix touches
+# Owner of the patch: needs explicit CoPilot+ Max routing because the fix touches
 # scripts/run_production_eval.py and src/gui/eval_panels/runner.py, both of
-# which are inside Agent3 / coder territory and outside the Claudex Coder
+# which are inside reviewer / coder territory and outside the Claudex Coder
 # regression-fixture lane scope.
 #
 # What the bug is, in one sentence:
@@ -37,7 +37,7 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ADDENDUM_PATH = (
-    Path("C:/Users/jerem/HYBRIDRAG_LOCAL_ONLY")
+    Path("C:/Users/{USERNAME}/HYBRIDRAG_LOCAL_ONLY")
     / "RETRIEVAL_KNOB_WIRING_AUDIT_ADDENDUM_2026-04-15.md"
 )
 
@@ -91,9 +91,9 @@ def test_provenance_runner_imports_rpe_top_k():
     strict=True,
     reason=(
         "KNOWN: production_eval TOP_K constant shadows config.retrieval.top_k. "
-        "Patch lane needs explicit Codex Max routing -- touches "
+        "Patch lane needs explicit CoPilot+ Max routing -- touches "
         "scripts/run_production_eval.py and src/gui/eval_panels/runner.py "
-        "(Agent3 territory). Documented in "
+        "(reviewer territory). Documented in "
         "RETRIEVAL_KNOB_WIRING_AUDIT_ADDENDUM_2026-04-15.md Finding #1."
     ),
 )

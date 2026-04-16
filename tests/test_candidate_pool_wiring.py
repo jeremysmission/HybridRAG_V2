@@ -96,7 +96,7 @@ class _FakeMetadataStore:
             and filters.get("is_filed_deliverable") is True
         ):
             return [
-                r"D:\CorpusTransfr\verified\IGS\1.5 IGS CDRLS\A001 - Corrective Action Plan\Fairford\Deliverables Report IGSI-1811 Corrective Action Plan (A001)\Deliverables Report IGSI-1811 Fairford CAP 2024-09.docx"
+                r"D:\CorpusTransfr\verified\IGS\1.5 enterprise program CDRLS\A001 - Corrective Action Plan\Fairford\Deliverables Report IGSI-1811 Corrective Action Plan (A001)\Deliverables Report IGSI-1811 Fairford CAP 2024-09.docx"
             ]
         return []
 
@@ -436,7 +436,7 @@ def test_vector_retriever_builds_temporal_a027_hints_for_month_named_queries():
     )
 
     assert ["a027", "acas scan results", "october-2025"] in groups
-    assert ["a027", "acas scan results", "nexion"] in groups
+    assert ["a027", "acas scan results", "monitoring system"] in groups
 
 
 def test_vector_retriever_builds_cross_tree_cdrl_groups_for_dual_cdrl_query():

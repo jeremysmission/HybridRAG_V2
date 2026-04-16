@@ -1,3 +1,9 @@
+@REM === NON-PROGRAMMER GUIDE ===
+@REM Purpose: Starts the import-and-extract GUI wrapper for operator-driven runs.
+@REM How to follow: Launch it, choose the source folder, and use the buttons shown in the window.
+@REM Inputs: This repo and a source export location.
+@REM Outputs: A running GUI for guided import and extraction.
+@REM ============================
 @echo off
 title HybridRAG V2 Import + Extract GUI
 setlocal EnableExtensions EnableDelayedExpansion

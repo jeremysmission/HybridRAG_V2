@@ -1,3 +1,9 @@
+@REM === NON-PROGRAMMER GUIDE ===
+@REM Purpose: Installs the CUDA-enabled PyTorch pieces expected by the workstation setup.
+@REM How to follow: Run it when the machine needs GPU-enabled Torch support.
+@REM Inputs: A Windows workstation with the matching CUDA driver/tooling.
+@REM Outputs: A Torch install that can use the GPU from this repo.
+@REM ============================
 @echo off
 setlocal enabledelayedexpansion
 title HybridRAG V2 -- Install CUDA Torch (Workstation)

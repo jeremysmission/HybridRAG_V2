@@ -312,7 +312,7 @@ entries:
     category: contract_deliverable
     expansion: Contract Data Requirements List
     aliases: [Contract Data Requirements List]
-    definition_short: "Contract deliverable data requirements list under DoD acquisition."
+    definition_short: "Contract deliverable data requirements list under industry acquisition."
     regex_safe: true
     retrieval_expand: true
     collision_risk: low
@@ -350,4 +350,4 @@ entries:
     sources:
       - source_id: dau_glossary
         citation: "https://www.dau.edu/glossary"
-    notes: "Also heavily used in cybersecurity (NIST RMF) — cross-listed in cyber_terms pack."
+    notes: "Also heavily used in cybersecurity (security standard RMF) — cross-listed in cyber_terms pack."

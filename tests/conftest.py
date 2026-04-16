@@ -19,7 +19,7 @@
 #   Python emits this as a PytestUnraisableExceptionWarning and pytest's
 #   unraisableexception plugin upgrades the warning to a failure.
 #
-# Symptom Claude-Researcher hit (war room 2026-04-15):
+# Symptom CoPilot+-Researcher hit (review board 2026-04-15):
 #   tests/test_eval_gui_streaming.py and tests/test_qa_workbench.py and
 #   tests/test_benchmark_gui_panels.py see 4 tests fail at suite level
 #   that PASS in isolation, with PytestUnraisableExceptionWarning at

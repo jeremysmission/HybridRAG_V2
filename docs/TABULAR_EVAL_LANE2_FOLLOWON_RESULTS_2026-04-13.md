@@ -43,37 +43,37 @@
 
 ### T-02 — Find the spares row for Part Number ZFBT-4R2G-FT+.
 
-- `rpusTransfr\verified\IGS\1.0 IGS DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 ISTO Spares.xlsx` `80936a3841efbca70951adb1a8056c_kvtable_3` row=0
+- `rpusTransfr\verified\IGS\1.0 enterprise program DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 legacy monitoring system Spares.xlsx` `80936a3841efbca70951adb1a8056c_kvtable_3` row=0
     - `TO`: `WX31M4`
     - `Requirement`: `BOM`
     - `Line Item`: `36`
     - `Quote #`: `Web Quote`
-    - `Site`: `Material Buydown ISTO Spares Kit`
+    - `Site`: `Material Buydown legacy monitoring system Spares Kit`
     - `Part Number`: `ZFBT-4R2G-FT+`
 
-- `rpusTransfr\verified\IGS\1.0 IGS DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 ISTO Spares.xlsx` `dae52721763ab1230b1d90014cc54d2_pipekv_1` row=0
+- `rpusTransfr\verified\IGS\1.0 enterprise program DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 legacy monitoring system Spares.xlsx` `dae52721763ab1230b1d90014cc54d2_pipekv_1` row=0
     - `Date Received TO`: `WX31M4`
     - `Requirement`: `BOM`
     - `Line Item`: `35`
     - `Quote #`: `Q000X5B6`
-    - `Site`: `Material Buydown ISTO Spares Kit`
+    - `Site`: `Material Buydown legacy monitoring system Spares Kit`
     - `Part Number`: `DGXZ +36NFNF-A`
 
 ### T-03 — Find the spares row for a Power Supply, Redundant, 900W.
 
-- `rpusTransfr\verified\IGS\1.0 IGS DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 ISTO Spares.xlsx` `80936a3841efbca70951adb1a8056c_kvtable_1` row=0
+- `rpusTransfr\verified\IGS\1.0 enterprise program DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 legacy monitoring system Spares.xlsx` `80936a3841efbca70951adb1a8056c_kvtable_1` row=0
     - `Part Description`: `Power Supply, Redundant, 900W`
     - `UOM`: `EA`
     - `Qty Required`: `2`
     - `Vendor Name`: `Sterling Computers`
     - `Shopping Cart`: `PR 0031126723`
 
-- `rpusTransfr\verified\IGS\1.0 IGS DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 ISTO Spares.xlsx` `dae52721763ab1230b1d90014cc54d2_pipekv_1` row=0
+- `rpusTransfr\verified\IGS\1.0 enterprise program DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 legacy monitoring system Spares.xlsx` `dae52721763ab1230b1d90014cc54d2_pipekv_1` row=0
     - `Date Received TO`: `WX31M4`
     - `Requirement`: `BOM`
     - `Line Item`: `35`
     - `Quote #`: `Q000X5B6`
-    - `Site`: `Material Buydown ISTO Spares Kit`
+    - `Site`: `Material Buydown legacy monitoring system Spares Kit`
     - `Part Number`: `DGXZ +36NFNF-A`
 
 ### T-04 — How many PR Number rows were captured from the PR & PO spreadsheet?
@@ -96,11 +96,11 @@
 
 ### T-05 — How many rows were captured from Initial Spares sources?
 
-- `IGS DM - Restricted\SEMS3D\Non-CDRL Deliverables\ISTO NEXION Initial Spares\SEMS3D-37125 Nexion-ISTO Initial Spares.xlsx` `ff18052e69344ad42a676a103f7c22_kvtable_1` row=0
+- `enterprise program DM - Restricted\SEMS3D\Non-CDRL Deliverables\legacy monitoring system monitoring system Initial Spares\SEMS3D-37125 monitoring system-legacy monitoring system Initial Spares.xlsx` `ff18052e69344ad42a676a103f7c22_kvtable_1` row=0
     - `er`: `2002 Q3`
     - `Esc Value`: `143.066666666667`
 
-- `IGS DM - Restricted\SEMS3D\Non-CDRL Deliverables\ISTO NEXION Initial Spares\SEMS3D-37125 Nexion-ISTO Initial Spares.xlsx` `ff18052e69344ad42a676a103f7c22_kvtable_2` row=0
+- `enterprise program DM - Restricted\SEMS3D\Non-CDRL Deliverables\legacy monitoring system monitoring system Initial Spares\SEMS3D-37125 monitoring system-legacy monitoring system Initial Spares.xlsx` `ff18052e69344ad42a676a103f7c22_kvtable_2` row=0
     - `UOM`: `UN`
     - `UOM Description`: `Unit`
     - `Year & Quarter`: `2002 Q4`
@@ -138,17 +138,17 @@
 
 ### T-08 — Find spares rows for vendor Sterling Computers.
 
-- `rpusTransfr\verified\IGS\1.0 IGS DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 ISTO Spares.xlsx` `80936a3841efbca70951adb1a8056c_kvtable_1` row=0
+- `rpusTransfr\verified\IGS\1.0 enterprise program DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 legacy monitoring system Spares.xlsx` `80936a3841efbca70951adb1a8056c_kvtable_1` row=0
     - `Part Description`: `Power Supply, Redundant, 900W`
     - `UOM`: `EA`
     - `Qty Required`: `2`
     - `Vendor Name`: `Sterling Computers`
     - `Shopping Cart`: `PR 0031126723`
 
-- `rpusTransfr\verified\IGS\1.0 IGS DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 ISTO Spares.xlsx` `80936a3841efbca70951adb1a8056c_kvtable_2` row=0
+- `rpusTransfr\verified\IGS\1.0 enterprise program DM - Restricted\SEMS3D\A001-PSIP\A001-ISTO_Initial_Spares\SEMS3D-37218 legacy monitoring system Spares.xlsx` `80936a3841efbca70951adb1a8056c_kvtable_2` row=0
     - `TO`: `WX31M4`
     - `Requirement`: `BOM`
     - `Line Item`: `38`
     - `Quote #`: `Q-00191352`
-    - `Site`: `Material Buydown ISTO Spares Kit`
+    - `Site`: `Material Buydown legacy monitoring system Spares Kit`
     - `Part Number`: `820306-B21`

@@ -1,3 +1,9 @@
+# NON-PROGRAMMER GUIDE
+# Purpose: Runs the dated PowerShell workstation setup flow for this repo.
+# How to follow: Read the top help block first, then run it from PowerShell with the needed flags.
+# Inputs: This repo checkout and the workstation prerequisites described in the script.
+# Outputs: A configured local workstation environment.
+#
 #Requires -Version 5.1
 <#
 .SYNOPSIS

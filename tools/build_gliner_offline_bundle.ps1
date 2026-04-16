@@ -3,7 +3,7 @@
   Build a fully-offline gliner install bundle for proxy-hardened workstations.
 
 .DESCRIPTION
-  Runs on a machine with internet (Beast). Pip-downloads gliner==0.2.26 and its
+  Runs on a machine with internet (primary workstation). Pip-downloads gliner==0.2.26 and its
   transitive dependencies into <OutputRoot>\gliner_offline\wheels, then snapshots
   the urchade/gliner_medium-v2.1 HuggingFace model into <OutputRoot>\gliner_offline\hf_home.
   Zips the whole thing to <OutputRoot>\gliner_offline.zip.
@@ -22,7 +22,12 @@
 .EXAMPLE
   .\tools\build_gliner_offline_bundle.ps1 -OutputRoot C:\scratch\gliner_test
 #>
-
+# NON-PROGRAMMER GUIDE
+# Purpose: Builds the offline GLiNER bundle on a machine that does have internet access.
+# How to follow: Run it on the staging machine, then copy the resulting bundle to the isolated workstation.
+# Inputs: A prepared repo environment with the needed download tools.
+# Outputs: A zip bundle for offline GLiNER installation.
+#
 param(
     [string]$OutputRoot = ''
 )

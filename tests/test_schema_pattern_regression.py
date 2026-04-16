@@ -74,7 +74,7 @@ def test_default_fixture_exists():
         ("ORG", "The organization", "drop"),
         ("ORG", "Organizations", "drop"),
         # ORG keep
-        ("ORG", "NEXION", "keep"),
+        ("ORG", "monitoring system", "keep"),
     ],
 )
 def test_classifier_focus_families(etype, text, expected):

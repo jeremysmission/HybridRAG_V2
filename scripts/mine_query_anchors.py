@@ -67,7 +67,7 @@ def _short_src(path: str) -> str:
 
 
 def _is_nist_control(text: str) -> bool:
-    """Support the mine query anchors workflow by handling the is nist control step."""
+    """Support the mine query anchors workflow by handling the is security standard control step."""
     upper = (text or "").upper()
     return any(upper.startswith(p) for p in NIST_CONTROL_PREFIXES)
 

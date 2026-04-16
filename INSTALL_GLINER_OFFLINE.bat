@@ -4,7 +4,7 @@
 @REM          --trusted-host fallback still connection-errors on pypi fetches.
 @REM
 @REM Prereq: Copy vendor\gliner_offline.zip into C:\HybridRAG_V2\vendor\ first.
-@REM         The zip is produced on a builder machine (e.g. Beast) by:
+@REM         The zip is produced on a builder machine (e.g. primary workstation) by:
 @REM             .\tools\build_gliner_offline_bundle.ps1
 @REM
 @REM Skip pause: set HYBRIDRAG_NO_PAUSE=1 for unattended runs.
