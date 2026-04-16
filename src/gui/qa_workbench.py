@@ -346,7 +346,7 @@ class QAWorkbench(tk.Tk):
         ).pack(side=tk.RIGHT, padx=(0, 8), pady=8)
 
     def _open_user_guide(self) -> None:
-        guide = V2_ROOT / "docs" / "QA_WORKBENCH_USER_GUIDE.docx"
+        guide = V2_ROOT / "docs" / "QA_WORKBENCH_USER_GUIDE_V2.docx"
         if not guide.exists():
             from tkinter import messagebox
             messagebox.showwarning("Info", f"User guide not found:\n{guide}\n\nRun: python scripts/build_user_guides.py")

@@ -289,27 +289,45 @@ def probe_dependencies() -> DependencyProbe:
             blockers.append("single_turn_sample_import_failed")
 
     try:
+        # RAGAS 0.4.x moved metrics behind underscored names and changed the
+        # collections module layout.  Try every known location so the probe
+        # works across 0.2, 0.4, and future 1.0 releases.
         metrics_modules = []
-        try:
-            metrics_modules.append(importlib.import_module("ragas.metrics.collections"))
-        except Exception:
-            metrics_modules.append(importlib.import_module("ragas.metrics"))
+        # Check ragas.metrics FIRST -- the underscore-prefixed NonLLM classes
+        # there don't require an LLM judge.  The collections module has
+        # LLM-based wrappers with the same short names, so check it second.
+        for mod_name in ("ragas.metrics", "ragas.metrics.collections"):
+            try:
+                metrics_modules.append(importlib.import_module(mod_name))
+            except Exception:
+                pass
+
+        # Candidate attribute names for context recall.
+        # Underscore-prefixed variants (0.4.x NonLLM, no LLM required) first.
+        _RECALL_NAMES = [
+            "_NonLLMContextRecall",
+            "NonLLMContextRecall",
+        ]
+        _PRECISION_NAMES = [
+            "_NonLLMContextPrecisionWithReference",
+            "NonLLMContextPrecisionWithReference",
+        ]
 
         for metrics_module in metrics_modules:
-            if (
-                "nonllm_context_recall" not in supported_metrics
-                and hasattr(metrics_module, "NonLLMContextRecall")
-            ):
-                supported_metrics["nonllm_context_recall"] = (
-                    f"{metrics_module.__name__}.NonLLMContextRecall"
-                )
-            if (
-                "nonllm_context_precision_with_reference" not in supported_metrics
-                and hasattr(metrics_module, "NonLLMContextPrecisionWithReference")
-            ):
-                supported_metrics["nonllm_context_precision_with_reference"] = (
-                    f"{metrics_module.__name__}.NonLLMContextPrecisionWithReference"
-                )
+            if "nonllm_context_recall" not in supported_metrics:
+                for attr in _RECALL_NAMES:
+                    if hasattr(metrics_module, attr):
+                        supported_metrics["nonllm_context_recall"] = (
+                            f"{metrics_module.__name__}.{attr}"
+                        )
+                        break
+            if "nonllm_context_precision_with_reference" not in supported_metrics:
+                for attr in _PRECISION_NAMES:
+                    if hasattr(metrics_module, attr):
+                        supported_metrics["nonllm_context_precision_with_reference"] = (
+                            f"{metrics_module.__name__}.{attr}"
+                        )
+                        break
 
         if "nonllm_context_recall" not in supported_metrics:
             blockers.append("nonllm_context_recall_metric_missing")

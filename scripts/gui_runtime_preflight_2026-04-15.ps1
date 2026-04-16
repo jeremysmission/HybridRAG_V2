@@ -90,6 +90,7 @@ $envPairs = @(
     @("ALL_PROXY", $allProxy),
     @("all_proxy", $allProxy),
     @("HF_HUB_DISABLE_TELEMETRY", "1"),
+    @("HF_HUB_OFFLINE", $(if ($env:HF_HUB_OFFLINE) { $env:HF_HUB_OFFLINE } else { "1" })),
     @("HF_HUB_ENABLE_HF_TRANSFER", $(if ($env:HF_HUB_ENABLE_HF_TRANSFER) { $env:HF_HUB_ENABLE_HF_TRANSFER } else { "0" })),
     @("TRANSFORMERS_NO_ADVISORY_WARNINGS", $(if ($env:TRANSFORMERS_NO_ADVISORY_WARNINGS) { $env:TRANSFORMERS_NO_ADVISORY_WARNINGS } else { "1" })),
     @("HYBRIDRAG_PROJECT_ROOT", $resolvedProjectRoot),

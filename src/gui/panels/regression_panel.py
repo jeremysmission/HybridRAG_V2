@@ -175,6 +175,12 @@ class RegressionPanel(tk.LabelFrame):
 
     def _on_run(self):
         path = self._fixture_path_var.get().strip() or str(DEFAULT_FIXTURE_PATH)
+        if not Path(path).exists():
+            self._set_text(self._summary_text, f"Fixture not found:\n{path}")
+            return
+        if not path.endswith(".json"):
+            self._set_text(self._summary_text, f"Fixture must be a .json file:\n{path}")
+            return
         self._stop_event.clear()
         self._run_btn.config(state=tk.DISABLED, text="Running...")
         self._stop_btn.config(state=tk.NORMAL)
