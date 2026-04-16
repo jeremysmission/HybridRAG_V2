@@ -59,12 +59,12 @@ HARDTAIL_TRAINING40_SCOREBOARD = _LOCAL_ONLY_ROOT / "HARDTAIL_TRAINING40_HEAD_TO
 HARDTAIL_FILTERED9_SCOREBOARD = _LOCAL_ONLY_ROOT / "HARDTAIL_HEAD_TO_HEAD_SCOREBOARD_2026-04-15.json"
 CLAUDE_TRAINING40_MANIFEST = (
     _LOCAL_ONLY_ROOT
-    / "provider_runs" / "hardtail_v1" / "CoPilot+" / "2026-04-15_run_03_training40"
+    / "provider_runs" / "hardtail_v1" / "claude" / "2026-04-15_run_03_training40"
     / "extraction_manifest.json"
 )
 CODEX_TRAINING40_MANIFEST = (
     _LOCAL_ONLY_ROOT
-    / "provider_runs" / "hardtail_v1" / "CoPilot+" / "2026-04-15_run_02_training40"
+    / "provider_runs" / "hardtail_v1" / "codex" / "2026-04-15_run_02_training40"
     / "extraction_manifest.json"
 )
 
@@ -155,7 +155,7 @@ def _hardtail_timing(comparator_manifest_path: Path) -> dict:
     a hardtail provider run. Comparator manifests and supplement manifests
     use different key names; this function handles both shapes."""
     comparator = _read_json(comparator_manifest_path) or {}
-    # CoPilot+ shape: timings.wall_clock_s / avg_s_per_chunk / rc_failures
+    # Codex shape: timings.wall_clock_s / avg_s_per_chunk / rc_failures
     timings = comparator.get("timings") if isinstance(comparator, dict) else None
     if isinstance(timings, dict):
         return {
@@ -163,7 +163,7 @@ def _hardtail_timing(comparator_manifest_path: Path) -> dict:
             "avg_s_per_chunk": timings.get("avg_s_per_chunk", "?"),
             "rc_failures": timings.get("rc_failures", "?"),
         }
-    # CoPilot+ shape: comparator manifest has no timings; fall back to the
+    # Provider A shape: comparator manifest has no timings; fall back to the
     # sibling supplement manifest.json in the same run root.
     supp_path = comparator_manifest_path.parent / "manifest.json"
     supplement = _read_json(supp_path) or {}
@@ -180,8 +180,8 @@ def _hardtail_timing(comparator_manifest_path: Path) -> dict:
 def _section_hardtail() -> list[str]:
     """Support the overview panel workflow by handling the section hardtail step."""
     lines = ["## 2. Hardtail summary", ""]
-    CoPilot+ = _read_json(CLAUDE_TRAINING40_MANIFEST) or {}
-    CoPilot+ = _read_json(CODEX_TRAINING40_MANIFEST) or {}
+    provider_a = _read_json(CLAUDE_TRAINING40_MANIFEST) or {}
+    provider_b = _read_json(CODEX_TRAINING40_MANIFEST) or {}
 
     def _num(m: dict, *keys) -> object:
         cur: object = m
@@ -191,15 +191,15 @@ def _section_hardtail() -> list[str]:
             cur = cur.get(k)
         return cur if cur is not None else "?"
 
-    if CoPilot+ or CoPilot+:
+    if provider_a or provider_b:
         lines.append("### Training-40 head-to-head (same pack, same comparator)")
         lines.append("")
         lines.append("| provider | chunks | wall clock (s) | avg sec/chunk | rc fail | ent verdict (better) | rel verdict (better) | totals E/R/T |")
         lines.append("|---|---:|---:|---:|---:|---:|---:|---|")
 
         for label, m, manifest_path in (
-            ("CoPilot+ Max", CoPilot+, CLAUDE_TRAINING40_MANIFEST),
-            ("CoPilot+", CoPilot+, CODEX_TRAINING40_MANIFEST),
+            ("Provider A", provider_a, CLAUDE_TRAINING40_MANIFEST),
+            ("Provider B", provider_b, CODEX_TRAINING40_MANIFEST),
         ):
             if not m:
                 lines.append(f"| {label} | (manifest missing) | | | | | | |")
@@ -211,10 +211,10 @@ def _section_hardtail() -> list[str]:
             rc_fail = timing["rc_failures"]
             ent_better = _num(m, "entity_verdict_tally", "better_than_local")
             rel_better = _num(m, "relationship_verdict_tally", "better_than_local")
-            if label == "CoPilot+ Max":
-                totals = m.get("totals", {}).get("CoPilot+", {}) or {}
+            if label == "Provider A":
+                totals = m.get("totals", {}).get("claude", {}) or {}
             else:
-                totals = m.get("totals", {}).get("CoPilot+", {}) or m.get("totals", {}).get("CoPilot+", {}) or {}
+                totals = m.get("totals", {}).get("codex", {}) or m.get("totals", {}).get("claude", {}) or {}
             ent_tot = totals.get("entities", "?")
             rel_tot = totals.get("relationships", "?")
             tbl_tot = totals.get("table_rows", "?")
@@ -269,7 +269,7 @@ def _section_count_benchmark() -> list[str]:
         lines.append(f"- Run note: `{COUNT_BENCHMARK_RUN_NOTE}`")
 
     lines.append(
-        "- Status: Ready for QA (CoPilot+-Researcher shipped 2026-04-15: pytest 8 passed, live run 7/7 frozen-expectation verification)"
+        "- Status: Ready for QA (Researcher shipped 2026-04-15: pytest 8 passed, live run 7/7 frozen-expectation verification)"
     )
     lines.append("")
     return lines
@@ -495,7 +495,7 @@ def render_overview_markdown() -> str:
     footer = [
         "---",
         "",
-        "Signed: CoPilot+-Max - HybridRAG_Educational / HYBRIDRAG_LOCAL_ONLY - 2026-04-15 MDT",
+        "Signed: CoPilot+ - HybridRAG_Educational / HYBRIDRAG_LOCAL_ONLY - 2026-04-15 MDT",
         "",
     ]
     return "\n".join(header + body + footer)

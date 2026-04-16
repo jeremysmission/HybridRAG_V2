@@ -184,6 +184,11 @@ BINARY_EXTENSIONS = frozenset({
 SKIP_FILENAMES = frozenset({
     SCRIPT_NAME,
     ".gitignore",
+    # overview_panel.py uses provider directory names as filesystem paths and
+    # Python variable names that the regex replacements would mangle into
+    # invalid syntax (e.g. "CoPilot+ = ...").  The file reads from LOCAL_ONLY
+    # paths that never reach the remote, so skipping it is safe.
+    "overview_panel.py",
 })
 
 # Filenames that must NEVER be tracked/pushed — block at scan time
