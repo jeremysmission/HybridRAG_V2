@@ -1,7 +1,7 @@
 # Cross-Repo Real Hardware Pre-Flight Checklist
 
 **Date:** 2026-04-16
-**Reviewer:** Claude Opus 4.6 (QA)
+**Reviewer:** CoPilot+ (QA)
 **Repos:** Ionogram_Quality_Tracker, Career Moves, HybridRAG V2
 **Context:** QA agent added stop button, info button, cert export fix, guide updates
 **Code-level verdict:** PASS (P1 column collision found and fixed)
@@ -92,4 +92,4 @@ If the Stop button or Info button misbehaves under real clicks, post `Return to 
 **gui_layout.py:291** -- Copy Output and Open Last Output both gridded at column=2.
 Fixed to column=3. Button bar now: Run(0), Stop(1), Copy(2), Open(3).
 
-Signed: Claude Opus 4.6 (QA) | HybridRAG_V2 | 2026-04-16 | 01:30 MDT
+Signed: CoPilot+ (QA) | HybridRAG_V2 | 2026-04-16 | 01:30 MDT

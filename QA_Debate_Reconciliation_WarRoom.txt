@@ -1,4 +1,4 @@
-QA Debate Reconciliation War Room
+QA Debate Reconciliation review board
 Date: 2026-04-15
 Repo: C:\HybridRAG_V2
 Scope boundary: active GUI work in `src/gui/qa_workbench.py`, `src/gui/eval_gui.py`, and related eval/qa panel files is explicitly carved out unless it clearly breaks behavior outside that workstream.

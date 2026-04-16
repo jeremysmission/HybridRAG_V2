@@ -107,7 +107,7 @@ This is demo-day gate -- if it breaks here, it breaks in front of leadership.
 - [ ] Cross-document query pulls from multiple sources
 - [ ] Hand keyboard to someone else -- they can use it without instruction
 - [ ] Close app, reopen -- previous state/settings preserved
-- [ ] No AI attribution visible anywhere (no Claude/Anthropic/Agent text)
+- [ ] No AI attribution visible anywhere (no CoPilot+/approved vendor/Agent text)
 
 ---
 
