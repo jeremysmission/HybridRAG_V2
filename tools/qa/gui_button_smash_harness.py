@@ -491,8 +491,8 @@ def _force_build_all_panels(app: tk.Tk) -> List[str]:
     """Navigate to every panel so lazy-loaded widgets get created."""
     built: List[str] = []
     try:
-        from tools.qa._v2_panel_helpers import get_tab_specs
-        for spec in get_panels():
+        from tools.qa._v2_panel_helpers import get_tab_specs, switch_tab
+        for spec in get_tab_specs(app):
             try:
                 spec.notebook.select(spec.index)
                 _pump(app, 150)
@@ -761,7 +761,7 @@ def _tier_a_tab_switching(app: tk.Tk, errors: list) -> List[TestResult]:
     results: List[TestResult] = []
     try:
         from tools.qa._v2_panel_helpers import get_tab_specs
-        panels = get_panels()
+        panels = get_tab_specs(app)
     except Exception:
         return results
 
@@ -774,8 +774,8 @@ def _tier_a_tab_switching(app: tk.Tk, errors: list) -> List[TestResult]:
             new_errors = errors[baseline:]
             results.append(TestResult(
                 test_id=f"A_tab_{spec.key}",
-                tier="A", panel=spec.label,
-                description=f"Switch to tab: {spec.label}",
+                tier="A", panel=spec.key,
+                description=f"Switch to tab: {spec.key}",
                 passed=len(new_errors) == 0,
                 error=new_errors[0]["error"] if new_errors else "",
                 duration_ms=(time.perf_counter() - t0) * 1000,
@@ -783,8 +783,8 @@ def _tier_a_tab_switching(app: tk.Tk, errors: list) -> List[TestResult]:
         except Exception as exc:
             results.append(TestResult(
                 test_id=f"A_tab_{spec.key}",
-                tier="A", panel=spec.label,
-                description=f"Switch to tab: {spec.label}",
+                tier="A", panel=spec.key,
+                description=f"Switch to tab: {spec.key}",
                 passed=False, error=str(exc),
                 traceback_str=traceback.format_exc(),
                 duration_ms=(time.perf_counter() - t0) * 1000,
@@ -1187,7 +1187,7 @@ def _smart_monkey_rapid_tab_switching(app: tk.Tk, errors: list,
     """T2: Rapid tab switching N times."""
     try:
         from tools.qa._v2_panel_helpers import get_tab_specs
-        panels = get_panels()
+        panels = get_tab_specs(app)
     except Exception:
         panels = []
 
@@ -1574,7 +1574,7 @@ def _smart_monkey_proxy_env_vars(app: tk.Tk, errors: list) -> TestResult:
         # Try a few panel switches to verify nothing explodes
         try:
             from tools.qa._v2_panel_helpers import get_tab_specs
-            for spec in get_panels()[:4]:
+            for spec in get_tab_specs(app)[:4]:
                 spec.notebook.select(spec.index)
                 _pump(app, 50)
         except Exception:
@@ -1785,11 +1785,11 @@ def run_tier_c(app: tk.Tk, catalog: List[WidgetInfo],
             elif action == "tab_switch":
                 try:
                     from tools.qa._v2_panel_helpers import get_tab_specs
-                    panels = get_panels()
+                    panels = get_tab_specs(app)
                     if panels:
                         spec = random.choice(panels)
                         spec.notebook.select(spec.index)
-                        action_log.append(f"switch to tab: {spec.label}")
+                        action_log.append(f"switch to tab: {spec.key}")
                 except Exception:
                     pass
 
@@ -1948,7 +1948,7 @@ This is demo-day gate -- if it breaks here, it breaks in front of leadership.
 - [ ] Cross-document query pulls from multiple sources
 - [ ] Hand keyboard to someone else -- they can use it without instruction
 - [ ] Close app, reopen -- previous state/settings preserved
-- [ ] No AI attribution visible anywhere (no Claude/Anthropic/Agent text)
+- [ ] No AI attribution visible anywhere (no CoPilot+/approved vendor/Agent text)
 
 ---
 
@@ -1992,7 +1992,8 @@ def generate_tier_d_checklist() -> str:
 def run_harness(mode: str = "mock", visible: bool = False,
                 tiers: str = "abc", smart_rounds: int = 10,
                 dumb_seconds: int = 30,
-                output_dir: Optional[str] = None) -> SmashReport:
+                output_dir: Optional[str] = None,
+                gui: str = "workbench") -> SmashReport:
     """Run the full button smash harness."""
     report = SmashReport()
     report.started_utc = _utc_now()
@@ -2021,7 +2022,7 @@ def run_harness(mode: str = "mock", visible: bool = False,
 
     # Boot the app
     _install_shims()
-    app = _create_app(mode=mode, visible=visible)
+    app = _create_app(mode=mode, visible=visible, gui=gui)
     errors = _install_error_trap(app)
 
     # Force build all panels so we discover everything
@@ -2158,6 +2159,8 @@ Examples:
                    help="Dumb monkey duration in seconds (default: 30)")
     p.add_argument("--output-dir", default="",
                    help="Custom output directory (default: output/qa_button_smash_<timestamp>)")
+    p.add_argument("--gui", choices=["workbench", "eval"], default="workbench",
+                   help="Which GUI to test: workbench (QA Workbench) or eval (Eval GUI)")
     args = p.parse_args(argv)
 
     report = run_harness(
@@ -2167,6 +2170,7 @@ Examples:
         smart_rounds=args.smart_rounds,
         dumb_seconds=args.dumb_seconds,
         output_dir=args.output_dir or None,
+        gui=args.gui,
     )
 
     # Print summary

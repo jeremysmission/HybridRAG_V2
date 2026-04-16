@@ -419,7 +419,7 @@ def _add_ragas_section(doc):
 
     _heading(doc, "Hallucination Rate — Made-Up Facts", level=3)
     _callout(doc, "WARNING", (
-        "In medical, legal, or defense contexts, even a 5% hallucination rate is dangerous. "
+        "In medical, legal, or enterprise contexts, even a 5% hallucination rate is dangerous. "
         "This metric tracks the proportion of responses containing claims not backed by "
         "any retrieved evidence. Target: below 2% for regulated industries."
     ))
@@ -441,7 +441,7 @@ def _add_ragas_section(doc):
         "LLM vs Non-LLM metrics: Our current metrics use algorithmic fuzzy matching "
         "(no external API needed). LLM-based metrics use a judge model for deeper semantic "
         "evaluation but require API access and cost. The Non-LLM variants are the correct "
-        "choice for offline, air-gapped, and cost-controlled environments."
+        "choice for offline, offline, and cost-controlled environments."
     ))
 
     # RAGAS How-To

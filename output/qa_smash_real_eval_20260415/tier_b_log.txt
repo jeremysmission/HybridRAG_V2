@@ -1,0 +1,18 @@
+[B_Q1_rapid_submit] PASS: Rapid submit 20x in quick succession
+[B_Q2_empty_submit] PASS: Submit with empty query field
+[B_Q4_ask_then_stop] PASS: Ask then immediately Stop (cancel mid-stream)
+[B_Q6_injection] PASS: SQL injection attempt in query field
+[B_Q7_unicode_flood] PASS: Unicode flood (emoji + CJK + RTL + control chars)
+[B_Q5_long_query] PASS: Paste ~10KB text into query field (10200 chars)
+[B_Q8b_prompt_injection] PASS: Prompt injection battery (6 vectors)
+[B_I1_start_stop_toggle] PASS: Rapid Start/Stop indexing toggle 10x
+[B_mode_flip] PASS: Rapid offline/online mode flip 10x
+[B_T2_rapid_tabs] PASS: Rapid tab switching 30x
+[B_Q8_double_click_all] PASS: Double-click every enabled button (39 buttons)
+[B_W1_resize_stress] PASS: Rapid window resize to extreme dimensions 10x
+[B_W3_maximize_minimize] PASS: Maximize/minimize cycling 5x
+[B_theme_toggle] PASS: Rapid theme toggle (Light/Dark) 5x
+[B_reset_backends] PASS: Reset Backends button -- verify recovery
+[B_export_buttons] PASS: Click export buttons with no data (0 clicked)
+[B_proxy_env_vars] PASS: Proxy hardening: survive with HTTP(S)_PROXY env vars set
+[B_proxy_online_mode] PASS: Proxy hardening: online mode switch with proxy vars (no hang)

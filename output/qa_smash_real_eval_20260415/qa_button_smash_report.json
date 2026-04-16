@@ -1,0 +1,2871 @@
+{
+  "tool": "tools/qa/gui_button_smash_harness",
+  "version": "1.0.0",
+  "started_utc": "2026-04-16T05:02:58+00:00",
+  "finished_utc": "2026-04-16T05:03:22+00:00",
+  "mode": "real",
+  "tiers_run": [
+    "A",
+    "B"
+  ],
+  "widget_catalog": [
+    {
+      "widget_type": "button",
+      "widget_path": ".!frame.!button",
+      "label": "Info",
+      "state": "normal",
+      "panel": "",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!overviewpanel.!frame.!button",
+      "label": "Refresh",
+      "state": "normal",
+      "panel": "OverviewPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!overviewpanel.!frame.!button2",
+      "label": "Save as .md",
+      "state": "normal",
+      "panel": "OverviewPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!overviewpanel.!frame2.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "OverviewPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry2",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button2",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry3",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button3",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry4",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button4",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!frame.!entry2",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button",
+      "label": "Start",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button2",
+      "label": "Stop",
+      "state": "disabled",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button3",
+      "label": "Clear log",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button4",
+      "label": "Save as defaults",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button5",
+      "label": "Reset defaults",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe3.!frame.!button",
+      "label": "Open results JSON",
+      "state": "disabled",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe3.!frame.!button2",
+      "label": "Open report MD",
+      "state": "disabled",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe4.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame.!button2",
+      "label": "Load Results",
+      "state": "normal",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox",
+      "label": "PY_VAR13",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {
+        "values": [
+          "All",
+          "PASS",
+          "PARTIAL",
+          "MISS"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox",
+      "label": "",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox2",
+      "label": "PY_VAR14",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {
+        "values": [
+          "All"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox2",
+      "label": "",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox3",
+      "label": "PY_VAR15",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {
+        "values": [
+          "All"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox3",
+      "label": "",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox4",
+      "label": "PY_VAR16",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {
+        "values": [
+          "All"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox4",
+      "label": "",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!button",
+      "label": "Clear filters",
+      "state": "normal",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "treeview",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!panedwindow.!frame.!treeview",
+      "label": "",
+      "state": "",
+      "panel": "ResultsPanel",
+      "details": {
+        "columns": [
+          "query_id",
+          "persona",
+          "verdict",
+          "routing",
+          "ms"
+        ]
+      }
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!panedwindow.!frame2.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame.!frame.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame2.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame2.!frame.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame2.!button",
+      "label": "Compare",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!combobox",
+      "label": "PY_VAR29",
+      "state": "readonly",
+      "panel": "ComparePanel",
+      "details": {
+        "values": [
+          "Changed only",
+          "Gains",
+          "Losses",
+          "Unchanged",
+          "All"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!combobox",
+      "label": "",
+      "state": "readonly",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!combobox2",
+      "label": "PY_VAR30",
+      "state": "readonly",
+      "panel": "ComparePanel",
+      "details": {
+        "values": [
+          "All"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!combobox2",
+      "label": "",
+      "state": "readonly",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!button",
+      "label": "Clear",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "treeview",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame5.!treeview",
+      "label": "",
+      "state": "",
+      "panel": "ComparePanel",
+      "details": {
+        "columns": [
+          "query_id",
+          "persona",
+          "before",
+          "after",
+          "delta"
+        ]
+      }
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame6.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!frame.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!frame.!button2",
+      "label": "Refresh",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "treeview",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!panedwindow.!frame.!frame.!treeview",
+      "label": "",
+      "state": "",
+      "panel": "HistoryPanel",
+      "details": {
+        "columns": [
+          "run_id",
+          "timestamp",
+          "label",
+          "total",
+          "pass",
+          "partial",
+          "miss",
+          "routing",
+          "p50",
+          "strongest",
+          "weakest",
+          "filename"
+        ]
+      }
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!panedwindow.!frame2.!frame.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!entry2",
+      "label": "",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!button2",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!entry3",
+      "label": "",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!button3",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button",
+      "label": "Start",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button2",
+      "label": "Stop",
+      "state": "disabled",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button3",
+      "label": "Clear log",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button4",
+      "label": "Open output",
+      "state": "disabled",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe3.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry2",
+      "label": "",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button2",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry3",
+      "label": "",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button3",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry4",
+      "label": "",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button4",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry5",
+      "label": "",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button5",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton",
+      "label": "Include deferred targets",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton2",
+      "label": "raw_mentions",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton3",
+      "label": "unique_documents",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton4",
+      "label": "unique_chunks",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton5",
+      "label": "unique_rows",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button",
+      "label": "Start",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button2",
+      "label": "Stop",
+      "state": "disabled",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button3",
+      "label": "Clear log",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button4",
+      "label": "Open JSON",
+      "state": "disabled",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button5",
+      "label": "Open MD",
+      "state": "disabled",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe3.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!frame.!checkbutton",
+      "label": "Analysis only",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button",
+      "label": "Start",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button2",
+      "label": "Stop",
+      "state": "disabled",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button3",
+      "label": "Clear log",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button4",
+      "label": "Open artifact",
+      "state": "disabled",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe3.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!frame.!button",
+      "label": "Browse",
+      "state": "normal",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!frame.!button2",
+      "label": "Run Regression",
+      "state": "normal",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!frame.!button3",
+      "label": "Stop",
+      "state": "disabled",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "treeview",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!frame2.!treeview",
+      "label": "",
+      "state": "",
+      "panel": "RegressionPanel",
+      "details": {
+        "columns": [
+          "family",
+          "passed",
+          "total",
+          "rate"
+        ]
+      }
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!text2",
+      "label": "",
+      "state": "disabled",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!frame.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!frame.!button2",
+      "label": "Refresh",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "treeview",
+      "widget_path": ".!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!panedwindow.!frame.!frame.!treeview",
+      "label": "",
+      "state": "",
+      "panel": "HistoryPanel",
+      "details": {
+        "columns": [
+          "run_id",
+          "timestamp",
+          "label",
+          "total",
+          "pass",
+          "partial",
+          "miss",
+          "routing",
+          "p50",
+          "strongest",
+          "weakest",
+          "filename"
+        ]
+      }
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!panedwindow.!frame2.!frame.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "HistoryPanel",
+      "details": {}
+    }
+  ],
+  "tier_a_results": [
+    {
+      "test_id": "A_tab_Overview",
+      "tier": "A",
+      "panel": "Overview",
+      "description": "Switch to tab: Overview",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 101.88299999936135,
+      "details": {}
+    },
+    {
+      "test_id": "A_tab_Baseline",
+      "tier": "A",
+      "panel": "Baseline",
+      "description": "Switch to tab: Baseline",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 103.47449999972014,
+      "details": {}
+    },
+    {
+      "test_id": "A_tab_Aggregation",
+      "tier": "A",
+      "panel": "Aggregation",
+      "description": "Switch to tab: Aggregation",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 101.57429999890155,
+      "details": {}
+    },
+    {
+      "test_id": "A_tab_Count",
+      "tier": "A",
+      "panel": "Count",
+      "description": "Switch to tab: Count",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 105.26409999874886,
+      "details": {}
+    },
+    {
+      "test_id": "A_tab_RAGAS",
+      "tier": "A",
+      "panel": "RAGAS",
+      "description": "Switch to tab: RAGAS",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 102.2607999984757,
+      "details": {}
+    },
+    {
+      "test_id": "A_tab_Regression",
+      "tier": "A",
+      "panel": "Regression",
+      "description": "Switch to tab: Regression",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 102.9119000013452,
+      "details": {}
+    },
+    {
+      "test_id": "A_tab_History / Ledger",
+      "tier": "A",
+      "panel": "History / Ledger",
+      "description": "Switch to tab: History / Ledger",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 101.03399999934481,
+      "details": {}
+    },
+    {
+      "test_id": "A_tab_Launch",
+      "tier": "A",
+      "panel": "Launch",
+      "description": "Switch to tab: Launch",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 101.9722000000911,
+      "details": {}
+    },
+    {
+      "test_id": "A_tab_Results",
+      "tier": "A",
+      "panel": "Results",
+      "description": "Switch to tab: Results",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 100.86830000000191,
+      "details": {}
+    },
+    {
+      "test_id": "A_tab_Compare",
+      "tier": "A",
+      "panel": "Compare",
+      "description": "Switch to tab: Compare",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 101.7189000012877,
+      "details": {}
+    },
+    {
+      "test_id": "A_tab_History",
+      "tier": "A",
+      "panel": "History",
+      "description": "Switch to tab: History",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 101.58849999970698,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!frame.!button",
+      "tier": "A",
+      "panel": "",
+      "description": "Click button: Info",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 172.00830000001588,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!overviewpanel.!frame.!button",
+      "tier": "A",
+      "panel": "OverviewPanel",
+      "description": "Click button: Refresh",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 107.8907999999501,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!overviewpanel.!frame.!button2",
+      "tier": "A",
+      "panel": "OverviewPanel",
+      "description": "Click button: Save as .md",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 103.59959999914281,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 103.74439999941387,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button2",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 102.00600000098348,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button3",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 101.22250000131316,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button4",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 105.51120000127412,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Click button: Start",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 106.28079999878537,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button2",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "SKIPPED disabled button: Stop",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button3",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Click button: Clear log",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 104.6621999994386,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button4",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Click button: Save as defaults",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 104.50439999840455,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button5",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Click button: Reset defaults",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 102.59070000029169,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe3.!frame.!button",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "SKIPPED disabled button: Open results JSON",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe3.!frame.!button2",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "SKIPPED disabled button: Open report MD",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame.!button",
+      "tier": "A",
+      "panel": "ResultsPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 104.17779999988852,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame.!button2",
+      "tier": "A",
+      "panel": "ResultsPanel",
+      "description": "Click button: Load Results",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 105.21700000026613,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!button",
+      "tier": "A",
+      "panel": "ResultsPanel",
+      "description": "Click button: Clear filters",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 106.81099999965227,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame.!frame.!button",
+      "tier": "A",
+      "panel": "ComparePanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 100.29559999929916,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame2.!frame.!button",
+      "tier": "A",
+      "panel": "ComparePanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 104.6639000014693,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame2.!button",
+      "tier": "A",
+      "panel": "ComparePanel",
+      "description": "Click button: Compare",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 102.51229999994393,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!button",
+      "tier": "A",
+      "panel": "ComparePanel",
+      "description": "Click button: Clear",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 129.0884999998525,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!frame.!button",
+      "tier": "A",
+      "panel": "HistoryPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 104.42839999996067,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!frame.!button2",
+      "tier": "A",
+      "panel": "HistoryPanel",
+      "description": "Click button: Refresh",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 154.0129999993951,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!button",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 105.16760000064096,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!button2",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 100.4795999997441,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!button3",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 103.84440000052564,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "Click button: Start",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 119.02670000017679,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button2",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "SKIPPED disabled button: Stop",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button3",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "Click button: Clear log",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 171.0613999985071,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button4",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "SKIPPED disabled button: Open output",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 189.1446999998152,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button2",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 102.42769999968004,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button3",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 103.99019999931625,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button4",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 100.67109999909007,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button5",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 102.73199999937788,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Click button: Start",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 104.5921000004455,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button2",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "SKIPPED disabled button: Stop",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button3",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Click button: Clear log",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 101.46729999905801,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button4",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "SKIPPED disabled button: Open JSON",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button5",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "SKIPPED disabled button: Open MD",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!button",
+      "tier": "A",
+      "panel": "RagasPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 113.83849999947415,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button",
+      "tier": "A",
+      "panel": "RagasPanel",
+      "description": "Click button: Start",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 273.1969000014942,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button2",
+      "tier": "A",
+      "panel": "RagasPanel",
+      "description": "SKIPPED disabled button: Stop",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button3",
+      "tier": "A",
+      "panel": "RagasPanel",
+      "description": "Click button: Clear log",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 105.91930000009597,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button4",
+      "tier": "A",
+      "panel": "RagasPanel",
+      "description": "SKIPPED disabled button: Open artifact",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!regressionpanel.!frame.!button",
+      "tier": "A",
+      "panel": "RegressionPanel",
+      "description": "Click button: Browse",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 106.64899999937916,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!regressionpanel.!frame.!button2",
+      "tier": "A",
+      "panel": "RegressionPanel",
+      "description": "Click button: Run Regression",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 104.94810000091093,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!regressionpanel.!frame.!button3",
+      "tier": "A",
+      "panel": "RegressionPanel",
+      "description": "SKIPPED disabled button: Stop",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.0,
+      "details": {
+        "skipped": true,
+        "reason": "disabled"
+      }
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!frame.!button",
+      "tier": "A",
+      "panel": "HistoryPanel",
+      "description": "Click button: Browse...",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 212.22020000095654,
+      "details": {}
+    },
+    {
+      "test_id": "A_btn_.!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!frame.!button2",
+      "tier": "A",
+      "panel": "HistoryPanel",
+      "description": "Click button: Refresh",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 175.7737999996607,
+      "details": {}
+    },
+    {
+      "test_id": "A_combo_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox",
+      "tier": "A",
+      "panel": "ResultsPanel",
+      "description": "Cycle combobox (4 values)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 262.1166999997513,
+      "details": {
+        "values_tested": [
+          "All",
+          "PASS",
+          "PARTIAL",
+          "MISS"
+        ]
+      }
+    },
+    {
+      "test_id": "A_combo_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox2",
+      "tier": "A",
+      "panel": "ResultsPanel",
+      "description": "Cycle combobox (1 values)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 64.60790000164707,
+      "details": {
+        "values_tested": [
+          "All"
+        ]
+      }
+    },
+    {
+      "test_id": "A_combo_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox3",
+      "tier": "A",
+      "panel": "ResultsPanel",
+      "description": "Cycle combobox (1 values)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 64.61309999940568,
+      "details": {
+        "values_tested": [
+          "All"
+        ]
+      }
+    },
+    {
+      "test_id": "A_combo_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox4",
+      "tier": "A",
+      "panel": "ResultsPanel",
+      "description": "Cycle combobox (1 values)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 68.49049999982526,
+      "details": {
+        "values_tested": [
+          "All"
+        ]
+      }
+    },
+    {
+      "test_id": "A_combo_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!combobox",
+      "tier": "A",
+      "panel": "ComparePanel",
+      "description": "Cycle combobox (5 values)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 323.61889999992854,
+      "details": {
+        "values_tested": [
+          "Changed only",
+          "Gains",
+          "Losses",
+          "Unchanged",
+          "All"
+        ]
+      }
+    },
+    {
+      "test_id": "A_combo_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!combobox2",
+      "tier": "A",
+      "panel": "ComparePanel",
+      "description": "Cycle combobox (1 values)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 61.64160000116681,
+      "details": {
+        "values_tested": [
+          "All"
+        ]
+      }
+    },
+    {
+      "test_id": "A_check_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Toggle checkbutton: Include deferred targets",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 121.96210000001884,
+      "details": {}
+    },
+    {
+      "test_id": "A_check_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton2",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Toggle checkbutton: raw_mentions",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 123.45710000045074,
+      "details": {}
+    },
+    {
+      "test_id": "A_check_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton3",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Toggle checkbutton: unique_documents",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 123.9279000001261,
+      "details": {}
+    },
+    {
+      "test_id": "A_check_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton4",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Toggle checkbutton: unique_chunks",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 124.39160000030824,
+      "details": {}
+    },
+    {
+      "test_id": "A_check_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton5",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Toggle checkbutton: unique_rows",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 124.15189999956056,
+      "details": {}
+    },
+    {
+      "test_id": "A_check_.!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!frame.!checkbutton",
+      "tier": "A",
+      "panel": "RagasPanel",
+      "description": "Toggle checkbutton: Analysis only",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 129.88810000024387,
+      "details": {}
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 448.8541999999143,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry2",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 345.74869999960356,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry3",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 233.23449999952572,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry4",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 309.04799999916577,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!frame.!entry",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 213.94560000044294,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!frame.!entry2",
+      "tier": "A",
+      "panel": "LaunchPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 217.30589999970107,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame.!entry",
+      "tier": "A",
+      "panel": "ResultsPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 220.74330000032205,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame.!frame.!entry",
+      "tier": "A",
+      "panel": "ComparePanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 221.23029999966093,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame2.!frame.!entry",
+      "tier": "A",
+      "panel": "ComparePanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 221.0746000000654,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!frame.!entry",
+      "tier": "A",
+      "panel": "HistoryPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 221.76480000052834,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!entry",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 222.19679999943764,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!entry2",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 225.19649999958347,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!entry3",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 217.98069999931613,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!frame.!entry",
+      "tier": "A",
+      "panel": "AggregationPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 222.69280000000435,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 236.6554999989603,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry2",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 221.1354000010033,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry3",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 219.75149999889254,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry4",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 222.0909000006941,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry5",
+      "tier": "A",
+      "panel": "CountPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 221.60649999932502,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!entry",
+      "tier": "A",
+      "panel": "RagasPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 220.22970000034547,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!frame.!entry",
+      "tier": "A",
+      "panel": "RagasPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 299.7451999999612,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!regressionpanel.!frame.!entry",
+      "tier": "A",
+      "panel": "RegressionPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 231.28499999984342,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "test_id": "A_entry_.!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!frame.!entry",
+      "tier": "A",
+      "panel": "HistoryPanel",
+      "description": "Entry input battery (5 inputs)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 218.67410000049858,
+      "details": {
+        "sub_results": [
+          {
+            "input": "empty",
+            "ok": true
+          },
+          {
+            "input": "normal",
+            "ok": true
+          },
+          {
+            "input": "unicode",
+            "ok": true
+          },
+          {
+            "input": "injection",
+            "ok": true
+          },
+          {
+            "input": "long",
+            "ok": true
+          }
+        ]
+      }
+    }
+  ],
+  "tier_b_results": [
+    {
+      "test_id": "B_Q1_rapid_submit",
+      "tier": "B",
+      "panel": "QueryPanel",
+      "description": "Rapid submit 20x in quick succession",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 428.10040000040317,
+      "details": {
+        "clicks": 20
+      }
+    },
+    {
+      "test_id": "B_Q2_empty_submit",
+      "tier": "B",
+      "panel": "QueryPanel",
+      "description": "Submit with empty query field",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 200.36110000000917,
+      "details": {}
+    },
+    {
+      "test_id": "B_Q4_ask_then_stop",
+      "tier": "B",
+      "panel": "QueryPanel",
+      "description": "Ask then immediately Stop (cancel mid-stream)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 510.45439999870723,
+      "details": {}
+    },
+    {
+      "test_id": "B_Q6_injection",
+      "tier": "B",
+      "panel": "QueryPanel",
+      "description": "SQL injection attempt in query field",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 202.13690000127826,
+      "details": {}
+    },
+    {
+      "test_id": "B_Q7_unicode_flood",
+      "tier": "B",
+      "panel": "QueryPanel",
+      "description": "Unicode flood (emoji + CJK + RTL + control chars)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 203.98860000022978,
+      "details": {}
+    },
+    {
+      "test_id": "B_Q5_long_query",
+      "tier": "B",
+      "panel": "QueryPanel",
+      "description": "Paste ~10KB text into query field (10200 chars)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 301.6045000003942,
+      "details": {
+        "text_length": 10200
+      }
+    },
+    {
+      "test_id": "B_Q8b_prompt_injection",
+      "tier": "B",
+      "panel": "QueryPanel",
+      "description": "Prompt injection battery (6 vectors)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.013299999409355223,
+      "details": {
+        "vectors_tested": 6
+      }
+    },
+    {
+      "test_id": "B_I1_start_stop_toggle",
+      "tier": "B",
+      "panel": "IndexPanel",
+      "description": "Rapid Start/Stop indexing toggle 10x",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 204.02800000010757,
+      "details": {
+        "rounds": 10
+      }
+    },
+    {
+      "test_id": "B_mode_flip",
+      "tier": "B",
+      "panel": "TitleBar",
+      "description": "Rapid offline/online mode flip 10x",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 204.0614999987156,
+      "details": {
+        "rounds": 10
+      }
+    },
+    {
+      "test_id": "B_T2_rapid_tabs",
+      "tier": "B",
+      "panel": "NavBar",
+      "description": "Rapid tab switching 30x",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 831.8742000010388,
+      "details": {
+        "rounds": 30
+      }
+    },
+    {
+      "test_id": "B_Q8_double_click_all",
+      "tier": "B",
+      "panel": "All",
+      "description": "Double-click every enabled button (39 buttons)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 2669.289299999946,
+      "details": {
+        "buttons_clicked": 39
+      }
+    },
+    {
+      "test_id": "B_W1_resize_stress",
+      "tier": "B",
+      "panel": "Window",
+      "description": "Rapid window resize to extreme dimensions 10x",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 543.7521999992896,
+      "details": {}
+    },
+    {
+      "test_id": "B_W3_maximize_minimize",
+      "tier": "B",
+      "panel": "Window",
+      "description": "Maximize/minimize cycling 5x",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 797.9536000002554,
+      "details": {}
+    },
+    {
+      "test_id": "B_theme_toggle",
+      "tier": "B",
+      "panel": "TitleBar",
+      "description": "Rapid theme toggle (Light/Dark) 5x",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 204.92840000042634,
+      "details": {}
+    },
+    {
+      "test_id": "B_reset_backends",
+      "tier": "B",
+      "panel": "TitleBar",
+      "description": "Reset Backends button -- verify recovery",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 305.0836000002164,
+      "details": {}
+    },
+    {
+      "test_id": "B_export_buttons",
+      "tier": "B",
+      "panel": "QueryPanel/CostDashboard",
+      "description": "Click export buttons with no data (0 clicked)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.049199999921256676,
+      "details": {}
+    },
+    {
+      "test_id": "B_proxy_env_vars",
+      "tier": "B",
+      "panel": "System",
+      "description": "Proxy hardening: survive with HTTP(S)_PROXY env vars set",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 426.21970000072906,
+      "details": {
+        "proxy_vars_set": [
+          "HTTP_PROXY",
+          "HTTPS_PROXY",
+          "NO_PROXY",
+          "http_proxy",
+          "https_proxy",
+          "no_proxy"
+        ]
+      }
+    },
+    {
+      "test_id": "B_proxy_online_mode",
+      "tier": "B",
+      "panel": "System",
+      "description": "Proxy hardening: online mode switch with proxy vars (no hang)",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 0.014400000509340316,
+      "details": {}
+    }
+  ],
+  "tier_c_results": [],
+  "tier_d_status": "PENDING_NON_AUTHOR",
+  "summary": {
+    "verdict": "PASS",
+    "tiers_run": [
+      "A",
+      "B"
+    ],
+    "tier_a": {
+      "total": 96,
+      "passed": 96,
+      "failed": 0
+    },
+    "tier_b": {
+      "total": 18,
+      "passed": 18,
+      "failed": 0
+    },
+    "tier_c": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0
+    },
+    "tier_d": "PENDING_NON_AUTHOR",
+    "total_tests": 114,
+    "total_passed": 114,
+    "total_failed": 0,
+    "widgets_discovered": 107,
+    "panels_built": [
+      "Overview",
+      "Baseline",
+      "Aggregation",
+      "Count",
+      "RAGAS",
+      "Regression",
+      "History / Ledger",
+      "Launch",
+      "Results",
+      "Compare",
+      "History"
+    ],
+    "output_dir": "output\\qa_smash_real_eval_20260415",
+    "callback_errors_total": 0
+  }
+}

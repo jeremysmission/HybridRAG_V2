@@ -1,6 +1,6 @@
 # QA Workbench Overview
 
-Rendered: 2026-04-15 21:47
+Rendered: 2026-04-15 23:06
 Repo root: `C:\HybridRAG_V2`
 Local-only root: `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY`
 
@@ -21,7 +21,7 @@ It is a read-only view over artifacts that live elsewhere.
 
 - Frozen target manifest: `C:\HybridRAG_V2\tests\golden_eval\count_benchmark_targets_2026-04-15.json`
 - Target count: **15** (v1 high-specificity)
-- Latest live run result: `C:\HybridRAG_V2\tests\golden_eval\results\count_benchmark\count_benchmark_20260415_171759.md` (updated 2026-04-15 17:17)
+- Latest live run result: `C:\HybridRAG_V2\tests\golden_eval\results\count_benchmark\count_benchmark_20260415_220246.md` (updated 2026-04-15 22:02)
 - Run note: `C:\HybridRAG_V2\docs\COUNT_BENCHMARK_RUN_NOTE_2026-04-15.md`
 - Status: Ready for QA (Researcher shipped 2026-04-15: pytest 8 passed, live run 7/7 frozen-expectation verification)
 
@@ -34,32 +34,18 @@ It is a read-only view over artifacts that live elsewhere.
 
 ## 5. Regression status
 
-- Latest production eval file: `C:\HybridRAG_V2\docs\production_eval_results_lane1_retrieval_router_400_2026-04-13.json`
-- run_id: 20260414_035850
-- Last updated: 2026-04-15 21:35
-- Pass / Partial / Miss: 249 (62.3%) / 72 (18.0%) / 79 (19.8%)
-- Total queries: 400
-- Routing correct: 301
-- Wall-clock latency: p50 10682 ms / p95 43969 ms
+- Latest production eval file: `C:\HybridRAG_V2\docs\production_eval_results_gui_2026-04-15_230536.json`
+- run_id: 20260416_050553
+- Last updated: 2026-04-15 23:05
+- Pass / Partial / Miss: 0 / 0 / 0
+- Total queries: ?
+- Routing correct: 0
+- Wall-clock latency: p50 0 ms / p95 0 ms
 
 ## 6. Strongest / weakest areas
 
-- by persona — strongest:
-  - Logistics Lead: 71.2%
-  - Cybersecurity / Network Admin: 68.8%
-  - Field Engineer: 62.5%
-- by persona — weakest:
-  - Aggregation / Cross-role: 51.2%
-  - Program Manager: 57.5%
-  - Field Engineer: 62.5%
-- by query type — strongest:
-  - ENTITY: 75.2%
-  - TABULAR: 66.7%
-  - AGGREGATE: 53.8%
-- by query type — weakest:
-  - SEMANTIC: 52.9%
-  - AGGREGATE: 53.8%
-  - TABULAR: 66.7%
+- by persona: (not present in payload)
+- by query type: (not present in payload)
 
 ## 7. Artifact links
 
@@ -72,8 +58,8 @@ It is a read-only view over artifacts that live elsewhere.
 
 ### Hardtail training-40
 - `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\HARDTAIL_TRAINING40_HEAD_TO_HEAD_SCOREBOARD_2026-04-15.md`
-- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_runs\hardtail_v1\claude\2026-04-15_run_03_training40\extraction_manifest.json`
-- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_runs\hardtail_v1\codex\2026-04-15_run_02_training40\extraction_manifest.json`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_runs\hardtail_v1\CoPilot+\2026-04-15_run_03_training40\extraction_manifest.json`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_runs\hardtail_v1\CoPilot+\2026-04-15_run_02_training40\extraction_manifest.json`
 
 ### Count benchmark
 - runner: `C:\HybridRAG_V2\scripts\count_benchmark.py`

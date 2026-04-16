@@ -1,0 +1,148 @@
+QA Debate Reconciliation War Room
+Date: 2026-04-15
+Repo: C:\HybridRAG_V2
+Scope boundary: active GUI work in `src/gui/qa_workbench.py`, `src/gui/eval_gui.py`, and related eval/qa panel files is explicitly carved out unless it clearly breaks behavior outside that workstream.
+
+================================================================
+Round 1 - Reviewer A position
+================================================================
+
+I presented the following QA stance:
+
+1. `src/store/retrieval_metadata_store.py` has a real non-GUI sanitizer regression.
+   The `incident_id` extraction logic no longer recognizes `IGSI-1811` style values.
+   This is confirmed by failures in `tests/test_retrieval_metadata_store.py`.
+
+2. `tests/test_top_k_shadow_lockin.py` has a real sanitizer regression.
+   `ADDENDUM_PATH` was sanitized into `C:/Users/{USERNAME}/...`, which is a literal placeholder path and not a real runtime path strategy.
+
+3. The housekeeping move of `___OnboardingInfo_2026_04_09.md` is unsafe in its current state.
+   The file was moved into `archive/2026-04-15_housekeeping`, but live docs still reference the old top-level path.
+
+4. `archive/2026-04-15_housekeeping/README.md` is inaccurate relative to what was actually archived.
+
+5. The new theory/module docs are only local `.docx` files with no tracked text source.
+   That is a maintainability/process defect, not a runtime defect, but it is still a valid QA finding.
+
+6. Those new docs also need a manual sanitize pass before staging/push because untracked files are outside `sanitize_before_push.py`.
+
+7. Candidate-pool test failures should not be treated as a confirmed regression yet because they may overlap with the active Eval GUI / QA Workbench workstream.
+
+================================================================
+Round 2 - Reviewer B counter-position
+================================================================
+
+The second reviewer challenged and refined the stance as follows:
+
+1. Agreed that the `incident_id` extraction break is a firm regression.
+   It is outside the GUI workstream, tied to sanitization, and directly test-visible.
+
+2. Agreed that the literal placeholder path in `tests/test_top_k_shadow_lockin.py` is a firm regression.
+   A placeholder path is not an acceptable real-environment test strategy.
+
+3. Agreed that the onboarding-file archive move is a firm housekeeping inconsistency because it risks broken references in active docs.
+
+4. Agreed that the archive README mismatch is real, but argued it should be lower severity than the broken archive move / stale references issue.
+
+5. Agreed that `.docx`-only new docs are a firm process gap.
+   The reviewer recommended explicitly framing this as a maintainability defect rather than a runtime defect.
+
+6. Agreed that manual sanitization is required for the new untracked docs.
+
+7. Explicitly downgraded candidate-pool failures from "confirmed regression" to "recheck later" because current evidence is not isolated from in-flight GUI work.
+
+8. Reframed the GUI carveout itself as review guidance, not a bug/fix item.
+
+================================================================
+Debate and reconciliation
+================================================================
+
+Point A: retrieval metadata incident-ID extraction
+Decision: JOINT AGREEMENT
+Accepted QA stance:
+- This is a confirmed non-GUI regression.
+- It should stay on the fix list now.
+- Validation should include `tests/test_retrieval_metadata_store.py`.
+
+Point B: sanitized placeholder path in `test_top_k_shadow_lockin.py`
+Decision: JOINT AGREEMENT
+Accepted QA stance:
+- This is a confirmed non-GUI sanitizer regression.
+- The path must be replaced with a real resolvable deterministic local path strategy that matches actual repo/workflow storage.
+
+Point C: housekeeping move of `___OnboardingInfo_2026_04_09.md`
+Decision: JOINT AGREEMENT
+Accepted QA stance:
+- This is a confirmed housekeeping inconsistency.
+- Either move the file back to the repo root or update all live references to the archived location.
+- Broken/stale references are the primary problem, not the archive itself.
+
+Point D: archive README accuracy
+Decision: JOINT AGREEMENT
+Accepted QA stance:
+- This is a real issue, but lower severity than the broken-reference risk from Point C.
+- The README should either be narrowed to match the actual move set or the broader archive sweep should be completed.
+
+Point E: new theory/module docs exist only as local `.docx` files
+Decision: JOINT AGREEMENT
+Accepted QA stance:
+- This is a valid process/maintainability defect.
+- It is not a runtime regression, but it should still be corrected.
+- Matching tracked Markdown or plain-text source should be added so the docs are diffable, reviewable, sanitizable, and reproducible.
+
+Point F: manual sanitization of the new docs
+Decision: JOINT AGREEMENT
+Accepted QA stance:
+- This stays on the correction list.
+- Because the files are untracked and binary `.docx`, the normal sanitizer path will not protect them automatically.
+
+Point G: candidate-pool failures
+Decision: JOINT AGREEMENT
+Accepted QA stance:
+- Do not treat these as a confirmed standalone regression yet.
+- Re-run them after the active Eval GUI / QA Workbench work settles.
+- They can be mentioned as a deferred recheck item, not as a core finding.
+
+Point H: GUI carveout
+Decision: JOINT AGREEMENT
+Accepted QA stance:
+- This is a scope boundary, not a defect.
+- It should be stated as review guidance, not as a remediation item.
+
+================================================================
+Joint final QA stance
+================================================================
+
+Confirmed non-GUI findings to keep on the correction list:
+
+1. `src/store/retrieval_metadata_store.py` no longer preserves real `IGSI-1811` style incident-ID extraction after sanitization.
+2. `tests/test_top_k_shadow_lockin.py` uses a literal placeholder path `C:/Users/{USERNAME}/...` instead of a real resolvable deterministic local path.
+3. `___OnboardingInfo_2026_04_09.md` was moved into archive while active docs still reference the original top-level location.
+4. `archive/2026-04-15_housekeeping/README.md` does not accurately describe what was actually archived.
+5. The new theory/module docs should not remain as local `.docx` files only; matching tracked Markdown or plain-text source should be added.
+6. Those new docs need a manual sanitize pass before staging/pushing because untracked files are outside `sanitize_before_push.py`.
+
+Deferred / reframed items:
+
+1. Candidate-pool test failures are not yet a confirmed standalone regression.
+   Re-run them after the active `qa_workbench` / `eval_gui` work settles.
+
+2. The GUI carveout is scope guidance, not a bug.
+
+Severity framing:
+
+- High:
+  - retrieval-metadata sanitizer regression
+  - fake placeholder path regression
+
+- Medium:
+  - broken archive move / stale live references
+
+- Low to Medium:
+  - inaccurate archive README
+  - `.docx`-only doc process gap
+  - missing manual sanitization on new untracked docs
+
+Joint conclusion:
+
+The acceptable QA stance is to keep the non-GUI sanitizer and housekeeping findings, explicitly defer GUI-adjacent candidate-pool conclusions until the Eval GUI / QA Workbench work stabilizes, and separate runtime regressions from documentation/process defects instead of flattening them into one severity bucket.

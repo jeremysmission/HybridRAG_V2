@@ -1,0 +1,269 @@
+{
+  "run_id": "20260416_050445",
+  "timestamp_utc": "2026-04-16T05:04:45.398087+00:00",
+  "store_chunks": 10435593,
+  "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (NVIDIA GeForce RTX 3090)",
+  "total_queries": 1,
+  "pass_count": 1,
+  "partial_count": 0,
+  "miss_count": 0,
+  "routing_correct": 1,
+  "p50_pure_retrieval_ms": 5202,
+  "p95_pure_retrieval_ms": 5202,
+  "p50_wall_clock_ms": 5346,
+  "p95_wall_clock_ms": 5346,
+  "p50_router_ms": 2,
+  "p95_router_ms": 2,
+  "per_persona": {
+    "Program Manager": {
+      "total": 1,
+      "PASS": 1,
+      "PARTIAL": 0,
+      "MISS": 0,
+      "routing_correct": 1
+    }
+  },
+  "per_query_type": {
+    "TABULAR": {
+      "total": 1,
+      "PASS": 1,
+      "PARTIAL": 0,
+      "MISS": 0,
+      "routing_correct": 1
+    }
+  },
+  "stage_latency_summary": {},
+  "results": [
+    {
+      "id": "PQ-101",
+      "persona": "Program Manager",
+      "expected_query_type": "TABULAR",
+      "routed_query_type": "TABULAR",
+      "routing_correct": true,
+      "query": "What is the latest enterprise program weekly hours variance for fiscal year 2024?",
+      "expected_document_family": "Program Management",
+      "family_signals": [
+        "program management",
+        "program",
+        "management"
+      ],
+      "top_in_family": true,
+      "any_top5_in_family": true,
+      "verdict": "PASS",
+      "entity_dependent": false,
+      "embed_retrieve_ms": 5346,
+      "router_ms": 2,
+      "retrieval_ms": 5202,
+      "stage_timings_ms": {
+        "router": 2,
+        "retrieval": 5202,
+        "vector_search": 857,
+        "rerank": 4344,
+        "context_assemble": 0,
+        "context_build": 4345
+      },
+      "top_results": [
+        {
+          "rank": 1,
+          "chunk_id": "0e6dad5171a531d258f88ef0bccadf03d5e2ff13615d183062f606b2e1e293d0",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\Delete After Time\\,DanaInfo=www.dau.mil+ARJ53_rev2.pdf",
+          "short_source": "Delete After Time/,DanaInfo=www.dau.mil+ARJ53_rev2.pdf",
+          "score": 0.0,
+          "text_preview": "he data more relevant to the average S&E?s activities, we normalized the data into the standard 40-hour work week, thus creating the picture of an average S&...",
+          "in_family": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "db4af0c6fae5f21288b08feb22d1b0acc0ed5d5e66e6b547ee269b3e0dee4966",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\2.0 Weekly Variance Reports\\2024\\2024-03\\2024-03-01 IGS Weekly Hours Variance.xlsx",
+          "short_source": "2024-03/2024-03-01 IGS Weekly Hours Variance.xlsx",
+          "score": 0.0,
+          "text_preview": "[SHEET] _com.sap.ip.bi.xl.hiddensheet [SHEET] Pivot Reporting Month: | 2024-02-01T00:00:00 | | | | | | | | | | | | | Fiscal Year | 2024 | | | | | | | Reporti...",
+          "in_family": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "84ac167c8a42160a56c1fcb7fa0212ba81551cf8157b1c7b6fb0e6113f10e67f",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\EVMgoldversion.doc",
+          "short_source": "_WhatEver/EVMgoldversion.doc",
+          "score": 0.0,
+          "text_preview": "ment actions. Earned value analysis segregates schedule and cost problems for early and improved visibility of program performance. 1.6.1 Analyze Significant...",
+          "in_family": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "28de8d6bd643e43204246030b51b97192a8947b5a45dfb7060ad1b449e73ce21",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\10.0 Program Management\\2.0 Weekly Variance Reports\\2024\\2024-01\\2024-01-19 IGS Weekly Hours Variance.xlsx",
+          "short_source": "2024-01/2024-01-19 IGS Weekly Hours Variance.xlsx",
+          "score": 0.0,
+          "text_preview": "[SHEET] _com.sap.ip.bi.xl.hiddensheet [SHEET] Pivot Reporting Month: | 2024-01-01T00:00:00 | | | | | | | | | | | | | Fiscal Year | 2024 | | | | | | | Reporti...",
+          "in_family": true
+        },
+        {
+          "rank": 5,
+          "chunk_id": "428f3945c3b97e89cd998e4979f08a4a8c2f783809d81c9b359a275dca12489e",
+          "source_path": "D:\\CorpusTransfr\\verified\\IGS\\Archive\\DM_Backup\\_WhatEver\\EVMgoldversion.doc",
+          "short_source": "_WhatEver/EVMgoldversion.doc",
+          "score": 0.0,
+          "text_preview": "less otherwise specified in contracts, standardized reports and formats may be used for customer reports on subcontracts or Government contracts per mutual a...",
+          "in_family": false
+        }
+      ],
+      "notes": "",
+      "error": ""
+    }
+  ],
+  "provenance": {
+    "run_id": "20260416_050445",
+    "timestamp_utc": "2026-04-16T05:04:45.398087+00:00",
+    "queries_path": "C:\\HybridRAG_V2\\tests\\golden_eval\\production_queries_400_2026-04-12.json",
+    "query_pack": "production_queries_400_2026-04-12.json",
+    "queries_pack_name": "production_queries_400_2026-04-12.json",
+    "config_path": "C:\\HybridRAG_V2\\config\\config.tier1_clean_2026-04-13.yaml",
+    "config_name": "config.tier1_clean_2026-04-13.yaml",
+    "store_path": "C:\\HybridRAG_V2\\data\\index\\lancedb",
+    "lance_path": "C:\\HybridRAG_V2\\data\\index\\lancedb",
+    "report_md_path": "C:\\HybridRAG_V2\\docs\\PRODUCTION_EVAL_RESULTS_GUI_2026-04-15_230423.md",
+    "results_json_path": "C:\\HybridRAG_V2\\docs\\production_eval_results_gui_2026-04-15_230423.json",
+    "artifact_paths": {
+      "results_json": "C:\\HybridRAG_V2\\docs\\production_eval_results_gui_2026-04-15_230423.json",
+      "report_md": "C:\\HybridRAG_V2\\docs\\PRODUCTION_EVAL_RESULTS_GUI_2026-04-15_230423.md"
+    },
+    "gpu_device": "CUDA_VISIBLE_DEVICES=0 -> cuda:0 (NVIDIA GeForce RTX 3090)",
+    "gpu_index_requested": "0",
+    "max_queries_requested": null,
+    "router_mode": "rule-based fallback",
+    "llm_available": false,
+    "provider": "openai",
+    "model": "",
+    "run_status": "STOPPED",
+    "elapsed_s": 17.3,
+    "runner_source": "src.gui.eval_panels.runner.EvalRunner",
+    "run_summary": {
+      "overall_pass_rate_pct": 100.0,
+      "category_min_pass_rate_pct": 100.0,
+      "score_summary": {
+        "status": "STOPPED",
+        "total_queries": 1,
+        "pass_count": 1,
+        "partial_count": 0,
+        "miss_count": 0,
+        "routing_correct": 1,
+        "pass_rate_pct": 100.0,
+        "partial_rate_pct": 0.0,
+        "miss_rate_pct": 0.0,
+        "routing_rate_pct": 100.0
+      },
+      "latency_summary": {
+        "p50_pure_retrieval_ms": 5202,
+        "p95_pure_retrieval_ms": 5202,
+        "p50_wall_clock_ms": 5346,
+        "p95_wall_clock_ms": 5346,
+        "p50_router_ms": 2,
+        "p95_router_ms": 2,
+        "elapsed_s": 17.3
+      },
+      "stage_latency_summary": {},
+      "strongest_areas": [
+        "persona: Program Manager (100%, n=1)",
+        "query_type: TABULAR (100%, n=1)"
+      ],
+      "weakest_areas": [
+        "persona: Program Manager (100%, n=1)",
+        "query_type: TABULAR (100%, n=1)"
+      ],
+      "strongest_personas": [
+        "Program Manager (100%)"
+      ],
+      "weakest_personas": [
+        "Program Manager (100%)"
+      ],
+      "strongest_query_types": [
+        "TABULAR (100%)"
+      ],
+      "weakest_query_types": [
+        "TABULAR (100%)"
+      ],
+      "strongest_area_rows": [
+        {
+          "dimension": "persona",
+          "name": "Program Manager",
+          "total": 1,
+          "pass_count": 1,
+          "partial_count": 0,
+          "miss_count": 0,
+          "routing_correct": 1,
+          "score_pct": 100.0,
+          "pass_rate_pct": 100.0,
+          "routing_pct": 100.0
+        },
+        {
+          "dimension": "query_type",
+          "name": "TABULAR",
+          "total": 1,
+          "pass_count": 1,
+          "partial_count": 0,
+          "miss_count": 0,
+          "routing_correct": 1,
+          "score_pct": 100.0,
+          "pass_rate_pct": 100.0,
+          "routing_pct": 100.0
+        }
+      ],
+      "weakest_area_rows": [
+        {
+          "dimension": "persona",
+          "name": "Program Manager",
+          "total": 1,
+          "pass_count": 1,
+          "partial_count": 0,
+          "miss_count": 0,
+          "routing_correct": 1,
+          "score_pct": 100.0,
+          "pass_rate_pct": 100.0,
+          "routing_pct": 100.0
+        },
+        {
+          "dimension": "query_type",
+          "name": "TABULAR",
+          "total": 1,
+          "pass_count": 1,
+          "partial_count": 0,
+          "miss_count": 0,
+          "routing_correct": 1,
+          "score_pct": 100.0,
+          "pass_rate_pct": 100.0,
+          "routing_pct": 100.0
+        }
+      ],
+      "persona_rows": [
+        {
+          "dimension": "persona",
+          "name": "Program Manager",
+          "total": 1,
+          "pass_count": 1,
+          "partial_count": 0,
+          "miss_count": 0,
+          "routing_correct": 1,
+          "score_pct": 100.0,
+          "pass_rate_pct": 100.0,
+          "routing_pct": 100.0
+        }
+      ],
+      "query_type_rows": [
+        {
+          "dimension": "query_type",
+          "name": "TABULAR",
+          "total": 1,
+          "pass_count": 1,
+          "partial_count": 0,
+          "miss_count": 0,
+          "routing_correct": 1,
+          "score_pct": 100.0,
+          "pass_rate_pct": 100.0,
+          "routing_pct": 100.0
+        }
+      ]
+    }
+  }
+}
