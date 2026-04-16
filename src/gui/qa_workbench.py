@@ -312,14 +312,14 @@ class QAWorkbench(tk.Tk):
         )
 
     def _build_header(self) -> None:
-        header = tk.Frame(self, bg=DARK["panel_bg"], height=48)
+        header = tk.Frame(self, bg=DARK["header_bg"], height=48)
         header.pack(side=tk.TOP, fill=tk.X)
         header.pack_propagate(False)
         tk.Label(
             header,
             text="HybridRAG V2 -- QA Workbench",
             font=FONT_TITLE,
-            bg=DARK["panel_bg"],
+            bg=DARK["header_bg"],
             fg=DARK["fg"],
             padx=16,
         ).pack(side=tk.LEFT, fill=tk.Y)
@@ -327,7 +327,7 @@ class QAWorkbench(tk.Tk):
             header,
             textvariable=self._header_status,
             font=FONT,
-            bg=DARK["panel_bg"],
+            bg=DARK["header_bg"],
             fg=DARK["label_fg"],
             padx=16,
         ).pack(side=tk.RIGHT, fill=tk.Y)

@@ -64,6 +64,7 @@ DARK = {
     "red": "#f44336",
     "orange": "#ff9800",
     "gray": "#a0a0a0",
+    "header_bg": "#252525",
     "menu_bg": "#2d2d2d",
     "menu_fg": "#ffffff",
     "scrollbar_bg": "#3c3c3c",
@@ -160,6 +161,18 @@ def apply_ttk_styles(theme_dict=None):
               background=[("active", t["border"]),
                           ("disabled", t["disabled_fg"])],
               foreground=[("disabled", t["bg"])])
+
+    # TNotebook (tab bar and tab buttons)
+    style.configure("TNotebook", background=t["bg"],
+                     borderwidth=0, tabmargins=(4, 4, 4, 0))
+    style.configure("TNotebook.Tab", background=t["input_bg"],
+                     foreground=t["fg"], font=FONT,
+                     padding=(14, 6), borderwidth=0)
+    style.map("TNotebook.Tab",
+              background=[("selected", t["accent"]),
+                          ("active", t["border"])],
+              foreground=[("selected", t["accent_fg"]),
+                          ("active", t["fg"])])
 
     # TEntry (text input fields -- dark field, white text)
     style.configure("TEntry", fieldbackground=t["input_bg"],

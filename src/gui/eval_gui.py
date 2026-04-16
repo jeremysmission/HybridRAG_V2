@@ -121,14 +121,14 @@ class EvalGUI(tk.Tk):
         self._drain_pump()
 
     def _build_header(self) -> None:
-        header = tk.Frame(self, bg=DARK["panel_bg"], height=48)
+        header = tk.Frame(self, bg=DARK["header_bg"], height=48)
         header.pack(side=tk.TOP, fill=tk.X)
         header.pack_propagate(False)
         title = tk.Label(
             header,
             text="HybridRAG V2 -- Production Eval",
             font=FONT_TITLE,
-            bg=DARK["panel_bg"],
+            bg=DARK["header_bg"],
             fg=DARK["fg"],
             padx=16,
         )
@@ -137,7 +137,7 @@ class EvalGUI(tk.Tk):
             header,
             text="",
             font=FONT,
-            bg=DARK["panel_bg"],
+            bg=DARK["header_bg"],
             fg=DARK["label_fg"],
             padx=16,
         )
