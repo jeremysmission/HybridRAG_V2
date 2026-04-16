@@ -27,7 +27,7 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml.ns import qn, nsdecls
 from docx.oxml import parse_xml
 
-STAGE_DIR = Path(__file__).resolve().parent
+STAGE_DIR = Path(__file__).resolve().parent.parent / "docs"
 
 # --- Colors ---
 NAVY = RGBColor(0, 48, 135)       # #003087
@@ -578,22 +578,26 @@ def _add_references(doc):
     refs = [
         ("RAGAS Framework",
          'Es, S., James, J., Espinosa-Anke, L., & Schockaert, S. (2023). '
-         '"RAGAS: Automated Evaluation of Retrieval Augmented Generation." '
-         'arXiv:2309.15217. https://arxiv.org/abs/2309.15217'),
+         'RAGAS: Automated evaluation of retrieval augmented generation '
+         '[Preprint]. arXiv. https://doi.org/10.48550/arXiv.2309.15217'),
         ("RAGAS Documentation",
-         'Explodinggradients. RAGAS — Retrieval Augmented Generation Assessment. '
-         'https://docs.ragas.io'),
+         'Explodinggradients. (2024). RAGAS: Retrieval augmented generation assessment '
+         '(Version 0.4) [Software documentation]. https://docs.ragas.io'),
         ("Score Thresholds",
-         'Industry benchmark thresholds adapted from Qdrant RAG Evaluation Guide '
-         '(qdrant.tech/blog/rag-evaluation-guide) and PremAI RAG Evaluation '
-         'Metrics & Testing 2026 (blog.premai.io).'),
-        ("Microsoft Writing Style Guide",
-         'Microsoft Corporation. Microsoft Writing Style Guide. '
-         'https://learn.microsoft.com/en-us/style-guide/welcome/'),
-        ("Typography Standards",
-         'Document typography follows recommendations from the Google Developer '
-         'Documentation Style Guide and ISO/IEC Directives Part 2 for '
-         'structure and drafting of technical documents.'),
+         'Qdrant. (2025). RAG evaluation guide: Metrics, benchmarks, and best practices. '
+         'https://qdrant.tech/blog/rag-evaluation-guide/   |   '
+         'PremAI. (2026). RAG evaluation metrics and testing. '
+         'https://blog.premai.io/rag-evaluation-metrics/'),
+        ("Document Design",
+         'Microsoft Corporation. (2024). Microsoft writing style guide. '
+         'https://learn.microsoft.com/en-us/style-guide/welcome/   |   '
+         'Google. (2024). Google developer documentation style guide. '
+         'https://developers.google.com/style'),
+        ("Technical Documentation",
+         'Write the Docs Community. (2025). Software documentation guide. '
+         'https://www.writethedocs.org/guide/   |   '
+         'TechLasi. (2026). Software documentation best practices: The complete guide. '
+         'https://techlasi.com/savvy/software-documentation-best-practices/'),
     ]
 
     for title, citation in refs:
@@ -626,17 +630,35 @@ def _build_qa_workbench_guide():
     _add_toc(doc)
     _add_version_history(doc)
 
+    # Your First 5 Minutes
+    _heading(doc, "Your First 5 Minutes", level=1)
+    _para(doc, "If you want to see results immediately, follow these five steps. "
+          "Detailed explanations for each tab are in the sections that follow.")
+    _bullet(doc, "Double-click start_qa_workbench.bat (the window opens in 2-3 seconds).", bold_prefix="1. Launch:  ")
+    _bullet(doc, "Click the Regression tab and click Run Regression. It completes in 1-3 seconds "
+            "and confirms all extraction patterns are intact.", bold_prefix="2. Smoke test:  ")
+    _bullet(doc, "Click the Count tab, verify paths are set, and click Start. "
+            "7/7 match means your corpus is complete.", bold_prefix="3. Corpus check:  ")
+    _bullet(doc, "Click the RAGAS tab, check 'Analysis only', and click Start. "
+            "It reports how many queries are ready for evaluation.", bold_prefix="4. RAGAS readiness:  ")
+    _bullet(doc, "Click the Baseline tab, set Limit to 5, and click Start. "
+            "Watch 5 live queries run against your index with color-coded verdicts.", bold_prefix="5. First eval:  ")
+    _callout(doc, "TIP", "The recommended benchmark order after any code change is: "
+             "Regression > Count > Aggregation > Baseline > append ledger row.")
+    doc.add_page_break()
+
     # Quick Start
-    _heading(doc, "Quick Start", level=1)
-    _para(doc, "Get the QA Workbench running in under 5 minutes.")
-    _heading(doc, "Prerequisites", level=2)
+    _heading(doc, "Installation and Prerequisites", level=1)
+    _heading(doc, "System Requirements", level=2)
     _bullet(doc, "Windows 10/11 with NVIDIA GPU (CUDA required)")
     _bullet(doc, "HybridRAG V2 repo cloned with .venv installed (run INSTALL_EVAL_GUI.bat if needed)")
     _bullet(doc, "LanceDB index built and populated (data/ directory)")
     _heading(doc, "Launch", level=2)
     _para(doc, "Double-click start_qa_workbench.bat, or from a terminal:")
     _para(doc, "cd /d C:\\HybridRAG_V2 && start_qa_workbench.bat", italic=True)
-    _callout(doc, "TIP", "Behind a corporate proxy? Set HTTPS_PROXY in your shell before launching. The launcher inherits proxy settings automatically.")
+    _callout(doc, "TIP", "Behind a corporate proxy? Set HTTPS_PROXY in your shell before launching. "
+             "The installer auto-exports your Windows CA certificates. If pip fails with SSL errors, "
+             "check that .venv/ca-bundle.pem exists and .venv/pip.ini has a cert = line.")
     _callout(doc, "NOTE", "The window has a vertical scrollbar. You can shrink it to half-screen and scroll to reach all content.")
 
     # Tab guides
@@ -711,9 +733,9 @@ def _build_qa_workbench_guide():
     _bullet(doc, "Results not in History: Results must be saved as production_eval_results*.json in docs/")
 
     _add_references(doc)
-    _add_footer(doc, "HybridRAG V2 — QA Workbench User Guide — 2026-04-15 — J. Randall")
+    _add_footer(doc, "HybridRAG V2 — QA Workbench User Guide — 2026-04-16 — J. Randall")
 
-    path = STAGE_DIR / "QA_WORKBENCH_USER_GUIDE_v2.docx"
+    path = STAGE_DIR / "QA_WORKBENCH_USER_GUIDE_V2.docx"
     doc.save(str(path))
     print(f"Written: {path}")
 
@@ -724,34 +746,98 @@ def _build_eval_gui_guide():
 
     _add_cover(doc, "Eval GUI", "User Guide")
     _add_toc(doc)
+    _add_version_history(doc)
 
-    _heading(doc, "Quick Start", level=1)
-    _bullet(doc, "Windows 10/11, NVIDIA GPU, .venv installed")
-    _bullet(doc, "Launch: start_eval_gui.bat")
-    _bullet(doc, "8 tabs: Overview, Launch, Aggregation, Count, RAGAS, Results, Compare, History")
-    _callout(doc, "TIP", "The Eval GUI is the operator's tool. The QA Workbench adds management-facing summary strips and regression. Both share the same core panels.")
+    # Your First 5 Minutes
+    _heading(doc, "Your First 5 Minutes", level=1)
+    _para(doc, "Get from launch to your first evaluation result in five steps.")
+    _bullet(doc, "Double-click start_eval_gui.bat.", bold_prefix="1. Launch:  ")
+    _bullet(doc, "Click the Launch tab. Query pack and config are pre-filled.", bold_prefix="2. Open Launch tab:  ")
+    _bullet(doc, "Set Limit to 5 (runs 5 queries instead of all 400).", bold_prefix="3. Set a limit:  ")
+    _bullet(doc, "Click Start. Watch live color-coded verdicts in the log.", bold_prefix="4. Run:  ")
+    _bullet(doc, "Click the Results tab. Browse verdict, persona, and timing for each query.", bold_prefix="5. Review:  ")
+    _callout(doc, "TIP", "The Eval GUI is the operator's tool for hands-on evaluation. "
+             "The QA Workbench adds management-facing summaries and regression testing.")
+    doc.add_page_break()
 
-    _heading(doc, "Tab: Launch", level=1)
-    _para(doc, "Run the 400-query production evaluation. Same functionality as QA Workbench Baseline tab.")
-    _bullet(doc, "Select query pack, config, GPU index, optional limit")
-    _bullet(doc, "Start/Stop with live progress and color-coded verdicts")
-    _bullet(doc, "Save as Defaults persists your input paths")
+    _heading(doc, "Installation and Prerequisites", level=1)
+    _bullet(doc, "Windows 10/11 with NVIDIA GPU (CUDA required)")
+    _bullet(doc, "HybridRAG V2 repo cloned with .venv installed (run INSTALL_EVAL_GUI.bat if needed)")
+    _bullet(doc, "LanceDB index built and populated (data/ directory)")
+    _heading(doc, "Launch", level=2)
+    _para(doc, "Double-click start_eval_gui.bat, or from a terminal:")
+    _para(doc, "cd /d C:\\HybridRAG_V2 && start_eval_gui.bat", italic=True)
+    _callout(doc, "TIP", "Behind a corporate proxy? Set HTTPS_PROXY in your shell before launching. "
+             "The installer auto-exports your Windows CA certificates for SSL-intercepting proxies.")
 
-    _heading(doc, "Tab: Results", level=1)
+    _heading(doc, "Tab 1: Overview", level=1)
+    _para(doc, "Read-only dashboard showing the current state of all evaluation lanes at a glance.")
+    _bullet(doc, "Baseline status and pass rate")
+    _bullet(doc, "Aggregation and count benchmark results")
+    _bullet(doc, "Strongest/weakest persona and query type breakdown")
+    _callout(doc, "NOTE", "No setup needed. This tab reads existing result files. "
+             "Missing data shows '(not yet available)' gracefully.")
+
+    _heading(doc, "Tab 2: Launch (Production Eval)", level=1)
+    _para(doc, "Run the full 400-query production evaluation against the live index. "
+          "This is the primary quality measurement tool.")
+    _heading(doc, "Setup", level=2)
+    _bullet(doc, "Query pack defaults to the 400-query production pack (3 personas, 4 query types)")
+    _bullet(doc, "Config defaults to config.yaml")
+    _bullet(doc, "GPU index: check nvidia-smi to see which GPU is available")
+    _bullet(doc, "Max Queries: blank for full 400, or 5-10 for a smoke test")
+    _heading(doc, "Running", level=2)
+    _para(doc, "Click Start. Progress bar advances per query. Live log shows color-coded verdicts:")
+    _bullet(doc, "Green = PASS (expected answer found in retrieved context)")
+    _bullet(doc, "Orange = PARTIAL (some relevant content, incomplete)")
+    _bullet(doc, "Red = MISS (expected content not retrieved)")
+    _para(doc, "Click Stop at any time to safely halt after the current query.")
+    _callout(doc, "WARNING", "PASS rate below 60% indicates a significant retrieval problem. "
+             "Investigate corpus coverage and embedding quality before proceeding.")
+
+    _heading(doc, "Tab 3: Aggregation", level=1)
+    _para(doc, "Tests cross-document aggregation accuracy. Can the system combine information "
+          "from multiple sources correctly?")
+    _bullet(doc, "Manifest: 12-item aggregation seed (default)")
+    _bullet(doc, "Self-check mode (blank answers) tests against certified baseline")
+    _bullet(doc, "12/12 pass = baseline intact. Any failure = regression.")
+    _callout(doc, "TIP", "Run Aggregation after any retrieval change. It catches cross-document "
+             "combination errors that single-query tests miss.")
+
+    _heading(doc, "Tab 4: Count", level=1)
+    _para(doc, "Verifies corpus coverage by counting entity mentions, documents, chunks, and rows.")
+    _bullet(doc, "7/7 frozen-expectation match = corpus complete, dedup stable")
+    _bullet(doc, "Count mismatch = new data ingested (expected) or dedup changed (investigate)")
+    _callout(doc, "NOTE", "Count benchmark requires LanceDB and Entity DB paths. "
+             "The defaults point to the standard install locations.")
+
+    _heading(doc, "Tab 5: RAGAS", level=1)
+    _para(doc, "Industry-standard retrieval quality measurement. See the RAGAS Reference "
+          "section later in this guide for full details on metrics and interpretation.")
+    _bullet(doc, "Analysis Only: fast readiness check, no GPU needed")
+    _bullet(doc, "Full Execution: measures context precision and context recall per query")
+    _bullet(doc, "Set Limit to 3-10 for quick tests")
+
+    _heading(doc, "Tab 6: Results", level=1)
     _para(doc, "Browse and filter a completed evaluation run in detail.")
     _bullet(doc, "Filter by Verdict, Persona, Family, or Query Type")
     _bullet(doc, "Click a row for full details: routing, top chunks, per-stage timing")
-    _callout(doc, "WARNING", "Watch for routing mismatches (expected vs actual query type) and empty retrieved chunks (retrieval failures).")
+    _bullet(doc, "Use this tab to investigate specific MISS or PARTIAL verdicts")
+    _callout(doc, "WARNING", "Watch for routing mismatches (expected vs actual query type) "
+             "and empty retrieved chunks (retrieval failures).")
 
-    _heading(doc, "Tab: Compare", level=1)
-    _para(doc, "Diff two evaluation runs side-by-side.")
+    _heading(doc, "Tab 7: Compare", level=1)
+    _para(doc, "Diff two evaluation runs side-by-side to see what changed.")
     _bullet(doc, "Select Run A (before) and Run B (after)")
     _bullet(doc, "Green rows = improvements, Red = regressions")
     _bullet(doc, "Filter: Changed Only, Gains Only, Losses Only")
-    _callout(doc, "TIP", "Any PASS > MISS transition warrants investigation before accepting the code change.")
+    _callout(doc, "TIP", "Any PASS > MISS transition warrants investigation before accepting "
+             "the code change.")
 
-    _heading(doc, "Tabs: Aggregation, Count, RAGAS, History", level=1)
-    _para(doc, "Same panels as QA Workbench. See the QA Workbench User Guide for detailed instructions.")
+    _heading(doc, "Tab 8: History", level=1)
+    _para(doc, "Browse all past evaluation runs in a sortable table. Track quality over time.")
+    _callout(doc, "TIP", "After any retrieval-side code change, the recommended benchmark order is: "
+             "Count > Aggregation > full Baseline > append ledger row.")
 
     _add_ragas_section(doc)
     _add_tuning_knobs(doc)
@@ -759,12 +845,18 @@ def _build_eval_gui_guide():
 
     doc.add_page_break()
     _heading(doc, "Troubleshooting", level=1)
-    _bullet(doc, "Same troubleshooting steps as QA Workbench. See QA Workbench User Guide.")
+    _callout(doc, "CAUTION", "Window opens and closes immediately? Run from terminal to see the error. "
+             "Most common: missing .venv or broken Python. Run INSTALL_EVAL_GUI.bat.")
+    _bullet(doc, "CUDA not available: Check nvidia-smi. Set CUDA_VISIBLE_DEVICES=0 before launching.")
+    _bullet(doc, "Proxy errors: Set HTTPS_PROXY and HTTP_PROXY in your shell before launch.")
+    _bullet(doc, "SSL certificate errors: Check .venv/ca-bundle.pem exists and .venv/pip.ini has cert = line.")
+    _bullet(doc, "RAGAS blocked: Run tools/install_ragas_proxy_ready_2026-04-15.ps1")
+    _bullet(doc, "Results not in History: Results must be saved as production_eval_results*.json in docs/")
 
     _add_references(doc)
-    _add_footer(doc, "HybridRAG V2 — Eval GUI User Guide — 2026-04-15 — J. Randall")
+    _add_footer(doc, "HybridRAG V2 — Eval GUI User Guide — 2026-04-16 — J. Randall")
 
-    path = STAGE_DIR / "EVAL_GUI_USER_GUIDE_v2.docx"
+    path = STAGE_DIR / "EVAL_GUI_USER_GUIDE_V2.docx"
     doc.save(str(path))
     print(f"Written: {path}")
 
