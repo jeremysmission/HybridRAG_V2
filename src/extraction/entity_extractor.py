@@ -23,6 +23,9 @@ import logging
 import re
 from dataclasses import dataclass
 from json import JSONDecodeError
+from pathlib import Path
+
+import yaml
 
 from src.llm.client import LLMClient
 from src.extraction.tabular_substrate import (
@@ -35,6 +38,144 @@ from src.util import skip_signal
 
 logger = logging.getLogger(__name__)
 _TABLE_EXTRACTOR = DeterministicTableExtractor()
+
+# ---------------------------------------------------------------------------
+# Schema loader — reads extraction_schema_v1.yaml and generates JSON schema
+# and system prompt at import time.
+# ---------------------------------------------------------------------------
+
+_SCHEMA_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "extraction_schema_v1.yaml"
+_EXPECTED_SCHEMA_VERSION = "v1"
+
+
+def _load_extraction_schema(path: Path = _SCHEMA_PATH) -> dict:
+    """Load and validate the extraction schema YAML.
+
+    Returns the parsed YAML dict. Raises RuntimeError on version mismatch
+    or missing file (fail-fast at import time, not at query time).
+    """
+    if not path.exists():
+        raise RuntimeError(
+            f"Extraction schema not found: {path}\n"
+            f"Expected config/extraction_schema_v1.yaml in the repo root."
+        )
+    with open(path, encoding="utf-8") as f:
+        schema = yaml.safe_load(f)
+    version = schema.get("version", "")
+    if version != _EXPECTED_SCHEMA_VERSION:
+        raise RuntimeError(
+            f"Extraction schema version mismatch: expected {_EXPECTED_SCHEMA_VERSION!r}, "
+            f"got {version!r}. Update _EXPECTED_SCHEMA_VERSION or fix the YAML."
+        )
+    return schema
+
+
+def _build_entity_schema(schema: dict) -> dict:
+    """Generate the OpenAI structured-output JSON schema from YAML config."""
+    entity_type_names = [et["name"] for et in schema["entity_types"]]
+    predicate_names = [rp["name"] for rp in schema["relationship_predicates"]]
+
+    return {
+        "type": "json_schema",
+        "json_schema": {
+            "name": "entity_extraction",
+            "strict": True,
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "entities": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "entity_type": {
+                                    "type": "string",
+                                    "enum": entity_type_names,
+                                },
+                                "text": {"type": "string"},
+                                "raw_text": {"type": "string"},
+                                "confidence": {"type": "number"},
+                                "context": {"type": "string"},
+                            },
+                            "required": ["entity_type", "text", "raw_text",
+                                         "confidence", "context"],
+                            "additionalProperties": False,
+                        },
+                    },
+                    "relationships": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "subject_type": {"type": "string"},
+                                "subject_text": {"type": "string"},
+                                "predicate": {
+                                    "type": "string",
+                                    "enum": predicate_names,
+                                },
+                                "object_type": {"type": "string"},
+                                "object_text": {"type": "string"},
+                                "confidence": {"type": "number"},
+                                "context": {"type": "string"},
+                            },
+                            "required": ["subject_type", "subject_text", "predicate",
+                                         "object_type", "object_text", "confidence",
+                                         "context"],
+                            "additionalProperties": False,
+                        },
+                    },
+                    "table_rows": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "headers": {
+                                    "type": "array",
+                                    "items": {"type": "string"},
+                                },
+                                "values": {
+                                    "type": "array",
+                                    "items": {"type": "string"},
+                                },
+                            },
+                            "required": ["headers", "values"],
+                            "additionalProperties": False,
+                        },
+                    },
+                },
+                "required": ["entities", "relationships", "table_rows"],
+                "additionalProperties": False,
+            },
+        },
+    }
+
+
+def _build_system_prompt(schema: dict) -> str:
+    """Generate the extraction system prompt from YAML config.
+
+    The template in the YAML uses {entity_type_block} and {predicate_block}
+    placeholders. We format entity types and predicates into the same
+    style as the original hardcoded prompt.
+    """
+    entity_lines = []
+    for et in schema["entity_types"]:
+        entity_lines.append(f"- {et['name']}: {et['description']}")
+    entity_block = "\n".join(entity_lines)
+
+    predicate_lines = []
+    for rp in schema["relationship_predicates"]:
+        predicate_lines.append(f"- {rp['name']}: {rp['description']}")
+    predicate_block = "\n".join(predicate_lines)
+
+    template = schema["system_prompt_template"]
+    return template.format(
+        entity_type_block=entity_block,
+        predicate_block=predicate_block,
+    )
+
+
+# Load schema at import time (fail-fast)
+_EXTRACTION_SCHEMA_RAW = _load_extraction_schema()
 TABLE_PROMPT_MODE_BASELINE = "baseline"
 TABLE_PROMPT_MODE_SYNOPSIS_ROW_PROVENANCE = "synopsis_row_provenance"
 _VALID_TABLE_PROMPT_MODES = {
@@ -42,8 +183,14 @@ _VALID_TABLE_PROMPT_MODES = {
     TABLE_PROMPT_MODE_SYNOPSIS_ROW_PROVENANCE,
 }
 
-# Structured outputs JSON schema for entity extraction
-ENTITY_SCHEMA = {
+# Structured outputs JSON schema for entity extraction.
+# Auto-generated from config/extraction_schema_v1.yaml at import time.
+# The YAML is the source of truth; this variable is derived.
+ENTITY_SCHEMA = _build_entity_schema(_EXTRACTION_SCHEMA_RAW)
+
+# Original hardcoded schema preserved as _ENTITY_SCHEMA_V1_REFERENCE for
+# regression comparison. Remove after V1 is fully validated.
+_ENTITY_SCHEMA_V1_REFERENCE = {
     "type": "json_schema",
     "json_schema": {
         "name": "entity_extraction",
@@ -124,45 +271,9 @@ ENTITY_SCHEMA = {
     },
 }
 
-EXTRACTION_SYSTEM_PROMPT = """You are an entity extraction engine for enterprise program military maintenance documents.
-
-Extract ALL entities and relationships from the provided text chunk.
-
-ENTITY TYPES:
-- PERSON: Full names with role if available (e.g., "SSgt Marcus Webb, Site POC")
-- PART: Part numbers, serial numbers with descriptions (e.g., "ARC-4471, RF Connector")
-- SITE: Location names, bases, observatories (e.g., "Thule Air Base", "Riverside Observatory")
-- DATE: Dates, schedules, deadlines in ISO format when possible (e.g., "2025-06-15")
-- PO: Purchase orders, requisition numbers (e.g., "PO-2025-0142")
-- ORG: Organizations, units, teams (e.g., "ACME Weather Radar")
-- CONTACT: Email addresses, phone numbers (e.g., "(970) 555-0142")
-
-RELATIONSHIP PREDICATES:
-- POC_FOR: person is point of contact for a site/system
-- WORKS_AT: person works at a site
-- REPLACED_AT: part was replaced at a site
-- CONSUMED_AT: part was consumed/used at a site
-- ORDERED_FOR: PO was ordered for a site/part
-- MAINTAINED_BY: site/system is maintained by a person
-- LOCATED_AT: equipment/system is at a site
-- SCHEDULED_FOR: maintenance is scheduled for a date
-- SHIPPED_TO: part/PO shipped to a site
-- REQUESTED_BY: part/PO requested by a person
-- FAILED_AT: part/equipment failed at a site
-- INSTALLED_AT: part was installed at a site
-- TESTED_AT: equipment tested at a site
-- REPORTS_TO: person reports to another person
-- OTHER: any other clear relationship
-
-TABLE ROWS: If the text contains tabular data (pipe-separated, CSV-like, or clearly columnar), extract each row as headers + values.
-
-RULES:
-- Normalize text: proper case for names, uppercase for part numbers
-- Confidence 0.0-1.0: 1.0 for explicitly stated, 0.7-0.9 for inferred, <0.7 for uncertain
-- context: the sentence or phrase where the entity/relationship appears
-- Extract EVERY entity — do not skip anything that matches the types above
-- For dates, convert to ISO 8601 (YYYY-MM-DD) when possible
-- For part numbers, preserve the exact format from the document"""
+# System prompt for GPT-4o entity extraction.
+# Auto-generated from config/extraction_schema_v1.yaml at import time.
+EXTRACTION_SYSTEM_PROMPT = _build_system_prompt(_EXTRACTION_SCHEMA_RAW)
 
 
 @dataclass
@@ -1278,6 +1389,178 @@ class EventBlockParser:
         if match:
             return _normalize_whitespace(match.group(0))
         return _normalize_whitespace(value)
+
+
+# ---------------------------------------------------------------------------
+# Phrase-based relationship extraction (mined from 10.4M chunk corpus)
+# ---------------------------------------------------------------------------
+
+# Regex patterns for relationship phrases identified in overnight corpus
+# mining (2026-04-16). Each tuple: (compiled_regex, predicate, subject_type,
+# object_type). The regex captures a context window; _extract_spo() parses
+# the subject and object from the surrounding text.
+#
+# Hit counts from full corpus scan:
+#   replaced_with: 230K, depends_on: 204K, inspected_by: 82K,
+#   ships_to: 61K, charged_to: 60K, installed_on: 48K,
+#   assigned_to: 48K, manufactured_by: 11K, ordered_by: 8K,
+#   reported_at: 4K  (total: 755K)
+
+_PHRASE_PATTERNS: list[tuple[re.Pattern[str], str, str, str]] = [
+    # "X were replaced with Y", "X replaced by Y"
+    (re.compile(
+        r"(?P<subj>[A-Za-z0-9][\w\s,.-]{2,60}?)\s+"
+        r"(?:(?:were|was|been|is)\s+)?replaced\s+(?:with|by)\s+"
+        r"(?P<obj>[A-Za-z0-9][\w\s,.-]{2,60}?)(?=[.,;:\r\n]|$)",
+        re.IGNORECASE,
+    ), "REPLACED_BY", "PART", "PART"),
+
+    # "X depends on Y", "X requires Y"
+    (re.compile(
+        r"(?P<subj>[A-Za-z0-9][\w\s,.-]{2,60}?)\s+"
+        r"(?:depends?\s+on|requires?)\s+"
+        r"(?P<obj>[A-Za-z0-9][\w\s,.-]{2,60}?)(?=[.,;:\r\n]|$)",
+        re.IGNORECASE,
+    ), "DEPENDS_ON", "PART", "PART"),
+
+    # "reviewed by X", "inspected by X", "approved by X", "verified by X"
+    (re.compile(
+        r"(?P<subj>[A-Za-z0-9][\w\s,.-]{2,60}?)\s+"
+        r"(?:(?:was|were|is|been)\s+)?(?:reviewed|inspected|approved|verified)\s+by\s+"
+        r"(?P<obj>[A-Za-z0-9][\w\s,.-]{2,60}?)(?=[.,;:\r\n]|$)",
+        re.IGNORECASE,
+    ), "INSPECTED_BY", "PART", "PERSON"),
+
+    # "shipped to X", "delivered to X"
+    (re.compile(
+        r"(?P<subj>[A-Za-z0-9][\w\s,.-]{2,60}?)\s+"
+        r"(?:(?:was|were|been)\s+)?(?:shipped|delivered|sent)\s+to\s+"
+        r"(?P<obj>[A-Za-z0-9][\w\s,.-]{2,60}?)(?=[.,;:\r\n]|$)",
+        re.IGNORECASE,
+    ), "SHIPPED_TO", "PART", "SITE"),
+
+    # "funded by X", "charged to X", "billed to X"
+    (re.compile(
+        r"(?P<subj>[A-Za-z0-9][\w\s,.-]{2,60}?)\s+"
+        r"(?:(?:is|was|were|been)\s+)?(?:funded|charged|billed)\s+(?:by|to)\s+"
+        r"(?P<obj>[A-Za-z0-9][\w\s,.-]{2,60}?)(?=[.,;:\r\n]|$)",
+        re.IGNORECASE,
+    ), "CHARGED_TO", "PART", "ORG"),
+
+    # "installed on X", "mounted on X"
+    (re.compile(
+        r"(?P<subj>[A-Za-z0-9][\w\s,.-]{2,60}?)\s+"
+        r"(?:(?:to\s+be|was|were|been)\s+)?(?:installed|mounted)\s+on\s+"
+        r"(?P<obj>[A-Za-z0-9][\w\s,.-]{2,60}?)(?=[.,;:\r\n]|$)",
+        re.IGNORECASE,
+    ), "INSTALLED_AT", "PART", "SITE"),
+
+    # "assigned to X", "tasked to X", "delegated to X"
+    (re.compile(
+        r"(?P<subj>[A-Za-z0-9][\w\s,.-]{2,60}?)\s+"
+        r"(?:(?:was|were|been|is)\s+)?(?:assigned|tasked|delegated)\s+to\s+"
+        r"(?P<obj>[A-Za-z0-9][\w\s,.-]{2,60}?)(?=[.,;:\r\n]|$)",
+        re.IGNORECASE,
+    ), "ASSIGNED_TO", "PERSON", "SITE"),
+
+    # "manufactured by X", "produced by X", "made by X"
+    (re.compile(
+        r"(?P<subj>[A-Za-z0-9][\w\s,.-]{2,60}?)\s+"
+        r"(?:(?:are|is|was|were)\s+)?(?:manufactured|produced|made)\s+by\s+"
+        r"(?P<obj>[A-Za-z0-9][\w\s,.-]{2,60}?)(?=[.,;:\r\n]|$)",
+        re.IGNORECASE,
+    ), "MANUFACTURED_BY", "PART", "ORG"),
+
+    # "requested by X", "submitted by X", "initiated by X"
+    (re.compile(
+        r"(?P<subj>[A-Za-z0-9][\w\s,.-]{2,60}?)\s+"
+        r"(?:(?:was|were|been)\s+)?(?:requested|submitted|initiated|ordered)\s+by\s+"
+        r"(?P<obj>[A-Za-z0-9][\w\s,.-]{2,60}?)(?=[.,;:\r\n]|$)",
+        re.IGNORECASE,
+    ), "REQUESTED_BY", "PO", "PERSON"),
+
+    # "reported at X", "found at X", "located at X"
+    (re.compile(
+        r"(?P<subj>[A-Za-z0-9][\w\s,.-]{2,60}?)\s+"
+        r"(?:(?:was|were|been)\s+)?(?:reported|found|located|documented)\s+at\s+"
+        r"(?P<obj>[A-Za-z0-9][\w\s,.-]{2,60}?)(?=[.,;:\r\n]|$)",
+        re.IGNORECASE,
+    ), "LOCATED_AT", "PART", "SITE"),
+]
+
+
+def _clean_phrase_entity(text: str) -> str:
+    """Normalize a phrase-extracted entity: strip whitespace, collapse runs."""
+    cleaned = re.sub(r"\s+", " ", text).strip()
+    # Remove trailing punctuation that leaked from the regex
+    cleaned = cleaned.rstrip(".,;:-")
+    return cleaned
+
+
+class RelationshipPhraseExtractor:
+    """
+    Tier 1: Deterministic phrase-based relationship extraction.
+
+    Extracts subject-predicate-object triples from formulaic relationship
+    phrases identified in overnight corpus mining (755K hits across 10.4M
+    chunks). Runs alongside RegexRelationshipExtractor (co-occurrence) and
+    EventBlockParser (maintenance blocks).
+
+    Unlike LLM extraction (Tier 3), this is regex-only and deterministic.
+    High recall on formulaic patterns; does not attempt free-form prose.
+    """
+
+    def extract(
+        self, text: str, chunk_id: str, source_path: str,
+    ) -> list[Relationship]:
+        """Extract relationship triples from phrase patterns in text."""
+        if not text or len(text) < 10:
+            return []
+
+        rels: list[Relationship] = []
+        seen: set[tuple[str, str, str]] = set()
+
+        for pattern, predicate, subj_type, obj_type in _PHRASE_PATTERNS:
+            for match in pattern.finditer(text):
+                subj_raw = match.group("subj")
+                obj_raw = match.group("obj")
+
+                subj = _clean_phrase_entity(subj_raw)
+                obj = _clean_phrase_entity(obj_raw)
+
+                # Skip empty or too-short extractions
+                if len(subj) < 2 or len(obj) < 2:
+                    continue
+                # Skip if subject or object is just stopwords
+                if subj.lower() in ("the", "a", "an", "it", "this", "that", "they"):
+                    continue
+                if obj.lower() in ("the", "a", "an", "it", "this", "that", "they"):
+                    continue
+
+                # Dedup within chunk
+                key = (subj.lower(), predicate, obj.lower())
+                if key in seen:
+                    continue
+                seen.add(key)
+
+                # Build context window
+                start = max(0, match.start() - 40)
+                end = min(len(text), match.end() + 40)
+                ctx = re.sub(r"\s+", " ", text[start:end]).strip()
+
+                rels.append(Relationship(
+                    subject_type=subj_type,
+                    subject_text=subj,
+                    predicate=predicate,
+                    object_type=obj_type,
+                    object_text=obj,
+                    confidence=0.85,
+                    source_path=source_path,
+                    chunk_id=chunk_id,
+                    context=ctx[:160],
+                ))
+
+        return rels
 
 
 # ---------------------------------------------------------------------------

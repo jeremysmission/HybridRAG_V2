@@ -333,6 +333,7 @@ class ImportExtractRunner:
             from src.store.relationship_store import RelationshipStore
             from src.extraction.entity_extractor import (
                 RegexPreExtractor, EventBlockParser, RegexRelationshipExtractor,
+                RelationshipPhraseExtractor,
             )
             from collections import Counter
             # iter_chunk_batches brings in _assert_streaming_api_available
@@ -391,6 +392,7 @@ class ImportExtractRunner:
                 security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
             )
             rel_extractor = RegexRelationshipExtractor()
+            phrase_extractor = RelationshipPhraseExtractor()
 
             tier1_hit_chunk_ids: set[str] = set()
             tier1_extracted_count = 0   # entities the extractor produced (pre-dedup)
@@ -425,6 +427,7 @@ class ImportExtractRunner:
                     entities = extractor.extract(text=text, chunk_id=cid, source_path=src)
                     block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
                     co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
+                    phrase_rels = phrase_extractor.extract(text=text, chunk_id=cid, source_path=src)
 
                     chunk_hit = False
                     for e in entities + block_entities:
@@ -434,7 +437,7 @@ class ImportExtractRunner:
                     if chunk_hit:
                         tier1_hit_chunk_ids.add(cid)
 
-                    for r in block_rels + co_rels:
+                    for r in block_rels + co_rels + phrase_rels:
                         batch_rels.append(r)
 
                     batch_processed += 1

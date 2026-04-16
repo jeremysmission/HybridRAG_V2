@@ -34,6 +34,7 @@ from src.extraction.entity_extractor import (
     RegexPreExtractor,
     EventBlockParser,
     RegexRelationshipExtractor,
+    RelationshipPhraseExtractor,
 )
 from src.extraction.tabular_substrate import (
     DeterministicTableExtractor,
@@ -1584,3 +1585,73 @@ PO-2025-0142"""
         assert "WORKS_AT" in predicates
         assert "REPLACED_AT" in predicates
         assert "ORDERED_FOR" in predicates
+
+
+class TestRelationshipPhraseExtractor:
+    """Tests for phrase-based relationship extraction (10 mining patterns)."""
+
+    @pytest.fixture
+    def extractor(self):
+        return RelationshipPhraseExtractor()
+
+    def test_replaced_with(self, extractor):
+        text = "The 51 Ohm resistors were replaced with upgraded outlet panel."
+        rels = extractor.extract(text, "c1", "doc.txt")
+        assert len(rels) >= 1
+        r = rels[0]
+        assert r.predicate == "REPLACED_BY"
+        assert "resistor" in r.subject_text.lower()
+
+    def test_installed_on(self, extractor):
+        text = "monitoring system shelter to be installed on Fish Pond Road."
+        rels = extractor.extract(text, "c1", "doc.txt")
+        assert len(rels) >= 1
+        assert rels[0].predicate == "INSTALLED_AT"
+        assert "Fish Pond" in rels[0].object_text
+
+    def test_shipped_to(self, extractor):
+        text = "The crate was shipped to the site with supplies."
+        rels = extractor.extract(text, "c1", "doc.txt")
+        assert len(rels) >= 1
+        assert rels[0].predicate == "SHIPPED_TO"
+
+    def test_manufactured_by(self, extractor):
+        text = "GCOs are manufactured by different companies including ARINC."
+        rels = extractor.extract(text, "c1", "doc.txt")
+        assert len(rels) >= 1
+        assert rels[0].predicate == "MANUFACTURED_BY"
+
+    def test_assigned_to(self, extractor):
+        text = "ANG personnel assigned to the base."
+        rels = extractor.extract(text, "c1", "doc.txt")
+        assert len(rels) >= 1
+        assert rels[0].predicate == "ASSIGNED_TO"
+
+    def test_inspected_by(self, extractor):
+        text = "The request is reviewed by all Terminal Instrument Procedures."
+        rels = extractor.extract(text, "c1", "doc.txt")
+        assert len(rels) >= 1
+        assert rels[0].predicate == "INSPECTED_BY"
+
+    def test_charged_to(self, extractor):
+        text = "The CRTC is funded by the Air National Guard."
+        rels = extractor.extract(text, "c1", "doc.txt")
+        assert len(rels) >= 1
+        assert rels[0].predicate == "CHARGED_TO"
+
+    def test_dedup_within_chunk(self, extractor):
+        text = "Part X was replaced with Y. Part X was replaced with Y."
+        rels = extractor.extract(text, "c1", "doc.txt")
+        # Same (subject, predicate, object) should be deduped
+        keys = [(r.subject_text.lower(), r.predicate, r.object_text.lower()) for r in rels]
+        assert len(keys) == len(set(keys))
+
+    def test_empty_text(self, extractor):
+        rels = extractor.extract("", "c1", "doc.txt")
+        assert rels == []
+
+    def test_confidence_is_085(self, extractor):
+        text = "Equipment installed on the rear wall."
+        rels = extractor.extract(text, "c1", "doc.txt")
+        for r in rels:
+            assert r.confidence == 0.85

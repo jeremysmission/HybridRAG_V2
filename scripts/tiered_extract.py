@@ -57,6 +57,7 @@ from src.extraction.entity_extractor import (
     RegexPreExtractor,
     EventBlockParser,
     RegexRelationshipExtractor,
+    RelationshipPhraseExtractor,
 )
 from src.extraction.tabular_substrate import (
     DeterministicTableExtractor,
@@ -298,6 +299,7 @@ def run_tier1(
         security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
     )
     rel_extractor = RegexRelationshipExtractor()
+    phrase_extractor = RelationshipPhraseExtractor()
     all_entities: list[Entity] = []
     all_rels: list[Relationship] = []
 
@@ -309,9 +311,11 @@ def run_tier1(
         entities = extractor.extract(text=text, chunk_id=cid, source_path=src)
         block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
         co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
+        phrase_rels = phrase_extractor.extract(text=text, chunk_id=cid, source_path=src)
 
         entities.extend(block_entities)
         block_rels.extend(co_rels)
+        block_rels.extend(phrase_rels)
         return entities, block_rels
 
     with ThreadPoolExecutor(max_workers=max_concurrent) as pool:
@@ -334,6 +338,7 @@ def _stream_tier1(
     extractor: RegexPreExtractor,
     event_parser: EventBlockParser,
     rel_extractor: RegexRelationshipExtractor,
+    phrase_extractor: RelationshipPhraseExtractor,
     *,
     limit: int = 0,
     batch_size: int = 10000,
@@ -407,6 +412,7 @@ def _stream_tier1(
             entities = extractor.extract(text=text, chunk_id=cid, source_path=src)
             block_entities, block_rels = event_parser.parse(text=text, chunk_id=cid, source_path=src)
             co_rels = rel_extractor.extract(text=text, chunk_id=cid, source_path=src)
+            phrase_rels = phrase_extractor.extract(text=text, chunk_id=cid, source_path=src)
 
             for e in entities + block_entities:
                 key = (e.chunk_id, e.entity_type, e.text)
@@ -419,7 +425,7 @@ def _stream_tier1(
                 if len(entity_buffer) >= entity_flush_size:
                     flush_entities(force=True)
 
-            for r in block_rels + co_rels:
+            for r in block_rels + co_rels + phrase_rels:
                 key = (r.subject_text, r.predicate, r.object_text, r.chunk_id)
                 if key in seen_rels:
                     continue
@@ -1067,6 +1073,7 @@ def main() -> None:
         security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
     )
     rel_extractor = RegexRelationshipExtractor()
+    phrase_extractor = RelationshipPhraseExtractor()
     def _tier1_progress(
         chunks_done: int,
         entity_total: int,
@@ -1089,6 +1096,7 @@ def main() -> None:
         extractor=extractor,
         event_parser=event_parser,
         rel_extractor=rel_extractor,
+        phrase_extractor=phrase_extractor,
         limit=args.limit,
         batch_size=10000,
         dry_run=args.dry_run,

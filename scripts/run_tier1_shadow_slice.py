@@ -31,6 +31,7 @@ from src.extraction.entity_extractor import (
     RegexPreExtractor,
     EventBlockParser,
     RegexRelationshipExtractor,
+    RelationshipPhraseExtractor,
 )
 from scripts.audit_tier1_regex_gate import sample_chunks_from_store
 
@@ -106,6 +107,7 @@ def main() -> int:
         security_standard_exclude_patterns=config.extraction.security_standard_exclude_patterns,
     )
     rel_extractor = RegexRelationshipExtractor()
+    phrase_extractor = RelationshipPhraseExtractor()
 
     selection = sample_chunks_from_store(
         extractor=extractor,
@@ -135,6 +137,11 @@ def main() -> int:
             chunk_id=chunk.chunk_id,
             source_path=chunk.source_path,
         )
+        p_rels = phrase_extractor.extract(
+            text=chunk.text,
+            chunk_id=chunk.chunk_id,
+            source_path=chunk.source_path,
+        )
 
         for entity in extracted + block_entities:
             key = (entity.chunk_id, entity.entity_type, entity.text)
@@ -142,7 +149,7 @@ def main() -> int:
                 seen_entities.add(key)
                 entities.append(entity)
 
-        for rel in block_rels + co_rels:
+        for rel in block_rels + co_rels + p_rels:
             key = (rel.subject_text, rel.predicate, rel.object_text, rel.chunk_id)
             if key not in seen_rels:
                 seen_rels.add(key)
