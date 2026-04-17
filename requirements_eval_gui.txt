@@ -1,0 +1,38 @@
+# Evaluation GUI + QA Workbench Dependencies
+# Pinned to versions verified on Beast workstation (2026-04-16)
+# These are the RAGAS evaluation stack packages needed by:
+#   - scripts/run_ragas_eval.py
+#   - scripts/import_extract_gui.py (QA Workbench RAGAS tab)
+#   - scripts/run_production_eval.py (Eval GUI RAGAS tab)
+#
+# Install: pip install -r requirements_eval_gui.txt
+# Requires: .venv with core HybridRAG_V2 packages already installed
+
+# --- Primary evaluation packages (waiver required) ---
+ragas==0.4.3
+rapidfuzz==3.14.5
+
+# --- RAGAS transitive dependencies ---
+# These are pulled in by ragas and must be present
+appdirs==1.4.4
+datasets==4.8.4
+diskcache==5.6.3
+instructor==1.15.1
+langchain==1.2.15
+langchain-community==0.4.1
+langchain-core==1.2.30
+langchain-openai==1.1.13
+nest-asyncio==1.6.0
+networkx==3.6.1
+openai==2.32.0
+pillow==12.1.0
+pydantic==2.11.1
+rich==13.9.4
+scikit-network==0.33.5
+tiktoken==0.8.0
+tqdm==4.67.3
+typer==0.24.1
+
+# --- Already in core .venv but listed for completeness ---
+numpy==1.26.4
+scikit-learn==1.8.0

@@ -22,6 +22,8 @@ set "PYTHONUTF8=1"
 set "PYTHONIOENCODING=utf-8"
 set "NO_PROXY=127.0.0.1,localhost"
 set "no_proxy=127.0.0.1,localhost"
+if not defined HF_HUB_OFFLINE set "HF_HUB_OFFLINE=1"
+if not defined TRANSFORMERS_OFFLINE set "TRANSFORMERS_OFFLINE=1"
 
 if not exist ".venv\Scripts\python.exe" (
     echo ERROR: HybridRAG V2 virtual environment not found at .venv\Scripts\python.exe
@@ -45,6 +47,7 @@ echo   HybridRAG V2 — Walk-Away Import + Extraction
 echo ============================================================
 echo   Source: %1
 echo   Started: %date% %time%
+echo   HF offline: %HF_HUB_OFFLINE% / Transformers: %TRANSFORMERS_OFFLINE%
 echo ============================================================
 echo.
 

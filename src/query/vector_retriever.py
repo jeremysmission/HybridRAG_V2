@@ -213,7 +213,10 @@ class VectorRetriever:
         incident_id = self._extract_deliverable_id(lower)
         contract_number = self._extract_contract_number(lower)
         po_number = self._extract_purchase_order_number(lower)
-        site = self._extract_known_site(lower) or self._extract_site_hint(q)
+        # Metadata filters should only use validated sites. Loose title-cased
+        # tokens like "cross", "sustainment", or "authorization" poison the
+        # sidecar query and were observed in the 400-query replay.
+        site = self._extract_known_site(lower)
         shipment_modes = self._shipment_mode_hints(lower)
         wants_reference_did = self._is_reference_did_query(lower)
         wants_filed = self._has_deliverable_intent(lower) or "filed deliverable" in lower
@@ -306,8 +309,6 @@ class VectorRetriever:
         metadata_only_group: dict[str, object] = {}
         if contract_periods:
             metadata_only_group["contract_period"] = contract_periods[0]
-        if program_names:
-            metadata_only_group["program_name"] = program_names[0]
         if document_types:
             metadata_only_group["document_type"] = document_types[0]
         if document_categories:
@@ -317,18 +318,23 @@ class VectorRetriever:
         if source_exts and metadata_only_group:
             metadata_only_group["source_exts"] = source_exts
         if metadata_only_group:
-            groups.append(metadata_only_group)
+            if program_names:
+                for program_name in program_names:
+                    group = dict(metadata_only_group)
+                    group["program_name"] = program_name
+                    groups.append(group)
+            else:
+                groups.append(metadata_only_group)
 
         for group in groups:
             if contract_periods and "contract_period" not in group:
                 group["contract_period"] = contract_periods[0]
-            if program_names and "program_name" not in group:
-                group["program_name"] = program_names[0]
             if document_types and "document_type" not in group:
                 group["document_type"] = document_types[0]
             if document_categories and "document_category" not in group:
                 group["document_category"] = document_categories[0]
 
+        groups = self._expand_program_name_variants(groups, program_names)
         return self._dedupe_filter_groups(groups)
 
     def _dedupe_filter_groups(self, groups: list[dict[str, object]]) -> list[dict[str, object]]:
@@ -352,6 +358,25 @@ class VectorRetriever:
             seen.add(key)
             deduped.append(cleaned)
         return deduped
+
+    def _expand_program_name_variants(
+        self,
+        groups: list[dict[str, object]],
+        program_names: list[str],
+    ) -> list[dict[str, object]]:
+        """Duplicate groups when multiple concrete program families are present."""
+        if not program_names:
+            return groups
+        expanded: list[dict[str, object]] = []
+        for group in groups:
+            if "program_name" in group:
+                expanded.append(group)
+                continue
+            for program_name in program_names:
+                clone = dict(group)
+                clone["program_name"] = program_name
+                expanded.append(clone)
+        return expanded
 
     def _metadata_path_hits(
         self,
@@ -578,12 +603,19 @@ class VectorRetriever:
         return None
 
     def _extract_contract_periods(self, query: str) -> list[str]:
+        query = query.lower()
         periods: list[str] = []
         if re.search(r"\boy1\b", query):
             periods.append("OY1")
+        if "option year 1" in query:
+            periods.append("OY1")
         if re.search(r"\boy2\b", query):
             periods.append("OY2")
+        if "option year 2" in query:
+            periods.append("OY2")
         if "base year" in query:
+            periods.append("Base Year")
+        if "new base yr" in query or "new base year" in query:
             periods.append("Base Year")
         deduped: list[str] = []
         seen: set[str] = set()
@@ -595,11 +627,15 @@ class VectorRetriever:
         return deduped
 
     def _extract_program_names(self, query: str) -> list[str]:
+        query = query.lower()
         programs: list[str] = []
-        if "monitoring system" in query:
-            programs.append("monitoring system")
         if "legacy monitoring system" in query:
             programs.append("legacy monitoring system")
+        if "monitoring system" in query and "legacy monitoring system" not in query:
+            programs.append("monitoring system")
+        for program_name in ("nexion", "isto", "sems3d", "oasis", "igscc"):
+            if re.search(rf"\b{re.escape(program_name)}\b", query):
+                programs.append(program_name)
         deduped: list[str] = []
         seen: set[str] = set()
         for program in programs:
@@ -610,11 +646,14 @@ class VectorRetriever:
         return deduped
 
     def _extract_document_types(self, query: str) -> list[str]:
+        query = query.lower()
         document_types: list[str] = []
         if "packing list" in query:
             document_types.append("Packing List")
         if "bill of materials" in query or re.search(r"\bbom\b", query):
             document_types.append("BOM")
+        if "dd250" in query or "dd 250" in query:
+            document_types.append("DD250")
         if any(token in query for token in ("shipping", "shipment", "shipments")):
             document_types.append("Shipping")
         deduped: list[str] = []

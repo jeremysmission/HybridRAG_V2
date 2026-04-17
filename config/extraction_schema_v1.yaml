@@ -1,0 +1,79 @@
+# Extraction Schema V1 — Source of truth for entity types, predicates, and system prompt
+#
+# This file defines the structured extraction schema used by the GPT-4o
+# entity extractor. The entity_extractor.py module loads this YAML at import
+# time and auto-generates the JSON schema and system prompt from it.
+#
+# IMPORTANT: Changing this file changes extraction behavior. The version
+# field is asserted at load time to prevent silent schema drift.
+
+version: "v1"
+
+entity_types:
+  - name: PERSON
+    description: "Full names with role if available (e.g., \"SSgt Marcus Webb, Site POC\")"
+  - name: PART
+    description: "Part numbers, serial numbers with descriptions (e.g., \"ARC-4471, RF Connector\")"
+  - name: SITE
+    description: "Location names, bases, observatories (e.g., \"Thule Air Base\", \"Riverside Observatory\")"
+  - name: DATE
+    description: "Dates, schedules, deadlines in ISO format when possible (e.g., \"2025-06-15\")"
+  - name: PO
+    description: "Purchase orders, requisition numbers (e.g., \"PO-2025-0142\")"
+  - name: ORG
+    description: "Organizations, units, teams (e.g., \"ACME Weather Radar\")"
+  - name: CONTACT
+    description: "Email addresses, phone numbers (e.g., \"(970) 555-0142\")"
+
+relationship_predicates:
+  - name: POC_FOR
+    description: "person is point of contact for a site/system"
+  - name: WORKS_AT
+    description: "person works at a site"
+  - name: REPLACED_AT
+    description: "part was replaced at a site"
+  - name: CONSUMED_AT
+    description: "part was consumed/used at a site"
+  - name: ORDERED_FOR
+    description: "PO was ordered for a site/part"
+  - name: MAINTAINED_BY
+    description: "site/system is maintained by a person"
+  - name: LOCATED_AT
+    description: "equipment/system is at a site"
+  - name: REPORTS_TO
+    description: "person reports to another person"
+  - name: SCHEDULED_FOR
+    description: "maintenance is scheduled for a date"
+  - name: SHIPPED_TO
+    description: "part/PO shipped to a site"
+  - name: REQUESTED_BY
+    description: "part/PO requested by a person"
+  - name: FAILED_AT
+    description: "part/equipment failed at a site"
+  - name: INSTALLED_AT
+    description: "part was installed at a site"
+  - name: TESTED_AT
+    description: "equipment tested at a site"
+  - name: OTHER
+    description: "any other clear relationship"
+
+system_prompt_template: |
+  You are an entity extraction engine for enterprise program military maintenance documents.
+
+  Extract ALL entities and relationships from the provided text chunk.
+
+  ENTITY TYPES:
+  {entity_type_block}
+
+  RELATIONSHIP PREDICATES:
+  {predicate_block}
+
+  TABLE ROWS: If the text contains tabular data (pipe-separated, CSV-like, or clearly columnar), extract each row as headers + values.
+
+  RULES:
+  - Normalize text: proper case for names, uppercase for part numbers
+  - Confidence 0.0-1.0: 1.0 for explicitly stated, 0.7-0.9 for inferred, <0.7 for uncertain
+  - context: the sentence or phrase where the entity/relationship appears
+  - Extract EVERY entity -- do not skip anything that matches the types above
+  - For dates, convert to ISO 8601 (YYYY-MM-DD) when possible
+  - For part numbers, preserve the exact format from the document

@@ -18,6 +18,35 @@ from src.store.relationship_store import RelationshipStore, RelationshipResult
 from src.query.query_router import QueryClassification
 
 logger = logging.getLogger(__name__)
+
+# Stopwords excluded from query-term extraction for relationship/aggregate search
+_QUERY_STOPWORDS = frozenset({
+    "what", "which", "where", "when", "who", "how", "many", "much", "does",
+    "did", "are", "is", "was", "were", "the", "a", "an", "and", "or", "for",
+    "from", "into", "that", "this", "have", "has", "been", "with", "show",
+    "me", "all", "any", "each", "every", "list", "find", "get", "tell",
+    "about", "across", "under", "documented", "available", "exist", "exists",
+    "filed", "submitted", "delivered", "processed", "active", "latest",
+    "recent", "current", "specific", "particular",
+    "enterprise", "program",  # sanitized domain terms
+})
+
+
+def _extract_query_terms(query: str, min_len: int = 3) -> list[str]:
+    """Extract meaningful search terms from a query, excluding stopwords.
+
+    Returns terms in order of specificity (longer/rarer terms first).
+    Used to search the relationship and entity stores when the router
+    doesn't provide an explicit text_pattern.
+    """
+    tokens = re.findall(r"[A-Za-z0-9][\w.-]*", query)
+    terms = [
+        t for t in tokens
+        if len(t) >= min_len and t.lower() not in _QUERY_STOPWORDS
+    ]
+    # Sort by length descending — longer terms are more specific
+    terms.sort(key=lambda t: -len(t))
+    return terms[:8]  # cap to avoid query explosion
 VALID_ENTITY_TYPES = {"PERSON", "PART", "SITE", "DATE", "PO", "ORG", "CONTACT"}
 
 
@@ -205,25 +234,45 @@ class EntityRetriever:
                 sources.add(e.source_path)
 
         # Relationship traversal — search for related entities
-        search_text = c.text_pattern or c.site_filter or c.original_query
-        if search_text:
-            rel_start = time.perf_counter()
+        # Use explicit text_pattern/site_filter if available, otherwise
+        # extract key terms from the query and search for each.
+        rel_start = time.perf_counter()
+        if c.text_pattern:
             rels = self.relationship_store.find_related(
-                text=search_text,
-                min_confidence=self.min_confidence,
-                limit=20,
+                text=c.text_pattern, min_confidence=self.min_confidence, limit=20,
             )
-            relationship_lookup_ms = int((time.perf_counter() - rel_start) * 1000)
+        elif c.site_filter:
+            rels = self.relationship_store.find_related(
+                text=c.site_filter, min_confidence=self.min_confidence, limit=20,
+            )
+        else:
+            # Extract key terms and search each one
+            terms = _extract_query_terms(c.original_query)
+            rels = []
+            seen_rel_keys: set[tuple[str, str, str]] = set()
+            for term in terms[:4]:  # search top 4 terms
+                term_rels = self.relationship_store.find_related(
+                    text=term, min_confidence=self.min_confidence, limit=10,
+                )
+                for r in term_rels:
+                    key = (r.subject_text, r.predicate, r.object_text)
+                    if key not in seen_rel_keys:
+                        seen_rel_keys.add(key)
+                        rels.append(r)
+                if len(rels) >= 20:
+                    break
+            rels = rels[:20]
+        relationship_lookup_ms = int((time.perf_counter() - rel_start) * 1000)
 
-            if rels:
-                parts.append("\n## Relationship Results\n")
-                for r in rels:
-                    parts.append(
-                        f"- {r.subject_text} —[{r.predicate}]→ {r.object_text} "
-                        f"(confidence: {r.confidence:.1f}, source: {r.source_path})\n"
-                        f"  Context: {r.context}\n"
-                    )
-                    sources.add(r.source_path)
+        if rels:
+            parts.append("\n## Relationship Results\n")
+            for r in rels:
+                parts.append(
+                    f"- {r.subject_text} —[{r.predicate}]→ {r.object_text} "
+                    f"(confidence: {r.confidence:.1f}, source: {r.source_path})\n"
+                    f"  Context: {r.context}\n"
+                )
+                sources.add(r.source_path)
 
         if not parts:
             return None
@@ -260,6 +309,12 @@ class EntityRetriever:
 
         entity_type = self._normalize_entity_type(c.entity_type, c.original_query)
         text_pattern = c.text_pattern or self._extract_part_number(c.original_query)
+        # If router gave no text_pattern and no part number, extract key terms
+        # from the query to avoid full-table scan on 19.9M rows.
+        if not text_pattern:
+            terms = _extract_query_terms(c.original_query)
+            if terms:
+                text_pattern = terms[0]  # use most specific term
         text_pattern = f"%{text_pattern}%" if text_pattern else None
 
         agg = self.entity_store.aggregate_entity(
@@ -268,26 +323,56 @@ class EntityRetriever:
             min_confidence=self.min_confidence,
         )
 
-        if not agg:
-            return None
-
-        parts = ["## Aggregation Results\n\n"]
+        parts = []
         sources = set()
 
-        for item in agg:
-            parts.append(
-                f"- **{item['text']}**: found {item['count']} time(s) "
-                f"across {len(item['sources'])} source(s)\n"
-                f"  Sources: {', '.join(item['sources'])}\n"
-            )
-            sources.update(item["sources"])
+        if agg:
+            parts.append("## Aggregation Results\n\n")
+            for item in agg:
+                parts.append(
+                    f"- **{item['text']}**: found {item['count']} time(s) "
+                    f"across {len(item['sources'])} source(s)\n"
+                    f"  Sources: {', '.join(item['sources'])}\n"
+                )
+                sources.update(item["sources"])
+            parts.append(f"\n**Total unique matches: {len(agg)}**\n")
 
-        parts.append(f"\n**Total unique matches: {len(agg)}**\n")
+        # Query relationship store for cross-document evidence
+        # (same pattern as _entity_lookup — AGGREGATE queries need this
+        # for "which sites had shipments" / "what parts were replaced" type queries)
+        terms = _extract_query_terms(c.original_query)
+        rels: list[RelationshipResult] = []
+        if terms:
+            seen_rel_keys: set[tuple[str, str, str]] = set()
+            for term in terms[:4]:
+                term_rels = self.relationship_store.find_related(
+                    text=term, min_confidence=self.min_confidence, limit=10,
+                )
+                for r in term_rels:
+                    key = (r.subject_text, r.predicate, r.object_text)
+                    if key not in seen_rel_keys:
+                        seen_rel_keys.add(key)
+                        rels.append(r)
+                if len(rels) >= 20:
+                    break
+            rels = rels[:20]
+
+        if rels:
+            parts.append("\n## Cross-Document Relationships\n\n")
+            for r in rels:
+                parts.append(
+                    f"- {r.subject_text} —[{r.predicate}]→ {r.object_text} "
+                    f"(confidence: {r.confidence:.1f}, source: {r.source_path})\n"
+                )
+                sources.add(r.source_path)
+
+        if not parts:
+            return None
 
         return StructuredResult(
             context_text="".join(parts),
             sources=list(sources),
-            result_count=len(agg),
+            result_count=len(agg or []) + len(rels),
             query_path="AGGREGATE",
             stage_timings_ms={
                 "aggregate_lookup": int((time.perf_counter() - aggregate_start) * 1000),

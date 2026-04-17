@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -41,6 +42,7 @@ from scripts.import_embedengine import (
 
 REQUIRED_EXPORT_FILES = ("chunks.jsonl", "vectors.npy")
 DIVIDER = "=" * 70
+PYTHON = str(V2_ROOT / ".venv" / "Scripts" / "python.exe")
 
 
 def utc_now_iso() -> str:
@@ -66,6 +68,33 @@ def append_jsonl(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "a", encoding="utf-8", newline="\n") as f:
         f.write(json.dumps(payload, ensure_ascii=False) + "\n")
+
+
+def run_tier1_extraction(config_path: str, *, limit: int = 0) -> dict[str, Any]:
+    """Run Tier 1 extraction after import so staged imports populate relationships."""
+    cmd = [
+        PYTHON,
+        "scripts/tiered_extract.py",
+        "--tier",
+        "1",
+        "--config",
+        config_path,
+    ]
+    if limit > 0:
+        cmd.extend(["--limit", str(limit)])
+    proc = subprocess.run(
+        cmd,
+        cwd=str(V2_ROOT),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return {
+        "command": cmd,
+        "returncode": int(proc.returncode),
+        "stdout": proc.stdout,
+        "stderr": proc.stderr,
+    }
 
 
 def has_required_export_files(export_dir: Path) -> bool:
@@ -385,6 +414,11 @@ def main() -> None:
         help="Build vector index when --mode import is used.",
     )
     parser.add_argument(
+        "--skip-tier1-after-import",
+        action="store_true",
+        help="Do not auto-run Tier 1 extraction after a successful staged import.",
+    )
+    parser.add_argument(
         "--index-type",
         default="IVF_PQ",
         help="Vector index type for --mode import (default: IVF_PQ).",
@@ -503,7 +537,17 @@ def main() -> None:
             args.refine_factor,
             not args.no_optimize_index,
         )
-        stage_status = "import_complete"
+        if mode_result and not args.skip_tier1_after_import:
+            tier1_limit = len(chunks) if args.canary_limit > 0 else 0
+            tier1_result = run_tier1_extraction(args.config, limit=tier1_limit)
+            mode_result["tier1_extraction"] = tier1_result
+            stage_status = (
+                "import_complete"
+                if tier1_result["returncode"] == 0
+                else "import_complete_tier1_failed"
+            )
+        else:
+            stage_status = "import_complete"
 
     stage_result = {
         "stage_result_version": "1.0",
