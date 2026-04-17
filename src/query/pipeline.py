@@ -28,6 +28,30 @@ from src.store.lance_store import ChunkResult
 
 logger = logging.getLogger(__name__)
 
+# ---------------------------------------------------------------------------
+# Adaptive top-k per query type (2026 production pattern)
+# ---------------------------------------------------------------------------
+# Literature consensus: AGGREGATE queries need wider retrieval to gather
+# cross-document evidence; ENTITY queries need narrow, precise hits.
+# See RESEARCH_ROOM_2026-04-16.md Assignment (c) for citations.
+#
+# Keys: (retrieve_top_k, rerank_top_k)
+# retrieve_top_k: how many chunks to pull from vector search
+# rerank_top_k: how many to keep after FlashRank reranking
+ADAPTIVE_TOP_K: dict[str, tuple[int, int]] = {
+    "ENTITY":    (10, 5),
+    "SEMANTIC":  (30, 8),
+    "AGGREGATE": (50, 15),
+    "TABULAR":   (10, 5),
+    "COMPLEX":   (30, 8),   # sub-queries get their own adaptive top-k
+}
+_DEFAULT_TOP_K = (10, 5)
+
+
+def _resolve_adaptive_top_k(query_type: str) -> tuple[int, int]:
+    """Return (retrieve_top_k, rerank_top_k) for a given query type."""
+    return ADAPTIVE_TOP_K.get(query_type, _DEFAULT_TOP_K)
+
 
 def _merge_stage_timings(*timing_maps: dict[str, int] | None) -> dict[str, int]:
     """Support the pipeline workflow by handling the merge stage timings step."""
@@ -144,18 +168,23 @@ class QueryPipeline:
         step_start = time.perf_counter()
         classification = self.router.classify(query_text)
         stage_timings["router"] = int((time.perf_counter() - step_start) * 1000)
+
+        # Adaptive top-k: override caller's top_k with query-type-specific value
+        retrieve_k, rerank_k = _resolve_adaptive_top_k(classification.query_type)
+        effective_top_k = retrieve_k  # retrieve_k used for vector search depth
         logger.info(
-            "Query restricted: type=%s, reasoning=%s",
+            "Query restricted: type=%s, reasoning=%s | adaptive_top_k: retrieve=%d, rerank=%d",
             classification.query_type, classification.reasoning,
+            retrieve_k, rerank_k,
         )
 
         step_start = time.perf_counter()
         if classification.query_type == "COMPLEX":
-            context = self._handle_complex(classification, top_k)
+            context = self._handle_complex(classification, effective_top_k, rerank_k)
         elif classification.query_type in ("ENTITY", "AGGREGATE", "TABULAR"):
-            context = self._handle_structured(classification, top_k)
+            context = self._handle_structured(classification, effective_top_k, rerank_k)
         else:
-            context = self._handle_semantic(classification, top_k)
+            context = self._handle_semantic(classification, effective_top_k, rerank_k)
         stage_timings["retrieval"] = int((time.perf_counter() - step_start) * 1000)
         if context is not None:
             stage_timings = _merge_stage_timings(stage_timings, context.stage_timings_ms)
@@ -163,7 +192,7 @@ class QueryPipeline:
         return classification, context, stage_timings
 
     def _handle_semantic(
-        self, c: QueryClassification, top_k: int
+        self, c: QueryClassification, top_k: int, rerank_top_n: int = 5
     ) -> GeneratorContext | None:
         """Pure vector retrieval for semantic queries."""
         guarded_results = self._guarded_semantic_results(c, top_k)
@@ -175,6 +204,7 @@ class QueryPipeline:
             context, build_timings = self.context_builder.build_with_timings(
                 guarded_results,
                 c.original_query,
+                rerank_top_n=rerank_top_n,
             )
             context.stage_timings_ms = _merge_stage_timings(
                 {"vector_search": vector_search_ms},
@@ -192,7 +222,9 @@ class QueryPipeline:
         vector_search_ms = int((time.perf_counter() - search_start) * 1000)
         if not results:
             return None
-        context, build_timings = self.context_builder.build_with_timings(results, c.original_query)
+        context, build_timings = self.context_builder.build_with_timings(
+            results, c.original_query, rerank_top_n=rerank_top_n,
+        )
         context.stage_timings_ms = _merge_stage_timings(
             {"vector_search": vector_search_ms},
             build_timings,
@@ -200,7 +232,7 @@ class QueryPipeline:
         return context
 
     def _handle_structured(
-        self, c: QueryClassification, top_k: int
+        self, c: QueryClassification, top_k: int, rerank_top_n: int = 5
     ) -> GeneratorContext | None:
         """
         Structured retrieval with vector fallback.
@@ -237,6 +269,7 @@ class QueryPipeline:
             vector_context, build_timings = self.context_builder.build_with_timings(
                 vector_results,
                 c.original_query,
+                rerank_top_n=rerank_top_n,
             )
             vector_context.stage_timings_ms = _merge_stage_timings(
                 {"vector_search": vector_search_ms},
@@ -280,7 +313,7 @@ class QueryPipeline:
             return None
 
     def _handle_complex(
-        self, c: QueryClassification, top_k: int
+        self, c: QueryClassification, top_k: int, rerank_top_n: int = 8
     ) -> GeneratorContext | None:
         """
         Decompose complex query into sub-queries, fan out, merge results.
@@ -298,7 +331,7 @@ class QueryPipeline:
 
         if not c.sub_queries:
             # No decomposition — treat as semantic
-            return self._handle_semantic(c, top_k)
+            return self._handle_semantic(c, top_k, rerank_top_n)
 
         parts = []
         all_sources = []
@@ -312,10 +345,12 @@ class QueryPipeline:
                 expanded_query=sq.query_text,
             )
 
+            # Each sub-query gets its own adaptive top-k
+            sub_retrieve_k, sub_rerank_k = _resolve_adaptive_top_k(sq.query_type)
             if sq.query_type in ("ENTITY", "AGGREGATE", "TABULAR"):
-                ctx = self._handle_structured(sub_classification, top_k)
+                ctx = self._handle_structured(sub_classification, sub_retrieve_k, sub_rerank_k)
             else:
-                ctx = self._handle_semantic(sub_classification, top_k)
+                ctx = self._handle_semantic(sub_classification, sub_retrieve_k, sub_rerank_k)
 
             if ctx:
                 parts.append(f"### Sub-query {i}: {sq.query_text}\n\n{ctx.context_text}\n")

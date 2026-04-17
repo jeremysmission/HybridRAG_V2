@@ -518,6 +518,43 @@ def _retrieved_contexts_from_query(
     return contexts
 
 
+def _compute_ndcg(retrieved_contexts: list[str], reference_contexts: list[str]) -> float:
+    """Compute NDCG@k for a single query.
+
+    Relevance is binary: 1 if retrieved context has significant word overlap
+    with any reference context, 0 otherwise. This is a non-LLM metric that
+    weights position (a relevant doc at rank 1 scores higher than rank 10).
+    """
+    if not retrieved_contexts or not reference_contexts:
+        return 0.0
+
+    import re as _re
+    def _tokenize(text: str) -> set[str]:
+        return set(w.lower() for w in _re.findall(r'[A-Za-z0-9]+', text) if len(w) >= 3)
+
+    ref_word_sets = [_tokenize(ref) for ref in reference_contexts]
+
+    # Binary relevance for each retrieved context
+    relevance = []
+    for ctx in retrieved_contexts:
+        ctx_words = _tokenize(ctx)
+        is_relevant = any(
+            len(ctx_words & ref_words) / max(len(ref_words), 1) >= 0.2
+            for ref_words in ref_word_sets
+        )
+        relevance.append(1.0 if is_relevant else 0.0)
+
+    # DCG: sum of relevance / log2(rank+1)
+    import math
+    dcg = sum(rel / math.log2(i + 2) for i, rel in enumerate(relevance))
+
+    # Ideal DCG: all relevant docs at top
+    ideal_rels = sorted(relevance, reverse=True)
+    idcg = sum(rel / math.log2(i + 2) for i, rel in enumerate(ideal_rels))
+
+    return dcg / idcg if idcg > 0 else 0.0
+
+
 def _summarize_metric(name: str, values: list[float], errors: int) -> MetricSummary:
     """Condense detailed results into a shorter summary that is easier to review."""
     if not values:
@@ -633,6 +670,14 @@ def execute_metrics(
                 metric_values[metric_name].append(score)
             except Exception:
                 metric_errors[metric_name] += 1
+
+        # NDCG@k: non-LLM, position-weighted retrieval quality metric.
+        # Runs alongside RAGAS metrics with zero extra dependencies.
+        try:
+            ndcg = _compute_ndcg(retrieved_contexts, query.reference_contexts)
+            metric_values["ndcg_at_k"].append(ndcg)
+        except Exception:
+            metric_errors["ndcg_at_k"] += 1
         if log_cb:
             log_cb(
                 (
@@ -648,6 +693,11 @@ def execute_metrics(
         _summarize_metric(name, metric_values.get(name, []), metric_errors.get(name, 0))
         for name in sorted(supported_paths)
     ]
+    # Add NDCG@k summary (always computed, no RAGAS dependency)
+    if "ndcg_at_k" in metric_values:
+        summaries.append(
+            _summarize_metric("ndcg_at_k", metric_values["ndcg_at_k"], metric_errors.get("ndcg_at_k", 0))
+        )
     return summaries, skip_reasons, pipeline_info
 
 

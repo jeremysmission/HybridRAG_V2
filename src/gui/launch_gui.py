@@ -147,6 +147,33 @@ def _load_backends(app, config, logger):
         except Exception as exc:
             logger.warning("[WARN] RelationshipStore init failed: %s", exc)
 
+        # -- Entity store health check --
+        # Coordinator directive 2026-04-16: warn if relationship and table stores
+        # are empty, as this indicates the extraction pipeline hasn't populated
+        # the stores that the entity retriever depends on. Empty stores cause
+        # cascading LIKE scans on 19.9M rows (13-166s structured_lookup).
+        try:
+            _rel_count = relationship_store.count() if relationship_store else 0
+            _tbl_count = entity_store.count_table_rows() if entity_store else 0
+            _ent_count = entity_store.count_entities() if entity_store else 0
+            if _rel_count == 0 and _tbl_count == 0:
+                logger.warning(
+                    "[WARN] Entity store health: relationships=%d, "
+                    "extracted_tables=%d, entities=%d. The relationship and "
+                    "table stores are EMPTY. Entity/aggregate queries will "
+                    "fall back to slow LIKE scans. Run tiered_extract.py to "
+                    "populate.",
+                    _rel_count, _tbl_count, _ent_count,
+                )
+            elif _rel_count == 0:
+                logger.warning(
+                    "[WARN] Relationship store is empty (0 relationships). "
+                    "Cross-document queries will not find relationship triples. "
+                    "Run tiered_extract.py to populate.",
+                )
+        except Exception:
+            pass  # Don't block startup for health-check failures
+
         # -- Initialize embedder --
         _step("Backend: initializing embedder...")
         embedder = None

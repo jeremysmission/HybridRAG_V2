@@ -129,15 +129,15 @@ No new benchmark GUI needed for CorpusForge.
 
 ---
 
-## Slice 6: Sanitize "3090" References (P0 -- compliance)
+## Slice 6: Sanitize "NVIDIA workstation GPU" References (P0 -- compliance)
 
 **Owner:** Coder
 **Time:** 30 min
 
-- [ ] Search all docs/, output/, tests/ for "3090" / "NVIDIA workstation GPU" / "GeForce NVIDIA workstation GPU"
+- [ ] Search all docs/, output/, tests/ for "NVIDIA workstation GPU" / "NVIDIA workstation GPU" / "GeForce NVIDIA workstation GPU"
 - [ ] Replace with "NVIDIA workstation GPU" or "NVIDIA workstation desktop/laptop GPU"
-- [ ] Add "3090" to sanitizer pattern list for future push safety
-- [ ] Verify no 3090 references in any file the GUIs display
+- [ ] Add "NVIDIA workstation GPU" to sanitizer pattern list for future push safety
+- [ ] Verify no NVIDIA workstation GPU references in any file the GUIs display
 
 ---
 
@@ -177,7 +177,7 @@ No new benchmark GUI needed for CorpusForge.
 | 3 | Eval GUI install | P0 | 30min | Slice 2 (shared reqs) |
 | 4 | CorpusForge install | P1 | 1h | None |
 | 5 | Version downgrade test | P1 | 1-2h | Slices 1-3 |
-| 6 | Sanitize 3090 refs | P0 | 30min | None |
+| 6 | Sanitize NVIDIA workstation GPU refs | P0 | 30min | None |
 | 7 | RAM investigation | P1 | 1-2h | None |
 | 8 | Install guides | P1 | 1h | Slices 1-4 |
 

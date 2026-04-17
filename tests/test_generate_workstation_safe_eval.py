@@ -141,8 +141,8 @@ def test_generator_sanitizes_workstation_gpu_hardware_tokens(tmp_path: Path) -> 
     payload = [
         {
             "query_id": "PQ-902",
-            "user_input": "Show me the eval run captured on the RTX 3090 box.",
-            "reference": "GPU line: physical GPU 0 -> cuda:0 (NVIDIA GeForce RTX 3090).",
+            "user_input": "Show me the eval run captured on the NVIDIA workstation GPU box.",
+            "reference": "GPU line: physical GPU 0 -> cuda:0 (NVIDIA NVIDIA workstation GPU).",
             "reference_contexts": [],
             "persona": "Operator",
             "expected_query_type": "SEMANTIC",
@@ -152,7 +152,7 @@ def test_generator_sanitizes_workstation_gpu_hardware_tokens(tmp_path: Path) -> 
             "rationale": "Sanitize workstation hardware references.",
             "expected_anchor_entities": {"RUN": ["20260416_154142"]},
             "has_ground_truth": True,
-            "corpus_grounding_evidence": "Dual 3090 workstation output was copied into the report.",
+            "corpus_grounding_evidence": "Dual NVIDIA workstation GPU workstation output was copied into the report.",
         }
     ]
     _write_json(canonical, payload)
@@ -178,8 +178,8 @@ def test_generator_sanitizes_workstation_gpu_hardware_tokens(tmp_path: Path) -> 
     derived_rows = json.loads(derived.read_text(encoding="utf-8"))
     report = json.loads(validation.read_text(encoding="utf-8"))
 
-    assert "3090" not in derived_rows[0]["user_input"].lower()
-    assert "3090" not in derived_rows[0]["reference"].lower()
-    assert "3090" not in derived_rows[0]["corpus_grounding_evidence"].lower()
+    assert "NVIDIA workstation GPU" not in derived_rows[0]["user_input"].lower()
+    assert "NVIDIA workstation GPU" not in derived_rows[0]["reference"].lower()
+    assert "NVIDIA workstation GPU" not in derived_rows[0]["corpus_grounding_evidence"].lower()
     assert "NVIDIA workstation GPU" in derived_rows[0]["reference"]
     assert report["summary"]["disallowed_hits_in_sanitized_fields"] == 0

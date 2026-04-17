@@ -146,13 +146,25 @@ class StatusBar(tk.Frame):
             else:
                 self.fts_label.config(text="FTS: checking...", fg=t["gray"])
 
-            # Entities
+            # Entities + health warning when stores are empty
             ent_count = self._model.entity_count
             rel_count = self._model.relationship_count
-            self.entities_label.config(
-                text="Entities: {:,} | Rels: {:,}".format(ent_count, rel_count),
-                fg=t["green"] if ent_count > 0 else t["gray"],
-            )
+            tbl_count = getattr(self._model, "table_count", 0) or 0
+            if rel_count == 0 and tbl_count == 0:
+                self.entities_label.config(
+                    text="Entities: {:,} | Rels: 0 | Tables: 0 [EMPTY - run extraction]".format(ent_count),
+                    fg=t["red"],
+                )
+            elif rel_count == 0:
+                self.entities_label.config(
+                    text="Entities: {:,} | Rels: 0 [no relationships]".format(ent_count),
+                    fg=t["orange"],
+                )
+            else:
+                self.entities_label.config(
+                    text="Entities: {:,} | Rels: {:,}".format(ent_count, rel_count),
+                    fg=t["green"] if ent_count > 0 else t["gray"],
+                )
 
             # LLM
             if self._model.llm_available:

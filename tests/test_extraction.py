@@ -1110,6 +1110,16 @@ class TestEntityStore:
         assert len(results) == 1
         assert "ARC" in results[0].text
 
+    def test_lookup_by_text_pattern_uses_fts_when_available(self, entity_store):
+        entity_store.insert_entities([
+            self._make_entity(text="power amplifier module", chunk_id="c1"),
+            self._make_entity(text="receiver assembly", chunk_id="c2"),
+        ])
+        assert entity_store._fts_ready is True
+        results = entity_store.lookup_entities(text_pattern="%power amplifier%", limit=10)
+        assert len(results) == 1
+        assert results[0].text == "power amplifier module"
+
     def test_aggregate(self, entity_store):
         entity_store.insert_entities([
             self._make_entity(text="ARC-4471", chunk_id="c1"),
@@ -1120,6 +1130,18 @@ class TestEntityStore:
         texts = {a["text"]: a["count"] for a in agg}
         assert texts["ARC-4471"] == 2
         assert texts["FM-220"] == 1
+
+    def test_aggregate_by_text_pattern_uses_fts_when_available(self, entity_store):
+        entity_store.insert_entities([
+            self._make_entity(text="power amplifier module", chunk_id="c1"),
+            self._make_entity(text="power amplifier card", chunk_id="c2"),
+            self._make_entity(text="receiver assembly", chunk_id="c3"),
+        ])
+        agg = entity_store.aggregate_entity(text_pattern="%power amplifier%")
+        texts = {a["text"]: a["count"] for a in agg}
+        assert texts["power amplifier module"] == 1
+        assert texts["power amplifier card"] == 1
+        assert "receiver assembly" not in texts
 
     def test_type_summary(self, entity_store):
         entity_store.insert_entities([

@@ -14,8 +14,8 @@ Three parallel lanes that don't step on each other's code:
 
 | Lane | Focus | Code Surfaces | Owner |
 |------|-------|---------------|-------|
-| **Lane A: Retrieval Quality** | Fix the 64% -> 85% gap | `src/query/`, `src/store/`, `config/` | Coder A + Codex-Researcher |
-| **Lane B: Entity Enrichment** | Populate empty stores, extraction pipeline | `src/extraction/`, entity SQLite DB | Coder B + Claude-Researcher |
+| **Lane A: Retrieval Quality** | Fix the 64% -> 85% gap | `src/query/`, `src/store/`, `config/` | Coder A + CoPilot+-Researcher |
+| **Lane B: Entity Enrichment** | Populate empty stores, extraction pipeline | `src/extraction/`, entity SQLite DB | Coder B + CoPilot+-Researcher |
 | **Lane C: Deploy + Demo Prep** | Install scripts, proxy, guides, demo deck | `tools/`, `scripts/`, `docs/`, batch files | QA + Researchers |
 
 No lane touches another lane's code surfaces. All lanes share the eval harness for A/B testing.
@@ -31,7 +31,7 @@ No lane touches another lane's code surfaces. All lanes share the eval harness f
 - [x] 400-query production baseline established (64.0% PASS)
 - [x] Relevance score bug fixed (`_relevance_score` vs `_distance`)
 - [ ] **IN PROGRESS:** Adaptive top-k per query type (ENTITY=10, SEMANTIC=30, AGGREGATE=50)
-- [ ] **IN PROGRESS:** 3090 reference sanitization (compliance)
+- [ ] **IN PROGRESS:** NVIDIA workstation GPU reference sanitization (compliance)
 
 ### Lane B: Entity Enrichment
 - [x] Schema externalized to `config/extraction_schema_v1.yaml` (Option A)
@@ -96,15 +96,15 @@ No lane touches another lane's code surfaces. All lanes share the eval harness f
 - [ ] Target: 80%+ end-to-end with GPT-4o
 
 ### Lane B: Entity Enrichment
-- [ ] Evaluate GLiREL for deterministic relationship extraction (Claude-Researcher finding)
+- [ ] Evaluate GLiREL for deterministic relationship extraction (CoPilot+-Researcher finding)
 - [ ] If GLiREL A/B shows improvement: integrate into Tier 2 extraction pipeline
 - [ ] Cross-chunk dedup in quality_gate.py (marathon Hash Point: `TC 16-06-23-003` vs `TC16-06-23-003`)
-- [ ] Run Claude Max hardtail extraction on 1000 new chunks (overnight, free on Max plan)
-- [ ] Compare: updated Tier 1 regex vs phi4 vs Claude on same hardtail pack
+- [ ] Run CoPilot+ Max hardtail extraction on 1000 new chunks (overnight, free on Max plan)
+- [ ] Compare: updated Tier 1 regex vs phi4 vs CoPilot+ on same hardtail pack
 
 ### Lane C: Deploy + Demo Prep
 - [ ] CorpusForge install script proxy-hardened
-- [ ] Demo deck finalized with industry validation citations (5 from Claude-Researcher)
+- [ ] Demo deck finalized with industry validation citations (5 from CoPilot+-Researcher)
 - [ ] Demo rehearsal: full walkthrough with real queries on work machine
 - [ ] Sanitizer updated with all compliance patterns
 - [ ] Fresh install test on clean work machine (wipe + reinstall)
@@ -128,7 +128,7 @@ No lane touches another lane's code surfaces. All lanes share the eval harness f
 ### Lane B: Entity Enrichment
 - [ ] CorpusForge metadata enrichment (marathon Hash Point 2: richer chunk emission)
 - [ ] Site alias normalization map (from overnight mining path signals)
-- [ ] Vendor/contractor name normalization
+- [ ] Vendor/organization name normalization
 - [ ] Schema v2 locked-set validation (promote only if it wins on frozen hardtail)
 - [ ] Post-merge cross-chunk canonicalization
 
@@ -163,7 +163,7 @@ No lane touches another lane's code surfaces. All lanes share the eval harness f
 ### Lane C: Deploy + Demo Prep
 - [ ] Demo day dry run on work machine (full audience simulation)
 - [ ] One-pager for PM (problem, solution, security, accuracy, cost, next steps)
-- [ ] Backup demo on Beast (if work machine fails)
+- [ ] Backup demo on primary workstation (if work machine fails)
 - [ ] Print demo QA prep doc (50 questions + answers)
 - [ ] Final button smash on work machine GUI
 

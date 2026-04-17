@@ -118,7 +118,7 @@ PROGRAM_REPLACEMENTS = (
     ReplacementRule(
         name="rtx_3090",
         pattern=re.compile(
-            r"(?<![A-Za-z0-9])(?:NVIDIA\s+GeForce\s+)?RTX\s*3090(?![A-Za-z0-9])",
+            r"(?<![A-Za-z0-9])(?:NVIDIA\s+GeForce\s+)?RTX\s*NVIDIA workstation GPU(?![A-Za-z0-9])",
             re.IGNORECASE,
         ),
         replacement="NVIDIA workstation GPU",
@@ -126,7 +126,7 @@ PROGRAM_REPLACEMENTS = (
     ReplacementRule(
         name="geforce_rtx_3090",
         pattern=re.compile(
-            r"(?<![A-Za-z0-9])NVIDIA\s+GeForce\s+RTX\s*3090(?![A-Za-z0-9])",
+            r"(?<![A-Za-z0-9])NVIDIA\s+GeForce\s+RTX\s*NVIDIA workstation GPU(?![A-Za-z0-9])",
             re.IGNORECASE,
         ),
         replacement="NVIDIA workstation GPU",
@@ -138,12 +138,12 @@ PROGRAM_REPLACEMENTS = (
     ),
     ReplacementRule(
         name="single_3090",
-        pattern=re.compile(r"(?<![A-Za-z0-9])single\s+3090(?![A-Za-z0-9])", re.IGNORECASE),
+        pattern=re.compile(r"(?<![A-Za-z0-9])single\s+NVIDIA workstation GPU(?![A-Za-z0-9])", re.IGNORECASE),
         replacement="single NVIDIA workstation GPU",
     ),
     ReplacementRule(
         name="bare_3090",
-        pattern=re.compile(r"(?<![A-Za-z0-9])3090(?![A-Za-z0-9])", re.IGNORECASE),
+        pattern=re.compile(r"(?<![A-Za-z0-9])NVIDIA workstation GPU(?![A-Za-z0-9])", re.IGNORECASE),
         replacement="NVIDIA workstation GPU",
     ),
 )
@@ -161,7 +161,7 @@ DISALLOWED_TOKEN_PATTERNS = {
     "enterprise program": re.compile(r"(?<![A-Za-z0-9])enterprise program(?![A-Za-z0-9])", re.IGNORECASE),
     "legacy monitoring system": re.compile(r"(?<![A-Za-z0-9])legacy monitoring system(?![A-Za-z0-9])", re.IGNORECASE),
     "monitoring system": re.compile(r"(?<![A-Za-z0-9])monitoring system(?![A-Za-z0-9])", re.IGNORECASE),
-    "3090": re.compile(r"(?<![A-Za-z0-9])(?:NVIDIA\s+GeForce\s+)?RTX\s*3090|(?<![A-Za-z0-9])3090(?![A-Za-z0-9])", re.IGNORECASE),
+    "NVIDIA workstation GPU": re.compile(r"(?<![A-Za-z0-9])(?:NVIDIA\s+GeForce\s+)?RTX\s*NVIDIA workstation GPU|(?<![A-Za-z0-9])NVIDIA workstation GPU(?![A-Za-z0-9])", re.IGNORECASE),
 }
 
 

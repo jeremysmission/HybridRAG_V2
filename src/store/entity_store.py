@@ -12,11 +12,14 @@ aggregation queries ("How many times has part X failed?").
 from __future__ import annotations
 
 import logging
+import re
 import sqlite3
 from dataclasses import dataclass, field
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+_FTS_TABLE = "entities_fts"
 
 
 @dataclass
@@ -91,6 +94,7 @@ class EntityStore:
         self._conn.execute("PRAGMA temp_store=memory")
         self._conn.execute("PRAGMA cache_size=-64000")  # 64MB
         self._conn.execute("PRAGMA mmap_size=268435456")  # 256MB
+        self._fts_ready = False
         self._create_tables()
 
     def _create_tables(self) -> None:
@@ -129,7 +133,57 @@ class EntityStore:
             CREATE INDEX IF NOT EXISTS idx_tables_source ON extracted_tables(source_path);
             CREATE INDEX IF NOT EXISTS idx_tables_table_id ON extracted_tables(table_id);
         """)
+        self._ensure_entity_fts()
         self._conn.commit()
+
+    def _ensure_entity_fts(self) -> None:
+        """Create and backfill the optional FTS5 trigram index for ``entities.text``."""
+        try:
+            self._conn.executescript(f"""
+                CREATE VIRTUAL TABLE IF NOT EXISTS {_FTS_TABLE} USING fts5(
+                    text,
+                    content='entities',
+                    content_rowid='id',
+                    tokenize='trigram'
+                );
+
+                CREATE TRIGGER IF NOT EXISTS entities_ai_fts AFTER INSERT ON entities BEGIN
+                    INSERT INTO {_FTS_TABLE}(rowid, text)
+                    VALUES (new.id, new.text);
+                END;
+
+                CREATE TRIGGER IF NOT EXISTS entities_ad_fts AFTER DELETE ON entities BEGIN
+                    INSERT INTO {_FTS_TABLE}({_FTS_TABLE}, rowid, text)
+                    VALUES('delete', old.id, old.text);
+                END;
+
+                CREATE TRIGGER IF NOT EXISTS entities_au_fts AFTER UPDATE ON entities BEGIN
+                    INSERT INTO {_FTS_TABLE}({_FTS_TABLE}, rowid, text)
+                    VALUES('delete', old.id, old.text);
+                    INSERT INTO {_FTS_TABLE}(rowid, text)
+                    VALUES (new.id, new.text);
+                END;
+            """)
+            self._conn.execute(f"INSERT INTO {_FTS_TABLE}({_FTS_TABLE}) VALUES('rebuild')")
+            self._fts_ready = True
+        except sqlite3.OperationalError as exc:
+            self._fts_ready = False
+            logger.warning("EntityStore FTS5 unavailable; LIKE fallback remains active: %s", exc)
+
+    def _fts_match_query_from_like(self, text_pattern: str | None) -> str | None:
+        """Translate simple ``LIKE '%...%'`` patterns into safe FTS5 MATCH text."""
+        if not self._fts_ready or not text_pattern:
+            return None
+        pattern = str(text_pattern)
+        if "_" in pattern:
+            return None
+        match = re.fullmatch(r"%+(.+)%+", pattern)
+        if not match:
+            return None
+        needle = match.group(1).strip()
+        if len(needle) < 3:
+            return None
+        return f"\"{needle.replace('\"', '\"\"')}\""
 
     def insert_entities(self, entities: list[Entity]) -> int:
         """
@@ -185,26 +239,33 @@ class EntityStore:
 
         text_pattern uses SQL LIKE — pass '%Torres%' for substring match.
         """
-        conditions = ["confidence >= ?"]
+        conditions = ["e.confidence >= ?"]
         params: list = [min_confidence]
+        join_sql = ""
+        fts_query = self._fts_match_query_from_like(text_pattern)
 
         if entity_type:
-            conditions.append("entity_type = ?")
+            conditions.append("e.entity_type = ?")
             params.append(entity_type)
-        if text_pattern:
-            conditions.append("text LIKE ?")
+        if fts_query:
+            join_sql = f"JOIN {_FTS_TABLE} fts ON fts.rowid = e.id"
+            conditions.append("fts.text MATCH ?")
+            params.append(fts_query)
+        elif text_pattern:
+            conditions.append("e.text LIKE ?")
             params.append(text_pattern)
         if source_path:
-            conditions.append("source_path LIKE ?")
+            conditions.append("e.source_path LIKE ?")
             params.append(f"%{source_path}%")
 
         where = " AND ".join(conditions)
         rows = self._conn.execute(
-            f"""SELECT entity_type, text, raw_text, confidence,
-                       source_path, context, chunk_id
-                FROM entities
+            f"""SELECT e.entity_type, e.text, e.raw_text, e.confidence,
+                       e.source_path, e.context, e.chunk_id
+                FROM entities e
+                {join_sql}
                 WHERE {where}
-                ORDER BY confidence DESC
+                ORDER BY e.confidence DESC
                 LIMIT ?""",
             params + [limit],
         ).fetchall()
@@ -229,23 +290,30 @@ class EntityStore:
 
         Returns list of {text, count, sources} dicts.
         """
-        conditions = ["confidence >= ?"]
+        conditions = ["e.confidence >= ?"]
         params: list = [min_confidence]
+        join_sql = ""
+        fts_query = self._fts_match_query_from_like(text_pattern)
 
         if entity_type:
-            conditions.append("entity_type = ?")
+            conditions.append("e.entity_type = ?")
             params.append(entity_type)
-        if text_pattern:
-            conditions.append("text LIKE ?")
+        if fts_query:
+            join_sql = f"JOIN {_FTS_TABLE} fts ON fts.rowid = e.id"
+            conditions.append("fts.text MATCH ?")
+            params.append(fts_query)
+        elif text_pattern:
+            conditions.append("e.text LIKE ?")
             params.append(text_pattern)
 
         where = " AND ".join(conditions)
         rows = self._conn.execute(
-            f"""SELECT text, COUNT(*) as cnt,
-                       GROUP_CONCAT(DISTINCT source_path) as sources
-                FROM entities
+            f"""SELECT e.text, COUNT(*) as cnt,
+                       GROUP_CONCAT(DISTINCT e.source_path) as sources
+                FROM entities e
+                {join_sql}
                 WHERE {where}
-                GROUP BY text
+                GROUP BY e.text
                 ORDER BY cnt DESC""",
             params,
         ).fetchall()

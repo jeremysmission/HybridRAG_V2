@@ -55,7 +55,7 @@ def resolve_gliner_device(device: str) -> str | None:
     if device_count > 1 and device == "cuda:1":
         free_0 = torch.cuda.mem_get_info(0)[0]
         free_1 = torch.cuda.mem_get_info(1)[0]
-        # Prefer GPU 1 for GLiNER on the dual-3090 primary workstation; only
+        # Prefer GPU 1 for GLiNER on the dual-NVIDIA workstation GPU primary workstation; only
         # move to GPU 0 when it has materially more free VRAM.
         if free_0 > free_1 * 1.5:
             resolved = "cuda:0"

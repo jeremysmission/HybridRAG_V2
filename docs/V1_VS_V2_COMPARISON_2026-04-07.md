@@ -53,7 +53,7 @@ V1 could only answer semantic queries via vector search. V2's tri-store architec
 | P50 latency (retrieval) | ~200ms | 20ms |
 | P95 latency (retrieval) | ~500ms | 57ms |
 | Embedding dimension | 384 | 768 |
-| Embedding device | CPU/ONNX | CUDA (3090) |
+| Embedding device | CPU/ONNX | CUDA (NVIDIA workstation GPU) |
 | Chunk count | ~6.9M (bloated) | 17,707 (deduped canonical) |
 | Index size | ~170 GB | ~79 MB |
 

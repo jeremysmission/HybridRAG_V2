@@ -4,7 +4,7 @@ This is the default operating model for CorpusForge + HybridRAG V2 catch-up, dem
 
 ## Goal
 
-Use the available repos, clones, and 2x RTX 3090 GPUs to keep work moving in parallel without corrupting shared state, hiding blockers, or losing recovery context after a crash.
+Use the available repos, clones, and 2x NVIDIA workstation GPU GPUs to keep work moving in parallel without corrupting shared state, hiding blockers, or losing recovery context after a crash.
 
 ## Default Lane Split
 

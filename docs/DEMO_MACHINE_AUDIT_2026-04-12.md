@@ -6,7 +6,7 @@
 
 ## Machine Mapping
 
-- **primary workstation** in coordinator language maps to the current dual-RTX-3090 `C:\HybridRAG_V2` box documented elsewhere as the **primary workstation**.
+- **primary workstation** in coordinator language maps to the current dual-NVIDIA-workstation-GPU `C:\HybridRAG_V2` box documented elsewhere as the **primary workstation**.
 - **desktop workstation** and **laptop workstation** are evaluated from the latest dated docs plus any explicit machine facts already frozen into those docs.
 
 ## Side-by-Side Audit

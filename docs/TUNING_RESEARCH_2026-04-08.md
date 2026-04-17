@@ -142,7 +142,7 @@ Different entity types have different confidence profiles. Set separate threshol
 - Synthetic data: GLiNER's `synthetic_data_generation.ipynb` generates training data via GPT for custom entity types
 - Dataset size: ~5K-50K annotated examples
 - Fine-tuned GLiNER on cybersecurity data: P=89.7%, R=74.3%, F1=80.5% (beat GPT zero-shot)
-- Runs on consumer hardware (no 3090 required for base model)
+- Runs on consumer hardware (no high-end GPU required for base model)
 
 **Source:** GLiNER NAACL 2024, knowledgator gliner-bi-large-v2.0, nervaluate, seqeval, RAGAS entity_recall metric
 

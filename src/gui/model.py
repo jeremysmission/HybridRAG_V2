@@ -58,6 +58,7 @@ class GUIModel:
         self.chunk_count: int = 0
         self.entity_count: int = 0
         self.relationship_count: int = 0
+        self.table_count: int = 0
         self.llm_available: bool = False
         self.fts_ready: Optional[bool] = None
         self.fts_state: str = "not checked"
@@ -114,6 +115,13 @@ class GUIModel:
             )
         except Exception:
             self.relationship_count = 0
+
+        try:
+            self.table_count = (
+                self._entity_store.count_table_rows() if self._entity_store else 0
+            )
+        except Exception:
+            self.table_count = 0
 
         self._notify()
 

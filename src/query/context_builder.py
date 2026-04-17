@@ -49,27 +49,37 @@ class ContextBuilder:
         """True iff the reranker was requested AND successfully constructed."""
         return self._reranker is not None
 
-    def build(self, results: list[ChunkResult], query: str) -> GeneratorContext:
-        context, _timings = self.build_with_timings(results, query)
+    def build(
+        self, results: list[ChunkResult], query: str,
+        rerank_top_n: int | None = None,
+    ) -> GeneratorContext:
+        context, _timings = self.build_with_timings(results, query, rerank_top_n=rerank_top_n)
         return context
 
     def build_with_timings(
-        self, results: list[ChunkResult], query: str
+        self, results: list[ChunkResult], query: str,
+        rerank_top_n: int | None = None,
     ) -> tuple[GeneratorContext, dict[str, int]]:
         """
         Build context from retrieval results.
 
         If reranker is enabled, reranks candidates before selecting top-K.
         Each chunk is formatted with its source path for citation.
+
+        Args:
+            rerank_top_n: Override for the number of chunks to keep after
+                reranking. If None, uses self.top_k (the default).
+                Used by adaptive top-k to set per-query-type rerank depth.
         """
+        effective_top = rerank_top_n if rerank_top_n is not None else self.top_k
         build_start = time.perf_counter()
         rerank_ms = 0
-        if self._reranker and len(results) > self.top_k:
+        if self._reranker and len(results) > effective_top:
             rerank_start = time.perf_counter()
-            chunks = self._reranker.rerank(query, results, top_n=self.top_k)
+            chunks = self._reranker.rerank(query, results, top_n=effective_top)
             rerank_ms = int((time.perf_counter() - rerank_start) * 1000)
         else:
-            chunks = results[:self.top_k]
+            chunks = results[:effective_top]
         assemble_start = time.perf_counter()
         sources = list(dict.fromkeys(r.source_path for r in chunks))
 

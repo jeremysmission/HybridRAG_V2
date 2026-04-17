@@ -1063,6 +1063,22 @@ def main() -> int:
                 RelationshipStore(str(entity_db_path)),
             )
             print(f"  Entity store loaded: {entity_db_path}")
+            # Health check: warn if relationship/table stores are empty
+            try:
+                _es = EntityStore(str(entity_db_path))
+                _rs = RelationshipStore(str(entity_db_path))
+                _rel_n = _rs.count()
+                _tbl_n = _es.count_table_rows()
+                _ent_n = _es.count_entities()
+                if _rel_n == 0 and _tbl_n == 0:
+                    print(f"  [WARN] Entity store health: relationships={_rel_n}, "
+                          f"tables={_tbl_n}, entities={_ent_n}. "
+                          f"Stores are EMPTY — entity/aggregate queries will use "
+                          f"slow LIKE fallback. Run tiered_extract.py to populate.")
+                _es.close()
+                _rs.close()
+            except Exception:
+                pass
         except Exception as e:
             print(f"  Entity store init failed (non-fatal): {e}")
 

@@ -439,12 +439,9 @@ class RetrievalMetadataStore:
             CREATE INDEX IF NOT EXISTS idx_source_metadata_ref_did ON source_metadata(is_reference_did);
             CREATE INDEX IF NOT EXISTS idx_source_metadata_filed ON source_metadata(is_filed_deliverable);
             CREATE INDEX IF NOT EXISTS idx_source_metadata_ext ON source_metadata(source_ext);
-            CREATE INDEX IF NOT EXISTS idx_source_metadata_contract_period ON source_metadata(contract_period);
-            CREATE INDEX IF NOT EXISTS idx_source_metadata_program_name ON source_metadata(program_name);
-            CREATE INDEX IF NOT EXISTS idx_source_metadata_document_type ON source_metadata(document_type);
-            CREATE INDEX IF NOT EXISTS idx_source_metadata_document_category ON source_metadata(document_category);
             """
         )
+        # Migrate existing databases: add new columns if missing
         existing_columns = {
             str(row[1])
             for row in self._conn.execute("PRAGMA table_info(source_metadata)").fetchall()
@@ -461,6 +458,13 @@ class RetrievalMetadataStore:
                 f"ALTER TABLE source_metadata ADD COLUMN {column_name} TEXT NOT NULL DEFAULT ''"
             )
         self._conn.commit()
+        # Create indexes for new columns (must be AFTER ALTER TABLE migration)
+        self._conn.executescript("""
+            CREATE INDEX IF NOT EXISTS idx_source_metadata_contract_period ON source_metadata(contract_period);
+            CREATE INDEX IF NOT EXISTS idx_source_metadata_program_name ON source_metadata(program_name);
+            CREATE INDEX IF NOT EXISTS idx_source_metadata_document_type ON source_metadata(document_type);
+            CREATE INDEX IF NOT EXISTS idx_source_metadata_document_category ON source_metadata(document_category);
+        """)
 
     def upsert_from_chunks(self, chunks: list[dict]) -> dict[str, int]:
         """Derive and upsert one metadata row per unique source_path."""

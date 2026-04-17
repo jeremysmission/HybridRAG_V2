@@ -58,6 +58,10 @@ TEXT_REPLACEMENTS = [
     # Agent references -> team review
     (r"\bAgent\s*[1-6]\b", "reviewer"),
     (r"\bBeast\b", "primary workstation"),
+    # Hardware model references -> generic
+    (r"\bGeForce\s+RTX\s+3090\b", "NVIDIA workstation GPU"),
+    (r"\bRTX[\s-]*3090\b", "NVIDIA workstation GPU"),
+    (r"\b3090\b", "NVIDIA workstation GPU"),
     (r"\b6-agent debate\b", "design review"),
     (r"\bagent debate\b", "design review"),
     (r"\bwar room\b", "review board"),
