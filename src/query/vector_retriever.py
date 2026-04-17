@@ -633,7 +633,7 @@ class VectorRetriever:
             programs.append("legacy monitoring system")
         if "monitoring system" in query and "legacy monitoring system" not in query:
             programs.append("monitoring system")
-        for program_name in ("nexion", "isto", "sems3d", "oasis", "igscc"):
+        for program_name in ("monitoring system", "legacy monitoring system", "sems3d", "oasis", "igscc"):
             if re.search(rf"\b{re.escape(program_name)}\b", query):
                 programs.append(program_name)
         deduped: list[str] = []

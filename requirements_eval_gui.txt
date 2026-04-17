@@ -1,5 +1,5 @@
 # Evaluation GUI + QA Workbench Dependencies
-# Pinned to versions verified on Beast workstation (2026-04-16)
+# Pinned to versions verified on primary workstation workstation (2026-04-16)
 # These are the RAGAS evaluation stack packages needed by:
 #   - scripts/run_ragas_eval.py
 #   - scripts/import_extract_gui.py (QA Workbench RAGAS tab)

@@ -183,3 +183,61 @@ def test_generator_sanitizes_workstation_gpu_hardware_tokens(tmp_path: Path) -> 
     assert "NVIDIA workstation GPU" not in derived_rows[0]["corpus_grounding_evidence"].lower()
     assert "NVIDIA workstation GPU" in derived_rows[0]["reference"]
     assert report["summary"]["disallowed_hits_in_sanitized_fields"] == 0
+
+
+def test_generator_sanitizes_3090_hardware_tokens(tmp_path: Path) -> None:
+    """Verify numeric NVIDIA workstation GPU hardware references are scrubbed from sanitized fields."""
+    canonical = tmp_path / "canonical_3090.json"
+    derived = tmp_path / "derived_3090.json"
+    validation = tmp_path / "validation_3090.json"
+
+    payload = [
+        {
+            "query_id": "PQ-903",
+            "user_input": "Show me the run from the dual NVIDIA workstation GPU workstation.",
+            "reference": "Primary lane used an NVIDIA NVIDIA workstation GPU during capture.",
+            "reference_contexts": [],
+            "persona": "Operator",
+            "expected_query_type": "SEMANTIC",
+            "expected_document_family": "Eval",
+            "expected_source_patterns": [],
+            "difficulty": "easy",
+            "rationale": "Sanitize explicit NVIDIA workstation GPU hardware references.",
+            "expected_anchor_entities": {"RUN": ["20260417_010000"]},
+            "has_ground_truth": True,
+            "corpus_grounding_evidence": "Fallback rerun happened on a single NVIDIA workstation GPU lane.",
+        }
+    ]
+    _write_json(canonical, payload)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--canonical",
+            str(canonical),
+            "--output-json",
+            str(derived),
+            "--validation-json",
+            str(validation),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+
+    derived_rows = json.loads(derived.read_text(encoding="utf-8"))
+    report = json.loads(validation.read_text(encoding="utf-8"))
+
+    joined = " ".join(
+        [
+            derived_rows[0]["user_input"],
+            derived_rows[0]["reference"],
+            derived_rows[0]["corpus_grounding_evidence"],
+        ]
+    ).lower()
+    assert "NVIDIA workstation GPU" not in joined
+    assert "workstation gpu" in joined
+    assert report["summary"]["disallowed_hits_in_sanitized_fields"] == 0

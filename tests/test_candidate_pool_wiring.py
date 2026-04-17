@@ -148,7 +148,7 @@ class _FakeContextBuilder:
             query_text=query,
         )
 
-    def build_with_timings(self, results, query):
+    def build_with_timings(self, results, query, rerank_top_n=None):
         return self.build(results, query), {"context_build": 0}
 
 
@@ -316,6 +316,51 @@ def test_vector_retriever_builds_path_metadata_filters_for_explicit_folder_signa
         "document_category": "Logistics",
         "site_terms": ["guam"],
     } in groups
+
+
+def test_vector_retriever_does_not_poison_metadata_site_terms_from_non_sites():
+    """Metadata groups should not hard-filter on noun fragments that are not sites."""
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._metadata_filter_groups(
+        "What procurement records exist for the monitoring system Sustainment option year 2 period?"
+    )
+
+    assert any(
+        group.get("contract_period") == "OY2"
+        and group.get("program_name") == "monitoring system"
+        and group.get("document_category") == "Logistics"
+        for group in groups
+    )
+    assert all(group.get("site_terms") != ["sustainment"] for group in groups)
+
+
+def test_vector_retriever_preserves_legacy_program_name_in_metadata_groups():
+    """Legacy monitoring system queries must not collapse to monitoring system only."""
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._metadata_filter_groups(
+        "What DD250 acceptance forms have been processed for equipment transfers to Niger legacy monitoring system?"
+    )
+
+    assert any(group.get("program_name") == "legacy monitoring system" for group in groups)
+    assert not any(
+        group.get("program_name") == "monitoring system"
+        and group.get("site_terms") == ["niger"]
+        for group in groups
+    )
+
+
+def test_vector_retriever_extracts_explicit_program_family_tokens():
+    """Named program families should be available to typed metadata filters."""
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    assert retriever._extract_program_names(
+        "Show me the monitoring system OASIS installation acceptance test report."
+    ) == ["monitoring system", "oasis"]
 
 
 def test_vector_retriever_prefers_typed_metadata_hits_for_explicit_path_signals():

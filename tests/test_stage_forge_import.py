@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -10,6 +11,7 @@ import numpy as np
 from scripts.stage_forge_import import (
     build_canary_export,
     compute_delta,
+    run_tier1_extraction,
     select_latest_export,
 )
 
@@ -122,3 +124,29 @@ def test_compute_delta_detects_count_and_model_changes():
     assert delta["source_files_delta"] == 5
     assert delta["vector_dim_changed"] is True
     assert delta["embedding_model_changed"] is True
+
+
+def test_run_tier1_extraction_invokes_tiered_extract(monkeypatch):
+    """Verify staged import shells into Tier 1 extraction after a successful import."""
+    calls: list[dict] = []
+
+    def fake_run(cmd, cwd, text, capture_output, check):
+        calls.append(
+            {
+                "cmd": cmd,
+                "cwd": cwd,
+                "text": text,
+                "capture_output": capture_output,
+                "check": check,
+            }
+        )
+        return subprocess.CompletedProcess(cmd, 0, stdout="ok", stderr="")
+
+    monkeypatch.setattr("scripts.stage_forge_import.subprocess.run", fake_run)
+
+    result = run_tier1_extraction("config/config.yaml", limit=100)
+
+    assert result["returncode"] == 0
+    assert result["stdout"] == "ok"
+    assert calls
+    assert calls[0]["cmd"][-6:] == ["--tier", "1", "--config", "config/config.yaml", "--limit", "100"]
