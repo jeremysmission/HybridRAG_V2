@@ -117,7 +117,7 @@ datasketch==1.9.0               # MIT, open source — MinHash + LSH dedup for n
 
 gliner==0.2.26                   # Apache 2.0, France (NATO ally) — zero-shot NER, 205M params, CPU
                                  # Fallback: GPT-4o extraction (costlier, zero new deps)
-                                 # Status: NEW waiver requested 2026-04-04; see docs/Requested_Waivers_2026-04-04.md
+                                 # Status: NEW waiver requested 2026-04-04; see docs/reference/Requested_Waivers_2026-04-04.md
 
 # docling                        # MIT, IBM/USA — table extraction, 258M params, 97.9% accuracy
 #                                # Fallback: openpyxl + pdfplumber (lower accuracy)

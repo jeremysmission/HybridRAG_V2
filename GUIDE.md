@@ -6,10 +6,7 @@ HybridRAG V2 is a tri-store retrieval and answer system for enterprise program a
 
 ## Daily Workflow
 
-For the current multi-copilot, dual-GPU daily operating model, see [DAILY_WORKFLOW_2026-04-08.md](./DAILY_WORKFLOW_2026-04-08.md).
-
-### Research Standing Orders
-See [RESEARCH_STANDING_ORDERS.md](./docs/RESEARCH_STANDING_ORDERS.md) for the durable recency-first web-research policy used during active development sessions.
+For the current multi-agent, dual-GPU daily operating model, see [DAILY_WORKFLOW_2026-04-08.md](./DAILY_WORKFLOW_2026-04-08.md).
 
 ## Core Architecture
 
@@ -19,9 +16,6 @@ See [RESEARCH_STANDING_ORDERS.md](./docs/RESEARCH_STANDING_ORDERS.md) for the du
 - **Query Router:** classifies the query and selects the right retrieval path
 - **Reranker:** FlashRank on CPU
 - **Generation Layer:** OpenAI-compatible providers plus local Ollama for development and stress testing
-
-### Index Architecture
-See [V2_INDEX_ARCHITECTURE_AND_REBUILD_2026-04-11.md](./docs/V2_INDEX_ARCHITECTURE_AND_REBUILD_2026-04-11.md) — V2 uses LanceDB, not FAISS.
 
 ## Development Rules
 
@@ -106,13 +100,13 @@ Silent format loss is a production bug, not an acceptable limitation.
 ## Dependency Policy
 
 - New packages should stay within the approved license and sourcing constraints already documented for the project
-- Review [Requested_Waivers_2026-04-04.md](/C:/HybridRAG_V2/docs/Requested_Waivers_2026-04-04.md) before adding new dependencies
+- Review [Requested_Waivers_2026-04-04.md](/C:/HybridRAG_V2/docs/reference/Requested_Waivers_2026-04-04.md) before adding new dependencies
 - Avoid the banned vector and model stack already listed in the project policy docs
 
 ## Related Docs
 
-- [HOW_IT_WORKS_TECHNICAL_2026-04-05.md](/C:/HybridRAG_V2/docs/HOW_IT_WORKS_TECHNICAL_2026-04-05.md)
-- [SETUP_GUIDE_2026-04-05.md](/C:/HybridRAG_V2/docs/SETUP_GUIDE_2026-04-05.md)
-- [WORKSTATION_STACK_INSTALL_2026-04-12.md](/C:/HybridRAG_V2/docs/WORKSTATION_STACK_INSTALL_2026-04-12.md)
-- [WORKSTATION_DESKTOP_SETTINGS_FOR_TORCH_INSTALL_2026_04_06.md](/C:/HybridRAG_V2/docs/WORKSTATION_DESKTOP_SETTINGS_FOR_TORCH_INSTALL_2026_04_06.md)
+- [HOW_IT_WORKS_TECHNICAL_2026-04-05.md](/C:/HybridRAG_V2/docs/architecture/HOW_IT_WORKS_TECHNICAL_2026-04-05.md)
+- [SETUP_GUIDE_2026-04-05.md](/C:/HybridRAG_V2/docs/setup/SETUP_GUIDE_2026-04-05.md)
+- [WORKSTATION_STACK_INSTALL_2026-04-06.md](/C:/HybridRAG_V2/docs/setup/WORKSTATION_STACK_INSTALL_2026-04-06.md)
+- [WORKSTATION_DESKTOP_SETTINGS_FOR_TORCH_INSTALL_2026_04_06.md](/C:/HybridRAG_V2/docs/setup/WORKSTATION_DESKTOP_SETTINGS_FOR_TORCH_INSTALL_2026_04_06.md)
 - [WORKSTATION_OSS_RATE_LIMIT_REMINDER_2026-04-06.md](/C:/HybridRAG_V2/WORKSTATION_OSS_RATE_LIMIT_REMINDER_2026-04-06.md)
