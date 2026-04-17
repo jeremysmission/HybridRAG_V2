@@ -3,7 +3,7 @@
 **Reviewer:** CoPilot+ (QA)
 **Date:** 2026-04-17 MDT
 **Target:** `scripts/import_extract_gui.py`, `scripts/import_embedengine.py`, `tests/test_gui_import_streaming_and_gpu_label.py`
-**Source checklist:** Claude's GUI Import RAM Fix checklist (2026-04-17)
+**Source checklist:** CoPilot+'s GUI Import RAM Fix checklist (2026-04-17)
 **Code freeze in effect:** yes -- no edits made during this QA
 
 ---
@@ -58,7 +58,7 @@ Caveats that are legitimate, not defects:
 
 ### F1 -- LOW -- Sanitizer command in checklist is invalid
 
-The checklist says: `python sanitize_before_push.py --check finds no new 3090/GeForce/RTX hits...`
+The checklist says: `python sanitize_before_push.py --check finds no new NVIDIA workstation GPU/GeForce/RTX hits...`
 
 Running that command today:
 ```
@@ -80,7 +80,7 @@ Running the sanitizer today against the current tracked state:
 [WOULD SANITIZE] scripts/import_extract_gui.py
 ```
 
-Root cause: the `_sanitize_gpu_name` docstring at line 92 contains the literal example string `"NVIDIA GeForce RTX 3090"` to illustrate what gets sanitized. The sanitizer's own pattern matches this.
+Root cause: the `_sanitize_gpu_name` docstring at line 92 contains the literal example string `"NVIDIA NVIDIA workstation GPU"` to illustrate what gets sanitized. The sanitizer's own pattern matches this.
 
 Two resolution paths, both acceptable, operator's call:
 1. Leave as-is, let `--apply` rewrite to `"NVIDIA workstation GPU"` on the push gate. Docstring loses its illustrative value.
@@ -90,7 +90,7 @@ Memory rule `feedback_sanitizer_scope.md` says sanitizer is a push-time gate and
 
 ### F3 -- MEDIUM -- New test file will self-sanitize on push
 
-`tests/test_gui_import_streaming_and_gpu_label.py` is currently untracked. Once `git add`-ed, the sanitizer will scan it and find ~10 hits (parametrize inputs, docstrings, banned-list constants, end-to-end assertion loops). `--apply` will rewrite every `"NVIDIA GeForce RTX 3090"` string to `"NVIDIA workstation GPU"` -- which will then break the very assertions the rewritten strings feed (`assert "3090" not in out` etc.).
+`tests/test_gui_import_streaming_and_gpu_label.py` is currently untracked. Once `git add`-ed, the sanitizer will scan it and find ~10 hits (parametrize inputs, docstrings, banned-list constants, end-to-end assertion loops). `--apply` will rewrite every `"NVIDIA NVIDIA workstation GPU"` string to `"NVIDIA workstation GPU"` -- which will then break the very assertions the rewritten strings feed (`assert "NVIDIA workstation GPU" not in out` etc.).
 
 Two resolution paths:
 1. Add a sanitizer allowlist entry for this test file specifically (test needs the banned strings literally to prove they get scrubbed).
@@ -102,14 +102,14 @@ Memory rule `feedback_sanitize_before_push.md` says `local commit -> sanitize ->
 
 ## Checklist fidelity delta
 
-Compared to Claude's posted checklist, these items need either clarification or correction:
+Compared to CoPilot+'s posted checklist, these items need either clarification or correction:
 
 | Item | Status | Note |
 |------|--------|------|
 | "python sanitize_before_push.py --check" | WRONG flag | use `.venv\Scripts\python.exe sanitize_before_push.py` |
 | "sanitize_before_push.py still clean on tracked files before any push" | FAILS TODAY | `import_extract_gui.py` is dirty per F2 |
 | "73 passed" sweep | MATCHES | 73 passed on current tree |
-| "Tier 2 VRAM free number should visibly change..." | Requires real HW | cannot prove headless -- keep as human-eyes check on Beast |
+| "Tier 2 VRAM free number should visibly change..." | Requires real HW | cannot prove headless -- keep as human-eyes check on primary workstation |
 
 ---
 
@@ -117,7 +117,7 @@ Compared to Claude's posted checklist, these items need either clarification or 
 
 The code-level QA proves the mechanisms. The user-reported defect (30+ GB RAM on 10M corpus, VRAM mislabel) can only be finally closed by a real walk-away run. Minimum additional QA:
 
-- [ ] 10M-chunk CorpusForge export imported on Beast, peak RSS observed in Task Manager under the per-batch + dedup-set budget
+- [ ] 10M-chunk CorpusForge export imported on primary workstation, peak RSS observed in Task Manager under the per-batch + dedup-set budget
 - [ ] `nvidia-smi` side-by-side during IMPORT -- VRAM numbers on GPU 0 (or whichever Tier 2 lands on) do not move during the IMPORT or TIER 1 phases
 - [ ] Tier 2 run with other GPU workloads on the box -- panel VRAM number moves visibly on the 2-second refresh interval
 - [ ] Single-CUDA work machine run (RTX 4000 / RTX 3000 Pro Blackwell) -- stat panel still reads "NVIDIA GPU" with no model leak
@@ -131,7 +131,7 @@ The code-level QA proves the mechanisms. The user-reported defect (30+ GB RAM on
 - No code edits (freeze in effect)
 - No git operations
 - No sanitizer `--apply` invocation
-- No real-hardware 10M run (requires Beast session)
+- No real-hardware 10M run (requires primary workstation session)
 - No push to remote
 
 ---
