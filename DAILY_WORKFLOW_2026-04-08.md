@@ -4,7 +4,7 @@ This is the default operating model for CorpusForge + HybridRAG V2 catch-up, dem
 
 ## Goal
 
-Use the available repos, clones, and 2x NVIDIA workstation GPU GPUs to keep work moving in parallel without corrupting shared state, hiding blockers, or losing recovery context after a crash.
+Use the available repos, clones, and 2x RTX 3090 GPUs to keep work moving in parallel without corrupting shared state, hiding blockers, or losing recovery context after a crash.
 
 ## Default Lane Split
 
@@ -73,8 +73,8 @@ Before running anything substantial:
    - clone-local rehearsal
    - provisioning
 6. Update both sprint boards if scope changed:
-   - `C:\CorpusForge\docs\SPRINT_SYNC.md`
-   - `C:\HybridRAG_V2\docs\SPRINT_SYNC.md`
+- `C:\CorpusForge\archive\2026-04-17\docs\planning\SPRINT_SYNC.md`
+- `C:\HybridRAG_V2\docs\planning\SPRINT_SYNC.md`
 
 ## Metadata and Staleness Rules
 
