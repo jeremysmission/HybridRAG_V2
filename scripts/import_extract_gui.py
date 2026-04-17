@@ -85,20 +85,67 @@ def _format_count(n: int) -> str:
     return f"{n:,}"
 
 
+def _sanitize_gpu_name(name: str) -> str:
+    """Strip product/model details from a vendor GPU name.
+
+    Raw ``torch.cuda.get_device_name`` strings include model names that the
+    repo push-sanitizer treats as banned tokens, and they leak hardware
+    specifics in any screen-share. Keep the vendor, drop the rest.
+    """
+    if not name:
+        return "GPU"
+    lowered = name.lower()
+    if "nvidia" in lowered:
+        return "NVIDIA GPU"
+    if "amd" in lowered or "radeon" in lowered:
+        return "AMD GPU"
+    if "intel" in lowered:
+        return "Intel GPU"
+    first = name.split()[0] if name.split() else ""
+    return first or "GPU"
+
+
 def _get_gpu_info() -> str:
-    """Return GPU device name + VRAM or 'CPU only'."""
+    """Return sanitized GPU vendor summary, no VRAM numbers.
+
+    VRAM usage is only meaningful during GLiNER (Tier 2). Showing VRAM during
+    the Import and Tier 1 Regex phases is misleading because those phases
+    run entirely on CPU/RAM -- any VRAM drop visible in the panel reflects
+    other processes on the box, not this pipeline.
+    """
     try:
         import torch
-        if torch.cuda.is_available():
-            lines = []
-            for i in range(torch.cuda.device_count()):
-                name = torch.cuda.get_device_name(i)
-                free, total = torch.cuda.mem_get_info(i)
-                lines.append(f"GPU {i}: {name} ({free / 1e9:.1f} / {total / 1e9:.1f} GB)")
-            return " | ".join(lines)
-        return "CPU only (CUDA not available)"
+        if not torch.cuda.is_available():
+            return "CPU only (CUDA not available)"
+        names = [
+            _sanitize_gpu_name(torch.cuda.get_device_name(i))
+            for i in range(torch.cuda.device_count())
+        ]
+        unique = set(names)
+        if len(names) > 1 and len(unique) == 1:
+            return f"{len(names)}x {names[0]}"
+        return " | ".join(names)
     except ImportError:
         return "CPU only (torch not installed)"
+
+
+def _get_ram_info() -> str:
+    """Return a concise RAM string: process RSS + system used/total.
+
+    Shown on the Pipeline Status panel so operators can watch the import
+    phase bound peak RSS (streaming) instead of staring at an unrelated VRAM
+    number. Falls back gracefully if psutil is unavailable.
+    """
+    try:
+        import psutil
+        vm = psutil.virtual_memory()
+        rss = psutil.Process().memory_info().rss
+        return (
+            f"{rss / 1e9:.1f} GB proc | "
+            f"{vm.used / 1e9:.1f} / {vm.total / 1e9:.1f} GB system"
+        )
+    except Exception:
+        return "unavailable"
 
 
 # ============================================================================
@@ -176,8 +223,15 @@ class ImportExtractRunner:
 
                 self._set_phase("IMPORT")
                 self._log(f"Starting import from {source_path}")
+                # Refresh the RAM stat so the operator watches RSS during the
+                # streaming ingest instead of a stale startup snapshot.
+                self._set_stat("ram_status", _get_ram_info())
 
-                from scripts.import_embedengine import load_export, resolve_export_dir
+                from scripts.import_embedengine import (
+                    prepare_streaming_import,
+                    resolve_export_dir,
+                    stream_export_batches,
+                )
                 from src.store.lance_store import LanceStore
 
                 export_dir = resolve_export_dir(source_path)
@@ -185,31 +239,32 @@ class ImportExtractRunner:
                     self._finish_failed(f"Export directory not found: {export_dir}", results, t_start)
                     return
 
-                self._log("Loading export files (chunks.jsonl + vectors.npy)...")
-                chunks, vectors, manifest, skip_manifest = load_export(export_dir)
+                self._log("Preparing streaming import (memory-mapped vectors, line-streamed chunks)...")
+                chunks_path, vectors, manifest, skip_manifest, total = prepare_streaming_import(export_dir)
 
-                chunk_count = len(chunks)
-                self._set_stat("chunks_total", chunk_count)
-                self._log(f"Loaded {chunk_count:,} chunks, {vectors.shape[1]}d vectors")
+                self._set_stat("chunks_total", total)
+                self._log(f"Export: {total:,} chunks, {vectors.shape[1]}d vectors")
 
                 if manifest:
                     model = manifest.get("embedding_model", "unknown")
                     self._log(f"Embedding model: {model}")
 
-                # Ingest with batch progress
                 store = LanceStore(config.paths.lance_db)
                 before_count = store.count()
                 self._log(f"LanceDB before: {before_count:,} chunks")
 
                 batch_sz = store.INGEST_BATCH_SIZE
-                total = len(chunks)
                 inserted_total = 0
 
                 import numpy as np
 
-                # Load existing IDs for dedup
+                # Dedup is only meaningful when the target table already holds
+                # rows. For a fresh table the scan is a no-op; skipping it
+                # also avoids materialising a multi-GB chunk_id set on large
+                # re-imports where the operator has already cleared LanceDB.
                 existing_ids: set[str] = set()
-                if store._table is not None:
+                if store._table is not None and before_count > 0:
+                    self._log(f"Scanning {before_count:,} existing chunk_ids for dedup...")
                     try:
                         scanner = store._table.to_lance().scanner(
                             columns=["chunk_id"], batch_size=8192,
@@ -228,23 +283,32 @@ class ImportExtractRunner:
                         except Exception:
                             pass
 
-                self._log(f"Ingesting {total:,} chunks in batches of {batch_sz:,}...")
+                self._log(
+                    f"Streaming {total:,} chunks in batches of {batch_sz:,} "
+                    f"(peak RAM bounded to one batch, not the full corpus)..."
+                )
 
-                for start in range(0, total, batch_sz):
+                processed = 0
+                last_ram_log = time.perf_counter()
+
+                for batch_chunks, batch_vecs in stream_export_batches(
+                    chunks_path, vectors, batch_size=batch_sz,
+                ):
                     if self._stop_event.is_set():
                         self._log(f"Stop requested. Ingested {inserted_total:,} chunks so far.")
                         store.close()
                         self._finish_stopped(results, t_start)
                         return
 
-                    end = min(start + batch_sz, total)
-                    batch_chunks = chunks[start:end]
-                    batch_vecs = vectors[start:end].astype(np.float32)
-
+                    batch_vecs = batch_vecs.astype(np.float32)
                     records = []
                     for i, chunk in enumerate(batch_chunks):
-                        cid = chunk["chunk_id"]
+                        cid = chunk.get("chunk_id")
+                        if not cid:
+                            continue
                         if cid in existing_ids:
+                            continue
+                        if not chunk.get("text") or not chunk.get("source_path"):
                             continue
                         records.append({
                             "chunk_id": cid,
@@ -263,9 +327,24 @@ class ImportExtractRunner:
                             store._table.add(records)
                         inserted_total += len(records)
 
-                    self._set_progress(end, total)
-                    self._set_stat("chunks_processed", end)
-                    self._log(f"Ingested {end:,} / {total:,} ({inserted_total:,} new)")
+                    processed += len(batch_chunks)
+                    # Release batch-local lists before the next stream batch
+                    # so peak RSS stays at roughly one batch on the GC.
+                    batch_chunks = None  # noqa: F841
+                    batch_vecs = None  # noqa: F841
+                    records = None  # noqa: F841
+
+                    self._set_progress(processed, total)
+                    self._set_stat("chunks_processed", processed)
+
+                    now = time.perf_counter()
+                    if now - last_ram_log >= 2.0:
+                        self._set_stat("ram_status", _get_ram_info())
+                        last_ram_log = now
+
+                    self._log(f"Ingested {processed:,} / {total:,} ({inserted_total:,} new)")
+
+                self._set_stat("ram_status", _get_ram_info())
 
                 # FTS index
                 self._log("Building FTS index...")
@@ -404,6 +483,7 @@ class ImportExtractRunner:
 
             t1_start = time.perf_counter()
             stop_requested = False
+            last_ram_log_t1 = time.perf_counter()
 
             for batch in iter_chunk_batches(store, batch_size=10000):
                 if self._stop_event.is_set():
@@ -467,7 +547,13 @@ class ImportExtractRunner:
                 self._set_stat("tier1_entities", tier1_extracted_count)
                 self._set_stat("tier1_entities_new", tier1_inserted_count)
                 self._set_stat("tier1_relationships", tier1_rel_extracted_count)
-                elapsed_t1 = time.perf_counter() - t1_start
+
+                now_t1 = time.perf_counter()
+                if now_t1 - last_ram_log_t1 >= 2.0:
+                    self._set_stat("ram_status", _get_ram_info())
+                    last_ram_log_t1 = now_t1
+
+                elapsed_t1 = now_t1 - t1_start
                 rate = chunks_processed / max(elapsed_t1, 0.001)
                 self._log(
                     f"Tier 1: {chunks_processed:,} / {total_chunks:,} "
@@ -480,6 +566,7 @@ class ImportExtractRunner:
                 if stop_requested:
                     break
 
+            self._set_stat("ram_status", _get_ram_info())
             t1_elapsed = time.perf_counter() - t1_start
             self._log(
                 f"Tier 1 complete: {tier1_extracted_count:,} entities extracted, "
@@ -540,11 +627,33 @@ class ImportExtractRunner:
                     rel_store.close()
                     return
 
+                gpu_idx = None
+                sanitized_gpu_name = None
                 if "cuda" in resolved_device:
                     gpu_idx = int(resolved_device.split(":")[1]) if ":" in resolved_device else 0
-                    name = torch.cuda.get_device_name(gpu_idx)
-                    free, total_vram = torch.cuda.mem_get_info(gpu_idx)
-                    self._set_stat("gpu_status", f"{name} ({free / 1e9:.1f} / {total_vram / 1e9:.1f} GB)")
+                    sanitized_gpu_name = _sanitize_gpu_name(torch.cuda.get_device_name(gpu_idx))
+
+                def _refresh_tier2_gpu_stat():
+                    """Refresh VRAM free/total against the active GLiNER GPU.
+
+                    Without this, the Tier 2 stat is a one-shot snapshot taken
+                    before the model loads, so the panel can show wildly wrong
+                    numbers for hours on a busy dual-GPU box -- same class of
+                    bug as the Import-phase VRAM mislabel.
+                    """
+                    if gpu_idx is None or sanitized_gpu_name is None:
+                        return
+                    try:
+                        free, total_vram = torch.cuda.mem_get_info(gpu_idx)
+                    except Exception:
+                        return
+                    self._set_stat(
+                        "gpu_status",
+                        f"{sanitized_gpu_name} (Tier 2 VRAM free "
+                        f"{free / 1e9:.1f} / {total_vram / 1e9:.1f} GB)",
+                    )
+
+                _refresh_tier2_gpu_stat()
 
                 min_chunk_len = config.extraction.gliner_min_chunk_len
 
@@ -607,6 +716,7 @@ class ImportExtractRunner:
                     pending_sources.clear()
 
                 # Second streaming pass — same store handle, fresh iteration
+                last_stat_refresh_t2 = time.perf_counter()
                 for batch in iter_chunk_batches(store, batch_size=10000):
                     if self._stop_event.is_set():
                         self._log(
@@ -641,6 +751,13 @@ class ImportExtractRunner:
                         "phase_detail",
                         f"Tier 2 candidates: {candidate_chunks:,} / scanned {scanned_chunks:,}",
                     )
+
+                    now_t2 = time.perf_counter()
+                    if now_t2 - last_stat_refresh_t2 >= 2.0:
+                        self._set_stat("ram_status", _get_ram_info())
+                        _refresh_tier2_gpu_stat()
+                        last_stat_refresh_t2 = now_t2
+
                     self._log(
                         f"Tier 2: scanned {scanned_chunks:,} / {total_chunks:,}, "
                         f"{candidate_chunks:,} candidates, {tier2_entity_count:,} entities"
@@ -649,6 +766,9 @@ class ImportExtractRunner:
                 # Drain any remainder before closing out Tier 2
                 if not self._stop_event.is_set():
                     _flush_gliner_pending()
+
+                self._set_stat("ram_status", _get_ram_info())
+                _refresh_tier2_gpu_stat()
 
                 t2_elapsed = time.perf_counter() - t2_start
                 self._log(f"Tier 2: {tier2_entity_count:,} entities ({t2_elapsed:.1f}s)")
@@ -732,10 +852,15 @@ class ImportExtractGUI:
         self._build_ui()
         self._refresh_target_labels()
 
-        # GPU info on startup
+        # GPU + RAM info on startup. GPU is vendor-only (no VRAM noise
+        # while idle); RAM is the number operators should watch during the
+        # streaming import phase.
         gpu_info = _get_gpu_info()
         self._stat_values["gpu_status"].configure(text=gpu_info)
+        ram_info = _get_ram_info()
+        self._stat_values["ram_status"].configure(text=ram_info)
         self.append_log(f"GPU: {gpu_info}", "INFO")
+        self.append_log(f"RAM: {ram_info}", "INFO")
         self.append_log(
             "Ready. Select a source folder and click Start, "
             "or check 'Skip Import' if the LanceDB is already populated.",
@@ -834,6 +959,7 @@ class ImportExtractGUI:
         ]
         right_stats = [
             ("gpu_status", "GPU:"),
+            ("ram_status", "RAM:"),
             ("elapsed", "Elapsed:"),
             ("eta", "ETA:"),
             ("rate", "Rate:"),
@@ -964,7 +1090,7 @@ class ImportExtractGUI:
         self._chunks_processed = 0
         self._start_time = time.time()
         for key in self._stat_values:
-            if key not in {"gpu_status", "import_target", "entity_target"}:
+            if key not in {"gpu_status", "ram_status", "import_target", "entity_target"}:
                 self._stat_values[key].configure(text="--")
 
         # Start timer

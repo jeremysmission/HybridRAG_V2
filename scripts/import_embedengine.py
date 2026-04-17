@@ -288,6 +288,118 @@ def load_export(export_dir: Path, strict: bool = False) -> tuple[list[dict], np.
     return chunks, vectors, manifest, skip_manifest
 
 
+def prepare_streaming_import(
+    export_dir: Path,
+) -> tuple[Path, np.ndarray, dict, dict | None, int]:
+    """Prepare a streaming import without loading chunks into memory.
+
+    The walk-away GUI path previously called ``load_export`` which pulls the
+    full chunks.jsonl into a Python list. On a 10M chunk export that pushed
+    peak RSS past 30 GB before a single row reached LanceDB. This helper
+    validates the manifest, memory-maps vectors.npy, and returns the paths
+    and handles a streaming caller needs -- nothing more.
+
+    Returns:
+        (chunks_path, vectors_memmap, manifest, skip_manifest, total_chunks)
+    """
+    export_dir = resolve_export_dir(export_dir)
+
+    chunks_path = export_dir / "chunks.jsonl"
+    vectors_path = export_dir / "vectors.npy"
+    manifest_path = export_dir / "manifest.json"
+    skip_manifest_path = export_dir / "skip_manifest.json"
+
+    missing = []
+    if not chunks_path.exists():
+        missing.append(str(chunks_path))
+    if not vectors_path.exists():
+        missing.append(str(vectors_path))
+    if missing:
+        for m in missing:
+            print(f"  ERROR: Required file not found: {m}", file=sys.stderr)
+        sys.exit(1)
+
+    # Always memmap -- streaming callers read one batch at a time.
+    vectors = np.load(str(vectors_path), mmap_mode="r")
+    total_chunks = int(vectors.shape[0])
+
+    manifest: dict = {}
+    if manifest_path.exists():
+        with open(manifest_path, encoding="utf-8-sig") as f:
+            manifest = json.load(f)
+
+    issues = validate_manifest(manifest, vectors)
+    rejections = [i for i in issues if i.startswith("REJECT")]
+    warnings = [i for i in issues if i.startswith("WARNING")]
+    for w in warnings:
+        print(f"  {w}", file=sys.stderr)
+    if rejections:
+        for r in rejections:
+            print(f"  {r}", file=sys.stderr)
+        print("  Import aborted due to manifest validation failure.", file=sys.stderr)
+        sys.exit(1)
+
+    skip_manifest: dict | None = None
+    if skip_manifest_path.exists():
+        with open(skip_manifest_path, encoding="utf-8-sig") as f:
+            skip_manifest = json.load(f)
+
+    return chunks_path, vectors, manifest, skip_manifest, total_chunks
+
+
+def stream_export_batches(
+    chunks_path: Path,
+    vectors: np.ndarray,
+    batch_size: int = 1000,
+):
+    """Yield ``(chunk_list, vector_ndarray)`` pairs from an export.
+
+    chunks.jsonl is read line-by-line so peak RSS is bounded to roughly
+    ``batch_size`` chunks. Vectors are sliced out of the memory-mapped array
+    and copied into a regular ndarray so the caller can freely convert to
+    float32 / lists without holding the memmap open on that range.
+
+    Skips blank lines and JSONDecodeError lines (logged via stderr) so a
+    single corrupt row in a multi-million-line export does not abort an
+    overnight walk-away run. Caller is expected to verify integrity after.
+    """
+    if batch_size <= 0:
+        raise ValueError("batch_size must be positive")
+
+    batch: list[dict] = []
+    batch_start_index = 0
+    line_index = 0
+
+    with open(chunks_path, encoding="utf-8-sig") as f:
+        for raw_line in f:
+            line = raw_line.strip()
+            if not line:
+                continue
+            try:
+                chunk = json.loads(line)
+            except json.JSONDecodeError as exc:
+                print(
+                    f"  WARNING: skip malformed chunks.jsonl line "
+                    f"{line_index}: {exc}",
+                    file=sys.stderr,
+                )
+                line_index += 1
+                continue
+            batch.append(chunk)
+            line_index += 1
+            if len(batch) >= batch_size:
+                end = batch_start_index + len(batch)
+                vec_slice = np.array(vectors[batch_start_index:end])
+                yield batch, vec_slice
+                batch_start_index = end
+                batch = []
+
+    if batch:
+        end = batch_start_index + len(batch)
+        vec_slice = np.array(vectors[batch_start_index:end])
+        yield batch, vec_slice
+
+
 def print_export_summary(
     export_dir: Path,
     chunks: list[dict],
