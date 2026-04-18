@@ -115,28 +115,40 @@ FAMILY_SIGNALS: dict[str, list[str]] = {
     "PQ-025": ["cdrl", "ato", "mto", "taskord", "directive", "part failure", "pmr", "fep", "variance", "corrective action"],
 }
 
+# Family expansion signals for the 400-query eval scorer.
+# Tightened per R3's scorer audit (2026-04-17): removed 40 terms with >30%
+# cross-family contamination. Only terms with <30% false positive rate remain.
+# See: HYBRIDRAG_LOCAL_ONLY/r3_golden_set_2026-04-17/scorer_audit.md
 FAMILY_EXPANSIONS: dict[str, list[str]] = {
     "cdrls": [
+        # CDRL codes — very specific, <5% cross-family
         "cdrl", "a001", "a002", "a003", "a004", "a005", "a006", "a007", "a008", "a009",
-        "a010", "a011", "a012", "a013", "a014", "a015", "a016", "a017", "a018", "a019",
+        "a010", "a012", "a013", "a014", "a015", "a016", "a017", "a018", "a019",
         "a020", "a021", "a022", "a023", "a024", "a025", "a026", "a027", "a028", "a029",
         "a030", "a031", "a032", "a033", "a034", "a035", "a036", "a037", "a038", "a039",
         "a040", "a041", "a042", "a043", "a044", "a045", "a046", "a047", "a048", "a049",
         "a050", "a051", "a052", "a053", "a054",
         "deliverable", "monthly status", "corrective action", "engineering change",
+        # a011 removed — 50% cross-family (R3 audit)
     ],
     "logistics": [
-        "procurement", "purchase order", "shipment", "dd250", "dd 250", "spares",
-        "calibration", "inventory", "asset", "po ", "ibuy",
+        # Safe terms only — removed spares(100%), asset(88%), ibuy(75%), inventory(50%)
+        "procurement", "purchase order", "shipment", "dd250", "dd 250",
+        "calibration", "packing list", "shipping",
     ],
     "sysadmin": [
-        "dps", "monitoring system", "software", "user manual", "system", "config", "network",
+        # Removed network(100%), user manual(100%), config(76%), nexion(95%), dps(60%)
+        "monitoring system", "software",
     ],
     "cybersecurity": [
-        "security", "rmf", "acas", "stig", "ato", "cyber", "authorization",
+        # Removed security(39%), rmf(69%), acas(77%), stig(50%), authorization(57%)
+        # Only keeping the most specific terms
+        "ato", "cyber", "poam", "cte",
     ],
     "engineering": [
-        "install", "site survey", "maintenance", "as-built", "test", "spectrum", "ecp",
+        # Removed ALL broad terms: install(100%), site survey(100%), maintenance(100%),
+        # test(100%), spectrum(100%), sip(100%), drawings(100%)
+        "as-built", "ecp",
     ],
 }
 

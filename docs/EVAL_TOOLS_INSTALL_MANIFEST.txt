@@ -1,0 +1,15 @@
+﻿HybridRAG V2 Eval Tools Install Manifest
+Generated: 2026-04-16 13:06:03
+Machine: JEREMY
+
+ragas==0.4.3  [OK]
+rapidfuzz==3.14.5  [OK]
+datasets==4.8.4  [OK]
+langchain-core==1.2.30  [OK]
+tiktoken==0.8.0  [OK]
+instructor==1.15.1  [OK]
+openai==2.32.0  [OK]
+
+Proxy:  (source: none detected)
+CA Bundle: C:\HybridRAG_V2\.venv\ca-bundle.pem
+pip.ini: C:\HybridRAG_V2\.venv\pip.ini

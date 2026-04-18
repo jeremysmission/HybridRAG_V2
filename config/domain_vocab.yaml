@@ -1,0 +1,286 @@
+_meta:
+  description: Domain vocabulary for HybridRAG V2 entity extraction and query enrichment
+  built_by: CoPilot+
+  built_date: '2026-04-17'
+  sources:
+  - acronym_dictionary_merged.jsonl (158 entries from 5 corpus files)
+  - cdrl_heatmap.jsonl (57 codes from 10.4M chunk scan)
+  - filename_patterns_balanced.jsonl (43K file sample)
+  - corpus_mining session 2026-04-17
+acronyms:
+  AASHTO: American Association of State Highway and Transportation Officials
+  AC: Alternating Current
+  AF: Air Force
+  AFB: Air Force Base
+  AFPD: Air Force Policy Directive
+  AFWA: Air Force Weather Agency
+  ANT: Antenna
+  ASV: Annual Service Visit
+  ATSP: Advanced Technology Support Program
+  BEP: Budget Expenditure Plan
+  BIOS: Basic Input/Output System
+  BIT: Built-In Test
+  BTU: British Thermal Units
+  BU: Business Unit
+  CA: California
+  CAP: Contractor Approved Property
+  CDRL: Contract Data Requirements List
+  CE: Civil Engineering
+  CET: Contractual Engineering Task
+  CLIN: Contract Line Item Numbers
+  CO: Colorado
+  COMM: Communications
+  COS: Colorado Springs
+  COTS: Commercial Off-the-Shelf
+  CPU: Central Processing Unit
+  CUI: Controlled Unclassified Information
+  CV: Cable Vault
+  CWBS: Contract Work Breakdown Structure
+  DESC: Defense Electronics Supply Center
+  DISS: Digital Ionospheric Sounding System
+  DM: Data Management
+  DMEA: Defense Microelectronics Activity
+  DPS4D: Digital Portable Sounder, 4D
+  DTF: Development Test Facility
+  DWG: Drawing(s)
+  ECP: Engineering Change Proposal
+  ECU: Environmental Control Unit
+  EIA: Electronic Industries Alliance
+  EMT: Electrical Metal Tubing
+  FE: Field Engineering
+  FEP: Forecast Expenditure Plan
+  FIPS: Federal Information Processing Standard
+  FTP: File Transfer Protocol
+  GFE: Government Furnished Equipment
+  GFM: Government Furnished Materials
+  GFP: Government Furnished Property
+  GPS: Global Positioning System
+  GRUB: Grand Unified Bootloader
+  GSA: General Services Administration
+  GSC: Global Supply Chain
+  HDPE: High-Density Polyethylene
+  HECO: Hawaiian Electric Company
+  HF: High Frequency
+  HH: Handhole
+  HI: Hawaii
+  HP: Hewlett Packard
+  HR: Human Resources
+  IA: Information Assurance
+  IEEE: Institute of Electrical and Electronic Engineers
+  IGS: Ionospheric Ground Systems
+  IGSEP: Ionospheric Ground Sensors Enhancement Program
+  ILS: Integrations Logistics Support
+  IMS: Integrated Master Schedule
+  INS: Integrated National Systems
+  IP: Internet Protocol
+  IPT: Integrated Product Team
+  ISO: International Organization for Standardization
+  ISTO: Ionospheric Scintillation and Total Electron Content (TEC) Observer
+  IWO: Inter/Intra-company Work Order
+  JBPHH: Joint Base Pearl Harbor-Hickam
+  JHITS: Joint Hawaii Information Transfer System
+  KVM: Keyboard Video Monitor
+  LB: L-Shaped Bodies
+  LDI: Lowell Digisonde International, LLC
+  LLC: Limited Liability Company
+  MA: Mission Assurance
+  MAC: Macintosh (computer)
+  MIS: Management Information System
+  MOU: Memorandum of Understanding
+  MSR: Monthly Status Report
+  NAVFAC: Naval Facilities Engineering Command
+  NDA: Non-Disclosure Agreement
+  NEC: National Electric Code
+  NEXION: Next Generation Ionosonde
+  NG: Northrop Grumman
+  NGIDE: Northrop Grumman Integrated Digital Environment
+  NGSP: Northrop Grumman Space Systems
+  NOTAM: Notice to Airmen
+  NRTF: Naval Radio Transmitter Facility
+  O/S: Operating System
+  OB: Obstruction
+  ODC: Other Direct Costs
+  OS: Operating System
+  OSHA: Occupational Safety and Health Administration
+  OU: Operating Unit
+  PBOM: Priced Bill of Material
+  PCAB: Preventive and Corrective Action Board
+  PDU: Power Distribution Unit
+  PGS: Payload and Ground Systems
+  PM: Program Management/Manager
+  PMO: Program Management Office
+  PMP: Program Management Plan
+  PMR: Program Management Review
+  PO: Purchase Order
+  POC: Point-Of-Contact
+  PRA: Program Review Authority
+  PSFB: Peterson Space Force Base
+  PSI: Pounds per Square Inch
+  PVC: Polyvinyl Chloride
+  PWR: Power
+  QA: Quality Assurance
+  QMS: Quality Management System
+  RAID: Redundant Arrays of Inexpensive Disks
+  RDP: Remote Desktop Protocol
+  RF: Radio Frequency
+  RFBR: Radio Frequency Beacon Receiver
+  RFI: Radio Frequency Interference
+  RFP: Request for Proposal
+  RSSE: Remote Sensing Systems Environmental Branch
+  RTG: Return-To-Green
+  RX: Receive
+  SA: Systems Administration
+  SAMS: Supplier Assessment Management Systems
+  SATCOM/RF: Satellite Communications/Radio Frequency
+  SCA: Subcontract Administrator
+  SCN: Scintillation (file extension)
+  SE: Systems Engineering
+  SEP: Systems Engineering Plan
+  SFB: Space Force Base
+  SFTP: Secure File Transfer Protocol
+  SHT: Sheet(s)
+  SIP: Site Installation Plan
+  SOW: Statement of Work
+  SPAR: Supplier Performance Assessment Report
+  SQA: Supplier Quality Assurance
+  SSC: Space Systems Command
+  SST: Schedule Start Time
+  STIG: Security Technical Implementation Guidelines
+  SW/SWE: Software Engineering
+  TCI: TCI International, Inc., an SPX Company
+  TCP: Terminal Control Protocol
+  TEC: Total Electron Content
+  TIMS: Technical Interchange Meetings
+  TTR: Test Readiness Review
+  TWR: Tower
+  UHF: Ultra-High Frequency
+  UML: University of Massachusetts Lowell (UMass Lowell)
+  UPS: Uninterruptible Power Supply
+  USB: Universal Serial Bus
+  USRP: Universal Software-defined Radio Peripheral
+  UV: Ultra-Violet
+  VHF: Very High Frequency
+  VLF: Very Low Frequency
+  VPN: Virtual Private Network
+  VSWR: Voltage Standing Wave Ratio
+  WBS: Work Breakdown Schedule (Structure?)
+  WES2009: Windows Embedded Standard 2009
+ambiguous_acronyms:
+  CAP:
+  - Contractor Approved Property
+  - Corrective Action Plan
+  PO:
+  - Purchase Order
+  - Product Owner
+  MSR:
+  - Monthly Status Report
+  - Maintenance Service Report
+  STP:
+  - Setup and Test Procedures
+  - System Test Plan
+  PM:
+  - Program Management
+  - Program Manager
+sites:
+- American Samoa
+- Ascension
+- Awase
+- Curacao
+- Eareckson
+- Eglin
+- Eielson
+- Guam
+- Hawaii
+- Kwajalein
+- Lajes
+- Lualualei
+- Niger
+- Okinawa
+- Osan
+- Palau
+- Peterson
+- Selfridge
+- Thule
+- Wake
+- Wallops
+cdrl_codes:
+  A001: SPR&IP
+  A002: Maintenance Service Report (MSR)
+  A003: Technical Report - Site Installation Plan (SIP)
+  A004: Technical Report – DD250 (Transfer Equipment to Government)
+  A005: Test Plan
+  A006: Spectrum Analysis
+  A007: Installation Acceptance Test Report
+  A008: Management Plan (Program Management Plan - (Systems Mgt Plan)
+  A009: Monthly Status Report
+  A010: Maintenance Support Plan (Systems Sustainment Plan (SSP)
+  A011: Configuration Audit Report
+  A012: Configuration Management Plan
+  A013: System Engineering Plan (SEMP)
+  A014: Priced Bill of Materials
+  A015: -Test&Evaluation Program Plan
+  A016: A016_-_Baseline_Description_Document
+  A017: A017_-_Meeting_Minutes
+  A018: System Safety Program Plan (SSPP)
+  A020: -Contract Modification Proposal
+  A021: Program Protection Implementation Plan (PPIP)
+  A022: Software System Transition Plan (STrP)
+  A023: Integrated Logistics Support Plan (ILS)
+  A025: COM and SUM
+  A026: Interface Design Document (IDD)
+  A027: Cybersecurity
+  A028: Test Procedures
+  A029: A029_-_Data_Accession_List_(DAL)
+  A030: -Risk Management Database
+  A031: Integrated Master Schedule (IMS)
+  A032: Site Survey Report
+  A033: Drawings
+  A035: Software Design Description (SDD)
+  A037: A037_DI_MGMT_80033A.PDF
+  A038: A038_-_Project_Change_Briefing
+  A039: Software_Code
+  A041: Commercial-Off-the- Shelf (COTS) Manuals and Supplemental Data
+  A043: TRR Briefing
+  A044: Test Results Review Briefings
+  A045: A045_DI_MISC_80508A.PDF
+  A047: -SoftwareFirmware Change Request
+  A050: Configuration Change Request
+  A051: PDP_RR
+  A054: Maintenance Manual
+  A055: Government Property Inventory
+  A059: A059_DI_QCIC_80553A.PDF
+  A079: A079_DI_TMSS_80527A.PDF
+  A081: A081_DI_MGMT_80004A.PDF
+  A083: A083_DI_NDTI_80603A.PDF
+  A084: A084_DI_IPSC_81434.PDF
+  A085: A085_DI_ADMN_81306.PDF
+  A086: A086_DI_FNCL_81565B.PDF
+  A087: A087_DI_MGMT_80894A.PDF
+  A088: A088_DI_MGMT_80995A.PDF
+  A089: A089_DI_MISC_80557.PDF
+  A090: A090_DI_MISC_81381.PDF
+  A091: A091_DI_SAFT_81626.PDF
+  A101: PGSM.docx
+program_names:
+  NEXION: Next-Generation Ionosonde
+  ISTO: Ionospheric Scintillation and TEC Observer
+  DPS4D: Digisonde Portable Sounder 4D
+  SEMS3D: SEMS 3D Program
+  IGS: Ionospheric Ground System
+contract_patterns:
+  ticket_prefixes:
+  - IGSI-
+  - IGSE-
+  - SEMS3D-
+  - IGSCC-
+  contract_numbers:
+  - 47QFRA22F0009
+  - 47QFRA22R0006
+  option_years:
+  - Base Year
+  - OY1
+  - OY2
+  - OY3
+  - OY4
+  - OY5
+  mod_pattern: Mod\s*\d{1,3}
