@@ -336,6 +336,39 @@ def test_vector_retriever_does_not_poison_metadata_site_terms_from_non_sites():
     assert all(group.get("site_terms") != ["sustainment"] for group in groups)
 
 
+def test_vector_retriever_extracts_exact_bounded_contract_periods():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    assert retriever._extract_contract_periods("what happened in oy3 and option year 5") == ["OY3", "OY5"]
+    assert retriever._extract_contract_periods("show me the new base year contract period") == ["New Base Year"]
+    assert retriever._extract_contract_periods("show me the base year contract period") == ["Base Year"]
+
+
+def test_vector_retriever_builds_exact_temporal_alias_path_hints():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._path_hint_groups(
+        "What is the period of performance for monitoring system Sustainment OY2?"
+    )
+
+    assert ["Sustainment OY2 (1 Aug 24 - 31 Jul 25)"] in groups
+    assert ["monitoring system", "Sustainment OY2 (1 Aug 24 - 31 Jul 25)"] in groups
+
+
+def test_vector_retriever_builds_new_base_year_alias_path_hints():
+    store = _FakeStore()
+    retriever = VectorRetriever(store, _FakeEmbedder(), top_k=10, candidate_pool=30)
+
+    groups = retriever._path_hint_groups(
+        "Which received POs are tied to monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)?"
+    )
+
+    assert ["NEW BASE YR"] in groups
+    assert ["monitoring system", "Sustainment NEW BASE YR (1Aug 25 - 31 Jul 26)"] in groups
+
+
 def test_vector_retriever_preserves_legacy_program_name_in_metadata_groups():
     """Legacy monitoring system queries must not collapse to monitoring system only."""
     store = _FakeStore()
