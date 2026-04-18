@@ -45,7 +45,7 @@
 - Entity DB: `C:\HybridRAG_V2\data\index\sprint6\entities.sqlite3`
 - Model: `phi4:14b-q4_K_M`
 - Dedicated Ollama endpoint: `http://127.0.0.1:11435/v1`
-- GPU: single 3090 on `CUDA_VISIBLE_DEVICES=0`
+- GPU: single NVIDIA workstation GPU on `CUDA_VISIBLE_DEVICES=0`
 
 ### Commands
 

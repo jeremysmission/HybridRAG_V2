@@ -50,7 +50,7 @@ Ready for queries
 
 1. **GPT-OSS models are free** through the AWS GovCloud AI Toolkit (Service Catalog provisioned)
 2. **GPT-OSS API is OpenAI-compatible** — existing extraction and enrichment code works with an endpoint swap
-3. **Embedding must be local** — nomic-embed-text runs on GPU, not available as a cloud API. But embedding is the fastest step (60-200 chunks/sec on a 3090), so this is not a bottleneck
+3. **Embedding must be local** — nomic-embed-text runs on GPU, not available as a cloud API. But embedding is the fastest step (60-200 chunks/sec on a NVIDIA workstation GPU), so this is not a bottleneck
 4. **S3 is the natural staging area** — upload chunks, process, download results
 5. **No code rewrite needed** — just configuration changes (API endpoint + model name)
 

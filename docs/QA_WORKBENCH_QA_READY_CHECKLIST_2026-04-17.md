@@ -120,7 +120,7 @@ Runs 5 queries to exercise the real runner without burning 30+ minutes.
 # QA Workbench QA Report
 Date: 2026-04-17
 Tester: [name]
-Hardware: Beast (workstation GPU 0) / work single-CUDA / laptop
+Hardware: primary workstation (workstation GPU 0) / work single-CUDA / laptop
 API: commercial / Azure / none
 Launcher dry-run: PASS / FAIL
 Headless pytest: [N] passed, [N] skipped

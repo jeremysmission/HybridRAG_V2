@@ -236,7 +236,7 @@ NOW ─────────────────────────�
 **V2 extraction timeline (using V1 proven patterns):**
 - 1.5M filtered chunks at 60/sec = **~7 hours (one workday)**
 - Full 14M unfiltered at 60/sec = **~65 hours (~3 days)**
-- With filtering + work Blackwell GPUs (faster than 3090): **4-8 hours realistic**
+- With filtering + work Blackwell GPUs (faster than NVIDIA workstation GPU): **4-8 hours realistic**
 - **Work machine runs 24/7 in background** — start ASAP once phi4 validated
 
 **Source commits to port:** `afe7877`, `0750633`, `8fba386` (all 2026-04-02 in Clone1).

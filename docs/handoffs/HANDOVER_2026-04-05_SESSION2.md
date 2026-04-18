@@ -49,7 +49,7 @@
 
 ### Key Findings
 - Clone1 dedup: 27.6M chunks but only 89K unique hashes (99.7% duplicates)
-- phi4 on 3090: 2.6 chunks/min via Ollama (40-55 tok/sec generation)
+- phi4 on NVIDIA workstation GPU: 2.6 chunks/min via Ollama (40-55 tok/sec generation)
 - Tiered extraction (regex + GLiNER + GPT-4.1 Nano batch) = $10-50 for full corpus
 - SGLang would be 3-5x over Ollama for local extraction
 - AWS GovCloud OSS = potentially $0 for all enrichment + extraction

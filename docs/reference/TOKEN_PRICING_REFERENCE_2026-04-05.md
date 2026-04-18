@@ -30,7 +30,7 @@
 
 ## Local Models (Ollama, $0 API cost)
 
-| Model | Size | VRAM | Speed (3090) | Cost |
+| Model | Size | VRAM | Speed (NVIDIA workstation GPU) | Cost |
 |-------|------|------|-------------|------|
 | phi4:14b-q4_K_M | 9.1 GB | ~10 GB | ~40-55 tok/s | $0 |
 | phi4-mini | 2.5 GB | ~3 GB | ~80+ tok/s | $0 |

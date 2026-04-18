@@ -1543,7 +1543,7 @@ class RelationshipPhraseExtractor:
                     continue
                 # Quality filters (per QA phantom analysis 2026-04-17):
                 # 1. Minimum 2 words OR 4+ chars — kills single-word phantoms
-                #    like "assessed" but keeps acronyms like "GCOs", "NEXION"
+                #    like "assessed" but keeps acronyms like "GCOs", "monitoring system"
                 if len(subj.split()) < 2 and len(subj) < 4:
                     continue
                 if len(obj.split()) < 2 and len(obj) < 4:

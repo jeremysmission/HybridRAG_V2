@@ -17,7 +17,7 @@
 
 - **CUDA Toolkit:** 12.8 installed system-wide
 - **torch:** 2.7.1+cu128 from PyTorch CUDA index (NOT PyPI CPU-only)
-- **GPU:** NVIDIA RTX 3090 (24GB VRAM) or equivalent
+- **GPU:** NVIDIA NVIDIA workstation GPU (24GB VRAM) or equivalent
 - **Single-GPU mode:** `set CUDA_VISIBLE_DEVICES=0`
 - **Verify:** `.venv\Scripts\python.exe -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"`
 

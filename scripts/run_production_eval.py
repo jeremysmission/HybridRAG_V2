@@ -130,7 +130,7 @@ FAMILY_EXPANSIONS: dict[str, list[str]] = {
         "calibration", "inventory", "asset", "po ", "ibuy",
     ],
     "sysadmin": [
-        "dps", "nexion", "software", "user manual", "system", "config", "network",
+        "dps", "monitoring system", "software", "user manual", "system", "config", "network",
     ],
     "cybersecurity": [
         "security", "rmf", "acas", "stig", "ato", "cyber", "authorization",
