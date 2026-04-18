@@ -23,7 +23,7 @@ acronyms:
   BTU: British Thermal Units
   BU: Business Unit
   CA: California
-  CAP: Contractor Approved Property
+  CAP: organization Approved Property
   CDRL: Contract Data Requirements List
   CE: Civil Engineering
   CET: Contractual Engineering Task
@@ -33,13 +33,13 @@ acronyms:
   COS: Colorado Springs
   COTS: Commercial Off-the-Shelf
   CPU: Central Processing Unit
-  CUI: Controlled Unclassified Information
+  sensitive data: Controlled Unrestricted Information
   CV: Cable Vault
   CWBS: Contract Work Breakdown Structure
-  DESC: Defense Electronics Supply Center
-  DISS: Digital Ionospheric Sounding System
+  DESC: enterprise Electronics Supply Center
+  DISS: Digital atmospheric Sounding System
   DM: Data Management
-  DMEA: Defense Microelectronics Activity
+  DMEA: enterprise Microelectronics Activity
   DPS4D: Digital Portable Sounder, 4D
   DTF: Development Test Facility
   DWG: Drawing(s)
@@ -67,15 +67,15 @@ acronyms:
   HR: Human Resources
   IA: Information Assurance
   IEEE: Institute of Electrical and Electronic Engineers
-  IGS: Ionospheric Ground Systems
-  IGSEP: Ionospheric Ground Sensors Enhancement Program
+  enterprise program: atmospheric Ground Systems
+  IGSEP: atmospheric Ground Sensors Enhancement Program
   ILS: Integrations Logistics Support
   IMS: Integrated Master Schedule
   INS: Integrated National Systems
   IP: Internet Protocol
   IPT: Integrated Product Team
   ISO: International Organization for Standardization
-  ISTO: Ionospheric Scintillation and Total Electron Content (TEC) Observer
+  legacy monitoring system: atmospheric Scintillation and Total Electron Content (TEC) Observer
   IWO: Inter/Intra-company Work Order
   JBPHH: Joint Base Pearl Harbor-Hickam
   JHITS: Joint Hawaii Information Transfer System
@@ -91,10 +91,10 @@ acronyms:
   NAVFAC: Naval Facilities Engineering Command
   NDA: Non-Disclosure Agreement
   NEC: National Electric Code
-  NEXION: Next Generation Ionosonde
-  NG: Northrop Grumman
-  NGIDE: Northrop Grumman Integrated Digital Environment
-  NGSP: Northrop Grumman Space Systems
+  monitoring system: Next Generation sensor system
+  NG: Organization
+  NGIDE: Organization Integrated Digital Environment
+  NGSP: Organization Space Systems
   NOTAM: Notice to Airmen
   NRTF: Naval Radio Transmitter Facility
   O/S: Operating System
@@ -167,7 +167,7 @@ acronyms:
   WES2009: Windows Embedded Standard 2009
 ambiguous_acronyms:
   CAP:
-  - Contractor Approved Property
+  - organization Approved Property
   - Corrective Action Plan
   PO:
   - Purchase Order
@@ -262,11 +262,11 @@ cdrl_codes:
   A091: A091_DI_SAFT_81626.PDF
   A101: PGSM.docx
 program_names:
-  NEXION: Next-Generation Ionosonde
-  ISTO: Ionospheric Scintillation and TEC Observer
+  monitoring system: Next-Generation sensor system
+  legacy monitoring system: atmospheric Scintillation and TEC Observer
   DPS4D: Digisonde Portable Sounder 4D
   SEMS3D: SEMS 3D Program
-  IGS: Ionospheric Ground System
+  enterprise program: atmospheric Ground System
 contract_patterns:
   ticket_prefixes:
   - IGSI-

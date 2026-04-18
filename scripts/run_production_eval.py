@@ -137,7 +137,7 @@ FAMILY_EXPANSIONS: dict[str, list[str]] = {
         "calibration", "packing list", "shipping",
     ],
     "sysadmin": [
-        # Removed network(100%), user manual(100%), config(76%), nexion(95%), dps(60%)
+        # Removed network(100%), user manual(100%), config(76%), monitoring system(95%), dps(60%)
         "monitoring system", "software",
     ],
     "cybersecurity": [
