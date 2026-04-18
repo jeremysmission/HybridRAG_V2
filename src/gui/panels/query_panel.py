@@ -12,12 +12,15 @@
 #   - Uses GUIModel.query() -- not direct pipeline access
 # ============================================================================
 
+import json
 import tkinter as tk
 from tkinter import ttk
 import threading
 import time
 import logging
 import queue
+from datetime import datetime
+from pathlib import Path
 
 from src.gui.theme import current_theme, FONT, FONT_BOLD, FONT_SMALL, FONT_MONO
 from src.gui.helpers.safe_after import safe_after
@@ -176,6 +179,79 @@ class QueryPanel(tk.LabelFrame):
         scrollbar.config(command=self.answer_text.yview)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.answer_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # -- Feedback buttons --
+        self._feedback_frame = tk.Frame(self, bg=t["panel_bg"])
+        self._feedback_frame.pack(fill=tk.X, pady=(8, 0))
+
+        self._feedback_label = tk.Label(
+            self._feedback_frame, text="Was this helpful?",
+            bg=t["panel_bg"], fg=t["gray"], font=FONT_SMALL,
+        )
+        self._feedback_label.pack(side=tk.LEFT)
+
+        self._feedback_btns = {}
+        for label, value in [
+            ("\u2714 Helpful", "helpful"),
+            ("\u2718 Not Helpful", "not_helpful"),
+            ("\u26A0 Wrong Answer", "wrong_answer"),
+            ("\u2757 Bad Sources", "bad_sources"),
+        ]:
+            btn = tk.Button(
+                self._feedback_frame, text=label, font=FONT_SMALL,
+                bg=t["panel_bg"], fg=t["fg"], relief=tk.FLAT,
+                padx=8, pady=2, cursor="hand2",
+                command=lambda v=value: self._on_feedback(v),
+                activebackground=t["accent"],
+                activeforeground=t["accent_fg"],
+            )
+            btn.pack(side=tk.LEFT, padx=(6, 0))
+            self._feedback_btns[value] = btn
+
+        # Hide feedback until a query completes
+        self._feedback_frame.pack_forget()
+
+        # Session log path
+        self._session_log_dir = Path("data/query_sessions")
+        self._session_log_dir.mkdir(parents=True, exist_ok=True)
+        self._current_session: dict | None = None
+
+        # -- Copy/Export buttons --
+        self._action_frame = tk.Frame(self, bg=t["panel_bg"])
+        self._action_frame.pack(fill=tk.X, pady=(4, 0))
+
+        self._copy_answer_btn = tk.Button(
+            self._action_frame, text="Copy Answer", font=FONT_SMALL,
+            bg=t["panel_bg"], fg=t["accent"], relief=tk.FLAT,
+            padx=8, pady=2, cursor="hand2",
+            command=self._copy_answer,
+            activebackground=t["accent"],
+            activeforeground=t["accent_fg"],
+        )
+        self._copy_answer_btn.pack(side=tk.LEFT)
+
+        self._copy_sources_btn = tk.Button(
+            self._action_frame, text="Copy Sources", font=FONT_SMALL,
+            bg=t["panel_bg"], fg=t["accent"], relief=tk.FLAT,
+            padx=8, pady=2, cursor="hand2",
+            command=self._copy_sources,
+            activebackground=t["accent"],
+            activeforeground=t["accent_fg"],
+        )
+        self._copy_sources_btn.pack(side=tk.LEFT, padx=(6, 0))
+
+        self._export_btn = tk.Button(
+            self._action_frame, text="Export Session Log", font=FONT_SMALL,
+            bg=t["panel_bg"], fg=t["accent"], relief=tk.FLAT,
+            padx=8, pady=2, cursor="hand2",
+            command=self._export_session_log,
+            activebackground=t["accent"],
+            activeforeground=t["accent_fg"],
+        )
+        self._export_btn.pack(side=tk.LEFT, padx=(6, 0))
+
+        # Hide action buttons until a query completes
+        self._action_frame.pack_forget()
 
         # -- Sources expandable section --
         self._sources_frame = tk.Frame(self, bg=t["panel_bg"])
@@ -342,6 +418,15 @@ class QueryPanel(tk.LabelFrame):
         # Update status bar query path
         self._notify_status_bar(path)
 
+        # Log session and show feedback/action buttons
+        question = self.question_entry.get().strip()
+        self._current_session = self._log_session(question, response)
+        self._feedback_frame.pack(fill=tk.X, pady=(8, 0))
+        self._action_frame.pack(fill=tk.X, pady=(4, 0))
+        # Reset feedback button colors
+        for btn in self._feedback_btns.values():
+            btn.config(bg=t["panel_bg"], fg=t["fg"])
+
         self._finish_query_ui()
         self._status_label.config(text="", fg=t["gray"])
 
@@ -444,6 +529,102 @@ class QueryPanel(tk.LabelFrame):
                 widget = getattr(widget, "master", None)
         except Exception:
             pass
+
+    # ------------------------------------------------------------------
+    # Feedback + Session logging
+    # ------------------------------------------------------------------
+
+    def _on_feedback(self, feedback_value: str):
+        """Record operator feedback for the current query session."""
+        t = current_theme()
+        if self._current_session:
+            self._current_session["feedback"] = feedback_value
+            self._current_session["feedback_at"] = datetime.now().isoformat()
+            self._save_session(self._current_session)
+        # Visual confirmation
+        for value, btn in self._feedback_btns.items():
+            if value == feedback_value:
+                btn.config(bg=t["accent"], fg=t["accent_fg"])
+            else:
+                btn.config(bg=t["panel_bg"], fg=t["gray"])
+
+    def _log_session(self, question: str, response) -> dict:
+        """Create a session record for persistence."""
+        session = {
+            "timestamp": datetime.now().isoformat(),
+            "question": question,
+            "answer": getattr(response, "answer", ""),
+            "query_path": getattr(response, "query_path", ""),
+            "confidence": getattr(response, "confidence", ""),
+            "sources": getattr(response, "sources", []) or [],
+            "latency_ms": getattr(response, "latency_ms", 0),
+            "chunks_used": getattr(response, "chunks_used", 0),
+            "feedback": None,
+            "feedback_at": None,
+        }
+        self._save_session(session)
+        return session
+
+    def _save_session(self, session: dict):
+        """Append session to the daily log file."""
+        try:
+            date_str = datetime.now().strftime("%Y-%m-%d")
+            log_file = self._session_log_dir / f"sessions_{date_str}.jsonl"
+            with open(log_file, "a", encoding="utf-8") as f:
+                f.write(json.dumps(session, default=str) + "\n")
+        except Exception as e:
+            logger.warning("Failed to save session log: %s", e)
+
+    def _copy_answer(self):
+        """Copy the current answer text to clipboard."""
+        try:
+            text = self.answer_text.get("1.0", tk.END).strip()
+            if text:
+                self.clipboard_clear()
+                self.clipboard_append(text)
+                t = current_theme()
+                self._copy_answer_btn.config(text="Copied!", fg=t["green"])
+                self.after(2000, lambda: self._copy_answer_btn.config(
+                    text="Copy Answer", fg=t["accent"]))
+        except Exception:
+            pass
+
+    def _copy_sources(self):
+        """Copy the sources list to clipboard."""
+        try:
+            text = self._sources_detail.get("1.0", tk.END).strip()
+            if text:
+                self.clipboard_clear()
+                self.clipboard_append(text)
+                t = current_theme()
+                self._copy_sources_btn.config(text="Copied!", fg=t["green"])
+                self.after(2000, lambda: self._copy_sources_btn.config(
+                    text="Copy Sources", fg=t["accent"]))
+        except Exception:
+            pass
+
+    def _export_session_log(self):
+        """Open a file dialog to export the session log."""
+        try:
+            from tkinter import filedialog
+            date_str = datetime.now().strftime("%Y-%m-%d")
+            log_file = self._session_log_dir / f"sessions_{date_str}.jsonl"
+            if not log_file.exists():
+                return
+            dest = filedialog.asksaveasfilename(
+                defaultextension=".jsonl",
+                filetypes=[("JSONL files", "*.jsonl"), ("All files", "*.*")],
+                initialfile=f"query_sessions_{date_str}.jsonl",
+            )
+            if dest:
+                import shutil
+                shutil.copy2(str(log_file), dest)
+                t = current_theme()
+                self._export_btn.config(text="Exported!", fg=t["green"])
+                self.after(2000, lambda: self._export_btn.config(
+                    text="Export Session Log", fg=t["accent"]))
+        except Exception as e:
+            logger.warning("Failed to export session log: %s", e)
 
     # ------------------------------------------------------------------
     # Theme
