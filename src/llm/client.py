@@ -15,11 +15,15 @@ from __future__ import annotations
 
 import logging
 import os
+import threading
 from dataclasses import dataclass
 
 from openai import AzureOpenAI, OpenAI
 
 logger = logging.getLogger(__name__)
+
+_credential_cache: dict[str, str] = {}
+_credential_cache_lock = threading.Lock()
 
 
 @dataclass
@@ -157,13 +161,18 @@ class LLMClient:
             self._available = False
 
     def _resolve_key(self) -> str:
-        """Resolve API key from env vars or keyring."""
+        """Resolve API key from env vars or keyring (with session cache)."""
+        with _credential_cache_lock:
+            if "api_key" in _credential_cache:
+                return _credential_cache["api_key"]
+
         for var in self._KEY_VARS:
             val = os.getenv(var, "")
             if val:
+                with _credential_cache_lock:
+                    _credential_cache["api_key"] = val
                 return val
 
-        # Keyring fallback
         try:
             import keyring
             for service, username in self._KEYRING_KEY_CANDIDATES:
@@ -173,6 +182,8 @@ class LLMClient:
                         "LLM client key resolved from Windows Credential Manager: %s/%s",
                         service, username,
                     )
+                    with _credential_cache_lock:
+                        _credential_cache["api_key"] = val
                     return val
         except Exception:
             pass
@@ -180,12 +191,19 @@ class LLMClient:
         return ""
 
     def _resolve_endpoint(self, explicit: str) -> str:
-        """Resolve endpoint from explicit param or env vars."""
+        """Resolve endpoint from explicit param, env vars, or keyring (with session cache)."""
         if explicit:
             return explicit
+
+        with _credential_cache_lock:
+            if "endpoint" in _credential_cache:
+                return _credential_cache["endpoint"]
+
         for var in self._ENDPOINT_VARS:
             val = os.getenv(var, "")
             if val:
+                with _credential_cache_lock:
+                    _credential_cache["endpoint"] = val
                 return val
         try:
             import keyring
@@ -196,6 +214,8 @@ class LLMClient:
                         "LLM client endpoint resolved from Windows Credential Manager: %s/%s",
                         service, username,
                     )
+                    with _credential_cache_lock:
+                        _credential_cache["endpoint"] = val
                     return val
         except Exception:
             pass

@@ -15,7 +15,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 import logging
 
-from src.gui.theme import current_theme, FONT, FONT_BOLD, FONT_SECTION, FONT_MONO
+from src.gui.theme import current_theme, FONT, FONT_BOLD, FONT_SECTION, FONT_MONO, FONT_SMALL
 from src.gui.scrollable import ScrollableFrame
 
 logger = logging.getLogger(__name__)
@@ -80,7 +80,33 @@ class SettingsPanel(tk.LabelFrame):
         self._add_section(inner, t, "LLM Configuration")
         if cfg and hasattr(cfg, "llm"):
             llm = cfg.llm
-            self._add_row(inner, t, "Model", llm.model)
+
+            # Model selector dropdown
+            model_row = tk.Frame(inner, bg=t["panel_bg"])
+            model_row.pack(fill=tk.X, pady=2)
+            tk.Label(
+                model_row, text="Model:", font=FONT,
+                bg=t["panel_bg"], fg=t["label_fg"], width=22, anchor=tk.W,
+            ).pack(side=tk.LEFT)
+
+            self._model_var = tk.StringVar(value=self._current_model_label(llm))
+            self._model_dropdown = ttk.Combobox(
+                model_row,
+                textvariable=self._model_var,
+                values=["GPT-4o", "phi4:14b"],
+                state="readonly",
+                width=20,
+                font=FONT,
+            )
+            self._model_dropdown.pack(side=tk.LEFT)
+            self._model_dropdown.bind("<<ComboboxSelected>>", self._on_model_change)
+
+            self._model_status = tk.Label(
+                model_row, text="", font=FONT_SMALL,
+                bg=t["panel_bg"], fg=t["gray"],
+            )
+            self._model_status.pack(side=tk.LEFT, padx=(8, 0))
+
             self._add_row(inner, t, "Provider", llm.provider)
             self._add_row(inner, t, "Deployment", llm.deployment)
             self._add_row(inner, t, "Context Window",
@@ -158,6 +184,56 @@ class SettingsPanel(tk.LabelFrame):
             bg=t["panel_bg"], fg=t["gray"],
         )
         self._counts_label.pack(side=tk.LEFT, padx=(12, 0))
+
+    # ------------------------------------------------------------------
+    # Model selector
+    # ------------------------------------------------------------------
+
+    _MODEL_MAP = {
+        "GPT-4o": {"model": "gpt-4o", "deployment": "gpt-4o", "provider": "auto"},
+        "phi4:14b": {"model": "phi4:14b", "deployment": "", "provider": "ollama"},
+    }
+
+    def _current_model_label(self, llm) -> str:
+        if llm.provider == "ollama" or "phi4" in llm.model:
+            return "phi4:14b"
+        return "GPT-4o"
+
+    def _on_model_change(self, event=None):
+        label = self._model_var.get()
+        mapping = self._MODEL_MAP.get(label)
+        if not mapping or not self._config:
+            return
+
+        self._config.llm.model = mapping["model"]
+        self._config.llm.deployment = mapping["deployment"]
+        self._config.llm.provider = mapping["provider"]
+
+        try:
+            self._save_provider_to_config(mapping)
+            status = "Saved"
+        except Exception as e:
+            logger.warning("Failed to save model config: %s", e)
+            status = "Save failed"
+
+        self._model_status.config(text=status)
+        logger.info("Model switched to %s (provider=%s)", label, mapping["provider"])
+
+    def _save_provider_to_config(self, mapping):
+        from pathlib import Path
+        import yaml
+        config_path = Path(__file__).resolve().parents[3] / "config" / "config.yaml"
+        if not config_path.exists():
+            return
+        with open(config_path, "r", encoding="utf-8") as f:
+            raw = yaml.safe_load(f)
+        if "llm" not in raw:
+            raw["llm"] = {}
+        raw["llm"]["model"] = mapping["model"]
+        raw["llm"]["deployment"] = mapping["deployment"]
+        raw["llm"]["provider"] = mapping["provider"]
+        with open(config_path, "w", encoding="utf-8") as f:
+            yaml.dump(raw, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
 
     # ------------------------------------------------------------------
     # Widget builders
