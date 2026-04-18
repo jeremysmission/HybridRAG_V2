@@ -1,6 +1,6 @@
 # QA Workbench Overview
 
-Rendered: 2026-04-17 14:14
+Rendered: 2026-04-18 12:55
 Repo root: `C:\HybridRAG_V2`
 Local-only root: `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY`
 
@@ -35,31 +35,31 @@ It is a read-only view over artifacts that live elsewhere.
 ## 5. Regression status
 
 - Latest production eval file: `C:\HybridRAG_V2\docs\production_eval_results_2026-04-11.json`
-- run_id: 20260417_044349
-- Last updated: 2026-04-17 00:52
-- Pass / Partial / Miss: 19 (76.0%) / 4 (16.0%) / 2 (8.0%)
-- Total queries: 25
-- Routing correct: 9
-- Wall-clock latency: p50 7872 ms / p95 156231 ms
+- run_id: 20260418_181942
+- Last updated: 2026-04-18 12:19
+- Pass / Partial / Miss: 36 (78.3%) / 8 (17.4%) / 2 (4.3%)
+- Total queries: 46
+- Routing correct: 35
+- Wall-clock latency: p50 7735 ms / p95 37109 ms
 
 ## 6. Strongest / weakest areas
 
 - by persona — strongest:
-  - Logistics Lead: 100.0%
-  - Field Engineer: 80.0%
-  - Network Admin / Cybersecurity: 80.0%
+  - Program Manager: 100.0%
+  - Aggregation / Cross-role: 100.0%
+  - Logistics Lead: 93.8%
 - by persona — weakest:
-  - Aggregation / Cross-role: 60.0%
-  - Program Manager: 60.0%
-  - Network Admin / Cybersecurity: 80.0%
+  - Cybersecurity / Network Admin: 60.0%
+  - Field Engineer: 65.0%
+  - Logistics Lead: 93.8%
 - by query type — strongest:
-  - COMPLEX: 100.0%
-  - SEMANTIC: 80.0%
+  - AGGREGATE: 100.0%
+  - SEMANTIC: 83.3%
   - ENTITY: 75.0%
 - by query type — weakest:
-  - AGGREGATE: 50.0%
-  - TABULAR: 66.7%
+  - TABULAR: 33.3%
   - ENTITY: 75.0%
+  - SEMANTIC: 83.3%
 
 ## 7. Artifact links
 
