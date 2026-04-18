@@ -14,12 +14,14 @@ from __future__ import annotations
 import logging
 import re
 import sqlite3
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 _FTS_TABLE = "entities_fts"
+_SLOW_QUERY_LOG_THRESHOLD_S = 0.250
 
 
 @dataclass
@@ -226,6 +228,34 @@ class EntityStore:
         self._conn.commit()
         return len(rows)
 
+    def _log_slow_query_plan(
+        self,
+        *,
+        query_name: str,
+        sql: str,
+        params: list,
+        elapsed_s: float,
+    ) -> None:
+        """Log SQLite query-plan details when an entity lookup is unexpectedly slow."""
+        if elapsed_s < _SLOW_QUERY_LOG_THRESHOLD_S:
+            return
+        try:
+            plan_rows = self._conn.execute(
+                f"EXPLAIN QUERY PLAN {sql}",
+                params,
+            ).fetchall()
+            plan_summary = [" | ".join(str(part) for part in row) for row in plan_rows]
+        except Exception as exc:
+            plan_summary = [f"EXPLAIN failed: {exc}"]
+
+        logger.warning(
+            "EntityStore slow query: %s took %.3fs | params=%s | plan=%s",
+            query_name,
+            elapsed_s,
+            params,
+            plan_summary,
+        )
+
     def lookup_entities(
         self,
         entity_type: str | None = None,
@@ -259,16 +289,22 @@ class EntityStore:
             params.append(f"%{source_path}%")
 
         where = " AND ".join(conditions)
-        rows = self._conn.execute(
-            f"""SELECT e.entity_type, e.text, e.raw_text, e.confidence,
-                       e.source_path, e.context, e.chunk_id
-                FROM entities e
-                {join_sql}
-                WHERE {where}
-                ORDER BY e.confidence DESC
-                LIMIT ?""",
-            params + [limit],
-        ).fetchall()
+        sql = f"""SELECT e.entity_type, e.text, e.raw_text, e.confidence,
+                         e.source_path, e.context, e.chunk_id
+                  FROM entities e
+                  {join_sql}
+                  WHERE {where}
+                  ORDER BY e.confidence DESC
+                  LIMIT ?"""
+        query_params = params + [limit]
+        t0 = time.perf_counter()
+        rows = self._conn.execute(sql, query_params).fetchall()
+        self._log_slow_query_plan(
+            query_name="lookup_entities",
+            sql=sql,
+            params=query_params,
+            elapsed_s=time.perf_counter() - t0,
+        )
 
         return [
             EntityResult(
@@ -307,16 +343,21 @@ class EntityStore:
             params.append(text_pattern)
 
         where = " AND ".join(conditions)
-        rows = self._conn.execute(
-            f"""SELECT e.text, COUNT(*) as cnt,
-                       GROUP_CONCAT(DISTINCT e.source_path) as sources
-                FROM entities e
-                {join_sql}
-                WHERE {where}
-                GROUP BY e.text
-                ORDER BY cnt DESC""",
-            params,
-        ).fetchall()
+        sql = f"""SELECT e.text, COUNT(*) as cnt,
+                         GROUP_CONCAT(DISTINCT e.source_path) as sources
+                  FROM entities e
+                  {join_sql}
+                  WHERE {where}
+                  GROUP BY e.text
+                  ORDER BY cnt DESC"""
+        t0 = time.perf_counter()
+        rows = self._conn.execute(sql, params).fetchall()
+        self._log_slow_query_plan(
+            query_name="aggregate_entity",
+            sql=sql,
+            params=params,
+            elapsed_s=time.perf_counter() - t0,
+        )
 
         return [
             {"text": r[0], "count": r[1], "sources": r[2].split(",") if r[2] else []}

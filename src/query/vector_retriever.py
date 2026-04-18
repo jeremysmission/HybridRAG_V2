@@ -1085,9 +1085,24 @@ class VectorRetriever:
         system_hints = self._system_family_hints(lower_query)
         temporal_hints = self._temporal_path_terms(lower_query)
         topical_hints = self._cdrl_title_hints(lower_query) + self._a027_subtype_hints(lower_query)
+        # Extract specific CDRL codes for path-level boosting.
+        # A027 dominates at 96.7% of CDRL content (3.4M chunks); smaller
+        # CDRLs (A009=294 chunks, A013=405, etc.) get buried without
+        # explicit path-match promotion.
+        cdrl_codes = self._extract_cdrl_codes(lower_query)
 
-        def priority(result: ChunkResult) -> tuple[int, int, int, int, int, int, int, int, int]:
+        def priority(result: ChunkResult) -> tuple[int, int, int, int, int, int, int, int, int, int]:
             source = result.source_path.lower()
+            # Exact CDRL code match in source path — strongest signal
+            # for queries like "CDRL A009": promotes A009 chunks above
+            # the A027 mass that dominates vector search results.
+            exact_cdrl = int(
+                bool(cdrl_codes) and any(
+                    f"\\{code.lower()}" in source or f"/{code.lower()}" in source
+                    or f" {code.lower()}" in source or source.startswith(code.lower())
+                    for code in cdrl_codes
+                )
+            )
             preferred_corpus = int(
                 any(
                     token in source
@@ -1125,6 +1140,7 @@ class VectorRetriever:
             )
             if logistics_query:
                 return (
+                    exact_cdrl,
                     preferred_logistics,
                     exact_po,
                     exact_time,
@@ -1137,6 +1153,7 @@ class VectorRetriever:
                     -archive_penalty,
                 )
             return (
+                exact_cdrl,
                 exact_po,
                 exact_contract,
                 exact_time,

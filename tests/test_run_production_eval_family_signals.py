@@ -29,3 +29,54 @@ def test_family_signal_mapping_falls_back_to_expected_document_family():
     assert "management" in signals
     assert _match_in_family("1.0 enterprise program/Program Management/foo", "", signals)
 
+
+def test_family_signal_mapping_expands_cdrl_family_codes_for_fallback_queries():
+    qdef = {
+        "query_id": "PQ-336",
+        "expected_document_family": "CDRLs",
+    }
+
+    signals = _family_signals_for_query(qdef)
+
+    assert "a009" in signals
+    assert "monthly status" in signals
+    assert _match_in_family(
+        "A009 - Monthly Status Report/47QFRA22F0009_IGSI-2497_Monthly-Status-Report.docx",
+        "",
+        signals,
+    )
+
+
+def test_family_signal_mapping_expands_logistics_family_terms():
+    qdef = {
+        "query_id": "PQ-121",
+        "expected_document_family": "Logistics",
+    }
+
+    signals = _family_signals_for_query(qdef)
+
+    assert "dd250" in signals
+    assert "shipment" in signals
+    assert _match_in_family(
+        "5.0 Logistics/DD250/Niger transfer artifact.pdf",
+        "",
+        signals,
+    )
+
+
+def test_family_signal_mapping_expands_cybersecurity_family_terms():
+    qdef = {
+        "query_id": "PQ-201",
+        "expected_document_family": "Cybersecurity",
+    }
+
+    signals = _family_signals_for_query(qdef)
+
+    assert "acas" in signals
+    assert "authorization" in signals
+    assert _match_in_family(
+        "Cyber/Authorization Package/ACAS security scan results.xlsx",
+        "",
+        signals,
+    )
+

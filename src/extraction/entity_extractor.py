@@ -1489,6 +1489,16 @@ _PHRASE_PATTERNS: list[tuple[re.Pattern[str], str, str, str]] = [
 ]
 
 
+# Known phantom subjects/objects that produce noise relationships.
+# Identified by QA spot-check (2026-04-17): 45% phantom rate, top offenders.
+_PHANTOM_BLACKLIST = frozenset({
+    "assessed", "rivileges", "system", "hipaa", "cpu", "snmp",
+    "the system", "the site", "the project", "the program",
+    "it is", "there is", "this is", "they are",
+    "n/a", "none", "unknown", "tbd", "other",
+})
+
+
 def _clean_phrase_entity(text: str) -> str:
     """Normalize a phrase-extracted entity: strip whitespace, collapse runs."""
     cleaned = re.sub(r"\s+", " ", text).strip()
@@ -1531,10 +1541,29 @@ class RelationshipPhraseExtractor:
                 # Skip empty or too-short extractions
                 if len(subj) < 2 or len(obj) < 2:
                     continue
-                # Skip if subject or object is just stopwords
-                if subj.lower() in ("the", "a", "an", "it", "this", "that", "they"):
+                # Quality filters (per QA phantom analysis 2026-04-17):
+                # 1. Minimum 2 words OR 4+ chars — kills single-word phantoms
+                #    like "assessed" but keeps acronyms like "GCOs", "NEXION"
+                if len(subj.split()) < 2 and len(subj) < 4:
                     continue
-                if obj.lower() in ("the", "a", "an", "it", "this", "that", "they"):
+                if len(obj.split()) < 2 and len(obj) < 4:
+                    continue
+                # 2. Maximum 60 chars — kills run-on sentence captures
+                if len(subj) > 60 or len(obj) > 60:
+                    continue
+                # 3. Skip known phantom subjects
+                subj_lower = subj.lower()
+                obj_lower = obj.lower()
+                if subj_lower in _PHANTOM_BLACKLIST or obj_lower in _PHANTOM_BLACKLIST:
+                    continue
+                # 4. Skip if context contains negation before the match
+                pre_context = text[max(0, match.start() - 20):match.start()].upper()
+                if " NO " in pre_context or " NOT " in pre_context or "DOES NOT" in pre_context:
+                    continue
+                # Skip if subject or object is just stopwords
+                if subj_lower in ("the", "a", "an", "it", "this", "that", "they"):
+                    continue
+                if obj_lower in ("the", "a", "an", "it", "this", "that", "they"):
                     continue
 
                 # Dedup within chunk

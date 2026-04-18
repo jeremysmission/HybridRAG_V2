@@ -115,6 +115,31 @@ FAMILY_SIGNALS: dict[str, list[str]] = {
     "PQ-025": ["cdrl", "ato", "mto", "taskord", "directive", "part failure", "pmr", "fep", "variance", "corrective action"],
 }
 
+FAMILY_EXPANSIONS: dict[str, list[str]] = {
+    "cdrls": [
+        "cdrl", "a001", "a002", "a003", "a004", "a005", "a006", "a007", "a008", "a009",
+        "a010", "a011", "a012", "a013", "a014", "a015", "a016", "a017", "a018", "a019",
+        "a020", "a021", "a022", "a023", "a024", "a025", "a026", "a027", "a028", "a029",
+        "a030", "a031", "a032", "a033", "a034", "a035", "a036", "a037", "a038", "a039",
+        "a040", "a041", "a042", "a043", "a044", "a045", "a046", "a047", "a048", "a049",
+        "a050", "a051", "a052", "a053", "a054",
+        "deliverable", "monthly status", "corrective action", "engineering change",
+    ],
+    "logistics": [
+        "procurement", "purchase order", "shipment", "dd250", "dd 250", "spares",
+        "calibration", "inventory", "asset", "po ", "ibuy",
+    ],
+    "sysadmin": [
+        "dps", "nexion", "software", "user manual", "system", "config", "network",
+    ],
+    "cybersecurity": [
+        "security", "rmf", "acas", "stig", "ato", "cyber", "authorization",
+    ],
+    "engineering": [
+        "install", "site survey", "maintenance", "as-built", "test", "spectrum", "ecp",
+    ],
+}
+
 _FAMILY_STOPWORDS = {
     "the",
     "and",
@@ -296,6 +321,9 @@ def _family_signals_for_query(qdef: dict) -> list[str]:
     for tok in tokens:
         if len(tok) > 2 and tok not in _FAMILY_STOPWORDS:
             signals.append(tok)
+            signals.extend(FAMILY_EXPANSIONS.get(tok, []))
+    if family in FAMILY_EXPANSIONS:
+        signals.extend(FAMILY_EXPANSIONS[family])
     # Preserve order while deduplicating.
     deduped: list[str] = []
     seen: set[str] = set()

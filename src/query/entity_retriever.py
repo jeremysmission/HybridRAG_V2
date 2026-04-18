@@ -47,6 +47,27 @@ def _extract_query_terms(query: str, min_len: int = 3) -> list[str]:
     # Sort by length descending — longer terms are more specific
     terms.sort(key=lambda t: -len(t))
     return terms[:8]  # cap to avoid query explosion
+
+
+def _is_quality_relationship(r) -> bool:
+    """Filter out phantom relationships at query time.
+
+    Catches the 45% phantom rate identified in QA spot-check:
+    single-word subjects, run-on captures, known noise terms.
+    """
+    subj = r.subject_text.strip()
+    obj = r.object_text.strip()
+    # Single-word subjects under 4 chars are usually phantoms
+    if len(subj.split()) < 2 and len(subj) < 4:
+        return False
+    # Run-on captures (>60 chars) are sentence fragments, not entities
+    if len(subj) > 60 or len(obj) > 60:
+        return False
+    # Known noise
+    low = subj.lower()
+    if low in ("assessed", "rivileges", "system", "hipaa", "cpu", "n/a"):
+        return False
+    return True
 VALID_ENTITY_TYPES = {"PERSON", "PART", "SITE", "DATE", "PO", "ORG", "CONTACT"}
 
 
@@ -255,6 +276,8 @@ class EntityRetriever:
                     text=term, min_confidence=self.min_confidence, limit=10,
                 )
                 for r in term_rels:
+                    if not _is_quality_relationship(r):
+                        continue
                     key = (r.subject_text, r.predicate, r.object_text)
                     if key not in seen_rel_keys:
                         seen_rel_keys.add(key)
@@ -349,6 +372,8 @@ class EntityRetriever:
                     text=term, min_confidence=self.min_confidence, limit=10,
                 )
                 for r in term_rels:
+                    if not _is_quality_relationship(r):
+                        continue
                     key = (r.subject_text, r.predicate, r.object_text)
                     if key not in seen_rel_keys:
                         seen_rel_keys.add(key)

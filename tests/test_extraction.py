@@ -17,6 +17,7 @@ import re
 import sqlite3
 import sys
 import tempfile
+from unittest.mock import patch
 from pathlib import Path
 
 import pytest
@@ -1142,6 +1143,27 @@ class TestEntityStore:
         assert texts["power amplifier module"] == 1
         assert texts["power amplifier card"] == 1
         assert "receiver assembly" not in texts
+
+    def test_lookup_entities_logs_query_plan_when_slow(self, entity_store):
+        entity_store.insert_entities([self._make_entity(text="ARC-4471", chunk_id="c1")])
+        with patch("src.store.entity_store.time.perf_counter", side_effect=[0.0, 0.5]):
+            with patch("src.store.entity_store.logger.warning") as mock_warning:
+                results = entity_store.lookup_entities(text_pattern="%ARC%")
+        assert results
+        assert mock_warning.call_count == 1
+        assert mock_warning.call_args[0][1] == "lookup_entities"
+
+    def test_aggregate_entity_logs_query_plan_when_slow(self, entity_store):
+        entity_store.insert_entities([
+            self._make_entity(text="ARC-4471", chunk_id="c1"),
+            self._make_entity(text="ARC-4471", chunk_id="c2"),
+        ])
+        with patch("src.store.entity_store.time.perf_counter", side_effect=[0.0, 0.5]):
+            with patch("src.store.entity_store.logger.warning") as mock_warning:
+                agg = entity_store.aggregate_entity(entity_type="PART")
+        assert agg
+        assert mock_warning.call_count == 1
+        assert mock_warning.call_args[0][1] == "aggregate_entity"
 
     def test_type_summary(self, entity_store):
         entity_store.insert_entities([
