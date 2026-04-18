@@ -1,6 +1,6 @@
 # QA Workbench Overview
 
-Rendered: 2026-04-18 12:55
+Rendered: 2026-04-18 14:27
 Repo root: `C:\HybridRAG_V2`
 Local-only root: `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY`
 
@@ -36,7 +36,7 @@ It is a read-only view over artifacts that live elsewhere.
 
 - Latest production eval file: `C:\HybridRAG_V2\docs\production_eval_results_2026-04-11.json`
 - run_id: 20260418_181942
-- Last updated: 2026-04-18 12:19
+- Last updated: 2026-04-18 14:15
 - Pass / Partial / Miss: 36 (78.3%) / 8 (17.4%) / 2 (4.3%)
 - Total queries: 46
 - Routing correct: 35
