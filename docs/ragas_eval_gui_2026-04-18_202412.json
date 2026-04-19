@@ -1,0 +1,48 @@
+{
+  "run_id": "20260419_022417",
+  "timestamp_utc": "2026-04-19T02:24:17.306117+00:00",
+  "status": "PASS",
+  "summary": {
+    "surface": "RAGAS",
+    "queries_path": "C:\\HybridRAG_V2\\tests\\golden_eval\\production_queries_400_2026-04-12.json",
+    "queries_pack_name": "production_queries_400_2026-04-12.json",
+    "analysis_only": true,
+    "limit": null,
+    "top_k": 5,
+    "readiness": {
+      "queries_path": "C:\\HybridRAG_V2\\tests\\golden_eval\\production_queries_400_2026-04-12.json",
+      "metadata_blocks": 0,
+      "total_queries": 391,
+      "eligible_for_retrieval_metrics": 391,
+      "eligible_rate": 1.0,
+      "blocked_missing_reference_contexts": 0,
+      "fully_phase2c_enriched": 391,
+      "phase2c_ready_rate": 1.0,
+      "reason_counts": {},
+      "per_type_ready": {
+        "TABULAR": 74,
+        "AGGREGATE": 102,
+        "ENTITY": 117,
+        "SEMANTIC": 98
+      }
+    },
+    "dependencies": {
+      "ragas_installed": true,
+      "ragas_version": "0.4.3",
+      "rapidfuzz_installed": true,
+      "single_turn_import_path": "ragas.SingleTurnSample",
+      "supported_metrics": {
+        "nonllm_context_recall": "ragas.metrics._NonLLMContextRecall",
+        "nonllm_context_precision_with_reference": "ragas.metrics._NonLLMContextPrecisionWithReference"
+      },
+      "blockers": []
+    },
+    "metric_summaries": [],
+    "skip_reasons": {},
+    "pipeline_info": {},
+    "proof_text": "eligible=391/391; phase2c_ready=391/391; ragas_installed=yes"
+  },
+  "artifact_paths": {
+    "output_json": "C:\\HybridRAG_V2\\docs\\ragas_eval_gui_2026-04-18_202412.json"
+  }
+}

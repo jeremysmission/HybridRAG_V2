@@ -1,0 +1,120 @@
+{
+  "benchmark_id": "aggregation_benchmark_2026-04-15",
+  "manifest_path": "C:\\HybridRAG_V2\\tests\\aggregation_benchmark\\aggregation_seed_manifest_2026-04-15.json",
+  "mode": "self-check",
+  "total_items": 12,
+  "pass_count": 12,
+  "fail_count": 0,
+  "pass_rate": 1.0,
+  "gate_pass": true,
+  "results": [
+    {
+      "id": "AGG-001",
+      "family": "confabulation",
+      "question": "How many files are in `research_benchmarks/confabulations/questions`?",
+      "expected_answer": 76,
+      "actual_answer": 76,
+      "passed": true,
+      "detail": "numeric answer 76"
+    },
+    {
+      "id": "AGG-002",
+      "family": "confabulation",
+      "question": "How many total response files are under `responses_possible_v2_post`?",
+      "expected_answer": 624,
+      "actual_answer": 624,
+      "passed": true,
+      "detail": "numeric answer 624"
+    },
+    {
+      "id": "AGG-003",
+      "family": "confabulation",
+      "question": "How many distinct response basenames are represented under `responses_possible_v2_post`?",
+      "expected_answer": 16,
+      "actual_answer": 16,
+      "passed": true,
+      "detail": "numeric answer 16"
+    },
+    {
+      "id": "AGG-004",
+      "family": "confabulation",
+      "question": "How many lines are in `research_benchmarks/confabulations/articles/list.txt`?",
+      "expected_answer": 2197,
+      "actual_answer": 2197,
+      "passed": true,
+      "detail": "numeric answer 2197"
+    },
+    {
+      "id": "AGG-005",
+      "family": "cross_slice_rollup",
+      "question": "How many provider entities were tallied across the three cross-slice runs?",
+      "expected_answer": 1367,
+      "actual_answer": 1367,
+      "passed": true,
+      "detail": "numeric answer 1367"
+    },
+    {
+      "id": "AGG-006",
+      "family": "query_pack",
+      "question": "How many rows are in `query_pack_400_manifest_v11`?",
+      "expected_answer": 397,
+      "actual_answer": 397,
+      "passed": true,
+      "detail": "numeric answer 397"
+    },
+    {
+      "id": "AGG-007",
+      "family": "query_pack",
+      "question": "How many rows have both `question_context_entities` and `answer_entities`?",
+      "expected_answer": 134,
+      "actual_answer": 134,
+      "passed": true,
+      "detail": "numeric answer 134"
+    },
+    {
+      "id": "AGG-008",
+      "family": "query_pack",
+      "question": "How many rows have `question_context_only` entities?",
+      "expected_answer": 148,
+      "actual_answer": 148,
+      "passed": true,
+      "detail": "numeric answer 148"
+    },
+    {
+      "id": "AGG-009",
+      "family": "query_pack",
+      "question": "How many rows have `answer_entities_only`?",
+      "expected_answer": 55,
+      "actual_answer": 55,
+      "passed": true,
+      "detail": "numeric answer 55"
+    },
+    {
+      "id": "AGG-010",
+      "family": "query_pack",
+      "question": "How many rows have `no_gold_entities`?",
+      "expected_answer": 60,
+      "actual_answer": 60,
+      "passed": true,
+      "detail": "numeric answer 60"
+    },
+    {
+      "id": "AGG-011",
+      "family": "hardtail",
+      "question": "How many rows are in the `2026-04-14` three-way adjudication set?",
+      "expected_answer": 10,
+      "actual_answer": 10,
+      "passed": true,
+      "detail": "numeric answer 10"
+    },
+    {
+      "id": "AGG-012",
+      "family": "hardtail",
+      "question": "How many rows in that three-way set have `relationship_agreement = none`?",
+      "expected_answer": 1,
+      "actual_answer": 1,
+      "passed": true,
+      "detail": "numeric answer 1"
+    }
+  ]
+}

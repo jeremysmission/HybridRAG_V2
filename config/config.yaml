@@ -1,66 +1,51 @@
-# HybridRAG V2 Configuration — Workstation Defaults
-# Date: 2026-04-05
-# Rule: Single config, no modes. Pin openai SDK to v1.x.
-#
-# LLM Provider:
-#   Home/Dev:  export OPENAI_API_KEY=sk-...  (commercial OpenAI, auto-detected)
-#   Work/Prod: export AZURE_OPENAI_ENDPOINT=... && export AZURE_OPENAI_API_KEY=...
-#   Stress:    export HYBRIDRAG_API_PROVIDER=ollama  (free phi4, local)
-
 paths:
-  lance_db: "data/index/lancedb"
-  entity_db: "data/index/entities.sqlite3"
-  embedengine_output: "data/source"
-  site_vocabulary: "config/site_vocabulary.yaml"
-
+  lance_db: data/index/lancedb
+  entity_db: data/index/entities.sqlite3
+  embedengine_output: data/source
+  site_vocabulary: config/site_vocabulary.yaml
 retrieval:
   top_k: 10
   candidate_pool: 30
   min_score: 0.1
   reranker_enabled: true
   reranker_top_n: 30
-
 llm:
-  model: "gpt-4o"
-  deployment: "gpt-4o"
+  model: gpt-4o
+  deployment: gpt-4o
   context_window: 128000
   max_tokens: 16384
   temperature: 0.08
-  timeout_seconds: 180
-  api_base: ""               # Leave empty — resolved from env vars
-  api_version: "2024-10-21"
-  provider: "auto"           # auto | azure | openai | ollama
-
+  timeout_seconds: 10
+  api_base: ''
+  api_version: '2024-10-21'
+  provider: auto
 extraction:
-  min_confidence: 0.5          # Lowered per research — 0.3-0.5 is balanced
-  model: "phi4:14b-q4_K_M"      # Free local extraction via Ollama. Alt: "gpt-4o-mini" ($145 API)
+  min_confidence: 0.5
+  model: phi4:14b-q4_K_M
   part_patterns:
-    - 'ARC-\d{4}'
-    - 'IGSI-\d+'
-    - 'PO-\d{4}-\d{4}'
-    - 'SN[-: ]?\d+'
-    - 'SEMS3D-\d+'
-    - '[A-Z]{2,}-\d{3,4}'
-    - 'WR-\d{4}'
-    - 'FM-\d{3}'
-    - 'AB-\d{3}'
-    - 'PS-\d{3}'
-    - 'AH-\d{3}'
-  gliner_enabled: false        # Flip to true for Tier 2
-  gliner_device: "cuda:1"     # GPU 1 on primary workstation (GPU 0 for embedding)
-  gliner_model: "urchade/gliner_medium-v2.1"
-  gliner_min_chunk_len: 50    # Skip chunks < 50 chars for GLiNER
+  - ARC-\d{4}
+  - IGSI-\d+
+  - PO-\d{4}-\d{4}
+  - 'SN[-: ]?\d+'
+  - SEMS3D-\d+
+  - '[A-Z]{2,}-\d{3,4}'
+  - WR-\d{4}
+  - FM-\d{3}
+  - AB-\d{3}
+  - PS-\d{3}
+  - AH-\d{3}
+  gliner_enabled: false
+  gliner_device: cuda:1
+  gliner_model: urchade/gliner_medium-v2.1
+  gliner_min_chunk_len: 50
   gpt4o_extraction: true
-  max_concurrent: 16           # primary workstation has 16 threads
-
+  max_concurrent: 16
 server:
-  host: "127.0.0.1"
+  host: 127.0.0.1
   port: 8000
-
 crag:
-  enabled: false             # Sprint 3+ feature
+  enabled: false
   confidence_threshold: 0.8
   max_retries: 2
-  verifier_model: "gpt-oss-20b"
-
-hardware_preset: "primary workstation"
+  verifier_model: gpt-oss-20b
+hardware_preset: primary workstation

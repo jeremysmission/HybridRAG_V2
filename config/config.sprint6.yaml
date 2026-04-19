@@ -1,3 +1,0 @@
-paths:
-  lance_db: "data/index/sprint6/lancedb"
-  entity_db: "data/index/sprint6/entities.sqlite3"

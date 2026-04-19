@@ -127,9 +127,10 @@ class QueryPanel(tk.LabelFrame):
     def _build_widgets(self, t):
         """Build all child widgets with theme colors."""
 
-        # -- Row 0: Badge row (query path + confidence) --
+        # -- Row 0: Badge row (query path + confidence) -- HIDDEN from user surface
+        # Widgets still exist for internal code references but not packed (visible in Advanced only)
         badge_row = tk.Frame(self, bg=t["panel_bg"])
-        badge_row.pack(fill=tk.X, pady=(0, 8))
+        # badge_row.pack(fill=tk.X, pady=(0, 8))  # Hidden from main surface
 
         self._path_badge = tk.Label(
             badge_row, text="", font=FONT_BOLD,
@@ -195,6 +196,41 @@ class QueryPanel(tk.LabelFrame):
         )
         self.stop_btn.pack(side=tk.LEFT, padx=(8, 0))
 
+        # -- Endpoint switch (GPT-4o / phi4) --
+        endpoint_row = tk.Frame(self, bg=t["panel_bg"])
+        endpoint_row.pack(fill=tk.X, pady=(0, 6))
+
+        tk.Label(
+            endpoint_row, text="AI Endpoint:", bg=t["panel_bg"],
+            fg=t["fg"], font=FONT,
+        ).pack(side=tk.LEFT)
+
+        self._endpoint_var = tk.StringVar(value="GPT-4o")
+        self._endpoint_ready = False  # Guard: don't fire change handler during init
+        self._endpoint_combo = ttk.Combobox(
+            endpoint_row,
+            textvariable=self._endpoint_var,
+            values=["GPT-4o", "phi4:14b"],
+            state="readonly",
+            width=12,
+            font=FONT,
+        )
+        self._endpoint_combo.pack(side=tk.LEFT, padx=(8, 0))
+        self._endpoint_combo.bind("<<ComboboxSelected>>", self._on_endpoint_change)
+
+        self._endpoint_status = tk.Label(
+            endpoint_row, text="warming up...", font=FONT_SMALL,
+            bg=t["panel_bg"], fg=t["orange"],
+        )
+        self._endpoint_status.pack(side=tk.LEFT, padx=(8, 0))
+
+        # Auto-detect on startup: try GPT-4o first, fall back to phi4
+        self._endpoint_detect_start = time.time()
+        self._endpoint_detect_timeout = 60
+        self.after(2000, self._auto_detect_endpoint)
+        # Mark ready after init so change handler doesn't fire on construction
+        self.after(500, self._mark_endpoint_ready)
+
         # -- Top-k selector --
         topk_row = tk.Frame(self, bg=t["panel_bg"])
         topk_row.pack(fill=tk.X, pady=(0, 6))
@@ -224,7 +260,7 @@ class QueryPanel(tk.LabelFrame):
         self._adv_frame = tk.Frame(self, bg=t["panel_bg"])
         # Not packed yet — shown on toggle
 
-        cfg = model.config if model else None
+        cfg = self._model.config if self._model else None
         retrieval = cfg.retrieval if cfg and hasattr(cfg, "retrieval") else None
 
         # Candidate Pool
@@ -386,6 +422,117 @@ class QueryPanel(tk.LabelFrame):
         """Clear placeholder text on first focus."""
         if self.question_entry.get() == "Type your question here...":
             self.question_entry.delete(0, tk.END)
+
+    _ENDPOINT_MAP = {
+        "GPT-4o": {"model": "gpt-4o", "deployment": "gpt-4o", "provider": "auto"},
+        "phi4:14b": {"model": "phi4:14b", "deployment": "", "provider": "ollama"},
+    }
+
+    def _mark_endpoint_ready(self):
+        """Allow endpoint change handler to fire after init completes."""
+        self._endpoint_ready = True
+
+    def _on_endpoint_change(self, event=None):
+        """Handle endpoint switch — only when user actually clicks."""
+        if not self._endpoint_ready:
+            return
+        """Handle endpoint switch."""
+        label = self._endpoint_var.get()
+        mapping = self._ENDPOINT_MAP.get(label)
+        if not mapping:
+            return
+        t = current_theme()
+        self._endpoint_status.config(text="switching...", fg=t["orange"])
+
+        # Update config in memory
+        if self._model and self._model.config:
+            self._model.config.llm.model = mapping["model"]
+            self._model.config.llm.deployment = mapping["deployment"]
+            self._model.config.llm.provider = mapping["provider"]
+
+        # Save to config.yaml
+        try:
+            import yaml
+            config_path = Path(__file__).resolve().parents[3] / "config" / "config.yaml"
+            if config_path.exists():
+                with open(config_path, "r", encoding="utf-8") as f:
+                    raw = yaml.safe_load(f)
+                if "llm" not in raw:
+                    raw["llm"] = {}
+                raw["llm"]["model"] = mapping["model"]
+                raw["llm"]["deployment"] = mapping["deployment"]
+                raw["llm"]["provider"] = mapping["provider"]
+                with open(config_path, "w", encoding="utf-8") as f:
+                    yaml.dump(raw, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        except Exception as e:
+            logger.warning("Failed to save endpoint config: %s", e)
+
+        self._endpoint_status.config(
+            text="{} selected — verifying...".format(label), fg=t["orange"],
+        )
+        logger.info("Endpoint switched to %s (provider=%s)", label, mapping["provider"])
+
+        # Re-run auto-detect to verify the new endpoint
+        self._endpoint_detect_start = time.time()
+        self.after(1000, self._auto_detect_endpoint)
+
+    def _auto_detect_endpoint(self):
+        """Auto-detect best endpoint: try GPT-4o first, fall back to phi4."""
+        t = current_theme()
+
+        def _probe():
+            # Check if LLM client is available and what provider it resolved to
+            if self._model and self._model.llm_available:
+                client = getattr(self._model, "_llm_client", None)
+                if client:
+                    provider = getattr(client, "_provider", "unknown")
+                    model = getattr(client, "model", "unknown")
+                    if provider == "ollama":
+                        detected = "phi4:14b"
+                        status = "phi4 (local)"
+                        color = t["green"]
+                    else:
+                        detected = "GPT-4o"
+                        status = "GPT-4o (online)"
+                        color = t["green"]
+
+                    def _update():
+                        self._endpoint_var.set(detected)
+                        self._endpoint_status.config(text=status, fg=color)
+                    self.after(0, _update)
+                    return
+
+            # Not available yet — check for Ollama as fallback
+            try:
+                import urllib.request
+                req = urllib.request.urlopen("http://localhost:11434/api/tags", timeout=3)
+                if req.status == 200:
+                    def _fallback():
+                        self._endpoint_var.set("phi4:14b")
+                        self._endpoint_status.config(text="phi4 (local fallback)", fg=t["orange"])
+                    self.after(0, _fallback)
+                    return
+            except Exception:
+                pass
+
+            # Nothing available yet — check if we've exceeded timeout
+            elapsed = time.time() - self._endpoint_detect_start
+            if elapsed > self._endpoint_detect_timeout:
+                def _failed():
+                    self._endpoint_status.config(
+                        text="FAILED — no AI connected", fg=t["red"],
+                    )
+                self.after(0, _failed)
+            else:
+                remaining = int(self._endpoint_detect_timeout - elapsed)
+                def _retry():
+                    self._endpoint_status.config(
+                        text="warming up... ({}s)".format(remaining), fg=t["orange"],
+                    )
+                    self.after(5000, self._auto_detect_endpoint)
+                self.after(0, _retry)
+
+        threading.Thread(target=_probe, daemon=True).start()
 
     def _toggle_advanced(self):
         """Show/hide the Advanced retrieval controls drawer."""
