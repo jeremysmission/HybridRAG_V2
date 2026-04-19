@@ -166,6 +166,93 @@ class GUIModel:
         except Exception:
             self.llm_available = False
 
+    def run_ibit(self) -> dict:
+        """Run a built-in test verifying all subsystems.
+
+        Returns a dict of check_name -> (passed: bool, detail: str, elapsed_ms: int).
+        Ported from V1 status_bar_ibit.py pattern.
+        """
+        import time
+        results = {}
+
+        # Check 1: LanceDB / Vector Store
+        start = time.perf_counter()
+        try:
+            count = self._lance_store.count() if self._lance_store else 0
+            passed = count > 0
+            detail = "{:,} chunks".format(count) if passed else "empty or not loaded"
+        except Exception as e:
+            passed = False
+            detail = str(e)[:60]
+        results["Vector Store"] = (passed, detail, int((time.perf_counter() - start) * 1000))
+
+        # Check 2: FTS Index
+        start = time.perf_counter()
+        try:
+            fts_ok = self.fts_ready is True
+            detail = self.fts_status_detail or ("ready" if fts_ok else "not ready")
+        except Exception as e:
+            fts_ok = False
+            detail = str(e)[:60]
+        results["FTS Index"] = (fts_ok, detail, int((time.perf_counter() - start) * 1000))
+
+        # Check 3: Entity Store
+        start = time.perf_counter()
+        try:
+            ent_count = self._entity_store.count_entities() if self._entity_store else 0
+            passed = ent_count > 0
+            detail = "{:,} entities".format(ent_count) if passed else "empty"
+        except Exception as e:
+            passed = False
+            detail = str(e)[:60]
+        results["Entity Store"] = (passed, detail, int((time.perf_counter() - start) * 1000))
+
+        # Check 4: LLM Connection (live probe)
+        start = time.perf_counter()
+        try:
+            client = self._llm_client
+            if client and getattr(client, "available", False):
+                provider = getattr(client, "_provider", "unknown")
+                model = getattr(client, "model", "unknown")
+                # Attempt a minimal API call to verify connection
+                response = client.call("Say OK", max_tokens=5)
+                if response and response.text:
+                    passed = True
+                    detail = "{} ({}) - verified".format(model, provider)
+                else:
+                    passed = False
+                    detail = "{} ({}) - empty response".format(model, provider)
+            else:
+                passed = False
+                detail = "LLM client not available"
+        except Exception as e:
+            passed = False
+            detail = "Connection failed: {}".format(str(e)[:40])
+        results["LLM Connection"] = (passed, detail, int((time.perf_counter() - start) * 1000))
+
+        # Check 5: Embedder
+        start = time.perf_counter()
+        try:
+            if self._pipeline and hasattr(self._pipeline, "vector_retriever"):
+                vr = self._pipeline.vector_retriever
+                embedder = getattr(vr, "embedder", None)
+                if embedder and getattr(embedder, "_mode", "") in ("cuda", "onnx"):
+                    passed = True
+                    detail = "ready ({})".format(getattr(embedder, "_mode", ""))
+                else:
+                    passed = False
+                    detail = "not initialized"
+            else:
+                passed = False
+                detail = "pipeline not ready"
+        except Exception as e:
+            passed = False
+            detail = str(e)[:60]
+        results["Embedder"] = (passed, detail, int((time.perf_counter() - start) * 1000))
+
+        logger.info("IBIT results: %s", {k: (v[0], v[1]) for k, v in results.items()})
+        return results
+
     # ------------------------------------------------------------------
     # Query execution
     # ------------------------------------------------------------------

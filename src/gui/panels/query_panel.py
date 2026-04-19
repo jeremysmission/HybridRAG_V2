@@ -212,6 +212,49 @@ class QueryPanel(tk.LabelFrame):
         )
         self._topk_spin.pack(side=tk.LEFT, padx=(8, 0))
 
+        # -- Advanced retrieval controls (expandable) --
+        self._adv_visible = False
+        self._adv_toggle = tk.Button(
+            self, text="+ Advanced", font=FONT_SMALL,
+            bg=t["panel_bg"], fg=t["gray"], relief=tk.FLAT, bd=0,
+            command=self._toggle_advanced, anchor=tk.W, cursor="hand2",
+        )
+        self._adv_toggle.pack(fill=tk.X, pady=(0, 2))
+
+        self._adv_frame = tk.Frame(self, bg=t["panel_bg"])
+        # Not packed yet — shown on toggle
+
+        cfg = model.config if model else None
+        retrieval = cfg.retrieval if cfg and hasattr(cfg, "retrieval") else None
+
+        # Candidate Pool
+        cp_row = tk.Frame(self._adv_frame, bg=t["panel_bg"])
+        cp_row.pack(fill=tk.X, pady=1)
+        tk.Label(cp_row, text="Candidate Pool:", bg=t["panel_bg"], fg=t["fg"], font=FONT_SMALL, width=16, anchor=tk.W).pack(side=tk.LEFT)
+        self._candidate_pool_var = tk.IntVar(value=retrieval.candidate_pool if retrieval else 30)
+        tk.Spinbox(cp_row, from_=10, to=200, textvariable=self._candidate_pool_var, width=5, font=FONT_SMALL, bg=t["input_bg"], fg=t["input_fg"], relief=tk.FLAT, bd=1).pack(side=tk.LEFT, padx=(4, 0))
+
+        # Min Score
+        ms_row = tk.Frame(self._adv_frame, bg=t["panel_bg"])
+        ms_row.pack(fill=tk.X, pady=1)
+        tk.Label(ms_row, text="Min Score:", bg=t["panel_bg"], fg=t["fg"], font=FONT_SMALL, width=16, anchor=tk.W).pack(side=tk.LEFT)
+        self._min_score_var = tk.DoubleVar(value=retrieval.min_score if retrieval else 0.0)
+        self._min_score_scale = tk.Scale(ms_row, from_=0.0, to=1.0, resolution=0.05, orient=tk.HORIZONTAL, variable=self._min_score_var, length=120, font=FONT_SMALL, bg=t["panel_bg"], fg=t["fg"], troughcolor=t["input_bg"], highlightthickness=0)
+        self._min_score_scale.pack(side=tk.LEFT, padx=(4, 0))
+
+        # Reranker Top-N
+        rn_row = tk.Frame(self._adv_frame, bg=t["panel_bg"])
+        rn_row.pack(fill=tk.X, pady=1)
+        tk.Label(rn_row, text="Reranker Top-N:", bg=t["panel_bg"], fg=t["fg"], font=FONT_SMALL, width=16, anchor=tk.W).pack(side=tk.LEFT)
+        self._reranker_topn_var = tk.IntVar(value=retrieval.reranker_top_n if retrieval else 5)
+        tk.Spinbox(rn_row, from_=1, to=50, textvariable=self._reranker_topn_var, width=5, font=FONT_SMALL, bg=t["input_bg"], fg=t["input_fg"], relief=tk.FLAT, bd=1).pack(side=tk.LEFT, padx=(4, 0))
+
+        # Reranker Toggle
+        rt_row = tk.Frame(self._adv_frame, bg=t["panel_bg"])
+        rt_row.pack(fill=tk.X, pady=1)
+        self._reranker_enabled_var = tk.BooleanVar(value=retrieval.reranker_enabled if retrieval else True)
+        tk.Checkbutton(rt_row, text="Reranker Enabled", variable=self._reranker_enabled_var, bg=t["panel_bg"], fg=t["fg"], font=FONT_SMALL, selectcolor=t["input_bg"], activebackground=t["panel_bg"]).pack(side=tk.LEFT)
+
         # -- Network/status indicator --
         self._status_label = tk.Label(
             self, text="", fg=t["gray"], anchor=tk.W,
@@ -344,6 +387,26 @@ class QueryPanel(tk.LabelFrame):
         if self.question_entry.get() == "Type your question here...":
             self.question_entry.delete(0, tk.END)
 
+    def _toggle_advanced(self):
+        """Show/hide the Advanced retrieval controls drawer."""
+        if self._adv_visible:
+            self._adv_frame.pack_forget()
+            self._adv_toggle.config(text="+ Advanced")
+            self._adv_visible = False
+        else:
+            self._adv_frame.pack(fill=tk.X, pady=(0, 4), before=self._status_label)
+            self._adv_toggle.config(text="- Advanced")
+            self._adv_visible = True
+
+    def _get_advanced_config(self):
+        """Read current advanced control values for the next query."""
+        return {
+            "candidate_pool": self._candidate_pool_var.get(),
+            "min_score": self._min_score_var.get(),
+            "reranker_top_n": self._reranker_topn_var.get(),
+            "reranker_enabled": self._reranker_enabled_var.get(),
+        }
+
     # ------------------------------------------------------------------
     # Ready check
     # ------------------------------------------------------------------
@@ -404,11 +467,27 @@ class QueryPanel(tk.LabelFrame):
                             bg=t["inactive_btn_bg"], fg=t["inactive_btn_fg"])
         self.stop_btn.config(state=tk.NORMAL,
                              bg=t["red"], fg=t["accent_fg"])
-        self._status_label.config(text="Searching documents...", fg=t["orange"])
+        self._status_label.config(text="Classifying query...", fg=t["orange"])
 
         # Start elapsed timer
         self._stream_start = time.time()
         self._update_elapsed()
+
+        # Show phased status — classifying first, then update during query
+        def _phase_update():
+            elapsed = time.time() - self._stream_start
+            if self._model and self._model.is_querying:
+                if elapsed < 2:
+                    self._status_label.config(text="Classifying query...", fg=t["orange"])
+                elif elapsed < 5:
+                    self._status_label.config(text="Searching 10.4M documents...", fg=t["orange"])
+                else:
+                    self._status_label.config(
+                        text="Generating answer... ({:.0f}s)".format(elapsed),
+                        fg=t["orange"],
+                    )
+                self.after(500, _phase_update)
+        self.after(500, _phase_update)
 
         # Dispatch via model
         self._model.query(
@@ -510,7 +589,12 @@ class QueryPanel(tk.LabelFrame):
             btn.config(bg=t["panel_bg"], fg=t["fg"])
 
         self._finish_query_ui()
-        self._status_label.config(text="", fg=t["gray"])
+        elapsed = time.time() - self._stream_start if hasattr(self, "_stream_start") else 0
+        chunks = getattr(response, "chunks_used", 0)
+        self._status_label.config(
+            text="Done ({:.1f}s) — {} chunks retrieved".format(elapsed, chunks),
+            fg=t["green"],
+        )
 
     def _on_query_error(self, exc):
         """Handle query error with operator-friendly messages."""

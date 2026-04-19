@@ -35,6 +35,9 @@ class StatusBar(tk.Frame):
         self._stop_event = threading.Event()
         self._refresh_timer_id = None
         self._last_query_path = ""
+        self._llm_verified = False
+        self._llm_verify_detail = ""
+        self._llm_verify_running = False
 
         self._build_widgets(t)
         self._schedule_refresh()
@@ -80,6 +83,24 @@ class StatusBar(tk.Frame):
 
         self._sep3 = tk.Frame(self, width=1, bg=t["separator"])
         self._sep3.pack(side=tk.LEFT, fill=tk.Y, padx=8, pady=4)
+
+        # -- IBIT button --
+        self.ibit_btn = tk.Button(
+            self, text="Run IBIT", command=self._on_ibit,
+            font=FONT, bg=t["input_bg"], fg=t["fg"],
+            relief=tk.FLAT, bd=0, padx=8, pady=2,
+        )
+        self.ibit_btn.pack(side=tk.RIGHT, padx=(4, 8))
+
+        # -- IBIT badge --
+        self.ibit_label = tk.Label(
+            self, text="IBIT: --", anchor=tk.E,
+            padx=8, pady=4, bg=t["panel_bg"], fg=t["gray"], font=FONT,
+        )
+        self.ibit_label.pack(side=tk.RIGHT)
+
+        self._sep_ibit = tk.Frame(self, width=1, bg=t["separator"])
+        self._sep_ibit.pack(side=tk.RIGHT, fill=tk.Y, padx=8, pady=4)
 
         # -- Query path indicator (right-aligned) --
         self.path_label = tk.Label(
@@ -135,16 +156,22 @@ class StatusBar(tk.Frame):
                 fg=t["green"] if count > 0 else t["gray"],
             )
 
-            # FTS readiness on the configured store
+            # FTS readiness — honest 3-state: ready / warming up / not ready
             if self._model.fts_ready is True:
                 self.fts_label.config(text="FTS: ready", fg=t["green"])
+            elif self._model.fts_ready is None:
+                # Still initializing — hasn't been checked yet
+                self.fts_label.config(text="FTS: warming up...", fg=t["orange"])
             elif self._model.fts_ready is False:
-                if getattr(self._model, "fts_state", "") == "index_present":
-                    self.fts_label.config(text="FTS: present", fg=t["orange"])
+                state = getattr(self._model, "fts_state", "")
+                if state == "index_present":
+                    # Index exists but probe failed — rebuilding
+                    self.fts_label.config(text="FTS: rebuilding index...", fg=t["orange"])
+                elif state == "not checked":
+                    self.fts_label.config(text="FTS: warming up...", fg=t["orange"])
                 else:
-                    self.fts_label.config(text="FTS: missing", fg=t["red"])
-            else:
-                self.fts_label.config(text="FTS: checking...", fg=t["gray"])
+                    # Genuinely missing or broken
+                    self.fts_label.config(text="FTS: NOT READY", fg=t["red"])
 
             # Entities + health warning when stores are empty
             ent_count = self._model.entity_count
@@ -166,22 +193,149 @@ class StatusBar(tk.Frame):
                     fg=t["green"] if ent_count > 0 else t["gray"],
                 )
 
-            # LLM
-            if self._model.llm_available:
-                self.llm_label.config(text="LLM: available", fg=t["green"])
+            # LLM — show VERIFIED connection status (not just "client exists")
+            llm_client = getattr(self._model, "_llm_client", None)
+            if self._llm_verified:
+                self.llm_label.config(
+                    text=self._llm_verify_detail, fg=t["green"],
+                )
+            elif llm_client and getattr(llm_client, "available", False):
+                if not self._llm_verify_running:
+                    self._llm_verify_running = True
+                    self.llm_label.config(
+                        text="LLM: verifying connection...", fg=t["orange"],
+                    )
+                    self._verify_llm_connection(llm_client)
+                else:
+                    self.llm_label.config(
+                        text="LLM: verifying connection...", fg=t["orange"],
+                    )
             else:
-                self.llm_label.config(text="LLM: not configured", fg=t["orange"])
+                self.llm_label.config(text="LLM: NOT CONNECTED", fg=t["red"])
 
         except Exception as e:
             logger.debug("Status bar refresh error: %s", e)
+
+    def _verify_llm_connection(self, llm_client):
+        """Run a real API probe in a background thread. Sets _llm_verified on result."""
+        def _probe():
+            t = current_theme()
+            try:
+                provider = getattr(llm_client, "_provider", "unknown")
+                model = getattr(llm_client, "model", "unknown")
+                response = llm_client.call("Say OK", max_tokens=5)
+                if response and response.text:
+                    self._llm_verified = True
+                    if provider == "ollama":
+                        self._llm_verify_detail = "LLM: {} (local, verified)".format(model)
+                    else:
+                        self._llm_verify_detail = "LLM: {} (online, verified)".format(model)
+                    logger.info("LLM connection verified: %s (%s)", model, provider)
+                else:
+                    self._llm_verified = False
+                    self._llm_verify_detail = ""
+                    logger.warning("LLM probe returned empty response")
+            except Exception as e:
+                self._llm_verified = False
+                self._llm_verify_detail = ""
+                logger.warning("LLM connection verification failed: %s", e)
+            finally:
+                self._llm_verify_running = False
+                try:
+                    self.after(0, self._refresh_status)
+                except Exception:
+                    pass
+
+        threading.Thread(target=_probe, daemon=True).start()
+
+    def _on_ibit(self):
+        """Run IBIT and display results."""
+        if not self._model:
+            self.ibit_label.config(text="IBIT: no model", fg=current_theme()["red"])
+            return
+
+        t = current_theme()
+        self.ibit_label.config(text="IBIT: running...", fg=t["orange"])
+        self.ibit_btn.config(state=tk.DISABLED)
+        self.update_idletasks()
+
+        def _run():
+            try:
+                results = self._model.run_ibit()
+                passed = sum(1 for v in results.values() if v[0])
+                total = len(results)
+                total_ms = sum(v[2] for v in results.values())
+
+                if passed == total:
+                    badge = "IBIT: {}/{} PASS".format(passed, total)
+                    color = t["green"]
+                else:
+                    badge = "IBIT: {}/{} FAIL".format(passed, total)
+                    color = t["red"]
+
+                def _update():
+                    self.ibit_label.config(text=badge, fg=color)
+                    self.ibit_btn.config(state=tk.NORMAL)
+                    self._show_ibit_detail(results, total_ms)
+
+                self.after(0, _update)
+            except Exception as e:
+                def _error():
+                    self.ibit_label.config(
+                        text="IBIT: ERROR", fg=t["red"],
+                    )
+                    self.ibit_btn.config(state=tk.NORMAL)
+                self.after(0, _error)
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _show_ibit_detail(self, results, total_ms):
+        """Show IBIT detail popup (auto-closes after 10s)."""
+        t = current_theme()
+        popup = tk.Toplevel(self)
+        popup.title("IBIT Results")
+        popup.geometry("500x300")
+        popup.configure(bg=t["panel_bg"])
+
+        header = tk.Label(
+            popup, text="Built-In Test Results ({:,}ms)".format(total_ms),
+            font=("Segoe UI", 12, "bold"), bg=t["panel_bg"], fg=t["accent"],
+        )
+        header.pack(padx=16, pady=(12, 8))
+
+        for name, (passed, detail, elapsed) in results.items():
+            row = tk.Frame(popup, bg=t["panel_bg"])
+            row.pack(fill=tk.X, padx=16, pady=2)
+
+            tag = "[PASS]" if passed else "[FAIL]"
+            tag_color = t["green"] if passed else t["red"]
+
+            tk.Label(
+                row, text=tag, font=("Segoe UI", 10, "bold"),
+                bg=t["panel_bg"], fg=tag_color, width=7, anchor=tk.W,
+            ).pack(side=tk.LEFT)
+
+            tk.Label(
+                row, text="{}: {} ({}ms)".format(name, detail, elapsed),
+                font=("Segoe UI", 10), bg=t["panel_bg"], fg=t["fg"],
+                anchor=tk.W,
+            ).pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+        tk.Button(
+            popup, text="Close", command=popup.destroy,
+            font=FONT, bg=t["accent"], fg=t["accent_fg"],
+            relief=tk.FLAT, padx=16, pady=4,
+        ).pack(pady=(12, 8))
+
+        popup.after(10000, popup.destroy)
 
     def apply_theme(self, t):
         """Re-apply theme colors to all widgets."""
         self.configure(bg=t["panel_bg"])
         for w in (self.chunks_label, self.fts_label, self.entities_label,
-                  self.llm_label, self.path_label):
+                  self.llm_label, self.path_label, self.ibit_label):
             w.configure(bg=t["panel_bg"])
-        for sep in (self._sep1, self._sep_fts, self._sep2, self._sep3):
+        for sep in (self._sep1, self._sep_fts, self._sep2, self._sep3, self._sep_ibit):
             sep.configure(bg=t["separator"])
         self._refresh_status()
 
