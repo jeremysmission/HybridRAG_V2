@@ -308,25 +308,6 @@
     "corpus_grounding_evidence": "Real PO folder confirmed via anchor miner: '5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5000585586, PR 3000133844 Pulling Tape LLL monitoring system(GRAINGER)($598.00)/NG Packing List - Lualualei parts.xlsx' has 7,842 entity hits."
   },
   {
-    "query_id": "PQ-114",
-    "user_input": "What parts catalogs are available for monitoring system PVC components?",
-    "reference": "PVC parts catalog under 5.0 Logistics/Parts (Downloaded Information)/monitoring system Parts/PVC Parts/. The folder is confirmed via the declared pattern; specific part files would require deeper mining.",
-    "reference_contexts": [
-      "5.0 Logistics/Parts (Downloaded Information)/monitoring system Parts/PVC Parts/"
-    ],
-    "persona": "Logistics Lead",
-    "expected_query_type": "SEMANTIC",
-    "expected_document_family": "Logistics",
-    "expected_source_patterns": [
-      "5.0 Logistics/Parts (Downloaded Information)/monitoring system Parts/PVC Parts/%"
-    ],
-    "difficulty": "easy",
-    "rationale": "Tests retrieval of a parts catalog PDF (cantex-products-catalog.pdf).",
-    "expected_anchor_entities": {},
-    "has_ground_truth": true,
-    "corpus_grounding_evidence": "Folder 'monitoring system Parts/PVC Parts/' contains cantex-products-catalog.pdf with 505 entity hits."
-  },
-  {
     "query_id": "PQ-115",
     "user_input": "Which Tripp Lite power cord part number is used for legacy monitoring systems?",
     "reference": "The legacy monitoring system Tripp Lite power cord is part number P007-003 (CDW PN 3349509), a 3-foot 5-15P to C12 15A 14 AWG cable.",
@@ -891,29 +872,6 @@
     "corpus_grounding_evidence": "CDRL A027 DAA Accreditation Support Data has dedicated Updated POAM subfolder."
   },
   {
-    "query_id": "PQ-140",
-    "user_input": "What continuous monitoring audit results exist for August 2024?",
-    "reference": "August 2024 ConMon audit results would live under 3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2024/August/. Folder mining did not surface specific August 2024 files in the executed probes; only 2019 month folders were surfaced (Feb, Apr, May, Jul). The 2024 month coverage requires deeper folder walk on the cleaned store.",
-    "reference_contexts": [
-      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2024/August/"
-    ],
-    "persona": "Cybersecurity / Network Admin",
-    "expected_query_type": "SEMANTIC",
-    "expected_document_family": "Cybersecurity",
-    "expected_source_patterns": [
-      "3.0 Cybersecurity/ISSO/Continuous_Monitoring/Monthly Audits-Archive/2024/August/%"
-    ],
-    "difficulty": "medium",
-    "rationale": "Monthly ConMon audit retrieval for a specific month. Real folder structure.",
-    "expected_anchor_entities": {
-      "DATE": [
-        "August 2024"
-      ]
-    },
-    "has_ground_truth": true,
-    "corpus_grounding_evidence": "Folder 'Monthly Audits-Archive/2024/August/' confirmed in earlier corpus exploration."
-  },
-  {
     "query_id": "PQ-141",
     "user_input": "What Apache Log4j directive has been issued for enterprise program systems?",
     "reference": "The Log4j directive is MTO 2021-350-001, filed under 3.0 Cybersecurity/Directives/MTO 2021-350-001 Apache Log4j.",
@@ -1102,41 +1060,6 @@
     "expected_anchor_entities": {},
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Folders for monitoring system Sustainment Base Year through NEW BASE YR confirmed in Procurement tree."
-  },
-  {
-    "query_id": "PQ-149",
-    "user_input": "Which monitoring system and legacy monitoring system sites have had installation visits documented?",
-    "reference": "Confirmed sites with site-visit folders include both monitoring system and legacy monitoring system sites: Awase Okinawa JP, Curacao, Guam, Thule, Misawa, Lualualei, Eareckson, Eglin, Eielson, Kwajalein, Wake, San Vito, Ascension, Niger, Singapore, Diego Garcia, Djibouti, Learmonth, Fairford, Alpena, Vandenberg, Azores, Kirtland. All under ! Site Visits/(01) Sites/.",
-    "reference_contexts": [
-      "! Site Visits/(01) Sites/Awase (Okinawa JP)/",
-      "! Site Visits/(01) Sites/Thule/",
-      "! Site Visits/(01) Sites/Guam/",
-      "! Site Visits/(01) Sites/Misawa/",
-      "! Site Visits/(01) Sites/Curacao/",
-      "! Site Visits/(01) Sites/Ascension/",
-      "! Site Visits/(01) Sites/Kirtland/"
-    ],
-    "persona": "Aggregation / Cross-role",
-    "expected_query_type": "AGGREGATE",
-    "expected_document_family": "Site Visits",
-    "expected_source_patterns": [
-      "! Site Visits/(01) Sites/%"
-    ],
-    "difficulty": "medium",
-    "rationale": "Cross-folder site enumeration. 30+ sites under Site Visits/(01) Sites/.",
-    "expected_anchor_entities": {
-      "SITE": [
-        "Thule",
-        "Eglin",
-        "Vandenberg",
-        "Ascension",
-        "Guam",
-        "Awase",
-        "Kwajalein"
-      ]
-    },
-    "has_ground_truth": true,
-    "corpus_grounding_evidence": "30+ site folders confirmed under '! Site Visits/(01) Sites/' including all major OCONUS and CONUS installations."
   },
   {
     "query_id": "PQ-150",
@@ -1446,39 +1369,6 @@
     },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Folder '5.0 Logistics/Shipments/2024 - Shipments/Learmonth/2024_08_26 - Learmonth (Comm)/' confirmed with 7,693 entity hits."
-  },
-  {
-    "query_id": "PQ-164",
-    "user_input": "What return shipments from OCONUS sites were processed in 2024?",
-    "reference": "Confirmed 2024 OCONUS return shipments include: Learmonth (2024-09-17 Comm), Djibouti (2024-10-11 Mil-Air), Thule (2024-08-23 Return Shipment), Eielson (2024-08-31 Mil-Air), and the Azores Return (2024-06-14, anchored in PQ-171). All under 5.0 Logistics/Shipments/2024 - Shipments/.",
-    "reference_contexts": [
-      "5.0 Logistics/Shipments/2024 - Shipments/Learmonth/2024_09_17 - Learmonth Return (Comm)/",
-      "5.0 Logistics/Shipments/2024 - Shipments/Djibouti/2024_10_11 - Djibouti Return (Mil-Air)/",
-      "5.0 Logistics/Shipments/2024 - Shipments/Thule/2024_08_23 - Thule Return Shipment/",
-      "5.0 Logistics/Shipments/2024 - Shipments/Eielson/2024_08_31 - Eielson Return (Mil-Air)/",
-      "5.0 Logistics/Shipments/2024 - Shipments/Azores/2024_06_14 - Azores Return/"
-    ],
-    "persona": "Logistics Lead",
-    "expected_query_type": "AGGREGATE",
-    "expected_document_family": "Logistics",
-    "expected_source_patterns": [
-      "5.0 Logistics/Shipments/2024 - Shipments/%Return%"
-    ],
-    "difficulty": "medium",
-    "rationale": "2024 OCONUS return shipment AGGREGATE. Real returns confirmed: Azores 2024-06-14, Djibouti 2024-10-11, Learmonth 2024-09-17, Thule 2024-08-23.",
-    "expected_anchor_entities": {
-      "SITE": [
-        "Azores",
-        "Djibouti",
-        "Learmonth",
-        "Thule"
-      ],
-      "DATE": [
-        "2024"
-      ]
-    },
-    "has_ground_truth": true,
-    "corpus_grounding_evidence": "Four 2024 return shipments confirmed via folder mining: Azores Return, Djibouti Return, Learmonth Return, Thule Return Shipment."
   },
   {
     "query_id": "PQ-165",
@@ -2098,31 +1988,6 @@
     },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Folder '5.0 Logistics/Procurement/002 - Received/Palau legacy monitoring system Installation/' confirmed in procurement tree."
-  },
-  {
-    "query_id": "PQ-189",
-    "user_input": "What installation was performed at American Samoa for legacy monitoring system?",
-    "reference": "American Samoa legacy monitoring system installation artifacts live under both #legacy monitoring system Sites/1_Sites/American_Samoa/Installation/Allied Support/ (with the enterprise program SOW American Samoa - Cable installation SOW) and ! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/ which includes Deliverables Report IGSI-812. As-built drawings are at 4-Drawings/4-legacy monitoring system/2_As-Built Drawings (Sites)/201811080-- (American Samoa legacy monitoring system As-Builts)/. As with Palau, no 'American Samoa legacy monitoring system Installation' procurement period folder surfaced; install lives in the site tree.",
-    "reference_contexts": [
-      "#legacy monitoring system Sites/1_Sites/American_Samoa/Installation/Allied Support/IGS SOW American Samoa - Cable installation/",
-      "! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/Deliverables Report IGSI-812/",
-      "4-Drawings/4-legacy monitoring system/2_As-Built Drawings (Sites)/201811080-- (American Samoa legacy monitoring system As-Builts)/"
-    ],
-    "persona": "Field Engineer",
-    "expected_query_type": "SEMANTIC",
-    "expected_document_family": "Logistics",
-    "expected_source_patterns": [
-      "5.0 Logistics/Procurement/002 - Received/American Samoa legacy monitoring system Installation/%"
-    ],
-    "difficulty": "medium",
-    "rationale": "American Samoa legacy monitoring system installation narrative recall.",
-    "expected_anchor_entities": {
-      "SITE": [
-        "American Samoa"
-      ]
-    },
-    "has_ground_truth": true,
-    "corpus_grounding_evidence": "Folder '5.0 Logistics/Procurement/002 - Received/American Samoa legacy monitoring system Installation/' confirmed."
   },
   {
     "query_id": "PQ-190",
@@ -5804,36 +5669,6 @@
     "corpus_grounding_evidence": "Anchor: folders probe --like '%A009%' returned the IGSI-2497 deliverable filename."
   },
   {
-    "query_id": "PQ-337",
-    "user_input": "Which A009 monthly status reports were delivered in 2025?",
-    "reference": "At least three: IGSI-2494 (2025-03-11), IGSI-2496 (2025-05-13), IGSI-2497 (2025-06-17). All under 1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/.",
-    "reference_contexts": [
-      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/47QFRA22F0009_IGSI-2494_Monthly-Status-Report_2025-03-11.pdf",
-      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/47QFRA22F0009_IGSI-2496_Monthly-Status-Report_2025-05-13.pdf",
-      "1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/47QFRA22F0009_IGSI-2497_Monthly-Status-Report_2025-06-17.pdf"
-    ],
-    "persona": "Program Manager",
-    "expected_query_type": "AGGREGATE",
-    "expected_document_family": "CDRLs",
-    "expected_source_patterns": [
-      "%A009 - Monthly Status Report/%47QFRA22F0009_IGSI-%2025-%"
-    ],
-    "difficulty": "medium",
-    "rationale": "Year-scoped narrow enumeration. Confirmed: IGSI-2494 (2025-03-11), IGSI-2496 (2025-05-13), IGSI-2497 (2025-06-17).",
-    "expected_anchor_entities": {
-      "DATE": [
-        "2025"
-      ],
-      "INCIDENT_ID": [
-        "IGSI-2494",
-        "IGSI-2496",
-        "IGSI-2497"
-      ]
-    },
-    "has_ground_truth": true,
-    "corpus_grounding_evidence": "Anchor: folders probe --like '%A009%' returned three 2025-dated A009 monthly status PDFs at top of count distribution."
-  },
-  {
     "query_id": "PQ-338",
     "user_input": "What was the May 2023 monthly status report deliverable ID?",
     "reference": "IGSI-97. Filename: Deliverables Report IGSI-97 enterprise program Monthly Status Report - May23 (A009).pdf, under 1.0 enterprise program DM - Restricted/OASIS/A009 - Monthly Status Report/2023/.",
@@ -6076,49 +5911,6 @@
     },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned 7+ distinct Oct-Nov 2025 receipts under Soldering Material COCO1."
-  },
-  {
-    "query_id": "PQ-348",
-    "user_input": "What is FEP Recon and how often is it produced?",
-    "reference": "Recurring procurement reconciliation file family. Confirmed files include FEP Recon 20250416.xlsx and FEP Recon 20250507.xlsx, suggesting an approximately weekly cadence. All under 5.0 Logistics/Procurement/013 - FEP Recon/2025/.",
-    "reference_contexts": [
-      "5.0 Logistics/Procurement/013 - FEP Recon/2025/FEP Recon 20250416.xlsx",
-      "5.0 Logistics/Procurement/013 - FEP Recon/2025/FEP Recon 20250507.xlsx"
-    ],
-    "persona": "Logistics Lead",
-    "expected_query_type": "SEMANTIC",
-    "expected_document_family": "Logistics",
-    "expected_source_patterns": [
-      "%5.0 Logistics/Procurement/013 - FEP Recon%"
-    ],
-    "difficulty": "medium",
-    "rationale": "Process question about a recurring procurement reconciliation file family. Folder structure suggests roughly weekly cadence.",
-    "expected_anchor_entities": {},
-    "has_ground_truth": true,
-    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned multiple dated FEP Recon xlsx files under 5.0 Logistics/Procurement/013 - FEP Recon/2025/."
-  },
-  {
-    "query_id": "PQ-349",
-    "user_input": "Show me the FEP Recon file from 2025-04-16.",
-    "reference": "FEP Recon 20250416.xlsx under 5.0 Logistics/Procurement/013 - FEP Recon/2025/.",
-    "reference_contexts": [
-      "5.0 Logistics/Procurement/013 - FEP Recon/2025/FEP Recon 20250416.xlsx"
-    ],
-    "persona": "Logistics Lead",
-    "expected_query_type": "TABULAR",
-    "expected_document_family": "Logistics",
-    "expected_source_patterns": [
-      "%013 - FEP Recon/2025/FEP Recon 20250416%"
-    ],
-    "difficulty": "easy",
-    "rationale": "Single dated reconciliation spreadsheet lookup. Filename uses YYYYMMDD compact format.",
-    "expected_anchor_entities": {
-      "DATE": [
-        "2025-04-16"
-      ]
-    },
-    "has_ground_truth": true,
-    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned FEP Recon 20250416.xlsx."
   },
   {
     "query_id": "PQ-350",
@@ -6859,31 +6651,6 @@
     },
     "has_ground_truth": true,
     "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned a single confirmed received PO under the DMEA installation period folder."
-  },
-  {
-    "query_id": "PQ-380",
-    "user_input": "Which received POs are tied to monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)?",
-    "reference": "At least two confirmed: PO 5000646999 (Half Octave Filter Card from LDI, $6,250.00) and PO 5300163657 (Calibration from Micro Precision, $12,720.00). Both under 5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/.",
-    "reference_contexts": [
-      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/PO - 5000646999, PR 3000180760 Half Octave Filter Card(LDI)($6,250.00)/",
-      "5.0 Logistics/Procurement/002 - Received/monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/PO - 5300163657, PR 3000179491 Calibration (Micro Precision)($12,720.00)/"
-    ],
-    "persona": "Aggregation / Cross-role",
-    "expected_query_type": "AGGREGATE",
-    "expected_document_family": "Logistics",
-    "expected_source_patterns": [
-      "%monitoring system Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/PO - %"
-    ],
-    "difficulty": "medium",
-    "rationale": "Period-scoped PO enumeration. Confirmed: 5000646999 (Half Octave Filter Card) and 5300163657 (Calibration).",
-    "expected_anchor_entities": {
-      "PO": [
-        "5000646999",
-        "5300163657"
-      ]
-    },
-    "has_ground_truth": true,
-    "corpus_grounding_evidence": "Anchor: folders probe --like '%Procurement%2025%' returned both POs under the NEW BASE YR period folder."
   },
   {
     "query_id": "PQ-381",
