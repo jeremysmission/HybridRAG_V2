@@ -1,6 +1,6 @@
 # QA Workbench Overview
 
-Rendered: 2026-04-18 18:27
+Rendered: 2026-04-18 19:39
 Repo root: `C:\HybridRAG_V2`
 Local-only root: `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY`
 
