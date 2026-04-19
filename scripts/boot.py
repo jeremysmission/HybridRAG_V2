@@ -94,8 +94,28 @@ def boot_system(config: V2Config | str | Path | None = None) -> SimpleNamespace:
             generator=generator,
         )
 
+    # Aggregation executor is built unconditionally — does not require an LLM.
+    aggregation_executor = None
+    try:
+        from src.query.aggregation_executor import build_default_executor
+        aggregation_executor = build_default_executor(
+            data_dir=cfg.paths.lance_db,
+            aliases_yaml="config/canonical_aliases.yaml",
+        )
+        cov = aggregation_executor.store.coverage_summary()
+        print(
+            f"[OK] Aggregation executor attached "
+            f"(failure_events={cov.get('total_events', 0)}, "
+            f"with_system={cov.get('with_system', 0)})"
+        )
+    except Exception as agg_exc:
+        print(f"[WARN] Aggregation executor init failed: {agg_exc}")
+
+    # Pipeline assembles when core retrieval is present. Generator is optional:
+    # aggregation queries work without an LLM; non-aggregation queries return
+    # a retrieval-only response.
     pipeline = None
-    if generator is not None:
+    if query_router and vector_retriever and context_builder:
         pipeline = QueryPipeline(
             router=query_router,
             vector_retriever=vector_retriever,
@@ -103,7 +123,12 @@ def boot_system(config: V2Config | str | Path | None = None) -> SimpleNamespace:
             context_builder=context_builder,
             generator=generator,
             crag_verifier=crag_verifier,
+            aggregation_executor=aggregation_executor,
         )
+        if generator is None:
+            print("[OK] Query pipeline assembled in aggregation-only mode (no LLM)")
+        else:
+            print("[OK] Query pipeline assembled")
 
     return SimpleNamespace(
         config=cfg,
@@ -170,6 +195,13 @@ def main() -> None:
     print("=" * 50)
     print("  V2 ready.")
     print("=" * 50)
+
+    # Actually build the backend so the aggregation executor attaches and logs.
+    # Boot is more than a config smoke — QA needs to see pipeline state.
+    try:
+        boot_system(config)
+    except Exception as build_exc:
+        print(f"[WARN] Backend assembly during boot validation failed: {build_exc}")
 
 
 if __name__ == "__main__":

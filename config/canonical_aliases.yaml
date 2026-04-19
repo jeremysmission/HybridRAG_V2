@@ -1,0 +1,144 @@
+# Canonical aliases for failure-aggregation queries.
+# Seeded 2026-04-18 from 93,636 source_metadata rows.
+# Used by src/query/aggregation_executor.py to normalize query filters.
+
+systems:
+  NEXION:
+    canonical: NEXION
+    aliases:
+      - nexion
+      - NEXION
+      - Nexion
+      - NXN
+      - nxn
+  ISTO:
+    canonical: ISTO
+    aliases:
+      - isto
+      - ISTO
+      - Isto
+
+# Sites populated from source_metadata.site_token (covers 29,659 tokened docs).
+sites:
+  vandenberg:
+    full_name: Vandenberg
+    aliases:
+      - vandenberg
+      - vafb
+      - vandenberg afb
+  guam:
+    full_name: Guam
+    aliases:
+      - guam
+      - andersen
+      - andersen afb
+  learmonth:
+    full_name: Learmonth
+    aliases:
+      - learmonth
+      - learmonth hf
+  ascension:
+    full_name: Ascension
+    aliases:
+      - ascension
+      - ascension island
+  thule:
+    full_name: Thule
+    aliases:
+      - thule
+      - thule afb
+      - pituffik
+  eglin:
+    full_name: Eglin
+    aliases:
+      - eglin
+      - eglin afb
+  alpena:
+    full_name: Alpena
+    aliases:
+      - alpena
+      - alpena ccrcs
+  fairford:
+    full_name: Fairford
+    aliases:
+      - fairford
+      - raf fairford
+  wake:
+    full_name: Wake
+    aliases:
+      - wake
+      - wake island
+  hawaii:
+    full_name: Hawaii
+    aliases:
+      - hawaii
+      - kaena
+      - kaena point
+  azores:
+    full_name: Azores
+    aliases:
+      - azores
+      - lajes
+      - lajes field
+  okinawa:
+    full_name: Okinawa
+    aliases:
+      - okinawa
+      - kadena
+      - kadena ab
+  lualualei:
+    full_name: Lualualei
+    aliases:
+      - lualualei
+  curacao:
+    full_name: Curacao
+    aliases:
+      - curacao
+  djibouti:
+    full_name: Djibouti
+    aliases:
+      - djibouti
+      - djb
+      - camp lemonnier
+      - lemonnier
+  palau:
+    full_name: Palau
+    aliases:
+      - palau
+  kwajalein:
+    full_name: Kwajalein
+    aliases:
+      - kwajalein
+  niger:
+    full_name: Niger
+    aliases:
+      - niger
+      - niamey
+  american_samoa:
+    full_name: American Samoa
+    aliases:
+      - american samoa
+      - samoa
+  misawa:
+    full_name: Misawa
+    aliases:
+      - misawa
+      - misawa ab
+  diego_garcia:
+    full_name: Diego Garcia
+    aliases:
+      - diego garcia
+  awase:
+    full_name: Awase
+    aliases:
+      - awase
+
+# Year canonicalizer handled in code (src/query/aggregation_executor.py parse_year_range).
+# Accepted formats: 2024, CY2024, FY24, FY2024, 04/2024, Q1-2024, Q1 2024, 2024-Q1,
+# "from 2022-2025", "between X and Y", "in 2024", "past N years".
+
+part_number_patterns:
+  - 'SEMS3D-\d+'
+  - '[A-Z]{2,4}-\d{3,5}'
+  - '[A-Z]{2,4}\d{3,5}'
+  - 'TC\s?\d{2}-\d{2}-\d{2}-\d{3}'

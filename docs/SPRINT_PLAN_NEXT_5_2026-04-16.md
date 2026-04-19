@@ -71,6 +71,7 @@ No lane touches another lane's code surfaces. All lanes share the eval harness f
 - [ ] Add PART_NUMBER, CONTRACT, SITE typed entities (currently 0 typed entities despite 19.9M generic)
 - [ ] Key-value colon parsing for 5.4M semi-structured chunks
 - [ ] A/B test: entity-type queries before/after population
+- [ ] **Aggregation capability slice (Slices 0-2): gold top-N pack, `failure_events` table, extractor wire-up.** See `SPRINT_SLICE_AGGREGATION_CAPABILITY_2026-04-18.md`
 
 ### Lane C: Deploy + Demo Prep
 - [ ] Test install scripts on BOTH work machines (laptop + desktop) with real proxy
@@ -101,6 +102,7 @@ No lane touches another lane's code surfaces. All lanes share the eval harness f
 - [ ] Cross-chunk dedup in quality_gate.py (marathon Hash Point: `TC 16-06-23-003` vs `TC16-06-23-003`)
 - [ ] Run CoPilot+ Max hardtail extraction on 1000 new chunks (overnight, free on Max plan)
 - [ ] Compare: updated Tier 1 regex vs phi4 vs CoPilot+ on same hardtail pack
+- [ ] **Aggregation capability slice (Slices 3-7): canonical normalization, aggregate SQL API, router + generator wire-up, A/B, demo rehearsal.** See `SPRINT_SLICE_AGGREGATION_CAPABILITY_2026-04-18.md`. Demo queries: "highest failing part numbers in Nexion 2024", "ISTO Djibouti 2022-2025", "top 5 failure parts per year for past 7 years"
 
 ### Lane C: Deploy + Demo Prep
 - [ ] CorpusForge install script proxy-hardened

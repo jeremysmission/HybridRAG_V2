@@ -237,9 +237,28 @@ def _load_backends(app, config, logger):
             )
             generator = Generator(llm_client) if llm_client and llm_client.available else None
 
-            if router and vector_retriever and context_builder and generator:
+            # Aggregation executor is built unconditionally (does not require an
+            # LLM). Logged so QA can verify the attach at boot time.
+            aggregation_executor = None
+            try:
+                from src.query.aggregation_executor import build_default_executor
+                aggregation_executor = build_default_executor(
+                    data_dir=config.paths.lance_db,
+                    aliases_yaml="config/canonical_aliases.yaml",
+                )
+                cov = aggregation_executor.store.coverage_summary()
+                logger.info(
+                    "[OK] Aggregation executor attached (failure_events=%d, with_system=%d)",
+                    cov.get("total_events", 0), cov.get("with_system", 0),
+                )
+            except Exception as agg_exc:
+                logger.warning("[WARN] Aggregation executor init failed: %s", agg_exc)
+
+            # Pipeline assembles when core retrieval exists. Generator is
+            # optional — aggregation queries work without an LLM (SAG pattern).
+            if router and vector_retriever and context_builder:
                 crag_verifier = None
-                if config.crag.enabled:
+                if config.crag.enabled and generator:
                     try:
                         from src.query.crag_verifier import CRAGVerifier
                         crag_verifier = CRAGVerifier(
@@ -260,16 +279,20 @@ def _load_backends(app, config, logger):
                     context_builder=context_builder,
                     generator=generator,
                     crag_verifier=crag_verifier,
+                    aggregation_executor=aggregation_executor,
                 )
-                logger.info("[OK] Query pipeline assembled")
+                if generator is None:
+                    logger.info(
+                        "[OK] Query pipeline assembled in aggregation-only mode (no LLM)"
+                    )
+                else:
+                    logger.info("[OK] Query pipeline assembled")
             else:
                 missing = []
                 if not router:
                     missing.append("router")
                 if not vector_retriever:
                     missing.append("vector_retriever")
-                if not generator:
-                    missing.append("generator")
                 logger.warning(
                     "[WARN] Pipeline incomplete (missing: %s)",
                     ", ".join(missing),

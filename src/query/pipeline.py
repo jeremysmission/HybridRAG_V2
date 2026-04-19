@@ -24,6 +24,7 @@ from src.query.entity_retriever import EntityRetriever, StructuredResult
 from src.query.context_builder import ContextBuilder, GeneratorContext
 from src.query.generator import Generator, QueryResponse
 from src.query.crag_verifier import CRAGVerifier
+from src.query.aggregation_executor import AggregationExecutor, AggregationResult
 from src.store.lance_store import ChunkResult
 
 logger = logging.getLogger(__name__)
@@ -82,15 +83,21 @@ class QueryPipeline:
         vector_retriever: VectorRetriever,
         entity_retriever: EntityRetriever | None,
         context_builder: ContextBuilder,
-        generator: Generator,
+        generator: Generator | None,
         crag_verifier: CRAGVerifier | None = None,
+        aggregation_executor: AggregationExecutor | None = None,
     ):
+        # generator is Optional to support aggregation-only mode when no LLM is
+        # configured. The deterministic aggregation branch (SAG) returns its
+        # answer directly from SQL — no LLM required. Non-aggregation queries
+        # fall through to a retrieval-only response when generator is None.
         self.router = router
         self.vector_retriever = vector_retriever
         self.entity_retriever = entity_retriever
         self.context_builder = context_builder
         self.generator = generator
         self.crag_verifier = crag_verifier
+        self.aggregation_executor = aggregation_executor
         self._query_cache: OrderedDict[str, QueryResponse] = OrderedDict()
         self._cache_max = 128
 
@@ -112,6 +119,35 @@ class QueryPipeline:
             )
 
         start = time.perf_counter()
+
+        # Deterministic failure-aggregation branch (SAG pattern).
+        # Intercepts "top N / highest / rank" + "failure/failing" queries BEFORE
+        # the LLM router. Falls through to normal RAG when no match.
+        if self.aggregation_executor is not None:
+            agg_start = time.perf_counter()
+            agg_result = self.aggregation_executor.try_execute(query_text)
+            agg_ms = int((time.perf_counter() - agg_start) * 1000)
+            if agg_result is not None and agg_result.tier != "RED":
+                elapsed = int((time.perf_counter() - start) * 1000)
+                response = QueryResponse(
+                    answer=agg_result.context_text,
+                    confidence=agg_result.tier,
+                    query_path=f"AGGREGATION_{agg_result.tier}",
+                    sources=agg_result.sources,
+                    chunks_used=len(agg_result.ranked_rows) + sum(
+                        len(v) for v in agg_result.evidence_by_part.values()
+                    ),
+                    latency_ms=elapsed,
+                    stage_timings_ms={
+                        "aggregation_executor": agg_ms,
+                        "total": elapsed,
+                    },
+                )
+                if len(self._query_cache) >= self._cache_max:
+                    self._query_cache.popitem(last=False)
+                self._query_cache[cache_key] = response
+                return response
+
         classification, context, stage_timings = self.retrieve_context(query_text, top_k)
 
         if context is None:
@@ -128,6 +164,25 @@ class QueryPipeline:
             )
 
         # Step 3: Generate
+        if self.generator is None:
+            # No LLM configured — return retrieval-only response. This path is
+            # reached for non-aggregation queries when the system is running in
+            # aggregation-only mode. Aggregation queries never reach here
+            # because they return early above.
+            elapsed = int((time.perf_counter() - start) * 1000)
+            stage_timings["total"] = elapsed
+            return QueryResponse(
+                answer=(
+                    "[LLM_UNAVAILABLE] No LLM narration available — showing "
+                    "retrieval context only.\n\n" + context.context_text
+                ),
+                confidence="LLM_UNAVAILABLE",
+                query_path=classification.query_type,
+                sources=context.sources,
+                chunks_used=context.chunk_count,
+                latency_ms=elapsed,
+                stage_timings_ms=stage_timings,
+            )
         step_start = time.perf_counter()
         response = self.generator.generate(context, query_text)
         stage_timings["generation"] = int((time.perf_counter() - step_start) * 1000)
