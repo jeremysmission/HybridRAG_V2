@@ -49,6 +49,12 @@ _PANEL_DEFS = [
         "cls": "QueryPanel",
     },
     {
+        "key": "history",
+        "label": "History",
+        "module": "src.gui.panels.history_panel",
+        "cls": "HistoryPanel",
+    },
+    {
         "key": "entity",
         "label": "Entities",
         "module": "src.gui.panels.entity_panel",

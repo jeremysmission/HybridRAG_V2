@@ -43,6 +43,56 @@ _CONFIDENCE_COLORS = {
     "NOT_FOUND": "red",
 }
 
+# Evidence basis classification for aggregation-capable answers
+_EVIDENCE_LABELS = {
+    "EXACT_COUNT": ("\u2713 Exact Count", "green"),
+    "BOUNDED_COUNT": ("\u2248 Bounded Count", "orange"),
+    "INFERRED_SCHEDULE": ("\u23F0 Inferred Schedule", "orange"),
+    "QUALITATIVE": ("\u2139 Qualitative", "accent"),
+}
+
+
+def _classify_evidence_basis(query: str, answer: str, query_path: str) -> str:
+    """Classify the evidence basis of an answer for operator display.
+
+    Returns one of: EXACT_COUNT, BOUNDED_COUNT, INFERRED_SCHEDULE, QUALITATIVE.
+    """
+    q = query.lower()
+    a = answer.lower()
+
+    # Check for aggregation/count queries
+    is_count_query = any(w in q for w in (
+        "how many", "count", "total", "number of", "list all",
+        "which sites", "which cdrl", "what deliverables",
+    ))
+
+    if is_count_query and query_path == "AGGREGATE":
+        # Check if answer contains specific numbers
+        import re
+        has_number = bool(re.search(r"\b\d+\b", a))
+        has_exact_language = any(w in a for w in (
+            "found", "total of", "identified", "counted", "records show",
+        ))
+        if has_number and has_exact_language:
+            return "EXACT_COUNT"
+        elif has_number:
+            return "BOUNDED_COUNT"
+
+    # Check for schedule/cadence queries
+    is_schedule_query = any(w in q for w in (
+        "when is", "due date", "schedule", "deadline", "next",
+        "recurring", "cadence", "monthly", "quarterly",
+    ))
+    if is_schedule_query:
+        has_inferred = any(w in a for w in (
+            "appears to", "likely", "based on", "pattern suggests",
+            "recurring", "typically",
+        ))
+        if has_inferred:
+            return "INFERRED_SCHEDULE"
+
+    return "QUALITATIVE"
+
 
 class QueryPanel(tk.LabelFrame):
     """Query input and answer display panel.
@@ -92,6 +142,12 @@ class QueryPanel(tk.LabelFrame):
             bg=t["panel_bg"], fg=t["gray"], padx=8, pady=2,
         )
         self._confidence_badge.pack(side=tk.LEFT, padx=(8, 0))
+
+        self._evidence_badge = tk.Label(
+            badge_row, text="", font=FONT_BOLD,
+            bg=t["panel_bg"], fg=t["gray"], padx=8, pady=2,
+        )
+        self._evidence_badge.pack(side=tk.LEFT, padx=(8, 0))
 
         self._elapsed_label = tk.Label(
             badge_row, text="", font=FONT_SMALL,
@@ -341,6 +397,7 @@ class QueryPanel(tk.LabelFrame):
         # Reset badges
         self._path_badge.config(text="", fg=t["gray"])
         self._confidence_badge.config(text="", fg=t["gray"])
+        self._evidence_badge.config(text="", fg=t["gray"], bg=t["panel_bg"])
 
         # Update UI state
         self.ask_btn.config(state=tk.DISABLED,
@@ -391,12 +448,37 @@ class QueryPanel(tk.LabelFrame):
             bg=t.get(conf_color_key, t["gray"]),
         )
 
-        # Display answer
-        answer = getattr(response, "answer", "(no answer)")
+        # Display answer with empty/weak-evidence handling
+        answer = getattr(response, "answer", "") or ""
+        if not answer.strip() or answer.strip() == "[NOT_FOUND]":
+            answer = (
+                "No relevant documents found for this query.\n\n"
+                "Try:\n"
+                "  - Rephrasing with more specific terms\n"
+                "  - Including a CDRL code (e.g., A009), site name, or date\n"
+                "  - Checking the Entities tab for available data"
+            )
+        elif confidence == "NOT_FOUND":
+            answer = (
+                "The search found some documents but confidence is low.\n\n"
+                + answer + "\n\n"
+                "Note: This answer may be incomplete. Consider refining your query "
+                "with more specific terms."
+            )
         self.answer_text.config(state=tk.NORMAL)
         self.answer_text.delete("1.0", tk.END)
         self.answer_text.insert("1.0", answer)
         self.answer_text.config(state=tk.DISABLED)
+
+        # Set evidence basis badge
+        question = self.question_entry.get().strip()
+        evidence_type = _classify_evidence_basis(question, answer, path)
+        ev_label, ev_color_key = _EVIDENCE_LABELS.get(evidence_type, ("", "gray"))
+        self._evidence_badge.config(
+            text=" {} ".format(ev_label),
+            fg=t["accent_fg"],
+            bg=t.get(ev_color_key, t["gray"]),
+        )
 
         # Update sources
         sources = getattr(response, "sources", []) or []
@@ -431,18 +513,54 @@ class QueryPanel(tk.LabelFrame):
         self._status_label.config(text="", fg=t["gray"])
 
     def _on_query_error(self, exc):
-        """Handle query error (runs on main thread via safe_after)."""
+        """Handle query error with operator-friendly messages."""
         t = current_theme()
+        exc_str = str(exc).lower()
+
+        # Classify the error for operator-friendly messaging
+        if "timeout" in exc_str or "timed out" in exc_str:
+            title = "Query Timed Out"
+            message = (
+                "The search took too long and was stopped.\n\n"
+                "Try:\n"
+                "  - Simplifying your question\n"
+                "  - Reducing Top-K to 5\n"
+                "  - Asking about a specific document or site"
+            )
+            badge_text = " TIMEOUT "
+        elif "connection" in exc_str or "connect" in exc_str or "refused" in exc_str:
+            title = "Service Unavailable"
+            message = (
+                "Could not connect to the search backend.\n\n"
+                "Check that:\n"
+                "  - The LLM service is running\n"
+                "  - Network connection is available\n"
+                "  - Try again in a moment"
+            )
+            badge_text = " OFFLINE "
+        elif "api" in exc_str or "rate" in exc_str or "quota" in exc_str:
+            title = "API Error"
+            message = (
+                "The language model service returned an error.\n\n"
+                "This may be a temporary issue. Try again in a moment.\n"
+                "If it persists, check API key configuration in Settings."
+            )
+            badge_text = " API ERROR "
+        else:
+            title = "Query Failed"
+            message = "An unexpected error occurred:\n\n{}".format(str(exc))
+            badge_text = " ERROR "
+
         self.answer_text.config(state=tk.NORMAL)
         self.answer_text.delete("1.0", tk.END)
-        self.answer_text.insert("1.0", "Error: {}".format(str(exc)))
+        self.answer_text.insert("1.0", message)
         self.answer_text.config(state=tk.DISABLED)
 
         self._confidence_badge.config(
-            text=" ERROR ", fg=t["accent_fg"], bg=t["red"],
+            text=badge_text, fg=t["accent_fg"], bg=t["red"],
         )
         self._finish_query_ui()
-        self._status_label.config(text="Query failed.", fg=t["red"])
+        self._status_label.config(text=title, fg=t["red"])
 
     def _finish_query_ui(self):
         """Restore UI to idle state after query completes or cancels."""
@@ -474,9 +592,21 @@ class QueryPanel(tk.LabelFrame):
 
     def _update_elapsed(self):
         """Update elapsed time display every 100ms during a query."""
+        t = current_theme()
         if self._model and self._model.is_querying:
             elapsed = time.time() - self._stream_start
             self._elapsed_label.config(text="{:.1f}s".format(elapsed))
+            # Slow query warning at 30s
+            if elapsed > 30 and elapsed < 31:
+                self._status_label.config(
+                    text="Still searching... complex queries may take up to 60s.",
+                    fg=t["orange"],
+                )
+            elif elapsed > 60 and elapsed < 61:
+                self._status_label.config(
+                    text="This query is taking longer than usual. You can press Stop to cancel.",
+                    fg=t["red"],
+                )
             self._elapsed_timer_id = self.after(100, self._update_elapsed)
         else:
             elapsed = time.time() - self._stream_start
