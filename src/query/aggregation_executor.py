@@ -591,7 +591,7 @@ def _detect_unresolved_site_reference(
     "in X" / "for X" site-looking token that we couldn't resolve, else ''.
 
     Iterates over all matches in the query because a query like
-    "top failing parts in NEXION in Antarctica in 2024" has "in NEXION" first
+    "top failing parts in monitoring system in Antarctica in 2024" has "in monitoring system" first
     (a system, not a site — must be skipped) and "in Antarctica" second
     (the actual unresolved-site hit we want to return).
     """

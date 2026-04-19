@@ -1,11 +1,11 @@
 # Tonight Master Autonomous Pointer - 2026-04-14
 
-Use this if you want one big copy/paste for Claude before bed.
+Use this if you want one big copy/paste for CoPilot+ before bed.
 
 Actual prompt file:
 
 ```text
-C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\CLAUDE_OVERNIGHT_MASTER_COPY_PASTE_2026-04-14.md
+{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\CLAUDE_OVERNIGHT_MASTER_COPY_PASTE_2026-04-14.md
 ```
 
 This one includes:

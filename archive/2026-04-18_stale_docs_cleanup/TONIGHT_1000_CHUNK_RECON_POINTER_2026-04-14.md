@@ -2,12 +2,12 @@
 
 Copy/paste file for the 1000-chunk maximum-value recon run:
 
-- `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\CLAUDE_1000_CHUNK_RECON_COPY_PASTE_2026-04-14.md`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\CLAUDE_1000_CHUNK_RECON_COPY_PASTE_2026-04-14.md`
 
 Open it with:
 
 ```powershell
-code C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\CLAUDE_1000_CHUNK_RECON_COPY_PASTE_2026-04-14.md
+code {USER_HOME}\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\CLAUDE_1000_CHUNK_RECON_COPY_PASTE_2026-04-14.md
 ```
 
 Recommended use:

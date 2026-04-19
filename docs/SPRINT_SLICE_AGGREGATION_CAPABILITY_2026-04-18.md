@@ -12,8 +12,8 @@
 
 Answer analytical top-N questions against the legacy corpus with cited evidence:
 
-- "What were the highest failing part numbers in the Nexion system in 2024?"
-- "What were the highest failing part #s in the ISTO system in Djibouti from 2022-2025?"
+- "What were the highest failing part numbers in the monitoring systems in 2024?"
+- "What were the highest failing part #s in the legacy monitoring systems in Djibouti from 2022-2025?"
 - "What are the top 5 failure rate parts ranked each year for the past 7 years?"
 
 These are group-by-count-rank queries. Pure vector RAG cannot answer them reliably --
@@ -180,7 +180,7 @@ Each returned row:
 {
     "part_number": "ARC-4471",
     "count": 47,
-    "systems": ["Nexion"],
+    "systems": ["monitoring system"],
     "sites": ["Djibouti", "Thule"],
     "years": [2022, 2023, 2024, 2025],
     "sample_chunk_ids": ["...", "...", "..."],  # top 3 for citation
@@ -287,7 +287,7 @@ noisy OCR, the narrow parameterized API is the safer bet.
   in parallel.
 - **QA:** Slice 6 A/B after Day 9, Slice 7 demo rehearsal witness.
 - **Hardware:** V2 on GPU 0, V2_Dev on GPU 1 for cross-validation. Workstation
-  hardware only -- no Beast dependency.
+  hardware only -- no primary workstation dependency.
 
 ## References (research-first per memory)
 
@@ -296,7 +296,7 @@ noisy OCR, the narrow parameterized API is the safer bet.
   vs < 20% for Text2SQL-only and vanilla RAG.
 - LlamaIndex SQLAutoVectorQueryEngine (Jerry Liu, 2023): the canonical hybrid
   SQL + vector pattern we are mirroring.
-- BIRD leaderboard (Apr 2026): Claude 3.5 Sonnet 78.2%, GPT-4o 81.95% dev --
+- BIRD leaderboard (Apr 2026): CoPilot+ 3.5 Sonnet 78.2%, GPT-4o 81.95% dev --
   but Promethium enterprise reports 58-64% under dirty-schema conditions.
 - LazyGraphRAG (Microsoft, Nov 2024): considered and rejected for this slice --
   summary-based, does not do numeric top-N well.

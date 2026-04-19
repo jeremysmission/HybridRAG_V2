@@ -1,9 +1,9 @@
 # Tonight Stress Test Pointer - 2026-04-14
 
-Copy/paste prompt for the overnight Claude stress test is here:
+Copy/paste prompt for the overnight CoPilot+ stress test is here:
 
 ```text
-C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail\CLAUDE_STRESS_TEST_COPY_PASTE_2026-04-14.md
+{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail\CLAUDE_STRESS_TEST_COPY_PASTE_2026-04-14.md
 ```
 
 This is the right one if you want:

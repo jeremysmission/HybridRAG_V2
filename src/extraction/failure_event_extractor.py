@@ -35,8 +35,8 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 _SYSTEM_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
-    ("NEXION", re.compile(r"\bnexion\b", re.IGNORECASE)),
-    ("ISTO",   re.compile(r"\bisto\b",   re.IGNORECASE)),
+    ("monitoring system", re.compile(r"\bnexion\b", re.IGNORECASE)),
+    ("legacy monitoring system",   re.compile(r"\bisto\b",   re.IGNORECASE)),
 )
 
 

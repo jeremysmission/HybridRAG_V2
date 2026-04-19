@@ -3,7 +3,7 @@
 **Author:** Jeremy Randall (CoPilot+)
 **Repo:** HybridRAG_V2
 **Date:** 2026-04-19 MDT
-**Backlog item:** AGGREGATION P1 — Identify denominator sources needed for true failure rates on NEXION/ISTO systems
+**Backlog item:** AGGREGATION P1 — Identify denominator sources needed for true failure rates on monitoring system / legacy monitoring systems
 **Unblocks:** Q3 YELLOW → GREEN upgrade (`top 5 failure-rate parts ranked each year × 7 years`)
 
 ---
@@ -102,7 +102,7 @@ CREATE TABLE installed_base (
     source_path TEXT NOT NULL,
     source_doc_hash TEXT NOT NULL DEFAULT '',
     extraction_method TEXT NOT NULL DEFAULT '',   -- 'inventory_xlsx_v1', 'as_built_pdf_v1', etc.
-    system TEXT NOT NULL DEFAULT '',              -- NEXION, ISTO
+    system TEXT NOT NULL DEFAULT '',              -- monitoring system, legacy monitoring system
     site_token TEXT NOT NULL DEFAULT '',
     part_number TEXT NOT NULL DEFAULT '',
     qty_installed INTEGER,

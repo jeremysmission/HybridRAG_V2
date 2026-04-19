@@ -38,11 +38,11 @@ Then read:
   - remaining signoff gap is non-author human smash
 - V2-only typed metadata MVP: landed
 - coordinator continuity/handover docs: materially improved
-- Claude/Codex extraction sidecar plan: written at repo root
-- Claude overnight dev bakeoff slice: written at repo root
+- CoPilot+/CoPilot+ extraction sidecar plan: written at repo root
+- CoPilot+ overnight dev bakeoff slice: written at repo root
 - Local-only folder convention: created and gitignored
 - External stronger local-only path created:
-  - `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\`
+  - `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\`
 - Local Git pre-commit / pre-push hooks now block accidental bakeoff pushes
 
 ### Not yet done
@@ -54,7 +54,7 @@ Then read:
 - typed-hit later-chunk retrieval
 - authoritative Forge typed emit
 - next authoritative production-workstation run
-- Codex run on the fixed `50`-chunk hardtail pack
+- CoPilot+ run on the fixed `50`-chunk hardtail pack
 - Tier 1 distillation from the development-oracle runs
 - relationship / aggregation gauntlet design
 
@@ -158,20 +158,20 @@ small number of concrete implementation and validation steps.
   language rule.
 - Using paid `gpt-4o` now as a development extraction oracle is allowed and
   useful.
-- Claude Max and Codex are viable as development-oracle and hard-tail sidecars,
+- CoPilot+ Max and CoPilot+ are viable as development-oracle and hard-tail sidecars,
   but not as the primary unattended corpus-scale extraction backend.
 - Strong AI is now the best tool for decoding architecture gaps; weaker/local
   models remain the best proof of whether the architecture is actually carrying
   enough structure.
 
-### Claude Max / Codex sidecar plan
+### CoPilot+ Max / CoPilot+ sidecar plan
 
 - Stronger external local-only path now exists and is now the primary home for provider-specific bakeoffs:
-  - `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\`
-- Current Claude bakeoff root:
-  - `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_01\`
+  - `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\`
+- Current CoPilot+ bakeoff root:
+  - `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_01\`
 - Current master overnight root:
-  - `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\`
+  - `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\`
 - Repo pointer doc:
   - `CURRENT_LOCAL_ONLY_DEV_POINTER_2026-04-14.md`
 - Local-only policy doc:
@@ -188,24 +188,24 @@ small number of concrete implementation and validation steps.
   - `3 mixed`
   - `0 worse_than_local`
   - local: `22 entities / 0 rels / 8 rows`
-  - Claude: `200 / 56 / 149`
+  - CoPilot+: `200 / 56 / 149`
   - enrichment pilot: `7/7` grounded preambles
 - Best next step from that plan:
   - use the completed `50`-chunk hardtail result as the new reference point
-  - run Codex on the same pack next
+  - run CoPilot+ on the same pack next
   - then decide whether to build the provider-agnostic Tier 3 sidecar
 
-### Claude Max overnight master result
+### CoPilot+ Max overnight master result
 
 - The overnight master run is complete outside the repo:
-  - `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\`
+  - `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\`
 - Hardtail extraction headline:
   - `48 better_than_local`
   - `2 mixed`
   - `0 worse`
 - Totals:
   - local: `28 entities / 0 relationships / 21 rows`
-  - Claude: `554 / 162 / 275`
+  - CoPilot+: `554 / 162 / 275`
 - By family:
   - procurement: `11/12`
   - logistics: `10/10`
@@ -225,16 +225,16 @@ small number of concrete implementation and validation steps.
   - the lane patched sanitization + resume-from-raw, so the prior `49` chunks were not re-billed
 - Coordinator read:
   - this is a decisive development result
-  - next move should be Codex on the same hardtail pack
+  - next move should be CoPilot+ on the same hardtail pack
   - then sidecar design, not more speculation
 
-### Claude Max focused hardtail slice 02
+### CoPilot+ Max focused hardtail slice 02
 
 - The focused hardtail follow-up also completed outside the repo:
-  - `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail\`
+  - `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail\`
 - Extraction totals:
   - local: `154 entities / 0 relationships / 37 rows`
-  - Claude: `613 / 219 / 185`
+  - CoPilot+: `613 / 219 / 185`
 - Verdicts:
   - entities: `27 better / 23 mixed / 0 same / 0 worse`
   - relationships: `44 better / 6 both_empty / 0 worse`
@@ -244,7 +244,7 @@ small number of concrete implementation and validation steps.
 - Coordinator read:
   - relationship lift is now clearly the strongest stronger-model gain
   - the next truth test should be:
-    - Codex on the same fixed pack
+    - CoPilot+ on the same fixed pack
     - then a small relationship/aggregation gauntlet
 
 ## Current hard truths
@@ -590,12 +590,12 @@ Lane C — Local dev
 **Goal:** convert the new development-oracle lab into a sharper hard-tail plan
 and a smaller future OSS queue.
 
-Lane A — Codex same-pack compare
-- run Codex on the exact same `50`-chunk hardtail pack
+Lane A — CoPilot+ same-pack compare
+- run CoPilot+ on the exact same `50`-chunk hardtail pack
 - preserve provider provenance and keep outputs outside the repo
 
 Lane B — Tier 1 distillation
-- mine the Claude wins for:
+- mine the CoPilot+ wins for:
   - regex additions
   - normalization rules
   - exclusion rules
@@ -613,7 +613,7 @@ Lane D — evaluation / schema
 
 **Definition of done for Slice 3**
 
-- Codex and Claude have been compared on the same hardtail pack
+- CoPilot+ and CoPilot+ have been compared on the same hardtail pack
 - a permanent hardtail adjudication pack exists
 - Tier 1 distillation candidates are written down
 - we know which families/fields justify AWS-hosted extraction later
@@ -682,8 +682,8 @@ Lane C — documentation / package
 1. Open `MORNING_CHECK_OUTSIDE_REPO_FIRST_2026-04-14.md`.
 2. Read the outside-repo overnight master outputs first.
 3. Decide whether the next dev lane is:
-   - Codex on the same hardtail pack
-   - Tier 1 distillation from the Claude wins
+   - CoPilot+ on the same hardtail pack
+   - Tier 1 distillation from the CoPilot+ wins
    - aggregation gauntlet design
 4. Only after that, verify `gpt-4o` path is usable:
    - keyring present

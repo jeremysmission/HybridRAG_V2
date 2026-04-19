@@ -8,7 +8,7 @@ Read this if you want one file that answers:
 
 - what is done
 - what is still risky
-- what the overnight Claude runs proved
+- what the overnight CoPilot+ runs proved
 - what should happen next
 - what should not be re-litigated
 - where the real artifacts live
@@ -25,7 +25,7 @@ This file is push-safe. Provider-specific raw materials remain outside the repo.
 Provider-specific development bakeoffs now belong in the:
 
 - `local only hybridrag folder`
-- `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\`
 
 Do not move provider-specific raw logs, manifests, scripts, or evidence notes back into the repo.
 
@@ -126,11 +126,11 @@ Phase-1 product truth:
 
 These are development-only and not-for-push.
 
-### Round 1 Claude Bakeoff
+### Round 1 CoPilot+ Bakeoff
 
 Location:
 
-- `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_01\`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_01\`
 
 Headline:
 
@@ -142,7 +142,7 @@ Headline:
   - `0 worse_than_local`
 - totals:
   - local: `22 entities / 0 rels / 8 rows`
-  - Claude: `200 / 56 / 149`
+  - CoPilot+: `200 / 56 / 149`
 - enrichment pilot:
   - `7/7` grounded preambles
 
@@ -150,7 +150,7 @@ Headline:
 
 Location:
 
-- `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\`
 
 Headline:
 
@@ -161,7 +161,7 @@ Headline:
 Totals:
 
 - local: `28 entities / 0 relationships / 21 rows`
-- Claude: `554 / 162 / 275`
+- CoPilot+: `554 / 162 / 275`
 
 By family:
 
@@ -195,12 +195,12 @@ Important operational note:
 
 Location:
 
-- `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail\`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail\`
 
 Headline:
 
 - local: `154 entities / 0 relationships / 37 rows`
-- Claude: `613 / 219 / 185`
+- CoPilot+: `613 / 219 / 185`
 - relationship verdicts:
   - `44 better`
   - `6 both_empty`
@@ -211,7 +211,7 @@ Most important quality result:
 - tightened prompting eliminated the earlier generic-part hallucination mode
 - reported generic-part hallucinations: `0`
 
-## What The Claude Runs Proved
+## What The CoPilot+ Runs Proved
 
 - stronger-model proxy is very valuable on the hard tail
 - relationship lift is the clearest stronger-model win
@@ -224,7 +224,7 @@ Most important quality result:
   - schema gaps
 - provider-specific development runs belong outside the repo
 - this is strong enough to justify:
-  - Codex on the same fixed pack
+  - CoPilot+ on the same fixed pack
   - then provider-agnostic Tier 3 sidecar design
 
 ## What They Did Not Prove
@@ -236,9 +236,9 @@ Most important quality result:
 
 ## Most Important Next Moves
 
-### 1. Codex Same-Pack Compare
+### 1. CoPilot+ Same-Pack Compare
 
-Run Codex on the exact same fixed `50`-chunk hardtail pack.
+Run CoPilot+ on the exact same fixed `50`-chunk hardtail pack.
 
 Why:
 
@@ -330,9 +330,9 @@ Open first:
 
 Then inspect:
 
-- `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\00_meta\MORNING_REVIEW_INDEX_2026-04-14.md`
-- `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\04_final_summary\MORNING_HANDBACK_claude_master_2026-04-14.md`
-- `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail\CLAUDE_MAX_HARDTAIL_STRESS_TEST_EVIDENCE_2026-04-14.md`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\00_meta\MORNING_REVIEW_INDEX_2026-04-14.md`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\04_final_summary\MORNING_HANDBACK_claude_master_2026-04-14.md`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail\CLAUDE_MAX_HARDTAIL_STRESS_TEST_EVIDENCE_2026-04-14.md`
 
 ## Final Summary
 
@@ -344,7 +344,7 @@ Current best read:
 - relationship extraction is the clearest lift
 - the next real frontier is relationship-chain / aggregation truth
 - the next best day should focus on:
-  - Codex same-pack compare
+  - CoPilot+ same-pack compare
   - Tier 1 distillation
   - aggregation gauntlet design
 

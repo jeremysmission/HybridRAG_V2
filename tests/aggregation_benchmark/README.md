@@ -62,10 +62,10 @@ route correctly and return the right contract tier?*
   "items": [
     {
       "id": "FAIL-AGG-01",
-      "query": "What were the highest failing part numbers in the NEXION system in 2024?",
+      "query": "What were the highest failing part numbers in the monitoring systems in 2024?",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
-      "expected_filters": { "system": "NEXION", "year_from": 2024, "year_to": 2024 },
+      "expected_filters": { "system": "monitoring system", "year_from": 2024, "year_to": 2024 },
       "expected_params": { "top_n": 5 },
       "ground_truth_sql": "SELECT part_number, COUNT(*) ... GROUP BY part_number ORDER BY ... LIMIT 5",
       "requires_chunk_pass": true,
@@ -98,7 +98,7 @@ The two benchmarks answer orthogonal questions:
 | Scope boundary | Filesystem slice | Natural-language axis parsing |
 | Ground truth source | Manifest + filesystem count | Substrate SQL + alias table |
 | Gate rule | all_items_pass (strict) | Per-item tier/filter/result (soft GREEN→YELLOW) |
-| Failure mode caught | LLM fabricated numeric answer | Router misclassified, filter unresolved, substrate coverage gap |
+| Failure mode caught | LLM fabricated numeric answer | Router misrestricted, filter unresolved, substrate coverage gap |
 
 Merging them would force either:
 - Scoring the tier benchmark on exact numeric match (losing tier semantics), OR

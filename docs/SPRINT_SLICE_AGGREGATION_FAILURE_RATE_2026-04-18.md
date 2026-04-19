@@ -14,8 +14,8 @@
 Turn grouped/ranked/top-N failure-analysis questions into a demo-safe deliverable.
 Example questions the system must answer **exactly**, not narratively:
 
-1. "What were the highest failing part numbers in the NEXION system in 2024?"
-2. "What were the highest failing part numbers in the ISTO system in Djibouti from 2022-2025?"
+1. "What were the highest failing part numbers in the monitoring systems in 2024?"
+2. "What were the highest failing part numbers in the legacy monitoring systems in Djibouti from 2022-2025?"
 3. "What are the top 5 failure-rate parts ranked each year for the past 7 years?"
 
 These are NOT retrieval questions. They are **grouped aggregation + ranking** questions over an entire corpus-wide population of failure events. Free-form RAG answers them by counting the top-K retrieved chunks, which is structurally wrong and has been audited as a dead pattern in `STATE_SNAPSHOT_2026-04-18.txt`.
@@ -40,18 +40,18 @@ This mirrors the `aggregation_evidence_contract` commitment already in the backl
 
 ## What the 3 Target Questions Require
 
-### Question 1 — "Highest failing part numbers in NEXION system in 2024"
+### Question 1 — "Highest failing part numbers in monitoring systems in 2024"
 | Field | Needed | Source of truth |
 |-------|--------|----------------|
 | `failure_event` (row-level) | YES | Maintenance / CAP / IGSI / field-failure reports |
 | `part_number` | YES | Same row as failure_event, or linkable by failure_id |
-| `system` (NEXION canonical) | YES | System alias table (NEXION, Nexion, NXN, etc.) |
+| `system` (monitoring system canonical) | YES | System alias table (monitoring system, monitoring system, NXN, etc.) |
 | `event_date → year` | YES | Temporal canonicalization (`FY24`, `CY2024`, `2024`, `04/2024` → 2024) |
 | GROUP BY + ORDER BY + LIMIT | YES | SQL adapter |
 
 **Answerable as GREEN** once substrate is populated.
 
-### Question 2 — "Highest failing part numbers in ISTO system in Djibouti from 2022-2025"
+### Question 2 — "Highest failing part numbers in legacy monitoring systems in Djibouti from 2022-2025"
 Adds:
 - `site` canonical (Djibouti aliases: DJI, Djibouti AB, Camp Lemonnier, DJB)
 - Date-range filter (inclusive 2022 ≤ year ≤ 2025)
@@ -71,7 +71,7 @@ Adds (much harder):
 ## Architecture — What Gets Built
 
 ```
-User Query: "Top failing parts in NEXION 2024"
+User Query: "Top failing parts in monitoring system 2024"
     |
     v
 [Query Router] ── detects AGGREGATION intent via pattern:
@@ -82,13 +82,13 @@ User Query: "Top failing parts in NEXION 2024"
 [Aggregation Parser] ── extracts:
     - metric:      failures | rates | count
     - group_by:    part_number
-    - filter:      system=NEXION, year=2024
+    - filter:      system=monitoring system, year=2024
     - limit:       N (default 5, bounded 1-50)
     - rank_order:  DESC on metric
     |
     v
 [Canonical Resolver] ── normalizes filters:
-    - NEXION → "NEXION" (canonical)
+    - monitoring system → "monitoring system" (canonical)
     - 2024 → integer year
     - Djibouti → "DJI" canonical site
     |
@@ -96,7 +96,7 @@ User Query: "Top failing parts in NEXION 2024"
 [SQL Adapter] ── runs deterministic query against failure_events table:
     SELECT part_number, COUNT(*) AS failure_count
     FROM failure_events
-    WHERE system = 'NEXION' AND event_year = 2024
+    WHERE system = 'monitoring system' AND event_year = 2024
     GROUP BY part_number
     ORDER BY failure_count DESC
     LIMIT 5
@@ -135,7 +135,7 @@ All modules are parameterized. No new free-form LLM counting anywhere.
 ## Phased Slice Plan
 
 ### SLICE 1 — Truth Pack + Source Family Discovery (2-3 days)
-**Owner:** Claude-R3 (already designated per `AGGREGATION_ACTION_ITEMS_2026-04-18.txt`)
+**Owner:** CoPilot+-R3 (already designated per `AGGREGATION_ACTION_ITEMS_2026-04-18.txt`)
 **Dependency:** none — can start now
 
 - [ ] Build `failure_analysis_truth_pack_nexion_isto_2026-04-19.json`
@@ -152,10 +152,10 @@ All modules are parameterized. No new free-form LLM counting anywhere.
 ---
 
 ### SLICE 2 — Canonical Alias Tables (1-2 days)
-**Owner:** Claude-R3 + first free coder
+**Owner:** CoPilot+-R3 + first free coder
 **Dependency:** Slice 1 source map
 
-- [ ] System aliases: NEXION, ISTO, and any other systems appearing in failure rows
+- [ ] System aliases: monitoring system, legacy monitoring system, and any other systems appearing in failure rows
 - [ ] Site aliases: Djibouti + top 20 sites from `source_metadata` (`29,659 site tokens`)
 - [ ] Year canonicalizer: `FY24`, `CY2024`, `2024`, `04/2024`, `Q1-2024` → `2024`
 - [ ] Part-number canonicalizer: collapse whitespace/dash variants (`TC 16-06-23-003` = `TC16-06-23-003` — per CorpusForge marathon finding)
@@ -194,7 +194,7 @@ All modules are parameterized. No new free-form LLM counting anywhere.
 - [ ] Returns: deterministic result + substrate-coverage metadata (`rows_scanned`, `rows_matched`, `distinct_values`)
 - [ ] `UNSUPPORTED` return path when filter keys unresolvable
 
-**Acceptance:** Q1 ("top failing parts in NEXION 2024") returns exact ranked list from Slice 3 substrate. Q2 likewise. Q3 returns YELLOW (failure counts, no rates).
+**Acceptance:** Q1 ("top failing parts in monitoring system 2024") returns exact ranked list from Slice 3 substrate. Q2 likewise. Q3 returns YELLOW (failure counts, no rates).
 
 ---
 
@@ -216,7 +216,7 @@ All modules are parameterized. No new free-form LLM counting anywhere.
 ---
 
 ### SLICE 6 — Installed-Base Denominator (3-5 days, post-demo acceptable)
-**Owner:** Claude-R3 (per backlog AGGREGATION P1 rate denominator)
+**Owner:** CoPilot+-R3 (per backlog AGGREGATION P1 rate denominator)
 **Dependency:** Slice 1 source-family knowledge
 
 - [ ] Identify installed-base sources (deployment manifests, site population records)
@@ -229,7 +229,7 @@ All modules are parameterized. No new free-form LLM counting anywhere.
 ---
 
 ### SLICE 7 — Multi-Family Extractor Expansion (1-2 weeks, post-demo)
-**Owner:** Coder B / Claude-R3 rotation
+**Owner:** Coder B / CoPilot+-R3 rotation
 **Dependency:** Slices 3 + 4 proven
 
 - [ ] Extend extractor to families 2-5 from Slice 1 source map
@@ -325,8 +325,8 @@ By 2026-05-02 (demo):
 
 This slice satisfies / unblocks the following backlog items from `BacklogWork_2026_17_4.txt`:
 
-- AGGREGATION P0: deterministic failure-analysis truth pack (NEXION/ISTO) — **Slice 1**
-- AGGREGATION P0: smallest deterministic substrate for NEXION failures — **Slices 1-3**
+- AGGREGATION P0: deterministic failure-analysis truth pack (monitoring system / legacy monitoring system) — **Slice 1**
+- AGGREGATION P0: smallest deterministic substrate for monitoring system failures — **Slices 1-3**
 - AGGREGATION P1: narrow deterministic backend pilot — **Slices 3-4**
 - AGGREGATION P1: denominator sources for true failure rates — **Slice 6**
 - AGGREGATION P1: QA gate for failure-analysis pilot — **QA gates Slices 3-5**

@@ -15,15 +15,15 @@ A deterministic failure-aggregation backend (Structure-Augmented Generation patt
 
 ### Target questions this unlocks
 
-1. **"What were the highest failing part numbers in the NEXION system in 2024?"** → GREEN
-2. **"What were the highest failing part numbers in the ISTO system in Djibouti from 2022-2025?"** → GREEN
+1. **"What were the highest failing part numbers in the monitoring systems in 2024?"** → GREEN
+2. **"What were the highest failing part numbers in the legacy monitoring systems in Djibouti from 2022-2025?"** → GREEN
 3. **"What are the top 5 failure-rate parts ranked each year for the past 7 years?"** → YELLOW (rate requires installed-base denominator — not yet populated)
 
 ### New files
 
 | File | Purpose |
 |------|---------|
-| `config/canonical_aliases.yaml` | NEXION/ISTO + 22 site aliases (Djibouti inc. Camp Lemonnier) |
+| `config/canonical_aliases.yaml` | monitoring system / legacy monitoring system + 22 site aliases (Djibouti inc. Camp Lemonnier) |
 | `src/store/failure_events_store.py` | SQLite substrate (`failure_events` table) |
 | `src/extraction/failure_event_extractor.py` | Regex + path-derived extractor |
 | `src/query/aggregation_executor.py` | Intent detection + SQL + evidence linking + tier rendering |
@@ -67,7 +67,7 @@ Substrate populated from real V2 `retrieval_metadata.sqlite3` (93,636 source row
 ```
 Coverage:
   total_events:      35,990
-  with_system:       35,649 (NEXION + ISTO)
+  with_system:       35,649 (monitoring system + legacy monitoring system)
   with_site:         10,882 (22 distinct sites)
   with_year:         19,941
   with_part_number:   3,021 (900 distinct parts)
@@ -77,10 +77,10 @@ Live query results (see `output/qa_agg/smoke_test_results_2026-04-18.json`):
 
 | Query | Tier | Top Result |
 |-------|------|-----------|
-| NEXION 2024 highest failing parts | GREEN | `EC11612` (4 failures, 4 distinct docs) |
-| ISTO Djibouti 2022-2025 | GREEN | `SEMS3D-35674` (2 failures) |
+| monitoring system 2024 highest failing parts | GREEN | `EC11612` (4 failures, 4 distinct docs) |
+| legacy monitoring system Djibouti 2022-2025 | GREEN | `SEMS3D-35674` (2 failures) |
 | Top 5 failure **rate** per year × 7 years | YELLOW | Returns per-year counts + rate-unsupported disclaimer |
-| Top 10 NEXION Vandenberg 2022 | GREEN | `SEMS3D-40540` (3 failures) |
+| Top 10 monitoring system Vandenberg 2022 | GREEN | `SEMS3D-40540` (3 failures) |
 | "Who is the POC for Thule?" | PASSTHROUGH | Falls through to standard RAG ✓ |
 
 ---
@@ -89,7 +89,7 @@ Live query results (see `output/qa_agg/smoke_test_results_2026-04-18.json`):
 
 | Field | Rows | Coverage | Gap |
 |-------|------|----------|-----|
-| system (NEXION/ISTO) | 35,649 | 99.0% | Only 2 systems detected so far |
+| system (monitoring system / legacy monitoring system) | 35,649 | 99.0% | Only 2 systems detected so far |
 | event_year | 19,941 | 55.4% | Paths w/o date tokens — chunk pass could raise this |
 | site_token | 10,882 | 30.2% | Paths that don't mention a canonical site (many generic CDRL folders) |
 | part_number | 3,021 | 8.4% | **Biggest gap** — part_numbers live in chunk TEXT, not path. Pass 2 (chunk-derived) would raise this to est. 60-80% |
@@ -112,8 +112,8 @@ Following `docs/qa/QA_EXPECTATIONS_2026-04-05.md`.
 ### Pillar 2: Core Pipeline (real GPU, real LLM)
 - [ ] Launch GUI on workstation (Blackwell Single GPU — follow project policy)
 - [ ] Submit each of the 3 target questions in the main query panel:
-  1. `What were the highest failing part numbers in the NEXION system in 2024?`
-  2. `What were the highest failing part numbers in the ISTO system in Djibouti from 2022-2025?`
+  1. `What were the highest failing part numbers in the monitoring systems in 2024?`
+  2. `What were the highest failing part numbers in the legacy monitoring systems in Djibouti from 2022-2025?`
   3. `What are the top 5 failure rate parts ranked each year for the past 7 years?`
 - [ ] Verify each returns a ranked markdown table (not free-form prose count)
 - [ ] Verify Q1 and Q2 show `Confidence tier: GREEN`
@@ -130,8 +130,8 @@ Following `docs/qa/QA_EXPECTATIONS_2026-04-05.md`.
 ### Pillar 4: Real Data Pass
 - [ ] Verify `failure_events.sqlite3` exists at `C:\HybridRAG_V2\data\index\failure_events.sqlite3`
 - [ ] Verify row count ≥ 35,000 (`sqlite3 failure_events.sqlite3 "SELECT COUNT(*) FROM failure_events"`)
-- [ ] Verify NEXION system count ≥ 20,000
-- [ ] Verify ISTO system count ≥ 5,000
+- [ ] Verify monitoring systems count ≥ 20,000
+- [ ] Verify legacy monitoring systems count ≥ 5,000
 - [ ] Verify Djibouti site count ≥ 100 (`...WHERE site_token='djibouti'`)
 
 ### Pillar 5: Graceful Degradation
@@ -145,7 +145,7 @@ Following `docs/qa/QA_EXPECTATIONS_2026-04-05.md`.
 - [ ] **GUI button smash Tier B (smart monkey):** `python tools/qa/gui_button_smash_harness.py --tier b --smart-rounds 30`
 - [ ] **GUI button smash Tier C (dumb monkey):** `python tools/qa/gui_button_smash_harness.py --tier c --dumb-seconds 60`
 - [ ] **Human button smash Tier D:** non-author smashes GUI for 10 minutes — specifically tries to break aggregation with weird queries ("top 999999 failing parts", "top 0 failing parts", "top failing parts in NONEXISTENT system", empty query, just whitespace, SQL-injection-shaped strings).
-- [ ] **Ground-truth reconcile (optional overnight):** `python scripts/reconcile_raw_vs_substrate.py --mode compare --raw-root D:\CorpusTransfr --limit 500000 --output output/qa_agg/reconcile_500k.json`. Expect substrate coverage % > 90% for NEXION system count.
+- [ ] **Ground-truth reconcile (optional overnight):** `python scripts/reconcile_raw_vs_substrate.py --mode compare --raw-root D:\CorpusTransfr --limit 500000 --output output/qa_agg/reconcile_500k.json`. Expect substrate coverage % > 90% for monitoring systems count.
 
 ---
 
@@ -182,17 +182,17 @@ Expected cross-lane: identical top-3 results for Q1 and Q2 on both lanes (determ
 
 1. **Part-number coverage is 8.4%** — path-derived only. Chunk-derived Pass 2 needed for higher coverage. Mitigation: run Pass 2 overnight before demo.
 2. **Q3 (failure rate) returns YELLOW** — installed-base denominator substrate not yet populated. That's Sprint 6 / Slice 6 of the mega plan. Demo can present Q3 as "top failure-COUNT parts per year" rather than "failure-rate parts".
-3. **Only 2 systems detected so far** — NEXION, ISTO. Other systems in corpus will silently skip. Aliases can be extended in `canonical_aliases.yaml` without code changes.
+3. **Only 2 systems detected so far** — monitoring system, legacy monitoring system. Other systems in corpus will silently skip. Aliases can be extended in `canonical_aliases.yaml` without code changes.
 4. **Path-year extraction is 55%** — some paths don't have date tokens. Could be raised via chunk-derived year extraction from document text (Pass 2).
 
 ---
 
 ## 7. Backlog Items Satisfied By This Slice
 
-From `C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\BacklogWork_2026_17_4.txt`:
+From `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\BacklogWork_2026_17_4.txt`:
 
-- [x] AGGREGATION P0: smallest deterministic substrate for NEXION failures (partial — path-derived substrate exists, Pass 2 remaining)
-- [x] AGGREGATION P1: narrow deterministic backend pilot for NEXION/ISTO failure counts (`aggregation_executor.py`)
+- [x] AGGREGATION P0: smallest deterministic substrate for monitoring system failures (partial — path-derived substrate exists, Pass 2 remaining)
+- [x] AGGREGATION P1: narrow deterministic backend pilot for monitoring system / legacy monitoring system failure counts (`aggregation_executor.py`)
 - [x] AGGREGATION P1: deterministic backend path for exact counts
 - [x] AGGREGATION P0: demo-safe aggregation query pack (`failure_truth_pack_2026-04-18.json`)
 - [~] AGGREGATION P0: aggregation evidence contract — implicit in tier system (GREEN/YELLOW/RED), not yet externalized as separate doc

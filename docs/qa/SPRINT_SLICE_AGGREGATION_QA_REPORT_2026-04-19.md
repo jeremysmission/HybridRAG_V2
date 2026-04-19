@@ -8,7 +8,7 @@ API: none configured during this QA pass
 - Python: `3.14.3`
 - torch: `2.11.0+cu128`
 - CUDA: `yes`
-- GPU: `NVIDIA GeForce RTX 3090`
+- GPU: `NVIDIA NVIDIA workstation GPU`
 - API env present: `no`
 
 ## Scope
@@ -61,12 +61,12 @@ credentials were configured on this machine during the QA pass.
   - PASS
 - Row counts:
   - total: `35649`
-  - NEXION: `26745`
-  - ISTO: `8904`
+  - monitoring system: `26745`
+  - legacy monitoring system: `8904`
   - Djibouti: `392`
   - PASS
 - Distinct systems:
-  - raw: `ISTO`, `NEXION`
+  - raw: `legacy monitoring system`, `monitoring system`
   - PASS
 
 ### Pillar 5: Graceful Degradation
@@ -91,8 +91,8 @@ credentials were configured on this machine during the QA pass.
 - Filter parsing checks
   - PASS
   - Verified:
-    - Q1: `system=NEXION`, `year=2024`
-    - Q2: `system=ISTO`, `site_token=djibouti`, `year_from=2022`, `year_to=2025`
+    - Q1: `system=monitoring system`, `year=2024`
+    - Q2: `system=legacy monitoring system`, `site_token=djibouti`, `year_from=2022`, `year_to=2025`
     - Q3: `YELLOW`, per-year `2019-2025`, rate disclaimer path
 
 ### Pillar 7: GUI Harness
@@ -129,8 +129,8 @@ credentials were configured on this machine during the QA pass.
 ## Key Verified Outcomes
 - Deterministic aggregation is active on the primary lane.
 - The primary target queries are supported by the backend:
-  - Q1 NEXION 2024: `GREEN`
-  - Q2 ISTO Djibouti 2022-2025: `GREEN`
+  - Q1 monitoring system 2024: `GREEN`
+  - Q2 legacy monitoring system Djibouti 2022-2025: `GREEN`
   - Q3 failure rate x 7 years: `YELLOW` with denominator disclaimer
 - Aggregation now survives no-LLM conditions, which was previously a blocker.
 - Missing aliases now fails closed instead of producing ambiguous `GREEN` results.

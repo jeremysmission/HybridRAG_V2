@@ -10,7 +10,7 @@
 
 ## Purpose
 
-Before an aggregation answer leaves the system, it must be classified into one of **three contract tiers**. The tier determines what the answer is allowed to assert, what evidence it must carry, and what the UI displays.
+Before an aggregation answer leaves the system, it must be restricted into one of **three contract tiers**. The tier determines what the answer is allowed to assert, what evidence it must carry, and what the UI displays.
 
 This contract is the counterweight to the 2026 literature consensus: `Aggregation Queries over Unstructured Text` ([arXiv 2602.01355](https://arxiv.org/html/2602.01355v1)) showed free-form LLM counting over top-K retrieved chunks is structurally wrong for corpus-wide aggregates. The contract prevents that failure mode from ever reaching a user.
 
@@ -32,7 +32,7 @@ This contract is the counterweight to the 2026 literature consensus: `Aggregatio
 **UI badge:** `GREEN — deterministic backend count`
 
 **Allowed assertions:**
-- "The top 5 failing parts in NEXION in 2024 were: 1. `EC11612` (4 failures), 2. …"
+- "The top 5 failing parts in monitoring system in 2024 were: 1. `EC11612` (4 failures), 2. …"
 - "`ARC-4471` has 23 failure events recorded across the corpus."
 - "12 deliverables were filed under CDRL A027 in FY2024."
 
@@ -62,7 +62,7 @@ This contract is the counterweight to the 2026 literature consensus: `Aggregatio
 - Specific gap that would move this to GREEN: "Upgrade to GREEN by (a) running Pass 2 chunk extraction, (b) populating `installed_base` table."
 
 **Allowed assertions:**
-- "In 2024, the top failure-COUNT parts in NEXION were X, Y, Z. (Failure-rate requires denominator — unavailable.)"
+- "In 2024, the top failure-COUNT parts in monitoring system were X, Y, Z. (Failure-rate requires denominator — unavailable.)"
 - "Based on the ~30% of chunks with part_number extraction, top failing parts are: …"
 
 **Forbidden assertions at YELLOW:**
@@ -174,11 +174,11 @@ GREEN — return ranked result with evidence, no caveats
 
 | Query | Parses to | Tier | Reason |
 |-------|-----------|------|--------|
-| "Top 5 failing parts in NEXION in 2024" | sys=NEXION, year=2024-2024 | **GREEN** | All axes resolved; SQL returns ≥ 1 row with part_number |
-| "Top 5 failing parts in NEXION in Djibouti in 2024" | sys=NEXION, site=djibouti, year=2024-2024 | **GREEN** if ≥ 1 row matches, else **RED** | Narrower filter may produce 0 rows |
+| "Top 5 failing parts in monitoring system in 2024" | sys=monitoring system, year=2024-2024 | **GREEN** | All axes resolved; SQL returns ≥ 1 row with part_number |
+| "Top 5 failing parts in monitoring system in Djibouti in 2024" | sys=monitoring system, site=djibouti, year=2024-2024 | **GREEN** if ≥ 1 row matches, else **RED** | Narrower filter may produce 0 rows |
 | "Top 5 failure **rate** parts each year × 7 years" | per_year=true, is_rate=true, year=2019-2025 | **YELLOW** | `installed_base` doesn't exist → no rate possible |
 | "Top failing parts in SYSTEMX in 2024" | sys=unresolved, year=2024 | **RED** | SYSTEMX not in `canonical_aliases.yaml` |
-| "How many NEXION parts total?" (retrieval count) | NOT an aggregation axis shape | **PASSTHROUGH** | Falls through to standard RAG |
+| "How many monitoring system parts total?" (retrieval count) | NOT an aggregation axis shape | **PASSTHROUGH** | Falls through to standard RAG |
 
 ---
 

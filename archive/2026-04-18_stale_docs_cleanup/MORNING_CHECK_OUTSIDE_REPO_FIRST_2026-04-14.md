@@ -3,13 +3,13 @@
 If the machine survives the night, check the outside-repo location first:
 
 ```text
-C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\
+{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\
 ```
 
 Before drilling into any individual run folder, open this file first:
 
 ```text
-C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\README_HYBRIDRAG_LOCAL_ONLY_2026-04-14.md
+{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\README_HYBRIDRAG_LOCAL_ONLY_2026-04-14.md
 ```
 
 It is the contract for what the outside-repo root is for, what belongs there,
@@ -20,7 +20,7 @@ and what must stay out of the canonical repos.
 ### 1. Master overnight run
 
 ```text
-C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\
+{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01\
 ```
 
 First files to open there:
@@ -34,15 +34,15 @@ First files to open there:
 ### 2. Hardtail stress test
 
 ```text
-C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail\
+{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail\
 ```
 
 Check this if the focused stress-test lane produced more usable results than the master lane.
 
-### 3. Completed round-1 Claude bakeoff
+### 3. Completed round-1 CoPilot+ bakeoff
 
 ```text
-C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_01\
+{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_01\
 ```
 
 This already contains the completed first bakeoff and usage capture.
@@ -50,9 +50,9 @@ This already contains the completed first bakeoff and usage capture.
 ## Quick open commands
 
 ```powershell
-code C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY
-code C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01
-code C:\Users\jerem\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail
+code {USER_HOME}\HYBRIDRAG_LOCAL_ONLY
+code {USER_HOME}\HYBRIDRAG_LOCAL_ONLY\overnight_autonomous_runs\2026-04-14_master_01
+code {USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_dev_bakeoffs\2026-04-14_claude_bakeoff_02_hardtail
 ```
 
 ## Reminder

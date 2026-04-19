@@ -14,9 +14,9 @@
 |----------|------|----------------|---------------|
 | **Lane A** | Coder A on **V2 / GPU 0** | `src/query/`, `src/gui/`, GPU 0 eval | V2_Dev branch, Lane B substrate |
 | **Lane B** | Coder B on **V2_Dev / GPU 1** | `src/extraction/`, `src/store/`, GPU 1 eval | V2 branch, Lane A product surfaces |
-| **R3** (Claude-R3) | Data researcher / truth-pack owner | `HYBRIDRAG_LOCAL_ONLY/`, corpus mining | Repo code (research artifacts only) |
-| **Researcher-Web** (Claude-Researcher) | Literature + external validation | `HYBRIDRAG_LOCAL_ONLY/research_notes/` | Repo code |
-| **Coder-Free** (Codex / 3rd floater) | Unblocked coding helper | Whichever surface has no active owner | Do not cross lane owners |
+| **R3** (CoPilot+-R3) | Data researcher / truth-pack owner | `HYBRIDRAG_LOCAL_ONLY/`, corpus mining | Repo code (research artifacts only) |
+| **Researcher-Web** (CoPilot+-Researcher) | Literature + external validation | `HYBRIDRAG_LOCAL_ONLY/research_notes/` | Repo code |
+| **Coder-Free** (CoPilot+ / 3rd floater) | Unblocked coding helper | Whichever surface has no active owner | Do not cross lane owners |
 | **QA** | Gate keeper | Eval runs, GUI smash, acceptance reports | Code (does not commit) |
 
 ### Hard Parallelism Rules
@@ -73,7 +73,7 @@ Purpose: unblock all lanes before the sprint properly begins. Everything here ru
 
 ### Coder-Free — unblock Slice 2 alias tables
 - [ ] From `source_metadata` (93,636 rows) extract:
-  - canonical system list (NEXION, ISTO, + any others ≥100 rows)
+  - canonical system list (monitoring system, legacy monitoring system, + any others ≥100 rows)
   - canonical site list (Djibouti + top 20 sites)
 - [ ] Seed `config/canonical_aliases.yaml` with stub entries
 - [ ] Year canonicalizer unit tests (10 cases: FY24, CY2024, 2024, 04/2024, Q1-2024, etc.)
@@ -82,7 +82,7 @@ Purpose: unblock all lanes before the sprint properly begins. Everything here ru
 - [ ] Gate Lane A product P0 push before it goes to remote
 - [ ] Gate Lane B canary export — does file count + chunk count + vector count match expectation?
 
-**Wave 0 handover:** `~/.claude/handover/wave0_kickoff_2026-04-18_EOD.md`
+**Wave 0 handover:** `~/.CoPilot+/handover/wave0_kickoff_2026-04-18_EOD.md`
 
 ---
 
@@ -357,7 +357,7 @@ Wave 4 Day 14  DEMO DAY         backup hot-swap   live support  live support  li
 ## Daily Cadence
 
 ### Morning (30 min)
-- War room board post: what ran overnight, what broke, what's ready for QA
+- review board board post: what ran overnight, what broke, what's ready for QA
 - Each agent claims one task from wave backlog
 - Jeremy reviews + dispatches
 
@@ -366,7 +366,7 @@ Wave 4 Day 14  DEMO DAY         backup hot-swap   live support  live support  li
 - QA ships gates for morning's completed work
 
 ### Evening (30 min)
-- Handover doc updated (`~/.claude/handover/<agent>_<date>.md`)
+- Handover doc updated (`~/.CoPilot+/handover/<agent>_<date>.md`)
 - Overnight runs kicked off
 - Sanitize + push sweep on anything commit-ready
 
