@@ -72,8 +72,8 @@ It is a read-only view over artifacts that live elsewhere.
 
 ### Hardtail training-40
 - `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\HARDTAIL_TRAINING40_HEAD_TO_HEAD_SCOREBOARD_2026-04-15.md`
-- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_runs\hardtail_v1\claude\2026-04-15_run_03_training40\extraction_manifest.json`
-- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_runs\hardtail_v1\codex\2026-04-15_run_02_training40\extraction_manifest.json`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_runs\hardtail_v1\CoPilot+\2026-04-15_run_03_training40\extraction_manifest.json`
+- `{USER_HOME}\HYBRIDRAG_LOCAL_ONLY\provider_runs\hardtail_v1\CoPilot+\2026-04-15_run_02_training40\extraction_manifest.json`
 
 ### Count benchmark
 - runner: `C:\HybridRAG_V2\scripts\count_benchmark.py`
