@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import logging
 import threading
+import time
 from typing import Any, Callable, Optional
 
 logger = logging.getLogger(__name__)
@@ -44,6 +45,7 @@ class GUIModel:
         relationship_store=None,
         llm_client=None,
         config=None,
+        boot_started_at: Optional[float] = None,
     ):
         self._pipeline = pipeline
         self._lance_store = lance_store
@@ -63,6 +65,17 @@ class GUIModel:
         self.fts_ready: Optional[bool] = None
         self.fts_state: str = "not checked"
         self.fts_status_detail: str = "not checked"
+        self.boot_status: str = "starting"
+        self.boot_phase_key: str = "startup"
+        self.boot_phase_label: str = "Starting GUI"
+        self.boot_detail: str = "Window opened. Backend initialization pending."
+        self.boot_issues: list[str] = []
+        self.boot_started_at: float = (
+            float(boot_started_at)
+            if boot_started_at is not None
+            else time.perf_counter()
+        )
+        self.boot_finished_at: Optional[float] = None
 
         # Observer list
         self._observers: list[Callable[[], None]] = []
@@ -96,7 +109,7 @@ class GUIModel:
     # Store counts
     # ------------------------------------------------------------------
 
-    def refresh_counts(self) -> None:
+    def refresh_counts(self, notify: bool = True) -> None:
         """Refresh chunk/entity/relationship counts from stores."""
         try:
             self.chunk_count = self._lance_store.count() if self._lance_store else 0
@@ -123,7 +136,8 @@ class GUIModel:
         except Exception:
             self.table_count = 0
 
-        self._notify()
+        if notify:
+            self._notify()
 
     def _refresh_lance_health(self) -> None:
         """Refresh FTS readiness for the attached LanceDB store."""
@@ -165,6 +179,116 @@ class GUIModel:
                 self.llm_available = False
         except Exception:
             self.llm_available = False
+
+    # ------------------------------------------------------------------
+    # Startup / readiness state
+    # ------------------------------------------------------------------
+
+    def attach_runtime(
+        self,
+        pipeline=None,
+        lance_store=None,
+        entity_store=None,
+        relationship_store=None,
+        llm_client=None,
+        config=None,
+    ) -> None:
+        """Attach live backend objects after asynchronous startup finishes."""
+        with self._lock:
+            self._pipeline = pipeline
+            self._lance_store = lance_store
+            self._entity_store = entity_store
+            self._relationship_store = relationship_store
+            self._llm_client = llm_client
+            self._config = config
+
+        self.refresh_counts(notify=False)
+        self._check_llm()
+        self._notify()
+
+    def set_pipeline(self, pipeline) -> None:
+        """Attach the live query pipeline when the app is ready to query."""
+        with self._lock:
+            self._pipeline = pipeline
+        self._check_llm()
+        self._notify()
+
+    def set_boot_phase(
+        self,
+        phase_key: str,
+        phase_label: str,
+        detail: str = "",
+    ) -> None:
+        """Record the current startup phase."""
+        with self._lock:
+            self.boot_status = "starting"
+            self.boot_phase_key = phase_key
+            self.boot_phase_label = phase_label
+            self.boot_detail = detail
+            self.boot_finished_at = None
+        self._notify()
+
+    def add_boot_issue(self, issue: str) -> None:
+        """Record a startup warning or failure detail once."""
+        issue = (issue or "").strip()
+        if not issue:
+            return
+        with self._lock:
+            if issue not in self.boot_issues:
+                self.boot_issues.append(issue)
+
+    def mark_boot_ready(self, detail: str = "") -> None:
+        """Mark startup complete with a fully ready query surface."""
+        with self._lock:
+            self.boot_status = "ready"
+            self.boot_phase_key = "ready"
+            self.boot_phase_label = "Ready"
+            self.boot_detail = detail
+            self.boot_finished_at = time.perf_counter()
+        self._notify()
+
+    def mark_boot_degraded(self, detail: str = "") -> None:
+        """Mark startup complete in a reduced-capability state."""
+        with self._lock:
+            self.boot_status = "degraded"
+            self.boot_phase_key = "degraded"
+            self.boot_phase_label = "Degraded"
+            self.boot_detail = detail
+            self.boot_finished_at = time.perf_counter()
+        self._notify()
+
+    def mark_boot_failed(self, detail: str = "") -> None:
+        """Mark startup complete without a usable query pipeline."""
+        with self._lock:
+            self.boot_status = "failed"
+            self.boot_phase_key = "failed"
+            self.boot_phase_label = "Failed"
+            self.boot_detail = detail
+            self.boot_finished_at = time.perf_counter()
+        self._notify()
+
+    def get_boot_state_snapshot(self) -> dict[str, Any]:
+        """Return a stable snapshot of startup state for GUI rendering."""
+        with self._lock:
+            started_at = self.boot_started_at
+            finished_at = self.boot_finished_at
+            phase_key = self.boot_phase_key
+            phase_label = self.boot_phase_label
+            status = self.boot_status
+            detail = self.boot_detail
+            issues = list(self.boot_issues)
+            can_query = self._pipeline is not None
+
+        elapsed = max(0.0, (finished_at or time.perf_counter()) - started_at)
+        return {
+            "status": status,
+            "phase_key": phase_key,
+            "phase_label": phase_label,
+            "detail": detail,
+            "issues": issues,
+            "elapsed_seconds": elapsed,
+            "can_query": can_query,
+        }
 
     def run_ibit(self) -> dict:
         """Run a built-in test verifying all subsystems.

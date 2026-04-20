@@ -2,14 +2,16 @@
 # ============================================================================
 # HybridRAG V2 -- Status Bar (src/gui/panels/status_bar.py)
 # ============================================================================
-# Bottom status bar showing: chunks loaded, FTS readiness, entities loaded,
-# LLM status, and query path of last query. Refreshes every 15 seconds.
+# Bottom status bar showing: live startup/readiness state, chunks loaded,
+# FTS readiness, entities loaded, LLM status, and query path of last query.
+# Refreshes every second so long cold boots remain understandable.
 # ============================================================================
 
 import tkinter as tk
 import threading
 import logging
 
+from src.gui.helpers.safe_after import safe_after
 from src.gui.theme import current_theme, FONT
 
 logger = logging.getLogger(__name__)
@@ -19,6 +21,7 @@ class StatusBar(tk.Frame):
     """Bottom status bar with system health indicators.
 
     Displays:
+      - Startup/readiness phase for cold boot
       - Chunks loaded (from LanceDB)
       - FTS readiness for the configured LanceDB store
       - Entities loaded (from EntityStore)
@@ -26,7 +29,7 @@ class StatusBar(tk.Frame):
       - Last query path (SEMANTIC/ENTITY/AGGREGATE/TABULAR/COMPLEX)
     """
 
-    REFRESH_MS = 15000  # 15 seconds
+    REFRESH_MS = 1000  # 1 second
 
     def __init__(self, parent, model=None):
         t = current_theme()
@@ -38,12 +41,25 @@ class StatusBar(tk.Frame):
         self._llm_verified = False
         self._llm_verify_detail = ""
         self._llm_verify_running = False
+        self._llm_client_seen = None
+        self._observer_model = None
 
         self._build_widgets(t)
+        self._bind_model(model)
         self._schedule_refresh()
 
     def _build_widgets(self, t):
         """Build all status indicator widgets."""
+        # -- Startup / readiness indicator --
+        self.startup_label = tk.Label(
+            self, text="Startup: --", anchor=tk.W,
+            padx=8, pady=4, bg=t["panel_bg"], fg=t["orange"], font=FONT,
+        )
+        self.startup_label.pack(side=tk.LEFT)
+
+        self._sep0 = tk.Frame(self, width=1, bg=t["separator"])
+        self._sep0.pack(side=tk.LEFT, fill=tk.Y, padx=8, pady=4)
+
         # -- Chunks indicator --
         self.chunks_label = tk.Label(
             self, text="Chunks: --", anchor=tk.W,
@@ -112,7 +128,65 @@ class StatusBar(tk.Frame):
     def set_model(self, model):
         """Attach or replace the GUIModel reference."""
         self._model = model
+        self._bind_model(model)
         self._refresh_status()
+
+    def _bind_model(self, model):
+        """Subscribe once to model state changes."""
+        if model is None or model is self._observer_model:
+            return
+        try:
+            model.on_state_change(self._on_model_state_change)
+            self._observer_model = model
+        except Exception as exc:
+            logger.debug("Status bar failed to bind model observer: %s", exc)
+
+    def _on_model_state_change(self):
+        """Handle model updates from any thread."""
+        safe_after(self, 0, self._refresh_status)
+
+    def _format_startup_text(self, boot):
+        """Format the boot banner shown at the left side of the status bar."""
+        def _clip(text):
+            return text if len(text) <= 78 else text[:75] + "..."
+
+        status = boot.get("status") or "starting"
+        phase = boot.get("phase_label") or "Starting GUI"
+        detail = (boot.get("detail") or "").strip()
+        elapsed = boot.get("elapsed_seconds") or 0.0
+        seconds = "{:.0f}s".format(elapsed)
+
+        if status == "starting":
+            return _clip("Startup: {} ({})".format(phase, seconds))
+        if status == "ready":
+            return _clip("Ready: {} ({})".format(detail or "Ask is enabled.", seconds))
+        if status == "degraded":
+            return _clip("Degraded: {} ({})".format(
+                detail or "Query surface is partially available.",
+                seconds,
+            ))
+        if status == "failed":
+            return _clip("Failed: {} ({})".format(
+                detail or "Query pipeline is unavailable.",
+                seconds,
+            ))
+        return _clip("Startup: {}".format(phase))
+
+    def _startup_color(self, status, theme):
+        if status == "ready":
+            return theme["green"]
+        if status == "failed":
+            return theme["red"]
+        return theme["orange"]
+
+    def _reset_llm_verification_if_needed(self, llm_client):
+        """Reset verification cache when the attached LLM client changes."""
+        seen = id(llm_client) if llm_client is not None else None
+        if seen != self._llm_client_seen:
+            self._llm_client_seen = seen
+            self._llm_verified = False
+            self._llm_verify_detail = ""
+            self._llm_verify_running = False
 
     def set_query_path(self, path_name: str):
         """Update the last query path display."""
@@ -143,21 +217,38 @@ class StatusBar(tk.Frame):
         t = current_theme()
         try:
             if self._model is None:
+                self.startup_label.config(text="Startup: --", fg=t["gray"])
                 self.chunks_label.config(text="Chunks: --", fg=t["gray"])
                 self.fts_label.config(text="FTS: --", fg=t["gray"])
                 self.entities_label.config(text="Entities: --", fg=t["gray"])
                 self.llm_label.config(text="LLM: not initialized", fg=t["gray"])
                 return
 
-            # Chunks
-            count = self._model.chunk_count
-            self.chunks_label.config(
-                text="Chunks: {:,}".format(count),
-                fg=t["green"] if count > 0 else t["gray"],
+            boot = self._model.get_boot_state_snapshot()
+            boot_status = boot.get("status") or "starting"
+            self.startup_label.config(
+                text=self._format_startup_text(boot),
+                fg=self._startup_color(boot_status, t),
             )
 
+            # Chunks
+            if self._model.lance_store is None and boot_status == "starting":
+                self.chunks_label.config(text="Chunks: loading...", fg=t["orange"])
+            elif self._model.lance_store is None and boot_status in ("degraded", "failed"):
+                self.chunks_label.config(text="Chunks: unavailable", fg=t["red"])
+            else:
+                count = self._model.chunk_count
+                self.chunks_label.config(
+                    text="Chunks: {:,}".format(count),
+                    fg=t["green"] if count > 0 else t["gray"],
+                )
+
             # FTS readiness — honest 3-state: ready / warming up / not ready
-            if self._model.fts_ready is True:
+            if self._model.lance_store is None and boot_status == "starting":
+                self.fts_label.config(text="FTS: waiting for LanceDB...", fg=t["orange"])
+            elif self._model.lance_store is None and boot_status in ("degraded", "failed"):
+                self.fts_label.config(text="FTS: unavailable", fg=t["red"])
+            elif self._model.fts_ready is True:
                 self.fts_label.config(text="FTS: ready", fg=t["green"])
             elif self._model.fts_ready is None:
                 # Still initializing — hasn't been checked yet
@@ -177,7 +268,20 @@ class StatusBar(tk.Frame):
             ent_count = self._model.entity_count
             rel_count = self._model.relationship_count
             tbl_count = getattr(self._model, "table_count", 0) or 0
-            if rel_count == 0 and tbl_count == 0:
+            if (
+                self._model.entity_store is None
+                and self._model.relationship_store is None
+                and boot_status == "starting"
+            ):
+                self.entities_label.config(text="Entities: loading...", fg=t["orange"])
+            elif self._model.entity_store is None and boot_status in ("degraded", "failed"):
+                self.entities_label.config(text="Entities: unavailable", fg=t["orange"])
+            elif self._model.relationship_store is None and boot_status in ("degraded", "failed"):
+                self.entities_label.config(
+                    text="Entities: {:,} | Rels: unavailable".format(ent_count),
+                    fg=t["orange"],
+                )
+            elif rel_count == 0 and tbl_count == 0:
                 self.entities_label.config(
                     text="Entities: {:,} | Rels: 0 | Tables: 0 [EMPTY - run extraction]".format(ent_count),
                     fg=t["red"],
@@ -195,10 +299,15 @@ class StatusBar(tk.Frame):
 
             # LLM — show VERIFIED connection status (not just "client exists")
             llm_client = getattr(self._model, "_llm_client", None)
+            self._reset_llm_verification_if_needed(llm_client)
             if self._llm_verified:
                 self.llm_label.config(
                     text=self._llm_verify_detail, fg=t["green"],
                 )
+            elif llm_client is None and boot_status == "starting":
+                self.llm_label.config(text="LLM: initializing...", fg=t["orange"])
+            elif llm_client is None and boot_status == "degraded":
+                self.llm_label.config(text="LLM: unavailable", fg=t["orange"])
             elif llm_client and getattr(llm_client, "available", False):
                 if not self._llm_verify_running:
                     self._llm_verify_running = True
@@ -219,7 +328,6 @@ class StatusBar(tk.Frame):
     def _verify_llm_connection(self, llm_client):
         """Run a real API probe in a background thread. Sets _llm_verified on result."""
         def _probe():
-            t = current_theme()
             try:
                 provider = getattr(llm_client, "_provider", "unknown")
                 model = getattr(llm_client, "model", "unknown")
@@ -241,10 +349,7 @@ class StatusBar(tk.Frame):
                 logger.warning("LLM connection verification failed: %s", e)
             finally:
                 self._llm_verify_running = False
-                try:
-                    self.after(0, self._refresh_status)
-                except Exception:
-                    pass
+                safe_after(self, 0, self._refresh_status)
 
         threading.Thread(target=_probe, daemon=True).start()
 
@@ -278,14 +383,14 @@ class StatusBar(tk.Frame):
                     self.ibit_btn.config(state=tk.NORMAL)
                     self._show_ibit_detail(results, total_ms)
 
-                self.after(0, _update)
+                safe_after(self, 0, _update)
             except Exception as e:
                 def _error():
                     self.ibit_label.config(
                         text="IBIT: ERROR", fg=t["red"],
                     )
                     self.ibit_btn.config(state=tk.NORMAL)
-                self.after(0, _error)
+                safe_after(self, 0, _error)
 
         threading.Thread(target=_run, daemon=True).start()
 
@@ -332,10 +437,10 @@ class StatusBar(tk.Frame):
     def apply_theme(self, t):
         """Re-apply theme colors to all widgets."""
         self.configure(bg=t["panel_bg"])
-        for w in (self.chunks_label, self.fts_label, self.entities_label,
+        for w in (self.startup_label, self.chunks_label, self.fts_label, self.entities_label,
                   self.llm_label, self.path_label, self.ibit_label):
             w.configure(bg=t["panel_bg"])
-        for sep in (self._sep1, self._sep_fts, self._sep2, self._sep3, self._sep_ibit):
+        for sep in (self._sep0, self._sep1, self._sep_fts, self._sep2, self._sep3, self._sep_ibit):
             sep.configure(bg=t["separator"])
         self._refresh_status()
 

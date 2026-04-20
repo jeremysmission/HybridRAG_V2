@@ -74,7 +74,7 @@ def _sanitize_tk_env():
                     break
 
 
-def _load_backends(app, config, logger):
+def _load_backends(app, boot_model, config, logger):
     """Load heavy backends in a background thread, then attach to the GUI."""
     from src.gui.helpers.safe_after import safe_after
 
@@ -83,13 +83,31 @@ def _load_backends(app, config, logger):
     entity_store = None
     relationship_store = None
     llm_client = None
+    critical_failures = []
+    degraded_failures = []
+
+    def _record_issue(bucket, component, exc):
+        detail = str(exc).strip() or "unknown error"
+        issue = "{} unavailable ({})".format(component, detail)
+        boot_model.add_boot_issue(issue)
+        bucket.append(component)
+
+    def _set_phase(phase_key, phase_label, detail):
+        boot_model.set_boot_phase(phase_key, phase_label, detail)
+
+    def _unique(items):
+        seen = set()
+        ordered = []
+        for item in items:
+            if item and item not in seen:
+                seen.add(item)
+                ordered.append(item)
+        return ordered
 
     try:
-        _step("Backend: loading config...")
-        from src.config.schema import V2Config
-
         # -- Initialize stores --
         _step("Backend: opening LanceDB...")
+        _set_phase("opening_lancedb", "Opening LanceDB", "Loading vector store...")
         try:
             from src.store.lance_store import LanceStore
             lance_path = config.paths.lance_db
@@ -122,8 +140,14 @@ def _load_backends(app, config, logger):
                 )
         except Exception as exc:
             logger.warning("[WARN] LanceDB init failed: %s", exc)
+            _record_issue(critical_failures, "LanceDB", exc)
 
         _step("Backend: opening EntityStore...")
+        _set_phase(
+            "opening_entity_store",
+            "Opening entity store",
+            "Loading extracted entities...",
+        )
         try:
             from src.store.entity_store import EntityStore
             entity_path = config.paths.entity_db
@@ -134,8 +158,14 @@ def _load_backends(app, config, logger):
                         entity_store.count_entities())
         except Exception as exc:
             logger.warning("[WARN] EntityStore init failed: %s", exc)
+            _record_issue(degraded_failures, "Entity store", exc)
 
         _step("Backend: opening RelationshipStore...")
+        _set_phase(
+            "opening_relationship_store",
+            "Opening relationship store",
+            "Loading relationship graph...",
+        )
         try:
             from src.store.relationship_store import RelationshipStore
             rel_path = config.paths.entity_db
@@ -146,6 +176,7 @@ def _load_backends(app, config, logger):
                         relationship_store.count())
         except Exception as exc:
             logger.warning("[WARN] RelationshipStore init failed: %s", exc)
+            _record_issue(degraded_failures, "Relationship store", exc)
 
         # -- Entity store health check --
         # Coordinator directive 2026-04-16: warn if relationship and table stores
@@ -176,6 +207,11 @@ def _load_backends(app, config, logger):
 
         # -- Initialize embedder --
         _step("Backend: initializing embedder...")
+        _set_phase(
+            "initializing_embedder",
+            "Initializing embedder",
+            "Loading embedding model...",
+        )
         embedder = None
         try:
             from src.query.embedder import Embedder
@@ -187,9 +223,15 @@ def _load_backends(app, config, logger):
             logger.info("[OK] Embedder initialized (%s, dim=%d)", embedder.mode, embedder.dim)
         except Exception as exc:
             logger.warning("[WARN] Embedder init failed: %s", exc)
+            _record_issue(critical_failures, "Embedder", exc)
 
         # -- Initialize LLM client --
         _step("Backend: initializing LLM client...")
+        _set_phase(
+            "initializing_llm",
+            "Initializing LLM",
+            "Connecting generation client...",
+        )
         try:
             from src.llm.client import LLMClient
             provider = config.llm.provider if config.llm.provider != "auto" else ""
@@ -207,9 +249,15 @@ def _load_backends(app, config, logger):
         except Exception as exc:
             logger.warning("[WARN] LLM client init failed: %s", exc)
             logger.warning("       GUI will run without LLM generation.")
+            _record_issue(critical_failures, "LLM", exc)
 
         # -- Build query pipeline --
         _step("Backend: building query pipeline...")
+        _set_phase(
+            "building_pipeline",
+            "Building pipeline",
+            "Wiring retrievers and generator...",
+        )
         try:
             from src.query.query_router import QueryRouter
             from src.query.vector_retriever import VectorRetriever
@@ -253,6 +301,11 @@ def _load_backends(app, config, logger):
                 )
             except Exception as agg_exc:
                 logger.warning("[WARN] Aggregation executor init failed: %s", agg_exc)
+                _record_issue(
+                    degraded_failures,
+                    "Aggregation executor",
+                    agg_exc,
+                )
 
             # Pipeline assembles when core retrieval exists. Generator is
             # optional — aggregation queries work without an LLM (SAG pattern).
@@ -271,6 +324,11 @@ def _load_backends(app, config, logger):
                         logger.info("[OK] CRAG verifier enabled")
                     except Exception as crag_exc:
                         logger.warning("[WARN] CRAG init failed: %s", crag_exc)
+                        _record_issue(
+                            degraded_failures,
+                            "CRAG verifier",
+                            crag_exc,
+                        )
 
                 pipeline = QueryPipeline(
                     router=router,
@@ -297,18 +355,22 @@ def _load_backends(app, config, logger):
                     "[WARN] Pipeline incomplete (missing: %s)",
                     ", ".join(missing),
                 )
+                critical_failures.extend(
+                    component
+                    for component in ("Query router" if not router else None,
+                                      "Vector retriever" if not vector_retriever else None)
+                    if component and component not in critical_failures
+                )
         except Exception as exc:
             logger.warning("[WARN] Pipeline assembly failed: %s", exc)
+            _record_issue(critical_failures, "Query pipeline", exc)
 
     except Exception as exc:
         logger.error("[ERROR] Backend loading failed: %s", exc)
+        _record_issue(critical_failures, "Backend startup", exc)
 
-    # Build GUIModel and attach to app on the main thread
-    _step("Backend: attaching model to GUI...")
-    from src.gui.model import GUIModel
-
-    model = GUIModel(
-        pipeline=pipeline,
+    boot_model.attach_runtime(
+        pipeline=None,
         lance_store=lance_store,
         entity_store=entity_store,
         relationship_store=relationship_store,
@@ -316,8 +378,36 @@ def _load_backends(app, config, logger):
         config=config,
     )
 
+    # Final UI attach still happens on the main thread.
+    _step("Backend: attaching model to GUI...")
+    _set_phase("attaching_model", "Attaching model", "Finalizing query readiness...")
+
     def _attach():
-        app.set_model(model)
+        boot_issues = boot_model.get_boot_state_snapshot().get("issues", [])
+        if pipeline is not None:
+            boot_model.set_pipeline(pipeline)
+        if pipeline is None:
+            failure_list = _unique(critical_failures) or ["query pipeline"]
+            detail = "Ask disabled: {} failed to initialize.".format(
+                ", ".join(failure_list)
+            )
+            if boot_issues and not critical_failures:
+                detail = "Ask disabled: {}".format(boot_issues[0])
+            boot_model.mark_boot_failed(detail)
+        elif critical_failures or degraded_failures or boot_issues:
+            issue_list = _unique(degraded_failures or critical_failures)
+            detail = (
+                "Ask ready with limited capabilities: {}.".format(
+                    ", ".join(issue_list)
+                )
+                if issue_list
+                else (boot_issues[0] if boot_issues else "Reduced-capability startup.")
+            )
+            boot_model.mark_boot_degraded(detail)
+        else:
+            boot_model.mark_boot_ready("Ask ready. Query pipeline attached.")
+
+        app.set_model(boot_model)
         _step("Backend: model attached. GUI ready.")
 
     safe_after(app, 0, _attach)
@@ -326,6 +416,7 @@ def _load_backends(app, config, logger):
 def main():
     """Boot config, open GUI immediately, load backends in background."""
     _step("main() entered")
+    boot_started_at = time.perf_counter()
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -336,6 +427,7 @@ def main():
     # -- Phase 1: Load config --
     _step("Phase 1: load config...")
     config = None
+    config_issue = ""
     try:
         from src.config.schema import load_config, V2Config
         config_path = os.path.join(_project_root, "config", "config.yaml")
@@ -345,6 +437,7 @@ def main():
         _step("Phase 1 FAILED: {}".format(exc))
         from src.config.schema import V2Config
         config = V2Config()
+        config_issue = "Config load failed; using defaults ({})".format(exc)
 
     # -- Phase 2: Open GUI immediately --
     _step("Phase 2: creating GUI window...")
@@ -352,16 +445,34 @@ def main():
 
     # Create a placeholder model so the GUI has something to reference
     from src.gui.model import GUIModel
-    placeholder_model = GUIModel(config=config)
+    placeholder_model = GUIModel(config=config, boot_started_at=boot_started_at)
+    if config_issue:
+        placeholder_model.add_boot_issue(config_issue)
+        placeholder_model.set_boot_phase(
+            "loading_config",
+            "Loading config",
+            "Config failed to load. Using fallback defaults.",
+        )
+    else:
+        placeholder_model.set_boot_phase(
+            "loading_config",
+            "Loading config",
+            "Configuration loaded.",
+        )
 
     app = HybridRAGApp(model=placeholder_model, config=config)
+    placeholder_model.set_boot_phase(
+        "starting_backend",
+        "Starting backend",
+        "Window open. Initializing stores and models...",
+    )
     _step("Phase 2 done: GUI window created")
 
     # -- Phase 3: Load backends in background --
     _step("Phase 3: starting backend thread...")
     backend_thread = threading.Thread(
         target=_load_backends,
-        args=(app, config, logger),
+        args=(app, placeholder_model, config, logger),
         daemon=True,
     )
     backend_thread.start()
