@@ -1,8 +1,8 @@
 # Production Golden Eval Results
 
 **Agent:** reviewer | **Repo:** HybridRAG_V2 | **Date:** 2026-04-11 MDT
-**Run ID:** `20260420_005855`
-**Timestamp:** `2026-04-20T00:58:55.569795+00:00`
+**Run ID:** `20260420_033149`
+**Timestamp:** `2026-04-20T03:31:49.972756+00:00`
 **Mode:** Retrieval-only (real app path via `QueryPipeline.retrieve_context`, no answer generation)
 
 ## Store and GPU
@@ -17,30 +17,30 @@
 
 ## Headline
 
-- **PASS: 320/391** (82%) -- top-1 result is in the expected document family
+- **PASS: 323/391** (83%) -- top-1 result is in the expected document family
 - **PASS + PARTIAL: 374/391** (96%) -- at least one top-5 result is in the expected family
 - **MISS: 17/391** -- no top-5 result in the expected family
-- **Routing correct: 296/391** (76%) -- classifier chose the expected query_type
-- **Pure retrieval (embed + vector + FTS) P50: 13107ms / P95: 51168ms**
-- **Wall clock incl. OpenAI router P50: 16972ms / P95: 61740ms** (router P50 1402ms, P95 2440ms)
+- **Routing correct: 295/391** (75%) -- classifier chose the expected query_type
+- **Pure retrieval (embed + vector + FTS) P50: 11131ms / P95: 32023ms**
+- **Wall clock incl. OpenAI router P50: 14148ms / P95: 41700ms** (router P50 1543ms, P95 3012ms)
 
 ## Per-Persona Scorecard
 
 | Persona | Total | PASS | PARTIAL | MISS | Routing |
 |---------|------:|-----:|--------:|-----:|--------:|
-| Program Manager | 79 | 59 | 18 | 2 | 58/79 |
-| Logistics Lead | 76 | 66 | 5 | 5 | 54/76 |
-| Field Engineer | 79 | 61 | 9 | 9 | 60/79 |
-| Cybersecurity / Network Admin | 79 | 69 | 10 | 0 | 57/79 |
-| Aggregation / Cross-role | 78 | 65 | 12 | 1 | 67/78 |
+| Program Manager | 79 | 61 | 16 | 2 | 58/79 |
+| Logistics Lead | 76 | 66 | 4 | 6 | 54/76 |
+| Field Engineer | 79 | 64 | 7 | 8 | 59/79 |
+| Cybersecurity / Network Admin | 79 | 68 | 11 | 0 | 57/79 |
+| Aggregation / Cross-role | 78 | 64 | 13 | 1 | 67/78 |
 
 ## Per-Query-Type Breakdown
 
 | Query Type | Expected Count | PASS | PARTIAL | MISS | Routing Match |
 |------------|---------------:|-----:|--------:|-----:|--------------:|
-| SEMANTIC | 98 | 71 | 18 | 9 | 49/98 |
-| ENTITY | 117 | 100 | 13 | 4 | 92/117 |
-| TABULAR | 74 | 61 | 10 | 3 | 60/74 |
+| SEMANTIC | 98 | 71 | 17 | 10 | 48/98 |
+| ENTITY | 117 | 102 | 11 | 4 | 92/117 |
+| TABULAR | 74 | 62 | 10 | 2 | 60/74 |
 | AGGREGATE | 102 | 88 | 13 | 1 | 95/102 |
 | COMPLEX | 0 | 0 | 0 | 0 | 0/0 |
 
@@ -53,23 +53,23 @@ hits GPT-4o for every query; rule-based fallback is faster but wasn't exercised 
 
 | Stage | P50 | P95 | Min | Max |
 |-------|----:|----:|----:|----:|
-| Pure retrieval (embed+vector+FTS) | 13107ms | 51168ms | 2043ms | 126983ms |
-| OpenAI router classification | 1402ms | 2440ms | 833ms | 8113ms |
-| Wall clock (router+retrieval) | 16972ms | 61740ms | 3132ms | 149922ms |
+| Pure retrieval (embed+vector+FTS) | 11131ms | 32023ms | 1887ms | 98362ms |
+| OpenAI router classification | 1543ms | 3012ms | 840ms | 8437ms |
+| Wall clock (router+retrieval) | 14148ms | 41700ms | 3435ms | 129419ms |
 
 ## Stage Timing Breakdown
 
 | Stage | P50 | P95 | Max | Queries |
 |-------|----:|----:|----:|--------:|
-| aggregate_lookup | 2232ms | 11093ms | 17965ms | 111 |
-| context_build | 5430ms | 11723ms | 23542ms | 391 |
-| entity_lookup | 13394ms | 51190ms | 60044ms | 50 |
-| relationship_lookup | 171ms | 590ms | 1117ms | 50 |
-| rerank | 5430ms | 11723ms | 23542ms | 391 |
-| retrieval | 13107ms | 51168ms | 126983ms | 391 |
-| router | 1402ms | 2440ms | 8113ms | 391 |
-| structured_lookup | 7582ms | 43174ms | 122324ms | 161 |
-| vector_search | 309ms | 25187ms | 95064ms | 391 |
+| aggregate_lookup | 1858ms | 3015ms | 3342ms | 109 |
+| context_build | 4270ms | 8274ms | 13044ms | 391 |
+| entity_lookup | 7838ms | 10323ms | 12007ms | 51 |
+| relationship_lookup | 73ms | 275ms | 304ms | 51 |
+| rerank | 4270ms | 8274ms | 13044ms | 391 |
+| retrieval | 11131ms | 32023ms | 98362ms | 391 |
+| router | 1543ms | 3012ms | 8437ms | 391 |
+| structured_lookup | 4486ms | 19571ms | 24622ms | 160 |
+| vector_search | 233ms | 17915ms | 85337ms | 391 |
 
 ## Outcome Category Breakdown (from brief)
 
@@ -86,11 +86,11 @@ Separates real retrieval bugs from expected extraction gaps. The categories are:
 
 | Category | Count | Queries |
 |----------|------:|---------|
-| RETRIEVAL_PASS | 269 | PQ-101, PQ-102, PQ-103, PQ-104, PQ-105, PQ-106, PQ-107, PQ-108, PQ-109, PQ-110, PQ-111, PQ-113, PQ-115, PQ-116, PQ-118, PQ-119, PQ-121, PQ-124, PQ-125, PQ-126, PQ-127, PQ-128, PQ-129, PQ-130, PQ-131, PQ-133, PQ-135, PQ-136, PQ-137, PQ-138, PQ-139, PQ-141, PQ-142, PQ-143, PQ-144, PQ-145, PQ-151, PQ-152, PQ-155, PQ-156, PQ-159, PQ-161, PQ-163, PQ-165, PQ-166, PQ-167, PQ-168, PQ-169, PQ-170, PQ-171, PQ-172, PQ-173, PQ-174, PQ-175, PQ-176, PQ-178, PQ-179, PQ-180, PQ-181, PQ-183, PQ-184, PQ-185, PQ-186, PQ-187, PQ-190, PQ-191, PQ-192, PQ-193, PQ-194, PQ-195, PQ-197, PQ-198, PQ-199, PQ-200, PQ-207, PQ-211, PQ-212, PQ-213, PQ-214, PQ-220, PQ-221, PQ-222, PQ-223, PQ-224, PQ-225, PQ-227, PQ-228, PQ-230, PQ-231, PQ-232, PQ-233, PQ-234, PQ-235, PQ-236, PQ-237, PQ-238, PQ-239, PQ-240, PQ-243, PQ-244, PQ-245, PQ-246, PQ-247, PQ-248, PQ-250, PQ-251, PQ-252, PQ-253, PQ-254, PQ-255, PQ-256, PQ-257, PQ-258, PQ-259, PQ-260, PQ-261, PQ-271, PQ-272, PQ-274, PQ-275, PQ-276, PQ-277, PQ-278, PQ-279, PQ-280, PQ-281, PQ-283, PQ-284, PQ-285, PQ-286, PQ-287, PQ-288, PQ-289, PQ-290, PQ-291, PQ-292, PQ-293, PQ-294, PQ-295, PQ-296, PQ-297, PQ-301, PQ-302, PQ-304, PQ-306, PQ-307, PQ-308, PQ-310, PQ-311, PQ-312, PQ-313, PQ-314, PQ-315, PQ-316, PQ-317, PQ-318, PQ-319, PQ-321, PQ-322, PQ-331, PQ-332, PQ-334, PQ-335, PQ-336, PQ-338, PQ-340, PQ-341, PQ-342, PQ-343, PQ-344, PQ-345, PQ-346, PQ-347, PQ-350, PQ-352, PQ-357, PQ-358, PQ-359, PQ-360, PQ-361, PQ-363, PQ-364, PQ-365, PQ-366, PQ-367, PQ-368, PQ-369, PQ-370, PQ-371, PQ-372, PQ-373, PQ-374, PQ-376, PQ-378, PQ-382, PQ-386, PQ-387, PQ-388, PQ-391, PQ-392, PQ-393, PQ-394, PQ-395, PQ-396, PQ-397, PQ-398, PQ-401, PQ-402, PQ-403, PQ-406, PQ-407, PQ-408, PQ-409, PQ-410, PQ-411, PQ-412, PQ-413, PQ-414, PQ-415, PQ-416, PQ-417, PQ-418, PQ-419, PQ-420, PQ-421, PQ-422, PQ-423, PQ-424, PQ-426, PQ-428, PQ-439, PQ-440, PQ-443, PQ-446, PQ-447, PQ-448, PQ-450, PQ-451, PQ-452, PQ-453, PQ-455, PQ-457, PQ-458, PQ-459, PQ-460, PQ-461, PQ-462, PQ-463, PQ-464, PQ-465, PQ-466, PQ-467, PQ-468, PQ-469, PQ-470, PQ-471, PQ-472, PQ-473, PQ-474, PQ-477, PQ-478, PQ-480, PQ-481, PQ-482, PQ-483, PQ-485, PQ-493, PQ-496, PQ-500 |
-| RETRIEVAL_PARTIAL | 41 | PQ-112, PQ-122, PQ-132, PQ-157, PQ-158, PQ-160, PQ-162, PQ-182, PQ-196, PQ-201, PQ-215, PQ-216, PQ-218, PQ-226, PQ-229, PQ-249, PQ-262, PQ-273, PQ-282, PQ-303, PQ-309, PQ-320, PQ-333, PQ-339, PQ-351, PQ-354, PQ-355, PQ-356, PQ-362, PQ-399, PQ-400, PQ-425, PQ-427, PQ-444, PQ-456, PQ-475, PQ-476, PQ-479, PQ-492, PQ-497, PQ-498 |
+| RETRIEVAL_PASS | 273 | PQ-101, PQ-102, PQ-103, PQ-104, PQ-105, PQ-106, PQ-107, PQ-108, PQ-109, PQ-110, PQ-111, PQ-113, PQ-115, PQ-116, PQ-118, PQ-119, PQ-121, PQ-124, PQ-125, PQ-126, PQ-127, PQ-128, PQ-129, PQ-130, PQ-131, PQ-133, PQ-134, PQ-135, PQ-136, PQ-137, PQ-138, PQ-139, PQ-141, PQ-142, PQ-143, PQ-144, PQ-145, PQ-151, PQ-152, PQ-154, PQ-155, PQ-156, PQ-159, PQ-161, PQ-163, PQ-165, PQ-166, PQ-167, PQ-168, PQ-169, PQ-170, PQ-171, PQ-172, PQ-173, PQ-174, PQ-175, PQ-176, PQ-178, PQ-179, PQ-180, PQ-181, PQ-183, PQ-184, PQ-185, PQ-186, PQ-187, PQ-190, PQ-191, PQ-192, PQ-193, PQ-194, PQ-195, PQ-197, PQ-198, PQ-199, PQ-200, PQ-207, PQ-211, PQ-212, PQ-213, PQ-214, PQ-220, PQ-221, PQ-222, PQ-223, PQ-224, PQ-225, PQ-227, PQ-228, PQ-230, PQ-231, PQ-232, PQ-233, PQ-234, PQ-235, PQ-236, PQ-237, PQ-238, PQ-239, PQ-240, PQ-243, PQ-244, PQ-245, PQ-246, PQ-247, PQ-248, PQ-250, PQ-251, PQ-252, PQ-253, PQ-254, PQ-255, PQ-256, PQ-257, PQ-258, PQ-259, PQ-260, PQ-261, PQ-271, PQ-272, PQ-274, PQ-275, PQ-276, PQ-277, PQ-278, PQ-279, PQ-280, PQ-281, PQ-283, PQ-284, PQ-285, PQ-286, PQ-287, PQ-288, PQ-289, PQ-290, PQ-291, PQ-292, PQ-293, PQ-294, PQ-295, PQ-296, PQ-297, PQ-300, PQ-301, PQ-302, PQ-303, PQ-304, PQ-307, PQ-308, PQ-310, PQ-311, PQ-312, PQ-313, PQ-314, PQ-315, PQ-316, PQ-317, PQ-318, PQ-319, PQ-321, PQ-322, PQ-331, PQ-332, PQ-334, PQ-335, PQ-336, PQ-338, PQ-340, PQ-341, PQ-342, PQ-343, PQ-344, PQ-345, PQ-346, PQ-347, PQ-350, PQ-351, PQ-352, PQ-357, PQ-358, PQ-359, PQ-360, PQ-361, PQ-363, PQ-364, PQ-365, PQ-366, PQ-367, PQ-368, PQ-369, PQ-370, PQ-371, PQ-372, PQ-373, PQ-374, PQ-376, PQ-378, PQ-382, PQ-386, PQ-387, PQ-388, PQ-391, PQ-392, PQ-393, PQ-394, PQ-395, PQ-396, PQ-397, PQ-398, PQ-399, PQ-401, PQ-402, PQ-403, PQ-406, PQ-407, PQ-408, PQ-409, PQ-410, PQ-411, PQ-412, PQ-413, PQ-414, PQ-415, PQ-416, PQ-417, PQ-418, PQ-419, PQ-420, PQ-421, PQ-422, PQ-423, PQ-424, PQ-426, PQ-428, PQ-439, PQ-443, PQ-446, PQ-447, PQ-448, PQ-450, PQ-451, PQ-452, PQ-453, PQ-455, PQ-457, PQ-458, PQ-459, PQ-460, PQ-461, PQ-462, PQ-463, PQ-464, PQ-465, PQ-466, PQ-467, PQ-468, PQ-469, PQ-470, PQ-471, PQ-472, PQ-473, PQ-474, PQ-477, PQ-478, PQ-480, PQ-481, PQ-482, PQ-485, PQ-493, PQ-496, PQ-497, PQ-500 |
+| RETRIEVAL_PARTIAL | 38 | PQ-112, PQ-122, PQ-132, PQ-157, PQ-158, PQ-160, PQ-162, PQ-182, PQ-196, PQ-201, PQ-215, PQ-216, PQ-218, PQ-229, PQ-249, PQ-262, PQ-273, PQ-282, PQ-309, PQ-320, PQ-333, PQ-339, PQ-354, PQ-355, PQ-356, PQ-362, PQ-400, PQ-425, PQ-427, PQ-440, PQ-444, PQ-456, PQ-475, PQ-476, PQ-479, PQ-483, PQ-492, PQ-498 |
 | TIER2_GLINER_GAP | 0 | - |
-| TIER3_LLM_GAP | 64 | PQ-146, PQ-147, PQ-148, PQ-150, PQ-153, PQ-154, PQ-202, PQ-203, PQ-204, PQ-205, PQ-206, PQ-208, PQ-209, PQ-210, PQ-263, PQ-264, PQ-265, PQ-266, PQ-267, PQ-268, PQ-269, PQ-270, PQ-323, PQ-324, PQ-325, PQ-326, PQ-327, PQ-328, PQ-329, PQ-330, PQ-375, PQ-377, PQ-379, PQ-383, PQ-384, PQ-385, PQ-389, PQ-390, PQ-405, PQ-429, PQ-430, PQ-431, PQ-432, PQ-433, PQ-434, PQ-435, PQ-436, PQ-437, PQ-438, PQ-441, PQ-442, PQ-445, PQ-449, PQ-454, PQ-484, PQ-486, PQ-487, PQ-488, PQ-489, PQ-490, PQ-491, PQ-494, PQ-495, PQ-499 |
-| RETRIEVAL_BROKEN | 17 | PQ-117, PQ-120, PQ-123, PQ-134, PQ-177, PQ-188, PQ-217, PQ-219, PQ-241, PQ-242, PQ-298, PQ-299, PQ-300, PQ-305, PQ-353, PQ-381, PQ-404 |
+| TIER3_LLM_GAP | 63 | PQ-146, PQ-147, PQ-148, PQ-150, PQ-153, PQ-202, PQ-203, PQ-204, PQ-205, PQ-206, PQ-208, PQ-209, PQ-210, PQ-263, PQ-264, PQ-265, PQ-266, PQ-267, PQ-268, PQ-269, PQ-270, PQ-323, PQ-324, PQ-325, PQ-326, PQ-327, PQ-328, PQ-329, PQ-330, PQ-375, PQ-377, PQ-379, PQ-383, PQ-384, PQ-385, PQ-389, PQ-390, PQ-405, PQ-429, PQ-430, PQ-431, PQ-432, PQ-433, PQ-434, PQ-435, PQ-436, PQ-437, PQ-438, PQ-441, PQ-442, PQ-445, PQ-449, PQ-454, PQ-484, PQ-486, PQ-487, PQ-488, PQ-489, PQ-490, PQ-491, PQ-494, PQ-495, PQ-499 |
+| RETRIEVAL_BROKEN | 17 | PQ-117, PQ-120, PQ-123, PQ-177, PQ-188, PQ-217, PQ-219, PQ-226, PQ-241, PQ-242, PQ-298, PQ-299, PQ-305, PQ-306, PQ-353, PQ-381, PQ-404 |
 
 ## Hybrid (FTS + Vector) Fusion Evidence
 
@@ -108,8 +108,8 @@ on vector-only.
 
 **Queries with exact-token requirements (FTS beneficiaries):** 329/391
 
-- PASS: 269/329
-- PARTIAL: 44/329
+- PASS: 273/329
+- PARTIAL: 40/329
 
 **IDs flagged as FTS beneficiaries:**
 
@@ -137,7 +137,7 @@ on vector-only.
 - `PQ-128` [PASS] -- exact tokens: `What maintenance actions are documented in the Thule monitoring system Maintenan...`
 - `PQ-130` [PASS] -- exact tokens: `What is the Corrective Action Plan for Fairford monitoring system incident IGSI-...`
 - `PQ-132` [PARTIAL] -- exact tokens: `What known issues are documented for the Digisonde DPS-4D as of March 2022?...`
-- `PQ-134` [MISS] -- exact tokens: `What is the Part Failure Tracker and what parts have been replaced?...`
+- `PQ-134` [PASS] -- exact tokens: `What is the Part Failure Tracker and what parts have been replaced?...`
 - `PQ-136` [PASS] -- exact tokens: `What ACAS scan results are documented for the legacy monitoring systems under CD...`
 - `PQ-137` [PASS] -- exact tokens: `What SCAP scan results are archived for the monitoring systems?...`
 - `PQ-138` [PASS] -- exact tokens: `What is the System Authorization Boundary for monitoring system defined in SEMP?...`
@@ -149,7 +149,7 @@ on vector-only.
 - `PQ-146` [PASS] -- exact tokens: `How many site-specific Maintenance Service Report folders exist across both lega...`
 - `PQ-147` [PASS] -- exact tokens: `Which sites have Corrective Action Plans filed in 2024 with incident numbers?...`
 - `PQ-151` [PASS] -- exact tokens: `What was the December 2024 enterprise program weekly hours variance trend across...`
-- `PQ-154` [PARTIAL] -- exact tokens: `What FEP monthly actuals are available for 2025 and when do they transition to t...`
+- `PQ-154` [PASS] -- exact tokens: `What FEP monthly actuals are available for 2025 and when do they transition to t...`
 - `PQ-155` [PASS] -- exact tokens: `What is documented in the enterprise program Weekly Hours Variance report dated ...`
 - `PQ-156` [PASS] -- exact tokens: `What monthly status reports have been submitted under CDRL A009 for 2024?...`
 - `PQ-157` [PARTIAL] -- exact tokens: `What is the Configuration Audit Report (CDRL A011) used for and what has been su...`
@@ -214,7 +214,7 @@ on vector-only.
 - `PQ-221` [PASS] -- exact tokens: `Where are the FEP monthly actuals stored in the program management folder tree?...`
 - `PQ-222` [PASS] -- exact tokens: `How many enterprise program weekly hours variance reports are filed under the 20...`
 - `PQ-223` [PASS] -- exact tokens: `Show me the purchase order for the DMEA coax crimp kit bought from PBJ for the m...`
-- `PQ-226` [PARTIAL] -- exact tokens: `What did we buy from Dell for the Niger legacy monitoring system installation?...`
+- `PQ-226` [MISS] -- exact tokens: `What did we buy from Dell for the Niger legacy monitoring system installation?...`
 - `PQ-227` [PASS] -- exact tokens: `What work was performed under PO 5000516535 for Guam?...`
 - `PQ-228` [PASS] -- exact tokens: `What was the monitoring system wire assembly purchase order from TCI?...`
 - `PQ-229` [PARTIAL] -- exact tokens: `Who supplied the BNC male connectors for monitoring system in OY1?...`
@@ -274,12 +274,12 @@ on vector-only.
 - `PQ-296` [PASS] -- exact tokens: `Where is the IGSI-57 Curacao legacy monitoring system MSR parts list?...`
 - `PQ-298` [MISS] -- exact tokens: `Where is the legacy monitoring system Autodialer Programming Guide Revision 1 st...`
 - `PQ-299` [MISS] -- exact tokens: `Where is the October 7, 2024 revision of the monitoring system ASV procedures?...`
-- `PQ-300` [MISS] -- exact tokens: `Where is the September 23, 2025 draft of the monitoring system ASV procedures?...`
+- `PQ-300` [PASS] -- exact tokens: `Where is the September 23, 2025 draft of the monitoring system ASV procedures?...`
 - `PQ-301` [PASS] -- exact tokens: `Where is the USSF ICA document for the Awase site?...`
 - `PQ-302` [PASS] -- exact tokens: `Was there a combined Thule and Wake CT&E trip in 2019?...`
-- `PQ-303` [PARTIAL] -- exact tokens: `Was there a June 2018 monitoring system Eareckson CT&E visit?...`
+- `PQ-303` [PASS] -- exact tokens: `Was there a June 2018 monitoring system Eareckson CT&E visit?...`
 - `PQ-305` [MISS] -- exact tokens: `Is there a monitoring system autodialer programming guide separate from the lega...`
-- `PQ-306` [PASS] -- exact tokens: `Where is the _Archive subfolder for monitoring system ASV procedures?...`
+- `PQ-306` [MISS] -- exact tokens: `Where is the _Archive subfolder for monitoring system ASV procedures?...`
 - `PQ-309` [PARTIAL] -- exact tokens: `What is the March 2026 Guam monitoring system MSR deliverable ID?...`
 - `PQ-310` [PASS] -- exact tokens: `What is the November 2025 Wake monitoring system MSR deliverable?...`
 - `PQ-312` [PASS] -- exact tokens: `What is deliverable IGSI-2512?...`
@@ -295,7 +295,7 @@ on vector-only.
 - `PQ-323` [PASS] -- exact tokens: `How many A002 MSR deliverables have been submitted under contract FA881525FB002?...`
 - `PQ-324` [PASS] -- exact tokens: `How many A002 MSR deliverables are confirmed under contract 47QFRA22F0009?...`
 - `PQ-325` [PASS] -- exact tokens: `Which sites have monitoring system-suffixed A002 MSR subfolders in the CDRL tree...`
-- `PQ-326` [PASS] -- exact tokens: `Which sites have legacy monitoring system-suffixed A002 MSR subfolders?...`
+- `PQ-326` [PARTIAL] -- exact tokens: `Which sites have legacy monitoring system-suffixed A002 MSR subfolders?...`
 - `PQ-327` [PARTIAL] -- exact tokens: `List the 2025 enterprise program outage analysis spreadsheets archived under 6.0...`
 - `PQ-328` [PASS] -- exact tokens: `Which sites have scheduled 2026 ASV/survey trips in the ! Site Visits folder?...`
 - `PQ-329` [PARTIAL] -- exact tokens: `Which 2022 cumulative outage metrics files are archived?...`
@@ -311,7 +311,7 @@ on vector-only.
 - `PQ-340` [PASS] -- exact tokens: `Show me the enterprise program IMS revision delivered on 2023-06-20....`
 - `PQ-341` [PASS] -- exact tokens: `How many IMS revisions were delivered in 2023?...`
 - `PQ-347` [PASS] -- exact tokens: `Which Soldering Material COCO1 purchase orders were received in October-November...`
-- `PQ-351` [PARTIAL] -- exact tokens: `What does the A027 CT&E Report for Hawaii Install cover?...`
+- `PQ-351` [PASS] -- exact tokens: `What does the A027 CT&E Report for Hawaii Install cover?...`
 - `PQ-352` [PASS] -- exact tokens: `What's the IGSI-2891 legacy monitoring system RHEL8 cybersecurity assessment tes...`
 - `PQ-353` [MISS] -- exact tokens: `Walk me through what's in the Eglin 2017-03 ASV desktop log....`
 - `PQ-356` [PARTIAL] -- exact tokens: `Walk me through the Alpena SPR&IP Appendix J final document trail....`
@@ -339,7 +339,7 @@ on vector-only.
 - `PQ-381` [MISS] -- exact tokens: `Which received POs are tied to monitoring system Sustainment OY2 (1 Aug 24 - 31 ...`
 - `PQ-382` [PASS] -- exact tokens: `Which subcontract PRs are recorded under LDI Labor for 2025?...`
 - `PQ-383` [PASS] -- exact tokens: `How many distinct A027 RMF Security Plan AC Plans and Controls deliverables exis...`
-- `PQ-384` [PASS] -- exact tokens: `Cross-reference: which IGSI deliverables were filed in May 2023 across A009 and ...`
+- `PQ-384` [PARTIAL] -- exact tokens: `Cross-reference: which IGSI deliverables were filed in May 2023 across A009 and ...`
 - `PQ-385` [PASS] -- exact tokens: `Which 2018-11-07 cybersecurity submissions exist across the archive and Software...`
 - `PQ-386` [PASS] -- exact tokens: `What's the difference between the enterprise program Weekly Hours Variance repor...`
 - `PQ-387` [PASS] -- exact tokens: `Which contract is referenced in the OY2 IGSI-2464 AC Plans and Controls delivera...`
@@ -354,7 +354,7 @@ on vector-only.
 - `PQ-396` [PASS] -- exact tokens: `Show me the enterprise program FEP Monthly Actuals spreadsheet for 2025-01....`
 - `PQ-397` [PASS] -- exact tokens: `Show me the FEP Recon spreadsheet for 2025-05-07....`
 - `PQ-398` [PASS] -- exact tokens: `What does an FEP Monthly Actuals spreadsheet typically contain?...`
-- `PQ-399` [PARTIAL] -- exact tokens: `What is the relationship between the FEP Monthly Actuals spreadsheets and the FE...`
+- `PQ-399` [PASS] -- exact tokens: `What is the relationship between the FEP Monthly Actuals spreadsheets and the FE...`
 - `PQ-401` [PASS] -- exact tokens: `Show me the enterprise program FEP Monthly Actuals spreadsheet for 2024-02....`
 - `PQ-402` [PASS] -- exact tokens: `Show me the Calibration Tracker as of 2019-01-04....`
 - `PQ-404` [MISS] -- exact tokens: `Show me the Recommended Spares Parts List from 2018-06-27....`
@@ -386,7 +386,7 @@ on vector-only.
 - `PQ-437` [PASS] -- exact tokens: `Cross-reference: which Eareckson site logs exist across 2019 and 2018?...`
 - `PQ-438` [PASS] -- exact tokens: `Cross-reference: how many 2019-Feb monitoring system per-site audit logs exist (...`
 - `PQ-439` [PASS] -- exact tokens: `Cross-reference: do Kwajalein site logs appear in both the legacy monitoring sys...`
-- `PQ-440` [PASS] -- exact tokens: `How does the 'enterprise program FEP Monthly Actuals' family relate to the 'ente...`
+- `PQ-440` [PARTIAL] -- exact tokens: `How does the 'enterprise program FEP Monthly Actuals' family relate to the 'ente...`
 - `PQ-441` [PASS] -- exact tokens: `Cross-reference: how many SEMS3D-numbered ConMon bundles were submitted across b...`
 - `PQ-442` [PASS] -- exact tokens: `Cross-reference: which Cumulative Outages monthly files exist for 2022 across bo...`
 - `PQ-443` [PASS] -- exact tokens: `How does the FEP Recon family in Logistics relate to the FEP Monthly Actuals fam...`
@@ -430,7 +430,7 @@ on vector-only.
 - `PQ-484` [PARTIAL] -- exact tokens: `Cross-reference: how many distinct A013 SEMP deliverables exist under contract 4...`
 - `PQ-485` [PASS] -- exact tokens: `Cross-reference: which 2026 shipments occurred during the same week as the 2026-...`
 - `PQ-486` [PASS] -- exact tokens: `Cross-reference: which 2026-Q1 shipments are filed across all sites?...`
-- `PQ-487` [PARTIAL] -- exact tokens: `Cross-reference: which sites have both a confirmed A006 IATP deliverable and an ...`
+- `PQ-487` [PASS] -- exact tokens: `Cross-reference: which sites have both a confirmed A006 IATP deliverable and an ...`
 - `PQ-488` [PASS] -- exact tokens: `Cross-reference: how many ATO-ATC package change folders exist for the legacy mo...`
 - `PQ-489` [PASS] -- exact tokens: `Cross-reference: how does the per-control-family Pending vs Final split work in ...`
 - `PQ-490` [PARTIAL] -- exact tokens: `Cross-reference: how many distinct A006 / A007 IGSI deliverables exist across bo...`
@@ -439,7 +439,7 @@ on vector-only.
 - `PQ-493` [PASS] -- exact tokens: `How does the IGSI-2431 SEMP relate to the IGSI-66 SEMP under contract 47QFRA22F0...`
 - `PQ-495` [PASS] -- exact tokens: `Cross-reference: which 2024 cybersecurity submissions exist across A027 RMF and ...`
 - `PQ-496` [PASS] -- exact tokens: `Cross-reference: how does the corpus organize Acceptance Test Plan / Report deli...`
-- `PQ-497` [PARTIAL] -- exact tokens: `How does the recurring monthly cadence of FEP Monthly Actuals compare to the rec...`
+- `PQ-497` [PASS] -- exact tokens: `How does the recurring monthly cadence of FEP Monthly Actuals compare to the rec...`
 - `PQ-498` [PARTIAL] -- exact tokens: `Cross-reference: how does the corpus track plan/report lifecycle for field engin...`
 - `PQ-499` [PASS] -- exact tokens: `Cross-reference: how many distinct site-keyed CDRL deliverable families show up ...`
 
@@ -507,10 +507,10 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-131 | SEMANTIC | SEMANTIC | OK | PASS |
 | PQ-132 | ENTITY | ENTITY | OK | PARTIAL |
 | PQ-133 | AGGREGATE | ENTITY | MISS | PASS |
-| PQ-134 | TABULAR | TABULAR | OK | MISS |
+| PQ-134 | TABULAR | TABULAR | OK | PASS |
 | PQ-135 | SEMANTIC | SEMANTIC | OK | PASS |
 | PQ-136 | SEMANTIC | TABULAR | MISS | PASS |
-| PQ-137 | SEMANTIC | AGGREGATE | MISS | PASS |
+| PQ-137 | SEMANTIC | TABULAR | MISS | PASS |
 | PQ-138 | SEMANTIC | SEMANTIC | OK | PASS |
 | PQ-139 | SEMANTIC | COMPLEX | MISS | PASS |
 | PQ-141 | ENTITY | ENTITY | OK | PASS |
@@ -525,7 +525,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-151 | AGGREGATE | TABULAR | MISS | PASS |
 | PQ-152 | ENTITY | ENTITY | OK | PASS |
 | PQ-153 | AGGREGATE | AGGREGATE | OK | PARTIAL |
-| PQ-154 | AGGREGATE | AGGREGATE | OK | PARTIAL |
+| PQ-154 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-155 | ENTITY | ENTITY | OK | PASS |
 | PQ-156 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-157 | SEMANTIC | AGGREGATE | MISS | PARTIAL |
@@ -590,12 +590,12 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-218 | SEMANTIC | ENTITY | MISS | PARTIAL |
 | PQ-219 | SEMANTIC | ENTITY | MISS | MISS |
 | PQ-220 | TABULAR | TABULAR | OK | PASS |
-| PQ-221 | SEMANTIC | SEMANTIC | OK | PASS |
+| PQ-221 | SEMANTIC | TABULAR | MISS | PASS |
 | PQ-222 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-223 | ENTITY | ENTITY | OK | PASS |
 | PQ-224 | ENTITY | ENTITY | OK | PASS |
 | PQ-225 | ENTITY | ENTITY | OK | PASS |
-| PQ-226 | ENTITY | ENTITY | OK | PARTIAL |
+| PQ-226 | ENTITY | ENTITY | OK | MISS |
 | PQ-227 | ENTITY | ENTITY | OK | PASS |
 | PQ-228 | ENTITY | ENTITY | OK | PASS |
 | PQ-229 | ENTITY | ENTITY | OK | PARTIAL |
@@ -669,13 +669,13 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-297 | ENTITY | ENTITY | OK | PASS |
 | PQ-298 | ENTITY | ENTITY | OK | MISS |
 | PQ-299 | ENTITY | ENTITY | OK | MISS |
-| PQ-300 | ENTITY | ENTITY | OK | MISS |
+| PQ-300 | ENTITY | ENTITY | OK | PASS |
 | PQ-301 | SEMANTIC | ENTITY | MISS | PASS |
 | PQ-302 | SEMANTIC | SEMANTIC | OK | PASS |
-| PQ-303 | ENTITY | ENTITY | OK | PARTIAL |
+| PQ-303 | ENTITY | ENTITY | OK | PASS |
 | PQ-304 | SEMANTIC | ENTITY | MISS | PASS |
-| PQ-305 | SEMANTIC | SEMANTIC | OK | MISS |
-| PQ-306 | SEMANTIC | ENTITY | MISS | PASS |
+| PQ-305 | SEMANTIC | ENTITY | MISS | MISS |
+| PQ-306 | SEMANTIC | ENTITY | MISS | MISS |
 | PQ-307 | ENTITY | ENTITY | OK | PASS |
 | PQ-308 | ENTITY | ENTITY | OK | PASS |
 | PQ-309 | ENTITY | ENTITY | OK | PARTIAL |
@@ -695,7 +695,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-323 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-324 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-325 | AGGREGATE | AGGREGATE | OK | PASS |
-| PQ-326 | AGGREGATE | AGGREGATE | OK | PASS |
+| PQ-326 | AGGREGATE | AGGREGATE | OK | PARTIAL |
 | PQ-327 | AGGREGATE | AGGREGATE | OK | PARTIAL |
 | PQ-328 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-329 | AGGREGATE | AGGREGATE | OK | PARTIAL |
@@ -704,7 +704,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-332 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-333 | SEMANTIC | SEMANTIC | OK | PARTIAL |
 | PQ-334 | AGGREGATE | AGGREGATE | OK | PASS |
-| PQ-335 | SEMANTIC | TABULAR | MISS | PASS |
+| PQ-335 | SEMANTIC | SEMANTIC | OK | PASS |
 | PQ-336 | ENTITY | TABULAR | MISS | PASS |
 | PQ-338 | ENTITY | TABULAR | MISS | PASS |
 | PQ-339 | SEMANTIC | SEMANTIC | OK | PARTIAL |
@@ -717,7 +717,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-346 | ENTITY | TABULAR | MISS | PASS |
 | PQ-347 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-350 | ENTITY | ENTITY | OK | PASS |
-| PQ-351 | SEMANTIC | SEMANTIC | OK | PARTIAL |
+| PQ-351 | SEMANTIC | SEMANTIC | OK | PASS |
 | PQ-352 | ENTITY | ENTITY | OK | PASS |
 | PQ-353 | SEMANTIC | SEMANTIC | OK | MISS |
 | PQ-354 | ENTITY | TABULAR | MISS | PARTIAL |
@@ -749,7 +749,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-381 | AGGREGATE | AGGREGATE | OK | MISS |
 | PQ-382 | ENTITY | AGGREGATE | MISS | PASS |
 | PQ-383 | AGGREGATE | AGGREGATE | OK | PASS |
-| PQ-384 | AGGREGATE | AGGREGATE | OK | PASS |
+| PQ-384 | AGGREGATE | AGGREGATE | OK | PARTIAL |
 | PQ-385 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-386 | SEMANTIC | SEMANTIC | OK | PASS |
 | PQ-387 | ENTITY | ENTITY | OK | PASS |
@@ -764,7 +764,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-396 | TABULAR | TABULAR | OK | PASS |
 | PQ-397 | TABULAR | TABULAR | OK | PASS |
 | PQ-398 | SEMANTIC | SEMANTIC | OK | PASS |
-| PQ-399 | SEMANTIC | TABULAR | MISS | PARTIAL |
+| PQ-399 | SEMANTIC | TABULAR | MISS | PASS |
 | PQ-400 | ENTITY | ENTITY | OK | PARTIAL |
 | PQ-401 | TABULAR | TABULAR | OK | PASS |
 | PQ-402 | TABULAR | TABULAR | OK | PASS |
@@ -805,7 +805,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-437 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-438 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-439 | TABULAR | COMPLEX | MISS | PASS |
-| PQ-440 | SEMANTIC | SEMANTIC | OK | PASS |
+| PQ-440 | SEMANTIC | SEMANTIC | OK | PARTIAL |
 | PQ-441 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-442 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-443 | SEMANTIC | SEMANTIC | OK | PASS |
@@ -848,11 +848,11 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-480 | TABULAR | SEMANTIC | MISS | PASS |
 | PQ-481 | TABULAR | TABULAR | OK | PASS |
 | PQ-482 | SEMANTIC | SEMANTIC | OK | PASS |
-| PQ-483 | SEMANTIC | ENTITY | MISS | PASS |
+| PQ-483 | SEMANTIC | ENTITY | MISS | PARTIAL |
 | PQ-484 | AGGREGATE | SEMANTIC | MISS | PARTIAL |
 | PQ-485 | TABULAR | AGGREGATE | MISS | PASS |
 | PQ-486 | AGGREGATE | AGGREGATE | OK | PASS |
-| PQ-487 | AGGREGATE | AGGREGATE | OK | PARTIAL |
+| PQ-487 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-488 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-489 | AGGREGATE | SEMANTIC | MISS | PASS |
 | PQ-490 | AGGREGATE | AGGREGATE | OK | PARTIAL |
@@ -862,7 +862,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 | PQ-494 | AGGREGATE | SEMANTIC | MISS | PASS |
 | PQ-495 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-496 | SEMANTIC | SEMANTIC | OK | PASS |
-| PQ-497 | SEMANTIC | SEMANTIC | OK | PARTIAL |
+| PQ-497 | SEMANTIC | SEMANTIC | OK | PASS |
 | PQ-498 | SEMANTIC | SEMANTIC | OK | PARTIAL |
 | PQ-499 | AGGREGATE | AGGREGATE | OK | PASS |
 | PQ-500 | SEMANTIC | SEMANTIC | OK | PASS |
@@ -877,8 +877,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 45230ms (router 3096ms, retrieval 31644ms)
-**Stage timings:** context_build=7726ms, rerank=7726ms, retrieval=31644ms, router=3096ms, vector_search=23916ms
+**Latency:** embed+retrieve 18673ms (router 2828ms, retrieval 11768ms)
+**Stage timings:** context_build=3451ms, rerank=3451ms, retrieval=11768ms, router=2828ms, vector_search=8317ms
 
 **Top-5 results:**
 
@@ -903,8 +903,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 14887ms (router 2296ms, retrieval 12331ms)
-**Stage timings:** aggregate_lookup=4096ms, context_build=7994ms, rerank=7994ms, retrieval=12331ms, router=2296ms, structured_lookup=8192ms, vector_search=240ms
+**Latency:** embed+retrieve 9287ms (router 2796ms, retrieval 6312ms)
+**Stage timings:** aggregate_lookup=1723ms, context_build=4427ms, rerank=4427ms, retrieval=6312ms, router=2796ms, structured_lookup=3447ms, vector_search=160ms
 
 **Top-5 results:**
 
@@ -929,8 +929,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 35601ms (router 1949ms, retrieval 33239ms)
-**Stage timings:** context_build=7475ms, entity_lookup=24923ms, relationship_lookup=520ms, rerank=7475ms, retrieval=33239ms, router=1949ms, structured_lookup=50887ms, vector_search=319ms
+**Latency:** embed+retrieve 13804ms (router 2828ms, retrieval 10768ms)
+**Stage timings:** context_build=3382ms, entity_lookup=7005ms, relationship_lookup=185ms, rerank=3382ms, retrieval=10768ms, router=2828ms, structured_lookup=14381ms, vector_search=194ms
 
 **Top-5 results:**
 
@@ -955,8 +955,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 26366ms (router 1914ms, retrieval 24289ms)
-**Stage timings:** context_build=2974ms, entity_lookup=20665ms, relationship_lookup=409ms, rerank=2974ms, retrieval=24289ms, router=1914ms, structured_lookup=42149ms, vector_search=239ms
+**Latency:** embed+retrieve 14181ms (router 2626ms, retrieval 11387ms)
+**Stage timings:** context_build=2117ms, entity_lookup=8863ms, relationship_lookup=248ms, rerank=2117ms, retrieval=11387ms, router=2626ms, structured_lookup=18223ms, vector_search=157ms
 
 **Top-5 results:**
 
@@ -964,10 +964,10 @@ a classifier tuning opportunity, tracked but not fixed here.
    > ram. The MPP includes an Integrated Master Plan (IMP) and other associated narratives that define the program architecture and contractual commitments based ...
 2. [out] `SMORS Plans/SMORS Program Management Plan.doc` (score=0.016)
    > other programs. Schedule Management The IMS, located on SMORSNet, provides the total program summary schedule and is the top scheduling document to which all...
-3. [out] `_WhatEver/EVMgoldversion.doc` (score=0.016)
-   > m. (See Guidelines Discussion Paragraph 1.2.1) The scheduling system containing a program master schedule reflecting contractual requirements, significant de...
-4. [IN-FAMILY] `04 - Program Planning/Program Planning audit checklist.xlsx` (score=0.016)
+3. [IN-FAMILY] `04 - Program Planning/Program Planning audit checklist.xlsx` (score=0.016)
    > pport, : Satisfactory, : The IMS is a monthly deliverable to the gov't. All schedule are located here: \\rsmcoc-fps01\#RSMCOC-FPS01\Group2\IGS\1.5 IGS CDRLS\...
+4. [out] `_WhatEver/EVMgoldversion.doc` (score=0.016)
+   > m. (See Guidelines Discussion Paragraph 1.2.1) The scheduling system containing a program master schedule reflecting contractual requirements, significant de...
 5. [IN-FAMILY] `SEP/SEP_S2I3_8Dec04.doc` (score=0.016)
    > Engineering, supported by Software Engineering, also provides training. 3.1.3.2 Personnel Resources SWAFS Project staffing is based on the integrated staffin...
 
@@ -981,8 +981,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 42888ms (router 1016ms, retrieval 30006ms)
-**Stage timings:** context_build=4398ms, rerank=4398ms, retrieval=30006ms, router=1016ms, vector_search=25608ms
+**Latency:** embed+retrieve 15420ms (router 1537ms, retrieval 9873ms)
+**Stage timings:** context_build=2048ms, rerank=2048ms, retrieval=9873ms, router=1537ms, vector_search=7825ms
 
 **Top-5 results:**
 
@@ -1007,8 +1007,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 5540ms (router 1199ms, retrieval 4085ms)
-**Stage timings:** context_build=3773ms, rerank=3773ms, retrieval=4085ms, router=1199ms, vector_search=311ms
+**Latency:** embed+retrieve 4230ms (router 1260ms, retrieval 2769ms)
+**Stage timings:** context_build=2563ms, rerank=2563ms, retrieval=2769ms, router=1260ms, vector_search=205ms
 
 **Top-5 results:**
 
@@ -1033,8 +1033,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 13017ms (router 1202ms, retrieval 11538ms)
-**Stage timings:** aggregate_lookup=4316ms, context_build=6923ms, rerank=6923ms, retrieval=11538ms, router=1202ms, structured_lookup=8632ms, vector_search=298ms
+**Latency:** embed+retrieve 7893ms (router 1937ms, retrieval 5788ms)
+**Stage timings:** aggregate_lookup=1667ms, context_build=3946ms, rerank=3946ms, retrieval=5788ms, router=1937ms, structured_lookup=3334ms, vector_search=173ms
 
 **Top-5 results:**
 
@@ -1059,8 +1059,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 14459ms (router 1110ms, retrieval 13172ms)
-**Stage timings:** aggregate_lookup=6163ms, context_build=6732ms, rerank=6732ms, retrieval=13172ms, router=1110ms, structured_lookup=12326ms, vector_search=276ms
+**Latency:** embed+retrieve 8608ms (router 1826ms, retrieval 6596ms)
+**Stage timings:** aggregate_lookup=1669ms, context_build=4740ms, rerank=4740ms, retrieval=6596ms, router=1826ms, structured_lookup=3338ms, vector_search=186ms
 
 **Top-5 results:**
 
@@ -1085,8 +1085,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 7715ms (router 1295ms, retrieval 6216ms)
-**Stage timings:** context_build=5753ms, rerank=5753ms, retrieval=6216ms, router=1295ms, vector_search=463ms
+**Latency:** embed+retrieve 4426ms (router 2059ms, retrieval 2188ms)
+**Stage timings:** context_build=1998ms, rerank=1998ms, retrieval=2188ms, router=2059ms, vector_search=189ms
 
 **Top-5 results:**
 
@@ -1111,8 +1111,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 8341ms (router 2353ms, retrieval 5789ms)
-**Stage timings:** context_build=5520ms, rerank=5520ms, retrieval=5789ms, router=2353ms, vector_search=268ms
+**Latency:** embed+retrieve 9091ms (router 5617ms, retrieval 3295ms)
+**Stage timings:** context_build=3128ms, rerank=3128ms, retrieval=3295ms, router=5617ms, vector_search=166ms
 
 **Top-5 results:**
 
@@ -1137,8 +1137,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 132214ms (router 1819ms, retrieval 105475ms)
-**Stage timings:** context_build=11993ms, rerank=11993ms, retrieval=105475ms, router=1819ms, vector_search=60249ms
+**Latency:** embed+retrieve 42431ms (router 1985ms, retrieval 34105ms)
+**Stage timings:** context_build=6287ms, rerank=6287ms, retrieval=34105ms, router=1985ms, vector_search=17877ms
 
 **Top-5 results:**
 
@@ -1173,8 +1173,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 38025ms (router 1461ms, retrieval 36268ms)
-**Stage timings:** aggregate_lookup=11838ms, context_build=23542ms, rerank=23542ms, retrieval=36268ms, router=1461ms, structured_lookup=23677ms, vector_search=885ms
+**Latency:** embed+retrieve 13885ms (router 2037ms, retrieval 11667ms)
+**Stage timings:** aggregate_lookup=2458ms, context_build=8924ms, rerank=8923ms, retrieval=11667ms, router=2037ms, structured_lookup=4916ms, vector_search=284ms
 
 **Top-5 results:**
 
@@ -1199,8 +1199,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 56521ms (router 1505ms, retrieval 42984ms)
-**Stage timings:** context_build=6061ms, rerank=6061ms, retrieval=42984ms, router=1505ms, vector_search=7227ms
+**Latency:** embed+retrieve 19709ms (router 3077ms, retrieval 14221ms)
+**Stage timings:** context_build=2703ms, rerank=2703ms, retrieval=14221ms, router=3077ms, vector_search=2447ms
 
 **Top-5 results:**
 
@@ -1231,8 +1231,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 53272ms (router 1008ms, retrieval 52010ms)
-**Stage timings:** context_build=10641ms, rerank=10641ms, retrieval=52010ms, router=1008ms, vector_search=563ms
+**Latency:** embed+retrieve 14939ms (router 2160ms, retrieval 12622ms)
+**Stage timings:** context_build=3320ms, rerank=3320ms, retrieval=12622ms, router=2160ms, vector_search=135ms
 
 **Top-5 results:**
 
@@ -1257,19 +1257,19 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 54072ms (router 1176ms, retrieval 52711ms)
-**Stage timings:** context_build=7778ms, rerank=7777ms, retrieval=52711ms, router=1176ms, vector_search=985ms
+**Latency:** embed+retrieve 16528ms (router 3801ms, retrieval 12549ms)
+**Stage timings:** context_build=3282ms, rerank=3282ms, retrieval=12549ms, router=3801ms, vector_search=166ms
 
 **Top-5 results:**
 
 1. [IN-FAMILY] `Enclosure - Metallic (RSC081004)/Page 24 (RSC081004).pdf` (score=0.016)
    > Tools Test Equipment Enclosures Enclosure Climate Control Safety: Electrical Components Safety: Protective Wear Terms and Conditions NEMA 4 JIC Continuous-Hi...
-2. [out] `2018-09-25 Ascension NEXION Lab/Monthly Scans 2018 Sep ISTO-NEXION.xlsx` (score=0.016)
-   > mation system after updates have been installed may be exploited by adversaries. Some information technology products may remove older versions of software a...
+2. [IN-FAMILY] `Enclosure - Metallic (RSC081004)/Page 24 (RSC081004).pdf` (score=0.016)
+   > your enclosure thousands of times and maintain a perfect seal. At a casual glance, many enclosures look pretty much alike ? big gray metal boxes. However, al...
 3. [IN-FAMILY] `Enclosure - Metallic (RSC081004)/Page 24 (RSC081004).pdf` (score=0.016)
    > rters Transformers and Filters Circuit Protection Tools Test Equipment Enclosures Enclosure Climate Control Safety: Electrical Components Safety: Protective ...
-4. [out] `2018-10-23 Eareckson Site/ACAS-SCAP Results CAT I 2018-10-23.xlsx` (score=0.016)
-   > [SECTION] FTQW-WXA- 3ESP.WEATHER.AF NEW-NEXION.WEATHER.AF AFTG-WXA-3ALP.WEATHER.AF.MIL Date Exported:: 285, : Title: The operating system must remove all sof...
+4. [out] `SRS/SWAFS_IS_Final_SRS.pdf` (score=0.016)
+   > ncide with the REIP Product Generation Pillar. All of the PRODGEN modules share a common function of creating image files, and all are implemented in the Res...
 5. [IN-FAMILY] `Enclosure - Metallic (RSC081004)/Page 24 (RSC081004).pdf` (score=0.016)
    > otection Tools Test Equipment Enclosures Enclosure Climate Control Safety: Electrical Components Safety: Protective Wear Terms and Conditions WC10 NEMA 12 Op...
 
@@ -1283,8 +1283,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 16972ms (router 1104ms, retrieval 15647ms)
-**Stage timings:** aggregate_lookup=4461ms, context_build=10965ms, rerank=10965ms, retrieval=15647ms, router=1104ms, structured_lookup=8922ms, vector_search=219ms
+**Latency:** embed+retrieve 8563ms (router 1488ms, retrieval 6913ms)
+**Stage timings:** aggregate_lookup=1725ms, context_build=5034ms, rerank=5034ms, retrieval=6913ms, router=1488ms, structured_lookup=3450ms, vector_search=153ms
 
 **Top-5 results:**
 
@@ -1309,21 +1309,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 24306ms (router 1848ms, retrieval 22098ms)
-**Stage timings:** aggregate_lookup=10082ms, context_build=11103ms, rerank=11103ms, retrieval=22098ms, router=1848ms, structured_lookup=20164ms, vector_search=912ms
+**Latency:** embed+retrieve 7188ms (router 1183ms, retrieval 5793ms)
+**Stage timings:** aggregate_lookup=1670ms, context_build=3901ms, rerank=3901ms, retrieval=5793ms, router=1183ms, structured_lookup=3340ms, vector_search=221ms
 
 **Top-5 results:**
 
 1. [IN-FAMILY] `_WhatEver/DoD Systems.xls` (score=0.016)
    > [SECTION] 3962.0 PROCUREMENT TRACKING SYSTEM SSCPTS Document tracking syste m for procurement requests, credit card purchase requests, outgoing shipments, tu...
-2. [out] `Submitted/OneDrive_1_12-15-2025.zip` (score=0.016)
+2. [out] `Evaluation Questions Delivery/Evaluation_IGS Proposal Questions_Northrop Grumman_6.6.22.docx` (score=0.016)
    > Calculation for Sustainment CLINS on the Sustainment Pricing Breakdown tab) has not been adjusted to reflect the updated price. All tabs have updated pricing...
-3. [out] `A001-RMF_Plan/SEMS3D-33003_RMF Migration Plan (CDRLA001)_IGS_12 Sep 16.docx` (score=0.016)
+3. [out] `OneDrive_1_12-15-2025/NGC_IGS_PPQ_SMORS.docx` (score=0.016)
+   > ms software and operating systems, the sustainment support requires various and unique system development, testing, and integration complexities. NG supports...
+4. [out] `Submitted/OneDrive_1_12-15-2025.zip` (score=0.016)
+   > Calculation for Sustainment CLINS on the Sustainment Pricing Breakdown tab) has not been adjusted to reflect the updated price. All tabs have updated pricing...
+5. [out] `A001-RMF_Plan/SEMS3D-33003_RMF Migration Plan (CDRLA001)_IGS_12 Sep 16.docx` (score=0.016)
    > stem Life Cycle/Acquisition Phase For programs of record, identify the current System Acquisition Phase: Pre-Milestone A (Material Solution Analysis) Post-Mi...
-4. [out] `Evaluation Questions Delivery/Evaluation_IGS Proposal Questions_Northrop Grumman_6.6.22.docx` (score=0.016)
-   > Calculation for Sustainment CLINS on the Sustainment Pricing Breakdown tab) has not been adjusted to reflect the updated price. All tabs have updated pricing...
-5. [IN-FAMILY] `06_June/SEMS3D-38701-IGS_IPT_Briefing_Slides.pdf` (score=0.016)
-   > [SECTION] 2.4.10 T he Government will provide internet connectivity 1 Feb 2019 1 May 19 2.5.1 The Government will provide access to the outside gated area as...
 
 ---
 
@@ -1335,8 +1335,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 149922ms (router 1694ms, retrieval 126983ms)
-**Stage timings:** context_build=15130ms, rerank=15130ms, retrieval=126983ms, router=1694ms, vector_search=26476ms
+**Latency:** embed+retrieve 34828ms (router 2321ms, retrieval 24811ms)
+**Stage timings:** context_build=5182ms, entity_lookup=9133ms, relationship_lookup=61ms, rerank=5182ms, retrieval=24811ms, router=2321ms, structured_lookup=18389ms, vector_search=10433ms
 
 **Top-5 results:**
 
@@ -1354,12 +1354,12 @@ a classifier tuning opportunity, tracked but not fixed here.
    > es - Order Install materials and equipment (to include spares) - Niger 25 days Tue 11/22/22 Mon 12/26/22 72 104 93 100% 3.12.3.15.10 Equipment and Kitting - ...
 7. [IN-FAMILY] `(02) Forms & Documents/Local Mileage Spreadsheet.xlsx` (score=0.016)
    > : NG, To: PSFB / IGS Warehouse, Reason: Retrieve Lower Cable Management PVC Tubing Date: 2023-03-17T00:00:00, Name: Dettler, Mileage: 6.9, From: PSFB / IGS W...
-8. [IN-FAMILY] `2023_05_12 - Guam Return (NG Comm-Air)/PGS-23-I-005 Set.pdf` (score=0.016)
-   > [SECTION] COMBINATION WRENCH, ALLOY STEEL, CHROME, 15 MM HEAD SIZE, 9 1/4 I NCH OVERALL LENGTH COMBINATION WRENCH, ALLOY STEEL, CHROME, 7/8 INCH HEAD SIZE, 1...
-9. [IN-FAMILY] `(02) Forms & Documents/Local Mileage Spreadsheet.xlsx` (score=0.016)
-   > Paine St Date: 2023-04-10T00:00:00, Name: Dettler, Mileage: 5, From: NG, To: SMORS Warehouse, Reason: Took some items from Niger to SMORS Warehouse, Location...
-10. [out] `DRMO Documents (Downloaded)/DISP_h2book[1].pdf` (score=0.016)
-   > [SECTION] 2090 Miscellaneous Ship and Marine Equipment Includes Sails; Chain Ladders; Rope Lad- ders; Marine Furniture. GROUP 22 Railway Equipment 2210 Locom...
+8. [IN-FAMILY] `Export_Control/dtr_part_v_515.pdf` (score=0.016)
+   > owing are the authorized exoneration addresses with actual end destination entered in the final destination block that must be used when shipping any cargo t...
+9. [IN-FAMILY] `2023_07_12 - Guam Return (NG Comm-Air)/Foreign Shipper's Declaration for Guam return - NGC C-876.docx` (score=0.016)
+   > This form certifies the articles specified in this shipment are valued over $2,000 and were exported from the U.S. Complete this form listing all articles in...
+10. [out] `2022/Deliverables Report IGSI-147 IGS IMS 12_14_22 (A031).pdf` (score=0.016)
+   > [SECTION] 88 0% 3.12.2.57 IGSI -448 A033 - As-Built Drawings - Niger(Prior to end of PoP) 1 day Fri 2/24/23 Mon 2/27/23 155 157 89 0% 3.12.2.58 IGSI-446 A011...
 
 ---
 
@@ -1371,8 +1371,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 7628ms (router 1476ms, retrieval 5974ms)
-**Stage timings:** context_build=5646ms, rerank=5646ms, retrieval=5974ms, router=1476ms, vector_search=328ms
+**Latency:** embed+retrieve 5348ms (router 1764ms, retrieval 3420ms)
+**Stage timings:** context_build=3272ms, rerank=3272ms, retrieval=3420ms, router=1764ms, vector_search=148ms
 
 **Top-5 results:**
 
@@ -1397,8 +1397,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 10567ms (router 1763ms, retrieval 8373ms)
-**Stage timings:** context_build=7917ms, rerank=7917ms, retrieval=8373ms, router=1763ms, vector_search=456ms
+**Latency:** embed+retrieve 5058ms (router 1963ms, retrieval 2881ms)
+**Stage timings:** context_build=2691ms, rerank=2691ms, retrieval=2881ms, router=1963ms, vector_search=190ms
 
 **Top-5 results:**
 
@@ -1423,8 +1423,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 36163ms (router 2451ms, retrieval 33360ms)
-**Stage timings:** aggregate_lookup=17396ms, context_build=15522ms, rerank=15522ms, retrieval=33360ms, router=2451ms, structured_lookup=34792ms, vector_search=440ms
+**Latency:** embed+retrieve 12528ms (router 2114ms, retrieval 10218ms)
+**Stage timings:** aggregate_lookup=2410ms, context_build=7480ms, rerank=7480ms, retrieval=10218ms, router=2114ms, structured_lookup=4820ms, vector_search=299ms
 
 **Top-5 results:**
 
@@ -1449,8 +1449,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 13792ms (router 1711ms, retrieval 11771ms)
-**Stage timings:** context_build=11416ms, rerank=11416ms, retrieval=11771ms, router=1711ms, vector_search=353ms
+**Latency:** embed+retrieve 6054ms (router 1808ms, retrieval 4048ms)
+**Stage timings:** context_build=3882ms, rerank=3882ms, retrieval=4048ms, router=1808ms, vector_search=165ms
 
 **Top-5 results:**
 
@@ -1462,8 +1462,8 @@ a classifier tuning opportunity, tracked but not fixed here.
    > tap and hold the stylus on an asset. Then select Edit/Add and you will be taken to Process Inventory. Assets can be removed from the list by selecting the Re...
 4. [out] `iBuy Training/Role-based_Curriculum_Guide.pdf` (score=0.016)
    > iew Only Required ICMT/PRR/MR Required Unbilled Analysis and Resolution Process and Commentary Required Unbilled Portal tab Introduction to Business Warehous...
-5. [out] `Files for Training (2015-02-19)/RedBeam Property Custodian User Manual June 25, 2013.doc` (score=0.016)
-   > a check mark next to the desired records by clicking in the appropriate check boxes. To group the data in the reports, you may select the values from the dro...
+5. [out] `iBuy Training/SRM7_Shopping_Cart_Status.pdf` (score=0.016)
+   > [SECTION] 3.1 Locate Additiona l Details for Buyer-Assigned Requirements 3.2 PSS Buyer Internal Notes and Attachments 4.0 Shopping Cart Information in PDF Fo...
 
 ---
 
@@ -1475,8 +1475,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 19310ms (router 2040ms, retrieval 17015ms)
-**Stage timings:** aggregate_lookup=7695ms, context_build=8913ms, rerank=8913ms, retrieval=17015ms, router=2040ms, structured_lookup=15390ms, vector_search=406ms
+**Latency:** embed+retrieve 9253ms (router 1858ms, retrieval 7165ms)
+**Stage timings:** aggregate_lookup=1782ms, context_build=5151ms, rerank=5151ms, retrieval=7165ms, router=1858ms, structured_lookup=3564ms, vector_search=231ms
 
 **Top-5 results:**
 
@@ -1501,8 +1501,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 62035ms (router 1782ms, retrieval 59942ms)
-**Stage timings:** context_build=7872ms, entity_lookup=51577ms, relationship_lookup=171ms, rerank=7872ms, retrieval=59942ms, router=1782ms, structured_lookup=103497ms, vector_search=320ms
+**Latency:** embed+retrieve 13322ms (router 1375ms, retrieval 11762ms)
+**Stage timings:** context_build=2906ms, entity_lookup=8637ms, relationship_lookup=57ms, rerank=2906ms, retrieval=11762ms, router=1375ms, structured_lookup=17388ms, vector_search=161ms
 
 **Top-5 results:**
 
@@ -1527,8 +1527,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** legacy monitoring system Sites
 
-**Latency:** embed+retrieve 74670ms (router 2020ms, retrieval 72431ms)
-**Stage timings:** context_build=10774ms, entity_lookup=60044ms, relationship_lookup=1117ms, rerank=10774ms, retrieval=72431ms, router=2020ms, structured_lookup=122324ms, vector_search=490ms
+**Latency:** embed+retrieve 15760ms (router 2080ms, retrieval 13496ms)
+**Stage timings:** context_build=4411ms, entity_lookup=8573ms, relationship_lookup=225ms, rerank=4411ms, retrieval=13496ms, router=2080ms, structured_lookup=17596ms, vector_search=284ms
 
 **Top-5 results:**
 
@@ -1553,8 +1553,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 28212ms (router 1516ms, retrieval 26561ms)
-**Stage timings:** aggregate_lookup=17965ms, context_build=8284ms, rerank=8284ms, retrieval=26561ms, router=1516ms, structured_lookup=35931ms, vector_search=309ms
+**Latency:** embed+retrieve 10567ms (router 1807ms, retrieval 8611ms)
+**Stage timings:** aggregate_lookup=2919ms, context_build=5562ms, rerank=5562ms, retrieval=8611ms, router=1807ms, structured_lookup=5838ms, vector_search=128ms
 
 **Top-5 results:**
 
@@ -1579,8 +1579,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 17831ms (router 1113ms, retrieval 16172ms)
-**Stage timings:** aggregate_lookup=4963ms, context_build=10901ms, rerank=10901ms, retrieval=16172ms, router=1113ms, structured_lookup=9927ms, vector_search=307ms
+**Latency:** embed+retrieve 9615ms (router 1864ms, retrieval 7550ms)
+**Stage timings:** aggregate_lookup=1783ms, context_build=5589ms, rerank=5589ms, retrieval=7550ms, router=1864ms, structured_lookup=3566ms, vector_search=177ms
 
 **Top-5 results:**
 
@@ -1605,8 +1605,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 27994ms (router 1167ms, retrieval 26326ms)
-**Stage timings:** aggregate_lookup=16356ms, context_build=9699ms, rerank=9699ms, retrieval=26326ms, router=1167ms, structured_lookup=32712ms, vector_search=270ms
+**Latency:** embed+retrieve 9898ms (router 2048ms, retrieval 7667ms)
+**Stage timings:** aggregate_lookup=2919ms, context_build=4584ms, rerank=4584ms, retrieval=7667ms, router=2048ms, structured_lookup=5838ms, vector_search=163ms
 
 **Top-5 results:**
 
@@ -1631,8 +1631,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 66760ms (router 1338ms, retrieval 60320ms)
-**Stage timings:** context_build=11402ms, entity_lookup=32651ms, relationship_lookup=590ms, rerank=11402ms, retrieval=60320ms, router=1338ms, structured_lookup=66483ms, vector_search=15675ms
+**Latency:** embed+retrieve 27019ms (router 1662ms, retrieval 21803ms)
+**Stage timings:** context_build=7425ms, entity_lookup=8764ms, relationship_lookup=237ms, rerank=7425ms, retrieval=21803ms, router=1662ms, structured_lookup=18002ms, vector_search=5376ms
 
 **Top-5 results:**
 
@@ -1665,8 +1665,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 6773ms (router 1119ms, retrieval 5460ms)
-**Stage timings:** context_build=5243ms, rerank=5243ms, retrieval=5460ms, router=1119ms, vector_search=216ms
+**Latency:** embed+retrieve 5059ms (router 1294ms, retrieval 3599ms)
+**Stage timings:** context_build=3459ms, rerank=3459ms, retrieval=3599ms, router=1294ms, vector_search=139ms
 
 **Top-5 results:**
 
@@ -1691,8 +1691,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** SysAdmin
 
-**Latency:** embed+retrieve 54809ms (router 1101ms, retrieval 53508ms)
-**Stage timings:** context_build=4702ms, rerank=4701ms, retrieval=53508ms, router=1101ms, vector_search=234ms
+**Latency:** embed+retrieve 13997ms (router 1738ms, retrieval 12091ms)
+**Stage timings:** context_build=3046ms, rerank=3046ms, retrieval=12091ms, router=1738ms, vector_search=138ms
 
 **Top-5 results:**
 
@@ -1717,8 +1717,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 79273ms (router 1616ms, retrieval 77426ms)
-**Stage timings:** context_build=8351ms, rerank=8351ms, retrieval=77426ms, router=1616ms, vector_search=350ms
+**Latency:** embed+retrieve 19831ms (router 4512ms, retrieval 15136ms)
+**Stage timings:** context_build=3319ms, rerank=3319ms, retrieval=15136ms, router=4512ms, vector_search=161ms
 
 **Top-5 results:**
 
@@ -1735,7 +1735,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-134 [MISS] -- Field Engineer
+### PQ-134 [PASS] -- Field Engineer
 
 **Query:** What is the Part Failure Tracker and what parts have been replaced?
 
@@ -1743,21 +1743,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Asset Mgmt
 
-**Latency:** embed+retrieve 9170ms (router 1702ms, retrieval 7217ms)
-**Stage timings:** context_build=6934ms, rerank=6934ms, retrieval=7217ms, router=1702ms, vector_search=282ms
+**Latency:** embed+retrieve 5316ms (router 2073ms, retrieval 3069ms)
+**Stage timings:** context_build=2916ms, rerank=2916ms, retrieval=3069ms, router=2073ms, vector_search=152ms
 
 **Top-5 results:**
 
-1. [out] `IGS/A001, Failure Summary & Analysis Report DID.pdf` (score=0.016)
-   > shall consist of a cumulative tabulation of failure data obtained from individual failure reports . Failures whic occurred during the latest report period sh...
+1. [IN-FAMILY] `4.2 Asset Management/Part Failure Tracker.xlsx` (score=0.016)
+   > [SHEET] Part Failure Tracker Status | MSR Number | Team Members | Location | System | Date | Purpose | Faulty (Yes/No) | Upgrade (Y/N) | Description | Mainte...
 2. [out] `Critical_Spares_Reports/SEMS3D-xxxxx ISTO Critical Spares Planning Estimate (A001).docx` (score=0.016)
    > eans that certain spare parts are kept at each ISTO system in an On-Site Spares Kit, and a set of spares are kept in the Depot Spares Kit at Northrop Grumman...
-3. [out] `SEMS Program Docs/Systems Sustainment Plan (SSP).docx` (score=0.016)
-   > onsible for monitoring system performance (both actively and passively), identifying problematic hardware, and initiating hardware replacement actions as nec...
+3. [IN-FAMILY] `4.2 Asset Management/Part Failure Tracker_1.xlsx` (score=0.016)
+   > [SHEET] Part Failure Tracker Status | MSR Number | Team Members | Location | System | Date | Purpose | Faulty (Yes/No) | Upgrade (Y/N) | Description | Mainte...
 4. [out] `A001 - WX39 Critical Spares Planning Estimate/SEMS3D-37613 WX39 Critical Spares Planning Estimate (A001).docx` (score=0.016)
    > ns that certain spare parts are kept at each NEXION system in an On-Site Spares Kit, and a set of spares are kept in the Depot Spares Kit at Northrop Grumman...
-5. [out] `MS-JC-17-01498 (Fieldfox RF Analyzer) (N9913A) (Keysight)/KT Service Guide (N9927-90003).pdf` (score=0.016)
-   > t sequence for determining the failure of and replacing a defective assembly. page 91 Replaceable Parts Listings Tables with illustrations that list all repl...
+5. [out] `IGS/A001, Failure Summary & Analysis Report DID.pdf` (score=0.016)
+   > shall consist of a cumulative tabulation of failure data obtained from individual failure reports . Failures whic occurred during the latest report period sh...
 
 ---
 
@@ -1769,8 +1769,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 5221ms (router 934ms, retrieval 4122ms)
-**Stage timings:** context_build=3915ms, rerank=3915ms, retrieval=4122ms, router=934ms, vector_search=206ms
+**Latency:** embed+retrieve 4077ms (router 1756ms, retrieval 2165ms)
+**Stage timings:** context_build=2032ms, rerank=2032ms, retrieval=2165ms, router=1756ms, vector_search=133ms
 
 **Top-5 results:**
 
@@ -1795,8 +1795,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 48814ms (router 1309ms, retrieval 33354ms)
-**Stage timings:** context_build=13043ms, rerank=13043ms, retrieval=33354ms, router=1309ms, vector_search=20310ms
+**Latency:** embed+retrieve 22749ms (router 1645ms, retrieval 13912ms)
+**Stage timings:** context_build=6668ms, rerank=6668ms, retrieval=13912ms, router=1645ms, vector_search=7243ms
 
 **Top-5 results:**
 
@@ -1827,12 +1827,12 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Query:** What SCAP scan results are archived for the monitoring systems?
 
-**Expected type:** SEMANTIC  |  **Routed:** AGGREGATE  |  **Routing match:** MISS
+**Expected type:** SEMANTIC  |  **Routed:** TABULAR  |  **Routing match:** MISS
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 72570ms (router 1919ms, retrieval 52657ms)
-**Stage timings:** aggregate_lookup=6701ms, context_build=19159ms, rerank=19159ms, retrieval=52657ms, router=1919ms, structured_lookup=13402ms, vector_search=26796ms
+**Latency:** embed+retrieve 24780ms (router 1412ms, retrieval 17254ms)
+**Stage timings:** context_build=7312ms, rerank=7312ms, retrieval=17254ms, router=1412ms, vector_search=9941ms
 
 **Top-5 results:**
 
@@ -1867,8 +1867,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 5311ms (router 1537ms, retrieval 3593ms)
-**Stage timings:** context_build=3349ms, rerank=3349ms, retrieval=3593ms, router=1537ms, vector_search=244ms
+**Latency:** embed+retrieve 3517ms (router 1273ms, retrieval 2079ms)
+**Stage timings:** context_build=1929ms, rerank=1929ms, retrieval=2079ms, router=1273ms, vector_search=149ms
 
 **Top-5 results:**
 
@@ -1893,8 +1893,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 19556ms (router 1523ms, retrieval 17881ms)
-**Stage timings:** aggregate_lookup=5912ms, context_build=11605ms, rerank=11603ms, retrieval=17881ms, router=1523ms, structured_lookup=11824ms, vector_search=362ms
+**Latency:** embed+retrieve 9718ms (router 4080ms, retrieval 5485ms)
+**Stage timings:** context_build=5225ms, rerank=5225ms, retrieval=5485ms, router=4080ms, vector_search=257ms
 
 **Top-5 results:**
 
@@ -1919,8 +1919,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 46361ms (router 1602ms, retrieval 44485ms)
-**Stage timings:** context_build=5958ms, entity_lookup=37872ms, relationship_lookup=292ms, rerank=5958ms, retrieval=44485ms, router=1602ms, structured_lookup=76329ms, vector_search=361ms
+**Latency:** embed+retrieve 13713ms (router 1427ms, retrieval 12113ms)
+**Stage timings:** context_build=3330ms, entity_lookup=8555ms, relationship_lookup=63ms, rerank=3330ms, retrieval=12113ms, router=1427ms, structured_lookup=17237ms, vector_search=164ms
 
 **Top-5 results:**
 
@@ -1945,8 +1945,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 53695ms (router 943ms, retrieval 42853ms)
-**Stage timings:** aggregate_lookup=8008ms, context_build=7951ms, rerank=7951ms, retrieval=42853ms, router=943ms, structured_lookup=16016ms, vector_search=26893ms
+**Latency:** embed+retrieve 20335ms (router 1236ms, retrieval 14659ms)
+**Stage timings:** aggregate_lookup=1818ms, context_build=4631ms, rerank=4631ms, retrieval=14659ms, router=1236ms, structured_lookup=3637ms, vector_search=8209ms
 
 **Top-5 results:**
 
@@ -1971,8 +1971,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 25679ms (router 1389ms, retrieval 23796ms)
-**Stage timings:** aggregate_lookup=5285ms, context_build=18248ms, rerank=18248ms, retrieval=23796ms, router=1389ms, structured_lookup=10570ms, vector_search=262ms
+**Latency:** embed+retrieve 10636ms (router 1294ms, retrieval 9062ms)
+**Stage timings:** aggregate_lookup=2243ms, context_build=6562ms, rerank=6562ms, retrieval=9062ms, router=1294ms, structured_lookup=4486ms, vector_search=255ms
 
 **Top-5 results:**
 
@@ -1997,8 +1997,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 110549ms (router 1950ms, retrieval 84510ms)
-**Stage timings:** context_build=9612ms, entity_lookup=51190ms, relationship_lookup=847ms, rerank=9612ms, retrieval=84510ms, router=1950ms, structured_lookup=104075ms, vector_search=22859ms
+**Latency:** embed+retrieve 35646ms (router 1407ms, retrieval 25148ms)
+**Stage timings:** context_build=5970ms, entity_lookup=8907ms, relationship_lookup=234ms, rerank=5970ms, retrieval=25148ms, router=1407ms, structured_lookup=18283ms, vector_search=10036ms
 
 **Top-5 results:**
 
@@ -2033,8 +2033,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 6794ms (router 1876ms, retrieval 4676ms)
-**Stage timings:** context_build=4429ms, rerank=4429ms, retrieval=4676ms, router=1876ms, vector_search=246ms
+**Latency:** embed+retrieve 3435ms (router 1382ms, retrieval 1887ms)
+**Stage timings:** context_build=1745ms, rerank=1745ms, retrieval=1887ms, router=1382ms, vector_search=142ms
 
 **Top-5 results:**
 
@@ -2059,8 +2059,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 25596ms (router 1109ms, retrieval 24202ms)
-**Stage timings:** aggregate_lookup=11093ms, context_build=12527ms, rerank=12527ms, retrieval=24202ms, router=1109ms, structured_lookup=22186ms, vector_search=581ms
+**Latency:** embed+retrieve 10450ms (router 945ms, retrieval 9254ms)
+**Stage timings:** aggregate_lookup=3023ms, context_build=6001ms, rerank=6001ms, retrieval=9254ms, router=945ms, structured_lookup=6046ms, vector_search=229ms
 
 **Top-5 results:**
 
@@ -2085,8 +2085,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 48670ms (router 3277ms, retrieval 35517ms)
-**Stage timings:** aggregate_lookup=12127ms, context_build=9625ms, rerank=9625ms, retrieval=35517ms, router=3277ms, structured_lookup=24254ms, vector_search=13763ms
+**Latency:** embed+retrieve 22764ms (router 1904ms, retrieval 16419ms)
+**Stage timings:** aggregate_lookup=3197ms, context_build=6420ms, rerank=6420ms, retrieval=16419ms, router=1904ms, structured_lookup=6394ms, vector_search=6801ms
 
 **Top-5 results:**
 
@@ -2121,8 +2121,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 13280ms (router 1654ms, retrieval 11353ms)
-**Stage timings:** aggregate_lookup=1485ms, context_build=9592ms, rerank=9592ms, retrieval=11353ms, router=1654ms, structured_lookup=2970ms, vector_search=275ms
+**Latency:** embed+retrieve 7124ms (router 1910ms, retrieval 4992ms)
+**Stage timings:** aggregate_lookup=354ms, context_build=4419ms, rerank=4419ms, retrieval=4992ms, router=1910ms, structured_lookup=708ms, vector_search=218ms
 
 **Top-5 results:**
 
@@ -2147,8 +2147,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 13565ms (router 1033ms, retrieval 12332ms)
-**Stage timings:** aggregate_lookup=6158ms, context_build=5914ms, rerank=5914ms, retrieval=12332ms, router=1033ms, structured_lookup=12317ms, vector_search=258ms
+**Latency:** embed+retrieve 8638ms (router 1864ms, retrieval 6572ms)
+**Stage timings:** aggregate_lookup=1874ms, context_build=4501ms, rerank=4501ms, retrieval=6572ms, router=1864ms, structured_lookup=3748ms, vector_search=195ms
 
 **Top-5 results:**
 
@@ -2173,8 +2173,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 42979ms (router 1391ms, retrieval 32313ms)
-**Stage timings:** context_build=7125ms, rerank=7125ms, retrieval=32313ms, router=1391ms, vector_search=25187ms
+**Latency:** embed+retrieve 18710ms (router 1512ms, retrieval 12902ms)
+**Stage timings:** context_build=3755ms, rerank=3755ms, retrieval=12902ms, router=1512ms, vector_search=9119ms
 
 **Top-5 results:**
 
@@ -2199,8 +2199,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 50038ms (router 1529ms, retrieval 48102ms)
-**Stage timings:** context_build=5301ms, rerank=5301ms, retrieval=48102ms, router=1529ms, vector_search=326ms
+**Latency:** embed+retrieve 13561ms (router 2214ms, retrieval 11131ms)
+**Stage timings:** context_build=2180ms, rerank=2180ms, retrieval=11131ms, router=2214ms, vector_search=213ms
 
 **Top-5 results:**
 
@@ -2225,8 +2225,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 13272ms (router 1148ms, retrieval 11982ms)
-**Stage timings:** aggregate_lookup=4534ms, context_build=7070ms, rerank=7070ms, retrieval=11982ms, router=1148ms, structured_lookup=9068ms, vector_search=377ms
+**Latency:** embed+retrieve 9393ms (router 1783ms, retrieval 7443ms)
+**Stage timings:** aggregate_lookup=1687ms, context_build=5607ms, rerank=5607ms, retrieval=7443ms, router=1783ms, structured_lookup=3374ms, vector_search=148ms
 
 **Top-5 results:**
 
@@ -2243,7 +2243,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-154 [PARTIAL] -- Program Manager
+### PQ-154 [PASS] -- Program Manager
 
 **Query:** What FEP monthly actuals are available for 2025 and when do they transition to the new contract?
 
@@ -2251,21 +2251,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 8946ms (router 1629ms, retrieval 7113ms)
-**Stage timings:** aggregate_lookup=2766ms, context_build=4089ms, rerank=4089ms, retrieval=7113ms, router=1629ms, structured_lookup=5532ms, vector_search=257ms
+**Latency:** embed+retrieve 8200ms (router 2306ms, retrieval 5689ms)
+**Stage timings:** aggregate_lookup=1774ms, context_build=3721ms, rerank=3721ms, retrieval=5689ms, router=2306ms, structured_lookup=3548ms, vector_search=193ms
 
 **Top-5 results:**
 
-1. [out] `A017_-_Meeting Minutes_-_Other/SEMS3D-42307_IGS_WX29_ITP_Meeting Minutes_20220228.pdf` (score=0.016)
-   > l contract start date for the new contract. ? Ms. Mazurek stated that the CLINS cannot go beyond 12 consecutive months, so new CLINS would be required. Mr. M...
-2. [out] `Key Documents/DOD 8510.01_2014.pdf` (score=0.016)
-   > ion that is more than 3 years old. Transition to the RMF, categorize system and select controls in accordance with CNSSI 1253 and execute RMF within 6 months...
-3. [IN-FAMILY] `WxHE Examples/TO 22F1411 CET 22-246 WxHe CDRL A001 MSR due 20250610.docx` (score=0.016)
-   > g scripts for new capabilities. Narrative of Issues None currently. Travel and Results Travel for May ? N/A. Upcoming travel for June ? N/A. Actions Required...
-4. [out] `Travel Approval Forms/ETA application approved (Frank).pdf` (score=0.016)
-   > need to print or show this confirmation email. You will need to go through border control when you arrive. If your details change Your ETA is linked to your ...
-5. [out] `Bids/2024260_ngc_slupsk_poland_24062024.pdf` (score=0.016)
-   > 4.) DEADLINE PERFORMANCE BY SCHEDULE: 10 th of September, 2024 Each party may be released from liability for performance in its contractual obligations/order...
+1. [IN-FAMILY] `_WhatEver/DoD Systems.xls` (score=0.016)
+   > them by providing required capabilities related to program management, budget development and funds management, procurement and contract management, and acqu...
+2. [IN-FAMILY] `OU Visit/1 Seagren_IGS OU Visit.pptx` (score=0.016)
+   > terests: Trail running, hiking, camping, and travel What I do: Systems Engineer Field Engineer Data Manager Systems Configuration Management IGS Systems Perf...
+3. [IN-FAMILY] `_WhatEver/whatever.zip` (score=0.016)
+   > them by providing required capabilities related to program management, budget development and funds management, procurement and contract management, and acqu...
+4. [IN-FAMILY] `NEXION_2010/CCSB ECP NEXION-10-001_CHARTS_COMMENTS.pdf` (score=0.016)
+   > il AFWA confirms the location of each site, the priority preference, as well as the LAT/LONG for each site (future locations have been changing due to AFWA o...
+5. [out] `Install/1P752.049 IGS Installs Wake  Thule_Draft.pptx` (score=0.016)
+   > IN will be invoiced and paid in accordance with the milestone billing schedule outlined below. Early billing is authorized. NORTHROP GRUMMAN PROPRIETARY LEVE...
 
 ---
 
@@ -2277,8 +2277,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 58223ms (router 1057ms, retrieval 48279ms)
-**Stage timings:** context_build=6673ms, entity_lookup=24222ms, relationship_lookup=284ms, rerank=6673ms, retrieval=48279ms, router=1057ms, structured_lookup=49012ms, vector_search=17098ms
+**Latency:** embed+retrieve 25675ms (router 1831ms, retrieval 19765ms)
+**Stage timings:** context_build=3332ms, entity_lookup=8409ms, relationship_lookup=226ms, rerank=3332ms, retrieval=19765ms, router=1831ms, structured_lookup=17270ms, vector_search=7797ms
 
 **Top-5 results:**
 
@@ -2303,8 +2303,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 10883ms (router 990ms, retrieval 9688ms)
-**Stage timings:** aggregate_lookup=2034ms, context_build=7451ms, rerank=7451ms, retrieval=9688ms, router=990ms, structured_lookup=4068ms, vector_search=201ms
+**Latency:** embed+retrieve 9048ms (router 1561ms, retrieval 7300ms)
+**Stage timings:** aggregate_lookup=1760ms, context_build=5352ms, rerank=5352ms, retrieval=7300ms, router=1561ms, structured_lookup=3520ms, vector_search=186ms
 
 **Top-5 results:**
 
@@ -2329,8 +2329,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 14199ms (router 2212ms, retrieval 11758ms)
-**Stage timings:** aggregate_lookup=4325ms, context_build=7124ms, rerank=7123ms, retrieval=11758ms, router=2212ms, structured_lookup=8650ms, vector_search=308ms
+**Latency:** embed+retrieve 10439ms (router 2439ms, retrieval 7773ms)
+**Stage timings:** aggregate_lookup=1890ms, context_build=5667ms, rerank=5667ms, retrieval=7773ms, router=2439ms, structured_lookup=3780ms, vector_search=214ms
 
 **Top-5 results:**
 
@@ -2355,8 +2355,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 4133ms (router 1010ms, retrieval 2904ms)
-**Stage timings:** context_build=2631ms, rerank=2631ms, retrieval=2904ms, router=1010ms, vector_search=273ms
+**Latency:** embed+retrieve 4324ms (router 1797ms, retrieval 2255ms)
+**Stage timings:** context_build=2005ms, rerank=2005ms, retrieval=2255ms, router=1797ms, vector_search=250ms
 
 **Top-5 results:**
 
@@ -2381,8 +2381,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 31107ms (router 1453ms, retrieval 23869ms)
-**Stage timings:** context_build=3623ms, rerank=3623ms, retrieval=23869ms, router=1453ms, vector_search=20245ms
+**Latency:** embed+retrieve 18686ms (router 1710ms, retrieval 12401ms)
+**Stage timings:** context_build=3296ms, rerank=3296ms, retrieval=12401ms, router=1710ms, vector_search=9105ms
 
 **Top-5 results:**
 
@@ -2407,8 +2407,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 26091ms (router 1478ms, retrieval 18228ms)
-**Stage timings:** context_build=4532ms, rerank=4532ms, retrieval=18228ms, router=1478ms, vector_search=13695ms
+**Latency:** embed+retrieve 18792ms (router 1619ms, retrieval 12263ms)
+**Stage timings:** context_build=3640ms, rerank=3640ms, retrieval=12263ms, router=1619ms, vector_search=8622ms
 
 **Top-5 results:**
 
@@ -2433,8 +2433,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 17936ms (router 1273ms, retrieval 16377ms)
-**Stage timings:** aggregate_lookup=7958ms, context_build=8030ms, rerank=8030ms, retrieval=16377ms, router=1273ms, structured_lookup=15916ms, vector_search=387ms
+**Latency:** embed+retrieve 10225ms (router 1317ms, retrieval 8653ms)
+**Stage timings:** aggregate_lookup=2215ms, context_build=6162ms, rerank=6162ms, retrieval=8653ms, router=1317ms, structured_lookup=4430ms, vector_search=275ms
 
 **Top-5 results:**
 
@@ -2459,8 +2459,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 6685ms (router 1496ms, retrieval 5020ms)
-**Stage timings:** context_build=4810ms, rerank=4810ms, retrieval=5020ms, router=1496ms, vector_search=209ms
+**Latency:** embed+retrieve 5938ms (router 1972ms, retrieval 3760ms)
+**Stage timings:** context_build=3578ms, rerank=3578ms, retrieval=3760ms, router=1972ms, vector_search=181ms
 
 **Top-5 results:**
 
@@ -2485,8 +2485,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 60384ms (router 1899ms, retrieval 42591ms)
-**Stage timings:** context_build=13148ms, entity_lookup=4893ms, relationship_lookup=164ms, rerank=13148ms, retrieval=42591ms, router=1899ms, structured_lookup=10115ms, vector_search=24383ms
+**Latency:** embed+retrieve 36062ms (router 1800ms, retrieval 26995ms)
+**Stage timings:** context_build=7689ms, entity_lookup=3232ms, relationship_lookup=60ms, rerank=7689ms, retrieval=26995ms, router=1800ms, structured_lookup=6584ms, vector_search=16012ms
 
 **Top-5 results:**
 
@@ -2521,8 +2521,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 45554ms (router 2888ms, retrieval 38793ms)
-**Stage timings:** context_build=11027ms, rerank=11026ms, retrieval=38793ms, router=2888ms, vector_search=14242ms
+**Latency:** embed+retrieve 35200ms (router 2433ms, retrieval 29749ms)
+**Stage timings:** context_build=8399ms, rerank=8399ms, retrieval=29749ms, router=2433ms, vector_search=9156ms
 
 **Top-5 results:**
 
@@ -2557,8 +2557,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 67364ms (router 1649ms, retrieval 53756ms)
-**Stage timings:** context_build=8619ms, rerank=8619ms, retrieval=53756ms, router=1649ms, vector_search=31676ms
+**Latency:** embed+retrieve 49229ms (router 1070ms, retrieval 39501ms)
+**Stage timings:** context_build=9612ms, rerank=9612ms, retrieval=39501ms, router=1070ms, vector_search=16860ms
 
 **Top-5 results:**
 
@@ -2593,8 +2593,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 74275ms (router 1149ms, retrieval 54798ms)
-**Stage timings:** context_build=8637ms, rerank=8637ms, retrieval=54798ms, router=1149ms, vector_search=35445ms
+**Latency:** embed+retrieve 49499ms (router 1511ms, retrieval 37641ms)
+**Stage timings:** context_build=7486ms, rerank=7486ms, retrieval=37641ms, router=1511ms, vector_search=21990ms
 
 **Top-5 results:**
 
@@ -2629,8 +2629,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 75028ms (router 1677ms, retrieval 51168ms)
-**Stage timings:** context_build=12171ms, rerank=12171ms, retrieval=51168ms, router=1677ms, vector_search=27335ms
+**Latency:** embed+retrieve 44615ms (router 1557ms, retrieval 31500ms)
+**Stage timings:** context_build=7670ms, rerank=7670ms, retrieval=31500ms, router=1557ms, vector_search=15359ms
 
 **Top-5 results:**
 
@@ -2665,8 +2665,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 56987ms (router 1701ms, retrieval 45539ms)
-**Stage timings:** context_build=9309ms, rerank=9308ms, retrieval=45539ms, router=1701ms, vector_search=19293ms
+**Latency:** embed+retrieve 36656ms (router 1824ms, retrieval 29254ms)
+**Stage timings:** context_build=5579ms, rerank=5579ms, retrieval=29254ms, router=1824ms, vector_search=12262ms
 
 **Top-5 results:**
 
@@ -2680,15 +2680,15 @@ a classifier tuning opportunity, tracked but not fixed here.
    > {ReturedEquipmentAECON? n? , x. . TACify|Z LowellDigisondeInternational,LLC175CabotStreet, LOWELLDIGISONDETel:1.978.735-4752Suite200 LeINTERNATIONALFax:1.978...
 5. [IN-FAMILY] `2026_01_08 - Computer, Control/Returned Packing List.pdf` (score=-1.000)
    > 4ecevensF Retumed egmemet Son Viscrjay, Lowell Digisonde International, LLC 175 Cabot Street, Suite 200 LOWELL DIGISONDE Tel: 1.978.735-4752 i y INTERNATIONA...
-6. [out] `Rev 11/SEMS3D-36847 FINAL NEXION SPRIP (CDRL A001).pdf` (score=0.016)
-   > re LDI Pre-Processor 1 1 Maintenance spare LDI Receiver 1 Maintenance spare LDI Tracker 1 Maintenance spare LDI Power Distribution 1 Maintenance spare LDI An...
+6. [out] `BOM/Materials BOM (2017-06-07).xlsx` (score=0.016)
+   > Card, Total Weight (lbs): 0, Vendor: LDI, Part Number: AS-5021202, UOM: Each, Typical Install: 1, Cost/Unit: 2667.62, Total: 2667.62 Wake Is.: 0, UAE: 1, Des...
 7. [IN-FAMILY] `Guam_Nov2013_(Restoral)/Maintenance Service Report (MSR)_(CDRL A088)_Guam_(12-18Nov13)_ISO_Corrected.pdf` (score=0.016)
    > up FedEx shipment with tools and test equipment at hotel security and loaded rental vehicle. ? 0900L Picked up Uninterruptible Power Supply (UPS) batteries a...
-8. [out] `BOM/Materials BOM (2017-06-07).xlsx` (score=0.016)
+8. [out] `BOM/Materials BOM (2017-06-08).xlsx` (score=0.016)
    > Card, Total Weight (lbs): 0, Vendor: LDI, Part Number: AS-5021202, UOM: Each, Typical Install: 1, Cost/Unit: 2667.62, Total: 2667.62 Wake Is.: 0, UAE: 1, Des...
 9. [out] `2011 Reports/MSR Input (McElhinney) Oct 11.doc` (score=0.016)
    > b at this time) # of TCNOs applied and if they were applied before or after the suspense: Gary Nunn performing 2. Site Operational Status: (only address what...
-10. [out] `BOM/Materials BOM (2017-06-08).xlsx` (score=0.016)
+10. [out] `BOM/Materials BOM (2017-06-09).xlsx` (score=0.016)
    > Card, Total Weight (lbs): 0, Vendor: LDI, Part Number: AS-5021202, UOM: Each, Typical Install: 1, Cost/Unit: 2667.62, Total: 2667.62 Wake Is.: 0, UAE: 1, Des...
 
 ---
@@ -2701,8 +2701,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 61740ms (router 1607ms, retrieval 51508ms)
-**Stage timings:** context_build=9564ms, rerank=9564ms, retrieval=51508ms, router=1607ms, vector_search=30002ms
+**Latency:** embed+retrieve 38771ms (router 1292ms, retrieval 30772ms)
+**Stage timings:** context_build=5460ms, rerank=5460ms, retrieval=30772ms, router=1292ms, vector_search=18504ms
 
 **Top-5 results:**
 
@@ -2737,8 +2737,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 63218ms (router 1521ms, retrieval 52545ms)
-**Stage timings:** context_build=10955ms, rerank=10955ms, retrieval=52545ms, router=1521ms, vector_search=26570ms
+**Latency:** embed+retrieve 44219ms (router 2796ms, retrieval 34574ms)
+**Stage timings:** context_build=7268ms, rerank=7268ms, retrieval=34574ms, router=2796ms, vector_search=19287ms
 
 **Top-5 results:**
 
@@ -2773,8 +2773,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 58275ms (router 1689ms, retrieval 43936ms)
-**Stage timings:** context_build=10587ms, rerank=10587ms, retrieval=43936ms, router=1689ms, vector_search=21219ms
+**Latency:** embed+retrieve 39797ms (router 1522ms, retrieval 29895ms)
+**Stage timings:** context_build=7500ms, rerank=7500ms, retrieval=29895ms, router=1522ms, vector_search=15232ms
 
 **Top-5 results:**
 
@@ -2809,8 +2809,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 73321ms (router 1867ms, retrieval 57450ms)
-**Stage timings:** context_build=11889ms, entity_lookup=15223ms, relationship_lookup=60ms, rerank=11889ms, retrieval=57450ms, router=1867ms, structured_lookup=30566ms, vector_search=30276ms
+**Latency:** embed+retrieve 45182ms (router 1364ms, retrieval 36092ms)
+**Stage timings:** context_build=9124ms, entity_lookup=8336ms, relationship_lookup=79ms, rerank=9124ms, retrieval=36092ms, router=1364ms, structured_lookup=16830ms, vector_search=18551ms
 
 **Top-5 results:**
 
@@ -2845,8 +2845,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 18846ms (router 1835ms, retrieval 16705ms)
-**Stage timings:** aggregate_lookup=6619ms, context_build=9887ms, rerank=9887ms, retrieval=16705ms, router=1835ms, structured_lookup=13239ms, vector_search=196ms
+**Latency:** embed+retrieve 10720ms (router 1638ms, retrieval 8874ms)
+**Stage timings:** aggregate_lookup=2461ms, context_build=6240ms, rerank=6240ms, retrieval=8874ms, router=1638ms, structured_lookup=4923ms, vector_search=169ms
 
 **Top-5 results:**
 
@@ -2871,8 +2871,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 63385ms (router 1638ms, retrieval 53516ms)
-**Stage timings:** context_build=12127ms, rerank=12127ms, retrieval=53516ms, router=1638ms, vector_search=23098ms
+**Latency:** embed+retrieve 33791ms (router 1962ms, retrieval 26678ms)
+**Stage timings:** context_build=7064ms, rerank=7063ms, retrieval=26678ms, router=1962ms, vector_search=11671ms
 
 **Top-5 results:**
 
@@ -2890,12 +2890,12 @@ a classifier tuning opportunity, tracked but not fixed here.
    > ental at Thule NG International Travel Import/Export Advisor determined that Equipment/Materials must be logged in EEMS for Thule travel San Vito ? NEXION AS...
 7. [IN-FAMILY] `IGS Overview/IGS Tech VolumeR1.docx` (score=0.016)
    > h includes all GFP and CAP material. The IMS includes the location where the property is currently being stored. GFE and CAP tagged equipment are currently b...
-8. [IN-FAMILY] `Archive/IGS Master Site Visits Tracker (OY4)(26 Oct).docx` (score=0.016)
-   > t & Material Packing List *All purchased items are received Standard NEXION ASV Equipment/Materials Standard ISTO ASV Equipment/Materials FieldFox Cable Anal...
-9. [IN-FAMILY] `Aug2021_ASV/SEMS3D-41897 San Vito NEXION MSR CDRL A001 (11-23 Aug 2021).pdf` (score=0.016)
-   > ip were still on -site due to problems arranging for shipment and customs clearance. Arrangements were made prior to travel for this ASV to drop the items of...
-10. [IN-FAMILY] `Thule/SEMS3D-36600 Thule Shipment Certificate of Delivery (A001).docx` (score=0.016)
-   > Documents Table . Government Documents Shipment details Table 2 shows the status of all equipment being shipped to Thule AB via the Pacer Goose resupply ship...
+8. [IN-FAMILY] `Aug16/IGS IPT Briefing Slides_(CDRL A001)_1 September 2016_afh comments and updates.pptx` (score=0.016)
+   > t System (EEMS) database; updates completed 21 Jun 16 EEMS requires a variety of information typically acquired during purchase process; working with procure...
+9. [IN-FAMILY] `Archive/IGS Master Site Visits Tracker (OY4)(15 Oct).docx` (score=0.016)
+   > nk?s reservation for his originally planned return. They said he had too many no shows and they wouldn?t let him make a reservation Most RX antennas PSP scre...
+10. [IN-FAMILY] `Aug16/IGS IPT Briefing Slides_(CDRL A001)_8 September 2016_Draft_afh updates.pptx` (score=0.016)
+   > t System (EEMS) database; updates completed 21 Jun 16 EEMS requires a variety of information typically acquired during purchase process; working with procure...
 
 ---
 
@@ -2907,8 +2907,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 61766ms (router 1796ms, retrieval 48346ms)
-**Stage timings:** context_build=9242ms, entity_lookup=18802ms, relationship_lookup=68ms, rerank=9242ms, retrieval=48346ms, router=1796ms, structured_lookup=37741ms, vector_search=20232ms
+**Latency:** embed+retrieve 33527ms (router 1768ms, retrieval 26292ms)
+**Stage timings:** context_build=7042ms, entity_lookup=7838ms, relationship_lookup=71ms, rerank=7041ms, retrieval=26292ms, router=1768ms, structured_lookup=15819ms, vector_search=11340ms
 
 **Top-5 results:**
 
@@ -2943,8 +2943,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 6725ms (router 1787ms, retrieval 4597ms)
-**Stage timings:** context_build=4189ms, rerank=4189ms, retrieval=4597ms, router=1787ms, vector_search=407ms
+**Latency:** embed+retrieve 6246ms (router 2662ms, retrieval 3291ms)
+**Stage timings:** context_build=3039ms, rerank=3039ms, retrieval=3291ms, router=2662ms, vector_search=251ms
 
 **Top-5 results:**
 
@@ -2969,8 +2969,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 7128ms (router 2019ms, retrieval 4890ms)
-**Stage timings:** context_build=4634ms, rerank=4634ms, retrieval=4890ms, router=2019ms, vector_search=255ms
+**Latency:** embed+retrieve 5614ms (router 1755ms, retrieval 3669ms)
+**Stage timings:** context_build=3494ms, rerank=3494ms, retrieval=3669ms, router=1755ms, vector_search=175ms
 
 **Top-5 results:**
 
@@ -2995,21 +2995,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 13697ms (router 1536ms, retrieval 11934ms)
-**Stage timings:** aggregate_lookup=4188ms, context_build=7472ms, rerank=7472ms, retrieval=11934ms, router=1536ms, structured_lookup=8376ms, vector_search=273ms
+**Latency:** embed+retrieve 9185ms (router 1561ms, retrieval 7437ms)
+**Stage timings:** aggregate_lookup=1797ms, context_build=5461ms, rerank=5461ms, retrieval=7437ms, router=1561ms, structured_lookup=3594ms, vector_search=177ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Sys 12 Install 1X-Thule/Thule Information.pdf` (score=0.016)
-   > Authorities. Another Thule mission dates back to 1961 when the Air Force established a s atellite command and control facility (OL-5) to track and communicat...
+1. [IN-FAMILY] `A010 - Maintenance Support Plan (Systems Sustainment Plan (SSP)/FA881525FB002_IGSCC-115_IGS-Systems-Sustainment-Plan_A010_2025-09-26.docx` (score=0.016)
+   > could be required. If a site is no longer operational due to a government constraint or dependency, the site will remain down until the government can resolv...
 2. [IN-FAMILY] `Sys 12 Install 1X-Thule/Thule Information.pdf` (score=0.016)
    > ontractors, which was formed as a joint venture in 1952, employs approximately 400 Danish, Greenlandic, and American personnel. It is the largest single orga...
 3. [IN-FAMILY] `2014-07-09 thru 07-25 (NEXION_Site Survey)(BAH)/1_Thule Site Survey Report July 2014 (Rotation Corrected).pdf` (score=0.016)
    > Thule Air Base Site Survey, 9 ? 25 July 14 26 Aug 2014 3.0 Site Survey Overview Refer to Attachment 1, Site Survey Data, for site survey checklist and techni...
-4. [IN-FAMILY] `PreInstallationData/Permafrost Foundation in Thule - Report.pdf` (score=0.016)
-   > : ?, ?, and ? Graphs ........................................................................248 Enclosure 17.2: Consolidation Area, TAB General Pla n..........
+4. [out] `Eglin 2017-03-(20-24) ASV/SEMS3D-32865_Maintenance Service Report (MSR)_(CDRL A001)_Vandenberg NEXION (5-9 Jul 16).docx` (score=0.016)
+   > s visit was to perform a required annual service visit (ASV) for the NEXION system installed at Vandenberg AFB, CA., and document the results of the maintena...
 5. [IN-FAMILY] `Sys 12 Install 1X-Thule/Thule Information.pdf` (score=0.016)
-   > cking Station (RTS) located approximately 3.5 miles NE of Thule main base. Detachment 3 reports to the 22nd Space Operations Squadron, 50th Operations Group,...
+   > Authorities. Another Thule mission dates back to 1961 when the Air Force established a s atellite command and control facility (OL-5) to track and communicat...
 
 ---
 
@@ -3021,8 +3021,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 8653ms (router 1541ms, retrieval 6980ms)
-**Stage timings:** context_build=4094ms, entity_lookup=2377ms, relationship_lookup=372ms, rerank=4094ms, retrieval=6980ms, router=1541ms, structured_lookup=5499ms, vector_search=136ms
+**Latency:** embed+retrieve 7683ms (router 1642ms, retrieval 5873ms)
+**Stage timings:** context_build=3611ms, entity_lookup=1879ms, relationship_lookup=255ms, rerank=3611ms, retrieval=5873ms, router=1642ms, structured_lookup=4268ms, vector_search=126ms
 
 **Top-5 results:**
 
@@ -3047,8 +3047,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 7479ms (router 1145ms, retrieval 6185ms)
-**Stage timings:** context_build=5903ms, rerank=5903ms, retrieval=6185ms, router=1145ms, vector_search=281ms
+**Latency:** embed+retrieve 4677ms (router 1055ms, retrieval 3440ms)
+**Stage timings:** context_build=3276ms, rerank=3276ms, retrieval=3440ms, router=1055ms, vector_search=163ms
 
 **Top-5 results:**
 
@@ -3073,21 +3073,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 5787ms (router 1323ms, retrieval 4270ms)
-**Stage timings:** context_build=4047ms, rerank=4047ms, retrieval=4270ms, router=1323ms, vector_search=223ms
+**Latency:** embed+retrieve 6031ms (router 2007ms, retrieval 3811ms)
+**Stage timings:** context_build=3564ms, rerank=3564ms, retrieval=3811ms, router=2007ms, vector_search=210ms
 
 **Top-5 results:**
 
 1. [out] `ISO 9001 Docs (Govt Property) (2014-08-19)/ES_WI-7.4.1 (RedBeam Procedures).pdf` (score=0.016)
    > [SECTION] BOOZ ALLEN HAMILTON ENGINEERING SERVICES, LLC PROPRIETARY INFORMATION Page 24 of 42 Inventory Reports Inventory reports provide detailed asset info...
-2. [IN-FAMILY] `Site Inventory/Thule Site Inventory and Spares Report 2021-Sep-2.xlsx` (score=0.016)
-   > Comment: Please add PART NUMBER: Can we remove these? PART NUMBER: Confirmed and changed info PART NUMBER: Confirmed against DD1149 PART NUMBER: Add PART NUM...
-3. [IN-FAMILY] `Emails/Thule and Eareckson PSIPs.msg` (score=0.016)
-   > include unique items identified during vendor discussions - Thule 5 days Mon 11/6/17 Mon 11/13/17 100% Determine site-specific support equipment and material...
-4. [IN-FAMILY] `Sys 12 Install 1X-Thule/Thule Information.pdf` (score=0.016)
-   > your PCS, carry this information package with you. When you arrive at Thule, you will be greeted by the Base Commander, First Sergeant, Chaplain, and of cour...
-5. [IN-FAMILY] `Critical_Spares_Reports/SEMS3D-xxxxx ISTO Critical Spares Planning Estimate (A001).docx` (score=0.016)
+2. [IN-FAMILY] `Thule 2021 (26 Aug - 3 Sep) ASV/SEMS3D-40539 Thule NEXION MSR CDRL A0001 (24 SEP 2021)CUI.pdf` (score=0.016)
+   > .................................................... 5 Table 6. Parts Removed ..................................................................................
+3. [IN-FAMILY] `Critical_Spares_Reports/SEMS3D-xxxxx ISTO Critical Spares Planning Estimate (A001).docx` (score=0.016)
    > mmended spares parts lists. Table . Recommended Spares Parts List additional Spares Recommendations Recommended Additions to the Depot Spares Kit Table 7 sho...
+4. [IN-FAMILY] `Site Inventory/Thule Site Inventory and Spares Report 2021-Sep-2.xlsx` (score=0.016)
+   > Comment: Please add PART NUMBER: Can we remove these? PART NUMBER: Confirmed and changed info PART NUMBER: Confirmed against DD1149 PART NUMBER: Add PART NUM...
+5. [IN-FAMILY] `Emails/Thule and Eareckson PSIPs.msg` (score=0.016)
+   > include unique items identified during vendor discussions - Thule 5 days Mon 11/6/17 Mon 11/13/17 100% Determine site-specific support equipment and material...
 
 ---
 
@@ -3099,8 +3099,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 33534ms (router 1188ms, retrieval 26651ms)
-**Stage timings:** context_build=10867ms, rerank=10867ms, retrieval=26651ms, router=1188ms, vector_search=15784ms
+**Latency:** embed+retrieve 19372ms (router 1398ms, retrieval 14757ms)
+**Stage timings:** context_build=6469ms, rerank=6469ms, retrieval=14757ms, router=1398ms, vector_search=8287ms
 
 **Top-5 results:**
 
@@ -3135,8 +3135,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 54967ms (router 1767ms, retrieval 42484ms)
-**Stage timings:** context_build=9209ms, entity_lookup=16202ms, relationship_lookup=82ms, rerank=9209ms, retrieval=42484ms, router=1767ms, structured_lookup=32569ms, vector_search=16989ms
+**Latency:** embed+retrieve 31223ms (router 1574ms, retrieval 23010ms)
+**Stage timings:** context_build=6890ms, entity_lookup=7009ms, relationship_lookup=60ms, rerank=6890ms, retrieval=23010ms, router=1574ms, structured_lookup=14138ms, vector_search=9050ms
 
 **Top-5 results:**
 
@@ -3169,8 +3169,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 55750ms (router 1596ms, retrieval 41768ms)
-**Stage timings:** context_build=12094ms, entity_lookup=15300ms, relationship_lookup=76ms, rerank=12094ms, retrieval=41768ms, router=1596ms, structured_lookup=30753ms, vector_search=14296ms
+**Latency:** embed+retrieve 32672ms (router 1475ms, retrieval 22595ms)
+**Stage timings:** context_build=6534ms, entity_lookup=6671ms, relationship_lookup=62ms, rerank=6534ms, retrieval=22595ms, router=1475ms, structured_lookup=13467ms, vector_search=9325ms
 
 **Top-5 results:**
 
@@ -3199,8 +3199,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 45441ms (router 1590ms, retrieval 32987ms)
-**Stage timings:** context_build=7218ms, entity_lookup=12871ms, relationship_lookup=82ms, rerank=7218ms, retrieval=32987ms, router=1590ms, structured_lookup=25907ms, vector_search=12814ms
+**Latency:** embed+retrieve 35048ms (router 1475ms, retrieval 26408ms)
+**Stage timings:** context_build=6808ms, entity_lookup=7906ms, relationship_lookup=73ms, rerank=6808ms, retrieval=26408ms, router=1475ms, structured_lookup=15959ms, vector_search=11619ms
 
 **Top-5 results:**
 
@@ -3233,8 +3233,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 7688ms (router 1440ms, retrieval 6093ms)
-**Stage timings:** context_build=5811ms, rerank=5811ms, retrieval=6093ms, router=1440ms, vector_search=281ms
+**Latency:** embed+retrieve 4981ms (router 1328ms, retrieval 3475ms)
+**Stage timings:** context_build=3327ms, rerank=3327ms, retrieval=3475ms, router=1328ms, vector_search=148ms
 
 **Top-5 results:**
 
@@ -3259,19 +3259,19 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 5453ms (router 1284ms, retrieval 4030ms)
-**Stage timings:** context_build=3823ms, rerank=3823ms, retrieval=4030ms, router=1284ms, vector_search=206ms
+**Latency:** embed+retrieve 4809ms (router 1152ms, retrieval 3491ms)
+**Stage timings:** context_build=3340ms, rerank=3340ms, retrieval=3491ms, router=1152ms, vector_search=151ms
 
 **Top-5 results:**
 
 1. [out] `2023/Deliverables Report IGSI-154 IGS IMS_07_27_23 (A031).pdf` (score=0.016)
    > [SECTION] 264 0% 3.17.11 Palau Installation External Dependencies 57 days Fri 9/15/2 3 Mon 12/4/23 265 0% 3.17.11.27 IGSE-195 The Government will coordinate ...
-2. [out] `NEXION COTS Manuals/SN4520-4110_UM.pdf` (score=0.016)
-   > ..........................................................34 Connecting to external power source ...............................................................
+2. [out] `APACS/EXT _Re_ PERSONNEL APACS 3320861 - Fuierer_ Sepp W.msg` (score=0.016)
+   > IGS Field Engineer, Northrop Grumman Corporation, will be accompanying 2 members (separate APACS request) from the Space Systems Command (SSC) Ionospheric Gr...
 3. [out] `2024/47QFRA22F0009_IGSI-1365 IGS IMS_2024-12-12.pdf` (score=0.016)
    > [SECTION] 20 0% 3.17.11 No Palau Installation External Dependencies 21 days Tue 3/25/25 T ue 4/22/25 21 0% 3.17.11.27 No IGSE-195 The Government will coordin...
-4. [out] `NEXION System Manuals/SN4520_4110.pdf` (score=0.016)
-   > ..........................................................34 Connecting to external power source ...............................................................
+4. [out] `2025 Site Survey/NEXION Site Survey Questions_Loring.docx` (score=0.016)
+   > NEXION Site Survey Questions Loring, ME Primary Objectives Determine the ideal site location and configuration for the NEXION system layout while considering...
 5. [out] `A031 - Integrated Master Schedule (IMS)/47QFRA22F0009_Integrated-Master-Schedule_IGS_2025-01-22.pdf` (score=0.016)
    > [SECTION] 20 0% 3.17.11 No Palau Installation External Dependencies 21 days Tue 3/25/25 T ue 4/22/25 21 0% 3.17.11.27 No IGSE-195 The Government will coordin...
 
@@ -3285,8 +3285,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 28400ms (router 1501ms, retrieval 24339ms)
-**Stage timings:** context_build=9434ms, entity_lookup=13337ms, relationship_lookup=307ms, rerank=9434ms, retrieval=24339ms, router=1501ms, structured_lookup=27288ms, vector_search=1260ms
+**Latency:** embed+retrieve 15612ms (router 1118ms, retrieval 13473ms)
+**Stage timings:** context_build=5711ms, entity_lookup=6579ms, relationship_lookup=240ms, rerank=5711ms, retrieval=13473ms, router=1118ms, structured_lookup=13639ms, vector_search=941ms
 
 **Top-5 results:**
 
@@ -3321,8 +3321,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 26704ms (router 1056ms, retrieval 24266ms)
-**Stage timings:** context_build=6230ms, entity_lookup=14583ms, relationship_lookup=64ms, rerank=6230ms, retrieval=24266ms, router=1056ms, structured_lookup=29295ms, vector_search=3387ms
+**Latency:** embed+retrieve 15433ms (router 1584ms, retrieval 12876ms)
+**Stage timings:** context_build=4752ms, entity_lookup=6650ms, relationship_lookup=234ms, rerank=4752ms, retrieval=12876ms, router=1584ms, structured_lookup=13768ms, vector_search=1239ms
 
 **Top-5 results:**
 
@@ -3340,11 +3340,11 @@ a classifier tuning opportunity, tracked but not fixed here.
    > t Data (ACAS Scan Results) -Oct IGSI-2478 12/10/2024 12/13/2024 OY2 IGS IPT Meeting Minutes Dec 24 CDRL A017 IGSI-2491 12/9/2024 12/10/2024 OY2 IGS Monthly S...
 7. [IN-FAMILY] `2023/Deliverables Report IGSI-966 ISTO DAA Accreditation Support Data (ACAS San Results) (A027).zip` (score=0.016)
    > [ARCHIVE_MEMBER=Deliverables Report IGSI-966 ISTO DAA Accreditation Support Data (ACAS San Results) (A027)/ACAS/2023-may-scan-1/DISA ASR_ARF (Scan ISTO Kicks...
-8. [IN-FAMILY] `Deliverables Spreadsheets/June Deliverables WX29.xlsx` (score=0.016)
-   > osted Date: 2018-06-01T00:00:00 Key: SEMS3D-36497, Summary: IGS Baseline Description Document IGS Baseline Description (System Performance Baseline Briefing)...
+8. [IN-FAMILY] `09_September/SEMS3D-39048-IGS_IPT_Briefing_Slides.pdf` (score=0.016)
+   > date identification and authentication (IA) controls Complete 7/31/2019 IGS-2337 Update maintenance (MA) controls Complete 8/30/2019 IGS-2339 Update incident...
 9. [IN-FAMILY] `2023/Deliverables Report IGSI-1056 IGS Monthly Status Report - July23 (A009).pdf` (score=0.016)
    > [SECTION] IGSE- 179 Support Agreement - Wake 2/3/2023 2/28/2024 K. Catt IGSE-183 Updated Radio Frequency Authorization (RFA) for each NEXION site 4/20/2023 2...
-10. [IN-FAMILY] `09_September/SEMS3D-39048-IGS_IPT_Briefing_Slides.pdf` (score=0.016)
+10. [IN-FAMILY] `08_August/SEMS3D-38880-IGS_IPT_Briefing_Slides.pdf` (score=0.016)
    > date identification and authentication (IA) controls Complete 7/31/2019 IGS-2337 Update maintenance (MA) controls Complete 8/30/2019 IGS-2339 Update incident...
 
 ---
@@ -3357,8 +3357,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 33000ms (router 1402ms, retrieval 29584ms)
-**Stage timings:** aggregate_lookup=3244ms, context_build=16634ms, rerank=16634ms, retrieval=29584ms, router=1402ms, structured_lookup=6488ms, vector_search=9704ms
+**Latency:** embed+retrieve 21615ms (router 1965ms, retrieval 18295ms)
+**Stage timings:** aggregate_lookup=1792ms, context_build=11029ms, rerank=11029ms, retrieval=18295ms, router=1965ms, structured_lookup=3584ms, vector_search=5473ms
 
 **Top-5 results:**
 
@@ -3393,8 +3393,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 73853ms (router 1861ms, retrieval 51007ms)
-**Stage timings:** context_build=10452ms, rerank=10452ms, retrieval=51007ms, router=1861ms, vector_search=29307ms
+**Latency:** embed+retrieve 52630ms (router 1541ms, retrieval 33039ms)
+**Stage timings:** context_build=8882ms, entity_lookup=6670ms, relationship_lookup=61ms, rerank=8882ms, retrieval=33039ms, router=1541ms, structured_lookup=13463ms, vector_search=17423ms
 
 **Top-5 results:**
 
@@ -3429,8 +3429,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 34458ms (router 1411ms, retrieval 25674ms)
-**Stage timings:** context_build=5725ms, rerank=5725ms, retrieval=25674ms, router=1411ms, vector_search=3891ms
+**Latency:** embed+retrieve 23345ms (router 2318ms, retrieval 16793ms)
+**Stage timings:** context_build=4360ms, rerank=4360ms, retrieval=16793ms, router=2318ms, vector_search=4035ms
 
 **Top-5 results:**
 
@@ -3444,16 +3444,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > accepted Red Hat Enterprise Linux 7 STIG SCAP Benchmark This Security Technical Implementation Guide is published as a tool to improve the security of Depart...
 5. [IN-FAMILY] `Deliverables Report IGSI-481 CT&E Report Niger (A027)/Deliverables Report IGSI-481 CT&E Report Niger (A027).zip` (score=-1.000)
    > [ARCHIVE_MEMBER=Niger CT&E Report 2022-Dec-13.xlsx] [SHEET] Scan Report CUI | | | | | | CUI: NIGER SCAN REPORT CUI: ACAS Asset Insight CUI: Description, : CA...
-6. [out] `Niger/Niger STA-SP-IGS NEXION-1Oct2022.pdf` (score=0.016)
-   > ions Agaez, Niger Air Base 201 Air Base 201 US Forces MIL Air, US Gov?t Short-term (<60 Days) Long-term (>60 Days) Total No. of Personnel No. of local Nation...
-7. [IN-FAMILY] `A027 - DAA Accreditation Support Data (CT&E Plan)/Deliverables Report IGSI-469 CT&E Plan Niger (A027).pdf` (score=0.016)
-   > CUI CUI Ionospheric Ground Sensors Certification Test and Evaluation (CT&E) Plan ISTO Niger 08 December 2022 Prepared Under: Contract Number: 47QFRA22F0009 C...
-8. [IN-FAMILY] `2023/Deliverables Report IGSI-150 IGS IMS03_29_23 (A031).pdf` (score=0.016)
-   > [SECTION] 85 0% 3.12.2.57 IGSI-448 A03 3 - As-Built Drawings - Niger(Prior to end of PoP) 0 days Wed 4/26/23 Wed 4/26/23 152 154 86 100% 3.12.2.58 IGSI-446 A...
-9. [IN-FAMILY] `2022/Deliverables Report IGSI-87 IGS Monthly Status Report - Dec22 (A009).pdf` (score=0.016)
+6. [IN-FAMILY] `2023/Deliverables Report IGSI-151 IGS IMS 04_20_23 (A031).pdf` (score=0.016)
+   > Scan Results) - Niger 0 days Fri 12/16/22 Fri 12/16/22 112 154 80 100% 3.12.2.50 IGSI-481 A027 DAA Accreditation Support Data (ACAS Scan Results) - Niger 0 d...
+7. [IN-FAMILY] `2022/Deliverables Report IGSI-87 IGS Monthly Status Report - Dec22 (A009).pdf` (score=0.016)
    > [SECTION] IGSE-66 S upport Agreement - San Vito 8/1/2022 2/1/2023 IGSE-65 Site Support Agreement - Kwajalein 8/1/2022 2/1/2023 IGSE-64 Site Support Agreement...
-10. [IN-FAMILY] `2023/Deliverables Report IGSI-152 IGS IMS_05_16_23 (A031).pdf` (score=0.016)
-   > [SECTION] 100% 3.12.2.58 IGSI-446 A011 Configuration Audit Report - Niger 0 days Wed 2/22/23 Wed 2/22/23 153 154 87 100% 3.12.2.60 IGSI-447 A017 Installation...
+8. [out] `Niger/Niger STA-SP-IGS NEXION-1Oct2022.pdf` (score=0.016)
+   > ions Agaez, Niger Air Base 201 Air Base 201 US Forces MIL Air, US Gov?t Short-term (<60 Days) Long-term (>60 Days) Total No. of Personnel No. of local Nation...
+9. [IN-FAMILY] `A016 - Baseline Description Document (System Performance Baseline Briefing)/Deliverables Report IGSI-70 Baseline Description Document (A016) .pdf` (score=0.016)
+   > RL A027 1 RELEASE 12/22/2022 ISTO IGSI-475 SPC Singapore Configuration Audit Report (Jun 23) CDRL A011 1 RELEASE 7/3/2023 ISTO IGSI-476 SPC Singapore MSR (Ma...
+10. [IN-FAMILY] `2023/Deliverables Report IGSI-150 IGS IMS03_29_23 (A031).pdf` (score=0.016)
+   > [SECTION] 85 0% 3.12.2.57 IGSI-448 A03 3 - As-Built Drawings - Niger(Prior to end of PoP) 0 days Wed 4/26/23 Wed 4/26/23 152 154 86 100% 3.12.2.58 IGSI-446 A...
 
 ---
 
@@ -3465,8 +3465,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 41496ms (router 1110ms, retrieval 27809ms)
-**Stage timings:** context_build=7638ms, rerank=7638ms, retrieval=27809ms, router=1110ms, vector_search=20170ms
+**Latency:** embed+retrieve 34727ms (router 5827ms, retrieval 20441ms)
+**Stage timings:** context_build=7135ms, rerank=7135ms, retrieval=20441ms, router=5827ms, vector_search=13306ms
 
 **Top-5 results:**
 
@@ -3501,8 +3501,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 56350ms (router 1838ms, retrieval 32051ms)
-**Stage timings:** context_build=10085ms, rerank=10085ms, retrieval=32051ms, router=1838ms, vector_search=21965ms
+**Latency:** embed+retrieve 42029ms (router 2026ms, retrieval 24394ms)
+**Stage timings:** context_build=7928ms, rerank=7928ms, retrieval=24394ms, router=2026ms, vector_search=16465ms
 
 **Top-5 results:**
 
@@ -3537,8 +3537,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 16957ms (router 1499ms, retrieval 15228ms)
-**Stage timings:** context_build=3557ms, entity_lookup=11246ms, relationship_lookup=232ms, rerank=3557ms, retrieval=15228ms, router=1499ms, structured_lookup=22957ms, vector_search=192ms
+**Latency:** embed+retrieve 13828ms (router 1868ms, retrieval 11755ms)
+**Stage timings:** context_build=3804ms, entity_lookup=7512ms, relationship_lookup=248ms, rerank=3804ms, retrieval=11755ms, router=1868ms, structured_lookup=15521ms, vector_search=189ms
 
 **Top-5 results:**
 
@@ -3563,8 +3563,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 23118ms (router 2340ms, retrieval 20515ms)
-**Stage timings:** context_build=3821ms, entity_lookup=15744ms, relationship_lookup=558ms, rerank=3821ms, retrieval=20515ms, router=2340ms, structured_lookup=32605ms, vector_search=390ms
+**Latency:** embed+retrieve 15299ms (router 3503ms, retrieval 11542ms)
+**Stage timings:** context_build=3794ms, entity_lookup=7250ms, relationship_lookup=249ms, rerank=3794ms, retrieval=11542ms, router=3503ms, structured_lookup=14999ms, vector_search=247ms
 
 **Top-5 results:**
 
@@ -3589,8 +3589,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 20863ms (router 1518ms, retrieval 19056ms)
-**Stage timings:** context_build=4851ms, entity_lookup=13939ms, relationship_lookup=69ms, rerank=4851ms, retrieval=19056ms, router=1518ms, structured_lookup=28017ms, vector_search=196ms
+**Latency:** embed+retrieve 15239ms (router 3999ms, retrieval 11044ms)
+**Stage timings:** context_build=3671ms, rerank=3671ms, retrieval=11044ms, router=3999ms, vector_search=165ms
 
 **Top-5 results:**
 
@@ -3615,8 +3615,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 51374ms (router 1481ms, retrieval 35763ms)
-**Stage timings:** context_build=8638ms, entity_lookup=12979ms, relationship_lookup=237ms, rerank=8638ms, retrieval=35763ms, router=1481ms, structured_lookup=26432ms, vector_search=13908ms
+**Latency:** embed+retrieve 31557ms (router 1777ms, retrieval 22288ms)
+**Stage timings:** context_build=7470ms, entity_lookup=7116ms, relationship_lookup=247ms, rerank=7470ms, retrieval=22288ms, router=1777ms, structured_lookup=14727ms, vector_search=7453ms
 
 **Top-5 results:**
 
@@ -3651,8 +3651,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 25939ms (router 1013ms, retrieval 18021ms)
-**Stage timings:** context_build=10816ms, rerank=10816ms, retrieval=18021ms, router=1013ms, vector_search=7205ms
+**Latency:** embed+retrieve 20038ms (router 2194ms, retrieval 12278ms)
+**Stage timings:** context_build=7405ms, rerank=7405ms, retrieval=12278ms, router=2194ms, vector_search=4873ms
 
 **Top-5 results:**
 
@@ -3666,16 +3666,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > Security Report Report date: Version New Code This shows the security problems detected of the code produced recently SecurityVulnerabilities Security Hotspo...
 5. [out] `STIG/1-1_linux-0-arf-res.xml` (score=-1.000)
    > asset1 asset1 xccdf1 collection1 Red Hat Enterprise Linux 7 oval:mil.disa.stig.rhel7:def:1 accepted Red Hat Enterprise Linux 7 STIG SCAP Benchmark This Secur...
-6. [IN-FAMILY] `Procedures/Procedure IGS CT&E Scan 2018-01-20.docx` (score=0.016)
-   > scan result should now be listed in the Scan Results page. Acronym ACAS Assured Compliance Assessment Solution IAVM Information Assurance Information Managem...
+6. [IN-FAMILY] `NEXION Thule/NEXION Thule Monthly Scan 2019 Oct.xlsx` (score=0.016)
+   > ACAS: Red Hat Enterprise Linux 7 Security Technical Implementation Guide STIG, : V002.004, : R2.4, : WWCX-WXD-3THP.WEATHER.AF.MIL, : 10.0.0.1, : NEXION Thule...
 7. [IN-FAMILY] `Scans ACAS-STIG/NEXION Lab ACAS-RHEL7 STIG Results 2019-04-23.xlsx` (score=0.016)
    > ries (such as /home or an equivalent). Description: The use of separate file systems for different paths can protect the system from failures resulting from ...
-8. [IN-FAMILY] `Procedures/Procedure IGS CT&E Scan 2018-06-22.docx` (score=0.016)
-   > scan result should now be listed in the Scan Results page. Acronym ACAS Assured Compliance Assessment Solution IAVM Information Assurance Information Managem...
+8. [IN-FAMILY] `2019-09/NEXION Lab Monthly Scan 2019 Sep.xlsx` (score=0.016)
+   > l ACAS: Red Hat Enterprise Linux 7 Security Technical Implementation Guide STIG, : V002.004, : R2.4, : NEW-NEXION.WEATHER.AF.MIL, : 158.114.89.9, : NEXION La...
 9. [IN-FAMILY] `2019-06-25_ISTO Kwajalein Army ATC/ISTO KWAJ POAM 2019-06-25.xlsx` (score=0.016)
    > a Firefox, : 0, : 2, : 0, : 2, : Yes ISTO STIG & ACAS Results: ISTO, : RHEL 7.6, : RHEL 7, : 3, : 10, : 1, : 14, : Yes, : CAT I's are downgraded to CAT II 11...
-10. [IN-FAMILY] `2018-10-18 thru 25 (Data Gather for LDI) (Jim and Vinh)/SEMS3D-XXXXX Eareckson Trip Report - Data Capture & Tower Inspection (A001).docx` (score=0.016)
-   > [SECTION] XXXXXXXXXXXXX XXX SUMMARY ACAS/IAVM and SCC/RHEL 7 STIG scans were performed and documented. .RSF and .SAO.XML data files were collected and docume...
+10. [IN-FAMILY] `A027 - NEXION TOWX39 CT&E Plan Wake Thule/SEMS3D-38733 CTE Plan NEXION Wake Thule CDRL A027.pdf` (score=0.016)
+   > [SECTION] 5.2 Assured Compliance Assessment Solution (ACAS) ACAS assesses Information Assurance Vulnerability Management (IAVM) and Time Compliance Network O...
 
 ---
 
@@ -3687,8 +3687,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 36637ms (router 1502ms, retrieval 25642ms)
-**Stage timings:** aggregate_lookup=7339ms, context_build=7998ms, rerank=7998ms, retrieval=25642ms, router=1502ms, structured_lookup=14678ms, vector_search=10305ms
+**Latency:** embed+retrieve 22379ms (router 1702ms, retrieval 15999ms)
+**Stage timings:** aggregate_lookup=2068ms, context_build=6620ms, rerank=6620ms, retrieval=15999ms, router=1702ms, structured_lookup=4136ms, vector_search=7310ms
 
 **Top-5 results:**
 
@@ -3721,8 +3721,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 48539ms (router 2275ms, retrieval 31802ms)
-**Stage timings:** aggregate_lookup=3812ms, context_build=7106ms, rerank=7106ms, retrieval=31802ms, router=2275ms, structured_lookup=7624ms, vector_search=20883ms
+**Latency:** embed+retrieve 32344ms (router 2122ms, retrieval 20821ms)
+**Stage timings:** aggregate_lookup=1892ms, context_build=6143ms, rerank=6143ms, retrieval=20821ms, router=2122ms, structured_lookup=3784ms, vector_search=12785ms
 
 **Top-5 results:**
 
@@ -3747,8 +3747,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 32728ms (router 1653ms, retrieval 21637ms)
-**Stage timings:** aggregate_lookup=3144ms, context_build=11849ms, rerank=11849ms, retrieval=21637ms, router=1653ms, structured_lookup=6288ms, vector_search=6642ms
+**Latency:** embed+retrieve 24645ms (router 2059ms, retrieval 17187ms)
+**Stage timings:** aggregate_lookup=1741ms, context_build=10517ms, rerank=10517ms, retrieval=17187ms, router=2059ms, structured_lookup=3482ms, vector_search=4928ms
 
 **Top-5 results:**
 
@@ -3783,21 +3783,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 40186ms (router 1752ms, retrieval 27662ms)
-**Stage timings:** aggregate_lookup=3045ms, context_build=9686ms, rerank=9685ms, retrieval=27662ms, router=1752ms, structured_lookup=6090ms, vector_search=14931ms
+**Latency:** embed+retrieve 22030ms (router 2041ms, retrieval 15710ms)
+**Stage timings:** aggregate_lookup=1667ms, context_build=5949ms, rerank=5949ms, retrieval=15710ms, router=2041ms, structured_lookup=3334ms, vector_search=8093ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `1.0 FEP/Financial Reporting calendar.pdf` (score=0.016)
-   > SUNDAY MONDAY TUESDAY WEDNESDAY THURSDAY FRIDAY SATURDAY 1 2 3 4 5 6 HOLIDAY HFM files due (3PM) Tax Provision Entry (12PM) 7 8 9 10 11 12 13 HFM Functional ...
+1. [IN-FAMILY] `NG Property/Property Management (d02447g).pdf` (score=0.016)
+   > leading-edge locations to identify causes of variances averaged 22 and included codes for incorrect entries, leaks or spills, wrong location, receipt error, ...
 2. [IN-FAMILY] `2024-03/2024-03-01 IGS Weekly Hours Variance.xlsx` (score=0.016)
    > [SHEET] _com.sap.ip.bi.xl.hiddensheet [SHEET] Pivot Reporting Month: | 2024-02-01T00:00:00 | | | | | | | | | | | | | Fiscal Year | 2024 | | | | | | | Reporti...
-3. [IN-FAMILY] `1.0 FEP/Financial Reporting calendar.pdf` (score=0.016)
-   > B) FSC 301 consultations due 15 16 17 18 19 20 21 22 23 24 25 26 27 28 Month-End 29 30 31 HFM Files Due (COB) MARCH 2026 All reporting timelines are in Easte...
+3. [IN-FAMILY] `NG Property/Property Management (d02447g).pdf` (score=0.016)
+   > h, the on-hand balance in the inventory system was usually adjusted to reflect the actual physical count. Table 6 shows the established criteria for research...
 4. [IN-FAMILY] `2024-01/2024-01-19 IGS Weekly Hours Variance.xlsx` (score=0.016)
    > [SHEET] _com.sap.ip.bi.xl.hiddensheet [SHEET] Pivot Reporting Month: | 2024-01-01T00:00:00 | | | | | | | | | | | | | Fiscal Year | 2024 | | | | | | | Reporti...
-5. [out] `EAR Database/754.txt` (score=0.016)
-   > the calendar quarter. For example, for the calendar quarter beginning April 1 and ending June 30, applications will be accepted beginning February 1, but mus...
+5. [IN-FAMILY] `_WhatEver/EVMgoldversion.doc` (score=0.016)
+   > ire the minimum amount of variance analysis in Format 5 which satisfies its management information needs, but yet adequately addresses all HYPERLINK \l "sign...
 
 ---
 
@@ -3809,8 +3809,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 15166ms (router 1433ms, retrieval 13464ms)
-**Stage timings:** aggregate_lookup=4158ms, context_build=9099ms, rerank=9099ms, retrieval=13464ms, router=1433ms, structured_lookup=8316ms, vector_search=206ms
+**Latency:** embed+retrieve 12054ms (router 3629ms, retrieval 8222ms)
+**Stage timings:** aggregate_lookup=2010ms, context_build=6021ms, rerank=6020ms, retrieval=8222ms, router=3629ms, structured_lookup=4020ms, vector_search=191ms
 
 **Top-5 results:**
 
@@ -3835,8 +3835,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 23633ms (router 1254ms, retrieval 22178ms)
-**Stage timings:** context_build=6211ms, entity_lookup=15583ms, relationship_lookup=244ms, rerank=6211ms, retrieval=22178ms, router=1254ms, structured_lookup=31655ms, vector_search=139ms
+**Latency:** embed+retrieve 12341ms (router 1545ms, retrieval 10642ms)
+**Stage timings:** context_build=3547ms, entity_lookup=6714ms, relationship_lookup=246ms, rerank=3547ms, retrieval=10642ms, router=1545ms, structured_lookup=13921ms, vector_search=132ms
 
 **Top-5 results:**
 
@@ -3861,8 +3861,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 34608ms (router 1264ms, retrieval 31809ms)
-**Stage timings:** aggregate_lookup=4751ms, context_build=11426ms, rerank=11426ms, retrieval=31809ms, router=1264ms, structured_lookup=9502ms, vector_search=15631ms
+**Latency:** embed+retrieve 20951ms (router 1902ms, retrieval 17918ms)
+**Stage timings:** aggregate_lookup=1698ms, context_build=8525ms, rerank=8525ms, retrieval=17918ms, router=1902ms, structured_lookup=3396ms, vector_search=7694ms
 
 **Top-5 results:**
 
@@ -3897,20 +3897,20 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 9186ms (router 1839ms, retrieval 7173ms)
-**Stage timings:** aggregate_lookup=2498ms, context_build=4450ms, rerank=4450ms, retrieval=7173ms, router=1839ms, structured_lookup=4996ms, vector_search=223ms
+**Latency:** embed+retrieve 10406ms (router 2450ms, retrieval 7776ms)
+**Stage timings:** aggregate_lookup=1645ms, context_build=5964ms, rerank=5964ms, retrieval=7776ms, router=2450ms, structured_lookup=3290ms, vector_search=166ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Thule AB - Greenland/Timeline of Events - Thule.docx` (score=0.016)
-   > Thule ? Timeline of Events 22 Feb: Pacer Goose Telecon 02 Mar: Shelter Arrives at NGC 23 Mar: Anchors/Foundations Complete; stored at Stresscon until ready t...
+1. [IN-FAMILY] `Archive/005_Bi-Weekly Status Updates_NEXION Install_Wake-Thule(14Feb2019).pdf` (score=0.016)
+   > Barge Arrival at Thule Complete SCATS/Mil Air Shipment (Tools/Equipment) Not Started (late Apr ? early May 2019) Allied Support Shipment In Work (late Jun) ?...
 2. [IN-FAMILY] `Cables/FieldFox User Manual (N9913) (9018-03771).pdf` (score=0.016)
    > channel equalization is deemed stale. Detection Method In SA Mode, the X-axis is comprised of data points, also known as ?buckets?. The number of data points...
-3. [IN-FAMILY] `Archive/004_Bi-Weekly Status Updates_NEXION Install_Wake-Thule(31Jan2019).pdf` (score=0.016)
-   > 019) Deliver Cargo to Norfolk Complete Barge Arrival at Thule Complete SCATS/Mil Air Shipment (Tools/Equipment) Not Started (22 May 2019) Allied Support Ship...
-4. [IN-FAMILY] `SAR-VAR/429 EOS TDY Checklist v11 CAO 9 Aug 21.pdf` (score=0.016)
-   > CIRRUS or MAESTRO) for payment. AIRCARD will not work. a. Will you require fuel support on arrival or during your TDY? - If yes, how much fuel? - What time w...
-5. [IN-FAMILY] `Archive/005_Bi-Weekly Status Updates_NEXION Install_Wake-Thule(14Feb2019).pdf` (score=0.016)
+3. [IN-FAMILY] `Archive/006_Bi-Weekly Status Updates_NEXION Install_Wake-Thule(28Feb2019).pdf` (score=0.016)
+   > Barge Arrival at Thule Complete SCATS/Mil Air Shipment (Tools/Equipment) Not Started (late Apr ? early May 2019) Allied Support Shipment In Work (late Jun) ?...
+4. [out] `Delete After Time/SEFGuide 01-01.pdf` (score=0.016)
+   > as well as other key events normally associated with executing the systems engineering process, is when those events generally occur relative to the phases o...
+5. [IN-FAMILY] `Archive/007_Bi-Weekly Status Updates_NEXION Install_Wake-Thule(20Mar2019).pdf` (score=0.016)
    > Barge Arrival at Thule Complete SCATS/Mil Air Shipment (Tools/Equipment) Not Started (late Apr ? early May 2019) Allied Support Shipment In Work (late Jun) ?...
 
 ---
@@ -3923,8 +3923,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 40817ms (router 2296ms, retrieval 27591ms)
-**Stage timings:** aggregate_lookup=3791ms, context_build=10690ms, rerank=10690ms, retrieval=27591ms, router=2296ms, structured_lookup=7582ms, vector_search=13109ms
+**Latency:** embed+retrieve 25533ms (router 5122ms, retrieval 16214ms)
+**Stage timings:** aggregate_lookup=1865ms, context_build=8080ms, rerank=8079ms, retrieval=16214ms, router=5122ms, structured_lookup=3731ms, vector_search=6268ms
 
 **Top-5 results:**
 
@@ -3938,16 +3938,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > Corrective Action Plan Kwajalein ISTO 25 October 2024 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A001 Prepared For: Space Systems Command (SS...
 5. [IN-FAMILY] `A001 - Corrective Action Plan (CAP)/Deliverable Report IGSI-1005 Corrective Action Plan (A001).docx` (score=-1.000)
    > Corrective Action Plan Next Generation Ionosonde (NEXION) 10 July 2023 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A001 Prepared For: Space Sy...
-6. [out] `_WhatEver/DoD Systems.xls` (score=0.016)
-   > o accomplish contract maintenance work for missiles, engines, aircraft and end-items that could not be accomplished by organic depots due to inadequate equip...
-7. [IN-FAMILY] `PWS/PWS 5012 IGS 2015-09-22 Vinh Nguyen.pdf` (score=0.016)
+6. [IN-FAMILY] `San Vito_Mar2012_(Restoral)/Maintenance Service Report (CDRL A088)_San Vito_.pdf` (score=0.016)
+   > (This page intentionally left blank.) A Maintenance Service Report Atch 2-1 ATTACHMENT 2 SUPPLEMENTAL INFORMATION (Optional ? Pictures, Screen Captures, etc....
+7. [IN-FAMILY] `Proposal - TO WX23 IGS Sustainment Bridge/PWS WX23 2016-10-07 IGS Sustainment Bridge.pdf` (score=0.016)
    > fy the criteria of evaluation. Government personnel will record all surveillance observations. Surveillance will be done according to standard inspection pro...
-8. [out] `_WhatEver/whatever.zip` (score=0.016)
+8. [out] `_WhatEver/DoD Systems.xls` (score=0.016)
    > o accomplish contract maintenance work for missiles, engines, aircraft and end-items that could not be accomplished by organic depots due to inadequate equip...
-9. [IN-FAMILY] `2016 Completed/PWS 5012 IGS 2015-09-22.pdf` (score=0.016)
+9. [IN-FAMILY] `PWS/PWS 5012 IGS 2015-09-22 Vinh Nguyen.pdf` (score=0.016)
    > fy the criteria of evaluation. Government personnel will record all surveillance observations. Surveillance will be done according to standard inspection pro...
-10. [out] `DM/p50152s.pdf` (score=0.016)
-   > ating or updating the file plan. C2.2.6.7.2. RMAs shall provide the capability to enter the date when the records associated with a vital records folder have...
+10. [out] `_WhatEver/whatever.zip` (score=0.016)
+   > o accomplish contract maintenance work for missiles, engines, aircraft and end-items that could not be accomplished by organic depots due to inadequate equip...
 
 ---
 
@@ -3959,8 +3959,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 31197ms (router 1161ms, retrieval 21459ms)
-**Stage timings:** context_build=5268ms, rerank=5268ms, retrieval=21459ms, router=1161ms, vector_search=16190ms
+**Latency:** embed+retrieve 17555ms (router 1772ms, retrieval 11629ms)
+**Stage timings:** context_build=3652ms, rerank=3652ms, retrieval=11629ms, router=1772ms, vector_search=7976ms
 
 **Top-5 results:**
 
@@ -3985,8 +3985,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 32903ms (router 1908ms, retrieval 21797ms)
-**Stage timings:** context_build=5079ms, rerank=5079ms, retrieval=21797ms, router=1908ms, vector_search=16717ms
+**Latency:** embed+retrieve 17134ms (router 1633ms, retrieval 11509ms)
+**Stage timings:** context_build=3573ms, rerank=3573ms, retrieval=11509ms, router=1633ms, vector_search=7936ms
 
 **Top-5 results:**
 
@@ -4011,8 +4011,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 26585ms (router 1003ms, retrieval 21108ms)
-**Stage timings:** context_build=3406ms, rerank=3406ms, retrieval=21108ms, router=1003ms, vector_search=17702ms
+**Latency:** embed+retrieve 17239ms (router 1516ms, retrieval 11678ms)
+**Stage timings:** context_build=3570ms, rerank=3570ms, retrieval=11678ms, router=1516ms, vector_search=8108ms
 
 **Top-5 results:**
 
@@ -4037,8 +4037,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 4940ms (router 1485ms, retrieval 3200ms)
-**Stage timings:** context_build=2913ms, rerank=2913ms, retrieval=3200ms, router=1485ms, vector_search=286ms
+**Latency:** embed+retrieve 4996ms (router 1818ms, retrieval 2949ms)
+**Stage timings:** context_build=2728ms, rerank=2728ms, retrieval=2949ms, router=1818ms, vector_search=220ms
 
 **Top-5 results:**
 
@@ -4063,21 +4063,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 30183ms (router 1669ms, retrieval 21827ms)
-**Stage timings:** context_build=2936ms, rerank=2936ms, retrieval=21827ms, router=1669ms, vector_search=6085ms
+**Latency:** embed+retrieve 22271ms (router 2215ms, retrieval 15781ms)
+**Stage timings:** context_build=3654ms, rerank=3654ms, retrieval=15781ms, router=2215ms, vector_search=5317ms
 
 **Top-5 results:**
 
 1. [out] `AT&T/AT&T_SOW ISF_P412 (Draft 2016-04-04).doc` (score=0.016)
    > effort will be accomplished at the subcontractor s facility. PERIOD OF PERFORMANCE The period of performance may be stated using actual dates, days after con...
-2. [IN-FAMILY] `CPAR/47QFRA22F0009_OY1_Contractor_Assessment_NGResponse.docx` (score=0.016)
+2. [IN-FAMILY] `CPAR/47QFRA22F0009_OY2_Contractor_Assessment_NG Response.docx` (score=0.016)
    > Contractor Performance Assessment Report (CPAR) Input Request Form For Contractor: GSA will review the self-assessment information and will consider whether ...
-3. [out] `5017 AT&T (NEXION HI) (7020.50)/SOW ISF_P412 (Draft 2016-04-04).doc` (score=0.016)
-   > effort will be accomplished at the subcontractor s facility. PERIOD OF PERFORMANCE The period of performance may be stated using actual dates, days after con...
-4. [IN-FAMILY] `CPAR/47QFRA22F0009_OY2_Contractor_Assessment_NG Response.docx` (score=0.016)
-   > Contractor Performance Assessment Report (CPAR) Input Request Form For Contractor: GSA will review the self-assessment information and will consider whether ...
-5. [IN-FAMILY] `Templates/NGMS SOW 1-2017.doc` (score=0.016)
+3. [out] `Ascension Anchor Repair SOW-TSSI/Aztec Anchor Foundation Installation Rev 1.doc` (score=0.016)
    > RMANCE This section identifies where the contract effort will be performed. If performance will occur at multiple government locations, this section must ind...
+4. [IN-FAMILY] `CPAR/47QFRA22F0009_OY1_Contractor_Assessment_NGResponse.docx` (score=0.016)
+   > Contractor Performance Assessment Report (CPAR) Input Request Form For Contractor: GSA will review the self-assessment information and will consider whether ...
+5. [out] `5017 AT&T (NEXION HI) (7020.50)/SOW ISF_P412 (Draft 2016-04-04).doc` (score=0.016)
+   > effort will be accomplished at the subcontractor s facility. PERIOD OF PERFORMANCE The period of performance may be stated using actual dates, days after con...
 
 ---
 
@@ -4089,8 +4089,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 12800ms (router 1250ms, retrieval 11404ms)
-**Stage timings:** aggregate_lookup=4044ms, context_build=7178ms, rerank=7178ms, retrieval=11404ms, router=1250ms, structured_lookup=8088ms, vector_search=181ms
+**Latency:** embed+retrieve 9496ms (router 1451ms, retrieval 7887ms)
+**Stage timings:** aggregate_lookup=1640ms, context_build=6105ms, rerank=6105ms, retrieval=7887ms, router=1451ms, structured_lookup=3280ms, vector_search=141ms
 
 **Top-5 results:**
 
@@ -4115,8 +4115,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 5939ms (router 1215ms, retrieval 4456ms)
-**Stage timings:** context_build=4272ms, rerank=4272ms, retrieval=4456ms, router=1215ms, vector_search=183ms
+**Latency:** embed+retrieve 4401ms (router 1252ms, retrieval 2955ms)
+**Stage timings:** context_build=2783ms, rerank=2783ms, retrieval=2955ms, router=1252ms, vector_search=171ms
 
 **Top-5 results:**
 
@@ -4141,8 +4141,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 32455ms (router 1082ms, retrieval 31157ms)
-**Stage timings:** context_build=4801ms, rerank=4801ms, retrieval=31157ms, router=1082ms, vector_search=179ms
+**Latency:** embed+retrieve 17549ms (router 1516ms, retrieval 15860ms)
+**Stage timings:** context_build=3960ms, rerank=3960ms, retrieval=15860ms, router=1516ms, vector_search=172ms
 
 **Top-5 results:**
 
@@ -4167,8 +4167,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 18239ms (router 1143ms, retrieval 16856ms)
-**Stage timings:** context_build=3745ms, rerank=3745ms, retrieval=16856ms, router=1143ms, vector_search=273ms
+**Latency:** embed+retrieve 14148ms (router 1816ms, retrieval 12094ms)
+**Stage timings:** context_build=3417ms, rerank=3417ms, retrieval=12094ms, router=1816ms, vector_search=206ms
 
 **Top-5 results:**
 
@@ -4193,8 +4193,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 21340ms (router 1072ms, retrieval 15692ms)
-**Stage timings:** context_build=3667ms, rerank=3667ms, retrieval=15692ms, router=1072ms, vector_search=12024ms
+**Latency:** embed+retrieve 21084ms (router 1973ms, retrieval 14600ms)
+**Stage timings:** context_build=3952ms, rerank=3952ms, retrieval=14600ms, router=1973ms, vector_search=10648ms
 
 **Top-5 results:**
 
@@ -4215,25 +4215,25 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Query:** Where are the FEP monthly actuals stored in the program management folder tree?
 
-**Expected type:** SEMANTIC  |  **Routed:** SEMANTIC  |  **Routing match:** OK
+**Expected type:** SEMANTIC  |  **Routed:** TABULAR  |  **Routing match:** MISS
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 24000ms (router 1115ms, retrieval 18287ms)
-**Stage timings:** context_build=1824ms, rerank=1824ms, retrieval=18287ms, router=1115ms, vector_search=16463ms
+**Latency:** embed+retrieve 17972ms (router 1617ms, retrieval 11104ms)
+**Stage timings:** context_build=2302ms, rerank=2302ms, retrieval=11104ms, router=1617ms, vector_search=8802ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `PMP/DMEA__IGS-Program-Management-Plan-FinalR1.docx` (score=0.016)
-   > DFARS, and Security Communication with the Customer Customer meetings Cost and schedule Property management CDRL preparation Notification to ATSP PMO of cont...
-2. [IN-FAMILY] `XiBuy Training/Section_1_-_Overview.pptx` (score=0.016)
-   > esent Reallocate and approve transactions on behalf of cardholder if required Financial Manager - View Only Role For business management representatives, ava...
-3. [IN-FAMILY] `_WhatEver/DoD Systems.xls` (score=0.016)
+1. [IN-FAMILY] `04 - Program Planning/Program Planning audit checklist.xlsx` (score=0.033)
+   > stablished that define the expected performance., : Satisfactory, : Baselines are kept in the FEP which are located here: \\rsmcoc-fps01\#RSMCOC-FPS01\Group2...
+2. [IN-FAMILY] `Program Metrics/Program Metrics Audit-4857 Checklist.xlsx` (score=0.016)
+   > ated/released annually, unless a change is required before then. Reference: PMP Annual Update-Delivery 29SEP2025.pdf, : IGS MA verified document update/relea...
+3. [IN-FAMILY] `Archive/Program Management Plan.doc` (score=0.016)
+   > Expenditure Plan The FEP displays a time-phased estimate of expected spending profiles for active task orders, enabling the calculation of an estimated cost ...
+4. [IN-FAMILY] `_WhatEver/DoD Systems.xls` (score=0.016)
    > [SECTION] 2037.0 FINANCIAL MANAGEMENT SUITE FMSUITE The Financial Management Suite (FMSuite) is an online suite of Financial Management components housed in ...
-4. [IN-FAMILY] `DM/SEMS Data Management Plan.doc` (score=0.016)
-   > Figure 3.3.1.1.2-1, provides a listing of the various permission leveled folders that products are stored in. SeMIS is designed so that the data is only view...
-5. [IN-FAMILY] `_WhatEver/whatever.zip` (score=0.016)
-   > [SECTION] 2037.0 FINANCIAL MANAGEMENT SUITE FMSUITE The Financial Management Suite (FMSuite) is an online suite of Financial Management components housed in ...
+5. [IN-FAMILY] `Financial_Tools/201805 SEMSIII FEP Training (Beginner).pptx` (score=0.016)
+   > [SECTION] NORTHROP GR UMMAN PRIVATE / PROPRIETARY LEVEL I External Customer Reporting Cost Performance Report (CPR) ? Contractually due 15 workdays after end...
 
 ---
 
@@ -4245,8 +4245,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 36087ms (router 1469ms, retrieval 23816ms)
-**Stage timings:** aggregate_lookup=1656ms, context_build=7279ms, rerank=7278ms, retrieval=23816ms, router=1469ms, structured_lookup=3312ms, vector_search=14880ms
+**Latency:** embed+retrieve 24480ms (router 2445ms, retrieval 17146ms)
+**Stage timings:** aggregate_lookup=2059ms, context_build=6302ms, rerank=6302ms, retrieval=17146ms, router=2445ms, structured_lookup=4118ms, vector_search=8784ms
 
 **Top-5 results:**
 
@@ -4271,8 +4271,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 45947ms (router 1150ms, retrieval 34156ms)
-**Stage timings:** context_build=7653ms, rerank=7653ms, retrieval=34156ms, router=1150ms, vector_search=12944ms
+**Latency:** embed+retrieve 26380ms (router 1771ms, retrieval 19886ms)
+**Stage timings:** context_build=6803ms, rerank=6803ms, retrieval=19886ms, router=1771ms, vector_search=5648ms
 
 **Top-5 results:**
 
@@ -4307,8 +4307,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 38792ms (router 1077ms, retrieval 31960ms)
-**Stage timings:** context_build=4098ms, rerank=4098ms, retrieval=31960ms, router=1077ms, vector_search=8738ms
+**Latency:** embed+retrieve 23005ms (router 1633ms, retrieval 17382ms)
+**Stage timings:** context_build=3656ms, rerank=3656ms, retrieval=17382ms, router=1633ms, vector_search=3959ms
 
 **Top-5 results:**
 
@@ -4339,8 +4339,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 31232ms (router 1562ms, retrieval 25736ms)
-**Stage timings:** context_build=6040ms, rerank=6039ms, retrieval=25736ms, router=1562ms, vector_search=4730ms
+**Latency:** embed+retrieve 21250ms (router 2265ms, retrieval 16198ms)
+**Stage timings:** context_build=4933ms, rerank=4933ms, retrieval=16198ms, router=2265ms, vector_search=3460ms
 
 **Top-5 results:**
 
@@ -4367,7 +4367,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-226 [PARTIAL] -- Logistics Lead
+### PQ-226 [MISS] -- Logistics Lead
 
 **Query:** What did we buy from Dell for the Niger legacy monitoring system installation?
 
@@ -4375,21 +4375,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 19214ms (router 1150ms, retrieval 17888ms)
-**Stage timings:** context_build=3869ms, entity_lookup=13758ms, relationship_lookup=71ms, rerank=3869ms, retrieval=17888ms, router=1150ms, structured_lookup=27659ms, vector_search=188ms
+**Latency:** embed+retrieve 13769ms (router 1499ms, retrieval 12093ms)
+**Stage timings:** context_build=3718ms, entity_lookup=8152ms, relationship_lookup=61ms, rerank=3718ms, retrieval=12093ms, router=1499ms, structured_lookup=16427ms, vector_search=161ms
 
 **Top-5 results:**
 
 1. [out] `ISTO COTS Manuals/Dell-Poweredge_R340_Manual_RevA09.pdf` (score=0.016)
    > mance. Event log Displays a time-stamped log of the results of all tests run on the system. This is displayed if at least one event description is recorded. ...
-2. [out] `PR 0013909698 (Battery-Laptop) (Dell 04YRJH) (2016-05-24)/Battery (Dell 04YRJH) (Packing Slip) (Inventoried).pdf` (score=0.016)
-   > n Customer Self Repair, then access the Service Manuals for your products. Your link to Dell Service Contracts is WWW.DELL.COM/ServiceContracts Spare Parts P...
+2. [out] `EthernetExtenderInfo/RE Learmonth Copper Extender 043012_0923.txt` (score=0.016)
+   > Cc: Morris, Brock D Civ USAF AFWA AFWA/A6XP; Nealey, Daniel A TSgt USAF AFWA AFWA/A6XP; LBRUKARD@arinc.com; STARR, KEITH A CTR USAF AFSPC SMC/SLW Subject: RE...
 3. [out] `ISTO COTS Manuals/Dell-poweredge-r340-owners-manual-en-us.pdf` (score=0.016)
    > mance. Event log Displays a time-stamped log of the results of all tests run on the system. This is displayed if at least one event description is recorded. ...
-4. [out] `2022-12-01 ISTO Niger/Niger CT&E Report 2022-Dec-13.xlsx` (score=0.016)
-   > ict client connections to the local network with the following command: # postconf -e 'smtpd_client_restrictions = permit_mynetworks,reject', : Niger, : 127....
-5. [IN-FAMILY] `PO - 5000433063, PR 31433720, C 16099648 Dell Server R740 NEXION(Future Tech)($29,251.00)/DellR740.pdf` (score=0.016)
-   > Printers & Scanners Deals(//www.dell.com/en-us/shop/deals/electronics-software-deals/printers-scanners-deals) ftware Deals(//www.dell.com/en-us/shop/deals/el...
+4. [out] `McAfee AV v8_7 Patch 5/CM-182590-VSE87iP5.Zip` (score=0.016)
+   > olution: When Scan32.exe is executed via command line, it now reads from the default settings and overwrites, but does not save, the setting based on what is...
+5. [out] `Laptop/Dell Latitude e5530 Spec Sheet.pdf` (score=0.016)
+   > screws. Confidently safeguard data with Dell Data Protection software2, Trusted Platform Module (TPM)3, encrypted hard drive options3, and smart card2 and fi...
 
 ---
 
@@ -4401,8 +4401,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 36219ms (router 1612ms, retrieval 26729ms)
-**Stage timings:** context_build=4336ms, rerank=4336ms, retrieval=26729ms, router=1612ms, vector_search=10516ms
+**Latency:** embed+retrieve 25383ms (router 1528ms, retrieval 17833ms)
+**Stage timings:** context_build=4270ms, rerank=4270ms, retrieval=17833ms, router=1528ms, vector_search=6052ms
 
 **Top-5 results:**
 
@@ -4435,8 +4435,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 34656ms (router 2243ms, retrieval 31243ms)
-**Stage timings:** context_build=7068ms, rerank=7068ms, retrieval=31243ms, router=2243ms, vector_search=7662ms
+**Latency:** embed+retrieve 20812ms (router 1626ms, retrieval 18225ms)
+**Stage timings:** context_build=6833ms, rerank=6833ms, retrieval=18225ms, router=1626ms, vector_search=3965ms
 
 **Top-5 results:**
 
@@ -4471,8 +4471,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 16528ms (router 1200ms, retrieval 15214ms)
-**Stage timings:** context_build=3582ms, rerank=3582ms, retrieval=15214ms, router=1200ms, vector_search=170ms
+**Latency:** embed+retrieve 12979ms (router 1719ms, retrieval 11109ms)
+**Stage timings:** context_build=3574ms, rerank=3574ms, retrieval=11109ms, router=1719ms, vector_search=135ms
 
 **Top-5 results:**
 
@@ -4497,8 +4497,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 4721ms (router 1188ms, retrieval 3383ms)
-**Stage timings:** context_build=3224ms, rerank=3224ms, retrieval=3383ms, router=1188ms, vector_search=158ms
+**Latency:** embed+retrieve 5896ms (router 2373ms, retrieval 3356ms)
+**Stage timings:** context_build=3219ms, rerank=3219ms, retrieval=3356ms, router=2373ms, vector_search=136ms
 
 **Top-5 results:**
 
@@ -4523,8 +4523,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 28060ms (router 1124ms, retrieval 23668ms)
-**Stage timings:** context_build=3927ms, rerank=3927ms, retrieval=23668ms, router=1124ms, vector_search=5813ms
+**Latency:** embed+retrieve 20113ms (router 1468ms, retrieval 15564ms)
+**Stage timings:** context_build=4275ms, rerank=4275ms, retrieval=15564ms, router=1468ms, vector_search=3043ms
 
 **Top-5 results:**
 
@@ -4557,8 +4557,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 5123ms (router 1351ms, retrieval 3642ms)
-**Stage timings:** context_build=3493ms, rerank=3493ms, retrieval=3642ms, router=1351ms, vector_search=148ms
+**Latency:** embed+retrieve 5389ms (router 1399ms, retrieval 3826ms)
+**Stage timings:** context_build=3688ms, rerank=3688ms, retrieval=3826ms, router=1399ms, vector_search=137ms
 
 **Top-5 results:**
 
@@ -4583,8 +4583,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 37391ms (router 1010ms, retrieval 30705ms)
-**Stage timings:** context_build=5258ms, rerank=5258ms, retrieval=30705ms, router=1010ms, vector_search=11705ms
+**Latency:** embed+retrieve 27050ms (router 1633ms, retrieval 20099ms)
+**Stage timings:** context_build=4785ms, rerank=4785ms, retrieval=20099ms, router=1633ms, vector_search=7467ms
 
 **Top-5 results:**
 
@@ -4619,8 +4619,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 31666ms (router 1317ms, retrieval 26556ms)
-**Stage timings:** context_build=8776ms, rerank=8776ms, retrieval=26556ms, router=1317ms, vector_search=17779ms
+**Latency:** embed+retrieve 25000ms (router 2827ms, retrieval 19434ms)
+**Stage timings:** context_build=7805ms, rerank=7805ms, retrieval=19434ms, router=2827ms, vector_search=11629ms
 
 **Top-5 results:**
 
@@ -4634,16 +4634,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > [SHEET] Parts List PART NUMBER | HWCI | SYSTEM | SUB-SYSTEM | STATE | ITEM TYPE | OEM | UM | NOMENCLATURE | DOC TYPE | DRAWING NUMBER | FIND NO | DOC REVISIO...
 5. [IN-FAMILY] `2026_01_22 - Ascension (Mil-Air)/NG Packing List - Ascension (Outgoing).xlsx` (score=-1.000)
    > [SHEET] Parts List PART NUMBER | HWCI | SYSTEM | SUB-SYSTEM | STATE | ITEM TYPE | OEM | UM | NOMENCLATURE | DOC TYPE | DRAWING NUMBER | FIND NO | DOC REVISIO...
-6. [IN-FAMILY] `AMCI 24-101/AMCI24-101V11.pdf` (score=0.016)
-   > for pickup. Advise the receiving organization it?s their responsibility to pick up their shipments in a timely manner. Annotate the delivery date in CMOS. 82...
+6. [IN-FAMILY] `AFI 24-203/AFI24-203_AFSPCSUP_I.pdf` (score=0.016)
+   > he air manifest data accompanies the mission. 3.9.2.1.3. At destination/port of debarkation. Receipt for cargo. Prepare documentation for onward movement as ...
 7. [IN-FAMILY] `A023 - Integrated Logistics Plan (ILSP)/FA881525FB002_IGSCC-129_IGS_Integrated-Logistics-Support-Plan_A023_2025-09-24.pdf` (score=0.016)
    > es. The IGS program utilizes military transportation when available to foreign locations. The use of military air transportation method is preferred for loca...
-8. [IN-FAMILY] `AFI 24-203/AFI24-203_AFSPCSUP_I.pdf` (score=0.016)
-   > he air manifest data accompanies the mission. 3.9.2.1.3. At destination/port of debarkation. Receipt for cargo. Prepare documentation for onward movement as ...
+8. [IN-FAMILY] `AMCI 24-101/AMCI24-101V11.pdf` (score=0.016)
+   > for pickup. Advise the receiving organization it?s their responsibility to pick up their shipments in a timely manner. Annotate the delivery date in CMOS. 82...
 9. [IN-FAMILY] `ILSP 2024/47QFRA22F0009_IGSI-2438 IGS Integrated Logistics Support Plan (ILSP) (A023).docx` (score=0.016)
    > licable regulations for guidance and direction. Specifically, crates and wooden containers for international shipments will be constructed or procured to uti...
-10. [IN-FAMILY] `IGS/manifest_20180523.txt` (score=0.016)
-   > pping\Shipping Instructions (Ascension)\Info Rcvd 2018-03-30 from Patrick AFB I:\# 005_ILS\Shipping\Shipping Instructions (Ascension)\Info Rcvd 2018-03-30 fr...
+10. [IN-FAMILY] `AFI 24-203/AFI24-203.pdf` (score=0.016)
+   > kly data is downloaded from TRACKER, Global Air Transportation Execution System, Global Transportation Network and commercial carrier websites. These metrics...
 
 ---
 
@@ -4655,8 +4655,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 56864ms (router 1108ms, retrieval 44761ms)
-**Stage timings:** context_build=8641ms, rerank=8641ms, retrieval=44761ms, router=1108ms, vector_search=26520ms
+**Latency:** embed+retrieve 40628ms (router 1677ms, retrieval 32068ms)
+**Stage timings:** context_build=7529ms, rerank=7529ms, retrieval=32068ms, router=1677ms, vector_search=17213ms
 
 **Top-5 results:**
 
@@ -4691,8 +4691,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 53897ms (router 1182ms, retrieval 44287ms)
-**Stage timings:** aggregate_lookup=2378ms, context_build=13415ms, rerank=13415ms, retrieval=44287ms, router=1182ms, structured_lookup=4756ms, vector_search=28493ms
+**Latency:** embed+retrieve 40200ms (router 1268ms, retrieval 31885ms)
+**Stage timings:** aggregate_lookup=1783ms, context_build=11998ms, rerank=11998ms, retrieval=31885ms, router=1268ms, structured_lookup=3566ms, vector_search=18104ms
 
 **Top-5 results:**
 
@@ -4727,8 +4727,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 57721ms (router 1314ms, retrieval 47183ms)
-**Stage timings:** aggregate_lookup=2300ms, context_build=13192ms, rerank=13192ms, retrieval=47183ms, router=1314ms, structured_lookup=4600ms, vector_search=31690ms
+**Latency:** embed+retrieve 43159ms (router 2162ms, retrieval 33205ms)
+**Stage timings:** aggregate_lookup=1755ms, context_build=13044ms, rerank=13044ms, retrieval=33205ms, router=2162ms, structured_lookup=3510ms, vector_search=18404ms
 
 **Top-5 results:**
 
@@ -4763,8 +4763,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 64654ms (router 1343ms, retrieval 55213ms)
-**Stage timings:** context_build=11723ms, rerank=11723ms, retrieval=55213ms, router=1343ms, vector_search=25766ms
+**Latency:** embed+retrieve 40731ms (router 2253ms, retrieval 33111ms)
+**Stage timings:** context_build=7507ms, rerank=7507ms, retrieval=33111ms, router=2253ms, vector_search=18236ms
 
 **Top-5 results:**
 
@@ -4799,8 +4799,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 5045ms (router 1192ms, retrieval 3719ms)
-**Stage timings:** context_build=3590ms, rerank=3590ms, retrieval=3719ms, router=1192ms, vector_search=129ms
+**Latency:** embed+retrieve 5229ms (router 1220ms, retrieval 3852ms)
+**Stage timings:** context_build=3721ms, rerank=3721ms, retrieval=3852ms, router=1220ms, vector_search=131ms
 
 **Top-5 results:**
 
@@ -4825,8 +4825,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 21057ms (router 901ms, retrieval 19991ms)
-**Stage timings:** context_build=3391ms, rerank=3391ms, retrieval=19991ms, router=901ms, vector_search=207ms
+**Latency:** embed+retrieve 11879ms (router 1229ms, retrieval 10480ms)
+**Stage timings:** context_build=2824ms, rerank=2824ms, retrieval=10480ms, router=1229ms, vector_search=142ms
 
 **Top-5 results:**
 
@@ -4851,8 +4851,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 16593ms (router 1278ms, retrieval 15119ms)
-**Stage timings:** context_build=4191ms, rerank=4191ms, retrieval=15119ms, router=1278ms, vector_search=386ms
+**Latency:** embed+retrieve 12927ms (router 1535ms, retrieval 11183ms)
+**Stage timings:** context_build=3549ms, rerank=3548ms, retrieval=11183ms, router=1535ms, vector_search=210ms
 
 **Top-5 results:**
 
@@ -4877,8 +4877,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 17163ms (router 1366ms, retrieval 15639ms)
-**Stage timings:** context_build=4201ms, entity_lookup=10953ms, relationship_lookup=200ms, rerank=4201ms, retrieval=15639ms, router=1366ms, structured_lookup=22307ms, vector_search=283ms
+**Latency:** embed+retrieve 12050ms (router 1597ms, retrieval 10274ms)
+**Stage timings:** context_build=2491ms, entity_lookup=7564ms, relationship_lookup=62ms, rerank=2491ms, retrieval=10274ms, router=1597ms, structured_lookup=15253ms, vector_search=155ms
 
 **Top-5 results:**
 
@@ -4903,8 +4903,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 14732ms (router 1013ms, retrieval 13595ms)
-**Stage timings:** context_build=2815ms, rerank=2815ms, retrieval=13595ms, router=1013ms, vector_search=144ms
+**Latency:** embed+retrieve 12103ms (router 1568ms, retrieval 10373ms)
+**Stage timings:** context_build=2813ms, rerank=2813ms, retrieval=10373ms, router=1568ms, vector_search=136ms
 
 **Top-5 results:**
 
@@ -4929,8 +4929,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 26248ms (router 2479ms, retrieval 23617ms)
-**Stage timings:** context_build=6399ms, rerank=6399ms, retrieval=23617ms, router=2479ms, vector_search=290ms
+**Latency:** embed+retrieve 13295ms (router 1643ms, retrieval 11479ms)
+**Stage timings:** context_build=3785ms, rerank=3785ms, retrieval=11479ms, router=1643ms, vector_search=159ms
 
 **Top-5 results:**
 
@@ -4955,8 +4955,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 26343ms (router 2283ms, retrieval 23941ms)
-**Stage timings:** context_build=3102ms, rerank=3102ms, retrieval=23941ms, router=2283ms, vector_search=134ms
+**Latency:** embed+retrieve 17054ms (router 3154ms, retrieval 13749ms)
+**Stage timings:** context_build=2980ms, rerank=2980ms, retrieval=13749ms, router=3154ms, vector_search=125ms
 
 **Top-5 results:**
 
@@ -4981,8 +4981,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 26756ms (router 1491ms, retrieval 25112ms)
-**Stage timings:** context_build=4531ms, rerank=4531ms, retrieval=25112ms, router=1491ms, vector_search=179ms
+**Latency:** embed+retrieve 15402ms (router 1216ms, retrieval 14025ms)
+**Stage timings:** context_build=3737ms, rerank=3737ms, retrieval=14025ms, router=1216ms, vector_search=139ms
 
 **Top-5 results:**
 
@@ -5007,8 +5007,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 18974ms (router 1242ms, retrieval 17593ms)
-**Stage timings:** context_build=4762ms, rerank=4762ms, retrieval=17593ms, router=1242ms, vector_search=170ms
+**Latency:** embed+retrieve 15229ms (router 888ms, retrieval 14171ms)
+**Stage timings:** context_build=3734ms, rerank=3734ms, retrieval=14171ms, router=888ms, vector_search=140ms
 
 **Top-5 results:**
 
@@ -5033,8 +5033,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 23818ms (router 978ms, retrieval 22721ms)
-**Stage timings:** context_build=4411ms, rerank=4411ms, retrieval=22721ms, router=978ms, vector_search=134ms
+**Latency:** embed+retrieve 16048ms (router 2362ms, retrieval 13531ms)
+**Stage timings:** context_build=3760ms, rerank=3760ms, retrieval=13531ms, router=2362ms, vector_search=130ms
 
 **Top-5 results:**
 
@@ -5059,8 +5059,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 35092ms (router 1864ms, retrieval 33033ms)
-**Stage timings:** context_build=10893ms, rerank=10893ms, retrieval=33033ms, router=1864ms, vector_search=367ms
+**Latency:** embed+retrieve 15126ms (router 840ms, retrieval 14129ms)
+**Stage timings:** context_build=3768ms, rerank=3768ms, retrieval=14129ms, router=840ms, vector_search=129ms
 
 **Top-5 results:**
 
@@ -5085,8 +5085,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 41134ms (router 1108ms, retrieval 39852ms)
-**Stage timings:** context_build=6348ms, rerank=6348ms, retrieval=39852ms, router=1108ms, vector_search=185ms
+**Latency:** embed+retrieve 16445ms (router 2054ms, retrieval 14224ms)
+**Stage timings:** context_build=3748ms, entity_lookup=10265ms, relationship_lookup=65ms, rerank=3748ms, retrieval=14224ms, router=2054ms, structured_lookup=20662ms, vector_search=142ms
 
 **Top-5 results:**
 
@@ -5111,8 +5111,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 50831ms (router 998ms, retrieval 42203ms)
-**Stage timings:** context_build=6711ms, entity_lookup=20387ms, relationship_lookup=81ms, rerank=6711ms, retrieval=42203ms, router=998ms, structured_lookup=40936ms, vector_search=15023ms
+**Latency:** embed+retrieve 29359ms (router 1031ms, retrieval 22858ms)
+**Stage timings:** context_build=5912ms, entity_lookup=7239ms, relationship_lookup=61ms, rerank=5912ms, retrieval=22858ms, router=1031ms, structured_lookup=14600ms, vector_search=9644ms
 
 **Top-5 results:**
 
@@ -5147,8 +5147,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 48065ms (router 1540ms, retrieval 39851ms)
-**Stage timings:** context_build=6693ms, entity_lookup=17860ms, relationship_lookup=102ms, rerank=6693ms, retrieval=39851ms, router=1540ms, structured_lookup=35925ms, vector_search=15193ms
+**Latency:** embed+retrieve 27571ms (router 1873ms, retrieval 20611ms)
+**Stage timings:** context_build=5965ms, entity_lookup=7014ms, relationship_lookup=64ms, rerank=5965ms, retrieval=20611ms, router=1873ms, structured_lookup=14156ms, vector_search=7567ms
 
 **Top-5 results:**
 
@@ -5162,16 +5162,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > [ARCHIVE_MEMBER=370.opattrs.xml] acas.opsattrs 158.114.89.8 158.114.89.8:acas.opsattrs::370 158.114.89.8 1:1 False [ARCHIVE_MEMBER=370.arf.xml] acas.assetdat...
 5. [IN-FAMILY] `ACAS Week 3/DISA ASR_ARF (Scan NEXION Kickstart Lab VM (158.114.89.50)).zip` (score=-1.000)
    > [ARCHIVE_MEMBER=372.opattrs.xml] acas.opsattrs 158.114.89.8 158.114.89.8:acas.opsattrs::372 158.114.89.8 1:1 False [ARCHIVE_MEMBER=372.arf.xml] acas.assetdat...
-6. [IN-FAMILY] `A016 - Baseline Description Document (System Performance Baseline Briefing)/47QFRA22F0009_IGSI-2468_A016_Baseline-Description-Document_2025-07-31.pdf` (score=0.016)
-   > ed 10/30/2024 Both IGSI-2444 A055 Government Property Inventory Report - 2025-01 1 Delivered 1/15/2025 Both IGSI-2445 A055 Government Property Inventory Repo...
+6. [IN-FAMILY] `AU/Deliverables Report IGSI-126 Audit & Accountability (AU) Plans and Controls (A027).zip` (score=0.016)
+   > [ARCHIVE_MEMBER=Deliverables Report IGSI-126 Audit & Accountability (AU) Plans and Controls (A027)/Deliverables Report IGSI-126 ISTO AU Controls 2022-Oct (A0...
 7. [IN-FAMILY] `NEXION/MSR Input Apr_rs.docx` (score=0.016)
    > [SECTION] 27 Apr: Looking at Acronis as a replacement for the current imaging software, Ghost. Certification and Accreditation (Ryan and Gary) 04 Apr: Sent F...
-8. [IN-FAMILY] `Gov't Info/IGSCC deliverable (NGIDE Jira) 2025-08-26.xlsx` (score=0.016)
-   > [SHEET] IGSCC deliverable (NGIDE Jira) Summary | Issue key | Due Date Summary: IGSCC RMF Authorization Documentation - Security Plan - A027, Issue key: IGSCC...
+8. [IN-FAMILY] `A008 - Management Plan (Program Management Plan - Systems Mgt Plan)/Deliverables Report IGSI-63 IGS Program Management Plan (A008).pdf` (score=0.016)
+   > ments, the document will be moved to the ?IGS DM ? Restricted? folder and DM will be notified that the document is ready for delivery to the Government via G...
 9. [out] `2012 Reports/NEXION MSR Input (McElhinney) Mar 12.doc` (score=0.016)
    > Author: Ed Huber NEXION MSR Input For the Mo/Yr: Mar 12 From: Ray McElhinney 1. Work you did this month on the following: (only address what is applicable) C...
-10. [IN-FAMILY] `Aug16/IGS IPT Briefing Slides_(CDRL A001)_1 September 2016_afh comments and updates.pptx` (score=0.016)
-   > has been added to the IGS Sprint 5 Deliverables Site Preparation Requirements and Implementation Plan (SPR&IP) and Appendix K (Hawaii) Updates (CDRL A001) - ...
+10. [out] `Key Documents/sp800-37-rev1-final.pdf` (score=0.016)
+   > icial. This publication may be used by nongovernmental organizations on a voluntary basis and is not subject to copyright in the United States. Attribution w...
 
 ---
 
@@ -5183,8 +5183,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 25999ms (router 1297ms, retrieval 22765ms)
-**Stage timings:** context_build=5609ms, entity_lookup=14604ms, relationship_lookup=175ms, rerank=5609ms, retrieval=22765ms, router=1297ms, structured_lookup=29558ms, vector_search=2376ms
+**Latency:** embed+retrieve 15418ms (router 1951ms, retrieval 12267ms)
+**Stage timings:** context_build=4038ms, entity_lookup=6982ms, relationship_lookup=63ms, rerank=4038ms, retrieval=12267ms, router=1951ms, structured_lookup=14090ms, vector_search=1182ms
 
 **Top-5 results:**
 
@@ -5215,8 +5215,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 23363ms (router 976ms, retrieval 19170ms)
-**Stage timings:** context_build=4593ms, entity_lookup=11167ms, relationship_lookup=259ms, rerank=4593ms, retrieval=19170ms, router=976ms, structured_lookup=22853ms, vector_search=3149ms
+**Latency:** embed+retrieve 17025ms (router 1822ms, retrieval 12979ms)
+**Stage timings:** context_build=3872ms, entity_lookup=6750ms, relationship_lookup=182ms, rerank=3872ms, retrieval=12979ms, router=1822ms, structured_lookup=13865ms, vector_search=2173ms
 
 **Top-5 results:**
 
@@ -5245,21 +5245,31 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 30886ms (router 1267ms, retrieval 29437ms)
-**Stage timings:** context_build=5242ms, rerank=5242ms, retrieval=29437ms, router=1267ms, vector_search=210ms
+**Latency:** embed+retrieve 42321ms (router 1100ms, retrieval 27977ms)
+**Stage timings:** context_build=7476ms, rerank=7476ms, retrieval=27977ms, router=1100ms, vector_search=13492ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `A027 - DAA Accreditation Support Data (CT&E Plan)/Deliverables Report IGSI-665 CT&E Plan ISTO UDL (A027).pdf` (score=0.016)
-   > ce Assessment Solution (ACAS) scan to address the following compliance standard: o Vendor Patching o Time Compliance Network Order (TCNO) o Information Assur...
-2. [IN-FAMILY] `2023/Deliverables Report IGSI-722 NEXION DAA Accreditation Support Data (DAA) (ACAS Scan Results).xlsx` (score=0.016)
-   > [SHEET] Asset Overview CUI | | | | | | CUI: Asset Overview CUI: ACAS Asset Insight CUI: Host Name, : CAT I, : CAT II, : CAT III, : CAT IV, : Total, : Credent...
-3. [out] `Support Documents - ACAS/CM-249437-ACAS EL7 User Guide v1.3.pdf` (score=0.016)
+1. [IN-FAMILY] `2025/FA881525FB002_IGSCC-529_DAA-Accreditation-Support-Data_ACAS-Scan_ISTO_October-2025.xlsx` (score=-1.000)
+   > [SHEET] Asset Overview CUI | | | | | | CUI: ACAS Asset Insight CUI: Host Name, : CAT I, : CAT II, : CAT III, : CAT IV, : Total, : Credentialed CUI: ACAS RHEL...
+2. [IN-FAMILY] `2025/FA881525FB002_IGSCC-529_DAA-Accreditation-Support-Data_ACAS-Scan_NEXION_October-2025.xlsx` (score=-1.000)
+   > [SHEET] Asset Overview CUI | | | | | | CUI: ACAS Asset Insight CUI: Host Name, : CAT I, : CAT II, : CAT III, : CAT IV, : Total, : Credentialed CUI: ACAS RHEL...
+3. [IN-FAMILY] `2022-09-09 IGSI-214 NEXION Scan Reports - 2022-Aug/Deliverables Report IGSI-214 NEXION Weekly Scan 3-4 2022-Aug (A027).xlsx` (score=-1.000)
+   > [SHEET] Scan Report CUI | | | | | | CUI: Asset Overview CUI: ACAS Asset Insight CUI: Host Name, : CAT I, : CAT II, : CAT III, : CAT IV, : Total, : Credential...
+4. [IN-FAMILY] `2022-09-09 IGSI-214 NEXION Scan Reports - 2022-Aug/Deliverables Report IGSI-214 NEXION Monthly Full STIG 2022-Aug (A027).xlsx` (score=-1.000)
+   > [SHEET] Scan Report CUI | | | | | CUI: Asset Overview CUI: CKL Asset Insight CUI: Host Name, : CAT I, : CAT II, : CAT III, : CAT IV, : Total CUI: NEXION STIG...
+5. [IN-FAMILY] `2022-09-09 IGSI-215 ISTO Scan Reports - 2022-Aug/Deliverables Report IGSI-215 ISTO Weekly Scan 3-4 2022-Aug (A027).xlsx` (score=-1.000)
+   > [SHEET] Scan Report CUI | | | | | | CUI: Asset Overview CUI: ACAS Asset Insight CUI: Host Name, : CAT I, : CAT II, : CAT III, : CAT IV, : Total, : Credential...
+6. [out] `Support Documents - ACAS/CM-249437-ACAS EL7 User Guide v1.3.pdf` (score=0.016)
    > Page 1 of 140 Assured Compliance Assessment Solution (ACAS) Enterprise Linux 7 User Guide May 11, 2020 V1.3 Distribution Statement: Distribution authorized t...
-4. [IN-FAMILY] `Thule ACAS and Data Collection (16-25 Oct 2019)/SEMS3D-39312 Thule NEXION Trip Report - Data Collection and ACAS Scan (16-25 Oct 2019) (A001).pdf` (score=0.016)
-   > ers Traveler Depart Return Frank Pitts 16 October 2019 25 October 2019 Vinh Nguyen 16 October 2019 25 October 2019 3. PERFORMED CYBER SCANS The following sca...
-5. [out] `archive/NGC Enterprise_Approved_Products_Summary.xlsx` (score=0.016)
-   > : 2015-04-23T00:00:00, : 2015-04-23T00:00:00, : 2018-04-23T00:00:00, : The Assured Compliance Assessment Solution (ACAS) product suite provides the required ...
+7. [IN-FAMILY] `2023/Deliverables Report IGSI-722 NEXION DAA Accreditation Support Data (DAA) (ACAS Scan Results).xlsx` (score=0.016)
+   > [SHEET] Asset Overview CUI | | | | | | CUI: Asset Overview CUI: ACAS Asset Insight CUI: Host Name, : CAT I, : CAT II, : CAT III, : CAT IV, : Total, : Credent...
+8. [out] `2015/ISTO_(formerly_SCINDA)_SSP_16Apr2015-FINAL_SIGNED.pdf` (score=0.016)
+   > lizes the DISA-mandated Assured Compliance Assessment Solution (ACAS) as the security technical implementation and/or recommendation guidance for the secure ...
+9. [IN-FAMILY] `2023/Deliverables Report IGSI-1373 ISTO DAA Accreditation Support Data (DAA) (ACAS Scan Results).xlsx` (score=0.016)
+   > [SHEET] Asset Overview CUI | | | | | | CUI: Asset Overview CUI: ACAS Asset Insight CUI: Host Name, : CAT I, : CAT II, : CAT III, : CAT IV, : Total, : Credent...
+10. [out] `Artifacts/Artifacts.zip` (score=0.016)
+   > lizes the DISA-mandated Assured Compliance Assessment Solution (ACAS) as the security technical implementation and/or recommendation guidance for the secure ...
 
 ---
 
@@ -5271,8 +5281,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 30781ms (router 1381ms, retrieval 27885ms)
-**Stage timings:** context_build=4623ms, entity_lookup=21512ms, relationship_lookup=75ms, rerank=4623ms, retrieval=27885ms, router=1381ms, structured_lookup=43174ms, vector_search=1674ms
+**Latency:** embed+retrieve 15102ms (router 1086ms, retrieval 12821ms)
+**Stage timings:** context_build=4128ms, entity_lookup=7456ms, relationship_lookup=66ms, rerank=4128ms, retrieval=12821ms, router=1086ms, structured_lookup=15045ms, vector_search=1169ms
 
 **Top-5 results:**
 
@@ -5303,8 +5313,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 55111ms (router 1120ms, retrieval 47447ms)
-**Stage timings:** context_build=12386ms, rerank=12386ms, retrieval=47447ms, router=1120ms, vector_search=6168ms
+**Latency:** embed+retrieve 26502ms (router 2022ms, retrieval 19847ms)
+**Stage timings:** context_build=7634ms, rerank=7634ms, retrieval=19847ms, router=2022ms, vector_search=4670ms
 
 **Top-5 results:**
 
@@ -5339,8 +5349,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 24463ms (router 906ms, retrieval 22228ms)
-**Stage timings:** context_build=5132ms, entity_lookup=13721ms, relationship_lookup=93ms, rerank=5132ms, retrieval=22228ms, router=906ms, structured_lookup=27629ms, vector_search=3280ms
+**Latency:** embed+retrieve 14882ms (router 1069ms, retrieval 12594ms)
+**Stage timings:** context_build=4044ms, entity_lookup=7284ms, relationship_lookup=64ms, rerank=4044ms, retrieval=12594ms, router=1069ms, structured_lookup=14697ms, vector_search=1201ms
 
 **Top-5 results:**
 
@@ -5369,8 +5379,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 39075ms (router 1008ms, retrieval 31962ms)
-**Stage timings:** context_build=8945ms, entity_lookup=15582ms, relationship_lookup=148ms, rerank=8945ms, retrieval=31962ms, router=1008ms, structured_lookup=31461ms, vector_search=7285ms
+**Latency:** embed+retrieve 20361ms (router 920ms, retrieval 15570ms)
+**Stage timings:** context_build=4389ms, entity_lookup=7166ms, relationship_lookup=188ms, rerank=4389ms, retrieval=15570ms, router=920ms, structured_lookup=14709ms, vector_search=3825ms
 
 **Top-5 results:**
 
@@ -5384,16 +5394,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > accepted Red Hat Enterprise Linux 7 STIG SCAP Benchmark This Security Technical Implementation Guide is published as a tool to improve the security of Depart...
 5. [IN-FAMILY] `Deliverables Report IGSI-481 CT&E Report Niger (A027)/Deliverables Report IGSI-481 CT&E Report Niger (A027).zip` (score=-1.000)
    > [ARCHIVE_MEMBER=Niger CT&E Report 2022-Dec-13.xlsx] [SHEET] Scan Report CUI | | | | | | CUI: NIGER SCAN REPORT CUI: ACAS Asset Insight CUI: Description, : CA...
-6. [IN-FAMILY] `IGS Data Management/IGS Deliverables Process.docx` (score=0.016)
-   > nsure the delivered product meets requirements and customer/user needs. Products to be verified and the verification method used are identified in Table 1. T...
+6. [IN-FAMILY] `A008 - Management Plan (Program Management Plan - Systems Mgt Plan)/Deliverables Report IGSI-1135 IGS Program Management Plan (Sept 2023) (A008) .pdf` (score=0.016)
+   > ts List (CDRL) identified as deliverables in the Deliverables Table of the Performance Work Statement (PWS) are tracked in Jira. All deliverables for the IGS...
 7. [IN-FAMILY] `2022/Deliverables Report IGSI-87 IGS Monthly Status Report - Dec22 (A009).pdf` (score=0.016)
    > [SECTION] IGSE-66 S upport Agreement - San Vito 8/1/2022 2/1/2023 IGSE-65 Site Support Agreement - Kwajalein 8/1/2022 2/1/2023 IGSE-64 Site Support Agreement...
 8. [IN-FAMILY] `Evidence/PMP Annual Update-Delivery 29SEP2025.pdf` (score=0.016)
    > [OCR_PAGE=1] IGS Deliverables Dashboard IGS Completed Deliverables Summary DMEA Priced Bill of Materials (A013) IGSCC Monthly Audit Report (A027) - August 20...
-9. [IN-FAMILY] `1.0 IGS DM - Restricted/IGS-Deliverables-List_1.xlsx` (score=0.016)
+9. [IN-FAMILY] `1.0 IGS DM - Restricted/IGS-Deliverables-List.xlsx` (score=0.016)
    > Plan - Niger ISTO - 2022-12-22, Due Date: 2022-12-22T00:00:00, Delivery Date: 2022-12-22T00:00:00, Timeliness: 0, Created By: Ray H Dalrymple, Action State: ...
-10. [IN-FAMILY] `AU/Deliverables Report IGSI-126 Audit & Accountability (AU) Plans and Controls (A027).zip` (score=0.016)
-   > [ARCHIVE_MEMBER=Deliverables Report IGSI-126 Audit & Accountability (AU) Plans and Controls (A027)/Deliverables Report IGSI-126 ISTO AU Controls 2022-Oct (A0...
+10. [IN-FAMILY] `A008 - Management Plan (Program Management Plan - Systems Mgt Plan)/Deliverables Report IGSI-560 IGS Program Management Plan (Jan 2023) (A008) .pdf` (score=0.016)
+   > ts List (CDRL) identified as deliverables in the Deliverables Table of the Performance Work Statement (PWS) are tracked in Jira. All deliverables for the IGS...
 
 ---
 
@@ -5405,8 +5415,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 49727ms (router 1192ms, retrieval 41193ms)
-**Stage timings:** context_build=4366ms, rerank=4365ms, retrieval=41193ms, router=1192ms, vector_search=17152ms
+**Latency:** embed+retrieve 26859ms (router 1264ms, retrieval 21035ms)
+**Stage timings:** context_build=4094ms, rerank=4094ms, retrieval=21035ms, router=1264ms, vector_search=9030ms
 
 **Top-5 results:**
 
@@ -5431,8 +5441,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 6029ms (router 1364ms, retrieval 4541ms)
-**Stage timings:** context_build=4381ms, rerank=4381ms, retrieval=4541ms, router=1364ms, vector_search=159ms
+**Latency:** embed+retrieve 5329ms (router 1315ms, retrieval 3864ms)
+**Stage timings:** context_build=3710ms, rerank=3710ms, retrieval=3864ms, router=1315ms, vector_search=127ms
 
 **Top-5 results:**
 
@@ -5457,8 +5467,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 41568ms (router 1083ms, retrieval 30357ms)
-**Stage timings:** context_build=8950ms, rerank=8950ms, retrieval=30357ms, router=1083ms, vector_search=21406ms
+**Latency:** embed+retrieve 28938ms (router 1050ms, retrieval 21318ms)
+**Stage timings:** context_build=7578ms, rerank=7578ms, retrieval=21318ms, router=1050ms, vector_search=13739ms
 
 **Top-5 results:**
 
@@ -5493,21 +5503,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 12815ms (router 1115ms, retrieval 11493ms)
-**Stage timings:** aggregate_lookup=4356ms, context_build=6869ms, rerank=6869ms, retrieval=11493ms, router=1115ms, structured_lookup=8712ms, vector_search=267ms
+**Latency:** embed+retrieve 10311ms (router 1800ms, retrieval 8305ms)
+**Stage timings:** aggregate_lookup=1836ms, context_build=6272ms, rerank=6272ms, retrieval=8305ms, router=1800ms, structured_lookup=3672ms, vector_search=196ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Delete After Time/fi-5530c2.pdf` (score=0.016)
-   > Part Number PA03334-B605 Technical Specifications MODEL fi-5530C2 1 Scanning speeds may vary due to the system environment used. 2 External stacker attachmen...
+1. [IN-FAMILY] `OY2/47QFRA22F0009_IGSI-3032_IGS_Monthly_Audit_Report_Feb-Apr-2025.xlsx` (score=0.016)
+   > [SECTION] CUI: 147.74.19 6.49, : Believed to be an ACAS scanner apart of subnet 147.74.0.0/16. AS367 registered to Air Force System Networking, : 147.74.196....
 2. [IN-FAMILY] `Archive/Memo to File_Mod 4 Attachment 1_IGS Oasis PWS FINAL_03.09.2023.docx` (score=0.016)
    > provided by the Government. At a minimum, all systems must be scanned on a yearly basis and after each CCR implementation. (CDRL A027-SCAP Scan Results, A027...
 3. [IN-FAMILY] `OY2/47QFRA22F0009_IGSI-3032_IGS_Monthly_Audit_Report_Feb-Apr-2025.xlsx` (score=0.016)
-   > [SECTION] CUI: 147.74.19 6.49, : Believed to be an ACAS scanner apart of subnet 147.74.0.0/16. AS367 registered to Air Force System Networking, : 147.74.196....
+   > [SECTION] CUI: 147.74.196 .37, : Believed to be an ACAS scanner apart of subnet 147.74.0.0/16. AS367 registered to Air Force System Networking, : 147.74.196....
 4. [IN-FAMILY] `Archive/Memo to File_Mod 4 Attachment 1_IGS Oasis PWS 6_27_23 _Redlined.docx` (score=0.016)
    > provided by the Government. At a minimum, all systems must be scanned on a yearly basis and after each CCR implementation. (CDRL A027-SCAP Scan Results, A027...
-5. [IN-FAMILY] `OY2/47QFRA22F0009_IGSI-3032_IGS_Monthly_Audit_Report_Feb-Apr-2025.xlsx` (score=0.016)
-   > [SECTION] CUI: 147.74.196 .37, : Believed to be an ACAS scanner apart of subnet 147.74.0.0/16. AS367 registered to Air Force System Networking, : 147.74.196....
+5. [IN-FAMILY] `Delete After Time/fi-5530c2.pdf` (score=0.016)
+   > Part Number PA03334-B605 Technical Specifications MODEL fi-5530C2 1 Scanning speeds may vary due to the system environment used. 2 External stacker attachmen...
 
 ---
 
@@ -5519,8 +5529,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 11333ms (router 1519ms, retrieval 9699ms)
-**Stage timings:** aggregate_lookup=2721ms, context_build=6851ms, rerank=6851ms, retrieval=9699ms, router=1519ms, structured_lookup=5442ms, vector_search=127ms
+**Latency:** embed+retrieve 9653ms (router 1402ms, retrieval 8102ms)
+**Stage timings:** aggregate_lookup=1732ms, context_build=6243ms, rerank=6243ms, retrieval=8102ms, router=1402ms, structured_lookup=3464ms, vector_search=125ms
 
 **Top-5 results:**
 
@@ -5545,8 +5555,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 11875ms (router 1249ms, retrieval 10495ms)
-**Stage timings:** aggregate_lookup=3724ms, context_build=6619ms, rerank=6618ms, retrieval=10495ms, router=1249ms, structured_lookup=7448ms, vector_search=151ms
+**Latency:** embed+retrieve 10006ms (router 1260ms, retrieval 8594ms)
+**Stage timings:** aggregate_lookup=2140ms, context_build=6325ms, rerank=6325ms, retrieval=8594ms, router=1260ms, structured_lookup=4280ms, vector_search=128ms
 
 **Top-5 results:**
 
@@ -5558,8 +5568,8 @@ a classifier tuning opportunity, tracked but not fixed here.
    > ocuments, internal non-deliverable and informal documents, and external documents. The ID number for delivered documentation is referred to as the SEMS3D num...
 4. [IN-FAMILY] `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (score=0.016)
    > bles\Loring Site Survey\14-0038_NEXION Site Survey Report (CDRL A090)_Lualualei NRTF_3 Nov 14.pdf I:\# 003 Deliverables\Loring Site Survey\NEXION Site Survey...
-5. [out] `01 Contract Award/Sec J_ Atch 1_PWS.PDF` (score=0.016)
-   > der. Attachment 1, SEMS III Contract PWS lists the reference documents for Government policies and procedures. The documents identified in Atch 1, SEMS III C...
+5. [IN-FAMILY] `WX29-for OY2/SEMS3D-40239 TOWX29 IGS Sustainment Project Cloeout (A001).pdf` (score=0.016)
+   > S3D-34956 IGS WX29 A029 Data Accession List SEMS3D-36498 IGS WX29 A029 Data Accession List SEMS3D-38718 IGS ISTO/NEXION Data Accession List DAL (CDRL A029) 2...
 
 ---
 
@@ -5571,8 +5581,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 60380ms (router 1631ms, retrieval 41393ms)
-**Stage timings:** aggregate_lookup=2369ms, context_build=16942ms, rerank=16942ms, retrieval=41393ms, router=1631ms, structured_lookup=4738ms, vector_search=22081ms
+**Latency:** embed+retrieve 40506ms (router 1470ms, retrieval 32007ms)
+**Stage timings:** aggregate_lookup=1831ms, context_build=12082ms, rerank=12082ms, retrieval=32007ms, router=1470ms, structured_lookup=3662ms, vector_search=18093ms
 
 **Top-5 results:**
 
@@ -5607,8 +5617,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 14830ms (router 1544ms, retrieval 13107ms)
-**Stage timings:** aggregate_lookup=4486ms, context_build=8378ms, rerank=8378ms, retrieval=13107ms, router=1544ms, structured_lookup=8974ms, vector_search=239ms
+**Latency:** embed+retrieve 11015ms (router 1879ms, retrieval 8944ms)
+**Stage timings:** aggregate_lookup=1853ms, context_build=6921ms, rerank=6921ms, retrieval=8944ms, router=1879ms, structured_lookup=3708ms, vector_search=165ms
 
 **Top-5 results:**
 
@@ -5633,8 +5643,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 11382ms (router 1647ms, retrieval 9557ms)
-**Stage timings:** aggregate_lookup=983ms, context_build=8376ms, rerank=8376ms, retrieval=9557ms, router=1647ms, structured_lookup=1966ms, vector_search=197ms
+**Latency:** embed+retrieve 8685ms (router 1464ms, retrieval 7048ms)
+**Stage timings:** aggregate_lookup=400ms, context_build=6498ms, rerank=6498ms, retrieval=7048ms, router=1464ms, structured_lookup=800ms, vector_search=149ms
 
 **Top-5 results:**
 
@@ -5659,8 +5669,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 31970ms (router 2412ms, retrieval 24877ms)
-**Stage timings:** aggregate_lookup=4464ms, context_build=7530ms, rerank=7530ms, retrieval=24877ms, router=2412ms, structured_lookup=8928ms, vector_search=12882ms
+**Latency:** embed+retrieve 24508ms (router 1199ms, retrieval 18824ms)
+**Stage timings:** aggregate_lookup=1814ms, context_build=6454ms, rerank=6454ms, retrieval=18824ms, router=1199ms, structured_lookup=3628ms, vector_search=10555ms
 
 **Top-5 results:**
 
@@ -5685,8 +5695,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 10726ms (router 1694ms, retrieval 8909ms)
-**Stage timings:** aggregate_lookup=2962ms, context_build=5807ms, rerank=5807ms, retrieval=8909ms, router=1694ms, structured_lookup=5924ms, vector_search=138ms
+**Latency:** embed+retrieve 10072ms (router 1353ms, retrieval 8561ms)
+**Stage timings:** aggregate_lookup=2087ms, context_build=6335ms, rerank=6335ms, retrieval=8561ms, router=1353ms, structured_lookup=4175ms, vector_search=136ms
 
 **Top-5 results:**
 
@@ -5711,8 +5721,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 4269ms (router 931ms, retrieval 3208ms)
-**Stage timings:** context_build=3065ms, rerank=3065ms, retrieval=3208ms, router=931ms, vector_search=143ms
+**Latency:** embed+retrieve 4491ms (router 983ms, retrieval 3339ms)
+**Stage timings:** context_build=3196ms, rerank=3196ms, retrieval=3339ms, router=983ms, vector_search=142ms
 
 **Top-5 results:**
 
@@ -5737,8 +5747,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 5504ms (router 1608ms, retrieval 3762ms)
-**Stage timings:** context_build=3617ms, rerank=3617ms, retrieval=3762ms, router=1608ms, vector_search=145ms
+**Latency:** embed+retrieve 5336ms (router 1228ms, retrieval 3936ms)
+**Stage timings:** context_build=3793ms, rerank=3793ms, retrieval=3936ms, router=1228ms, vector_search=142ms
 
 **Top-5 results:**
 
@@ -5763,8 +5773,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 5302ms (router 1464ms, retrieval 3713ms)
-**Stage timings:** context_build=3566ms, rerank=3566ms, retrieval=3713ms, router=1464ms, vector_search=147ms
+**Latency:** embed+retrieve 5676ms (router 1278ms, retrieval 4229ms)
+**Stage timings:** context_build=4087ms, rerank=4087ms, retrieval=4229ms, router=1278ms, vector_search=141ms
 
 **Top-5 results:**
 
@@ -5789,21 +5799,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 18912ms (router 1184ms, retrieval 17579ms)
-**Stage timings:** context_build=3956ms, rerank=3956ms, retrieval=17579ms, router=1184ms, vector_search=178ms
+**Latency:** embed+retrieve 14773ms (router 1304ms, retrieval 13302ms)
+**Stage timings:** context_build=3754ms, rerank=3754ms, retrieval=13302ms, router=1304ms, vector_search=146ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.016)
+1. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.032)
+   > with the "IPT Slides" view of the "IGS Outages" rich filter, shown in Figure 1, to create the current month outage spreadsheet. Figure . The IPT Slides View ...
+2. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.032)
    > ulative Outages: All outages that occurred before the current month going back to 1 January 2016. User Interface Overview Figure 1 shows the user interface (...
-2. [IN-FAMILY] `Program Metrics/Program Metrics Audit-4857 Checklist.xlsx` (score=0.016)
+3. [IN-FAMILY] `Program Metrics/Program Metrics Audit-4857 Checklist.xlsx` (score=0.016)
    > ssment of program quality based on an agreed upon set of defined metrics., : Satisfactory, : The IGS QAF was decommissioned July as IPRS metrics were deemed ...
-3. [IN-FAMILY] `A031 - Integrated Master Schedule (IMS)/FA881525FB002_IGSCC-147_IGS-IMS_2026-3-12.pdf` (score=0.016)
-   > [SECTION] 208 0% Outage Response - July 21 days Thu 7/2/26 Th u 7/30/26 207 332 209 79% Documentation 259 days Mon 8/4/25 Thu 7/30/26 210 100% Program Plans ...
-4. [out] `A023 - Integrated Logistics Plan (ILSP)/FA881525FB002_IGSCC-129_IGS_Integrated-Logistics-Support-Plan_A023_2025-09-24.pdf` (score=0.016)
+4. [out] `July18/SEMS3D-36828_IGS-IPT-Briefing_Slides_(A001).pptx` (score=0.016)
+   > [SECTION] [SLIDE 6 1] Outages ? Cumulative 1 = Guam 2 = Singapore 3 = Curacao 4 = Ascension 5 = Kwajalein 6 = Diego Garcia 30 = NG Lab (COS System / Serial N...
+5. [out] `A023 - Integrated Logistics Plan (ILSP)/FA881525FB002_IGSCC-129_IGS_Integrated-Logistics-Support-Plan_A023_2025-09-24.pdf` (score=0.016)
    > gement property book spreadsheet. 4.4 Supplier Management The IGS program maintains supplier information in the part detail tab of the hardware/software base...
-5. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.016)
-   > erscores with a space. This will make the table column names much easier to read. Use the Find and Replace function to replace all NaN values with a dash. Th...
 
 ---
 
@@ -5815,8 +5825,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 10468ms (router 1843ms, retrieval 8474ms)
-**Stage timings:** aggregate_lookup=2245ms, context_build=6029ms, rerank=6029ms, retrieval=8474ms, router=1843ms, structured_lookup=4490ms, vector_search=198ms
+**Latency:** embed+retrieve 9987ms (router 1530ms, retrieval 8274ms)
+**Stage timings:** aggregate_lookup=1773ms, context_build=6325ms, rerank=6325ms, retrieval=8274ms, router=1530ms, structured_lookup=3546ms, vector_search=175ms
 
 **Top-5 results:**
 
@@ -5841,8 +5851,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 27763ms (router 1103ms, retrieval 22003ms)
-**Stage timings:** context_build=3570ms, entity_lookup=9717ms, relationship_lookup=57ms, rerank=3570ms, retrieval=22003ms, router=1103ms, structured_lookup=19549ms, vector_search=8657ms
+**Latency:** embed+retrieve 26084ms (router 1420ms, retrieval 20141ms)
+**Stage timings:** context_build=3715ms, entity_lookup=7404ms, relationship_lookup=61ms, rerank=3715ms, retrieval=20141ms, router=1420ms, structured_lookup=14931ms, vector_search=8959ms
 
 **Top-5 results:**
 
@@ -5867,8 +5877,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 14817ms (router 1346ms, retrieval 13325ms)
-**Stage timings:** context_build=2735ms, rerank=2735ms, retrieval=13325ms, router=1346ms, vector_search=166ms
+**Latency:** embed+retrieve 12052ms (router 1291ms, retrieval 10578ms)
+**Stage timings:** context_build=2912ms, rerank=2912ms, retrieval=10578ms, router=1291ms, vector_search=166ms
 
 **Top-5 results:**
 
@@ -5893,19 +5903,19 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 3352ms (router 984ms, retrieval 2218ms)
-**Stage timings:** context_build=2051ms, rerank=2051ms, retrieval=2218ms, router=984ms, vector_search=167ms
+**Latency:** embed+retrieve 3648ms (router 1144ms, retrieval 2316ms)
+**Stage timings:** context_build=2151ms, rerank=2151ms, retrieval=2316ms, router=1144ms, vector_search=165ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Nguyen-Vinh/Cloud (Amazon-Microsoft) UC-Davis 2022-Dec-31 (Nguyen).pdf` (score=0.016)
-   > Certificate of Completion This is to certify that Consisting of 30 Continuing Education Units of instruction has successfully completed the requirements for ...
-2. [IN-FAMILY] `Misc Docs/Northrop Grumman Education Assistance Program.pdf` (score=0.016)
-   > e following costs for approved/ authorized programs of study provided pre -approval is obtained and the requirements for successful completion are met: ? Tui...
-3. [out] `Sec+ Renewal Process/PGS Division_CompTIA_CertMaster Sec+ Renewal Process.docx` (score=0.016)
-   > the license or certification is on file, then no further action is necessary. If the license or certification is not on file or is not in active status (such...
-4. [IN-FAMILY] `01_Training_Tracker/PSF Homepage for Trainees.docx` (score=0.016)
+1. [IN-FAMILY] `LX Training/Course_Catalog.pdf` (score=0.016)
+   > ing guidance for this training.] XiBuy New User Course ID: BUPM-NGCPCAPPR-NG Course Length: .5 hr Course Delivery: WBT Registration: LX XiBuy supports activi...
+2. [IN-FAMILY] `01_Training_Tracker/PSF Homepage for Trainees.docx` (score=0.016)
    > clicking on the Title of the training, this window contains the course details/information about the course requirement. Back to Training List: Click to retu...
+3. [IN-FAMILY] `Nguyen-Vinh/Cloud (Amazon-Microsoft) UC-Davis 2022-Dec-31 (Nguyen).pdf` (score=0.016)
+   > Certificate of Completion This is to certify that Consisting of 30 Continuing Education Units of instruction has successfully completed the requirements for ...
+4. [IN-FAMILY] `01_Training_Tracker/PSF Homepage for Trainees.docx` (score=0.016)
+   > e required test (80% to pass) if applicable. Training Link: Link where the course is located. Clicking on the link will take you to the website where the cou...
 5. [IN-FAMILY] `DoD Security Refresher Training/Certificate - DoD Refresher 2017-10-20 thru 2018-10-20 (Highlighted).pdf` (score=0.016)
    > ? ? Home Success Plan Skills and Competencies Reports All Learning Activity Current Learning Transcripts Curricula Certifications My Continuing Education Pla...
 
@@ -5919,8 +5929,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 4468ms (router 1141ms, retrieval 3214ms)
-**Stage timings:** context_build=3092ms, rerank=3092ms, retrieval=3214ms, router=1141ms, vector_search=121ms
+**Latency:** embed+retrieve 4743ms (router 1241ms, retrieval 3351ms)
+**Stage timings:** context_build=3228ms, rerank=3228ms, retrieval=3351ms, router=1241ms, vector_search=123ms
 
 **Top-5 results:**
 
@@ -5945,8 +5955,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 4720ms (router 833ms, retrieval 3735ms)
-**Stage timings:** context_build=3576ms, rerank=3576ms, retrieval=3735ms, router=833ms, vector_search=159ms
+**Latency:** embed+retrieve 5825ms (router 1620ms, retrieval 4018ms)
+**Stage timings:** context_build=3862ms, rerank=3862ms, retrieval=4018ms, router=1620ms, vector_search=155ms
 
 **Top-5 results:**
 
@@ -5971,8 +5981,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 4783ms (router 958ms, retrieval 3684ms)
-**Stage timings:** context_build=3529ms, rerank=3529ms, retrieval=3684ms, router=958ms, vector_search=155ms
+**Latency:** embed+retrieve 5269ms (router 1028ms, retrieval 4068ms)
+**Stage timings:** context_build=3885ms, rerank=3885ms, retrieval=4068ms, router=1028ms, vector_search=150ms
 
 **Top-5 results:**
 
@@ -5997,8 +6007,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 16268ms (router 1156ms, retrieval 14965ms)
-**Stage timings:** context_build=3708ms, rerank=3708ms, retrieval=14965ms, router=1156ms, vector_search=181ms
+**Latency:** embed+retrieve 14024ms (router 1231ms, retrieval 12607ms)
+**Stage timings:** context_build=3574ms, rerank=3574ms, retrieval=12607ms, router=1231ms, vector_search=159ms
 
 **Top-5 results:**
 
@@ -6023,21 +6033,31 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 23934ms (router 1916ms, retrieval 12699ms)
-**Stage timings:** context_build=3412ms, rerank=3412ms, retrieval=12699ms, router=1916ms, vector_search=9287ms
+**Latency:** embed+retrieve 21115ms (router 1630ms, retrieval 16704ms)
+**Stage timings:** context_build=7344ms, rerank=7344ms, retrieval=16704ms, router=1630ms, vector_search=9360ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Bi-Weekly Slides/Status 2026-02-17.pptx` (score=0.016)
-   > [SLIDE 1] Status Update LDI+UML 2026-02-17 Received shipment of components Have not started evaluation / modification of components Guam system? Evaluate and...
-2. [IN-FAMILY] `2026_02_06 - LDI Repair Equipment/02.05.2026 Shipment Confirmation.pdf` (score=0.016)
+1. [IN-FAMILY] `2023_12_20 - American Samoa GPS Repair (Ship to Guam then HC - FP)/NG Packing List - American Samoa.xlsx` (score=-1.000)
+   > [SHEET] Parts List PART NUMBER | HWCI | SYSTEM | SUB-SYSTEM | STATE | ITEM TYPE | OEM | UM | NOMENCLATURE | DOC TYPE | DRAWING NUMBER | FIND NO | DOC REVISIO...
+2. [IN-FAMILY] `2023_01_24 - Guam ECU Repair Parts (Com) RECEIVED 30 Jan 23/Packing List.pdf` (score=-1.000)
+   > NG Packing List - Template.xlsx Ship From: Ship To: TCN: Date Shipped: 24-Jan-23 Task Order: Total Cost: $525.00 Weight: Dimensions: Mark For: Con 1: 28 Con ...
+3. [IN-FAMILY] `2023_12_21 - Guam (Mil-Air)/NG Packing List (Guam ASV & Tower Repair).xlsx` (score=-1.000)
+   > [SHEET] Parts List PART NUMBER | HWCI | SYSTEM | SUB-SYSTEM | STATE | ITEM TYPE | OEM | UM | NOMENCLATURE | DOC TYPE | DRAWING NUMBER | FIND NO | DOC REVISIO...
+4. [IN-FAMILY] `2023_12_19 - LDI Repair Parts/Returned Packing List 5-13-25.pdf` (score=-1.000)
+   > LDWCLL DISISONDE INTERNATIONAL I__Oh Lowell Digisonde International, LLC Tel: 1.978.735-4752 Fax: 1.978.735-4754 www.digisonde.com 175 Cabot Street, Suite 20...
+5. [IN-FAMILY] `2023_12_19 - LDI Repair Parts/Returned Packing List 7-10-24.pdf` (score=-1.000)
+   > ft12 1172)iiqqH I LOWELLDIGISONDE INTERNATIONAL LII ?ec4rtCJ ErC-/V5I1% LowellDigisondeInternational,LLC Tel:1.978.735-4752 Fax:1.978.735-4754 www.digisonde....
+6. [out] `Bi-Weekly Slides/SAO-6 Status 2024-05-02.pptx` (score=0.016)
+   > [SLIDE 1] SAO 6 Status Update LDI+UML 2024-05-02 Last period?s Tasks and Accomplishments Dispatcher version 2.0.1 (latest) running at MH Delivering to produc...
+7. [IN-FAMILY] `2026_02_06 - LDI Repair Equipment/02.05.2026 Shipment Confirmation.pdf` (score=0.016)
    > [SECTION] LOWELL DIGISON DE INTERNATIONAL 175 CABOT ST STE 200 LOWELL MA 01854 (US (978) 7354852 REF: R2606506890 NV: R2606506890 PD R2606506890 DEPT: TRK# 3...
-3. [IN-FAMILY] `Apr18/SEMS3D-36247_IGS_IPT_Briefing_Slides(CDRL_A001).pptx` (score=0.016)
-   > truction ? Tower Systems Error Boundary Characterization ? LDI Cargo Delivery to Seattle ? Arrow Moving & Storage Barge Shipment to Eareckson AS ? AML Receiv...
-4. [IN-FAMILY] `2024_02_07 - Vandenberg (NG Comm)/02.07.2024 Shipment Confirmation (Vandenberg).pdf` (score=0.016)
-   > ith.Canada@ngc.com> Sent: Wednesday, February 7, 2024 12:54 PM To: Anders, Jody L [US] (SP) <iody.Andeccom>; Chapin, Eric [US] (SP) <Eric.Chpjpgc.corn> Subje...
-5. [IN-FAMILY] `Archive/MIL-HDBK-61B_draft.pdf` (score=0.016)
-   > ? List of Acquisition Logistics items being addressed: - LSAs/Maintenance Plan - Tech Manuals: 9 Operator 9 Maintenance 9 Trainers - Interim Support 9 Interi...
+8. [IN-FAMILY] `Bi-Weekly Slides/Status 2026-02-17.pptx` (score=0.016)
+   > [SLIDE 1] Status Update LDI+UML 2026-02-17 Received shipment of components Have not started evaluation / modification of components Guam system? Evaluate and...
+9. [IN-FAMILY] `T191102280/T191102280.pdf` (score=0.016)
+   > the ?rst repaired equipment shipment a few minutes ago. Please send me the dimensions of the remaining shipment to request the FedEx label. Thanks for the st...
+10. [out] `Structured/NEXION.docx` (score=0.016)
+   > frequency interval list) Maintenance Resources There are several resources one can reference to check for maintenance of the system. More information is cont...
 
 ---
 
@@ -6049,8 +6069,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 38446ms (router 1165ms, retrieval 30866ms)
-**Stage timings:** context_build=7136ms, rerank=7136ms, retrieval=30866ms, router=1165ms, vector_search=14965ms
+**Latency:** embed+retrieve 42796ms (router 1027ms, retrieval 34110ms)
+**Stage timings:** context_build=7647ms, rerank=7647ms, retrieval=34110ms, router=1027ms, vector_search=17915ms
 
 **Top-5 results:**
 
@@ -6085,8 +6105,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 18902ms (router 1724ms, retrieval 14138ms)
-**Stage timings:** context_build=6724ms, rerank=6724ms, retrieval=14138ms, router=1724ms, vector_search=7414ms
+**Latency:** embed+retrieve 22419ms (router 1649ms, retrieval 17307ms)
+**Stage timings:** context_build=8362ms, rerank=8362ms, retrieval=17307ms, router=1649ms, vector_search=8944ms
 
 **Top-5 results:**
 
@@ -6100,16 +6120,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > [SHEET] Parts List PART NUMBER | HWCI | SYSTEM | SUB-SYSTEM | STATE | ITEM TYPE | OEM | UM | NOMENCLATURE | DOC TYPE | DRAWING NUMBER | FIND NO | DOC REVISIO...
 5. [IN-FAMILY] `2025_08_19 - Wake (Mil-Air)/NG Packing List_Wake-NEXION_2025-10 (Mil-Air).xlsx` (score=-1.000)
    > [SHEET] Parts List PART NUMBER | HWCI | SYSTEM | SUB-SYSTEM | STATE | ITEM TYPE | OEM | UM | NOMENCLATURE | DOC TYPE | DRAWING NUMBER | FIND NO | DOC REVISIO...
-6. [IN-FAMILY] `Shipping and Hand-Carry/Return Shipping List.docx` (score=0.016)
-   > San Vito ? Return Shipping List 2-9 Feb 2022
-7. [IN-FAMILY] `A009 - Monthly Status Report/FA881525FB002_IGSCC-107_Monthly-Status-Report_2025-12-16.pdf` (score=0.016)
-   > ulnerabilities in GNU Binutils Pending Verification IAVA 2025-A-0818 Multiple Vulnerabilities in cURL Pending Verification IAVB 2025-B-0192 Multiple Vulnerab...
-8. [IN-FAMILY] `Wake/SEMS3D-38186 Wake Shipment Certificate of Delivery (A001).pdf` (score=0.016)
-   > ment will be held in a secure storage area at Boyer Towing/Logistics, Inc. until the Wake Island barge is loaded and ready for transport on or about 06 May 2...
-9. [IN-FAMILY] `2025_04_10 - LLL Return Com(NG)/04.10.2025 Shipment Confirmation.pdf` (score=0.016)
-   > [SECTION] III 1111111111111111111 1111111111111111111111111 II 11111111111111111111111111111111111 IPh1! r?!rr ? Express 1 Ifjfl MON - 14 APR 5:OOP5 of 5 MPS...
-10. [IN-FAMILY] `Archive/S Fuierer Wake Packing List.pdf` (score=0.016)
-   > NG Packing List_Hand-Carry (Wake ASV-RTS)(2023-03-23).xlsx Ship From: Ship To: TCN: Date Shipped: 22-Mar-23 Task Order: N/A Total Cost: #REF! Weight: Dimensi...
+6. [IN-FAMILY] `IGS/manifest_20180523.txt` (score=0.016)
+   > MS-HW-1X-XXXXX (NG to Wake Island) (Installation)\FY17 AK Remote Resupply Barge V-2.pptx I:\# 005_ILS\Shipping\MS-HW-1X-XXXXX (NG to Wake Island) (Installati...
+7. [IN-FAMILY] `Wake/SEMS3D-38186 Wake Shipment Certificate of Delivery (A001).docx` (score=0.016)
+   > 2019. Referenced Documents Table 1. Government Documents Shipment details Table 2 shows the status of all equipment being shipped to Boyer Towing/Logistics, ...
+8. [IN-FAMILY] `2016-XX-XX (BAH to Thule)/PACER GOOSE Brief 15.ppt` (score=0.016)
+   > lideLayout1.xmlPK [Content_Types].xml| _rels/.rels drs/slideLayouts/slideLayout1.xml [Content_Types].xmlPK _rels/.relsPK drs/slideLayouts/slideLayout1.xmlPK ...
+9. [IN-FAMILY] `Shipping/SEMS3D-36600 Wake Shipment Certificate of Delivery (A001).docx` (score=0.016)
+   > 2019. Referenced Documents Table 1. Government Documents Shipment details Table 2 shows the status of all equipment being shipped to Boyer Towing/Logistics, ...
+10. [IN-FAMILY] `2024_12_11 - Wake (Mil-Air)/DD1149_FB25004346X510XXX.pdf` (score=0.016)
+   > SHIPPING CONTAINER TALLY NO. OF SHEETS 5. REQUISITION DATE 6, REQUISITION NUMBER 2 12/11/2024 FB25004346X510XXX CP 719 556 8316 5:54:19 PM 955 PAINE ST BLDG ...
 
 ---
 
@@ -6121,8 +6141,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 42069ms (router 2061ms, retrieval 33236ms)
-**Stage timings:** context_build=6809ms, rerank=6809ms, retrieval=33236ms, router=2061ms, vector_search=15493ms
+**Latency:** embed+retrieve 44651ms (router 1443ms, retrieval 35677ms)
+**Stage timings:** context_build=8274ms, rerank=8274ms, retrieval=35677ms, router=1443ms, vector_search=18309ms
 
 **Top-5 results:**
 
@@ -6157,8 +6177,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 39328ms (router 1624ms, retrieval 30520ms)
-**Stage timings:** context_build=6617ms, rerank=6617ms, retrieval=30520ms, router=1624ms, vector_search=15112ms
+**Latency:** embed+retrieve 44409ms (router 1526ms, retrieval 34760ms)
+**Stage timings:** context_build=7614ms, rerank=7614ms, retrieval=34760ms, router=1526ms, vector_search=18302ms
 
 **Top-5 results:**
 
@@ -6180,8 +6200,8 @@ a classifier tuning opportunity, tracked but not fixed here.
    > quent onward movement to Eareckson Air Station with the FY'18 Resupply Barge, : ALL CARGO TO BE DELIVERED TO EARECKSON AIR STATION FOR THE FY'18 & FY' 19 MOD...
 9. [IN-FAMILY] `ILSP 2024/47QFRA22F0009_IGSI-2438 IGS Integrated Logistics Support Plan (ILSP) (A023).docx` (score=0.016)
    > licable regulations for guidance and direction. Specifically, crates and wooden containers for international shipments will be constructed or procured to uti...
-10. [IN-FAMILY] `2020-05-26 (NG to Alpena)(Hand Carry)/Shipping Checklist - Alpena.docx` (score=0.016)
-   > Site: Ship Date: Shipment Type: Lead: EEMS HSR No.: TCN: Pre-Shipment (3 Months Out) Identify and purchase materials for trip Identify missing JCR Submit JCR...
+10. [IN-FAMILY] `2010-04-06 (McGuire to RAF Fairford)/Fairford_DD1149_03-24-2010_F01 (McGuire AFB) (2010-03-30).pdf` (score=0.016)
+   > DATE (YY YMMDD) D(YYYYMMDD) b. BLDG 56B RAF FAIRFORD GLOUCESTERSHIRE GB GL7 4DL 13. MODE OF SHIPMENT 74, BILL OF LADING NUMBER Air - Military ATTN: Mr. Adria...
 
 ---
 
@@ -6193,8 +6213,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 44098ms (router 1249ms, retrieval 36089ms)
-**Stage timings:** context_build=6638ms, rerank=6638ms, retrieval=36089ms, router=1249ms, vector_search=18643ms
+**Latency:** embed+retrieve 44961ms (router 1438ms, retrieval 36023ms)
+**Stage timings:** context_build=7615ms, rerank=7615ms, retrieval=36023ms, router=1438ms, vector_search=19471ms
 
 **Top-5 results:**
 
@@ -6229,8 +6249,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 3423ms (router 1158ms, retrieval 2096ms)
-**Stage timings:** context_build=1905ms, rerank=1905ms, retrieval=2096ms, router=1158ms, vector_search=190ms
+**Latency:** embed+retrieve 4197ms (router 1628ms, retrieval 2358ms)
+**Stage timings:** context_build=2159ms, rerank=2159ms, retrieval=2358ms, router=1628ms, vector_search=198ms
 
 **Top-5 results:**
 
@@ -6255,8 +6275,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 37092ms (router 1101ms, retrieval 28901ms)
-**Stage timings:** aggregate_lookup=2107ms, context_build=9004ms, rerank=9004ms, retrieval=28901ms, router=1101ms, structured_lookup=4214ms, vector_search=17789ms
+**Latency:** embed+retrieve 41377ms (router 1086ms, retrieval 32023ms)
+**Stage timings:** aggregate_lookup=2287ms, context_build=10409ms, rerank=10409ms, retrieval=32023ms, router=1086ms, structured_lookup=4574ms, vector_search=19327ms
 
 **Top-5 results:**
 
@@ -6291,8 +6311,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 31037ms (router 1605ms, retrieval 24714ms)
-**Stage timings:** context_build=7582ms, rerank=7582ms, retrieval=24714ms, router=1605ms, vector_search=17131ms
+**Latency:** embed+retrieve 34498ms (router 1601ms, retrieval 27424ms)
+**Stage timings:** context_build=7303ms, rerank=7303ms, retrieval=27424ms, router=1601ms, vector_search=20086ms
 
 **Top-5 results:**
 
@@ -6327,8 +6347,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 36751ms (router 1408ms, retrieval 28976ms)
-**Stage timings:** aggregate_lookup=1690ms, context_build=11412ms, rerank=11412ms, retrieval=28976ms, router=1408ms, structured_lookup=3380ms, vector_search=15874ms
+**Latency:** embed+retrieve 41700ms (router 1504ms, retrieval 32383ms)
+**Stage timings:** aggregate_lookup=1742ms, context_build=12933ms, rerank=12933ms, retrieval=32383ms, router=1504ms, structured_lookup=3484ms, vector_search=17707ms
 
 **Top-5 results:**
 
@@ -6344,14 +6364,14 @@ a classifier tuning opportunity, tracked but not fixed here.
    > [SHEET] Remaining Items to be Kitted LI | Nomenclature | Qty | Comments LI: 6, Nomenclature: Cable Lubricant, Clear, Klien Tools Premium Synthetic, 1 Qt, Qty...
 6. [IN-FAMILY] `Thule/SEMS3D-37119 Thule Barge Shipment Certificate of Delivery (A001).docx` (score=0.016)
    > s 4 Figure 5. Center Pier Anchor 5 Figure 6. Crates Shipping container 5 Figure 7. Foam Shipping container 6 LIST OF TABLES Table 1. Government Documents 1 T...
-7. [out] `Contractors Questions/Copy of 2018_08_01 Questions  Answerd-claire v2.xlsx` (score=0.016)
-   > [SHEET] Ark1 | PHGFCG.SEMSIII.KAY.18.016 | | | | | : 844243 - Thule Nexion, : MT H?jgaard Gr?nland ApS, : Latest revision, : 2018-08-09T00:00:00 : Question #...
-8. [IN-FAMILY] `Archive/WX29OY3_Scorecard_2020-07-03.xls` (score=0.016)
-   > [SECTION] 122.0 1745 .0 N/A Make Travel Arrangements / Travel Docs - Thule 6.0 1.0 336.0 N/A 0.0 FS 40.0 40.0 0 123.0 1746.0 N/A Complete Export Control Requ...
-9. [out] `2024/4b_CN01_SDRL 002_Weekly Name Run - to NGC, WE 20240906.xlsx` (score=0.016)
-   > t: Sustainment, : Bill Hours : Wk Ending, : Employee, UDL Project: Task Description, : SAT, : SUN, July: MON, July: TUE, July: WED, August: THU, August: FRI,...
-10. [IN-FAMILY] `Thule/SEMS3D-37119 Thule Barge Shipment Certificate of Delivery (A001).docx` (score=0.016)
+7. [IN-FAMILY] `Archive/Thule Tower Erection SOW_Rev3 (002)_Tracked Changes.doc` (score=0.016)
+   > EXION tower assembly and erection is strictly limited to July 24, 2018 to September 15, 2018.XXXX to XXXX. PLACE OF PERFORMANCE Work will be performed on Thu...
+8. [IN-FAMILY] `Thule/SEMS3D-37119 Thule Barge Shipment Certificate of Delivery (A001).docx` (score=0.016)
    > Storage to transport containers, including a full tower, anchors, shelter, 1 cable vault, desk, ECU and RF cable wheels. Pacer Goose arrived at Thule AB and ...
+9. [IN-FAMILY] `2024_10_07 - Guam (Hand Carry)/NG Packing List - Guam RTS-ASV_2024-10-07 thru 15.xlsx` (score=0.016)
+   > wkeye" Wagner Assistant Chief of Staff CIS (N6) CTF 73/COMLOG WESTPAC DSN: (315) 421-2453 / COMM: +65 6750-2453, SHIPPING LEAD TIME: Two-Three weeks, SHIPPIN...
+10. [IN-FAMILY] `2019-11-15 (Thule to McGuire)(Greenlee)/DD1149_FB25009311X501XXX.pdf` (score=0.016)
+   > [SECTION] THULE AB 0970 4 7193938232 FY2561 821 SPTS LGS CP 011 719 474 3840 X3201 HANGAR 4 BLDG 606 3971 THULE AB GL 3. SHIP TO - MARK FOR VECTRUS SERVICES ...
 
 ---
 
@@ -6363,8 +6383,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 42671ms (router 2444ms, retrieval 32996ms)
-**Stage timings:** context_build=6909ms, rerank=6909ms, retrieval=32996ms, router=2444ms, vector_search=17460ms
+**Latency:** embed+retrieve 46020ms (router 1971ms, retrieval 36580ms)
+**Stage timings:** context_build=7535ms, rerank=7535ms, retrieval=36580ms, router=1971ms, vector_search=19383ms
 
 **Top-5 results:**
 
@@ -6378,16 +6398,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > [SHEET] Remaining Items to be Kitted LI | Nomenclature | Qty | Comments LI: 1, Nomenclature: Duct Seal (Monkey Snot), Qty: 3, Comments: Rcvd 4/29; on desk LI...
 5. [IN-FAMILY] `Thule_Install_2019/Thule Packing List_2019-04-30.xlsx` (score=-1.000)
    > [SHEET] Remaining Items to be Kitted LI | Nomenclature | Qty | Comments LI: 6, Nomenclature: Cable Lubricant, Clear, Klien Tools Premium Synthetic, 1 Qt, Qty...
-6. [IN-FAMILY] `PO - 5000420325, PR 31429973, C 16073393 Spectrum Analyzer NEXION(PB&J)($3,426.00)/Purchase Order 5000420325.msg` (score=0.016)
-   > Item 00004: BAG S-2 SOFT CARRY BAG Item Qty: 1.000 UOM: EA Unit Price: 168.00 Total Price: 168.00 Tracking Number: IGS Delivery Date: 09/05/2023 Requisition:...
+6. [IN-FAMILY] `Thule/SEMS3D-37119 Thule Barge Shipment Certificate of Delivery (A001).docx` (score=0.016)
+   > s 4 Figure 5. Center Pier Anchor 5 Figure 6. Crates Shipping container 5 Figure 7. Foam Shipping container 6 LIST OF TABLES Table 1. Government Documents 1 T...
 7. [IN-FAMILY] `2021-03-25_(NG_to_ASCENSION)(HAND_CARRY & GROUND-MIL-AIR)/Shipping Checklist - Template.docx` (score=0.016)
    > Site: Ship Date: Shipment Type: Lead: EEMS HSR No.: TCN: Pre-Shipment (3 Months Out) Identify and purchase materials for trip ? Follow Procurement Checklist ...
 8. [IN-FAMILY] `Thule/SEMS3D-37119 Thule Barge Shipment Certificate of Delivery (A001).docx` (score=0.016)
-   > s 4 Figure 5. Center Pier Anchor 5 Figure 6. Crates Shipping container 5 Figure 7. Foam Shipping container 6 LIST OF TABLES Table 1. Government Documents 1 T...
+   > Storage to transport containers, including a full tower, anchors, shelter, 1 cable vault, desk, ECU and RF cable wheels. Pacer Goose arrived at Thule AB and ...
 9. [IN-FAMILY] `2020-02-06 (Singapore to NG)/Shipping Checklist - Singapore.docx` (score=0.016)
    > Site: Ship Date: Shipment Type: EEMS HSR No.: TCN: Pre-Shipment (3 Months Out) Identify and purchase materials for trip Identify missing JCR Submit JCR Pre-S...
-10. [IN-FAMILY] `Thule/SEMS3D-37119 Thule Barge Shipment Certificate of Delivery (A001).docx` (score=0.016)
-   > Storage to transport containers, including a full tower, anchors, shelter, 1 cable vault, desk, ECU and RF cable wheels. Pacer Goose arrived at Thule AB and ...
+10. [IN-FAMILY] `PO - 5000420325, PR 31429973, C 16073393 Spectrum Analyzer NEXION(PB&J)($3,426.00)/Purchase Order 5000420325.msg` (score=0.016)
+   > Item 00004: BAG S-2 SOFT CARRY BAG Item Qty: 1.000 UOM: EA Unit Price: 168.00 Total Price: 168.00 Tracking Number: IGS Delivery Date: 09/05/2023 Requisition:...
 
 ---
 
@@ -6399,8 +6419,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 30644ms (router 2410ms, retrieval 21672ms)
-**Stage timings:** context_build=6917ms, rerank=6917ms, retrieval=21672ms, router=2410ms, vector_search=14754ms
+**Latency:** embed+retrieve 34442ms (router 1517ms, retrieval 25350ms)
+**Stage timings:** context_build=7534ms, rerank=7534ms, retrieval=25350ms, router=1517ms, vector_search=17815ms
 
 **Top-5 results:**
 
@@ -6414,16 +6434,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > NG Packing List - Ascension (Return).xlsx Ship From: Ship To: TCN: FB25206068X502XXX Date Shipped: 9-Mar-26 Task Order: Total Cost: $65,936.24 Weight: Dimens...
 5. [IN-FAMILY] `2026_03_09 - Ascension Return (Mil-Air)/NG Packing List - Ascension (Return).xlsx` (score=-1.000)
    > [SHEET] Parts List PART NUMBER | HWCI | SYSTEM | SUB-SYSTEM | STATE | ITEM TYPE | OEM | UM | NOMENCLATURE | DOC TYPE | DRAWING NUMBER | FIND NO | DOC REVISIO...
-6. [IN-FAMILY] `IGS/manifest_20180523.txt` (score=0.016)
-   > pping\Shipping Instructions (Ascension)\Info Rcvd 2018-03-30 from Patrick AFB I:\# 005_ILS\Shipping\Shipping Instructions (Ascension)\Info Rcvd 2018-03-30 fr...
-7. [IN-FAMILY] `PO - 5000665726, PR 3000187518 Solvents/PO 5000665726 - 01.27.2026 - Lines 1-2 (P).pdf` (score=0.016)
-   > [SECTION] ERIC CHAPIN, Sec+ I Shipping and Receiving Coordinator Northrop Grumman Corporation I Space Systems 0: 719-393-8544 I Eric.Chaein@ncic.com From: Ch...
-8. [IN-FAMILY] `AMCI 24-101/AMCI24-101V11.pdf` (score=0.016)
-   > for pickup. Advise the receiving organization it?s their responsibility to pick up their shipments in a timely manner. Annotate the delivery date in CMOS. 82...
+6. [IN-FAMILY] `Archive/Appendix G_Ascension Island_SPR&IP_Draft_14 Oct 11.doc` (score=0.016)
+   > aterials will be shipped via military channels, when possible, from the 45 LRS/LGTT, Patrick AFB Transportation Management Office (TMO) to and forwarded via ...
+7. [IN-FAMILY] `Export_Control/dtr_part_v_515.pdf` (score=0.016)
+   > . Strict adherence to following guidelines will ensure shipments are not delayed in customs. The following must be on the commercial invoice: a. The shipper?...
+8. [out] `AMC Travel (Mil-Air)/Ascension travel INFO.txt` (score=0.016)
+   > March 2024 Note For future travel to Ascension, the runway is fully operational and have started the return of Air International Travel flights. Also, the Br...
 9. [IN-FAMILY] `Archive/Shipping Estimates (2011-10-23).xlsx` (score=0.016)
    > [SHEET] Sheet1 | | Outgoing Shipment | | | | | | | | | | | Return Shipment | | | | | | Outgoing Shipment: Commercial, : Military, : Commercial/Military : Sys...
-10. [IN-FAMILY] `Export_Control/dtr_part_v_510.pdf` (score=0.016)
-   > al carrier?s arrival notification (Ankomstmelding) with goods number, commercial invoice, container packing list, and TCMD/DD Form 1149 or equivalent informa...
+10. [IN-FAMILY] `IGS/manifest_20180523.txt` (score=0.016)
+   > pping\Shipping Instructions (Ascension)\Info Rcvd 2018-03-30 from Patrick AFB I:\# 005_ILS\Shipping\Shipping Instructions (Ascension)\Info Rcvd 2018-03-30 fr...
 
 ---
 
@@ -6435,8 +6455,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 18153ms (router 1592ms, retrieval 16430ms)
-**Stage timings:** context_build=3203ms, rerank=3203ms, retrieval=16430ms, router=1592ms, vector_search=142ms
+**Latency:** embed+retrieve 17962ms (router 1272ms, retrieval 16509ms)
+**Stage timings:** context_build=3621ms, rerank=3620ms, retrieval=16509ms, router=1272ms, vector_search=138ms
 
 **Top-5 results:**
 
@@ -6461,8 +6481,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 20712ms (router 1390ms, retrieval 17888ms)
-**Stage timings:** context_build=3722ms, rerank=3722ms, retrieval=17888ms, router=1390ms, vector_search=1842ms
+**Latency:** embed+retrieve 22084ms (router 1818ms, retrieval 18419ms)
+**Stage timings:** context_build=4311ms, rerank=4311ms, retrieval=18419ms, router=1818ms, vector_search=2222ms
 
 **Top-5 results:**
 
@@ -6495,8 +6515,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 14689ms (router 1799ms, retrieval 12766ms)
-**Stage timings:** context_build=3343ms, rerank=3343ms, retrieval=12766ms, router=1799ms, vector_search=136ms
+**Latency:** embed+retrieve 14523ms (router 1172ms, retrieval 13184ms)
+**Stage timings:** context_build=3341ms, rerank=3341ms, retrieval=13184ms, router=1172ms, vector_search=141ms
 
 **Top-5 results:**
 
@@ -6521,8 +6541,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 15520ms (router 1141ms, retrieval 14199ms)
-**Stage timings:** context_build=2507ms, rerank=2507ms, retrieval=14199ms, router=1141ms, vector_search=217ms
+**Latency:** embed+retrieve 13889ms (router 1502ms, retrieval 12185ms)
+**Stage timings:** context_build=2353ms, rerank=2353ms, retrieval=12185ms, router=1502ms, vector_search=180ms
 
 **Top-5 results:**
 
@@ -6530,12 +6550,12 @@ a classifier tuning opportunity, tracked but not fixed here.
    > LatestDVL Latest drift velocity display UniSearch Data search page manager SAO archive availability plot SAO archive retrieval SAO archive download form Digi...
 2. [out] `Scratch/QA Checklist_NEXION Installation (Wake In Work)a.xlsx` (score=0.016)
    > s., Reference: Sensaphone Manual & NEXION Autodialer Programming Guide Inspection Item: Autodialer Maximum Calls is set to six (6)., Reference: Sensaphone Ma...
-3. [out] `VDDs/SCINDA-VDD001.docx` (score=0.016)
-   > hanges The SCINDA software version 1.0.1 release includes cleanup fixes to package shell scripts. The following sections will discuss each of these items in ...
+3. [out] `ModuleAutoDeps/org-netbeans-modules-queries.xml` (score=0.016)
+   > Major release version of module changed from 0 to 1 to signal stability; update your dependencies
 4. [out] `Scratch/QA Checklist_NEXION Installation (Wake In Work)a.xlsx` (score=0.016)
-   > Maximum of 16 characters allowed), Reference: Sensaphone Manual & NEXION Autodialer Programming Guide Inspection Item: Autodialer ID Voice Message is program...
-5. [out] `Log Tag/LogTag Analyzer User Guide.pdf` (score=0.016)
-   > guide are placed in an order that you will need to follow in order to successfully use the LogTag? products first time. Experienced users of the software may...
+   > todialer Programming Guide Inspection Item: Autodialer reports a power out alarm when AC power is disconnected from the autodialer., Reference: Sensaphone Ma...
+5. [out] `LogTag Temp Recorder (Global Sensors) (TRIX-8)/LogTag Users Manual.pdf` (score=0.016)
+   > eb browser to open a website with the latest download links whenever a new version is available. Distributed by MicroDAQ.com, Ltd. www.MicroDAQ.com (603) 746...
 
 ---
 
@@ -6547,8 +6567,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 14683ms (router 1957ms, retrieval 12481ms)
-**Stage timings:** context_build=2362ms, rerank=2362ms, retrieval=12481ms, router=1957ms, vector_search=267ms
+**Latency:** embed+retrieve 13886ms (router 1387ms, retrieval 12243ms)
+**Stage timings:** context_build=2514ms, rerank=2514ms, retrieval=12243ms, router=1387ms, vector_search=233ms
 
 **Top-5 results:**
 
@@ -6565,7 +6585,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-300 [MISS] -- Field Engineer
+### PQ-300 [PASS] -- Field Engineer
 
 **Query:** Where is the September 23, 2025 draft of the monitoring system ASV procedures?
 
@@ -6573,21 +6593,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 14791ms (router 1701ms, retrieval 12949ms)
-**Stage timings:** context_build=2512ms, rerank=2512ms, retrieval=12949ms, router=1701ms, vector_search=150ms
+**Latency:** embed+retrieve 15600ms (router 1552ms, retrieval 13803ms)
+**Stage timings:** context_build=3796ms, rerank=3796ms, retrieval=13803ms, router=1552ms, vector_search=236ms
 
 **Top-5 results:**
 
-1. [out] `_WhatEver/DoD Systems.xls` (score=0.016)
-   > [SECTION] 2323.0 PROCESS IMPROVEMENT WORKING GROUP PROCESS IMPROVEMENT WORKING GROUP Create an interactiv e tracking system for proposed action items that al...
-2. [out] `scc-5.0.2_rhel7_x86_64/scc-5.0.2_rhel7_x86_64.tar.gz` (score=0.016)
-   > vulnerability scanning activities in which the information system implements privileged access authorization to organization-identified information system co...
-3. [out] `_WhatEver/whatever.zip` (score=0.016)
-   > [SECTION] 2323.0 PROCESS IMPROVEMENT WORKING GROUP PROCESS IMPROVEMENT WORKING GROUP Create an interactiv e tracking system for proposed action items that al...
-4. [out] `scc-5.0.2_rhel7_x86_64/scc-5.0.2_rhel7_x86_64.tar.gz` (score=0.016)
-   > ance of organization-defined operational areas. policy draft 2013-08-27 DISA FSO The organization defines the operational areas in which to employ video surv...
-5. [out] `_WhatEver/DoD Systems.xls` (score=0.016)
-   > [SECTION] 1546.0 TECHNICAL DIRECTIVE STATUS ACCOUNTING TDSA (NAVY) THE TECHNICAL DIRECTIVE STATUS ACCOUNTING SYSTEM IS AN AUTOMATED A CCOUNTING SYSTEM DESIGN...
+1. [IN-FAMILY] `zArchive/NEXION ASV Procedures Work Note (Rev 1).docx` (score=0.016)
+   > requirements. Some of the documents, specific to an ASV, will include the following: Site Inventory List JHA Form for tower climbing, and any other hazardous...
+2. [out] `2025/2025-03-14 IGS Weekly Hours Variance.xlsx` (score=0.016)
+   > 267201A09, : NEXION LOGISTICS - Opt2, : 2025, : 3, : 2025-03-14T00:00:00, : 28587, : N32690, : Canada, Edith A, : 7411050, : GP E&S Onsite, : GPDE0041, : PGS...
+3. [IN-FAMILY] `_Archive/NEXION ASV Procedures Work Note (Rev 2).docx` (score=0.016)
+   > ite access requirements. Some of the documents, specific to an ASV, will include the following: Site Inventory List JHA Form for tower climbing, and any othe...
+4. [out] `Searching for File Paths for NEXION Deliverable Control Log/Installation.Eglin.manifest_20180523.txt` (score=0.016)
+   > 00811003 (Installation Dwgs) (EAFB)\ASV (08-21-2015)\Eglin Shelter.JPG I:\NEXION\Drawings\WORKING\200811003 (Installation Dwgs) (EAFB)\ASV (08-21-2015)\20081...
+5. [IN-FAMILY] `_Archive/NEXION ASV Procedures Work Note (Rev 3).docx` (score=0.016)
+   > ite access requirements. Some of the documents, specific to an ASV, will include the following: Site Inventory List JHA Form for tower climbing, and any othe...
 
 ---
 
@@ -6599,8 +6619,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 19945ms (router 1227ms, retrieval 18457ms)
-**Stage timings:** context_build=4144ms, rerank=4144ms, retrieval=18457ms, router=1227ms, vector_search=297ms
+**Latency:** embed+retrieve 18405ms (router 1317ms, retrieval 16884ms)
+**Stage timings:** context_build=3056ms, rerank=3056ms, retrieval=16884ms, router=1317ms, vector_search=201ms
 
 **Top-5 results:**
 
@@ -6625,8 +6645,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 15818ms (router 1271ms, retrieval 13266ms)
-**Stage timings:** context_build=10049ms, rerank=10049ms, retrieval=13266ms, router=1271ms, vector_search=3216ms
+**Latency:** embed+retrieve 13503ms (router 3012ms, retrieval 9434ms)
+**Stage timings:** context_build=7385ms, rerank=7385ms, retrieval=9434ms, router=3012ms, vector_search=2048ms
 
 **Top-5 results:**
 
@@ -6653,7 +6673,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-303 [PARTIAL] -- Field Engineer
+### PQ-303 [PASS] -- Field Engineer
 
 **Query:** Was there a June 2018 monitoring system Eareckson CT&E visit?
 
@@ -6661,21 +6681,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 34234ms (router 1992ms, retrieval 32060ms)
-**Stage timings:** context_build=6000ms, rerank=6000ms, retrieval=32060ms, router=1992ms, vector_search=178ms
+**Latency:** embed+retrieve 15297ms (router 1430ms, retrieval 13691ms)
+**Stage timings:** context_build=3716ms, rerank=3716ms, retrieval=13691ms, router=1430ms, vector_search=154ms
 
 **Top-5 results:**
 
-1. [out] `NG Dailies/Eareckson Update Thursday 02 Aug 2018.msg` (score=0.016)
-   > Subject: Eareckson Update Thursday 02 Aug 2018 From: Brukardt, Larry A [US] (MS) To: Ogburn, Lori A [US] (MS); Pitts, Lorenzia F [US] (MS); Seagren, Frank A ...
+1. [IN-FAMILY] `NG Dailies/Eareckson Update Tuesday  14 Aug 2018.msg` (score=0.016)
+   > Subject: Eareckson Update Tuesday, 14 Aug 2018 From: Brukardt, Larry A [US] (MS) To: Ogburn, Lori A [US] (MS); Pitts, Lorenzia F [US] (MS); Seagren, Frank A ...
 2. [IN-FAMILY] `Sep18/SEMS3D-37190-IGS_IPT_Briefing_Slides (A001).pdf` (score=0.016)
    > , and technical requirements. Slide 40 IGS Action Items Open Action Items No. Title OPR Opened Suspense Status 55 Review all RMF final phase controls in eMAS...
-3. [IN-FAMILY] `NG Dailies/Eareckson Update Tuesday  14 Aug 2018.msg` (score=0.016)
-   > Subject: Eareckson Update Tuesday, 14 Aug 2018 From: Brukardt, Larry A [US] (MS) To: Ogburn, Lori A [US] (MS); Pitts, Lorenzia F [US] (MS); Seagren, Frank A ...
-4. [IN-FAMILY] `Nov18/SEMS3D-37458-IGS_IPT_Briefing_Slides.pdf` (score=0.016)
-   > uyen 11 Jan 18 June 2019 Open 56 Site Support Agreement for Singapore to include site access and phone line Janell Bartlett 01 Nov 18 March 2019 Open Slide 4...
-5. [out] `NG Dailies/Eareckson Update Wednesday 01 Aug 2018.msg` (score=0.016)
-   > Subject: Eareckson Update Wednesday 01 Aug 2018 From: Brukardt, Larry A [US] (MS) To: Ogburn, Lori A [US] (MS); Pitts, Lorenzia F [US] (MS); Seagren, Frank A...
+3. [out] `Archive/TO WX31 IGS Installs II with Mod4.pdf` (score=0.016)
+   > [SECTION] 711 3040 0% Site Acceptance Testin g 7 days Tue 8/21/18 Wed 8/29/18 712 3041 0% Dry-Run Eareckson Installation Acceptance Test Plan 1 day Tue 8/21/...
+4. [out] `_AFMAN/afi15-180.pdf` (score=0.016)
+   > WSEP Visits. 3.3.1. MAJCOMs will conduct AFWSEP visits to weather squadrons, flights, detachments, and oper- ating locations at a frequency c onsistent with ...
+5. [IN-FAMILY] `ISSM/NEXiONATO.xlsx` (score=0.016)
+   > required to demonstrate use of the intrusion detection system., Compliance Status: Non-Compliant, Date Tested: 28-Mar-2018, Tested By: CHERYL WALTERS, Test R...
 
 ---
 
@@ -6687,8 +6707,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 36560ms (router 1061ms, retrieval 35272ms)
-**Stage timings:** context_build=5446ms, rerank=5446ms, retrieval=35272ms, router=1061ms, vector_search=151ms
+**Latency:** embed+retrieve 18011ms (router 1308ms, retrieval 16538ms)
+**Stage timings:** context_build=3644ms, rerank=3644ms, retrieval=16538ms, router=1308ms, vector_search=144ms
 
 **Top-5 results:**
 
@@ -6709,12 +6729,12 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Query:** Is there a monitoring system autodialer programming guide separate from the legacy monitoring system one?
 
-**Expected type:** SEMANTIC  |  **Routed:** SEMANTIC  |  **Routing match:** OK
+**Expected type:** SEMANTIC  |  **Routed:** ENTITY  |  **Routing match:** MISS
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 7902ms (router 1370ms, retrieval 6353ms)
-**Stage timings:** context_build=6077ms, rerank=6077ms, retrieval=6353ms, router=1370ms, vector_search=275ms
+**Latency:** embed+retrieve 13978ms (router 1901ms, retrieval 11907ms)
+**Stage timings:** context_build=2315ms, rerank=2315ms, retrieval=11907ms, router=1901ms, vector_search=151ms
 
 **Top-5 results:**
 
@@ -6731,7 +6751,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-306 [PASS] -- Field Engineer
+### PQ-306 [MISS] -- Field Engineer
 
 **Query:** Where is the _Archive subfolder for monitoring system ASV procedures?
 
@@ -6739,21 +6759,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Field Engineering
 
-**Latency:** embed+retrieve 46207ms (router 1134ms, retrieval 44867ms)
-**Stage timings:** context_build=9052ms, entity_lookup=35534ms, relationship_lookup=117ms, rerank=9052ms, retrieval=44867ms, router=1134ms, structured_lookup=71303ms, vector_search=162ms
+**Latency:** embed+retrieve 16345ms (router 1974ms, retrieval 14204ms)
+**Stage timings:** context_build=1769ms, rerank=1769ms, retrieval=14204ms, router=1974ms, vector_search=135ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `ISTO ASV Procedure/ISTO ASV Procedures Work Note (rough draft)-RevB.docx` (score=0.016)
-   > Follow-on Maintenance Previous Maintenance Service Report (MSR) Site Drawings Autodialer Programming and Verification Cable Analysis Guide (Anritsu Manual or...
-2. [out] `CM-183111-VSE880LMLRP4/epo45_help_vse_880.zip` (score=0.016)
-   > the same for both client systems and ePolicy Orchestrator repositories. Install the emergency DAT file. This process is different for client systems and for ...
-3. [IN-FAMILY] `ISTO ASV Procedure/ISTO ASV Procedures Work Note -RevC.docx` (score=0.016)
-   > Follow-on Maintenance Previous Maintenance Service Report (MSR) Site Drawings Autodialer Programming and Verification Cable Analysis Guide (Anritsu Manual or...
-4. [out] `CM-183111-VSE880LMLRP4/epo45_help_vse_880.zip` (score=0.016)
-   > detected. Delete files &#8212; The scanner deletes files with potential threats as soon as it detects them. Related reference Process setting tab options Rel...
-5. [out] `Documents and Forms/Ionosonde-case-study[1].pdf` (score=0.016)
-   > files and IIWG formatted ASDCII file in the following directory structures. Aproximately 50 Gigabytes in volume stored on RAID. 35 36 37 38 Schema available ...
+1. [out] `archive/ISTO_eMASS_Security Controls_Responses-SCTM_25Sep2017.xlsx` (score=0.016)
+   > tains and examines documentation of the use of the identified automated tools to ensure the organization being inspected/assessed employs automated tools to ...
+2. [out] `47QFRA22F0009_IGSI-2459_Plans-and-Controls_PS_2024-11-07/IGSI-2459_NEXION_Personnel-Security-Controls_2024-Nov_A027.xlsx` (score=0.016)
+   > al personnel with physical access monitoring responsibilities; organizational personnel with incident response responsibilities; organizational personnel wit...
+3. [out] `2017-11-06 ISTO RMF eMASS Response-Imports/ISTO_TRExport_06Nov2017 Final Export IGS.xlsx` (score=0.016)
+   > tains and examines documentation of the use of the identified automated tools to ensure the organization being inspected/assessed employs automated tools to ...
+4. [out] `Deliverables Report IGSI-1171 NEXION-ISTO AT Plans and Controls (A027)/NEXION_Security Controls_AT_2023-Nov.xlsx` (score=0.016)
+   > al personnel with physical access monitoring responsibilities; organizational personnel with incident response responsibilities; organizational personnel wit...
+5. [out] `2017-11-06 ISTO RMF eMASS Response-Imports/ISTO_TRExport_06Nov2017 NC Report-IGS.xlsx` (score=0.016)
+   > tains and examines documentation of the use of the identified automated tools to ensure the organization being inspected/assessed employs automated tools to ...
 
 ---
 
@@ -6765,8 +6785,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 23927ms (router 1374ms, retrieval 20017ms)
-**Stage timings:** context_build=4500ms, entity_lookup=13321ms, relationship_lookup=78ms, rerank=4500ms, retrieval=20017ms, router=1374ms, structured_lookup=26799ms, vector_search=2116ms
+**Latency:** embed+retrieve 18933ms (router 1056ms, retrieval 16019ms)
+**Stage timings:** context_build=4194ms, entity_lookup=9952ms, relationship_lookup=65ms, rerank=4194ms, retrieval=16019ms, router=1056ms, structured_lookup=20034ms, vector_search=1807ms
 
 **Top-5 results:**
 
@@ -6797,8 +6817,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 22341ms (router 1439ms, retrieval 19478ms)
-**Stage timings:** context_build=4560ms, entity_lookup=13394ms, relationship_lookup=79ms, rerank=4560ms, retrieval=19478ms, router=1439ms, structured_lookup=26947ms, vector_search=1443ms
+**Latency:** embed+retrieve 18144ms (router 1561ms, retrieval 15306ms)
+**Stage timings:** context_build=4238ms, entity_lookup=9726ms, relationship_lookup=69ms, rerank=4238ms, retrieval=15306ms, router=1561ms, structured_lookup=19590ms, vector_search=1272ms
 
 **Top-5 results:**
 
@@ -6831,8 +6851,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 17413ms (router 1441ms, retrieval 15835ms)
-**Stage timings:** context_build=4008ms, entity_lookup=11605ms, relationship_lookup=71ms, rerank=4007ms, retrieval=15835ms, router=1441ms, structured_lookup=23353ms, vector_search=150ms
+**Latency:** embed+retrieve 15679ms (router 1788ms, retrieval 13728ms)
+**Stage timings:** context_build=3819ms, entity_lookup=9700ms, relationship_lookup=64ms, rerank=3819ms, retrieval=13728ms, router=1788ms, structured_lookup=19529ms, vector_search=143ms
 
 **Top-5 results:**
 
@@ -6857,8 +6877,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 17169ms (router 1397ms, retrieval 15647ms)
-**Stage timings:** context_build=3734ms, rerank=3734ms, retrieval=15647ms, router=1397ms, vector_search=130ms
+**Latency:** embed+retrieve 15255ms (router 1396ms, retrieval 13701ms)
+**Stage timings:** context_build=3737ms, rerank=3737ms, retrieval=13701ms, router=1396ms, vector_search=131ms
 
 **Top-5 results:**
 
@@ -6883,8 +6903,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 22499ms (router 1025ms, retrieval 19449ms)
-**Stage timings:** context_build=4772ms, entity_lookup=12080ms, relationship_lookup=246ms, rerank=4772ms, retrieval=19449ms, router=1025ms, structured_lookup=24653ms, vector_search=2349ms
+**Latency:** embed+retrieve 18889ms (router 1267ms, retrieval 15738ms)
+**Stage timings:** context_build=4098ms, entity_lookup=9570ms, relationship_lookup=200ms, rerank=4097ms, retrieval=15738ms, router=1267ms, structured_lookup=19541ms, vector_search=1869ms
 
 **Top-5 results:**
 
@@ -6913,8 +6933,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 21420ms (router 1685ms, retrieval 17630ms)
-**Stage timings:** context_build=3977ms, entity_lookup=11563ms, relationship_lookup=68ms, rerank=3977ms, retrieval=17630ms, router=1685ms, structured_lookup=23263ms, vector_search=2020ms
+**Latency:** embed+retrieve 19001ms (router 991ms, retrieval 16167ms)
+**Stage timings:** context_build=3959ms, entity_lookup=10323ms, relationship_lookup=67ms, rerank=3959ms, retrieval=16167ms, router=991ms, structured_lookup=20780ms, vector_search=1817ms
 
 **Top-5 results:**
 
@@ -6945,8 +6965,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 20228ms (router 1663ms, retrieval 16812ms)
-**Stage timings:** context_build=3875ms, entity_lookup=11110ms, relationship_lookup=63ms, rerank=3875ms, retrieval=16812ms, router=1663ms, structured_lookup=22346ms, vector_search=1762ms
+**Latency:** embed+retrieve 19247ms (router 1824ms, retrieval 15591ms)
+**Stage timings:** context_build=4002ms, entity_lookup=9720ms, relationship_lookup=65ms, rerank=4002ms, retrieval=15591ms, router=1824ms, structured_lookup=19571ms, vector_search=1802ms
 
 **Top-5 results:**
 
@@ -6975,8 +6995,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 24546ms (router 2580ms, retrieval 18361ms)
-**Stage timings:** context_build=4405ms, entity_lookup=9573ms, relationship_lookup=77ms, rerank=4405ms, retrieval=18361ms, router=2580ms, structured_lookup=19300ms, vector_search=4305ms
+**Latency:** embed+retrieve 21500ms (router 1337ms, retrieval 16682ms)
+**Stage timings:** context_build=3987ms, entity_lookup=9200ms, relationship_lookup=64ms, rerank=3986ms, retrieval=16682ms, router=1337ms, structured_lookup=18529ms, vector_search=3430ms
 
 **Top-5 results:**
 
@@ -6986,16 +7006,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > Maintenance Service Report Eareckson NEXION 15 June 2023 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A002 Prepared For: Space Systems Command ...
 3. [IN-FAMILY] `Eareckson/Deliverables Report IGSI-737 Eareckson-NEXION MSR (A002).pdf` (score=-1.000)
    > CUI IGS EMSI Ionospheric Ground Sensors (IGS) Engineering, Management, Sustainment, and Installation (EMSI) CUI Maintenance Service Report Eareckson NEXION 1...
-4. [IN-FAMILY] `2022/Deliverables Report IGSI-83 IGS Monthly Status Report - Oct22 (A009).pdf` (score=0.016)
-   > S Maintenance IGSI-313 Wake 17 Oct 22 00:21 17 Oct 22 21:36 IGS Maintenance IGSI-314 Wake 17 Oct 22 22:06 18 Oct 22 20:51 IGS Maintenance IGSI-315 Wake 19 Oc...
+4. [IN-FAMILY] `2024/Deliverables Report IGSI-1062 IGS Monthly Status Report - Jan-24 (A009).pdf` (score=0.016)
+   > [SECTION] IGSI-198 4 Eareckson 04-Jan-24 04:18 04-Jan-24 06:26 Moving Weather / UDL IGSI-1961 Eareckson 03-Jan-24 08:25 03-Jan-24 13:17 Moving Weather / UDL ...
 5. [IN-FAMILY] `Eareckson/47QFRA22F0009_IGSI-2354_MSR_Eareckson-NEXION_2024-10-04.pdf` (score=0.016)
    > ....................................................... 9 Table 6. ASV Parts Removed ...........................................................................
-6. [IN-FAMILY] `2024/47QFRA22F0009_IGSI-1366_IGS-IMS_2024-11-25.pdf` (score=0.016)
-   > Eielson [21 CDs post travel] 0 days Wed 10/9/24 Wed 10/9/24 254 116 100% 4.2.1.4 No IGSI-2518 A002 -Maintenance Service Report - Learmonth [21 CDs post trave...
-7. [IN-FAMILY] `A016 - Baseline Description Document (System Performance Baseline Briefing)/47QFRA22F0009_IGSI-2468_A016_Baseline-Description-Document_2025-07-31.pdf` (score=0.016)
-   > d 10/25/2024 ISTO IGSI-2529 A001 Corrective Action Plan (CAP) - Learmonth NEXION 1 Delivered 8/16/2024 NEXION IGSI-3031 A002 Maintenance Service Report - Alp...
-8. [IN-FAMILY] `2024/Deliverables Report IGSI-1062 IGS Monthly Status Report - Jan-24 (A009).pdf` (score=0.016)
-   > [SECTION] IGSI-198 4 Eareckson 04-Jan-24 04:18 04-Jan-24 06:26 Moving Weather / UDL IGSI-1961 Eareckson 03-Jan-24 08:25 03-Jan-24 13:17 Moving Weather / UDL ...
+6. [IN-FAMILY] `12-0035/Maintenance Service Report_Eglin_2012_AUg.doc` (score=0.016)
+   > 20622857 \h 4.0 MAINTENANCE ACTIVITIES PAGEREF _Toc320622858 \h Equipment Information List. PAGEREF _Toc320622859 \h Reason For Submission. PAGEREF _Toc32062...
+7. [IN-FAMILY] `Eareckson/Deliverables Report IGSI-737 Eareckson-NEXION MSR (A002).pdf` (score=0.016)
+   > ........................................................ 9 Table 7. ASV Parts Removed ..........................................................................
+8. [IN-FAMILY] `Eglin (OB Light)/1.Maintenance Service Report_Eglin_2012_AUg.doc` (score=0.016)
+   > 20622857 \h 4.0 MAINTENANCE ACTIVITIES PAGEREF _Toc320622858 \h Equipment Information List. PAGEREF _Toc320622859 \h Reason For Submission. PAGEREF _Toc32062...
 
 ---
 
@@ -7007,8 +7027,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 24686ms (router 1000ms, retrieval 19541ms)
-**Stage timings:** context_build=4209ms, entity_lookup=10878ms, relationship_lookup=72ms, rerank=4208ms, retrieval=19541ms, router=1000ms, structured_lookup=21900ms, vector_search=4382ms
+**Latency:** embed+retrieve 22149ms (router 1117ms, retrieval 17165ms)
+**Stage timings:** context_build=4105ms, entity_lookup=9261ms, relationship_lookup=64ms, rerank=4105ms, retrieval=17165ms, router=1117ms, structured_lookup=18651ms, vector_search=3733ms
 
 **Top-5 results:**
 
@@ -7041,8 +7061,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 24465ms (router 1356ms, retrieval 19039ms)
-**Stage timings:** context_build=4469ms, rerank=4469ms, retrieval=19039ms, router=1356ms, vector_search=3863ms
+**Latency:** embed+retrieve 22600ms (router 1618ms, retrieval 17568ms)
+**Stage timings:** context_build=4569ms, rerank=4569ms, retrieval=17568ms, router=1618ms, vector_search=3526ms
 
 **Top-5 results:**
 
@@ -7077,8 +7097,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 23340ms (router 1402ms, retrieval 18340ms)
-**Stage timings:** context_build=3844ms, entity_lookup=10820ms, relationship_lookup=71ms, rerank=3844ms, retrieval=18340ms, router=1402ms, structured_lookup=21783ms, vector_search=3603ms
+**Latency:** embed+retrieve 21577ms (router 983ms, retrieval 16977ms)
+**Stage timings:** context_build=4262ms, entity_lookup=9147ms, relationship_lookup=65ms, rerank=4262ms, retrieval=16977ms, router=983ms, structured_lookup=18425ms, vector_search=3501ms
 
 **Top-5 results:**
 
@@ -7109,8 +7129,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 38620ms (router 1279ms, retrieval 26107ms)
-**Stage timings:** context_build=5185ms, rerank=5185ms, retrieval=26107ms, router=1279ms, vector_search=20922ms
+**Latency:** embed+retrieve 32184ms (router 1299ms, retrieval 22346ms)
+**Stage timings:** context_build=4739ms, rerank=4739ms, retrieval=22346ms, router=1299ms, vector_search=17607ms
 
 **Top-5 results:**
 
@@ -7145,8 +7165,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 14538ms (router 1800ms, retrieval 12544ms)
-**Stage timings:** context_build=3792ms, rerank=3792ms, retrieval=12544ms, router=1800ms, vector_search=213ms
+**Latency:** embed+retrieve 14339ms (router 1166ms, retrieval 12969ms)
+**Stage timings:** context_build=3593ms, rerank=3593ms, retrieval=12969ms, router=1166ms, vector_search=192ms
 
 **Top-5 results:**
 
@@ -7171,8 +7191,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 13914ms (router 1337ms, retrieval 12374ms)
-**Stage timings:** context_build=3604ms, rerank=3603ms, retrieval=12374ms, router=1337ms, vector_search=218ms
+**Latency:** embed+retrieve 16772ms (router 2734ms, retrieval 13789ms)
+**Stage timings:** context_build=3915ms, rerank=3915ms, retrieval=13789ms, router=2734ms, vector_search=218ms
 
 **Top-5 results:**
 
@@ -7197,8 +7217,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 6367ms (router 2292ms, retrieval 3897ms)
-**Stage timings:** context_build=3683ms, rerank=3683ms, retrieval=3897ms, router=2292ms, vector_search=213ms
+**Latency:** embed+retrieve 5830ms (router 1492ms, retrieval 4107ms)
+**Stage timings:** context_build=3887ms, rerank=3887ms, retrieval=4107ms, router=1492ms, vector_search=220ms
 
 **Top-5 results:**
 
@@ -7223,8 +7243,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 23976ms (router 983ms, retrieval 18686ms)
-**Stage timings:** context_build=2043ms, entity_lookup=8295ms, relationship_lookup=278ms, rerank=2043ms, retrieval=18686ms, router=983ms, structured_lookup=17147ms, vector_search=8068ms
+**Latency:** embed+retrieve 28814ms (router 1478ms, retrieval 22943ms)
+**Stage timings:** context_build=1908ms, rerank=1908ms, retrieval=22943ms, router=1478ms, vector_search=8664ms
 
 **Top-5 results:**
 
@@ -7249,8 +7269,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 9084ms (router 1073ms, retrieval 7855ms)
-**Stage timings:** aggregate_lookup=1888ms, context_build=5800ms, rerank=5800ms, retrieval=7855ms, router=1073ms, structured_lookup=3776ms, vector_search=166ms
+**Latency:** embed+retrieve 10260ms (router 1960ms, retrieval 8103ms)
+**Stage timings:** aggregate_lookup=1873ms, context_build=6049ms, rerank=6048ms, retrieval=8103ms, router=1960ms, structured_lookup=3746ms, vector_search=180ms
 
 **Top-5 results:**
 
@@ -7275,8 +7295,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 9186ms (router 1297ms, retrieval 7745ms)
-**Stage timings:** aggregate_lookup=1670ms, context_build=5924ms, rerank=5924ms, retrieval=7745ms, router=1297ms, structured_lookup=3340ms, vector_search=150ms
+**Latency:** embed+retrieve 10516ms (router 2079ms, retrieval 8264ms)
+**Stage timings:** aggregate_lookup=1918ms, context_build=6183ms, rerank=6183ms, retrieval=8264ms, router=2079ms, structured_lookup=3836ms, vector_search=162ms
 
 **Top-5 results:**
 
@@ -7301,8 +7321,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 28556ms (router 1358ms, retrieval 22836ms)
-**Stage timings:** aggregate_lookup=2376ms, context_build=10111ms, rerank=10111ms, retrieval=22836ms, router=1358ms, structured_lookup=4752ms, vector_search=10347ms
+**Latency:** embed+retrieve 28602ms (router 2174ms, retrieval 22596ms)
+**Stage timings:** aggregate_lookup=2971ms, context_build=10979ms, rerank=10979ms, retrieval=22596ms, router=2174ms, structured_lookup=5942ms, vector_search=8646ms
 
 **Top-5 results:**
 
@@ -7329,7 +7349,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-326 [PASS] -- Aggregation / Cross-role
+### PQ-326 [PARTIAL] -- Aggregation / Cross-role
 
 **Query:** Which sites have legacy monitoring system-suffixed A002 MSR subfolders?
 
@@ -7337,21 +7357,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 11848ms (router 1535ms, retrieval 10172ms)
-**Stage timings:** aggregate_lookup=3865ms, context_build=6167ms, rerank=6167ms, retrieval=10172ms, router=1535ms, structured_lookup=7730ms, vector_search=140ms
+**Latency:** embed+retrieve 11664ms (router 1632ms, retrieval 9839ms)
+**Stage timings:** aggregate_lookup=3342ms, context_build=6329ms, rerank=6329ms, retrieval=9839ms, router=1632ms, structured_lookup=6684ms, vector_search=168ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `RFC AF Global VPN - SEMS3D-40087/FOUO_SEMS3D-40087.zip` (score=0.016)
-   > and/or other countries. Mac is a trademark of Apple Inc., registered in the United States and other countries. Linux is the registered trademark of Linus Tor...
-2. [IN-FAMILY] `Gov't Info/IGSCC deliverable (NGIDE Jira) 2025-08-26T13_17_45-0600.csv` (score=0.016)
-   > 2,IGSCC-8 IGSCC Maintenance Service Report (MSR) - Guam ISTO- A002,IGSCC-7 IGSCC Maintenance Service Report (MSR) - Thule- A002,IGSCC-6 IGSCC Maintenance Ser...
-3. [out] `JTAGS Plans/ILSP.docx` (score=0.016)
-   > vices as follows. Tracking & Telemetry Subsystem Mission Processing Subsystem Communication Subsystem Common Services Subsystem Facilities Subsystem TSS (app...
-4. [IN-FAMILY] `Gov't Info/IGSCC deliverable (NGIDE Jira) 2025-08-26T13_21_48-0600.csv` (score=0.016)
-   > Service Report (MSR) - Thule- A002,IGSCC-6,7/17/2026 IGSCC Maintenance Service Report (MSR) - San Vito- A002,IGSCC-5,11/3/2025 IGSCC Maintenance Service Repo...
-5. [out] `4.2 Asset Management/Part Failure Tracker_1.xlsx` (score=0.016)
-   > dings: Location of returned SSD? MSR Number: IGSI-2746, Team Members: Seagren, Jeremy, Location: Eareckson, System: NEXION, Date: 2025-06-09T00:00:00, Purpos...
+1. [out] `AN FMQ-22 AMS/AFI 23-101 (Air Force Materiel Management (Sup I) (2013-12-09).pdf` (score=0.016)
+   > he status and location of the item will be known and appropriately reflected at all times. 4.3.2.7.1. Customers with a maintenance information system will up...
+2. [IN-FAMILY] `A016 - Baseline Description Document (System Performance Baseline Briefing)/47QFRA22F0009_IGSI-2468_A016_Baseline-Description-Document_2025-07-31.pdf` (score=0.016)
+   > d 10/25/2024 ISTO IGSI-2529 A001 Corrective Action Plan (CAP) - Learmonth NEXION 1 Delivered 8/16/2024 NEXION IGSI-3031 A002 Maintenance Service Report - Alp...
+3. [IN-FAMILY] `OY1/47QFRA22F0009_IGSI-1371_IGS_Monthly_Audit_Report_March.xlsx` (score=0.016)
+   > irus) Software Status and HBSS Updates (Antivirus DAT version), : Reported to SysAdmin. AntiVirus/HBSS (DAT file) updates are out of date for the below sites...
+4. [IN-FAMILY] `Gov't Info/IGSCC deliverable (NGIDE Jira) 2025-08-26T13_17_45-0600.csv` (score=0.016)
+   > 119 IGSCC Configuration Audit Report - Fairford - A011,IGSCC-118 IGSCC Configuration Audit Report (CAR) - Azores - A011,IGSCC-117 IGSCC Configuration Audit R...
+5. [IN-FAMILY] `OY1/47QFRA22F0009_IGSI-1371_IGS_Monthly_Audit_Report_Mar-24.xlsx` (score=0.016)
+   > irus) Software Status and HBSS Updates (Antivirus DAT version), : Reported to SysAdmin. AntiVirus/HBSS (DAT file) updates are out of date for the below sites...
 
 ---
 
@@ -7363,8 +7383,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 11916ms (router 1912ms, retrieval 9771ms)
-**Stage timings:** aggregate_lookup=2511ms, context_build=6970ms, rerank=6970ms, retrieval=9771ms, router=1912ms, structured_lookup=5022ms, vector_search=288ms
+**Latency:** embed+retrieve 9944ms (router 1314ms, retrieval 8401ms)
+**Stage timings:** aggregate_lookup=1858ms, context_build=6314ms, rerank=6314ms, retrieval=8401ms, router=1314ms, structured_lookup=3716ms, vector_search=229ms
 
 **Top-5 results:**
 
@@ -7389,8 +7409,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 10455ms (router 2042ms, retrieval 8284ms)
-**Stage timings:** aggregate_lookup=2315ms, context_build=5825ms, rerank=5825ms, retrieval=8284ms, router=2042ms, structured_lookup=4630ms, vector_search=143ms
+**Latency:** embed+retrieve 11107ms (router 1596ms, retrieval 9347ms)
+**Stage timings:** aggregate_lookup=3015ms, context_build=6187ms, rerank=6187ms, retrieval=9347ms, router=1596ms, structured_lookup=6030ms, vector_search=143ms
 
 **Top-5 results:**
 
@@ -7415,8 +7435,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Systems Engineering
 
-**Latency:** embed+retrieve 10001ms (router 1231ms, retrieval 8641ms)
-**Stage timings:** aggregate_lookup=2232ms, context_build=6267ms, rerank=6267ms, retrieval=8641ms, router=1231ms, structured_lookup=4464ms, vector_search=141ms
+**Latency:** embed+retrieve 9918ms (router 1479ms, retrieval 8283ms)
+**Stage timings:** aggregate_lookup=1838ms, context_build=6312ms, rerank=6312ms, retrieval=8283ms, router=1479ms, structured_lookup=3676ms, vector_search=133ms
 
 **Top-5 results:**
 
@@ -7441,8 +7461,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 9986ms (router 1219ms, retrieval 8641ms)
-**Stage timings:** aggregate_lookup=2038ms, context_build=6455ms, rerank=6455ms, retrieval=8641ms, router=1219ms, structured_lookup=4076ms, vector_search=147ms
+**Latency:** embed+retrieve 9858ms (router 1582ms, retrieval 8115ms)
+**Stage timings:** aggregate_lookup=1828ms, context_build=6145ms, rerank=6144ms, retrieval=8115ms, router=1582ms, structured_lookup=3656ms, vector_search=142ms
 
 **Top-5 results:**
 
@@ -7467,8 +7487,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 18351ms (router 1199ms, retrieval 12248ms)
-**Stage timings:** context_build=3760ms, rerank=3760ms, retrieval=12248ms, router=1199ms, vector_search=8488ms
+**Latency:** embed+retrieve 18136ms (router 1644ms, retrieval 12197ms)
+**Stage timings:** context_build=3648ms, rerank=3648ms, retrieval=12197ms, router=1644ms, vector_search=8549ms
 
 **Top-5 results:**
 
@@ -7493,8 +7513,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 22818ms (router 1090ms, retrieval 17412ms)
-**Stage timings:** aggregate_lookup=2270ms, context_build=6068ms, rerank=6068ms, retrieval=17412ms, router=1090ms, structured_lookup=4540ms, vector_search=9073ms
+**Latency:** embed+retrieve 22079ms (router 1150ms, retrieval 16380ms)
+**Stage timings:** aggregate_lookup=1798ms, context_build=6225ms, rerank=6225ms, retrieval=16380ms, router=1150ms, structured_lookup=3596ms, vector_search=8357ms
 
 **Top-5 results:**
 
@@ -7519,8 +7539,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 16525ms (router 977ms, retrieval 11423ms)
-**Stage timings:** context_build=2480ms, rerank=2480ms, retrieval=11423ms, router=977ms, vector_search=8942ms
+**Latency:** embed+retrieve 16574ms (router 1329ms, retrieval 11049ms)
+**Stage timings:** context_build=2445ms, rerank=2445ms, retrieval=11049ms, router=1329ms, vector_search=8603ms
 
 **Top-5 results:**
 
@@ -7545,8 +7565,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 9075ms (router 1166ms, retrieval 7774ms)
-**Stage timings:** aggregate_lookup=1616ms, context_build=6001ms, rerank=6001ms, retrieval=7774ms, router=1166ms, structured_lookup=3232ms, vector_search=156ms
+**Latency:** embed+retrieve 10139ms (router 1952ms, retrieval 8017ms)
+**Stage timings:** aggregate_lookup=1765ms, context_build=6093ms, rerank=6093ms, retrieval=8017ms, router=1952ms, structured_lookup=3530ms, vector_search=157ms
 
 **Top-5 results:**
 
@@ -7567,12 +7587,12 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Query:** What's in the January 2026 PMR deck?
 
-**Expected type:** SEMANTIC  |  **Routed:** TABULAR  |  **Routing match:** MISS
+**Expected type:** SEMANTIC  |  **Routed:** SEMANTIC  |  **Routing match:** OK
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 17642ms (router 1524ms, retrieval 11218ms)
-**Stage timings:** context_build=2832ms, rerank=2832ms, retrieval=11218ms, router=1524ms, vector_search=8385ms
+**Latency:** embed+retrieve 17382ms (router 1090ms, retrieval 11758ms)
+**Stage timings:** context_build=2810ms, rerank=2809ms, retrieval=11758ms, router=1090ms, vector_search=8948ms
 
 **Top-5 results:**
 
@@ -7597,8 +7617,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 12035ms (router 1106ms, retrieval 7014ms)
-**Stage timings:** context_build=3652ms, rerank=3652ms, retrieval=7014ms, router=1106ms, vector_search=3361ms
+**Latency:** embed+retrieve 11925ms (router 996ms, retrieval 7285ms)
+**Stage timings:** context_build=3660ms, rerank=3660ms, retrieval=7285ms, router=996ms, vector_search=3624ms
 
 **Top-5 results:**
 
@@ -7625,8 +7645,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5120ms (router 1245ms, retrieval 3747ms)
-**Stage timings:** context_build=3611ms, rerank=3611ms, retrieval=3747ms, router=1245ms, vector_search=135ms
+**Latency:** embed+retrieve 4871ms (router 1167ms, retrieval 3545ms)
+**Stage timings:** context_build=3409ms, rerank=3409ms, retrieval=3545ms, router=1167ms, vector_search=135ms
 
 **Top-5 results:**
 
@@ -7651,8 +7671,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5527ms (router 1632ms, retrieval 3769ms)
-**Stage timings:** context_build=3630ms, rerank=3630ms, retrieval=3769ms, router=1632ms, vector_search=138ms
+**Latency:** embed+retrieve 5115ms (router 1160ms, retrieval 3793ms)
+**Stage timings:** context_build=3654ms, rerank=3654ms, retrieval=3793ms, router=1160ms, vector_search=139ms
 
 **Top-5 results:**
 
@@ -7677,8 +7697,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5597ms (router 1534ms, retrieval 3927ms)
-**Stage timings:** context_build=3755ms, rerank=3755ms, retrieval=3927ms, router=1534ms, vector_search=158ms
+**Latency:** embed+retrieve 5139ms (router 1151ms, retrieval 3802ms)
+**Stage timings:** context_build=3641ms, rerank=3641ms, retrieval=3802ms, router=1151ms, vector_search=160ms
 
 **Top-5 results:**
 
@@ -7703,8 +7723,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 10264ms (router 1685ms, retrieval 8428ms)
-**Stage timings:** aggregate_lookup=1822ms, context_build=6435ms, rerank=6435ms, retrieval=8428ms, router=1685ms, structured_lookup=3644ms, vector_search=170ms
+**Latency:** embed+retrieve 9496ms (router 992ms, retrieval 8319ms)
+**Stage timings:** aggregate_lookup=1905ms, context_build=6246ms, rerank=6246ms, retrieval=8319ms, router=992ms, structured_lookup=3810ms, vector_search=167ms
 
 **Top-5 results:**
 
@@ -7729,8 +7749,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 19346ms (router 1544ms, retrieval 12929ms)
-**Stage timings:** context_build=4276ms, rerank=4276ms, retrieval=12929ms, router=1544ms, vector_search=8653ms
+**Latency:** embed+retrieve 19045ms (router 1098ms, retrieval 13350ms)
+**Stage timings:** context_build=4092ms, rerank=4092ms, retrieval=13350ms, router=1098ms, vector_search=9258ms
 
 **Top-5 results:**
 
@@ -7755,8 +7775,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 31707ms (router 2552ms, retrieval 19308ms)
-**Stage timings:** context_build=5233ms, rerank=5233ms, retrieval=19308ms, router=2552ms, vector_search=5632ms
+**Latency:** embed+retrieve 26391ms (router 1839ms, retrieval 19412ms)
+**Stage timings:** context_build=4703ms, rerank=4703ms, retrieval=19412ms, router=1839ms, vector_search=4847ms
 
 **Top-5 results:**
 
@@ -7789,8 +7809,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 12746ms (router 1066ms, retrieval 7801ms)
-**Stage timings:** context_build=3489ms, rerank=3489ms, retrieval=7801ms, router=1066ms, vector_search=4311ms
+**Latency:** embed+retrieve 14824ms (router 1168ms, retrieval 8419ms)
+**Stage timings:** context_build=3829ms, rerank=3829ms, retrieval=8419ms, router=1168ms, vector_search=4590ms
 
 **Top-5 results:**
 
@@ -7821,8 +7841,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 27019ms (router 1605ms, retrieval 19211ms)
-**Stage timings:** context_build=4673ms, rerank=4673ms, retrieval=19211ms, router=1605ms, vector_search=6343ms
+**Latency:** embed+retrieve 30824ms (router 1260ms, retrieval 23041ms)
+**Stage timings:** context_build=4718ms, rerank=4718ms, retrieval=23041ms, router=1260ms, vector_search=6480ms
 
 **Top-5 results:**
 
@@ -7857,8 +7877,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 10909ms (router 1644ms, retrieval 5985ms)
-**Stage timings:** context_build=3069ms, rerank=3069ms, retrieval=5985ms, router=1644ms, vector_search=2915ms
+**Latency:** embed+retrieve 11544ms (router 1599ms, retrieval 6298ms)
+**Stage timings:** context_build=3161ms, rerank=3161ms, retrieval=6298ms, router=1599ms, vector_search=3136ms
 
 **Top-5 results:**
 
@@ -7887,8 +7907,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 9340ms (router 1864ms, retrieval 7326ms)
-**Stage timings:** aggregate_lookup=405ms, context_build=6739ms, rerank=6739ms, retrieval=7326ms, router=1864ms, structured_lookup=810ms, vector_search=181ms
+**Latency:** embed+retrieve 8295ms (router 1162ms, retrieval 6938ms)
+**Stage timings:** aggregate_lookup=440ms, context_build=6335ms, rerank=6335ms, retrieval=6938ms, router=1162ms, structured_lookup=880ms, vector_search=162ms
 
 **Top-5 results:**
 
@@ -7913,8 +7933,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 31167ms (router 3014ms, retrieval 20680ms)
-**Stage timings:** context_build=5201ms, rerank=5201ms, retrieval=20680ms, router=3014ms, vector_search=7438ms
+**Latency:** embed+retrieve 32069ms (router 1280ms, retrieval 24314ms)
+**Stage timings:** context_build=4924ms, rerank=4924ms, retrieval=24314ms, router=1280ms, vector_search=7670ms
 
 **Top-5 results:**
 
@@ -7939,7 +7959,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-351 [PARTIAL] -- Field Engineer
+### PQ-351 [PASS] -- Field Engineer
 
 **Query:** What does the A027 CT&E Report for Hawaii Install cover?
 
@@ -7947,21 +7967,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 9209ms (router 5134ms, retrieval 3937ms)
-**Stage timings:** context_build=3776ms, rerank=3776ms, retrieval=3937ms, router=5134ms, vector_search=160ms
+**Latency:** embed+retrieve 5188ms (router 1008ms, retrieval 3985ms)
+**Stage timings:** context_build=3786ms, rerank=3786ms, retrieval=3985ms, router=1008ms, vector_search=198ms
 
 **Top-5 results:**
 
-1. [out] `Hawaii/IGS_Installs_Internal_Proposal_Plan_Post_Kickoff.docx` (score=0.016)
-   > d under A4.7 ? Cost Reporting Funds and Man-Hour Exp Report ? does this include the ?bigger? report that was discussed at one time to capture all of the cost...
+1. [IN-FAMILY] `A038_WX52_PCB#2_(AmericanSamoa)/SEMS3D-41527 WX52 IGS Installs Project Change Brief #2 (A038).pdf` (score=0.016)
+   > [SECTION] PM-6029 American Samoa (Added) - The Contractor shall deliver an Installation Acceptance Test Report SEMS3D-41533 TOWX52 Installation Acceptance Te...
 2. [IN-FAMILY] `SEMS3D-34891 CT&E Report - Hawaii Install (CDRL A027)/SEMS3D-34891 CT&E Report - Hawaii Install (CDRL A027).pdf` (score=0.016)
    > ystem for compliance with required Identification and Authentication Security Requirements. Test Objective 7: Evaluate the system for compliance with require...
-3. [IN-FAMILY] `Searching for File Paths for NEXION Deliverable Control Log/doc 3 with template columns.xls` (score=0.016)
-   > [SECTION] 36.0 Draft Osan AFB CT&E Report 41136.0 37.0 Draft Hawaii CT&E Report 41136.0 38.0 Trip Report, (CDRL045B) Pre-Site Survey Osan AB 4-11 August 2012...
-4. [IN-FAMILY] `SEMS3D-34891 CT&E Report - Hawaii Install (CDRL A027)/SEMS3D-34891 CT&E Report - Hawaii Install (CDRL A027).pdf` (score=0.016)
-   > ........................................................................................ 8 LIST OF FIGURES Figure 1. NEXION Accreditation Boundary 4 Figure 2...
-5. [IN-FAMILY] `2023/Deliverables Report IGSI-154 IGS IMS_07_27_23 (A031).pdf` (score=0.016)
-   > [SECTION] 167 0% 3.16.5.68 IGSI-816 A027 DAA Accreditation Support Data (CT&E Plan) - American Samoa 0 days Fri 9/15/23 Fri 9/15/23 168 0% 3.16.5.69 IGSI-815...
+3. [IN-FAMILY] `A038 WX52 PCB#3 (AS Descope)/SEMS3D-42319_WX52 IGS Installs Project Change Brief #3 (A038).pdf` (score=0.016)
+   > moved) - The Contractor shall deliver Installation Acceptance Test Procedures SEMS3D-41531 TOWX52 Installation Acceptance Test Procedures ? American Samoa (A...
+4. [IN-FAMILY] `BDD Final Table Merges/Merged BDD Table (doc 1 and from Grube) sorted by years.xlsx` (score=0.016)
+   > r Manuals Outlines Line No.: 677, Key/Document ID.: SEMS3D-34613, CDRL: A026, Summary/Description: TOWX28 IGS OS Upgrades ISTO Interface Design Document (A02...
+5. [IN-FAMILY] `A038_WX52_PCB#2_(AmericanSamoa)/SEMS3D-41527 WX52 IGS Installs Project Change Brief #2 (A038).pdf` (score=0.016)
+   > 6024 American Samoa (Added) - The Contractor shall deliver an Installation Acceptance Test Plan SEMS3D-41529 TOWX52 Installation Acceptance Test Plan ? Ameri...
 
 ---
 
@@ -7973,8 +7993,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 41764ms (router 1022ms, retrieval 33448ms)
-**Stage timings:** context_build=6535ms, entity_lookup=12318ms, relationship_lookup=298ms, rerank=6535ms, retrieval=33448ms, router=1022ms, structured_lookup=25233ms, vector_search=14296ms
+**Latency:** embed+retrieve 45364ms (router 2357ms, retrieval 33510ms)
+**Stage timings:** context_build=6897ms, entity_lookup=11529ms, relationship_lookup=303ms, rerank=6897ms, retrieval=33510ms, router=2357ms, structured_lookup=23665ms, vector_search=14779ms
 
 **Top-5 results:**
 
@@ -8009,8 +8029,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 4976ms (router 1062ms, retrieval 3792ms)
-**Stage timings:** context_build=3663ms, rerank=3663ms, retrieval=3792ms, router=1062ms, vector_search=129ms
+**Latency:** embed+retrieve 6852ms (router 2637ms, retrieval 4045ms)
+**Stage timings:** context_build=3906ms, rerank=3906ms, retrieval=4045ms, router=2637ms, vector_search=138ms
 
 **Top-5 results:**
 
@@ -8035,8 +8055,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5017ms (router 1233ms, retrieval 3651ms)
-**Stage timings:** context_build=3495ms, rerank=3495ms, retrieval=3651ms, router=1233ms, vector_search=156ms
+**Latency:** embed+retrieve 6801ms (router 2633ms, retrieval 3976ms)
+**Stage timings:** context_build=3784ms, rerank=3783ms, retrieval=3976ms, router=2633ms, vector_search=154ms
 
 **Top-5 results:**
 
@@ -8061,8 +8081,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 14118ms (router 1741ms, retrieval 12222ms)
-**Stage timings:** context_build=3419ms, entity_lookup=8560ms, relationship_lookup=77ms, rerank=3419ms, retrieval=12222ms, router=1741ms, structured_lookup=17275ms, vector_search=165ms
+**Latency:** embed+retrieve 15930ms (router 1537ms, retrieval 14176ms)
+**Stage timings:** context_build=3925ms, entity_lookup=9981ms, relationship_lookup=89ms, rerank=3924ms, retrieval=14176ms, router=1537ms, structured_lookup=20141ms, vector_search=180ms
 
 **Top-5 results:**
 
@@ -8087,8 +8107,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5477ms (router 1436ms, retrieval 3892ms)
-**Stage timings:** context_build=3720ms, rerank=3720ms, retrieval=3892ms, router=1436ms, vector_search=172ms
+**Latency:** embed+retrieve 5484ms (router 1359ms, retrieval 3921ms)
+**Stage timings:** context_build=3756ms, rerank=3756ms, retrieval=3921ms, router=1359ms, vector_search=164ms
 
 **Top-5 results:**
 
@@ -8113,8 +8133,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 16507ms (router 1038ms, retrieval 15329ms)
-**Stage timings:** context_build=3441ms, rerank=3441ms, retrieval=15329ms, router=1038ms, vector_search=159ms
+**Latency:** embed+retrieve 16538ms (router 1133ms, retrieval 15217ms)
+**Stage timings:** context_build=3761ms, rerank=3761ms, retrieval=15217ms, router=1133ms, vector_search=162ms
 
 **Top-5 results:**
 
@@ -8139,8 +8159,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 9548ms (router 1061ms, retrieval 8339ms)
-**Stage timings:** aggregate_lookup=2212ms, context_build=5952ms, rerank=5952ms, retrieval=8339ms, router=1061ms, structured_lookup=4424ms, vector_search=174ms
+**Latency:** embed+retrieve 14850ms (router 5793ms, retrieval 8846ms)
+**Stage timings:** aggregate_lookup=2324ms, context_build=6350ms, rerank=6350ms, retrieval=8846ms, router=5793ms, structured_lookup=4648ms, vector_search=171ms
 
 **Top-5 results:**
 
@@ -8165,8 +8185,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Site Visits
 
-**Latency:** embed+retrieve 4649ms (router 1274ms, retrieval 3226ms)
-**Stage timings:** context_build=3051ms, rerank=3051ms, retrieval=3226ms, router=1274ms, vector_search=174ms
+**Latency:** embed+retrieve 4634ms (router 933ms, retrieval 3501ms)
+**Stage timings:** context_build=3316ms, rerank=3316ms, retrieval=3501ms, router=933ms, vector_search=184ms
 
 **Top-5 results:**
 
@@ -8191,8 +8211,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 17848ms (router 1252ms, retrieval 12115ms)
-**Stage timings:** context_build=3507ms, rerank=3507ms, retrieval=12115ms, router=1252ms, vector_search=8608ms
+**Latency:** embed+retrieve 19885ms (router 1286ms, retrieval 13151ms)
+**Stage timings:** context_build=3953ms, rerank=3953ms, retrieval=13151ms, router=1286ms, vector_search=9197ms
 
 **Top-5 results:**
 
@@ -8217,21 +8237,31 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 4773ms (router 1057ms, retrieval 3571ms)
-**Stage timings:** context_build=3420ms, rerank=3420ms, retrieval=3571ms, router=1057ms, vector_search=150ms
+**Latency:** embed+retrieve 15991ms (router 1483ms, retrieval 11223ms)
+**Stage timings:** context_build=7570ms, rerank=7570ms, retrieval=11223ms, router=1483ms, vector_search=3652ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Space and AF AO Other Tools-Documents/ACSAT V1.0.2.2.zip` (score=0.016)
-   > Multilevel)": "+", "Cross Domain (Transfer)": "+", "Nuclear Command and Control": "+" }, "CM-2(6).2": { "#": "776", "RMF Family": "CM", "RMF Ctrl ID": "CM-2(...
-2. [IN-FAMILY] `NEXION/MSR Input Nov_rs.doc` (score=0.016)
-   > Author: Ed Huber NEXION MSR Input For the Mo/Yr: Nov 10 From: Ryan Schneider 1. Work you did this month on the following: (only address what is applicable) N...
-3. [out] `Delete After Time/Appendices to SSEMP_v3.docx` (score=0.016)
-   > . If any software requirements may be satisfied by a unit, the unit test?s results should be verified to make sure that the requirements are satisfied by the...
-4. [IN-FAMILY] `Archive/15-0029_ASES_Trip Report_(CDRL A045B)_Trip Report, LDI OS Upgrade Demonstration Trip 20-23 July 15 _Draft.doc` (score=0.016)
-   > ing/discussion in the following areas: What software has changed besides the OS? What is included with First Article Test (FAT) report? Observe a portion of ...
-5. [out] `Delete After Time/Appendices to SSEMP_v4tk.docx` (score=0.016)
-   > . If any software requirements may be satisfied by a unit, the unit test?s results should be verified to make sure that the requirements are satisfied by the...
+1. [IN-FAMILY] `47QFRA22F0009_IGSI-1809_CTE_Plan_Lajes-NEXION/47QFRA22F0009_IGSI-1809_CTE_Plan_Lajes-NEXION.docx` (score=-1.000)
+   > Certification Test and Evaluation Plan NEXION Lajes Field, Azores 19 Apr 2024 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A027 Prepared For: S...
+2. [IN-FAMILY] `Deliverables Report IGSI-113 DAA Accreditation Support Data (CT&E Plan Okinawa) (A027)/Deliverables Report IGSI-113 DAA Accreditation Support Data (CT&E Plan Okinawa) (A027) - Comments.docx` (score=-1.000)
+   > Certification Test and Evaluation (CT&E) Plan NEXION OKINAWA 26 July 2023 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A027 Prepared For: Space...
+3. [IN-FAMILY] `Deliverables Report IGSI-113 DAA Accreditation Support Data (CT&E Plan Okinawa) (A027)/Deliverables Report IGSI-113 DAA Accreditation Support Data (CT&E Plan Okinawa) (A027).docx` (score=-1.000)
+   > Certification Test and Evaluation (CT&E) Plan NEXION Okinawa 26 July 2023 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A027 Prepared For: Space...
+4. [IN-FAMILY] `Deliverables Report IGSI-469 CT&E Plan Niger (A027)/CT&E Plan ISTO Niger CDRL A027 Comments.docx` (score=-1.000)
+   > Ionospheric Ground Sensors Certification Test and Evaluation (CT&E) Plan ISTO Niger 08 December 2022 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Numb...
+5. [IN-FAMILY] `Deliverables Report IGSI-469 CT&E Plan Niger (A027)/CT&E Plan ISTO Niger CDRL A027.docx` (score=-1.000)
+   > Ionospheric Ground Sensors Certification Test and Evaluation (CT&E) Plan ISTO Niger 08 December 2022 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Numb...
+6. [IN-FAMILY] `z DISS SSAAs/Appendix G DISS-082703.doc` (score=0.016)
+   > t report will require additional security testing, evaluation, and reporting. The CT&E report is anticipated to be sensitive unclassified information and sho...
+7. [IN-FAMILY] `2012/hill_-_final_Performance_PlanAttachment_8_to_the_F2AST_1_Sept_09.pdf` (score=0.016)
+   > actor must provide a spend plan to Government for concurrence. The QAP will use Government/Contractor Reviews and the Contractor Cost Data Report in the eval...
+8. [IN-FAMILY] `z DISS SSAAs/DISS SSAA and Attach._Type_1-2.zIP` (score=0.016)
+   > t report will require additional security testing, evaluation, and reporting. The CT&E report is anticipated to be sensitive unclassified information and sho...
+9. [IN-FAMILY] `PMP/15-0019_NEXION_PMP_(CDRL A081)_Rev 4_20 Apr 15_Final.doc` (score=0.016)
+   > atus and Management Report (CPSMR) 5th CD of the month 5th CD of the month Contractor format via electronic media Tech Report Study/Services (Annual C&A Asse...
+10. [IN-FAMILY] `z DISS SSAAs/Appendix G DISS-082703.doc` (score=0.016)
+   > used for the CT&E will be included in the CT&E procedures. All procedures and checklists will be provided to the ISSO, the system administrator, and the Cert...
 
 ---
 
@@ -8243,8 +8273,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5271ms (router 1258ms, retrieval 3821ms)
-**Stage timings:** context_build=3587ms, rerank=3587ms, retrieval=3821ms, router=1258ms, vector_search=233ms
+**Latency:** embed+retrieve 5417ms (router 1179ms, retrieval 3995ms)
+**Stage timings:** context_build=3779ms, rerank=3779ms, retrieval=3995ms, router=1179ms, vector_search=216ms
 
 **Top-5 results:**
 
@@ -8269,8 +8299,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 27768ms (router 1518ms, retrieval 21137ms)
-**Stage timings:** context_build=6734ms, rerank=6734ms, retrieval=21137ms, router=1518ms, vector_search=14373ms
+**Latency:** embed+retrieve 30473ms (router 2265ms, retrieval 22359ms)
+**Stage timings:** context_build=7327ms, rerank=7327ms, retrieval=22359ms, router=2265ms, vector_search=15031ms
 
 **Top-5 results:**
 
@@ -8305,8 +8335,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 9004ms (router 1589ms, retrieval 6301ms)
-**Stage timings:** context_build=5156ms, rerank=5156ms, retrieval=6301ms, router=1589ms, vector_search=1145ms
+**Latency:** embed+retrieve 8753ms (router 1008ms, retrieval 6550ms)
+**Stage timings:** context_build=5209ms, rerank=5209ms, retrieval=6550ms, router=1008ms, vector_search=1341ms
 
 **Top-5 results:**
 
@@ -8324,12 +8354,12 @@ a classifier tuning opportunity, tracked but not fixed here.
    > date identification and authentication (IA) controls Complete 7/31/2019 IGS-2337 Update maintenance (MA) controls Complete 8/30/2019 IGS-2339 Update incident...
 7. [IN-FAMILY] `A009 - Monthly Status Report/47QFRA22F0009_IGSI-2493_Monthly-Status-Report_2025-02-11.pdf` (score=0.016)
    > [SECTION] IGSI-2480 1/14/2025 1/17/2025 OY2 IGS IPT Meeting Minutes Jan 25 CDRL A017 IGSI-2492 1/13/2025 1/14/2025 IGS Monthly Status Report/IPT Slides - Jan...
-8. [IN-FAMILY] `09_September/SEMS3D-39048-IGS_IPT_Briefing_Slides.pdf` (score=0.016)
+8. [IN-FAMILY] `A016 - Baseline Description Document (System Performance Baseline Briefing)/47QFRA22F0009_IGSI-1145_Baseline_Description_Document_2024-07-29.pdf` (score=0.016)
+   > GSI-1136 SPC OY1 IGS Computer Operation Manual/Software User Manual (COM/SUM) CDRL A025 1 RELEASE 6/28/2024 BOTH IGSI-1371 SPC OY1 IGS-Monthly Audit Report 2...
+9. [IN-FAMILY] `A009 - Monthly Status Report/47QFRA22F0009_IGSI-2492_Monthly-Status-Report_2025-01-14.pdf` (score=0.016)
+   > [SECTION] OY2 NEXION/ISTO AC Plan and Controls IGSI-2464 1/10/2025 1/10/2025 Done OY2 NEXION/ISTO SC Plan and Controls IGSI-2462 1/10/2025 1/10/2025 Done OY2...
+10. [IN-FAMILY] `09_September/SEMS3D-39048-IGS_IPT_Briefing_Slides.pdf` (score=0.016)
    > date identification and authentication (IA) controls Complete 7/31/2019 IGS-2337 Update maintenance (MA) controls Complete 8/30/2019 IGS-2339 Update incident...
-9. [IN-FAMILY] `OY2/47QFRA22F0009_IGSI-2464_Plans-and-Controls_AC_2025-01-10.zip` (score=0.016)
-   > ng Atypical Usage Monitoring The below is a screenshot of the ISSO?s anomaly report checklist and the Ascension?s Anomaly Report: ISSO Checklist (2022-Jan): ...
-10. [IN-FAMILY] `Continuous Monitoring Plan/Deliverables Report IGSI-1938 Continuous Monitoring Plan (A027).zip` (score=0.016)
-   > AF ?Automatically Compliant? security controls) must be reviewed annually ? roughly 89 security controls each month. See the ISTO Security Plan for the descr...
 
 ---
 
@@ -8341,8 +8371,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 9030ms (router 1118ms, retrieval 6861ms)
-**Stage timings:** context_build=5452ms, rerank=5452ms, retrieval=6861ms, router=1118ms, vector_search=1408ms
+**Latency:** embed+retrieve 8823ms (router 1061ms, retrieval 6566ms)
+**Stage timings:** context_build=5130ms, rerank=5130ms, retrieval=6566ms, router=1061ms, vector_search=1402ms
 
 **Top-5 results:**
 
@@ -8362,10 +8392,10 @@ a classifier tuning opportunity, tracked but not fixed here.
    > [SECTION] IGSI-2480 1/14/2025 1/17/2025 OY2 IGS IPT Meeting Minutes Jan 25 CDRL A017 IGSI-2492 1/13/2025 1/14/2025 IGS Monthly Status Report/IPT Slides - Jan...
 8. [IN-FAMILY] `09_September/SEMS3D-39048-IGS_IPT_Briefing_Slides.pdf` (score=0.016)
    > date identification and authentication (IA) controls Complete 7/31/2019 IGS-2337 Update maintenance (MA) controls Complete 8/30/2019 IGS-2339 Update incident...
-9. [IN-FAMILY] `OY2/47QFRA22F0009_IGSI-2464_Plans-and-Controls_AC_2025-01-10.zip` (score=0.016)
-   > ng Atypical Usage Monitoring The below is a screenshot of the ISSO?s anomaly report checklist and the Ascension?s Anomaly Report: ISSO Checklist (2022-Jan): ...
-10. [IN-FAMILY] `A027 - NEXION SSP/SEMS3D-38758 RMF System Security Plan 2019-06-27.pdf` (score=0.016)
-   > ities: SMC AP Numbers(CCI): IA-2(8).1(001941) CONTINUOUS MONITORING STRATEGY Criticality Low to medium Frequency Undetermined Method Undetermined Reporting D...
+9. [IN-FAMILY] `A009 - Monthly Status Report/47QFRA22F0009_IGSI-2492_Monthly-Status-Report_2025-01-14.pdf` (score=0.016)
+   > [SECTION] OY2 NEXION/ISTO AC Plan and Controls IGSI-2464 1/10/2025 1/10/2025 Done OY2 NEXION/ISTO SC Plan and Controls IGSI-2462 1/10/2025 1/10/2025 Done OY2...
+10. [IN-FAMILY] `A016 - Baseline Description Document (System Performance Baseline Briefing)/47QFRA22F0009_IGSI-1145_Baseline_Description_Document_2024-07-29.pdf` (score=0.016)
+   > GSI-1136 SPC OY1 IGS Computer Operation Manual/Software User Manual (COM/SUM) CDRL A025 1 RELEASE 6/28/2024 BOTH IGSI-1371 SPC OY1 IGS-Monthly Audit Report 2...
 
 ---
 
@@ -8377,8 +8407,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 27385ms (router 1264ms, retrieval 20569ms)
-**Stage timings:** context_build=6782ms, rerank=6782ms, retrieval=20569ms, router=1264ms, vector_search=13786ms
+**Latency:** embed+retrieve 29360ms (router 1083ms, retrieval 22596ms)
+**Stage timings:** context_build=7577ms, rerank=7577ms, retrieval=22596ms, router=1083ms, vector_search=15018ms
 
 **Top-5 results:**
 
@@ -8413,8 +8443,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 9779ms (router 1502ms, retrieval 7019ms)
-**Stage timings:** context_build=5857ms, rerank=5857ms, retrieval=7019ms, router=1502ms, vector_search=1161ms
+**Latency:** embed+retrieve 9596ms (router 1233ms, retrieval 7146ms)
+**Stage timings:** context_build=5900ms, rerank=5900ms, retrieval=7146ms, router=1233ms, vector_search=1245ms
 
 **Top-5 results:**
 
@@ -8449,8 +8479,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 89615ms (router 1219ms, retrieval 50121ms)
-**Stage timings:** context_build=7779ms, rerank=7779ms, retrieval=50121ms, router=1219ms, vector_search=42342ms
+**Latency:** embed+retrieve 10041ms (router 1358ms, retrieval 7458ms)
+**Stage timings:** context_build=5714ms, rerank=5714ms, retrieval=7458ms, router=1358ms, vector_search=1744ms
 
 **Top-5 results:**
 
@@ -8464,16 +8494,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > [ARCHIVE_MEMBER=438.opattrs.xml] acas.opsattrs 158.114.89.8 158.114.89.8:acas.opsattrs::438 158.114.89.8 1:1 False [ARCHIVE_MEMBER=438.arf.xml] acas.assetdat...
 5. [IN-FAMILY] `Deliverables Report IGSI-966 ISTO DAA Accreditation Support Data (ACAS San Results) (A027)/ISTO Scan Report 2023-May.xlsx` (score=-1.000)
    > [SHEET] Scan Report CUI | | | | | | CUI: Asset Overview CUI: ACAS Asset Insight CUI: Host Name, : CAT I, : CAT II, : CAT III, : CAT IV, : Total, : Credential...
-6. [IN-FAMILY] `2024/47QFRA22F0009_IGSI-1065_Monthly_Status_Report_2024-05-16.pdf` (score=0.016)
-   > I-2008 4/16/2024 4/15/2024 OY1 ISTO DAA Accreditation Support Data (DAA) March Scan Results (ACAS) IGSI-1803 4/18/2024 5/10/2024 Installation Acceptance Test...
+6. [IN-FAMILY] `A008 - Management Plan (Program Management Plan - Systems Mgt Plan)/Deliverables Report IGSI-1135 IGS Program Management Plan (Sept 2023) (A008) .pdf` (score=0.016)
+   > agreed to dates The originating IGS QA is responsible for documenting, tracking, and closing findings in the findings tool. Q210-PGSO, Audit for Compliance, ...
 7. [IN-FAMILY] `2023/Deliverables Report IGSI-966 ISTO DAA Accreditation Support Data (ACAS San Results) (A027).zip` (score=0.016)
    > [ARCHIVE_MEMBER=Deliverables Report IGSI-966 ISTO DAA Accreditation Support Data (ACAS San Results) (A027)/ACAS/2023-may-scan-1/DISA ASR_ARF (Scan ISTO Kicks...
-8. [IN-FAMILY] `2023/Deliverables Report IGSI-1199 NEXION DAA Accreditation Support Data (ACAS Scan Results) (A027).zip` (score=0.016)
+8. [out] `Procedures/Procedure IGS CT&E Scan 2018-01-20.docx` (score=0.016)
+   > scan result should now be listed in the Scan Results page. Acronym ACAS Assured Compliance Assessment Solution IAVM Information Assurance Information Managem...
+9. [IN-FAMILY] `2023/Deliverables Report IGSI-1199 NEXION DAA Accreditation Support Data (ACAS Scan Results) (A027).zip` (score=0.016)
    > [ARCHIVE_MEMBER=Deliverables Report IGSI-1199 NEXION DAA Accreditation Support Data (ACAS Scan Results) (A027)/NEXION Scan Report 2023-Jul.xlsx] [SHEET] Scan...
-9. [IN-FAMILY] `2023/Deliverables Report IGSI-966 ISTO DAA Accreditation Support Data (ACAS San Results) (A027).zip` (score=0.016)
-   > San Results) (A027)/ACAS/2023-may-scan-3/DISA ASR_ARF (Scan ISTO Kickstart Lab VM (158.114.89.46))/435.opattrs.xml] acas.opsattrs 158.114.89.8 158.114.89.8:a...
-10. [IN-FAMILY] `2023/Deliverables Report IGSI-1198 ISTO DAA Accreditation Support Data (ACAS Scan Results) (A027).zip` (score=0.016)
-   > [ARCHIVE_MEMBER=Deliverables Report IGSI-1198 ISTO DAA Accreditation Support Data (ACAS Scan Results) (A027)/ISTO Scan Report 2023-Jul.xlsx] [SHEET] Scan Rep...
+10. [out] `Procedures/Procedure IGS CT&E Scan 2018-06-22.docx` (score=0.016)
+   > scan result should now be listed in the Scan Results page. Acronym ACAS Assured Compliance Assessment Solution IAVM Information Assurance Information Managem...
 
 ---
 
@@ -8485,8 +8515,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 9856ms (router 1781ms, retrieval 7086ms)
-**Stage timings:** context_build=5689ms, rerank=5689ms, retrieval=7086ms, router=1781ms, vector_search=1396ms
+**Latency:** embed+retrieve 9542ms (router 1315ms, retrieval 7063ms)
+**Stage timings:** context_build=5581ms, rerank=5581ms, retrieval=7063ms, router=1315ms, vector_search=1481ms
 
 **Top-5 results:**
 
@@ -8521,8 +8551,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 18324ms (router 961ms, retrieval 12660ms)
-**Stage timings:** context_build=3528ms, rerank=3528ms, retrieval=12660ms, router=961ms, vector_search=9131ms
+**Latency:** embed+retrieve 19404ms (router 1022ms, retrieval 13505ms)
+**Stage timings:** context_build=4032ms, rerank=4032ms, retrieval=13505ms, router=1022ms, vector_search=9473ms
 
 **Top-5 results:**
 
@@ -8547,8 +8577,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 9760ms (router 1387ms, retrieval 8224ms)
-**Stage timings:** aggregate_lookup=1756ms, context_build=6286ms, rerank=6286ms, retrieval=8224ms, router=1387ms, structured_lookup=3512ms, vector_search=181ms
+**Latency:** embed+retrieve 10625ms (router 1340ms, retrieval 9078ms)
+**Stage timings:** aggregate_lookup=2397ms, context_build=6508ms, rerank=6508ms, retrieval=9078ms, router=1340ms, structured_lookup=4794ms, vector_search=172ms
 
 **Top-5 results:**
 
@@ -8573,8 +8603,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 15699ms (router 943ms, retrieval 14518ms)
-**Stage timings:** context_build=3145ms, rerank=3145ms, retrieval=14518ms, router=943ms, vector_search=248ms
+**Latency:** embed+retrieve 16585ms (router 1127ms, retrieval 15172ms)
+**Stage timings:** context_build=3766ms, rerank=3766ms, retrieval=15172ms, router=1127ms, vector_search=223ms
 
 **Top-5 results:**
 
@@ -8599,8 +8629,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 5116ms (router 1510ms, retrieval 3412ms)
-**Stage timings:** context_build=3196ms, rerank=3196ms, retrieval=3412ms, router=1510ms, vector_search=216ms
+**Latency:** embed+retrieve 6155ms (router 1717ms, retrieval 4149ms)
+**Stage timings:** context_build=3890ms, rerank=3890ms, retrieval=4149ms, router=1717ms, vector_search=259ms
 
 **Top-5 results:**
 
@@ -8625,8 +8655,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 25773ms (router 988ms, retrieval 17033ms)
-**Stage timings:** context_build=4538ms, rerank=4537ms, retrieval=17033ms, router=988ms, vector_search=12495ms
+**Latency:** embed+retrieve 27320ms (router 1307ms, retrieval 17562ms)
+**Stage timings:** context_build=4847ms, rerank=4847ms, retrieval=17562ms, router=1307ms, vector_search=12714ms
 
 **Top-5 results:**
 
@@ -8661,8 +8691,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 10213ms (router 1071ms, retrieval 9015ms)
-**Stage timings:** aggregate_lookup=2922ms, context_build=5949ms, rerank=5949ms, retrieval=9015ms, router=1071ms, structured_lookup=5845ms, vector_search=140ms
+**Latency:** embed+retrieve 11424ms (router 1370ms, retrieval 9872ms)
+**Stage timings:** aggregate_lookup=2860ms, context_build=6865ms, rerank=6865ms, retrieval=9872ms, router=1370ms, structured_lookup=5721ms, vector_search=142ms
 
 **Top-5 results:**
 
@@ -8687,8 +8717,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 21018ms (router 1110ms, retrieval 12246ms)
-**Stage timings:** context_build=3990ms, rerank=3990ms, retrieval=12246ms, router=1110ms, vector_search=8255ms
+**Latency:** embed+retrieve 21617ms (router 2214ms, retrieval 11774ms)
+**Stage timings:** context_build=4009ms, rerank=4009ms, retrieval=11774ms, router=2214ms, vector_search=7764ms
 
 **Top-5 results:**
 
@@ -8715,8 +8745,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 20783ms (router 1488ms, retrieval 14113ms)
-**Stage timings:** aggregate_lookup=2147ms, context_build=6197ms, rerank=6197ms, retrieval=14113ms, router=1488ms, structured_lookup=4294ms, vector_search=5767ms
+**Latency:** embed+retrieve 20897ms (router 1524ms, retrieval 14615ms)
+**Stage timings:** aggregate_lookup=2199ms, context_build=6680ms, rerank=6679ms, retrieval=14615ms, router=1524ms, structured_lookup=4398ms, vector_search=5735ms
 
 **Top-5 results:**
 
@@ -8741,8 +8771,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 19287ms (router 1089ms, retrieval 12826ms)
-**Stage timings:** aggregate_lookup=394ms, context_build=6741ms, rerank=6741ms, retrieval=12826ms, router=1089ms, structured_lookup=788ms, vector_search=5690ms
+**Latency:** embed+retrieve 22303ms (router 1486ms, retrieval 14602ms)
+**Stage timings:** aggregate_lookup=440ms, context_build=7536ms, rerank=7536ms, retrieval=14602ms, router=1486ms, structured_lookup=880ms, vector_search=6626ms
 
 **Top-5 results:**
 
@@ -8775,8 +8805,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 14965ms (router 3173ms, retrieval 9350ms)
-**Stage timings:** aggregate_lookup=2193ms, context_build=4561ms, rerank=4561ms, retrieval=9350ms, router=3173ms, structured_lookup=4386ms, vector_search=2595ms
+**Latency:** embed+retrieve 14968ms (router 2470ms, retrieval 10074ms)
+**Stage timings:** aggregate_lookup=2421ms, context_build=5190ms, rerank=5190ms, retrieval=10074ms, router=2470ms, structured_lookup=4842ms, vector_search=2462ms
 
 **Top-5 results:**
 
@@ -8807,8 +8837,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 9494ms (router 2599ms, retrieval 6706ms)
-**Stage timings:** aggregate_lookup=370ms, context_build=6094ms, rerank=6094ms, retrieval=6706ms, router=2599ms, structured_lookup=740ms, vector_search=241ms
+**Latency:** embed+retrieve 9033ms (router 1384ms, retrieval 7402ms)
+**Stage timings:** aggregate_lookup=432ms, context_build=6720ms, rerank=6720ms, retrieval=7402ms, router=1384ms, structured_lookup=864ms, vector_search=249ms
 
 **Top-5 results:**
 
@@ -8833,8 +8863,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 10209ms (router 1898ms, retrieval 8180ms)
-**Stage timings:** aggregate_lookup=1949ms, context_build=6076ms, rerank=6076ms, retrieval=8180ms, router=1898ms, structured_lookup=3898ms, vector_search=154ms
+**Latency:** embed+retrieve 11986ms (router 2523ms, retrieval 9284ms)
+**Stage timings:** aggregate_lookup=2318ms, context_build=6799ms, rerank=6799ms, retrieval=9284ms, router=2523ms, structured_lookup=4636ms, vector_search=165ms
 
 **Top-5 results:**
 
@@ -8859,8 +8889,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 27052ms (router 1861ms, retrieval 20561ms)
-**Stage timings:** aggregate_lookup=1738ms, context_build=7882ms, rerank=7882ms, retrieval=20561ms, router=1861ms, structured_lookup=3476ms, vector_search=10940ms
+**Latency:** embed+retrieve 29299ms (router 1748ms, retrieval 22610ms)
+**Stage timings:** aggregate_lookup=2343ms, context_build=8716ms, rerank=8716ms, retrieval=22610ms, router=1748ms, structured_lookup=4686ms, vector_search=11550ms
 
 **Top-5 results:**
 
@@ -8887,7 +8917,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-384 [PASS] -- Aggregation / Cross-role
+### PQ-384 [PARTIAL] -- Aggregation / Cross-role
 
 **Query:** Cross-reference: which IGSI deliverables were filed in May 2023 across A009 and A027 families?
 
@@ -8895,21 +8925,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 10718ms (router 1343ms, retrieval 9192ms)
-**Stage timings:** aggregate_lookup=2307ms, context_build=6639ms, rerank=6639ms, retrieval=9192ms, router=1343ms, structured_lookup=4617ms, vector_search=240ms
+**Latency:** embed+retrieve 11213ms (router 1287ms, retrieval 9653ms)
+**Stage timings:** aggregate_lookup=2324ms, context_build=7055ms, rerank=7055ms, retrieval=9653ms, router=1287ms, structured_lookup=4650ms, vector_search=266ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `1.0 IGS DM - Restricted/IGS-Deliverables-List.xlsx` (score=0.016)
-   > GS IPT - IGS IPT - 2023-05-16, Due Date: 2023-05-19T00:00:00, Delivery Date: 2023-05-16T00:00:00, Timeliness: -3, Created By: Ray H Dalrymple, Action State: ...
+1. [out] `Hojgaard/CSR Report 2016.pdf` (score=0.016)
+   > GNB, BREEAM and LEED Initiatives in 2017 ? Development of sustainability consultancy tools in relation to customers and business partners ? Becoming a part o...
 2. [IN-FAMILY] `2023/Deliverables Report IGSI-99 IGS Monthly Status Report - June23 (A009).pdf` (score=0.016)
    > E-179 Support Agreement - Wake 2/3/2023 7/1/2023 K. Catt IGSE-183 Updated Radio Frequency Authorization (RFA) for each NEXION site 4/20/2023 8/1/2023 J. Call...
-3. [IN-FAMILY] `1.0 IGS DM - Restricted/IGS-Deliverables-List_1.xlsx` (score=0.016)
-   > GS IPT - IGS IPT - 2023-05-16, Due Date: 2023-05-19T00:00:00, Delivery Date: 2023-05-16T00:00:00, Timeliness: -3, Created By: Ray H Dalrymple, Action State: ...
+3. [IN-FAMILY] `A031 - Integrated Master Schedule (IMS)/FA881525FB002_IGSCC-143_IGS-IMS_2025-11-20.pdf` (score=0.016)
+   > [SECTION] 327 0% 4.12.6.2No Conduct IPT Meeting Feb 2026 IPT 0.5 days Tue 2/10/26 Tue 2/10/2 6 326 328 0% 4.12.7 No IPT/Monthly Status Report Mar 2026 10.5 d...
 4. [IN-FAMILY] `2023/Deliverables Report IGSI-91 IGS Monthly Status Report - Feb23 (A009).pdf` (score=0.016)
    > - Kwajalein 8/1/2022 7/1/2023 K. Catt IGSE-64 Site Support Agreement - Singapore 8/1/2022 7/1/2023 K. Catt IGSE-179 Support Agreement - Wake 2/3/2023 7/1/202...
-5. [IN-FAMILY] `1.0 IGS DM - Restricted/IGS-Deliverables-List.xlsx` (score=0.016)
-   > GS IPT - IGS IPT - 2023-01-19, Due Date: 2023-01-20T00:00:00, Delivery Date: 2023-01-19T00:00:00, Timeliness: -1, Created By: Ray H Dalrymple, Action State: ...
+5. [out] `From WD Drive/IPPC Procedure Manual_stset_2014-01-10_2014011312_12--3.75 MB.pdf` (score=0.016)
+   > [SECTION] 23 The SC November 2013 discussed the term ? IPPC members? and decided to continue to accept comments from non -contracting parties, RPPOs and re l...
 
 ---
 
@@ -8921,19 +8951,19 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 22868ms (router 1692ms, retrieval 16256ms)
-**Stage timings:** aggregate_lookup=1699ms, context_build=5958ms, rerank=5958ms, retrieval=16256ms, router=1692ms, structured_lookup=3398ms, vector_search=8598ms
+**Latency:** embed+retrieve 24905ms (router 1665ms, retrieval 18070ms)
+**Stage timings:** aggregate_lookup=2328ms, context_build=6642ms, rerank=6642ms, retrieval=18070ms, router=1665ms, structured_lookup=4656ms, vector_search=9098ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `A027 - Cybersecurity Assessment Test Report/47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity-Assessment-Test-Report_2024-12-02.zip` (score=0.016)
-   > [ARCHIVE_MEMBER=47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx] [SHEET] Asset Overview CUI | | | | | | CUI: File Name, : CAT I,...
+1. [IN-FAMILY] `Ascension Island/ASI_scan_CTE_Detail_30Sep2014.pdf` (score=0.016)
+   > [SECTION] First Discovered: Nov 18, 2013 22: 06:10 UTC Last Observed: Sep 30, 2014 15:23:57 UTC Vuln Publication Date: N/A Patch Publication Date: N/A Plugin...
 2. [IN-FAMILY] `Searching for File Paths for NEXION Deliverable Control Log/Guam.manifest_20180523.txt` (score=0.016)
    > 12\Certificate Profile - 2048 Multi SAN Server Enrollment Form - corrected IP address - Guam.docx I:\# 002 Cybersecurity\NEXION Cybersecurity - Archive\Secur...
-3. [IN-FAMILY] `Ascension Island/ASI_scan_CTE_Detail_30Sep2014.pdf` (score=0.016)
-   > [SECTION] First Discovered: Nov 18, 2013 22: 06:10 UTC Last Observed: Sep 30, 2014 15:23:57 UTC Vuln Publication Date: N/A Patch Publication Date: N/A Plugin...
+3. [IN-FAMILY] `A027 - Cybersecurity Assessment Test Report/47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity-Assessment-Test-Report_2024-12-02.zip` (score=0.016)
+   > [ARCHIVE_MEMBER=47QFRA22F0009_IGSI-2891_ISTO_RHEL8_Cybersecurity_Assessment_Test_Report.xlsx] [SHEET] Asset Overview CUI | | | | | | CUI: File Name, : CAT I,...
 4. [IN-FAMILY] `Searching for File Paths for NEXION Deliverable Control Log/Guam.manifest_20180523.txt` (score=0.016)
-   > sion 2 - Request ID Screen Capture.docx I:\# 002 Cybersecurity\NEXION Cybersecurity - Archive\Security Files\PKI Files\Guam Jun 2012\Archive\Certificate Prof...
+   > \ionomonrc I:\# 002 Cybersecurity\ISTO\Guam\archive\System Configuration-USRP-GPS Files\usrp\usrp-data-send.sh I:\# 002 Cybersecurity\ISTO\Guam\archive\Syste...
 5. [IN-FAMILY] `Searching for File Paths for NEXION Deliverable Control Log/Goose.manifest_20180523.txt` (score=0.016)
    > a\Goose_Bay I:\# 002 Cybersecurity\NEXION Cybersecurity - Archive\2015 Annual IA Docs\Information Assurance\System Security Files\2009 CD Files\Miscellaneous...
 
@@ -8947,8 +8977,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 18611ms (router 2305ms, retrieval 12037ms)
-**Stage timings:** context_build=3475ms, rerank=3475ms, retrieval=12037ms, router=2305ms, vector_search=8562ms
+**Latency:** embed+retrieve 21357ms (router 3751ms, retrieval 12911ms)
+**Stage timings:** context_build=3834ms, rerank=3834ms, retrieval=12911ms, router=3751ms, vector_search=9076ms
 
 **Top-5 results:**
 
@@ -8973,8 +9003,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 36122ms (router 1646ms, retrieval 28835ms)
-**Stage timings:** context_build=6757ms, rerank=6757ms, retrieval=28835ms, router=1646ms, vector_search=13813ms
+**Latency:** embed+retrieve 40525ms (router 1080ms, retrieval 32559ms)
+**Stage timings:** context_build=7620ms, rerank=7620ms, retrieval=32559ms, router=1080ms, vector_search=15651ms
 
 **Top-5 results:**
 
@@ -9009,8 +9039,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 5768ms (router 1292ms, retrieval 4334ms)
-**Stage timings:** context_build=4175ms, rerank=4175ms, retrieval=4334ms, router=1292ms, vector_search=159ms
+**Latency:** embed+retrieve 5600ms (router 1245ms, retrieval 4176ms)
+**Stage timings:** context_build=4023ms, rerank=4023ms, retrieval=4176ms, router=1245ms, vector_search=152ms
 
 **Top-5 results:**
 
@@ -9035,8 +9065,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 10988ms (router 1763ms, retrieval 9038ms)
-**Stage timings:** aggregate_lookup=2211ms, context_build=6624ms, rerank=6624ms, retrieval=9038ms, router=1763ms, structured_lookup=4422ms, vector_search=202ms
+**Latency:** embed+retrieve 11069ms (router 1612ms, retrieval 9226ms)
+**Stage timings:** aggregate_lookup=2346ms, context_build=6674ms, rerank=6674ms, retrieval=9226ms, router=1612ms, structured_lookup=4692ms, vector_search=205ms
 
 **Top-5 results:**
 
@@ -9046,10 +9076,10 @@ a classifier tuning opportunity, tracked but not fixed here.
    > inter. Labels will expire 60 days from the date the label was prepared. ID decks sent directly to a separate government or contractor activity are authorizat...
 3. [IN-FAMILY] `Audit Schedules/2025 Audit Schedule-NGPro 3.6 WPs-IGS-20250521.xlsx` (score=0.016)
    > [SECTION] 2025 Audit Schedule-IGS: E476-MSO Validation 2025 Audit Schedule-IGS: E480-PGSO Transition Deployment 2025 Audit Schedule-IGS: E490-PGSM Hardware E...
-4. [IN-FAMILY] `Delete After Time/,DanaInfo=www.itsmacademy.com+itSMF_ITILV3_Intro_Overview.pdf` (score=0.016)
-   > d service management capabilities I how the allocation of available resources will be tuned to optimal effect across the portfolio of services I how service ...
-5. [IN-FAMILY] `Audit Schedules/2025 Audit Schedule-NGPro 3.6 WPs-IGS-20250521.xlsx` (score=0.016)
-   > [SECTION] 2025 Audit Schedule-IGS: C-P203 Purchase Order C loseout Checklist 2025 Audit Schedule-IGS: P100_704 SPWI: Closeout and Record Retention 2025 Audit...
+4. [IN-FAMILY] `Gov't Info/IGSCC deliverable (NGIDE Jira) 2025-08-26T13_21_48-0600.csv` (score=0.016)
+   > SCC-114,7/14/2026 IGSCC Monthly Status Report- Jun26 -A009,IGSCC-113,6/9/2026 IGSCC Monthly Status Report- May26 -A009,IGSCC-112,5/12/2026 IGSCC Monthly Stat...
+5. [out] `A031 - Integrated Master Schedule (IMS)/FA881525FB002_IGSCC-147_IGS-IMS_2026-3-12.pdf` (score=0.016)
+   > [SECTION] 16 0% A011 -Site Configuration Audit Report - Azores [15 CDs post travel ] 0 days Fri 6/5/26 Fri 6/5/26 183 185 17 0% A011 -Site Configuration Audi...
 
 ---
 
@@ -9061,8 +9091,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 28409ms (router 2074ms, retrieval 22002ms)
-**Stage timings:** aggregate_lookup=2425ms, context_build=6450ms, rerank=6450ms, retrieval=22002ms, router=2074ms, structured_lookup=4850ms, vector_search=13126ms
+**Latency:** embed+retrieve 24958ms (router 1979ms, retrieval 18350ms)
+**Stage timings:** aggregate_lookup=2399ms, context_build=6382ms, rerank=6382ms, retrieval=18350ms, router=1979ms, structured_lookup=4798ms, vector_search=9568ms
 
 **Top-5 results:**
 
@@ -9087,17 +9117,17 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 4414ms (router 1151ms, retrieval 3116ms)
-**Stage timings:** context_build=2966ms, rerank=2966ms, retrieval=3116ms, router=1151ms, vector_search=150ms
+**Latency:** embed+retrieve 4703ms (router 1247ms, retrieval 3273ms)
+**Stage timings:** context_build=3111ms, rerank=3111ms, retrieval=3273ms, router=1247ms, vector_search=162ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Archive/D400-01-PGSF.pptx` (score=0.016)
-   > ECD Changes tab, select your program and take a screenshot If there are no RTG plans, this slide can be deleted/hidden Data As of: M/D/YYYY D400-01-PGSF Nort...
+1. [IN-FAMILY] `Audits/SSEI OU Program Audit Data 2024-Jul data.xlsx` (score=0.016)
+   > [SHEET] SS&EI OU Audit status SSEI Program Audits | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | SSEI Program Audits: 2024, : ...
 2. [IN-FAMILY] `Program Metrics/Program Metrics Audit-4857 Checklist.xlsx` (score=0.016)
    > ated/released annually, unless a change is required before then. Reference: PMP Annual Update-Delivery 29SEP2025.pdf, : IGS MA verified document update/relea...
-3. [IN-FAMILY] `Audits/SSEI OU Program Audit Data 2024-Jul data.xlsx` (score=0.016)
-   > [SHEET] SS&EI OU Audit status SSEI Program Audits | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | SSEI Program Audits: 2024, : ...
+3. [IN-FAMILY] `Archive/D400-01-PGSF.pptx` (score=0.016)
+   > ECD Changes tab, select your program and take a screenshot If there are no RTG plans, this slide can be deleted/hidden Data As of: M/D/YYYY D400-01-PGSF Nort...
 4. [IN-FAMILY] `2024/IGS_PMR_2024_May.pptx` (score=0.016)
    > [SLIDE 1] Text here D400-01 PGSF Monthly Program Excellence Review Template ? Rev B [SLIDE 2] Ionospheric Ground Sensors (IGS)IPRS PMR Charts 2 May 2024 Fina...
 5. [IN-FAMILY] `1.0 FEP/Financial Reporting calendar.pdf` (score=0.016)
@@ -9113,8 +9143,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 4644ms (router 1637ms, retrieval 2874ms)
-**Stage timings:** context_build=2719ms, rerank=2719ms, retrieval=2874ms, router=1637ms, vector_search=155ms
+**Latency:** embed+retrieve 4482ms (router 1046ms, retrieval 3251ms)
+**Stage timings:** context_build=3101ms, rerank=3101ms, retrieval=3251ms, router=1046ms, vector_search=150ms
 
 **Top-5 results:**
 
@@ -9139,8 +9169,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 4411ms (router 1283ms, retrieval 2997ms)
-**Stage timings:** context_build=2856ms, rerank=2856ms, retrieval=2997ms, router=1283ms, vector_search=140ms
+**Latency:** embed+retrieve 5032ms (router 1466ms, retrieval 3384ms)
+**Stage timings:** context_build=3231ms, rerank=3231ms, retrieval=3384ms, router=1466ms, vector_search=152ms
 
 **Top-5 results:**
 
@@ -9165,8 +9195,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 10218ms (router 1556ms, retrieval 8530ms)
-**Stage timings:** aggregate_lookup=1709ms, context_build=6677ms, rerank=6677ms, retrieval=8530ms, router=1556ms, structured_lookup=3418ms, vector_search=143ms
+**Latency:** embed+retrieve 11032ms (router 1215ms, retrieval 9630ms)
+**Stage timings:** aggregate_lookup=2832ms, context_build=6638ms, rerank=6638ms, retrieval=9630ms, router=1215ms, structured_lookup=5666ms, vector_search=155ms
 
 **Top-5 results:**
 
@@ -9191,8 +9221,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 10400ms (router 1359ms, retrieval 8906ms)
-**Stage timings:** aggregate_lookup=2742ms, context_build=6011ms, rerank=6011ms, retrieval=8906ms, router=1359ms, structured_lookup=5486ms, vector_search=150ms
+**Latency:** embed+retrieve 10374ms (router 1097ms, retrieval 9084ms)
+**Stage timings:** aggregate_lookup=2331ms, context_build=6601ms, rerank=6601ms, retrieval=9084ms, router=1097ms, structured_lookup=4664ms, vector_search=151ms
 
 **Top-5 results:**
 
@@ -9217,8 +9247,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 4261ms (router 1011ms, retrieval 3112ms)
-**Stage timings:** context_build=2951ms, rerank=2951ms, retrieval=3112ms, router=1011ms, vector_search=160ms
+**Latency:** embed+retrieve 4649ms (router 946ms, retrieval 3518ms)
+**Stage timings:** context_build=3371ms, rerank=3371ms, retrieval=3518ms, router=946ms, vector_search=146ms
 
 **Top-5 results:**
 
@@ -9226,12 +9256,12 @@ a classifier tuning opportunity, tracked but not fixed here.
    > ECD Changes tab, select your program and take a screenshot If there are no RTG plans, this slide can be deleted/hidden Data As of: M/D/YYYY D400-01-PGSF Nort...
 2. [IN-FAMILY] `Program Metrics/Program Metrics Audit-4857 Checklist.xlsx` (score=0.016)
    > ated/released annually, unless a change is required before then. Reference: PMP Annual Update-Delivery 29SEP2025.pdf, : IGS MA verified document update/relea...
-3. [IN-FAMILY] `Archive/WX52_Scorecard_2021-03-26-AS.xlsx` (score=0.016)
-   > view Project Deliverables Planning Spreadsheet (A001), : 4 days, : 2020-08-24T00:00:00, : 2020-08-27T00:00:00, : 41, : 12, : NA, : 1.3.3.4.2, : Fixed Duratio...
-4. [out] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.016)
-   > ulative Outages: All outages that occurred before the current month going back to 1 January 2016. User Interface Overview Figure 1 shows the user interface (...
-5. [IN-FAMILY] `Archive/WX52_Scorecard_2021-03-26-AS.xlsx` (score=0.016)
-   > view Project Deliverables Planning Spreadsheet (A001), : 4 days, : 2020-08-24T00:00:00, : 2020-08-27T00:00:00, : 41, : 12, : NA, : 1.3.3.4.2, : Fixed Duratio...
+3. [IN-FAMILY] `Audits/SSEI OU Program Audit Data 2024-Jul data.xlsx` (score=0.016)
+   > [SHEET] SS&EI OU Audit status SSEI Program Audits | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | SSEI Program Audits: 2024, : ...
+4. [IN-FAMILY] `iBuy Training/SAP ECC Procurement Users Manual (Section_07).pdf` (score=0.016)
+   > [SECTION] 13 January 2012 7-71 Changing Layout to an Excel Spreadsheet: If you are unable to display an Excel spreadsheet, perform as noted: Current Problem:...
+5. [IN-FAMILY] `SEMS Closeout/Missing Functions.xlsx` (score=0.016)
+   > [SHEET] Sheet1 Function | Replacement Function: Document Management Function: Risk Management Board Function: Security Function: Annual Program Plan updates ...
 
 ---
 
@@ -9243,8 +9273,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 4756ms (router 934ms, retrieval 3696ms)
-**Stage timings:** context_build=3561ms, rerank=3561ms, retrieval=3696ms, router=934ms, vector_search=134ms
+**Latency:** embed+retrieve 5339ms (router 933ms, retrieval 4207ms)
+**Stage timings:** context_build=4077ms, rerank=4077ms, retrieval=4207ms, router=933ms, vector_search=129ms
 
 **Top-5 results:**
 
@@ -9269,8 +9299,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 4371ms (router 1059ms, retrieval 3151ms)
-**Stage timings:** context_build=2982ms, rerank=2982ms, retrieval=3151ms, router=1059ms, vector_search=169ms
+**Latency:** embed+retrieve 5071ms (router 1175ms, retrieval 3679ms)
+**Stage timings:** context_build=3483ms, rerank=3483ms, retrieval=3679ms, router=1175ms, vector_search=195ms
 
 **Top-5 results:**
 
@@ -9287,7 +9317,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-399 [PARTIAL] -- Program Manager
+### PQ-399 [PASS] -- Program Manager
 
 **Query:** What is the relationship between the FEP Monthly Actuals spreadsheets and the FEP Recon spreadsheets?
 
@@ -9295,21 +9325,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 3132ms (router 959ms, retrieval 2043ms)
-**Stage timings:** context_build=1889ms, rerank=1889ms, retrieval=2043ms, router=959ms, vector_search=154ms
+**Latency:** embed+retrieve 5367ms (router 1083ms, retrieval 4096ms)
+**Stage timings:** context_build=3938ms, rerank=3938ms, retrieval=4096ms, router=1083ms, vector_search=158ms
 
 **Top-5 results:**
 
-1. [out] `Delete After Time/DoDAF V2 - Volume 1.pdf` (score=0.016)
-   > up of systems. Owners use fusion views to review current progress against planned goals, which may include cost and schedule data or to address capability ga...
+1. [IN-FAMILY] `P-Card Documentation/Purchasing Card Program Requirements and Card Holder Responsibilities.doc` (score=0.016)
+   > ropriate and applicable (If this document is required, contact your Purchasing Department Buyer) The Reconciliation Cover Sheet To complete the reconciliatio...
 2. [out] `Key Documents/fea_v2.pdf` (score=0.016)
    > ip between the groups. This formal document will serve as a written understanding as to what each group expects including timing, financial consideration, an...
-3. [IN-FAMILY] `P-Card Documentation/Purchasing Card Program Requirements and Card Holder Responsibilities.doc` (score=0.016)
-   > ropriate and applicable (If this document is required, contact your Purchasing Department Buyer) The Reconciliation Cover Sheet To complete the reconciliatio...
-4. [IN-FAMILY] `P-Card Forms/CTM P600 (dwnld 2017-09-11).pdf` (score=0.016)
-   > orporate Purchasing Card. NGCPC Program Administrator The individual designated by a company element to act as the internal point of contact in matters relat...
-5. [IN-FAMILY] `SEMS Program Docs/Test and Evaluation Master Plan (TEMP).doc` (score=0.016)
-   > , execute, and document test activities using an enterprise approach that is adaptive, responsive to development and maintenance activities, cost-effective, ...
+3. [IN-FAMILY] `08 WBS/FEB with new NIDS for WX31 FFP.xlsx` (score=0.016)
+   > | | | | | | | BUDGET/FEP ETC | | | | MAR18 | | | APR18 | | | MAY18 | | | JUN18 | | | JUL18 | | | AUG18 | | | SEP18 | | | OCT18 | | | NOV18 | | | DEC18 | | | ...
+4. [IN-FAMILY] `Archive/Program Management Plan.doc` (score=0.016)
+   > ment SEMS Program Control uses standardized program cost spreadsheets and schedules to manage the program baseline. These tools are used to satisfy customer ...
+5. [IN-FAMILY] `Archive/Program Management Plan.doc` (score=0.016)
+   > Expenditure Plan The FEP displays a time-phased estimate of expected spending profiles for active task orders, enabling the calculation of an estimated cost ...
 
 ---
 
@@ -9321,8 +9351,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 13538ms (router 1586ms, retrieval 11819ms)
-**Stage timings:** context_build=2576ms, rerank=2576ms, retrieval=11819ms, router=1586ms, vector_search=154ms
+**Latency:** embed+retrieve 15420ms (router 1040ms, retrieval 14187ms)
+**Stage timings:** context_build=2917ms, rerank=2917ms, retrieval=14187ms, router=1040ms, vector_search=171ms
 
 **Top-5 results:**
 
@@ -9347,8 +9377,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 4441ms (router 1364ms, retrieval 2933ms)
-**Stage timings:** context_build=2770ms, rerank=2770ms, retrieval=2933ms, router=1364ms, vector_search=162ms
+**Latency:** embed+retrieve 4743ms (router 1161ms, retrieval 3388ms)
+**Stage timings:** context_build=3223ms, rerank=3223ms, retrieval=3388ms, router=1161ms, vector_search=164ms
 
 **Top-5 results:**
 
@@ -9373,8 +9403,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 4889ms (router 1518ms, retrieval 3246ms)
-**Stage timings:** context_build=3110ms, rerank=3110ms, retrieval=3246ms, router=1518ms, vector_search=136ms
+**Latency:** embed+retrieve 5203ms (router 1407ms, retrieval 3613ms)
+**Stage timings:** context_build=3467ms, rerank=3467ms, retrieval=3613ms, router=1407ms, vector_search=145ms
 
 **Top-5 results:**
 
@@ -9399,8 +9429,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 9890ms (router 1601ms, retrieval 8174ms)
-**Stage timings:** aggregate_lookup=2149ms, context_build=5881ms, rerank=5881ms, retrieval=8174ms, router=1601ms, structured_lookup=4298ms, vector_search=142ms
+**Latency:** embed+retrieve 11750ms (router 2835ms, retrieval 8754ms)
+**Stage timings:** aggregate_lookup=2297ms, context_build=6322ms, rerank=6322ms, retrieval=8754ms, router=2835ms, structured_lookup=4594ms, vector_search=134ms
 
 **Top-5 results:**
 
@@ -9425,8 +9455,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 4342ms (router 1210ms, retrieval 2980ms)
-**Stage timings:** context_build=2809ms, rerank=2808ms, retrieval=2980ms, router=1210ms, vector_search=171ms
+**Latency:** embed+retrieve 4689ms (router 1151ms, retrieval 3328ms)
+**Stage timings:** context_build=3139ms, rerank=3139ms, retrieval=3328ms, router=1151ms, vector_search=188ms
 
 **Top-5 results:**
 
@@ -9451,8 +9481,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 9815ms (router 1106ms, retrieval 8544ms)
-**Stage timings:** aggregate_lookup=2668ms, context_build=5700ms, rerank=5699ms, retrieval=8544ms, router=1106ms, structured_lookup=5336ms, vector_search=176ms
+**Latency:** embed+retrieve 11389ms (router 1199ms, retrieval 9976ms)
+**Stage timings:** aggregate_lookup=3251ms, context_build=6535ms, rerank=6535ms, retrieval=9976ms, router=1199ms, structured_lookup=6502ms, vector_search=189ms
 
 **Top-5 results:**
 
@@ -9477,19 +9507,19 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 13763ms (router 1838ms, retrieval 11806ms)
-**Stage timings:** context_build=3486ms, rerank=3486ms, retrieval=11806ms, router=1838ms, vector_search=140ms
+**Latency:** embed+retrieve 15282ms (router 1498ms, retrieval 13619ms)
+**Stage timings:** context_build=4071ms, entity_lookup=9322ms, relationship_lookup=83ms, rerank=4071ms, retrieval=13619ms, router=1498ms, structured_lookup=18811ms, vector_search=140ms
 
 **Top-5 results:**
 
 1. [IN-FAMILY] `IGS/manifest_20180523.txt` (score=0.033)
    > 06-22).pdf I:\# 005_ILS\Calibration\(I) FieldFox (MY53103706)\Calibration Certificate 178523 (Due 2019-04-25).pdf I:\# 005_ILS\Calibration\(N) SeekTech (SR-2...
-2. [IN-FAMILY] `Mountain Metrology/Mountain Metrology.pdf` (score=0.016)
-   > ration Date: 01/15/2001 Calibration Due Date: 01/15/2002 Calibration Procedure: MFG?S Rev: N/A Notes: Standards Used: Asset Number Mfg Model Due Date NIST Tr...
+2. [IN-FAMILY] `2018-04-13 (TDS2012C) (C045217) (Cal Due 2019-04-13)/NGMS CERT 178430.pdf` (score=0.016)
+   > Certificate of Calibration 4/18/2018 178430 JAMES DETTLER 100257 719-393-8115 NORTHROP GRUMMAN MISSION SYS. MMR 7000346416 ECAL NONE OK TEK TDS2012C OSCILLOS...
 3. [IN-FAMILY] `IGS/manifest_20180523.txt` (score=0.016)
    > 347101616901) I:\# 005_ILS\Calibration\(N) Dillon Quick-Check Tension Meter (DWTM002119) (Due 2018-07-13) I:\# 005_ILS\Calibration\(N) Dillon Quick-Check Ten...
-4. [IN-FAMILY] `2018-04-13 (TDS2012C) (C045217) (Cal Due 2019-04-13)/NGMS CERT 178430.pdf` (score=0.016)
-   > Certificate of Calibration 4/18/2018 178430 JAMES DETTLER 100257 719-393-8115 NORTHROP GRUMMAN MISSION SYS. MMR 7000346416 ECAL NONE OK TEK TDS2012C OSCILLOS...
+4. [IN-FAMILY] `Mountain Metrology/Mountain Metrology.pdf` (score=0.016)
+   > ration Date: 01/15/2001 Calibration Due Date: 01/15/2002 Calibration Procedure: MFG?S Rev: N/A Notes: Standards Used: Asset Number Mfg Model Due Date NIST Tr...
 5. [IN-FAMILY] `FieldFox (MY53103705)/NGMS CERT 179985-986 (Due 2020-01-10).pdf` (score=0.016)
    > "Assuring Accuracy In The Tools Our Customers Depend On" Mountain Metrology and Repair, Inc. - 1405 Potter Dr. - Colorado Springs, CO 80909 (719) 442-0004 - ...
 
@@ -9503,8 +9533,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 11704ms (router 1114ms, retrieval 10430ms)
-**Stage timings:** context_build=2883ms, entity_lookup=7094ms, relationship_lookup=273ms, rerank=2883ms, retrieval=10430ms, router=1114ms, structured_lookup=14735ms, vector_search=177ms
+**Latency:** embed+retrieve 19269ms (router 3328ms, retrieval 15743ms)
+**Stage timings:** context_build=3233ms, entity_lookup=12007ms, relationship_lookup=304ms, rerank=3233ms, retrieval=15743ms, router=3328ms, structured_lookup=24622ms, vector_search=198ms
 
 **Top-5 results:**
 
@@ -9529,8 +9559,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 4866ms (router 1141ms, retrieval 3608ms)
-**Stage timings:** context_build=3482ms, rerank=3482ms, retrieval=3608ms, router=1141ms, vector_search=126ms
+**Latency:** embed+retrieve 5248ms (router 1132ms, retrieval 3950ms)
+**Stage timings:** context_build=3820ms, rerank=3820ms, retrieval=3950ms, router=1132ms, vector_search=129ms
 
 **Top-5 results:**
 
@@ -9542,8 +9572,8 @@ a classifier tuning opportunity, tracked but not fixed here.
    > or Calibration 40631.0 ETA: Mid August to Norfolk Nikon Coolpix L19 Digital Camera 34029552.0 USAF-11645 John Lutz 40665.0 VAFB Photograph NEXION Equipment a...
 4. [IN-FAMILY] `1250-3607_Calibration Kit/1250-3607_SN # 3766.pdf` (score=0.016)
    > : MICRO PRECISION CALIBRATION, INC. . \ Pp R E C |S |@) N 1030 ?ACADEMY BLVD, SUITE 200 Wee COLORADO SPRINGS CO 80910 : (719) 442-0004 Certificate of Calibra...
-5. [IN-FAMILY] `PO - 5300108811, PR 3000062055 July Equip Calibration NEXION($3,012.00)/NOR-Q-072424-CS-APR.pdf` (score=0.016)
-   > [SECTION] CALIBRATION KIT, 1250-3605 1KEYSIGHT 001253 12 Months USD 119.00 USD 119.00Traceable Page 1 of 4 All transactions are subject to Micro Precision St...
+5. [IN-FAMILY] `Calibration (2013-04-03) (DWTM002120)/USAF-11647 (Certificate of Calibration 125799 thru 125801) (DWTM002120) (2013-04-03).pdf` (score=0.016)
+   > e: 88172 _ Equipment Description: DTM-0170(Manual) Calibration Date: 02/05/13 | _ Equipment Serial Number: 0170 Calibration Due Date: 02/05/14 Load Range: 10...
 
 ---
 
@@ -9555,8 +9585,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 4873ms (router 1175ms, retrieval 3568ms)
-**Stage timings:** context_build=3431ms, rerank=3431ms, retrieval=3568ms, router=1175ms, vector_search=136ms
+**Latency:** embed+retrieve 5955ms (router 1911ms, retrieval 3867ms)
+**Stage timings:** context_build=3737ms, rerank=3737ms, retrieval=3867ms, router=1911ms, vector_search=129ms
 
 **Top-5 results:**
 
@@ -9581,8 +9611,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 6206ms (router 2467ms, retrieval 3622ms)
-**Stage timings:** context_build=3491ms, rerank=3491ms, retrieval=3622ms, router=2467ms, vector_search=130ms
+**Latency:** embed+retrieve 5254ms (router 1158ms, retrieval 3924ms)
+**Stage timings:** context_build=3794ms, rerank=3794ms, retrieval=3924ms, router=1158ms, vector_search=129ms
 
 **Top-5 results:**
 
@@ -9607,8 +9637,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 5714ms (router 1618ms, retrieval 3971ms)
-**Stage timings:** context_build=3836ms, rerank=3836ms, retrieval=3971ms, router=1618ms, vector_search=134ms
+**Latency:** embed+retrieve 5427ms (router 1243ms, retrieval 4017ms)
+**Stage timings:** context_build=3886ms, rerank=3886ms, retrieval=4017ms, router=1243ms, vector_search=131ms
 
 **Top-5 results:**
 
@@ -9633,8 +9663,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 9368ms (router 1347ms, retrieval 7893ms)
-**Stage timings:** aggregate_lookup=1964ms, context_build=5786ms, rerank=5786ms, retrieval=7893ms, router=1347ms, structured_lookup=3928ms, vector_search=141ms
+**Latency:** embed+retrieve 11244ms (router 1869ms, retrieval 9200ms)
+**Stage timings:** aggregate_lookup=2522ms, context_build=6533ms, rerank=6533ms, retrieval=9200ms, router=1869ms, structured_lookup=5044ms, vector_search=144ms
 
 **Top-5 results:**
 
@@ -9647,7 +9677,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 4. [out] `July18/SEMS3D-36828_IGS-IPT-Briefing_Slides_(A001).pptx` (score=0.016)
    > [SECTION] [SLIDE 6 1] Outages ? Cumulative 1 = Guam 2 = Singapore 3 = Curacao 4 = Ascension 5 = Kwajalein 6 = Diego Garcia 30 = NG Lab (COS System / Serial N...
 5. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.016)
-   > in the GUI to create the new cumulative spreadsheet. The app will ask for a location and name for the file using a file explorer GUI and then save it in the ...
+   > uting the outage metrics. Outage Overlap The application does not check for overlap between outages. If outage records contain overlap, this will negatively ...
 
 ---
 
@@ -9659,21 +9689,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 5287ms (router 1710ms, retrieval 3458ms)
-**Stage timings:** context_build=3326ms, rerank=3326ms, retrieval=3458ms, router=1710ms, vector_search=132ms
+**Latency:** embed+retrieve 5084ms (router 1778ms, retrieval 3130ms)
+**Stage timings:** context_build=3002ms, rerank=3002ms, retrieval=3130ms, router=1778ms, vector_search=127ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.032)
+1. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.033)
    > ulative Outages: All outages that occurred before the current month going back to 1 January 2016. User Interface Overview Figure 1 shows the user interface (...
-2. [out] `01-January/OutageSlidesJan2021.pptx` (score=0.016)
-   > [SLIDE 1] NEXION December Outages [SLIDE 2] NEXION December Metrics [SLIDE 3] NEXION Three Month Metrics [SLIDE 4] NEXION Cumulative Metrics *From March 2019...
-3. [IN-FAMILY] `Archive/Unticketed Outages.xlsx` (score=0.016)
-   > [SHEET] NEXION NEXION: December 2018 | | | | | | | | | | | | | NEXION: December 2018: Outage Type, : TOT, : Alpena, : Ascension, : Eareckson, : Eglin, : Eiel...
-4. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.016)
-   > erscores with a space. This will make the table column names much easier to read. Use the Find and Replace function to replace all NaN values with a dash. Th...
-5. [out] `01_January/SEMS3D-37794-IGS_IPT_Briefing_Slides .pptx` (score=0.016)
+2. [out] `01_January/SEMS3D-37794-IGS_IPT_Briefing_Slides .pptx` (score=0.016)
    > es ? December 2018 [SLIDE 48] NEXION Outages ? Cumulative Note: 96 Total Outages Reported in 2017 [SLIDE 49] NEXION OR Trend Monthly Metrics review Dec-18 [S...
+3. [out] `Jan18/SEMS3D-35682_IGS IPT Briefing Slides_(CDRL A001).pptx` (score=0.016)
+   > led Maintenance [SLIDE 35] Outages ? December 2017 [SLIDE 36] Outages ? Cumulative Note: 40 Total Outages Reported in 2016 [SLIDE 37] Outages ? December 2017...
+4. [IN-FAMILY] `Archive/Unticketed Outages.xlsx` (score=0.016)
+   > [SHEET] NEXION NEXION: December 2018 | | | | | | | | | | | | | NEXION: December 2018: Outage Type, : TOT, : Alpena, : Ascension, : Eareckson, : Eglin, : Eiel...
+5. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.016)
+   > erscores with a space. This will make the table column names much easier to read. Use the Find and Replace function to replace all NaN values with a dash. Th...
 
 ---
 
@@ -9685,8 +9715,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 9804ms (router 1318ms, retrieval 8357ms)
-**Stage timings:** aggregate_lookup=2031ms, context_build=6177ms, rerank=6177ms, retrieval=8357ms, router=1318ms, structured_lookup=4062ms, vector_search=148ms
+**Latency:** embed+retrieve 12469ms (router 2310ms, retrieval 9974ms)
+**Stage timings:** aggregate_lookup=3330ms, context_build=6498ms, rerank=6498ms, retrieval=9974ms, router=2310ms, structured_lookup=6662ms, vector_search=140ms
 
 **Top-5 results:**
 
@@ -9711,8 +9741,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 12239ms (router 1290ms, retrieval 10827ms)
-**Stage timings:** context_build=3431ms, rerank=3431ms, retrieval=10827ms, router=1290ms, vector_search=135ms
+**Latency:** embed+retrieve 17087ms (router 1272ms, retrieval 15631ms)
+**Stage timings:** context_build=3923ms, rerank=3922ms, retrieval=15631ms, router=1272ms, vector_search=144ms
 
 **Top-5 results:**
 
@@ -9737,8 +9767,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 4910ms (router 1258ms, retrieval 3531ms)
-**Stage timings:** context_build=3397ms, rerank=3397ms, retrieval=3531ms, router=1258ms, vector_search=133ms
+**Latency:** embed+retrieve 5721ms (router 1528ms, retrieval 4019ms)
+**Stage timings:** context_build=3883ms, rerank=3883ms, retrieval=4019ms, router=1528ms, vector_search=135ms
 
 **Top-5 results:**
 
@@ -9763,8 +9793,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 13653ms (router 1359ms, retrieval 12166ms)
-**Stage timings:** context_build=3726ms, rerank=3726ms, retrieval=12166ms, router=1359ms, vector_search=143ms
+**Latency:** embed+retrieve 21179ms (router 1072ms, retrieval 19927ms)
+**Stage timings:** context_build=3925ms, rerank=3925ms, retrieval=19927ms, router=1072ms, vector_search=153ms
 
 **Top-5 results:**
 
@@ -9776,8 +9806,8 @@ a classifier tuning opportunity, tracked but not fixed here.
    > Title: Outage DTG Author: James Dettler 1. Initiate Outage Report 1a ARINC JCN # 1b. . DTG Outage 1c. Location(s) Explanation of Outage 1d. Reported By Base ...
 4. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.016)
    > in the GUI to create the new cumulative spreadsheet. The app will ask for a location and name for the file using a file explorer GUI and then save it in the ...
-5. [IN-FAMILY] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.016)
-   > he code checks for these designations and ignores case, so capitalization in the fix action field does not impact the calculations. Table . Fix Action Design...
+5. [out] `Examples/D63317_B_Configuration_Management_Plan_CUI_051723.docx` (score=0.016)
+   > g for hardcopy or erased/deleted for softcopy. When a disk is to be destroyed it will be reformatted to remove all data. Classified data will be disposed of ...
 
 ---
 
@@ -9789,8 +9819,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 13312ms (router 1083ms, retrieval 12058ms)
-**Stage timings:** context_build=3344ms, rerank=3344ms, retrieval=12058ms, router=1083ms, vector_search=201ms
+**Latency:** embed+retrieve 20388ms (router 1257ms, retrieval 18885ms)
+**Stage timings:** context_build=3947ms, rerank=3947ms, retrieval=18885ms, router=1257ms, vector_search=234ms
 
 **Top-5 results:**
 
@@ -9815,8 +9845,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 9297ms (router 1271ms, retrieval 7840ms)
-**Stage timings:** aggregate_lookup=1884ms, context_build=5741ms, rerank=5741ms, retrieval=7840ms, router=1271ms, structured_lookup=3768ms, vector_search=214ms
+**Latency:** embed+retrieve 11316ms (router 1724ms, retrieval 9325ms)
+**Stage timings:** aggregate_lookup=2567ms, context_build=6519ms, rerank=6519ms, retrieval=9325ms, router=1724ms, structured_lookup=5134ms, vector_search=238ms
 
 **Top-5 results:**
 
@@ -9841,8 +9871,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 5194ms (router 1393ms, retrieval 3663ms)
-**Stage timings:** context_build=3521ms, rerank=3521ms, retrieval=3663ms, router=1393ms, vector_search=141ms
+**Latency:** embed+retrieve 5811ms (router 1371ms, retrieval 4249ms)
+**Stage timings:** context_build=4099ms, rerank=4099ms, retrieval=4249ms, router=1371ms, vector_search=149ms
 
 **Top-5 results:**
 
@@ -9867,21 +9897,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 5488ms (router 1447ms, retrieval 3900ms)
-**Stage timings:** context_build=3746ms, rerank=3746ms, retrieval=3900ms, router=1447ms, vector_search=154ms
+**Latency:** embed+retrieve 5806ms (router 1527ms, retrieval 4076ms)
+**Stage timings:** context_build=3911ms, rerank=3911ms, retrieval=4076ms, router=1527ms, vector_search=165ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `2012/PoamPackage__04102012.xlsx` (score=0.016)
-   > [SHEET] PackagePOAM Package Plan of Action and Milestone (POA&M) | | | | | | | | | | | | Package Plan of Action and Milestone (POA&M): Date Initiated:, : POC...
-2. [IN-FAMILY] `06-June/SEMS3D-41715- IGS_June_IPT_Briefing_Slides.pdf` (score=0.016)
-   > 021 SEMS3D-41516 WX29 OY3 IGS NEXION Shelter Roof Base Fabrication Drawing 5/11/2021 SEMS3D-40518 TOWX29 OY3 ISTO Full Maintenance Manual (Type III)/Trouble ...
-3. [IN-FAMILY] `WX29-for OY2/SEMS3D-40239 TOWX29 IGS Sustainment Project Cloeout (A001).pdf` (score=0.016)
-   > liance. WX29 IPT Briefing Slides WX29 IPT Meeting Minutes SEMSIII Monthly Status Reports 100% 100% PO 10 Threshold Actual 100% completed no later than the du...
+1. [IN-FAMILY] `NEXION_DCART_Rearchitecture/DCART Status 2021-06-01.pptx` (score=0.016)
+   > Console via queued TCP interface Upcoming Milestones (6 month look-ahead) DCART Service ready for testing at NGC: June 25, 2021 Dispatcher and support softwa...
+2. [IN-FAMILY] `3_Mar/SEMS III TO WX29 IGS Sustainment Monthly COR Report - Mar 21.docx` (score=0.016)
+   > Provide narrative inputs to the following evaluation areas: QUALITY OF PRODUCT OR SERVICE: Exceptional. Completed Eglin Scientific Campaign Coordinating netw...
+3. [IN-FAMILY] `IAVM Technical Notes/2019_06_25_SEMS_557WW_CC_Update_DRAFT.pptx` (score=0.016)
+   > capability w/RHEL6 (Sep 19/May 20) Standard Forecaster Toolset (A005) Release 2 (7 software bug fixes) Release 3 (6 software bug fixes) WS-LVC (WX40) Release...
 4. [IN-FAMILY] `2022/SEMS3D-41700 - Baseline Description Document (A016).pdf` (score=0.016)
    > Mar-21 ISTO SEMS3D-41436 SPC IGS WX29 OY3 ISTO 2021 February Scans and POAMs 1 RELEASE 10-Mar-21 ISTO SEMS3D-41437 SPC IGS WX29 OY3 NEXION 2021 February Scan...
-5. [IN-FAMILY] `2023/Deliverables Report IGSI-91 IGS Monthly Status Report - Feb23 (A009).pdf` (score=0.016)
-   > (2023-Jan) POA&M Review/Update (Updated POAM) CDRL A027 IGSI-89 2/9/2023 2/9/2023 IGS Monthly Status Report/IPT Slides - Feb 23 CDRL A009 Slide 63 CUI CUI Qu...
+5. [IN-FAMILY] `IAVM Technical Notes/2019_IAVM-TCNO_DRAFT.pptx` (score=0.016)
+   > capability w/RHEL6 (Sep 19/May 20) Standard Forecaster Toolset (A005) Release 2 (7 software bug fixes) Release 3 (6 software bug fixes) WS-LVC (WX40) Release...
 
 ---
 
@@ -9893,8 +9923,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 5508ms (router 1732ms, retrieval 3635ms)
-**Stage timings:** context_build=3458ms, rerank=3458ms, retrieval=3635ms, router=1732ms, vector_search=176ms
+**Latency:** embed+retrieve 5716ms (router 1532ms, retrieval 4004ms)
+**Stage timings:** context_build=3855ms, rerank=3855ms, retrieval=4004ms, router=1532ms, vector_search=148ms
 
 **Top-5 results:**
 
@@ -9919,21 +9949,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 8949ms (router 1342ms, retrieval 7453ms)
-**Stage timings:** aggregate_lookup=2063ms, context_build=5182ms, rerank=5182ms, retrieval=7453ms, router=1342ms, structured_lookup=4126ms, vector_search=207ms
+**Latency:** embed+retrieve 10582ms (router 1633ms, retrieval 8761ms)
+**Stage timings:** aggregate_lookup=1810ms, context_build=6771ms, rerank=6771ms, retrieval=8761ms, router=1633ms, structured_lookup=3620ms, vector_search=179ms
 
 **Top-5 results:**
 
 1. [IN-FAMILY] `Management Indicators/Stoplight Chart.xlsx` (score=0.016)
    > WX41 Mod on 9/21/20. New PoP is 5/28/21 with ~$279K in CPIF fundind to execute IDES III previously underfunded requirements.Prioritzing work internally based...
-2. [IN-FAMILY] `Jan18/SEMS3D-35682_IGS IPT Briefing Slides_(CDRL A001).pptx` (score=0.016)
-   > ecorrelation time data quality Adding UHF data logging at a single ISTO site Targeting Kwajalein ISTO based on proximity to AFRL site [SLIDE 10] TO WX29 IGS ...
-3. [IN-FAMILY] `001_Project_Management/Stoplight Chart.xlsx` (score=0.016)
+2. [IN-FAMILY] `JSIG Templates/FedRAMP-Continuous-Monitoring-Strategy-Guide-v2.0-3.docx` (score=0.016)
+   > anner they were for time of authorization. In particular, this means: All scan findings must be documented (including low findings) Each unique vulnerability...
+3. [out] `001_Project_Management/Stoplight Chart.xlsx` (score=0.016)
    > WX41 Mod on 9/21/20. New PoP is 5/28/21 with ~$279K in CPIF fundind to execute IDES III previously underfunded requirements.Prioritzing work internally based...
-4. [IN-FAMILY] `Archive/IGS_IPT_Briefing_Slides_CB.pptx` (score=0.016)
-   > on time data quality Adding UHF data logging at a single ISTO site Targeting Kwajalein ISTO based on proximity to AFRL site John [SLIDE 10] TO WX29 IGS Susta...
-5. [IN-FAMILY] `2016-06/readme.txt` (score=0.016)
-   > ory for prior monthly Security supplements for this year. Even-number Month Security Supplement The cumulative Component Database updates in the \Windows fol...
+4. [IN-FAMILY] `Key Documents/FedRAMP-Continuous-Monitoring-Strategy-Guide-v2.0-3.docx` (score=0.016)
+   > anner they were for time of authorization. In particular, this means: All scan findings must be documented (including low findings) Each unique vulnerability...
+5. [IN-FAMILY] `Management Indicators/Stoplight Chart.xlsx` (score=0.016)
+   > WX41 Mod on 9/21/20. New PoP is 5/28/21 with ~$279K in CPIF fundind to execute IDES III previously underfunded requirements.Prioritzing work internally based...
 
 ---
 
@@ -9945,21 +9975,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 9417ms (router 1129ms, retrieval 8150ms)
-**Stage timings:** aggregate_lookup=2103ms, context_build=5885ms, rerank=5885ms, retrieval=8150ms, router=1129ms, structured_lookup=4206ms, vector_search=161ms
+**Latency:** embed+retrieve 9959ms (router 1269ms, retrieval 8505ms)
+**Stage timings:** aggregate_lookup=1783ms, context_build=6538ms, rerank=6538ms, retrieval=8505ms, router=1269ms, structured_lookup=3566ms, vector_search=183ms
 
 **Top-5 results:**
 
 1. [IN-FAMILY] `C&A Support/NEXION_Software_List_Ver1-2-0-20120801 - markup.doc` (score=0.016)
    > LatestDVL Latest drift velocity display UniSearch Data search page manager SAO archive availability plot SAO archive retrieval SAO archive download form Digi...
-2. [IN-FAMILY] `JSIG Templates/FedRAMP-Continuous-Monitoring-Strategy-Guide-v2.0-3.docx` (score=0.016)
+2. [IN-FAMILY] `Key Documents/FedRAMP-Continuous-Monitoring-Strategy-Guide-v2.0-3.docx` (score=0.016)
    > anner they were for time of authorization. In particular, this means: All scan findings must be documented (including low findings) Each unique vulnerability...
 3. [IN-FAMILY] `05_May/SEMS3D-39661-IGS_May_IPT_Briefing_Slides.pdf` (score=0.016)
    > trols - Mar 2020 Closed IGS-2381 CA Controls - Apr 2020 Closed IGS-2382 RA Controls - Apr 2020 Closed IGS-2383 SC Controls - May 2020 Closed IGS-2384 SA Cont...
-4. [IN-FAMILY] `Key Documents/FedRAMP-Continuous-Monitoring-Strategy-Guide-v2.0-3.docx` (score=0.016)
+4. [IN-FAMILY] `JSIG Templates/FedRAMP-Continuous-Monitoring-Strategy-Guide-v2.0-3.docx` (score=0.016)
    > anner they were for time of authorization. In particular, this means: All scan findings must be documented (including low findings) Each unique vulnerability...
-5. [IN-FAMILY] `2016-06/readme.txt` (score=0.016)
-   > ory for prior monthly Security supplements for this year. Even-number Month Security Supplement The cumulative Component Database updates in the \Windows fol...
+5. [IN-FAMILY] `Archive/SEMS3D-36678_IGS_IPT_Briefing_Slides(CDRL_A001).pptx` (score=0.016)
+   > [SECTION] 4 = A scension 5 = Kwajalein 6 = Diego Garcia 30 = NG Lab (COS System / Serial Number Note: 155 Outages Total Reported in 2017 [SLIDE 59] Outages ?...
 
 ---
 
@@ -9971,8 +10001,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 25692ms (router 1195ms, retrieval 15753ms)
-**Stage timings:** context_build=6713ms, rerank=6713ms, retrieval=15753ms, router=1195ms, vector_search=9039ms
+**Latency:** embed+retrieve 26567ms (router 2609ms, retrieval 16706ms)
+**Stage timings:** context_build=7848ms, rerank=7848ms, retrieval=16706ms, router=2609ms, vector_search=8857ms
 
 **Top-5 results:**
 
@@ -9994,8 +10024,8 @@ a classifier tuning opportunity, tracked but not fixed here.
    > ystems migrated to new hardware for Test - past due Filesystems migrated to new hardware for production - past due Before and After Metrics - past due Filesy...
 9. [IN-FAMILY] `A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.docx` (score=0.016)
    > e (AF) Enterprise Authorizing Official (AO) Risk Management Framework (RMF) Enterprise Mission Assurance Support System (eMASS) Registration and Security Pla...
-10. [out] `Archive/WX29OY3_Scorecard_2020-07-03.xls` (score=0.016)
-   > [Sheet: Diagnostics] Scorecard Diagnostics Version 3.96 Counts Value Go To Score 0.86 Program Group List Total Task Count 419.0 Status Date 44015.70833333333...
+10. [IN-FAMILY] `Procedures/Procedure IGS CT&E Scan 2018-07-30.docx` (score=0.016)
+   > IGS CTE Scan PROCEDURE 2018 January 19 PROCEDURE OVERVIEW This procedure is divided into two scans which are described below: PART I ? ACAS SCAN PROCEDURE As...
 
 ---
 
@@ -10007,8 +10037,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 17364ms (router 1784ms, retrieval 11251ms)
-**Stage timings:** context_build=2505ms, rerank=2505ms, retrieval=11251ms, router=1784ms, vector_search=8745ms
+**Latency:** embed+retrieve 18846ms (router 1868ms, retrieval 11741ms)
+**Stage timings:** context_build=2828ms, rerank=2828ms, retrieval=11741ms, router=1868ms, vector_search=8913ms
 
 **Top-5 results:**
 
@@ -10033,8 +10063,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 4846ms (router 1046ms, retrieval 3658ms)
-**Stage timings:** context_build=3504ms, rerank=3504ms, retrieval=3658ms, router=1046ms, vector_search=153ms
+**Latency:** embed+retrieve 5951ms (router 1543ms, retrieval 4233ms)
+**Stage timings:** context_build=4087ms, rerank=4087ms, retrieval=4233ms, router=1543ms, vector_search=145ms
 
 **Top-5 results:**
 
@@ -10059,8 +10089,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 4536ms (router 1339ms, retrieval 3016ms)
-**Stage timings:** context_build=2768ms, rerank=2768ms, retrieval=3016ms, router=1339ms, vector_search=247ms
+**Latency:** embed+retrieve 5029ms (router 1392ms, retrieval 3413ms)
+**Stage timings:** context_build=3202ms, rerank=3202ms, retrieval=3413ms, router=1392ms, vector_search=211ms
 
 **Top-5 results:**
 
@@ -10085,8 +10115,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 24533ms (router 2644ms, retrieval 17746ms)
-**Stage timings:** aggregate_lookup=1711ms, context_build=6357ms, rerank=6357ms, retrieval=17746ms, router=2644ms, structured_lookup=3422ms, vector_search=9676ms
+**Latency:** embed+retrieve 24697ms (router 2208ms, retrieval 17824ms)
+**Stage timings:** aggregate_lookup=1879ms, context_build=6811ms, rerank=6810ms, retrieval=17824ms, router=2208ms, structured_lookup=3758ms, vector_search=9133ms
 
 **Top-5 results:**
 
@@ -10111,8 +10141,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 5525ms (router 1669ms, retrieval 3708ms)
-**Stage timings:** context_build=3554ms, rerank=3554ms, retrieval=3708ms, router=1669ms, vector_search=153ms
+**Latency:** embed+retrieve 6032ms (router 1802ms, retrieval 4052ms)
+**Stage timings:** context_build=3898ms, rerank=3898ms, retrieval=4052ms, router=1802ms, vector_search=154ms
 
 **Top-5 results:**
 
@@ -10137,8 +10167,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 11034ms (router 2440ms, retrieval 8422ms)
-**Stage timings:** aggregate_lookup=2140ms, context_build=6093ms, rerank=6093ms, retrieval=8422ms, router=2440ms, structured_lookup=4280ms, vector_search=188ms
+**Latency:** embed+retrieve 10726ms (router 1741ms, retrieval 8760ms)
+**Stage timings:** aggregate_lookup=1793ms, context_build=6786ms, rerank=6786ms, retrieval=8760ms, router=1741ms, structured_lookup=3586ms, vector_search=180ms
 
 **Top-5 results:**
 
@@ -10163,8 +10193,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 42864ms (router 1879ms, retrieval 28384ms)
-**Stage timings:** aggregate_lookup=2053ms, context_build=6024ms, rerank=6024ms, retrieval=28384ms, router=1879ms, structured_lookup=4106ms, vector_search=20306ms
+**Latency:** embed+retrieve 41787ms (router 1862ms, retrieval 28420ms)
+**Stage timings:** aggregate_lookup=2298ms, context_build=6554ms, rerank=6554ms, retrieval=28420ms, router=1862ms, structured_lookup=4596ms, vector_search=19567ms
 
 **Top-5 results:**
 
@@ -10182,11 +10212,11 @@ a classifier tuning opportunity, tracked but not fixed here.
    > Technical Implementation Guide (STIG) Benchmark.. Manual security checks of the applicable STIG CT&E Expectation Northrop Grumman (NG) will address the ident...
 7. [IN-FAMILY] `CT&E Report/(FOUO) WES 2009 - VAFB CTandE Report 20150921.docx` (score=0.016)
    > conditions and be further tailored to determine current and predicted impacts to operations. The NEXION systems deployed strategically around the world perfo...
-8. [IN-FAMILY] `03.5 SWAFS/PWS WX32 2019-11-05 SWAFS Sustainment GAIM-FP Updates.docx` (score=0.016)
-   > ion Guide (STIG) checklists. The contractor shall deliver the STIG checklist as security evidence. The contractor shall analyze all STIG CAT findings to dete...
+8. [IN-FAMILY] `NEXION/unclassified_Network_Firewall_V8R2_STIG_062810.zip` (score=0.016)
+   > roductory and background information that cannot be placed in the XML at this time. This would include such things as screen captures that help make the manu...
 9. [IN-FAMILY] `SCC_WES_2009_VAFB/WES 2009 - VAFB CT&E Results 20150828.docx` (score=0.016)
    > conditions and be further tailored to determine current and predicted impacts to operations. The NEXION systems deployed strategically around the world perfo...
-10. [IN-FAMILY] `03.5 SWAFS/PWS WX32 2019-11-05 SWAFS Sustainment GAIM-FP UpdatesR1.docx` (score=0.016)
+10. [IN-FAMILY] `03.5 SWAFS/PWS WX32 2019-11-05 SWAFS Sustainment GAIM-FP Updates.docx` (score=0.016)
    > ion Guide (STIG) checklists. The contractor shall deliver the STIG checklist as security evidence. The contractor shall analyze all STIG CAT findings to dete...
 
 ---
@@ -10199,8 +10229,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 8165ms (router 1287ms, retrieval 6714ms)
-**Stage timings:** aggregate_lookup=1865ms, context_build=4637ms, rerank=4637ms, retrieval=6714ms, router=1287ms, structured_lookup=3730ms, vector_search=211ms
+**Latency:** embed+retrieve 8951ms (router 1553ms, retrieval 7206ms)
+**Stage timings:** aggregate_lookup=1881ms, context_build=5142ms, rerank=5142ms, retrieval=7206ms, router=1553ms, structured_lookup=3762ms, vector_search=182ms
 
 **Top-5 results:**
 
@@ -10225,21 +10255,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 20995ms (router 1258ms, retrieval 15497ms)
-**Stage timings:** aggregate_lookup=378ms, context_build=6206ms, rerank=6206ms, retrieval=15497ms, router=1258ms, structured_lookup=756ms, vector_search=8911ms
+**Latency:** embed+retrieve 21104ms (router 1329ms, retrieval 15361ms)
+**Stage timings:** aggregate_lookup=356ms, context_build=6277ms, rerank=6277ms, retrieval=15361ms, router=1329ms, structured_lookup=712ms, vector_search=8727ms
 
 **Top-5 results:**
 
 1. [IN-FAMILY] `2022/Calibration Checklist - Template.docx` (score=0.016)
    > Pre-Calibration Identify calibration items due Request quote for calibration Follow Procurement Checklist Segregate and stage calibration items so it will no...
-2. [IN-FAMILY] `NG Pro 3.7/IGS 3.7 T1-T5-20250507.xlsx` (score=0.016)
-   > which programs will need to procure early to ensure delivery in time for Engineering. The Engineering BOM identifies the list of parts and materials that are...
+2. [out] `DM/managing_elect_docs.pdf` (score=0.016)
+   > ft.doc A common method for version control numbering is to use the ordinal number (1, 2, 3, etc) for major version changes and the decimal number for minor c...
 3. [IN-FAMILY] `PO - 5300163657, PR 3000179491 Calibration (Micro Precision)($12,720.00)/PBJ-Q-080625-CS-19 Mar 26.pdf` (score=0.016)
    > /18/25 9/11/25 9/18/25 9/11/25 11/17/25 11/17/25 11/17/25 11/17/25 11/25/25 11/25/25 11/25/25 11/25/25 1/21/26 1/21/26 1/21/26 1/29/26 1/29/26 1/29/26 1/29/2...
-4. [IN-FAMILY] `NG Pro 3.7/IGS 3.7 T1-T5-20250515.xlsx` (score=0.016)
+4. [IN-FAMILY] `NGPro 3.7/IGS 3.7 T1-T5-20250515.xlsx` (score=0.016)
    > which programs will need to procure early to ensure delivery in time for Engineering. The Engineering BOM identifies the list of parts and materials that are...
-5. [IN-FAMILY] `Calibration (2017-07-13) (DWTM002119)/Certificate of Calibration (191189 thru 191191) (DWTM002119) (2017-07-13).pdf` (score=0.016)
-   > 10.00000 1,800.00 1,200.00 1,496.67 -3.33333 2,300.00 1,700.00 2,000.00 0.00000 Calibration Source: 88172 Calibration Date: 2/1/2017 Calibration Due Date: 2/...
+5. [IN-FAMILY] `WX31M4 (PO 7000355294)(Genesis Lamp)(OB Bulb)(88.44)(Recd 2018-08-10)/PO 7000355294.pdf` (score=0.016)
+   > [SECTION] ORDER. THE PURCHASE ORDER NUMBER MUST BE ON ALL INVOICES. ALL INVOICES MUST BE ITEMIZED EXACTLY IN ACCORDANCE WITH THE P.O. LINE ITEM NO., THE PART...
 
 ---
 
@@ -10251,8 +10281,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 11064ms (router 2743ms, retrieval 8113ms)
-**Stage timings:** aggregate_lookup=2066ms, context_build=5828ms, rerank=5828ms, retrieval=8113ms, router=2743ms, structured_lookup=4132ms, vector_search=218ms
+**Latency:** embed+retrieve 11477ms (router 3014ms, retrieval 8251ms)
+**Stage timings:** aggregate_lookup=1788ms, context_build=6258ms, rerank=6258ms, retrieval=8251ms, router=3014ms, structured_lookup=3576ms, vector_search=205ms
 
 **Top-5 results:**
 
@@ -10277,8 +10307,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 9255ms (router 1343ms, retrieval 7730ms)
-**Stage timings:** aggregate_lookup=2080ms, context_build=5427ms, rerank=5427ms, retrieval=7730ms, router=1343ms, structured_lookup=4160ms, vector_search=222ms
+**Latency:** embed+retrieve 9822ms (router 1470ms, retrieval 8124ms)
+**Stage timings:** aggregate_lookup=1805ms, context_build=6121ms, rerank=6121ms, retrieval=8124ms, router=1470ms, structured_lookup=3610ms, vector_search=197ms
 
 **Top-5 results:**
 
@@ -10303,21 +10333,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 9880ms (router 1201ms, retrieval 8464ms)
-**Stage timings:** aggregate_lookup=2331ms, context_build=5926ms, rerank=5926ms, retrieval=8464ms, router=1201ms, structured_lookup=4662ms, vector_search=204ms
+**Latency:** embed+retrieve 10268ms (router 1413ms, retrieval 8619ms)
+**Stage timings:** aggregate_lookup=2230ms, context_build=6178ms, rerank=6178ms, retrieval=8619ms, router=1413ms, structured_lookup=4460ms, vector_search=209ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `2018-Aug/ISSO Audit Log Sheet 2019-Aug.xlsx` (score=0.016)
+1. [IN-FAMILY] `2019-Aug/ISSO Audit Log Sheet 2019-Aug.xlsx` (score=0.016)
    > [SHEET] 2019 Sep Report | Site/System Audit Review Checklist | | Report for 2019 Sep (Review of Aug logs) | | Site/System Audit Review Checklist: Provide Dat...
 2. [IN-FAMILY] `archive/Eareckson CTE Results 2018-08-02.xlsx` (score=0.016)
    > TIG v1r10 2018-08-02.ckl Eareckson Test Plan: APACHE 2.2 Site for UNIX Security Technical Implementation Guide STIG, : V1, : R10, : 2018-08-01T00:00:00, : NE...
-3. [IN-FAMILY] `2019-Aug/ISSO Audit Log Sheet 2019-Aug.xlsx` (score=0.016)
+3. [IN-FAMILY] `2018-Aug/ISSO Audit Log Sheet 2019-Aug.xlsx` (score=0.016)
    > [SHEET] 2019 Sep Report | Site/System Audit Review Checklist | | Report for 2019 Sep (Review of Aug logs) | | Site/System Audit Review Checklist: Provide Dat...
-4. [IN-FAMILY] `2018-11-16 ACAS Scan Results (Jul-Oct) to eMASS and ISSM/NEXION Monthly Scans 2018 Jul-Oct.xlsx` (score=0.016)
-   > [SHEET] Asset Overview NEXION | | | | | | | | | | NEXION: ACAS SCAN NEXION: Name, : IP Address, : Scan Date, : OS, : File Name, : CAT I, : CAT II, : CAT III,...
-5. [IN-FAMILY] `NG Dailies/Eareckson Update Wednesday  22 Aug 2018.msg` (score=0.016)
-   > Subject: Eareckson Update Wednesday, 22 Aug 2018 From: Brukardt, Larry A [US] (MS) To: Ogburn, Lori A [US] (MS); Pitts, Lorenzia F [US] (MS); Seagren, Frank ...
+4. [IN-FAMILY] `2018-10-30 ISTO Lab (Singapore)/ACAS-SCAP Result NEXION-ISTO 2018-11-13.xlsx` (score=0.016)
+   > gin Modification Date: Thursday, September 27, 2018, Last Observed Date: Saturday, October 20, 2018, Patch Publication Date: Tuesday, September 25, 2018, Sca...
+5. [out] `Searching for File Paths for NEXION Deliverable Control Log/NEXION.manifest_20180523.txt` (score=0.016)
+   > 2018) I:\# 018 NEXION Sites\1_Sites\Eareckson AS - Alaska,US\7_Travel Information\5b. FY18 Non-DOD Rate.pdf I:\# 018 NEXION Sites\1_Sites\Eareckson AS - Alas...
 
 ---
 
@@ -10329,8 +10359,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 9572ms (router 1312ms, retrieval 7998ms)
-**Stage timings:** aggregate_lookup=2060ms, context_build=5605ms, rerank=5605ms, retrieval=7998ms, router=1312ms, structured_lookup=4120ms, vector_search=333ms
+**Latency:** embed+retrieve 10082ms (router 1499ms, retrieval 8288ms)
+**Stage timings:** aggregate_lookup=2022ms, context_build=5952ms, rerank=5952ms, retrieval=8288ms, router=1499ms, structured_lookup=4044ms, vector_search=313ms
 
 **Top-5 results:**
 
@@ -10355,8 +10385,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 14103ms (router 8113ms, retrieval 5825ms)
-**Stage timings:** context_build=5520ms, rerank=5520ms, retrieval=5825ms, router=8113ms, vector_search=303ms
+**Latency:** embed+retrieve 8824ms (router 2320ms, retrieval 6295ms)
+**Stage timings:** context_build=5982ms, rerank=5982ms, retrieval=6295ms, router=2320ms, vector_search=311ms
 
 **Top-5 results:**
 
@@ -10373,7 +10403,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-440 [PASS] -- Aggregation / Cross-role
+### PQ-440 [PARTIAL] -- Aggregation / Cross-role
 
 **Query:** How does the 'enterprise program FEP Monthly Actuals' family relate to the 'enterprise program Monthly Status Report' (A009) family?
 
@@ -10381,21 +10411,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 4165ms (router 1428ms, retrieval 2594ms)
-**Stage timings:** context_build=2436ms, rerank=2436ms, retrieval=2594ms, router=1428ms, vector_search=157ms
+**Latency:** embed+retrieve 5300ms (router 1734ms, retrieval 3395ms)
+**Stage timings:** context_build=3250ms, rerank=3250ms, retrieval=3395ms, router=1734ms, vector_search=145ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Archive/Program Management Plan.doc` (score=0.016)
-   > Expenditure Plan The FEP displays a time-phased estimate of expected spending profiles for active task orders, enabling the calculation of an estimated cost ...
-2. [IN-FAMILY] `02 PWS/PWS WX39 2019-01-18 IGS Installs Wake Thule.docx` (score=0.016)
-   > aged and controlled. All performance and financial reports shall be based on the CWBS. The Contractor shall communicate status information and issues to the ...
-3. [IN-FAMILY] `A008 - Management Plan (Program Management Plan - (Systems Mgt Plan)/47QFRA22F0009_IGSI-2439_IGS-Program-Management-Plan_2024-09-27.docx` (score=0.016)
-   > M. The BEP is the baseline against which performance is measured and is the direct source of the Budgeted Cost of Work Scheduled and Budgeted Cost of Work Pe...
-4. [IN-FAMILY] `02 PWS/PWS WX39 2018-08-29 IGS Installs Wake Thule.docx` (score=0.016)
-   > aged and controlled. All performance and financial reports shall be based on the CWBS. The Contractor shall communicate status information and issues to the ...
-5. [out] `Evidence/47QFRA22F0009_IGSI-2439 IGS Program Management Plan_2024-09-20.docx` (score=0.016)
-   > M. The BEP is the baseline against which performance is measured and is the direct source of the Budgeted Cost of Work Scheduled and Budgeted Cost of Work Pe...
+1. [out] `Removable Disk (E)/DoD Guide to Uniquely Identifying Items.pdf` (score=0.016)
+   > ts are serialized, Vehicle Identification Number (VIN), or El ectronic Serial Number ((ESN), for cell phones only). The Notion of an Enterprise The first req...
+2. [IN-FAMILY] `PWS/Copy of IGS Oasis PWS.1644426330957.docx` (score=0.016)
+   > nt indicators that relate to mission accomplishment such as schedule and performance status. These indicators shall be included with each monthly status brie...
+3. [out] `IUID/DoDUIDGuide.pdf` (score=0.016)
+   > ts are serialized, Vehicle Identification Number (VIN), or El ectronic Serial Number ((ESN), for cell phones only). The Notion of an Enterprise The first req...
+4. [IN-FAMILY] `Archive/IGS Oasis PWS.1644426330957 (Jims Notes 2022-02-24).docx` (score=0.016)
+   > nt indicators that relate to mission accomplishment such as schedule and performance status. These indicators shall be included with each monthly status brie...
+5. [IN-FAMILY] `NG Pro 3.7/IGS 3.7 T1-T5-20250507.xlsx` (score=0.016)
+   > ucture for assigning accountability for products and service identified by WBS and overall governing guidelines for managing the team., Rolls up to: PM-260 P...
 
 ---
 
@@ -10407,8 +10437,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 8712ms (router 1262ms, retrieval 7254ms)
-**Stage timings:** aggregate_lookup=1623ms, context_build=5412ms, rerank=5412ms, retrieval=7254ms, router=1262ms, structured_lookup=3246ms, vector_search=217ms
+**Latency:** embed+retrieve 10069ms (router 1785ms, retrieval 8048ms)
+**Stage timings:** aggregate_lookup=1794ms, context_build=6025ms, rerank=6025ms, retrieval=8048ms, router=1785ms, structured_lookup=3588ms, vector_search=228ms
 
 **Top-5 results:**
 
@@ -10433,8 +10463,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Engineering
 
-**Latency:** embed+retrieve 9754ms (router 1676ms, retrieval 7883ms)
-**Stage timings:** aggregate_lookup=1962ms, context_build=5707ms, rerank=5707ms, retrieval=7883ms, router=1676ms, structured_lookup=3924ms, vector_search=213ms
+**Latency:** embed+retrieve 9826ms (router 1116ms, retrieval 8496ms)
+**Stage timings:** aggregate_lookup=2244ms, context_build=6046ms, rerank=6046ms, retrieval=8496ms, router=1116ms, structured_lookup=4489ms, vector_search=202ms
 
 **Top-5 results:**
 
@@ -10459,8 +10489,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 15756ms (router 1413ms, retrieval 10262ms)
-**Stage timings:** context_build=1731ms, rerank=1731ms, retrieval=10262ms, router=1413ms, vector_search=8531ms
+**Latency:** embed+retrieve 16027ms (router 1220ms, retrieval 10441ms)
+**Stage timings:** context_build=1898ms, rerank=1898ms, retrieval=10441ms, router=1220ms, vector_search=8542ms
 
 **Top-5 results:**
 
@@ -10485,8 +10515,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 10310ms (router 2330ms, retrieval 7734ms)
-**Stage timings:** aggregate_lookup=1912ms, context_build=5576ms, rerank=5576ms, retrieval=7734ms, router=2330ms, structured_lookup=3824ms, vector_search=245ms
+**Latency:** embed+retrieve 9951ms (router 1507ms, retrieval 8201ms)
+**Stage timings:** aggregate_lookup=2011ms, context_build=5941ms, rerank=5941ms, retrieval=8201ms, router=1507ms, structured_lookup=4022ms, vector_search=247ms
 
 **Top-5 results:**
 
@@ -10511,8 +10541,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 21382ms (router 1711ms, retrieval 15700ms)
-**Stage timings:** aggregate_lookup=2006ms, context_build=5349ms, rerank=5349ms, retrieval=15700ms, router=1711ms, structured_lookup=4012ms, vector_search=8343ms
+**Latency:** embed+retrieve 23870ms (router 2105ms, retrieval 17388ms)
+**Stage timings:** aggregate_lookup=1755ms, context_build=6220ms, rerank=6219ms, retrieval=17388ms, router=2105ms, structured_lookup=3510ms, vector_search=9412ms
 
 **Top-5 results:**
 
@@ -10537,8 +10567,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 19196ms (router 1343ms, retrieval 10569ms)
-**Stage timings:** context_build=3403ms, rerank=3403ms, retrieval=10569ms, router=1343ms, vector_search=7165ms
+**Latency:** embed+retrieve 19334ms (router 1364ms, retrieval 10808ms)
+**Stage timings:** context_build=3770ms, rerank=3770ms, retrieval=10808ms, router=1364ms, vector_search=7038ms
 
 **Top-5 results:**
 
@@ -10546,14 +10576,14 @@ a classifier tuning opportunity, tracked but not fixed here.
    > Systems Engineering Management Plan 28 August 2024 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A013 Prepared For: Space Systems Command (SSC) ...
 2. [IN-FAMILY] `A013 - System Engineering Plan (SEMP)/47QFRA22F0009_IGSI-2431_IGS_Systems_Engineering_Management_Plan_2024-08-28.pdf` (score=-1.000)
    > CUI IGS EMSI Ionospheric Ground Sensors (IGS) Engineering, Management, Sustainment, and Installation (EMSI) CUI Systems Engineering Management Plan 28 August...
-3. [IN-FAMILY] `Archive/DMEA__IGS-Program-Management-Plan-Final.docx` (score=0.016)
-   > for the IGSEP program are delivered to DMEA and the customer through the ATSP NG PMO. NG maintains a copy of all delivered CDRLs in a restricted folder on th...
-4. [IN-FAMILY] `Archive/DMEA__IGS-Program-Management-Plan.docx` (score=0.016)
-   > for the IGSEP program are delivered to DMEA and the customer through the ATSP NG PMO. NG maintains a copy of all delivered CDRLs in a restricted folder on th...
+3. [IN-FAMILY] `A008 - Management Plan (Program Management Plan - Systems Mgt Plan)/Deliverables Report IGSI-1135 IGS Program Management Plan (Sept 2023) (A008) .pdf` (score=0.016)
+   > ess engineering requirements. IGS Systems Engineer Works with QA to develop a program and project level audit schedule. IGS MA/ QA Lead Establishes and maint...
+4. [IN-FAMILY] `A013 - System Engineering Management Plan (SEMP)/Deliverables Report IGSI-1111 IGS Systems Engineering Management Plan (A013).docx` (score=0.016)
+   > iver the following documentation: DD250, Installation Acceptance Test Report, As-Built Drawings, and any other required technical documents as prescribed in ...
 5. [IN-FAMILY] `2024/47QFRA22F0009_IGSI-2488_Monthly_Status_Report_2024-09-09.pdf` (score=0.016)
    > [SECTION] IGSE-19 7 Support Agreement - Awase 9/19/23 10/31/2024 D. Rego IGSE-183 Updated Radio Frequency Authorization (RFA) for each NEXION site 4/20/2023 ...
-6. [IN-FAMILY] `PMP/DMEA__IGS-Program-Management-Plan-FinalR1.docx` (score=0.016)
-   > for the IGSEP program are delivered to DMEA and the customer through the ATSP NG PMO. NG maintains a copy of all delivered CDRLs in a restricted folder on th...
+6. [IN-FAMILY] `Evidence/A013 - Deliverables Report IGSI-1111 IGS Systems Engineering Management Plan (A013).docx` (score=0.016)
+   > iver the following documentation: DD250, Installation Acceptance Test Report, As-Built Drawings, and any other required technical documents as prescribed in ...
 
 ---
 
@@ -10565,8 +10595,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 8547ms (router 1395ms, retrieval 7023ms)
-**Stage timings:** aggregate_lookup=1587ms, context_build=5288ms, rerank=5288ms, retrieval=7023ms, router=1395ms, structured_lookup=3174ms, vector_search=147ms
+**Latency:** embed+retrieve 9611ms (router 1504ms, retrieval 7939ms)
+**Stage timings:** aggregate_lookup=1755ms, context_build=6031ms, rerank=6031ms, retrieval=7939ms, router=1504ms, structured_lookup=3510ms, vector_search=152ms
 
 **Top-5 results:**
 
@@ -10591,8 +10621,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 26698ms (router 1417ms, retrieval 21533ms)
-**Stage timings:** context_build=5825ms, rerank=5825ms, retrieval=21533ms, router=1417ms, vector_search=8701ms
+**Latency:** embed+retrieve 27210ms (router 1391ms, retrieval 21753ms)
+**Stage timings:** context_build=6118ms, rerank=6118ms, retrieval=21753ms, router=1391ms, vector_search=8344ms
 
 **Top-5 results:**
 
@@ -10606,8 +10636,8 @@ a classifier tuning opportunity, tracked but not fixed here.
    > Ionospheric Ground Sensors Systems Sustainment Plan 29 September 2022 Prepared Under: Contract Number: 47QFRA22F0009 CDRL Number A010 Prepared For: Space Sys...
 5. [IN-FAMILY] `Archive/Deliverables Report IGSI-66 IGS Systems Engineering Management Plan (A013).doc` (score=-1.000)
    > Title: PMP Author: Brian Balm Systems Engineering Management Plan September 2022 Prepared Under: Contract No. 47QFRA22F0009 CDRL Sequence No. A013 Prepared F...
-6. [IN-FAMILY] `IGS PPIP (Program Protection Implementation Plan)/Deliverables Report IGSI-68 IGS Program Protection Implementation Plan (PPIP) (A027).doc` (score=0.016)
-   > t, and Installation (EMSI) Program Management Plan (PMP), respectively. Referenced Documents and Links The documents and link listed in the tables below are ...
+6. [IN-FAMILY] `A013 - System Engineering Plan (SEMP)/Deliverables Report IGSI-66 IGS Systems Engineering Management Plan (A013).pdf` (score=0.016)
+   > [SECTION] ISO/IEC/IEEE 15288:2015 Systems and software engineering ? System life cycle processes IEEE Std 24748-1:2016 Systems and software engineering ? Lif...
 7. [IN-FAMILY] `A012 - Configuration Management Plan/Deliverables Report IGSI-65 IGS Configuration Management Plan (A012).pdf` (score=0.016)
    > r software specific CM procedure definition. E231-INSO Data Management Principle and Operating Practice (ProP) Compliance. Provides process direction and tem...
 8. [IN-FAMILY] `Archive/DMEA__IGS-Program-Management-Plan-Final.docx` (score=0.016)
@@ -10627,8 +10657,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 9640ms (router 2126ms, retrieval 7278ms)
-**Stage timings:** aggregate_lookup=1624ms, context_build=5351ms, rerank=5351ms, retrieval=7278ms, router=2126ms, structured_lookup=3248ms, vector_search=302ms
+**Latency:** embed+retrieve 12604ms (router 4272ms, retrieval 8072ms)
+**Stage timings:** aggregate_lookup=1752ms, context_build=6033ms, rerank=6033ms, retrieval=8072ms, router=4272ms, structured_lookup=3504ms, vector_search=286ms
 
 **Top-5 results:**
 
@@ -10636,12 +10666,12 @@ a classifier tuning opportunity, tracked but not fixed here.
    > described in Section 2. Contract requirements or recommendations by systems engineers may identify additional work products that are also necessary for succe...
 2. [IN-FAMILY] `Evidence/PMP Annual Update-Delivery 29SEP2025.pdf` (score=0.016)
    > [OCR_PAGE=1] IGS Deliverables Dashboard IGS Completed Deliverables Summary DMEA Priced Bill of Materials (A013) IGSCC Monthly Audit Report (A027) - August 20...
-3. [IN-FAMILY] `Archive/IGS Install-Hawaii_IGS Tech Approach_Draft_29 Feb 16.docx` (score=0.016)
-   > [SECTION] 2.9 Contract Data Requirements List (CD RL) Table X ? IGS Install (Hawaii NEXION) Deliverables NG IGS Lead Comments: The CDRL list should be ?tailo...
+3. [IN-FAMILY] `_SOW/SOW Deliverables DISTRO 2 6 09.xls` (score=0.016)
+   > ntained by ILS or SA) A012 System/Segment Specification Open to all A013 Contract Transition Plan AFWA-SEMS A014 Systems Engineering Plan (SEP) AFWA-SEMS A01...
 4. [IN-FAMILY] `A013 - System Engineering Plan (SEMP)/FA881525FB002_IGSCC-126_IGS-System-Engineering-Plan_A013_Updated.pdf` (score=0.016)
    > [SECTION] CDRL A013 IGSCC-11526 System Engineering Plan i CUI REVISION/CHANGE RECORD Revision Deliverable No. Date Revision/Change Description Pages Affected...
-5. [IN-FAMILY] `Plan/SWAFS_IS_AcceptancePlan_Stone.pdf` (score=0.016)
-   > 7 ? Data Accession List (DAL) T008 ? Technical Report T009 ? Reserved T010 ? Software Requirements Specification (SRS) T011 ? System/Segment Design Document ...
+5. [IN-FAMILY] `_SOW/SOW Deliverables DISTRO.xls` (score=0.016)
+   > ntained by ILS or SA) A012 System/Segment Specification Open to all A013 Contract Transition Plan AFWA-SEMS A014 Systems Engineering Plan (SEP) AFWA-SEMS A01...
 
 ---
 
@@ -10653,8 +10683,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 4824ms (router 1296ms, retrieval 3406ms)
-**Stage timings:** context_build=3265ms, rerank=3265ms, retrieval=3406ms, router=1296ms, vector_search=140ms
+**Latency:** embed+retrieve 5869ms (router 1612ms, retrieval 4089ms)
+**Stage timings:** context_build=3953ms, rerank=3953ms, retrieval=4089ms, router=1612ms, vector_search=136ms
 
 **Top-5 results:**
 
@@ -10679,8 +10709,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 14819ms (router 1251ms, retrieval 8961ms)
-**Stage timings:** context_build=3590ms, rerank=3590ms, retrieval=8961ms, router=1251ms, vector_search=5370ms
+**Latency:** embed+retrieve 15879ms (router 1356ms, retrieval 9593ms)
+**Stage timings:** context_build=4144ms, rerank=4144ms, retrieval=9593ms, router=1356ms, vector_search=5448ms
 
 **Top-5 results:**
 
@@ -10711,8 +10741,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 19179ms (router 1425ms, retrieval 16087ms)
-**Stage timings:** context_build=3968ms, rerank=3968ms, retrieval=16087ms, router=1425ms, vector_search=5479ms
+**Latency:** embed+retrieve 20892ms (router 1360ms, retrieval 17864ms)
+**Stage timings:** context_build=4663ms, rerank=4663ms, retrieval=17864ms, router=1360ms, vector_search=5490ms
 
 **Top-5 results:**
 
@@ -10747,8 +10777,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 7980ms (router 1368ms, retrieval 5366ms)
-**Stage timings:** context_build=3901ms, rerank=3901ms, retrieval=5366ms, router=1368ms, vector_search=1465ms
+**Latency:** embed+retrieve 8914ms (router 1637ms, retrieval 5913ms)
+**Stage timings:** context_build=4534ms, rerank=4533ms, retrieval=5913ms, router=1637ms, vector_search=1379ms
 
 **Top-5 results:**
 
@@ -10783,8 +10813,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 12724ms (router 1106ms, retrieval 11506ms)
-**Stage timings:** context_build=3230ms, rerank=3230ms, retrieval=11506ms, router=1106ms, vector_search=121ms
+**Latency:** embed+retrieve 14720ms (router 1241ms, retrieval 13326ms)
+**Stage timings:** context_build=3780ms, rerank=3780ms, retrieval=13326ms, router=1241ms, vector_search=127ms
 
 **Top-5 results:**
 
@@ -10809,8 +10839,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 12611ms (router 1564ms, retrieval 10929ms)
-**Stage timings:** context_build=3509ms, entity_lookup=7023ms, relationship_lookup=264ms, rerank=3509ms, retrieval=10929ms, router=1564ms, structured_lookup=14575ms, vector_search=131ms
+**Latency:** embed+retrieve 12888ms (router 1168ms, retrieval 11565ms)
+**Stage timings:** context_build=3687ms, entity_lookup=7468ms, relationship_lookup=275ms, rerank=3687ms, retrieval=11565ms, router=1168ms, structured_lookup=15487ms, vector_search=133ms
 
 **Top-5 results:**
 
@@ -10835,8 +10865,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 4806ms (router 1103ms, retrieval 3556ms)
-**Stage timings:** context_build=3379ms, rerank=3379ms, retrieval=3556ms, router=1103ms, vector_search=176ms
+**Latency:** embed+retrieve 6511ms (router 2547ms, retrieval 3777ms)
+**Stage timings:** context_build=3613ms, rerank=3613ms, retrieval=3777ms, router=2547ms, vector_search=164ms
 
 **Top-5 results:**
 
@@ -10861,8 +10891,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 31927ms (router 1120ms, retrieval 24502ms)
-**Stage timings:** context_build=6763ms, rerank=6763ms, retrieval=24502ms, router=1120ms, vector_search=17738ms
+**Latency:** embed+retrieve 37237ms (router 1263ms, retrieval 28696ms)
+**Stage timings:** context_build=7554ms, rerank=7554ms, retrieval=28696ms, router=1263ms, vector_search=21142ms
 
 **Top-5 results:**
 
@@ -10878,14 +10908,14 @@ a classifier tuning opportunity, tracked but not fixed here.
    > [SHEET] Parts List PART NUMBER | HWCI | SYSTEM | SUB-SYSTEM | STATE | ITEM TYPE | OEM | UM | NOMENCLATURE | DOC TYPE | DRAWING NUMBER | FIND NO | DOC REVISIO...
 6. [IN-FAMILY] `TO WX28-ISTO Upgrade-Ascension/Ascension Shipment.xlsx` (score=0.016)
    > [SHEET] Diego Garcia Shipment for Ascension | | | Shipment for Ascension: Item Name, : Container, : Container Dimensions (in), : Weight Shipment for Ascensio...
-7. [IN-FAMILY] `PO - 5000665726, PR 3000187518 Solvents/PO 5000665726 - 01.27.2026 - Lines 1-2 (P).pdf` (score=0.016)
-   > [SECTION] ERIC CHAPIN, Sec+ I Shipping and Receiving Coordinator Northrop Grumman Corporation I Space Systems 0: 719-393-8544 I Eric.Chaein@ncic.com From: Ch...
+7. [out] `zArchive/IGS-Outage-Analysis_2025-12-18.xlsx` (score=0.016)
+   > .476666666666667, : 0.9732718894009217, : 0.9956931643625192, January 2026 Outages: 26-1-16, : ISTO, : Ascension, : 2026-01-08T23:42:00, : 2026-01-09T15:00:0...
 8. [IN-FAMILY] `Shipping and Hand-Carry/Packing List.docx` (score=0.016)
    > San Vito Packing List 2-9 Feb 2022
-9. [out] `zArchive/IGS-Outage-Analysis_2025-12-18.xlsx` (score=0.016)
+9. [out] `Outage Analysis for IPT Slides/IGS-Outage-Analysis_2026-03-02.xlsx` (score=0.016)
    > .476666666666667, : 0.9732718894009217, : 0.9956931643625192, January 2026 Outages: 26-1-16, : ISTO, : Ascension, : 2026-01-08T23:42:00, : 2026-01-09T15:00:0...
-10. [IN-FAMILY] `2018-04-25(WX28)(NG-Upgrade Kits & Tower Parts)(NG to Patrick)(2936.21)/NGPackingSlip_SCATS_NG to Patrick AFB 1of3 (2018-04-25).pdf` (score=0.016)
-   > PACKING SLIP Page__1__ of __1__ 3535 Northrop Grumman Point Colorado Springs, Colorado 80916 James Dettler Telephone 719-393-8115 Fax 719-393-8418 Network Ta...
+10. [IN-FAMILY] `Shipping and Hand-Carry/Return Shipping List.docx` (score=0.016)
+   > San Vito ? Return Shipping List 2-9 Feb 2022
 
 ---
 
@@ -10897,8 +10927,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 33897ms (router 2713ms, retrieval 24927ms)
-**Stage timings:** context_build=6727ms, rerank=6727ms, retrieval=24927ms, router=2713ms, vector_search=18200ms
+**Latency:** embed+retrieve 33428ms (router 1435ms, retrieval 25513ms)
+**Stage timings:** context_build=6534ms, rerank=6534ms, retrieval=25513ms, router=1435ms, vector_search=18979ms
 
 **Top-5 results:**
 
@@ -10931,8 +10961,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 33964ms (router 1887ms, retrieval 25723ms)
-**Stage timings:** context_build=6453ms, rerank=6453ms, retrieval=25723ms, router=1887ms, vector_search=19269ms
+**Latency:** embed+retrieve 33184ms (router 1309ms, retrieval 24610ms)
+**Stage timings:** context_build=6734ms, rerank=6734ms, retrieval=24610ms, router=1309ms, vector_search=17876ms
 
 **Top-5 results:**
 
@@ -10967,8 +10997,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 35107ms (router 1253ms, retrieval 27121ms)
-**Stage timings:** aggregate_lookup=1588ms, context_build=8821ms, rerank=8821ms, retrieval=27121ms, router=1253ms, structured_lookup=3176ms, vector_search=16710ms
+**Latency:** embed+retrieve 35784ms (router 1613ms, retrieval 27749ms)
+**Stage timings:** aggregate_lookup=1685ms, context_build=8996ms, rerank=8996ms, retrieval=27749ms, router=1613ms, structured_lookup=3370ms, vector_search=17067ms
 
 **Top-5 results:**
 
@@ -11003,8 +11033,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 37273ms (router 1131ms, retrieval 29240ms)
-**Stage timings:** aggregate_lookup=2012ms, context_build=10768ms, rerank=10768ms, retrieval=29240ms, router=1131ms, structured_lookup=4024ms, vector_search=16459ms
+**Latency:** embed+retrieve 37395ms (router 2191ms, retrieval 28545ms)
+**Stage timings:** aggregate_lookup=1652ms, context_build=11201ms, rerank=11201ms, retrieval=28545ms, router=2191ms, structured_lookup=3304ms, vector_search=15692ms
 
 **Top-5 results:**
 
@@ -11039,8 +11069,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 31258ms (router 1350ms, retrieval 22903ms)
-**Stage timings:** context_build=6575ms, rerank=6575ms, retrieval=22903ms, router=1350ms, vector_search=16327ms
+**Latency:** embed+retrieve 30832ms (router 1170ms, retrieval 22978ms)
+**Stage timings:** context_build=6553ms, rerank=6553ms, retrieval=22978ms, router=1170ms, vector_search=16424ms
 
 **Top-5 results:**
 
@@ -11075,8 +11105,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 29429ms (router 1461ms, retrieval 22843ms)
-**Stage timings:** context_build=6054ms, rerank=6054ms, retrieval=22843ms, router=1461ms, vector_search=10077ms
+**Latency:** embed+retrieve 28849ms (router 1056ms, retrieval 22919ms)
+**Stage timings:** context_build=6130ms, rerank=6130ms, retrieval=22919ms, router=1056ms, vector_search=9982ms
 
 **Top-5 results:**
 
@@ -11111,8 +11141,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 14070ms (router 1172ms, retrieval 8899ms)
-**Stage timings:** context_build=3514ms, rerank=3514ms, retrieval=8899ms, router=1172ms, vector_search=5384ms
+**Latency:** embed+retrieve 14287ms (router 1101ms, retrieval 8990ms)
+**Stage timings:** context_build=3726ms, rerank=3726ms, retrieval=8990ms, router=1101ms, vector_search=5263ms
 
 **Top-5 results:**
 
@@ -11145,8 +11175,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 15353ms (router 1360ms, retrieval 9264ms)
-**Stage timings:** context_build=4967ms, rerank=4967ms, retrieval=9264ms, router=1360ms, vector_search=4297ms
+**Latency:** embed+retrieve 17976ms (router 4119ms, retrieval 9451ms)
+**Stage timings:** context_build=5027ms, rerank=5027ms, retrieval=9451ms, router=4119ms, vector_search=4424ms
 
 **Top-5 results:**
 
@@ -11181,8 +11211,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 10175ms (router 2478ms, retrieval 5891ms)
-**Stage timings:** context_build=3635ms, rerank=3635ms, retrieval=5891ms, router=2478ms, vector_search=2256ms
+**Latency:** embed+retrieve 9121ms (router 1545ms, retrieval 5459ms)
+**Stage timings:** context_build=3614ms, rerank=3614ms, retrieval=5459ms, router=1545ms, vector_search=1844ms
 
 **Top-5 results:**
 
@@ -11213,8 +11243,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 4864ms (router 1397ms, retrieval 3347ms)
-**Stage timings:** context_build=3213ms, rerank=3213ms, retrieval=3347ms, router=1397ms, vector_search=133ms
+**Latency:** embed+retrieve 5226ms (router 1324ms, retrieval 3727ms)
+**Stage timings:** context_build=3586ms, rerank=3585ms, retrieval=3727ms, router=1324ms, vector_search=141ms
 
 **Top-5 results:**
 
@@ -11239,8 +11269,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 8991ms (router 1402ms, retrieval 7466ms)
-**Stage timings:** aggregate_lookup=1885ms, context_build=5430ms, rerank=5430ms, retrieval=7466ms, router=1402ms, structured_lookup=3770ms, vector_search=150ms
+**Latency:** embed+retrieve 9143ms (router 1274ms, retrieval 7710ms)
+**Stage timings:** aggregate_lookup=1924ms, context_build=5634ms, rerank=5634ms, retrieval=7710ms, router=1274ms, structured_lookup=3848ms, vector_search=151ms
 
 **Top-5 results:**
 
@@ -11265,8 +11295,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 8437ms (router 1317ms, retrieval 6205ms)
-**Stage timings:** context_build=5183ms, rerank=5183ms, retrieval=6205ms, router=1317ms, vector_search=1021ms
+**Latency:** embed+retrieve 8413ms (router 1160ms, retrieval 6249ms)
+**Stage timings:** context_build=5254ms, rerank=5254ms, retrieval=6249ms, router=1160ms, vector_search=994ms
 
 **Top-5 results:**
 
@@ -11301,8 +11331,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5640ms (router 2150ms, retrieval 3376ms)
-**Stage timings:** context_build=3253ms, rerank=3253ms, retrieval=3376ms, router=2150ms, vector_search=122ms
+**Latency:** embed+retrieve 4858ms (router 1279ms, retrieval 3430ms)
+**Stage timings:** context_build=3308ms, rerank=3308ms, retrieval=3430ms, router=1279ms, vector_search=121ms
 
 **Top-5 results:**
 
@@ -11327,8 +11357,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 4593ms (router 1130ms, retrieval 3350ms)
-**Stage timings:** context_build=3231ms, rerank=3231ms, retrieval=3350ms, router=1130ms, vector_search=118ms
+**Latency:** embed+retrieve 4876ms (router 1332ms, retrieval 3395ms)
+**Stage timings:** context_build=3272ms, rerank=3272ms, retrieval=3395ms, router=1332ms, vector_search=122ms
 
 **Top-5 results:**
 
@@ -11340,8 +11370,8 @@ a classifier tuning opportunity, tracked but not fixed here.
    > nt 1_CRREL\Geotechncial Study_NEXION Installation_Thule Air Base_Final.zip I:\# 003 Deliverables\TO WX31 Deliverables\UAE Spectrum Analysis\OldVersions\UAE N...
 4. [IN-FAMILY] `Old Versions/Wake Island NEXION Spectrum Analysis (CDRL A006) v5 GCdocx.zip` (score=0.016)
    > records that we should be including in our analysis (keeping in mind that we are only using unclassified data for the analysis)? 2. Are the JSC records for W...
-5. [out] `Location Documents/Historic Landscape Survey UM-2-A.pdf` (score=0.016)
-   > cility Sketch Sheet for Wake Island. Records of the Federal Aviation Administration, 1950. . CAA Airport Facilities Record for Wake Island. Records of the Fe...
+5. [out] `Location Documents/Wake Island MDA Environmental Reports.txt` (score=0.016)
+   > The list of Wake Island MDA envrionmental assessment reports is available at: https://www.mda.mil/news/environmental_archive.html Interesting Gomorphology: h...
 
 ---
 
@@ -11353,8 +11383,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5903ms (router 1175ms, retrieval 4611ms)
-**Stage timings:** context_build=2660ms, entity_lookup=1577ms, relationship_lookup=244ms, rerank=2660ms, retrieval=4611ms, router=1175ms, structured_lookup=3643ms, vector_search=128ms
+**Latency:** embed+retrieve 5909ms (router 1006ms, retrieval 4747ms)
+**Stage timings:** context_build=2719ms, entity_lookup=1645ms, relationship_lookup=250ms, rerank=2718ms, retrieval=4747ms, router=1006ms, structured_lookup=3791ms, vector_search=131ms
 
 **Top-5 results:**
 
@@ -11379,8 +11409,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 11518ms (router 1333ms, retrieval 10043ms)
-**Stage timings:** context_build=3174ms, entity_lookup=6451ms, relationship_lookup=246ms, rerank=3174ms, retrieval=10043ms, router=1333ms, structured_lookup=13395ms, vector_search=171ms
+**Latency:** embed+retrieve 11632ms (router 1264ms, retrieval 10187ms)
+**Stage timings:** context_build=3140ms, entity_lookup=6629ms, relationship_lookup=243ms, rerank=3140ms, retrieval=10187ms, router=1264ms, structured_lookup=13744ms, vector_search=174ms
 
 **Top-5 results:**
 
@@ -11405,8 +11435,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 13945ms (router 2150ms, retrieval 8019ms)
-**Stage timings:** context_build=3923ms, rerank=3923ms, retrieval=8019ms, router=2150ms, vector_search=4096ms
+**Latency:** embed+retrieve 14658ms (router 2501ms, retrieval 8230ms)
+**Stage timings:** context_build=4001ms, rerank=4001ms, retrieval=8230ms, router=2501ms, vector_search=4228ms
 
 **Top-5 results:**
 
@@ -11441,8 +11471,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 38070ms (router 1793ms, retrieval 22043ms)
-**Stage timings:** context_build=7591ms, rerank=7591ms, retrieval=22043ms, router=1793ms, vector_search=14451ms
+**Latency:** embed+retrieve 40078ms (router 2467ms, retrieval 21802ms)
+**Stage timings:** context_build=6730ms, rerank=6730ms, retrieval=21802ms, router=2467ms, vector_search=15071ms
 
 **Top-5 results:**
 
@@ -11477,8 +11507,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 13102ms (router 1636ms, retrieval 9248ms)
-**Stage timings:** context_build=6871ms, rerank=6871ms, retrieval=9248ms, router=1636ms, vector_search=2377ms
+**Latency:** embed+retrieve 12452ms (router 1117ms, retrieval 8964ms)
+**Stage timings:** context_build=6499ms, rerank=6499ms, retrieval=8964ms, router=1117ms, vector_search=2465ms
 
 **Top-5 results:**
 
@@ -11494,12 +11524,12 @@ a classifier tuning opportunity, tracked but not fixed here.
    > asset1 asset1 xccdf1 collection1 Red Hat Enterprise Linux 7 oval:mil.disa.stig.rhel7:def:1 accepted Red Hat Enterprise Linux 7 STIG SCAP Benchmark This Secur...
 6. [IN-FAMILY] `A027 - ISS TOWX29 ST&E Report/SEMS3D-42101.zip` (score=0.016)
    > [ARCHIVE_MEMBER=ISS STE Scan Raw Results/IdM/archive/TDKA-DC-IGSIDMV_SCC-5.4_2021-10-07_182103_All-Settings_RHEL_7_STIG-003.004.html] SCC - All Settings Repo...
-7. [IN-FAMILY] `Testing/1_Test_Procedures_19Dec01-Revised_20Dec01.pdf` (score=0.016)
-   > put The database exists. A copy of the SQL procedure ?describe_oracle_tables.sql? is available. A copy of the legacy SEOC database tables specifications are ...
+7. [IN-FAMILY] `Reference Material/angeo-22-3145-2004.pdf` (score=0.016)
+   > ime. Figure 5 shows a subset of skymaps on 22 November 2002 for Cachimbo, spaced by 15 min, starting at 17:23 LT. Each skymap is the result of a 20-s measure...
 8. [IN-FAMILY] `Curacao 2016 (30 May - 4 Jun)/SEMS3D-32681_Maintenance Service Report (MSR)_(CDRL A001)_Curacao ISTO (30 May - 4 Jun 16).pdf` (score=0.016)
    > lationStatus&srt=Plane&dir=Desc GPS SATELLITE STATUS AS OF 9 JUNE 2016 (SORTED BY PRN, PLANE AND SLOT) PRN TO OTHER SPACE VEHICLE DESIGNATION TABLE http://ww...
-9. [IN-FAMILY] `Testing/Regression_Test_Draft_8-12-03.pdf` (score=0.016)
-   > dow is displayed with data related to Stations. 4 In the APUA Product Editor window select Accept The window is removed. Note messages in the Space Weather A...
+9. [IN-FAMILY] `Reference Material/angeo-22-3145-2004.pdf` (score=0.016)
+   > uator (Cachimbo) and the conjugates stations at Boa Vista and Campo Grande. Fig. 2. The Brazilian COPEX stations at the equator (Cachimbo) and the conjugates...
 10. [out] `TEC/IGS cost projections.xlsx` (score=0.016)
    > e, : Jan, : Feb, : Mar, : Apr, : May, : Jun, : Jul, : Aug, : Sep, : Oct, : Nov, : Dec, : Total ($K), : This estimate is for a verification and validation of ...
 
@@ -11513,21 +11543,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 4847ms (router 1652ms, retrieval 2917ms)
-**Stage timings:** context_build=2629ms, rerank=2629ms, retrieval=2917ms, router=1652ms, vector_search=288ms
+**Latency:** embed+retrieve 5185ms (router 1282ms, retrieval 3579ms)
+**Stage timings:** context_build=3242ms, rerank=3242ms, retrieval=3579ms, router=1282ms, vector_search=336ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `eMASS User Guide/eMASS_User_Guide.pdf` (score=0.016)
-   > n Added icon, signaling it was added to the Control baseline, a checkbox with a [Delete Selected] button to remove the added Control, and a [Comments] hyperl...
-2. [IN-FAMILY] `Artifacts/Signed_SAR-30-May-2019-122311_SecurityAssessmentReport.pdf` (score=0.016)
-   > DoD RMF Security Assessment Report (SAR) SYSTEM INFORMATION System Name (1): Security Controls Assessor (SCA) and/or SCA Rep (7): Next Generation Ionosonde S...
-3. [IN-FAMILY] `Kimberly/Master_Assessment_Datasheet_09Aug2017-NSS-External.xlsx` (score=0.016)
-   > : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : X, : +EGR, : +EGR, :...
-4. [IN-FAMILY] `Archive/ISTO System Authorization Boundary 2019-08-30.vsd` (score=0.016)
-   > File: ISTO System Authorization Boundary 2019-08-30.vsd Type: Visio Diagram (Legacy) (.vsd) Size: 1.3 MB (1,393,152 bytes) Parser status: PLACEHOLDER (conten...
-5. [IN-FAMILY] `Original/Physical and Environmental Protection Plan (PE).docx` (score=0.016)
-   > Directive S-5200.19? If Yes, has an examination of the TEMPEST countermeasures been reviewed and inspected to ensure those countermeasures have been implemen...
+1. [IN-FAMILY] `A027 - ISTO SSP/SEMS3D-38760 ISTO Security Plan 2019-06-28.pdf` (score=0.016)
+   > [SECTION] SA-4.1(003094), SA-4.2(003095), SA-4.3(003096), SA-4.4(003097), SA-4.5(0030 98), SA-4.6(003099), SA-4.7(003100) CONTINUOUS MONITORING STRATEGY Crit...
+2. [IN-FAMILY] `Artifacts/Signed_SP-31-May-2019-060834_SecurityPlan.pdf` (score=0.016)
+   > ng Policy. Comments Dependent on Continuous Monitoring Policy. Generated On: 31 May 2019 as of 6:08 AM Generated By: STOFFLER, RALPH (CIV) Page 143 of 193 UN...
+3. [IN-FAMILY] `System_Modification_Tracking/System_Mod_Request_Tracking.xlsx` (score=0.016)
+   > [SHEET] SMR Tracking SMR # | Detail | SW Version Slated for Implementation | Assignee | Date Found | Date Completed | Notes | Hours | Affected Sites SMR #: S...
+4. [IN-FAMILY] `archive/CTE Result-POAM - Hawaii 2017-08-08.xlsx` (score=0.016)
+   > G :: V1R?, : Ongoing, : Ongoing, : Ongoing, : Provided spreadsheet of STIG Fix requirements to LDI on 2017-Aug-03. Pending response from LDI with fix action ...
+5. [IN-FAMILY] `ISTO/08. (MA) Information System Maintenance Plan (2019 ISTO ATO).pdf` (score=0.016)
+   > the ISTO Computer Operations Manual / Software User Manual?s (COM/SUM) Revision History Table supports the following security Control: ? Supporting Security ...
 
 ---
 
@@ -11539,8 +11569,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 8484ms (router 1223ms, retrieval 7070ms)
-**Stage timings:** aggregate_lookup=1610ms, context_build=5236ms, rerank=5236ms, retrieval=7070ms, router=1223ms, structured_lookup=3220ms, vector_search=223ms
+**Latency:** embed+retrieve 8685ms (router 1259ms, retrieval 7201ms)
+**Stage timings:** aggregate_lookup=1617ms, context_build=5361ms, rerank=5361ms, retrieval=7201ms, router=1259ms, structured_lookup=3234ms, vector_search=222ms
 
 **Top-5 results:**
 
@@ -11565,8 +11595,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 23603ms (router 2274ms, retrieval 14116ms)
-**Stage timings:** context_build=6720ms, rerank=6720ms, retrieval=14116ms, router=2274ms, vector_search=7395ms
+**Latency:** embed+retrieve 23108ms (router 1610ms, retrieval 13884ms)
+**Stage timings:** context_build=6528ms, rerank=6528ms, retrieval=13884ms, router=1610ms, vector_search=7355ms
 
 **Top-5 results:**
 
@@ -11601,8 +11631,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 4465ms (router 1758ms, retrieval 2500ms)
-**Stage timings:** context_build=2272ms, rerank=2272ms, retrieval=2500ms, router=1758ms, vector_search=228ms
+**Latency:** embed+retrieve 4913ms (router 1944ms, retrieval 2714ms)
+**Stage timings:** context_build=2474ms, rerank=2474ms, retrieval=2714ms, router=1944ms, vector_search=239ms
 
 **Top-5 results:**
 
@@ -11627,30 +11657,30 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 25248ms (router 1272ms, retrieval 15479ms)
-**Stage timings:** context_build=6967ms, rerank=6967ms, retrieval=15479ms, router=1272ms, vector_search=8512ms
+**Latency:** embed+retrieve 24353ms (router 1060ms, retrieval 14678ms)
+**Stage timings:** context_build=6826ms, rerank=6826ms, retrieval=14678ms, router=1060ms, vector_search=7851ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `raw/TDKA-AS-IGSAPPV_SCC-5.4_2023-06-01_042443_All-Settings_RHEL_7_STIG-003.011.html` (score=-1.000)
+1. [IN-FAMILY] `2024 ISTO Reauthorization/SCAP scan.xlsx` (score=-1.000)
+   > [SHEET] Asset Overview CUI | | | | | | CUI: Asset Overview CUI: CKL Asset Insight CUI: Host Name, : CAT I, : CAT II, : CAT III, : CAT IV, : Total CUI: Americ...
+2. [IN-FAMILY] `raw/TDKA-AS-IGSAPPV_SCC-5.4_2023-06-01_042443_All-Settings_RHEL_7_STIG-003.011.html` (score=-1.000)
    > SCC - All Settings Report - TDKA-AS-IGSAPPV.IGS.PETERSON.AF.MIL All Settings Report - RHEL_7_STIG SCAP Compliance Checker - 5.4 Score | System Information | ...
-2. [out] `raw/TDKA-AS-IGSAPPV_SCC-5.4_2023-06-01_042443_XCCDF-Results_RHEL_7_STIG-003.011.xml` (score=-1.000)
+3. [out] `raw/TDKA-AS-IGSAPPV_SCC-5.4_2023-06-01_042443_XCCDF-Results_RHEL_7_STIG-003.011.xml` (score=-1.000)
    > accepted Red Hat Enterprise Linux 7 STIG SCAP Benchmark This Security Technical Implementation Guide is published as a tool to improve the security of Depart...
-3. [IN-FAMILY] `raw/TDKA-CM-IGSSATV_SCC-5.4_2023-06-01_002245_All-Settings_RHEL_7_STIG-003.011.html` (score=-1.000)
+4. [IN-FAMILY] `raw/TDKA-CM-IGSSATV_SCC-5.4_2023-06-01_002245_All-Settings_RHEL_7_STIG-003.011.html` (score=-1.000)
    > SCC - All Settings Report - TDKA-CM-IGSSATV.IGS.PETERSON.AF.MIL All Settings Report - RHEL_7_STIG SCAP Compliance Checker - 5.4 Score | System Information | ...
-4. [out] `raw/TDKA-CM-IGSSATV_SCC-5.4_2023-06-01_002245_XCCDF-Results_RHEL_7_STIG-003.011.xml` (score=-1.000)
+5. [out] `raw/TDKA-CM-IGSSATV_SCC-5.4_2023-06-01_002245_XCCDF-Results_RHEL_7_STIG-003.011.xml` (score=-1.000)
    > accepted Red Hat Enterprise Linux 7 STIG SCAP Benchmark This Security Technical Implementation Guide is published as a tool to improve the security of Depart...
-5. [IN-FAMILY] `raw/TDKA-DC-IGSIDMV_SCC-5.4_2023-06-01_042749_All-Settings_RHEL_7_STIG-003.011.html` (score=-1.000)
-   > SCC - All Settings Report - TDKA-DC-IGSIDMV.IGS.PETERSON.AF.MIL All Settings Report - RHEL_7_STIG SCAP Compliance Checker - 5.4 Score | System Information | ...
-6. [IN-FAMILY] `XML/DPS4D-EGLIN_SCC-4.2_2017-06-09_163440_OVAL-Variables_U_Windows_XP_V6R1.34_STIG_Benchmark-.xml` (score=0.016)
-   > SCAP Compliance Checker 4.2 5.11.1 2017-06-09T16:35:14
+6. [IN-FAMILY] `Archive/scc-5.2.1_rhel7_x86_64_bundle.zip` (score=0.016)
+   > uctions to perform automated checking. SCAP Content is a collection of XML files, usually bundled in a zip file, which defines the checks to be evaluated on ...
 7. [IN-FAMILY] `archive/CTE Overview.pptx` (score=0.016)
    > [SLIDE 1] CT&E Overview CT&E Objective & Method Tools, STIGs and Benchmarks ? Version TCNO / IAVM Assessment STIG Assessment ? Automated Scan STIG Assessment...
-8. [IN-FAMILY] `XML/QKKG-WXD-3MAP_SCC-5.7.2_2023-09-20_163632_OVAL-Variables_MOZ.xml` (score=0.016)
-   > SCAP Compliance Checker 5.7.2 5.11.2 2023-09-20T16:36:36
+8. [IN-FAMILY] `Archive/scc-5.2_rhel7_x86_64_bundle.zip` (score=0.016)
+   > uctions to perform automated checking. SCAP Content is a collection of XML files, usually bundled in a zip file, which defines the checks to be evaluated on ...
 9. [IN-FAMILY] `Procedures/Procedure ACAS SAR Reporting to Customer.pptx` (score=0.016)
    > [SLIDE 1] CT&E Overview CT&E Objective & Method Tools, STIGs and Benchmarks ? Version TCNO / IAVM Assessment STIG Assessment ? Automated Scan STIG Assessment...
-10. [IN-FAMILY] `Archive/scc-5.2.1_rhel7_x86_64_bundle.zip` (score=0.016)
+10. [IN-FAMILY] `STIG/scc-5.3_rhel7_x86_64_bundle.zip` (score=0.016)
    > uctions to perform automated checking. SCAP Content is a collection of XML files, usually bundled in a zip file, which defines the checks to be evaluated on ...
 
 ---
@@ -11663,8 +11693,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 5814ms (router 2202ms, retrieval 3450ms)
-**Stage timings:** context_build=3282ms, rerank=3282ms, retrieval=3450ms, router=2202ms, vector_search=167ms
+**Latency:** embed+retrieve 6169ms (router 2344ms, retrieval 3625ms)
+**Stage timings:** context_build=3447ms, rerank=3447ms, retrieval=3625ms, router=2344ms, vector_search=177ms
 
 **Top-5 results:**
 
@@ -11681,7 +11711,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-483 [PASS] -- Cybersecurity / Network Admin
+### PQ-483 [PARTIAL] -- Cybersecurity / Network Admin
 
 **Query:** What is the typical structure of an ATO-ATC package change folder?
 
@@ -11689,21 +11719,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 11560ms (router 1009ms, retrieval 10403ms)
-**Stage timings:** context_build=3368ms, entity_lookup=6619ms, relationship_lookup=246ms, rerank=3368ms, retrieval=10403ms, router=1009ms, structured_lookup=13730ms, vector_search=169ms
+**Latency:** embed+retrieve 12328ms (router 1400ms, retrieval 10739ms)
+**Stage timings:** context_build=3466ms, entity_lookup=6843ms, relationship_lookup=250ms, rerank=3466ms, retrieval=10739ms, router=1400ms, structured_lookup=14186ms, vector_search=178ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Archive/MIL-HDBK-61B_draft.pdf` (score=0.016)
-   > uthority means that the activity or organization exercising that authority controls the configuration of the product and determines what changes are to be in...
+1. [out] `howto/auth.xml` (score=0.016)
+   > How-To / Tutorials Authentication, Authorization and Access Control Authentication is any process by which you verify that someone is who they claim they are...
 2. [out] `Drawings Maintenance/Drawings Management Processes (2025-12-23).docx` (score=0.016)
    > l Drawing Number Row. Drawer updates information for new Revision. Drawer creates Drawing Folder in Explorer [e.g., 20X812XXX-A ISTO/NEXION Title], where all...
-3. [IN-FAMILY] `DOCUMENTS LIBRARY/MIL-HDBK-61B_draft (Configuration Management Guidance) (2002-09-10).pdf` (score=0.016)
-   > uthority means that the activity or organization exercising that authority controls the configuration of the product and determines what changes are to be in...
+3. [out] `developer/API.xml` (score=0.016)
+   > particular access control and authorization information, but also information on how to determine file types from suffixes, which can be modified by AddType ...
 4. [IN-FAMILY] `DM/SEMS Data Management Plan.doc` (score=0.016)
    > isk Management Plan System Administrator Self Assessment Tool Stakeholder Communications Plan System Change Requests Software Design Description Software Dev...
-5. [out] `CMP/E221-PGSM CM.pdf` (score=0.016)
-   > Change Authority hierarchy may become necessary for system, hardware, and software configuration coordination. At a minimum, one Change Authority shall be es...
+5. [IN-FAMILY] `Key Documents/sp800-37-rev1-final.pdf` (score=0.016)
+   > [SECTION] APPENDIX F PAGE F- 8 or the common controls inherited by organizational information systems and explicitly accepting the risk to organizational ope...
 
 ---
 
@@ -11715,8 +11745,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5448ms (router 1735ms, retrieval 3572ms)
-**Stage timings:** context_build=3408ms, rerank=3408ms, retrieval=3572ms, router=1735ms, vector_search=163ms
+**Latency:** embed+retrieve 5999ms (router 2223ms, retrieval 3594ms)
+**Stage timings:** context_build=3425ms, rerank=3425ms, retrieval=3594ms, router=2223ms, vector_search=168ms
 
 **Top-5 results:**
 
@@ -11741,8 +11771,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 44067ms (router 1917ms, retrieval 35744ms)
-**Stage timings:** aggregate_lookup=1615ms, context_build=7531ms, rerank=7531ms, retrieval=35744ms, router=1917ms, structured_lookup=3230ms, vector_search=26596ms
+**Latency:** embed+retrieve 43324ms (router 1949ms, retrieval 34824ms)
+**Stage timings:** aggregate_lookup=1842ms, context_build=7431ms, rerank=7430ms, retrieval=34824ms, router=1949ms, structured_lookup=3684ms, vector_search=25550ms
 
 **Top-5 results:**
 
@@ -11777,25 +11807,25 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Logistics
 
-**Latency:** embed+retrieve 31644ms (router 1317ms, retrieval 21119ms)
-**Stage timings:** aggregate_lookup=2105ms, context_build=4310ms, rerank=4310ms, retrieval=21119ms, router=1317ms, structured_lookup=4210ms, vector_search=14703ms
+**Latency:** embed+retrieve 33036ms (router 1781ms, retrieval 21641ms)
+**Stage timings:** aggregate_lookup=2011ms, context_build=6339ms, rerank=6339ms, retrieval=21641ms, router=1781ms, structured_lookup=4022ms, vector_search=13291ms
 
 **Top-5 results:**
 
 1. [IN-FAMILY] `References (DOD)/TCN_dtr_partii_app_l.pdf` (score=0.016)
    > the day-of-the-year of delivery to the original Port of Embarkation. For all other personal property, enter the day of the year the shipment is to be picked ...
-2. [IN-FAMILY] `Archive/NEXION_IP_Draft_13-Mar-09.doc` (score=0.016)
-   > just prior to shipment to the first site, which will include Government observers. FAT is detailed in Annex 1, Acceptance Test Plan (ATP) and Test Procedures...
-3. [IN-FAMILY] `SP-JC-23-00685 (Uline S-)/S-12552.pdf` (score=0.016)
-   > of Origin: USA PACKAGING: ? Label Inserts: ? 3 Sheets (20/sheet) ? Top & Bottom pieces of sheet are larger and not meant to be inserts. INFORMATION BELOW APP...
-4. [IN-FAMILY] `Archive/RIMS Pedestal_I-Plan_Final+2.doc` (score=0.016)
-   > just prior to shipment to the first site, which will include Government observers. FAT is detailed in Annex 1, Acceptance Test Plan (ATP) and Test Procedures...
-5. [IN-FAMILY] `2021-03-25_(NG_to_ASCENSION)(HAND_CARRY & GROUND-MIL-AIR)/Shipping Checklist - Template.docx` (score=0.016)
+2. [out] `Vulnerator_v6-1-9/Vulnerator_v6-1-9.zip` (score=0.016)
+   > e document?s encryption dictionary. (Optional; must be an indirect reference) The document?s information dictionary. (Optional, but strongly recommended; PDF...
+3. [IN-FAMILY] `2021-03-25_(NG_to_ASCENSION)(HAND_CARRY & GROUND-MIL-AIR)/Shipping Checklist - Template.docx` (score=0.016)
    > Site: Ship Date: Shipment Type: Lead: EEMS HSR No.: TCN: Pre-Shipment (3 Months Out) Identify and purchase materials for trip ? Follow Procurement Checklist ...
+4. [out] `Vulnerator_v6-1-9/Vulnerator_v6-1-9.zip` (score=0.016)
+   > e document?s encryption dictionary. (Optional; must be an indirect reference) The document?s information dictionary. (Optional, but strongly recommended; PDF...
+5. [IN-FAMILY] `Ryder/northrop-load-shipment-tracking.pptx` (score=0.016)
+   > itself, and any information from the carrier. SHIPMENT TRACKING contains reference information for the individual shipment. This is the information entered a...
 
 ---
 
-### PQ-487 [PARTIAL] -- Aggregation / Cross-role
+### PQ-487 [PASS] -- Aggregation / Cross-role
 
 **Query:** Cross-reference: which sites have both a confirmed A006 IATP deliverable and an A007 IATR deliverable?
 
@@ -11803,21 +11833,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 9865ms (router 1622ms, retrieval 8059ms)
-**Stage timings:** aggregate_lookup=2032ms, context_build=5789ms, rerank=5789ms, retrieval=8059ms, router=1622ms, structured_lookup=4064ms, vector_search=237ms
+**Latency:** embed+retrieve 9682ms (router 1858ms, retrieval 7636ms)
+**Stage timings:** aggregate_lookup=1883ms, context_build=5550ms, rerank=5550ms, retrieval=7636ms, router=1858ms, structured_lookup=3766ms, vector_search=203ms
 
 **Top-5 results:**
 
-1. [out] `_AFMAN/afman15-125.pdf` (score=0.016)
-   > blind spot), pass the information to the local ATC facility and/or FAA maintenance facility and include the information in the next update to the FLIP. 9.7.5...
+1. [IN-FAMILY] `Archive/IP-ANNEX 1_Test Plan_Rev2.doc` (score=0.016)
+   > nt participation as indicated in Attachments 1 and 2. 1.5 Test Reports Test Reports will be provided for each test type (i.e., FAT and SAT), and in the case ...
 2. [IN-FAMILY] `_Review Comment Files/Deliverables Report IGSI-101_Initial Site Installation Plan_AS (A003)-comments.docx` (score=0.016)
    > e. The telephone line and network installation will be the responsibility of American Samoa personnel, NG will assist as needed. Both interfaces are located ...
-3. [out] `_AFMAN/afman15-124.pdf` (score=0.016)
-   > [SECTION] CCCC I CAO of transmitting unit. AIREP Type ARP (Routine AIREP) or ARS (Special AIREP). Will precede all AIREP text. See Table 3.6. for ARS conditi...
+3. [IN-FAMILY] `Archive/IP-ANNEX 1_Test Plan_Rev3.doc` (score=0.016)
+   > nt participation as indicated in Attachments 1 and 2. 1.5 Test Reports Test Reports will be provided for each test type (i.e., FAT and SAT), and in the case ...
 4. [IN-FAMILY] `_Review Comment Files/Deliverables Report IGSI-101_Initial Site Installation Plan_AS (A003)-Pre Format Change.docx` (score=0.016)
    > the rack and rack-mounted surge suppressor assembly via separate ground wires to the master ground bus in room 133. These connections will be made with a min...
-5. [out] `Spectrum Management/AFI33-118.pdf` (score=0.016)
-   > the channel plan. 42 AFI33-118 18 JULY 2005 Attachment 3 MEMORANDUM OF AGREEMENT BETWEEN DEPARTMENT OF DEFENSE AND DEPARTMENT OF TRANSPORTATION REGARDING THE...
+5. [IN-FAMILY] `UAE NEXION Installation Test Plan/SEMS3D-40675 UAE acceptance Test Plan.pdf` (score=0.016)
+   > of the acceptance test process. The acceptance testing criteria will be PASS/FAIL. If neither category is appl icable, then ?not applicable? (N/A) may be ent...
 
 ---
 
@@ -11829,8 +11859,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 9536ms (router 1442ms, retrieval 7842ms)
-**Stage timings:** aggregate_lookup=2026ms, context_build=5517ms, rerank=5517ms, retrieval=7842ms, router=1442ms, structured_lookup=4052ms, vector_search=299ms
+**Latency:** embed+retrieve 9934ms (router 2097ms, retrieval 7545ms)
+**Stage timings:** aggregate_lookup=1696ms, context_build=5555ms, rerank=5555ms, retrieval=7545ms, router=2097ms, structured_lookup=3392ms, vector_search=293ms
 
 **Top-5 results:**
 
@@ -11855,8 +11885,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 4413ms (router 1469ms, retrieval 2675ms)
-**Stage timings:** context_build=2406ms, rerank=2406ms, retrieval=2675ms, router=1469ms, vector_search=269ms
+**Latency:** embed+retrieve 4573ms (router 1531ms, retrieval 2760ms)
+**Stage timings:** context_build=2489ms, rerank=2489ms, retrieval=2760ms, router=1531ms, vector_search=270ms
 
 **Top-5 results:**
 
@@ -11881,8 +11911,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 9444ms (router 1790ms, retrieval 7450ms)
-**Stage timings:** aggregate_lookup=1645ms, context_build=5597ms, rerank=5597ms, retrieval=7450ms, router=1790ms, structured_lookup=3290ms, vector_search=206ms
+**Latency:** embed+retrieve 9223ms (router 1560ms, retrieval 7442ms)
+**Stage timings:** aggregate_lookup=1686ms, context_build=5548ms, rerank=5548ms, retrieval=7442ms, router=1560ms, structured_lookup=3372ms, vector_search=207ms
 
 **Top-5 results:**
 
@@ -11907,8 +11937,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 18609ms (router 1341ms, retrieval 12870ms)
-**Stage timings:** aggregate_lookup=2094ms, context_build=6000ms, rerank=6000ms, retrieval=12870ms, router=1341ms, structured_lookup=4188ms, vector_search=4776ms
+**Latency:** embed+retrieve 18661ms (router 2208ms, retrieval 12075ms)
+**Stage timings:** aggregate_lookup=1716ms, context_build=5945ms, rerank=5945ms, retrieval=12075ms, router=2208ms, structured_lookup=3432ms, vector_search=4414ms
 
 **Top-5 results:**
 
@@ -11939,8 +11969,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 6005ms (router 2172ms, retrieval 3581ms)
-**Stage timings:** context_build=3262ms, rerank=3262ms, retrieval=3581ms, router=2172ms, vector_search=319ms
+**Latency:** embed+retrieve 6151ms (router 2215ms, retrieval 3639ms)
+**Stage timings:** context_build=3322ms, rerank=3322ms, retrieval=3639ms, router=2215ms, vector_search=317ms
 
 **Top-5 results:**
 
@@ -11965,8 +11995,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 18226ms (router 1098ms, retrieval 10325ms)
-**Stage timings:** context_build=3670ms, rerank=3670ms, retrieval=10325ms, router=1098ms, vector_search=6654ms
+**Latency:** embed+retrieve 19221ms (router 1126ms, retrieval 10497ms)
+**Stage timings:** context_build=3543ms, rerank=3543ms, retrieval=10497ms, router=1126ms, vector_search=6953ms
 
 **Top-5 results:**
 
@@ -11995,8 +12025,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5612ms (router 1903ms, retrieval 3570ms)
-**Stage timings:** context_build=3417ms, rerank=3417ms, retrieval=3570ms, router=1903ms, vector_search=152ms
+**Latency:** embed+retrieve 9676ms (router 6084ms, retrieval 3416ms)
+**Stage timings:** context_build=3262ms, rerank=3262ms, retrieval=3416ms, router=6084ms, vector_search=153ms
 
 **Top-5 results:**
 
@@ -12021,21 +12051,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Cybersecurity
 
-**Latency:** embed+retrieve 21962ms (router 1668ms, retrieval 16020ms)
-**Stage timings:** aggregate_lookup=1684ms, context_build=6206ms, rerank=6206ms, retrieval=16020ms, router=1668ms, structured_lookup=3368ms, vector_search=8129ms
+**Latency:** embed+retrieve 21246ms (router 1906ms, retrieval 15201ms)
+**Stage timings:** aggregate_lookup=1792ms, context_build=5469ms, rerank=5469ms, retrieval=15201ms, router=1906ms, structured_lookup=3584ms, vector_search=7940ms
 
 **Top-5 results:**
 
-1. [IN-FAMILY] `Reference/NIST.SP.800-160v2r1.pdf` (score=0.016)
+1. [IN-FAMILY] `Guam ISTO Upgrade (19-22 Nov 2019)/FRCB Handbook V 3.0.pdf` (score=0.031)
+   > bility of existing IT, changes to the infrastructure, procedural changes, or changes in the authorized or privileged user base) shall be reviewed for Cyberse...
+2. [IN-FAMILY] `Reference/NIST.SP.800-160v2r1.pdf` (score=0.016)
    > [SECTION] 107 While many different risk models are potentially valid and useful, three elements are common across most models: the likelihood of occurrence, ...
-2. [IN-FAMILY] `FRCB Reference Material/FRCB Handbook V 3.0.pdf` (score=0.016)
+3. [IN-FAMILY] `FRCB Reference Material/FRCB Handbook V 3.0.pdf` (score=0.016)
    > zing Official (DAO)) residual risk statement. The FRCB Cybersecurity Hold submission must contain authoritative RMF accreditation artifacts to be considered ...
-3. [IN-FAMILY] `Original/Enclosure 09- Policy Templates.zip` (score=0.016)
-   > s concern is for {ACRONYM} to share threat information. {ACRONYM} personnel collaborate with the {ACRONYM} Cyber Security team to share threat information. A...
-4. [IN-FAMILY] `Guam ISTO Upgrade (19-22 Nov 2019)/FRCB Handbook V 3.0.pdf` (score=0.016)
+4. [IN-FAMILY] `Key Documents/OMB Memoranda m-15-01.pdf` (score=0.016)
+   > f cybersecurity incidents involving Federal department and agency information systems to DHS US-CERT, which serves as the Federa l Information Secur ity Inci...
+5. [IN-FAMILY] `Guam ISTO Upgrade (19-22 Nov 2019)/FRCB Handbook V 3.0.pdf` (score=0.016)
    > zing Official (DAO)) residual risk statement. The FRCB Cybersecurity Hold submission must contain authoritative RMF accreditation artifacts to be considered ...
-5. [IN-FAMILY] `Artifacts/Artifacts.zip` (score=0.016)
-   > nt Security Technical Implementation Guide STIG :: V4R?, : Not Applicable, : Host Name Not Provided Date Exported:: 767, : Title: The application must accept...
 
 ---
 
@@ -12047,8 +12077,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 7133ms (router 3565ms, retrieval 3384ms)
-**Stage timings:** context_build=3146ms, rerank=3146ms, retrieval=3384ms, router=3565ms, vector_search=237ms
+**Latency:** embed+retrieve 5822ms (router 2176ms, retrieval 3412ms)
+**Stage timings:** context_build=3157ms, rerank=3157ms, retrieval=3412ms, router=2176ms, vector_search=254ms
 
 **Top-5 results:**
 
@@ -12065,7 +12095,7 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 ---
 
-### PQ-497 [PARTIAL] -- Aggregation / Cross-role
+### PQ-497 [PASS] -- Aggregation / Cross-role
 
 **Query:** How does the recurring monthly cadence of FEP Monthly Actuals compare to the recurring monthly cadence of Cumulative Outages?
 
@@ -12073,21 +12103,21 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** Program Management
 
-**Latency:** embed+retrieve 5240ms (router 1688ms, retrieval 3431ms)
-**Stage timings:** context_build=3297ms, rerank=3297ms, retrieval=3431ms, router=1688ms, vector_search=133ms
+**Latency:** embed+retrieve 10594ms (router 8437ms, retrieval 1993ms)
+**Stage timings:** context_build=1845ms, rerank=1845ms, retrieval=1993ms, router=8437ms, vector_search=147ms
 
 **Top-5 results:**
 
-1. [out] `Outage Metrics/OutageMetricsWorknote.docx` (score=0.016)
-   > ulative Outages: All outages that occurred before the current month going back to 1 January 2016. User Interface Overview Figure 1 shows the user interface (...
-2. [IN-FAMILY] `Archive/Program Management Plan.doc` (score=0.016)
-   > Expenditure Plan The FEP displays a time-phased estimate of expected spending profiles for active task orders, enabling the calculation of an estimated cost ...
-3. [out] `11Dec08_NEXION_GD_Results/Open_1112Review_NEXION2.rtf` (score=0.016)
-   > pdates and the frequency is more than weekly, this is a finding . If the parameter is set to automatic and the parameter is set to weekly (or less \endash da...
-4. [IN-FAMILY] `06_SEMS_Documents/Program Management Plan_04012020.docx` (score=0.016)
-   > on performance to date, actual costs to date, and projections of the Estimate To Complete (), which drives the Estimate at Complete (EAC) The BEP and are dev...
-5. [out] `IGS Availability/IGS Availbibilty Calculations Sep-19 -r1.xlsx` (score=0.016)
-   > , : (MTTR), July: (MTBF) September: Total Time, : MTX DT, : Crit DT, : Num MTX, : Num DE, : Num Crit, : # Overlapping outages, August: Ao, : Do, : OR, : MDT,...
+1. [IN-FAMILY] `IGS PMP/Deliverables Report IGSI-63 IGS Program Management Plan (A008) CAF.doc` (score=0.016)
+   > f Work Performed. Forecast Expenditure Plan The FEP displays a time-phased estimate of expected spending profiles for the contract, enabling the calculation ...
+2. [out] `PMP/15-0019_NEXION_PMP_(CDRL A081)_Rev 4_20 Apr 15_Draft.doc` (score=0.016)
+   > anges, unforeseen events that resultresulting in changes to the plan for execution, or because the project has deviated significantly from the baseline sched...
+3. [IN-FAMILY] `IGS PMP/Deliverables Report IGSI-63 IGS Program Management Plan (A008).doc` (score=0.016)
+   > f Work Performed. Forecast Expenditure Plan The FEP displays a time-phased estimate of expected spending profiles for the contract, enabling the calculation ...
+4. [out] `Draft/15-0019_NEXION_PMP_(CDRL A081)_Rev 4_20 Apr 15_Draft.doc` (score=0.016)
+   > ements changes, unforeseen events that result in changes to the plan for execution, or because the project has deviated significantly from the baseline sched...
+5. [IN-FAMILY] `A008 - Management Plan (Program Management Plan - (Systems Mgt Plan)/47QFRA22F0009_IGSI-2439_IGS-Program-Management-Plan_2024-09-27.docx` (score=0.016)
+   > M. The BEP is the baseline against which performance is measured and is the direct source of the Budgeted Cost of Work Scheduled and Budgeted Cost of Work Pe...
 
 ---
 
@@ -12099,8 +12129,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5231ms (router 2077ms, retrieval 2960ms)
-**Stage timings:** context_build=2742ms, rerank=2742ms, retrieval=2960ms, router=2077ms, vector_search=217ms
+**Latency:** embed+retrieve 5767ms (router 2671ms, retrieval 2854ms)
+**Stage timings:** context_build=2632ms, rerank=2632ms, retrieval=2854ms, router=2671ms, vector_search=221ms
 
 **Top-5 results:**
 
@@ -12125,8 +12155,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 142385ms (router 2162ms, retrieval 108653ms)
-**Stage timings:** aggregate_lookup=1924ms, context_build=11664ms, rerank=11664ms, retrieval=108653ms, router=2162ms, structured_lookup=3848ms, vector_search=95064ms
+**Latency:** embed+retrieve 129419ms (router 1803ms, retrieval 98362ms)
+**Stage timings:** aggregate_lookup=1890ms, context_build=11133ms, rerank=11133ms, retrieval=98362ms, router=1803ms, structured_lookup=3780ms, vector_search=85337ms
 
 **Top-5 results:**
 
@@ -12140,16 +12170,16 @@ a classifier tuning opportunity, tracked but not fixed here.
    > SCC - All Settings Report - TDKA-AS-IGSAPPV.IGS.PETERSON.AF.MIL All Settings Report - RHEL_7_STIG SCAP Compliance Checker - 5.4 Score | System Information | ...
 5. [IN-FAMILY] `raw/TDKA-AS-IGSAPPV_SCC-5.4_2023-06-01_042443_XCCDF-Results_RHEL_7_STIG-003.011.xml` (score=-1.000)
    > accepted Red Hat Enterprise Linux 7 STIG SCAP Benchmark This Security Technical Implementation Guide is published as a tool to improve the security of Depart...
-6. [IN-FAMILY] `Archive/IGS Install-Hawaii_IGS Tech Approach_Draft_29 Feb 16.docx` (score=0.016)
-   > [SECTION] 2.9 Contract Data Requirements List (CD RL) Table X ? IGS Install (Hawaii NEXION) Deliverables NG IGS Lead Comments: The CDRL list should be ?tailo...
+6. [IN-FAMILY] `Archive/MIL-HDBK-61B_draft.pdf` (score=0.016)
+   > equirements for digital data in the Contract Data Requirements List (CDRL). Figure 9-4 and Table 9-1 model and provide explanation of the factors involved in...
 7. [IN-FAMILY] `_SOW/SOW Deliverables DISTRO 2 6 09.xls` (score=0.016)
    > ntents of CDs in archive cabinet SoftwareArchiveList_1.doc Software Licenses H:\Swafs\common\Documents\Data Management\Software Licenses SWAFS Risk Managemen...
-8. [IN-FAMILY] `Readings, Docs for familiarization, info/PWS WX28 2017-02-20 IGS OS Uprades.pdf` (score=0.016)
-   > [SECTION] 2.9 Contract Data Req uirements List (CDRL) 2.9.1 IGS Deliverables shall be limited to only those products with corresponding PWS references listed...
-9. [IN-FAMILY] `A012 - Configuration Management Plan/FA881525FB002_IGSCC-125_IGS-Configuration-Management-Plan_A012_2025-12-18-UPDATED.pdf` (score=0.016)
-   > the NGIDE system using Jira and stored in the IGS Share drive. Jira provides unique identification. The IGS Contract Data Requirements List (CDRL) is documen...
-10. [IN-FAMILY] `PWS/PWS WX31 2017-08-24 IGS Installs.pdf` (score=0.016)
-   > [SECTION] 2.9 Contract Data Req uirements List (CDRL) 2.9.1 IGS Deliverables shall be limited to only those products with corresponding PWS references listed...
+8. [IN-FAMILY] `DOCUMENTS LIBRARY/MIL-HDBK-61B_draft (Configuration Management Guidance) (2002-09-10).pdf` (score=0.016)
+   > equirements for digital data in the Contract Data Requirements List (CDRL). Figure 9-4 and Table 9-1 model and provide explanation of the factors involved in...
+9. [IN-FAMILY] `_SOW/DO 5057 SWAFS Selective Tasks SEMSD 07502-1 2007-0926.pdf` (score=0.016)
+   > ersonnel will perform as Government POCs for the performance of this Delivery Order: NAME OFFICE PHONE NUMBER Mr Jerry Reif A8PA (402) 294-9645 Capt Annette ...
+10. [IN-FAMILY] `Archive/IGS Install-Hawaii_IGS Tech Approach_Draft_29 Feb 16.docx` (score=0.016)
+   > [SECTION] 2.9 Contract Data Requirements List (CD RL) Table X ? IGS Install (Hawaii NEXION) Deliverables NG IGS Lead Comments: The CDRL list should be ?tailo...
 
 ---
 
@@ -12161,8 +12191,8 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 **Expected family:** CDRLs
 
-**Latency:** embed+retrieve 5109ms (router 1379ms, retrieval 3567ms)
-**Stage timings:** context_build=3357ms, rerank=3357ms, retrieval=3567ms, router=1379ms, vector_search=210ms
+**Latency:** embed+retrieve 5205ms (router 1559ms, retrieval 3451ms)
+**Stage timings:** context_build=3268ms, rerank=3268ms, retrieval=3451ms, router=1559ms, vector_search=183ms
 
 **Top-5 results:**
 
@@ -12202,16 +12232,16 @@ a classifier tuning opportunity, tracked but not fixed here.
 
 | Category | Count | Queries |
 |----------|------:|---------|
-| Retrieval works -- top-1 in family | 320 | PQ-101, PQ-102, PQ-103, PQ-104, PQ-105, PQ-106, PQ-107, PQ-108, PQ-109, PQ-110, PQ-111, PQ-113, PQ-115, PQ-116, PQ-118, PQ-119, PQ-121, PQ-124, PQ-125, PQ-126, PQ-127, PQ-128, PQ-129, PQ-130, PQ-131, PQ-133, PQ-135, PQ-136, PQ-137, PQ-138, PQ-139, PQ-141, PQ-142, PQ-143, PQ-144, PQ-145, PQ-146, PQ-147, PQ-148, PQ-150, PQ-151, PQ-152, PQ-155, PQ-156, PQ-159, PQ-161, PQ-163, PQ-165, PQ-166, PQ-167, PQ-168, PQ-169, PQ-170, PQ-171, PQ-172, PQ-173, PQ-174, PQ-175, PQ-176, PQ-178, PQ-179, PQ-180, PQ-181, PQ-183, PQ-184, PQ-185, PQ-186, PQ-187, PQ-190, PQ-191, PQ-192, PQ-193, PQ-194, PQ-195, PQ-197, PQ-198, PQ-199, PQ-200, PQ-202, PQ-203, PQ-204, PQ-205, PQ-206, PQ-207, PQ-208, PQ-209, PQ-210, PQ-211, PQ-212, PQ-213, PQ-214, PQ-220, PQ-221, PQ-222, PQ-223, PQ-224, PQ-225, PQ-227, PQ-228, PQ-230, PQ-231, PQ-232, PQ-233, PQ-234, PQ-235, PQ-236, PQ-237, PQ-238, PQ-239, PQ-240, PQ-243, PQ-244, PQ-245, PQ-246, PQ-247, PQ-248, PQ-250, PQ-251, PQ-252, PQ-253, PQ-254, PQ-255, PQ-256, PQ-257, PQ-258, PQ-259, PQ-260, PQ-261, PQ-263, PQ-264, PQ-265, PQ-266, PQ-269, PQ-270, PQ-271, PQ-272, PQ-274, PQ-275, PQ-276, PQ-277, PQ-278, PQ-279, PQ-280, PQ-281, PQ-283, PQ-284, PQ-285, PQ-286, PQ-287, PQ-288, PQ-289, PQ-290, PQ-291, PQ-292, PQ-293, PQ-294, PQ-295, PQ-296, PQ-297, PQ-301, PQ-302, PQ-304, PQ-306, PQ-307, PQ-308, PQ-310, PQ-311, PQ-312, PQ-313, PQ-314, PQ-315, PQ-316, PQ-317, PQ-318, PQ-319, PQ-321, PQ-322, PQ-323, PQ-324, PQ-325, PQ-326, PQ-328, PQ-330, PQ-331, PQ-332, PQ-334, PQ-335, PQ-336, PQ-338, PQ-340, PQ-341, PQ-342, PQ-343, PQ-344, PQ-345, PQ-346, PQ-347, PQ-350, PQ-352, PQ-357, PQ-358, PQ-359, PQ-360, PQ-361, PQ-363, PQ-364, PQ-365, PQ-366, PQ-367, PQ-368, PQ-369, PQ-370, PQ-371, PQ-372, PQ-373, PQ-374, PQ-375, PQ-376, PQ-377, PQ-378, PQ-382, PQ-383, PQ-384, PQ-385, PQ-386, PQ-387, PQ-388, PQ-389, PQ-390, PQ-391, PQ-392, PQ-393, PQ-394, PQ-395, PQ-396, PQ-397, PQ-398, PQ-401, PQ-402, PQ-403, PQ-406, PQ-407, PQ-408, PQ-409, PQ-410, PQ-411, PQ-412, PQ-413, PQ-414, PQ-415, PQ-416, PQ-417, PQ-418, PQ-419, PQ-420, PQ-421, PQ-422, PQ-423, PQ-424, PQ-426, PQ-428, PQ-429, PQ-430, PQ-431, PQ-432, PQ-433, PQ-434, PQ-435, PQ-436, PQ-437, PQ-438, PQ-439, PQ-440, PQ-441, PQ-442, PQ-443, PQ-445, PQ-446, PQ-447, PQ-448, PQ-450, PQ-451, PQ-452, PQ-453, PQ-455, PQ-457, PQ-458, PQ-459, PQ-460, PQ-461, PQ-462, PQ-463, PQ-464, PQ-465, PQ-466, PQ-467, PQ-468, PQ-469, PQ-470, PQ-471, PQ-472, PQ-473, PQ-474, PQ-477, PQ-478, PQ-480, PQ-481, PQ-482, PQ-483, PQ-485, PQ-486, PQ-488, PQ-489, PQ-491, PQ-493, PQ-494, PQ-495, PQ-496, PQ-499, PQ-500 |
-| Retrieval works -- top-5 in family (not top-1) | 54 | PQ-112, PQ-122, PQ-132, PQ-153, PQ-154, PQ-157, PQ-158, PQ-160, PQ-162, PQ-182, PQ-196, PQ-201, PQ-215, PQ-216, PQ-218, PQ-226, PQ-229, PQ-249, PQ-262, PQ-267, PQ-268, PQ-273, PQ-282, PQ-303, PQ-309, PQ-320, PQ-327, PQ-329, PQ-333, PQ-339, PQ-351, PQ-354, PQ-355, PQ-356, PQ-362, PQ-379, PQ-399, PQ-400, PQ-405, PQ-425, PQ-427, PQ-444, PQ-449, PQ-454, PQ-456, PQ-475, PQ-476, PQ-479, PQ-484, PQ-487, PQ-490, PQ-492, PQ-497, PQ-498 |
+| Retrieval works -- top-1 in family | 323 | PQ-101, PQ-102, PQ-103, PQ-104, PQ-105, PQ-106, PQ-107, PQ-108, PQ-109, PQ-110, PQ-111, PQ-113, PQ-115, PQ-116, PQ-118, PQ-119, PQ-121, PQ-124, PQ-125, PQ-126, PQ-127, PQ-128, PQ-129, PQ-130, PQ-131, PQ-133, PQ-134, PQ-135, PQ-136, PQ-137, PQ-138, PQ-139, PQ-141, PQ-142, PQ-143, PQ-144, PQ-145, PQ-146, PQ-147, PQ-148, PQ-150, PQ-151, PQ-152, PQ-154, PQ-155, PQ-156, PQ-159, PQ-161, PQ-163, PQ-165, PQ-166, PQ-167, PQ-168, PQ-169, PQ-170, PQ-171, PQ-172, PQ-173, PQ-174, PQ-175, PQ-176, PQ-178, PQ-179, PQ-180, PQ-181, PQ-183, PQ-184, PQ-185, PQ-186, PQ-187, PQ-190, PQ-191, PQ-192, PQ-193, PQ-194, PQ-195, PQ-197, PQ-198, PQ-199, PQ-200, PQ-202, PQ-203, PQ-204, PQ-205, PQ-206, PQ-207, PQ-208, PQ-209, PQ-210, PQ-211, PQ-212, PQ-213, PQ-214, PQ-220, PQ-221, PQ-222, PQ-223, PQ-224, PQ-225, PQ-227, PQ-228, PQ-230, PQ-231, PQ-232, PQ-233, PQ-234, PQ-235, PQ-236, PQ-237, PQ-238, PQ-239, PQ-240, PQ-243, PQ-244, PQ-245, PQ-246, PQ-247, PQ-248, PQ-250, PQ-251, PQ-252, PQ-253, PQ-254, PQ-255, PQ-256, PQ-257, PQ-258, PQ-259, PQ-260, PQ-261, PQ-263, PQ-264, PQ-265, PQ-266, PQ-269, PQ-270, PQ-271, PQ-272, PQ-274, PQ-275, PQ-276, PQ-277, PQ-278, PQ-279, PQ-280, PQ-281, PQ-283, PQ-284, PQ-285, PQ-286, PQ-287, PQ-288, PQ-289, PQ-290, PQ-291, PQ-292, PQ-293, PQ-294, PQ-295, PQ-296, PQ-297, PQ-300, PQ-301, PQ-302, PQ-303, PQ-304, PQ-307, PQ-308, PQ-310, PQ-311, PQ-312, PQ-313, PQ-314, PQ-315, PQ-316, PQ-317, PQ-318, PQ-319, PQ-321, PQ-322, PQ-323, PQ-324, PQ-325, PQ-328, PQ-330, PQ-331, PQ-332, PQ-334, PQ-335, PQ-336, PQ-338, PQ-340, PQ-341, PQ-342, PQ-343, PQ-344, PQ-345, PQ-346, PQ-347, PQ-350, PQ-351, PQ-352, PQ-357, PQ-358, PQ-359, PQ-360, PQ-361, PQ-363, PQ-364, PQ-365, PQ-366, PQ-367, PQ-368, PQ-369, PQ-370, PQ-371, PQ-372, PQ-373, PQ-374, PQ-375, PQ-376, PQ-377, PQ-378, PQ-382, PQ-383, PQ-385, PQ-386, PQ-387, PQ-388, PQ-389, PQ-390, PQ-391, PQ-392, PQ-393, PQ-394, PQ-395, PQ-396, PQ-397, PQ-398, PQ-399, PQ-401, PQ-402, PQ-403, PQ-406, PQ-407, PQ-408, PQ-409, PQ-410, PQ-411, PQ-412, PQ-413, PQ-414, PQ-415, PQ-416, PQ-417, PQ-418, PQ-419, PQ-420, PQ-421, PQ-422, PQ-423, PQ-424, PQ-426, PQ-428, PQ-429, PQ-430, PQ-431, PQ-432, PQ-433, PQ-434, PQ-435, PQ-436, PQ-437, PQ-438, PQ-439, PQ-441, PQ-442, PQ-443, PQ-445, PQ-446, PQ-447, PQ-448, PQ-450, PQ-451, PQ-452, PQ-453, PQ-455, PQ-457, PQ-458, PQ-459, PQ-460, PQ-461, PQ-462, PQ-463, PQ-464, PQ-465, PQ-466, PQ-467, PQ-468, PQ-469, PQ-470, PQ-471, PQ-472, PQ-473, PQ-474, PQ-477, PQ-478, PQ-480, PQ-481, PQ-482, PQ-485, PQ-486, PQ-487, PQ-488, PQ-489, PQ-491, PQ-493, PQ-494, PQ-495, PQ-496, PQ-497, PQ-499, PQ-500 |
+| Retrieval works -- top-5 in family (not top-1) | 51 | PQ-112, PQ-122, PQ-132, PQ-153, PQ-157, PQ-158, PQ-160, PQ-162, PQ-182, PQ-196, PQ-201, PQ-215, PQ-216, PQ-218, PQ-229, PQ-249, PQ-262, PQ-267, PQ-268, PQ-273, PQ-282, PQ-309, PQ-320, PQ-326, PQ-327, PQ-329, PQ-333, PQ-339, PQ-354, PQ-355, PQ-356, PQ-362, PQ-379, PQ-384, PQ-400, PQ-405, PQ-425, PQ-427, PQ-440, PQ-444, PQ-449, PQ-454, PQ-456, PQ-475, PQ-476, PQ-479, PQ-483, PQ-484, PQ-490, PQ-492, PQ-498 |
 | Retrieval works -- needs Tier 2 GLiNER | 0 | - |
-| Retrieval works -- needs Tier 3 LLM relationships | 64 | PQ-146, PQ-147, PQ-148, PQ-150, PQ-153, PQ-154, PQ-202, PQ-203, PQ-204, PQ-205, PQ-206, PQ-208, PQ-209, PQ-210, PQ-263, PQ-264, PQ-265, PQ-266, PQ-267, PQ-268, PQ-269, PQ-270, PQ-323, PQ-324, PQ-325, PQ-326, PQ-327, PQ-328, PQ-329, PQ-330, PQ-375, PQ-377, PQ-379, PQ-383, PQ-384, PQ-385, PQ-389, PQ-390, PQ-405, PQ-429, PQ-430, PQ-431, PQ-432, PQ-433, PQ-434, PQ-435, PQ-436, PQ-437, PQ-438, PQ-441, PQ-442, PQ-445, PQ-449, PQ-454, PQ-484, PQ-486, PQ-487, PQ-488, PQ-489, PQ-490, PQ-491, PQ-494, PQ-495, PQ-499 |
+| Retrieval works -- needs Tier 3 LLM relationships | 63 | PQ-146, PQ-147, PQ-148, PQ-150, PQ-153, PQ-202, PQ-203, PQ-204, PQ-205, PQ-206, PQ-208, PQ-209, PQ-210, PQ-263, PQ-264, PQ-265, PQ-266, PQ-267, PQ-268, PQ-269, PQ-270, PQ-323, PQ-324, PQ-325, PQ-326, PQ-327, PQ-328, PQ-329, PQ-330, PQ-375, PQ-377, PQ-379, PQ-383, PQ-384, PQ-385, PQ-389, PQ-390, PQ-405, PQ-429, PQ-430, PQ-431, PQ-432, PQ-433, PQ-434, PQ-435, PQ-436, PQ-437, PQ-438, PQ-441, PQ-442, PQ-445, PQ-449, PQ-454, PQ-484, PQ-486, PQ-487, PQ-488, PQ-489, PQ-490, PQ-491, PQ-494, PQ-495, PQ-499 |
 | Content gap -- entity-dependent MISS | 0 | - |
-| Retrieval broken -- in-corpus, no extraction dep | 17 | PQ-117, PQ-120, PQ-123, PQ-134, PQ-177, PQ-188, PQ-217, PQ-219, PQ-241, PQ-242, PQ-298, PQ-299, PQ-300, PQ-305, PQ-353, PQ-381, PQ-404 |
+| Retrieval broken -- in-corpus, no extraction dep | 17 | PQ-117, PQ-120, PQ-123, PQ-177, PQ-188, PQ-217, PQ-219, PQ-226, PQ-241, PQ-242, PQ-298, PQ-299, PQ-305, PQ-306, PQ-353, PQ-381, PQ-404 |
 
 ## Demo-Day Narrative
 
-"HybridRAG V2 achieves **82% top-1 in-family relevance** and **96% in-top-5 coverage** on 25 real operator queries across 5 user personas, at **13107ms P50 / 51168ms P95 pure retrieval latency** over a 10,435,593 chunk live store. Zero outright misses. The 5 partials cluster around classifier routing misses and aggregation queries that need Tier 2 GLiNER and Tier 3 LLM extraction to close. Every future extraction and routing improvement measures itself against this baseline."
+"HybridRAG V2 achieves **83% top-1 in-family relevance** and **96% in-top-5 coverage** on 25 real operator queries across 5 user personas, at **11131ms P50 / 32023ms P95 pure retrieval latency** over a 10,435,593 chunk live store. Zero outright misses. The 5 partials cluster around classifier routing misses and aggregation queries that need Tier 2 GLiNER and Tier 3 LLM extraction to close. Every future extraction and routing improvement measures itself against this baseline."
 
 ---
 
