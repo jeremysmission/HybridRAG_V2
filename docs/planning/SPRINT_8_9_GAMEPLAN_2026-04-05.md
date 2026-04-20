@@ -126,5 +126,5 @@ Convert the proven demo build into a production-minded extraction and retrieval 
 - LanceDB vector indexing docs: https://docs.lancedb.com/indexing/vector-index
 - LanceDB scalar indexing docs: https://docs.lancedb.com/indexing/scalar-index
 - LanceDB reindexing docs: https://docs.lancedb.com/indexing/reindexing
-- OpenAI evaluation best practices: https://developers.openai.com/api/docs/guides/evaluation-best-practices/
-- OpenAI trace grading guide: https://developers.openai.com/api/docs/guides/trace-grading
+- Official evaluation best-practices guide
+- Official trace-grading guide

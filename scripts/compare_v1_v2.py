@@ -82,7 +82,9 @@ def _judge_pair(query: str, v1_answer: str, v2_answer: str) -> dict:
     api_key = os.environ.get("OPENAI_API_KEY") or os.environ.get("AZURE_OPENAI_API_KEY")
     if not api_key:
         return {"preference": "SKIP", "reasoning": "No OPENAI_API_KEY set."}
-    base_url = os.environ.get("OPENAI_API_BASE", "https://api.openai.com/v1")
+    base_url = os.environ.get("OPENAI_API_BASE") or os.environ.get("AZURE_OPENAI_ENDPOINT")
+    if not base_url:
+        return {"preference": "SKIP", "reasoning": "No LLM API base set."}
     prompt = (
         "You are an impartial evaluator. Given a question and two answers (A and B), "
         "decide which is better. Respond with ONLY valid JSON:\n"

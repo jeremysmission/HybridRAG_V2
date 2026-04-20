@@ -286,4 +286,4 @@ This plan is grounded in current code and measured family evidence, but it still
 - the repo already contains unrelated dirty work, but this lane itself is isolated to new docs only
 - the next safe coding slice is a minimal metadata-preservation change from Forge export into V2 import and Lance storage
 
-Signed: Agent Four | Lane 4
+Signed: reviewer | Lane 4

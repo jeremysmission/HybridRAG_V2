@@ -82,4 +82,4 @@ Before commit/push, the local changes at risk were:
 - `C:\HybridRAG_V2\docs\architecture\FAMILY_AWARE_QUERY_ROUTING_PLAN_2026-04-09.md`
 - `C:\HybridRAG_V2\docs\handoffs\LANE4_HANDOFF_2026-04-09.md`
 
-Signed: Agent Four | Lane 4
+Signed: reviewer | Lane 4

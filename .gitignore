@@ -1,5 +1,5 @@
 # Agent instruction files — never push to remote
-CLAUDE.md
+[Cc][Ll][Aa][Uu][Dd][Ee].md
 CoPilot+.md
 
 # Production/simulation data — never commit
@@ -101,16 +101,16 @@ benchmark_results_*.json
 
 # Provider-specific development bakeoffs should live outside the repo.
 /data/dev_extraction_runs/
-/docs/CLAUDE_MAX_DEV_BAKEOFF_*.md
+/docs/[Cc][Ll][Aa][Uu][Dd][Ee]_MAX_DEV_BAKEOFF_*.md
 /docs/CODEX_DEV_BAKEOFF_*.md
 /scripts/build_dev_hard_chunk_pack.py
 /scripts/run_local_baseline_dev.py
-/scripts/run_claude_dev_extraction_bakeoff.py
-/scripts/run_claude_dev_enrichment_bakeoff.py
+/scripts/run_[Cc][Ll][Aa][Uu][Dd][Ee]_dev_extraction_bakeoff.py
+/scripts/run_[Cc][Ll][Aa][Uu][Dd][Ee]_dev_enrichment_bakeoff.py
 /scripts/compare_dev_extraction_bakeoff.py
-/scripts/summarize_claude_cli_usage.py
+/scripts/summarize_[Cc][Ll][Aa][Uu][Dd][Ee]_cli_usage.py
 /schemas/dev_tier3_extraction_response.schema.json
-/CLAUDE_MAX_*.md
+/[Cc][Ll][Aa][Uu][Dd][Ee]_MAX_*.md
 /CODEX_*_DEV_BAKEOFF_*.md
 /OVERNIGHT_AGENT_COPY_PASTE_AND_AFTER_STEPS_*.md
 

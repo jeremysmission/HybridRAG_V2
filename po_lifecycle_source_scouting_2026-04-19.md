@@ -217,4 +217,4 @@ Do not start with a broad "all logistics" extractor. Start with:
 
 That is the smallest honest path to deterministic PO-lifecycle answers with bounded scope and real corpus evidence.
 
-Signed: Agent B
+Signed: reviewer

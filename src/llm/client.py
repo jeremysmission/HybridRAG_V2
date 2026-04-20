@@ -41,7 +41,7 @@ def _detect_provider(endpoint: str) -> str:
     Auto-detect provider from endpoint URL.
 
     Azure patterns: 'azure', 'cognitiveservices', '/openai/deployments/'
-    OpenAI patterns: 'api.openai.com' or empty (uses SDK default)
+    OpenAI patterns: SDK default host or empty endpoint value
     Ollama patterns: 'ollama' or loopback-host OpenAI-compatible URLs
     """
     if not endpoint:

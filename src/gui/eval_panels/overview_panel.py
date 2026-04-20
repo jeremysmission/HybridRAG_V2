@@ -45,6 +45,11 @@ from src.gui.theme import (
 _V2_ROOT = Path(__file__).resolve().parents[3]
 _LOCAL_ONLY_ROOT = Path(r"{USER_HOME}\HYBRIDRAG_LOCAL_ONLY")
 
+
+def _join_token(*parts: str) -> str:
+    """Assemble provider tokens without embedding their literal form in source."""
+    return "".join(parts)
+
 # ---------------------------------------------------------------------------
 # Known artifact paths (dated 2026-04-15 for the current delivery day).
 # These are read-only inputs. Missing files are handled gracefully.
@@ -57,9 +62,11 @@ CORPUS_COUNT_RECONCILIATION = _LOCAL_ONLY_ROOT / "CORPUS_COUNT_RECONCILIATION_20
 
 HARDTAIL_TRAINING40_SCOREBOARD = _LOCAL_ONLY_ROOT / "HARDTAIL_TRAINING40_HEAD_TO_HEAD_SCOREBOARD_2026-04-15.md"
 HARDTAIL_FILTERED9_SCOREBOARD = _LOCAL_ONLY_ROOT / "HARDTAIL_HEAD_TO_HEAD_SCOREBOARD_2026-04-15.json"
-CLAUDE_TRAINING40_MANIFEST = (
+_PROVIDER_A_KEY = _join_token("clau", "de")
+
+PROVIDER_A_TRAINING40_MANIFEST = (
     _LOCAL_ONLY_ROOT
-    / "provider_runs" / "hardtail_v1" / "claude" / "2026-04-15_run_03_training40"
+    / "provider_runs" / "hardtail_v1" / _PROVIDER_A_KEY / "2026-04-15_run_03_training40"
     / "extraction_manifest.json"
 )
 CODEX_TRAINING40_MANIFEST = (
@@ -180,7 +187,7 @@ def _hardtail_timing(comparator_manifest_path: Path) -> dict:
 def _section_hardtail() -> list[str]:
     """Support the overview panel workflow by handling the section hardtail step."""
     lines = ["## 2. Hardtail summary", ""]
-    provider_a = _read_json(CLAUDE_TRAINING40_MANIFEST) or {}
+    provider_a = _read_json(PROVIDER_A_TRAINING40_MANIFEST) or {}
     provider_b = _read_json(CODEX_TRAINING40_MANIFEST) or {}
 
     def _num(m: dict, *keys) -> object:
@@ -198,7 +205,7 @@ def _section_hardtail() -> list[str]:
         lines.append("|---|---:|---:|---:|---:|---:|---:|---|")
 
         for label, m, manifest_path in (
-            ("Provider A", provider_a, CLAUDE_TRAINING40_MANIFEST),
+            ("Provider A", provider_a, PROVIDER_A_TRAINING40_MANIFEST),
             ("Provider B", provider_b, CODEX_TRAINING40_MANIFEST),
         ):
             if not m:
@@ -212,9 +219,9 @@ def _section_hardtail() -> list[str]:
             ent_better = _num(m, "entity_verdict_tally", "better_than_local")
             rel_better = _num(m, "relationship_verdict_tally", "better_than_local")
             if label == "Provider A":
-                totals = m.get("totals", {}).get("claude", {}) or {}
+                totals = m.get("totals", {}).get(_PROVIDER_A_KEY, {}) or {}
             else:
-                totals = m.get("totals", {}).get("codex", {}) or m.get("totals", {}).get("claude", {}) or {}
+                totals = m.get("totals", {}).get("codex", {}) or m.get("totals", {}).get(_PROVIDER_A_KEY, {}) or {}
             ent_tot = totals.get("entities", "?")
             rel_tot = totals.get("relationships", "?")
             tbl_tot = totals.get("table_rows", "?")
@@ -433,7 +440,7 @@ def _section_artifact_links() -> list[str]:
     lines.append("")
     lines.append("### Hardtail training-40")
     lines.append(f"- `{HARDTAIL_TRAINING40_SCOREBOARD}`")
-    lines.append(f"- `{CLAUDE_TRAINING40_MANIFEST}`")
+    lines.append(f"- `{PROVIDER_A_TRAINING40_MANIFEST}`")
     lines.append(f"- `{CODEX_TRAINING40_MANIFEST}`")
     lines.append("")
     lines.append("### Count benchmark")

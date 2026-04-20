@@ -442,7 +442,7 @@ class Generator:
     """LLM generation with graduated confidence and citations."""
 
     GENERATOR_PROMPT = """
-    You are a technical document assistant for enterprise program military systems.
+    You are a technical document system for enterprise program military systems.
     Answer based ONLY on the provided context.
 
     CONFIDENCE LEVELS (required in every response):

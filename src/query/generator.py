@@ -19,7 +19,7 @@ from src.llm.client import LLMClient, LLMResponse
 from src.query.context_builder import GeneratorContext
 
 
-SYSTEM_PROMPT = """You are a technical document assistant for enterprise program military systems.
+SYSTEM_PROMPT = """You are a technical document system for enterprise program military systems.
 Answer based ONLY on the provided context.
 
 CONFIDENCE LEVELS (required in every response):

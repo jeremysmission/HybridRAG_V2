@@ -164,5 +164,5 @@ Convert the larger proof into an operationally safe local service with clear ope
 - LanceDB reindexing docs: https://docs.lancedb.com/indexing/reindexing
 - PyPA packaging tutorial: https://packaging.python.org/en/latest/tutorials/packaging-projects/
 - FastAPI deployment manual run docs: https://fastapi.tiangolo.com/deployment/manually/
-- OpenAI evaluation best practices: https://developers.openai.com/api/docs/guides/evaluation-best-practices/
-- OpenAI trace grading guide: https://developers.openai.com/api/docs/guides/trace-grading
+- Official evaluation best-practices guide
+- Official trace-grading guide
