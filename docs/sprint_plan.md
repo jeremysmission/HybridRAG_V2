@@ -5,6 +5,8 @@
 **Depth:** 7 sprints planned  
 **Source inputs:** main war room, `INFRASTRUCTURE_INVENTORY.md`, `post_push_known_gaps.md`, `SPRINT_SLICE_AGGREGATION_CAPABILITY_2026-04-18.md`, `SPRINT_SLICE_AGGREGATION_FAILURE_RATE_2026-04-18.md`
 
+**Priority directive:** per QA strategic framing, the near-term sequence is quality-first. The first two planned sprints focus on trustworthy bones — push-gate hygiene, routing, latency, eval credibility, semantic consistency, release scoreboard, and merge discipline — before broader capability-expansion work competes for priority.
+
 ## Sprint 1 — Demo Integrity + Push-Gate Hygiene
 
 ### SP1-01 — Top-K semantics unification
@@ -353,5 +355,3 @@
   - Logistics completion: Sprints 4, 5
   - Maintenance cross-domain: Sprint 5
   - Program management: Sprint 6
-
-Signed: Agent-C | C:\HybridRAG_V2 | 2026-04-20 MDT

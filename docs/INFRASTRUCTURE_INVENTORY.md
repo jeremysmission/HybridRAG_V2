@@ -8,7 +8,7 @@
 
 ## Why this doc exists
 
-On 2026-04-20 we nearly dispatched agents to rebuild three things that already existed (`tabular_substrate.py`, `entity_store.TableRow`, the eval GUI panels). This inventory is the durable fix. Future coordinators: scan here first.
+On 2026-04-20 the team nearly rebuilt three things that already existed (`tabular_substrate.py`, `entity_store.TableRow`, the eval GUI panels). This inventory is the durable fix. Future maintainers: scan here first.
 
 When you add new capability, append to the relevant section here in the SAME PR. If you delete capability, mark it removed.
 
@@ -42,8 +42,8 @@ When you add new capability, append to the relevant section here in the SAME PR.
 | Quality gate | `src/extraction/quality_gate.py` | Quality gating logic (likely tier-related) | |
 
 **Lane-specific add-ons (do NOT exist in V2 root):**
-- `po_event_extractor.py` — V2_Dev (Agent-B), Lane 2
-- `installed_base_xlsx_parser.py` — V2_Dev2 (Agent-C), Lane 3 (in flight)
+- `po_event_extractor.py` — V2_Dev, Lane 2
+- `installed_base_xlsx_parser.py` — V2_Dev2, Lane 3 (in flight)
 
 ### `tabular_substrate.py` — what's in it (CRITICAL — check before adding tabular extraction)
 
@@ -172,8 +172,8 @@ Storage target: `entity_store.TableRow` via `insert_table_rows`.
 | Script | Substrate | Notes |
 |--------|-----------|-------|
 | `populate_failure_events.py` | failure_events | Path-derived + chunk-derived passes |
-| `populate_po_pricing.py` | po_pricing | V2_Dev only (Agent-B's lane) |
-| `populate_installed_base.py` | installed_base | V2_Dev2 only (Agent-C's lane) |
+| `populate_po_pricing.py` | po_pricing | V2_Dev only |
+| `populate_installed_base.py` | installed_base | V2_Dev2 only |
 
 ### Benchmark / eval runners
 | Script | What it runs |
@@ -316,4 +316,4 @@ When you ship NEW capability that other agents might want to leverage:
 2. If you remove capability, mark as removed
 3. Don't let this doc go stale — it's the anti-duplication safeguard
 
-Coordinator runs a 5-min scan against this doc before drafting any "build new X" dispatch. If X is here, redirect to "extend Y" instead.
+Maintainers should run a quick scan against this doc before drafting any "build new X" dispatch. If X is here, redirect to "extend Y" instead.

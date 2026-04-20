@@ -4,7 +4,7 @@
 
 ## 1. Multi-agent triangulation beats single-thread certainty
 
-- Claude + Codex style cross-model review caught bugs that a single lane missed.
+- Cross-model review caught bugs that a single lane missed.
 - The strongest pattern today was:
   1. one lane reports
   2. another lane challenges
@@ -32,7 +32,7 @@ This was especially important on:
 - sanitize workflow diagnosis
 - merge-tree route verification
 
-## 4. Coordinator ETA estimates were consistently too optimistic
+## 4. Dispatch ETA estimates were consistently too optimistic
 
 - Even after aggressive division, ETA language still anchored expectations badly.
 - Better rule:
@@ -51,5 +51,3 @@ This was especially important on:
 - Never run in-place sanitize on the active working tree.
 - Push-gate scripts must encode policy, not rely on tribal memory.
 - If Scan 1/3/4 are clean and Scan 2 only shows historical archive/tool-config/business-title hits, document judgment and proceed instead of reopening the whole tree.
-
-Signed: Agent-C | C:\HybridRAG_V2 | 2026-04-20 MDT

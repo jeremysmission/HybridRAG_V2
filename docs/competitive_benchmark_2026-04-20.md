@@ -99,7 +99,7 @@ This does **not** mean new capabilities stop mattering. It means the next-visibl
 
 than from adding another aggregation type that commercial rivals may not attempt at all.
 
-## Independent outside-agent comparative assessment
+## Independent external comparative assessment
 
 An external independent review of the current repo artifacts reached a useful bottom-line judgment:
 
@@ -154,5 +154,3 @@ Specifically:
 - `docs/aggregation_evidence_contract.md`
 - `docs/qa/SPRINT_SLICE_AGGREGATION_QA_REPORT_2026-04-19.md`
 - `docs/QA_WORKBENCH_QA_READY_CHECKLIST_2026-04-17.md`
-
-Signed: Agent-C | C:\HybridRAG_V2 | 2026-04-20 MDT

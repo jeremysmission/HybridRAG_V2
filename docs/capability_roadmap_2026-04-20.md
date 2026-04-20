@@ -363,5 +363,3 @@ Aggregation capability is demo-scope complete when all of the following are true
 - PM/portfolio queries have a dedicated deterministic benchmark lane
 - router accuracy is at or above 90% on the demo pack
 - p95 latency is close enough to interactive use that operators stay engaged
-
-Signed: Agent-C | C:\HybridRAG_V2 | 2026-04-20 MDT
