@@ -1,0 +1,131 @@
+{
+  "scan_date": "2026-04-20",
+  "scanner": "Miner-Agent",
+  "purpose": "Demo evidence sampling - 30 corpus docs for Researcher demo pack",
+  "po_documents": [
+    {
+      "year": "2018",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/002 - Received/NEXION Sustainment OY1 (1 Aug 23 - 31 Jul 24)/PO - 5300067196, PR 31442726, C 16165219 Calibration NEXION(PBJ)($366.00)/42061-Q6777345-92018-Edith Canada_1.pdf"
+    },
+    {
+      "year": "2019",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/002 - Received/ISTO Sustainment NEW BASE YR (1Aug 25 - 31 Jul 26)/PO - 5000696458, PR 3000201978 Hardware Palau Jim(McMaster)($33.00)/7513K315.pdf"
+    },
+    {
+      "year": "2020",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/002 - Received/Niger ISTO Installation/PO - 5000342509, PR 31406803, C 15901486 Niger ISTO Non-Pen and Misc Materials (PBJ)($1,089.00)/201812020 (ISTO UHF Assembly)(2020-05-05)_1.pdf"
+    },
+    {
+      "year": "2021",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/002 - Received/NEXION Sustainment Base Year (1 Aug 22 - 31 Jul 23)/PO - 5300056721, PR  31419178, C 15992997 First Aid and CPR Training NEXION(PBJ)($1,177.00)/2021 Training Quote_1.pdf"
+    },
+    {
+      "year": "2022",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/002 - Received/NEXION Sustainment Base Year (1 Aug 22 - 31 Jul 23)/PO - 5000338616, PR 31403300, C 15876706 NEXION Antennas and Preamps(LDI)($14,343.00)/NGC - LDI 20221102-1 Rec Antenna & Pol Switches_1.pdf"
+    },
+    {
+      "year": "2023",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/002 - Received/ISTO Sustainment OY1 (1 Aug 23 - 31 Jul 24)/PO - 5000459221, PR 31441161, C 16153995 B210 USRP ISTO(PBJ)($4,380.00)/16153995_Shopping Cart_1.pdf"
+    },
+    {
+      "year": "2024",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/002 - Received/ISTO Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5000564537, PR 3000111303, Adapter ISTO(PBJ)($385.00)/47670-Q7319231-123433-Edith Canada_1.pdf"
+    },
+    {
+      "year": "2025",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/002 - Received/ISTO Sustainment NEW BASE YR (1Aug 25 - 31 Jul 26)/PO - 5000682276, PR 3000193458 ISTO UPS(CDWG)($3,619.16)/PO 5000682276 - 01.05.2026_1.pdf"
+    },
+    {
+      "year": "2016_archive",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/5012 (PO 7000298452) (LDI) (Systems 13 & 14) (Santiago & Aereckson)/Packing List (LDI) (Rx Ant Legs) (Rcvd 2016-07-18)_1.pdf"
+    },
+    {
+      "year": "2017_archive",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX25 (PO 7000321585) (Software-AutoCad 2017) (3488.00)/2017-05-31 (iBuy Approval Workflow Completed)_1.pdf"
+    }
+  ],
+  "failure_service_documents": [
+    {
+      "site": "Vandenberg",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Vandenberg/2011/Trip Report (CDRL A045B)/DCS_201690-11-D-0009_1.pdf"
+    },
+    {
+      "site": "Ascension",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2010-08-23 thru 08-27 (NEXION_Site Survey)(Heineman)/Reports/Trip Report_Ascension Island_20-31 Aug 2010_Final_1.pdf"
+    },
+    {
+      "site": "Guam",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2010-02-14 thru 02-24 (NEXION_Site Survey)(ARINC_Heineman-Dettler)/Trip Report_Guam_19 Aug 10_ISO_1.pdf"
+    },
+    {
+      "site": "Eglin",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Eglin/2015/Eglin OS Upgrade Trip_21-23 Oct 15/15-0044_Cover Letter_Trip Report (CDRL A045B)_Trip Report, Eglin Operating System (OS) Upgrade Trip 20-23 Oct 15 _Final_1.pdf"
+    },
+    {
+      "site": "Thule",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/SEMS3D/A001-Trip_Reports/Thule ACAS and Data Collection (16-25 Oct 2019)/SEMS3D-39312 Thule NEXION Trip Report - Data Collection and ACAS Scan (16-25 Oct 2019) (A001)_1.pdf"
+    },
+    {
+      "site": "Wake",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/SEMS3D/A001-Trip_Reports/Wake Trip Report (08-11 Oct 2019)/SEMS3D-39311 Wake NEXION Trip Report (08-11 Oct 2019) (A001)_1.pdf"
+    },
+    {
+      "site": "Learmonth",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Learmonth/2015-09-27/Learmonth_Trip Report_23 Sep - 4 Oct 15/15-0048_Cover Letter_Trip Report (CDRL A045B)_Learmonth Restoral-ASV_(23 Sep - 4 Oct 15)_Final_1.pdf"
+    },
+    {
+      "site": "Fairford",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Fairford/2010-06-07 thru 06-25 (NEXION_Install)(ARINC_Heineman-Dettler)/Sys 03 Install 04-Fairford/Install Trip Report/Cover Letter_1.pdf"
+    },
+    {
+      "site": "Alpena",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)/1_Site Selection/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.pdf"
+    }
+  ],
+  "installed_base_documents": [
+    {
+      "site": "Alpena",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Copy of Alpena Inventory  Spares Report_1.xlsx"
+    },
+    {
+      "site": "Eglin",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Eglin/2021-12-13 thru 12-17 (ASV)(Seagren-Dexter)/Site Inventory/Site Inventory and Spares Report_1.xlsx"
+    },
+    {
+      "site": "Guam",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2021-11-03 thru 11-13 (NEXION-ISTO ASV)(HW-CF)/Site Inventory/Guam ISTO & NEXION Inventory & Spare Reports_1.xlsx"
+    },
+    {
+      "site": "Vandenberg",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Vandenberg/2022-01-24 thru 28 (ASV)(Dettler-Pitts)/Site Inventory/Vandenberg Inventory List (2022-02-01)_1.xlsx"
+    },
+    {
+      "site": "Wake",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Wake/2021-08-10 thru 08-28 (NEXION_ASV_Dexter-Dettler)/Site Inventory/Wake Inventory List (2021-07-15)_1.xlsx"
+    }
+  ],
+  "msr_samples": [
+    {
+      "type": "ASV_Guam",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2013-09 RTS-ASV/2013-09/2013-09 (ASV)/Auth Transport Computer HW & SW_1.pdf"
+    },
+    {
+      "type": "RTS_Ascension",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2010-08-23 thru 08-27 (NEXION_Site Survey)(Heineman)/Reports/Trip Report_Ascension Island_20-31 Aug 2010_Final_1.pdf"
+    },
+    {
+      "type": "ASV_Vandenberg",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Vandenberg/2010/2010 ASV Tech Report/Final/Annual Service Visit _ASV_Vandenberg_19 May 2010_Final_1.pdf"
+    },
+    {
+      "type": "RTS_Thule",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Thule/2019-06-06 thru 09-07 (Thule NEXION Install)/2019-07-09 thru 08-09 (Nachbar-Womelsdorff)/Reciepts/Parts (Clamps) - 26 July 2019_1.pdf"
+    }
+  ],
+  "totals": {
+    "po_docs": 10,
+    "failure_service": 9,
+    "installed_base": 5,
+    "msr": 4
+  }
+}

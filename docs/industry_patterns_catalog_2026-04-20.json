@@ -1,0 +1,365 @@
+{
+  "scan_date": "2026-04-20",
+  "scanner": "Miner-Agent",
+  "corpus_source": "E:\\CorpusTransfr\file_state.sqlite3 (214,751 files)",
+  "categories": {
+    "DD Forms": [
+      {
+        "pattern": "DD1149",
+        "count": 602,
+        "samples": [
+          "LDI-TSI-NG-FIP)/DD Form 1149 1of1 TCN FB25008122X501XXX (2018-05-02) (LDI-NG2-Initials Signed)_1.pdf",
+          "LDI-TSI-NG-FIP)/DD Form 1149 1of1 TCN FB25008123X501XXX (2018-05-03) (TSI-NG2-Initials Signed)_1.pdf",
+          "LDI-TSI-NG-FIP)/DD Form 1149 1of1 TCN FB25008127X501XXX (2018-05-07) (FIB-NG2-Initials Signed)_1.pdf"
+        ]
+      },
+      {
+        "pattern": "DD250",
+        "count": 403,
+        "samples": [
+          "ll/Sys 11 Install 10-Alpena/Misc/DD Form 250_Hardware List_Sys 11 (Alpena) (2015-03-24 Update)_1.doc",
+          "n)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Misc/DD Form 250_Hardware List_Sys 11 (Alpena)_1.doc",
+          "LDI-TSI-NG-FIP)/DD Form 1149 1of1 TCN FB25008122X501XXX (2018-05-02) (LDI-NG2-Initials Signed)_1.pdf"
+        ]
+      },
+      {
+        "pattern": "AF_Form",
+        "count": 335,
+        "samples": [
+          "7-24 (Install)(COLSA)/Install/TAB 09 - WORK REQUEST/FOL Curacao AF Form 332 continuation sheet_1.doc",
+          "XION_Install)(ARINC_Brukardt-Dettler)/Sys 09 Install 08-Eielson/AF Form 813 Eielson - Approved_1.pdf",
+          "wajalein/2015-02 Install (Colsa)/TAB 09 - WORK REQUEST/Kwaj AF Form 332 Work Request continued_1.doc"
+        ]
+      },
+      {
+        "pattern": "DD2875",
+        "count": 58,
+        "samples": [
+          "/Accounts/Account Approvals - 2875/Approved Users - 2875 Signed/DD2875 (Fuierer S) NEXION-ISTO_1.pdf",
+          "/Accounts/Account Approvals - 2875/Approved Users - 2875 Signed/DD2875 (Randall J) NEXION-ISTO_1.pdf",
+          "O/Accounts/Account Approvals - 2875/Approved Users - 2875 Signed/DD2875_Fuierer S_Beyond Trust_1.pdf"
+        ]
+      },
+      {
+        "pattern": "DD254",
+        "count": 10,
+        "samples": [
+          ".0 Program Management/#DMEA Program Management/1.0 Contracts ATSP_DMEA/Awarded/Atch 02 - DD254_1.pdf",
+          "acts ATSP_DMEA/DD254/(CUI) DD-254 - NG -25-523 - Ionospheric Ground Systems - updated 20250515_1.pdf",
+          "agement/#DMEA Program Management/1.0 Contracts ATSP_DMEA/Delivered/15_CET 25-253_DD254 Changes_1.pdf"
+        ]
+      },
+      {
+        "pattern": "DD1354",
+        "count": 4,
+        "samples": [
+          "stall)(Brukardt-Dettler-Lutz)/Real Property Form/DD Form 1354_Ascension Island_NEXION_5 Feb 14_1.pdf",
+          "IGS/#  NEXION Sites/1_Sites/Wake Island - US Territory/dd1354_1.pdf",
+          "IGS/5.0 Logistics/Disposition/2024/DD1354 Connex Transfer (Signed)_1.pdf"
+        ]
+      },
+      {
+        "pattern": "DD1348",
+        "count": 3,
+        "samples": [
+          "IGS/Forms/DD Form 1348-1A (Issue Release-Receipt Doc) (Jul 91)/dd13481a_1.pdf",
+          "IGS/zzSEMS ARCHIVE/005_ILS/Disposition/DRMO Documents (Downloaded)/DISP_dd1348-1a_09232015_1.pdf",
+          "IGS/zzSEMS ARCHIVE/005_ILS/Disposition/Equipment DRMO (DD Form 1348-1A) (SWAFS) (2017-11-27)_1.pdf"
+        ]
+      }
+    ],
+    "CDRL References": [
+      {
+        "pattern": "CDRL_general",
+        "count": 3009,
+        "samples": [
+          ")/1_Site Selection/Reports/Cover Letter_SMC_(13-0021)_Trip Report (CDRL A045B)_Michigan_Jun13_1.docx",
+          "n/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.doc",
+          "n/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.pdf"
+        ]
+      },
+      {
+        "pattern": "A001",
+        "count": 2791,
+        "samples": [
+          ")/5_Install/Sys 11 Install 10-Alpena/ScreenCaptures/DCARTScreenCaps/SSTScreenCaps/SSTAlpena001_1.png",
+          " (NEXION-ASV)(Seagren-Vinh)/MSR/Copy of SEMS3D-40528 Alpena NEXION MSR CDRL A001 (9 Jun 2021)_1.docx",
+          ")(Pitts-Womelsdorff)/MSR/Drafts/SEMS3D-37105 Eielson NEXION ASV MSR 9-15 Sept 2018 (CDRL A001)_1.pdf"
+        ]
+      },
+      {
+        "pattern": "A027",
+        "count": 1515,
+        "samples": [
+          " Scan Results)/FA881525FB002_IGSCC-527_DAA-Accreditation-Support-Data_ACAS-Scan-Results_Aug-25_1.zip",
+          " Scan Results)/FA881525FB002_IGSCC-528_DAA-Accreditation-Support-Data_ACAS-Scan-Results_Sep-25_1.zip",
+          " Scan Results)/FA881525FB002_IGSCC-529_DAA-Accreditation-Support-Data_ACAS-Scan-Results_Oct-25_1.zip"
+        ]
+      },
+      {
+        "pattern": "A045B",
+        "count": 302,
+        "samples": [
+          ")/1_Site Selection/Reports/Cover Letter_SMC_(13-0021)_Trip Report (CDRL A045B)_Michigan_Jun13_1.docx",
+          "n/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.doc",
+          "n/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.pdf"
+        ]
+      },
+      {
+        "pattern": "A011",
+        "count": 177,
+        "samples": [
+          "it Report (A011)/Deliverables Report IGSI-1205 Curacao-ISTO Configuration Audit Report (A011)_1.docx",
+          "ion Audit Report/Deliverables Report IGSI-1205 Curacao ISTO Configuration Audit Report (A011)_1.docx",
+          "/Configuration Audit Report/Example_IGSI-230 Curacao ISTO CA Report (A011)(2022-09-23) - Copy_1.docx"
+        ]
+      },
+      {
+        "pattern": "A006",
+        "count": 128,
+        "samples": [
+          "rables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006)_1.docx",
+          "verables Report IGSI-720 Misawa NEXION Installation Acceptance Test Plan and Procedures (A006)_1.pdf",
+          "o/2_Spectrum Analysis/2017 June/SEMS3D-34628 Puerto Rico NEXION Spectrum Analysis (CDRL A006)_1.docx"
+        ]
+      },
+      {
+        "pattern": "A012",
+        "count": 103,
+        "samples": [
+          "ical Report_(CDRL A045B and A012)_Installation Summary Documentation_AlpenaNEXION_WithCoverLtr_1.pdf",
+          "cal Report_(CDRL A045B and A012)_Installation Summary Documentation_AlpenaNEXION_WithCoverLtrf_1.pdf",
+          "19)_Technical Report, Installation Summary Documentation, Alpena NEXION (CDRL A045B and A012)_1.docx"
+        ]
+      },
+      {
+        "pattern": "A054",
+        "count": 87,
+        "samples": [
+          "ings/4-ISTO/2_As-Built Drawings (Sites)/SEMS3D-34620 ISTO Maintenance Manual (CDRL A054)(COPY)_1.pdf",
+          " Aids and Guides/47QFRA22F0009_ IGSI-1140_OY1_IGS_Troubleshooting_Aides_Guides-ISTO_2024_06_26_1.pdf",
+          "rouble Shooting Aids and Guides/47QFRA22F0009_Troubleshooting-Aides-and-Guides_ISTO_2025-06-25_1.pdf"
+        ]
+      },
+      {
+        "pattern": "A013",
+        "count": 46,
+        "samples": [
+          "201811100-- (Palau ISTO As-Builts)/201811100-02 Downloaded Dwg Files/93286A013_Aluminum Washer_1.DWG",
+          "811100-- (Palau ISTO As-Builts)/201811100-02 Downloaded Dwg Files/93286A013_Aluminum Washer_1.SLDPRT",
+          "FE035 CET 25-523 IGSEP CDRL A013 PBOM due 20250930/IGSPE-25_DMEA-Priced-Bill-of-Materials_A013_1.pdf"
+        ]
+      },
+      {
+        "pattern": "A014",
+        "count": 38,
+        "samples": [
+          "uam ISTO As-Builts)/Install Photos/Type PRL1a (CA014003EN - Panelboards and Lighting Controls)_1.pdf",
+          "tricted/OASIS/A014 - Priced Bill of Materials/47QFRA22F0009_IGSI-2233_IGS_EMSI_PBOM_2024-04-22_1.pdf",
+          "icted/OASIS/A014 - Priced Bill of Materials/Deliverables Report IGSI-257 IGS EMSI PBOM (A014)_1.xlsx"
+        ]
+      }
+    ],
+    "BOM Types": [
+      {
+        "pattern": "BOM_general",
+        "count": 690,
+        "samples": [
+          "e Visits/(01) Sites/Guam/2018-08-11 thru 25 (Guam)(Frank P, Chris, Jim)/Guam BOM (2018-07-10)_1.xlsx",
+          "cement)(Pitts-Fuierer-Buisman)/Receive Cable Replacement (Fall 2019)/BOM-Estimate (10 May 19)_1.xlsx",
+          " Site Visits/(01) Sites/Vandenberg/2014/Key Files_12 May 14/D_Drive/20130530/Apache/icons/bomb_1.gif"
+        ]
+      },
+      {
+        "pattern": "PBOM",
+        "count": 25,
+        "samples": [
+          "FE035 CET 25-523 IGSEP CDRL A013 PBOM due 20250930/IGSPE-25_DMEA-Priced-Bill-of-Materials_A013_1.pdf",
+          "523 IGSEP CDRL A013 PBOM due 20250930/TO 25FE035 CET 25-523 IGSEP CDRL A013 PBOM due 20250930_1.docx",
+          "tricted/OASIS/A014 - Priced Bill of Materials/47QFRA22F0009_IGSI-2233_IGS_EMSI_PBOM_2024-04-22_1.pdf"
+        ]
+      },
+      {
+        "pattern": "EBOM",
+        "count": 7,
+        "samples": [
+          "al EBOM PLL - Jun 2025/200811018 Lajes Field Azores Parts List (2024-02-22) (Colored Version)_1.xlsx",
+          "IGS/5.0 Logistics/NEXION BOM/Proposal EBOM_May 24/Catalog Marketplace_1.xlsx",
+          "IGS/5.0 Logistics/NEXION BOM/Proposal EBOM_May 24/Home Depot Prices/1001252269_1.pdf"
+        ]
+      },
+      {
+        "pattern": "PLL",
+        "count": 7,
+        "samples": [
+          "IGS/10.0 Program Management/#GSA_OASIS/IDL_PLL/GDFA_LMDS-RFI-IDL_Final_Submitted_1.pdf",
+          "IGS/10.0 Program Management/#GSA_OASIS/IDL_PLL/MDA1on1_NGC_ProjectLowLook_1.pptx",
+          "IGS/10.0 Program Management/#GSA_OASIS/IDL_PLL/PLL RFP Notes_1.docx"
+        ]
+      },
+      {
+        "pattern": "CBOM",
+        "count": 4,
+        "samples": [
+          "ram Management/#DMEA Program Management/1.0 Contracts ATSP_DMEA/Delivered/11. CET 25-523_CBOM_1.xlsx",
+          "EA Program Management/1.0 Contracts ATSP_DMEA/Delivered/11. CET 25-523_CBOM_Update_09_05_2025_1.xlsx",
+          "mplates and Examples/Examples/RFP Dri-Bones Examples/Enclosure 08 - CET 24-430_DRI-BONES_CBOM_1.xlsx"
+        ]
+      }
+    ],
+    "MIL-STD References": [
+      {
+        "pattern": "DID",
+        "count": 94,
+        "samples": [
+          "IGS/#  NEXION Sites/1_Sites/Azores/2_Spectrum Analysis/USA-AF-AS-2023-W-00141 pedido_1.pdf",
+          "DM - Restricted/SEMS3D/A016_-_Baseline_Description_Document/Archive/MILSTD3046 Config Mgmt DID_1.pdf",
+          "er P-touch Label Printer PT-2100 PT-2110 PT-2700 PT-2710P T9500PC, Software Installation Guide_1.pdf"
+        ]
+      },
+      {
+        "pattern": "MIL_STD",
+        "count": 29,
+        "samples": [
+          "7-23 thru 08-11 (NEXION_Install)(ARINC_Brukardt-Dettler)/Sys 09 Install 08-Eielson/MIL-STD-464_1.pdf",
+          "IGS/1.0 IGS DM - Restricted/SEMS3D/A054 - Maintenance Manual/MIL-STD-1808C_CHG-1_1.pdf",
+          "IGS/1.0 IGS DM - Restricted/SEMS3D/A054 - Maintenance Manual/MIL-STD-1840C_1.pdf"
+        ]
+      }
+    ],
+    "Common Acronyms": [
+      {
+        "pattern": "ASV",
+        "count": 34376,
+        "samples": [
+          "on)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Photo_ASV_Alpena (2017-08-15)/20170815_130958_1.jpg",
+          "IGS/! Site Visits/(01) Sites/Alpena/2015-08 (NEXION_ASV)/Climbing (1)_1.JPG",
+          "IGS/! Site Visits/(01) Sites/Alpena/2015-08 (NEXION_ASV)/Climbing (10)_1.JPG"
+        ]
+      },
+      {
+        "pattern": "RTS",
+        "count": 19681,
+        "samples": [
+          ")/1_Site Selection/Reports/Cover Letter_SMC_(13-0021)_Trip Report (CDRL A045B)_Michigan_Jun13_1.docx",
+          "n/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.doc",
+          "n/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.pdf"
+        ]
+      },
+      {
+        "pattern": "IPT",
+        "count": 3034,
+        "samples": [
+          "01) Sites/Alpena/2016-08-15 thru 18 (NEXION_ASV-RTS)(Larry)/Receipts/HotelReceipt_13-18Aug2017_1.pdf",
+          "01) Sites/Alpena/2016-08-15 thru 18 (NEXION_ASV-RTS)(Larry)/Receipts/Luggage_Receipt_13Aug2017_1.pdf",
+          "01) Sites/Alpena/2016-08-15 thru 18 (NEXION_ASV-RTS)(Larry)/Receipts/Luggage_Receipt_18Aug2017_1.pdf"
+        ]
+      },
+      {
+        "pattern": "CDRL",
+        "count": 3009,
+        "samples": [
+          ")/1_Site Selection/Reports/Cover Letter_SMC_(13-0021)_Trip Report (CDRL A045B)_Michigan_Jun13_1.docx",
+          "n/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.doc",
+          "n/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.pdf"
+        ]
+      },
+      {
+        "pattern": "GFE",
+        "count": 1751,
+        "samples": [
+          "son/2017-07-10 thru 07-15 (Eielson) (Larry & Fred)/2017-07/2017_DataGap/DataGapBriefingFeb2015_1.pdf",
+          "M - Restricted/DMEA/A003_Status-of-GFE-GFP-GFM-CAP/ATSP4 TO 25FE035 CET 25-523 CDRL A003 25 07_1.pdf",
+          "DM - Restricted/DMEA/A003_Status-of-GFE-GFP-GFM-CAP/Requirements for Status of GFE-GFP-GFM-CAP_1.pdf"
+        ]
+      },
+      {
+        "pattern": "GFP",
+        "count": 1670,
+        "samples": [
+          "N Inventories/System 30 (Inventory) (BES Lab)/2011-12-07 (Photos of DPS-4Ds GFP Tags)/IMG_4524_1.JPG",
+          "N Inventories/System 30 (Inventory) (BES Lab)/2011-12-07 (Photos of DPS-4Ds GFP Tags)/IMG_4525_1.JPG",
+          "N Inventories/System 30 (Inventory) (BES Lab)/2011-12-07 (Photos of DPS-4Ds GFP Tags)/IMG_4527_1.JPG"
+        ]
+      },
+      {
+        "pattern": "DPS4D",
+        "count": 759,
+        "samples": [
+          "_Installation_Alpena/PhotosPriorInstallation/2013-12-16 Verification Trip/ECU, desk, and DPS4D_1.JPG",
+          "IGS/! Site Visits/(01) Sites/Alpena/2016-07-15 thru 07-18 (NEXION_RTS)/Photographs/DPS4D (1)_1.JPG",
+          "IGS/! Site Visits/(01) Sites/Alpena/2016-07-15 thru 07-18 (NEXION_RTS)/Photographs/DPS4D (2)_1.JPG"
+        ]
+      },
+      {
+        "pattern": "SAP",
+        "count": 436,
+        "samples": [
+          "es/Alpena/2017-08-13 thru 08-18 (NEXION_ASV)(Brukardt-Pitts)/Photographs/Franks/Sensaphone (1)_1.JPG",
+          "es/Alpena/2017-08-13 thru 08-18 (NEXION_ASV)(Brukardt-Pitts)/Photographs/Franks/Sensaphone (2)_1.JPG",
+          "tes/Alpena/2022-06-06 thru 06-09 (NEXION-ASV)(Seagren-Vinh)/Site Pictures/Installed/Sensaphone_1.jpg"
+        ]
+      },
+      {
+        "pattern": "DCART",
+        "count": 365,
+        "samples": [
+          "on)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/ScreenCaptures/DCARTScreenCaps/Info/AmplFreqs_1.png",
+          "on)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/ScreenCaptures/DCARTScreenCaps/Info/Counters1_1.png",
+          "on)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/ScreenCaptures/DCARTScreenCaps/Info/Counters2_1.png"
+        ]
+      },
+      {
+        "pattern": "FEP",
+        "count": 171,
+        "samples": [
+          "N_Install)(Heineman-Brukardt)/Sys 06 Install 06-San Vito/RestoreFeb12/SVSC20Feb12/mafePolicies_1.png",
+          "IGS/10.0 Program Management/1.0 FEP/2022/IGS FEP 08.26.22 Final_1.xlsx",
+          "IGS/10.0 Program Management/1.0 FEP/2022/IGS FEP 09.30.22Final_1.xlsx"
+        ]
+      },
+      {
+        "pattern": "COTS",
+        "count": 135,
+        "samples": [
+          "IGS/004_Drawings/NEXION COTS Manual Titles (2024-11-22)_1.docx",
+          "upplemental Data/47QFRA22F00009_IGSI-1138_NEXION_COTS_Manuals_and_Supplemental_Data_2024-06-11_1.pdf",
+          "als and Supplemental Data/47QFRA22F0009_IGSI-1139_ISTO_COTS_Manuals_and_Supplemental_Data_A041_1.pdf"
+        ]
+      },
+      {
+        "pattern": "IBIT",
+        "count": 44,
+        "samples": [
+          "uilt/200811002-B (NEXION As-Built Drawings) (VSFB)/DANGER Unauth Climb Prohibited (2022-07-15)_1.dxf",
+          "am Management/#IGSCC/Contracts/Awarded/Exhibit A_OASIS_SB_8(a)_Pool_2_Contract_Conformed Copy__1.pdf",
+          "IGS/10.0 Program Management/#IGSCC/Contracts/Awarded/Exhibit B_Conformed Award_47QFRA22F0009_1.pdf"
+        ]
+      },
+      {
+        "pattern": "NCAJ",
+        "count": 28,
+        "samples": [
+          "Okinawa, Japan/System Install/Tower Install_TSSI/1.h. C-P015 NCAJ (TSSI_Okinawa_Tower Install)_1.pdf",
+          "se -Okinawa, Japan/System Install/Tower Install_TSSI/C-P015 NCAJ (TSSI_Okinawa_Tower Install)_1.docx",
+          "- Alaska,US/Equipment & Kitting/Shipping/Resupply Barge_Eareckson/AML/Tab 11-NCAJ CTM-P-FM-001_1.pdf"
+        ]
+      },
+      {
+        "pattern": "MPLM",
+        "count": 15,
+        "samples": [
+          "IGS/10.0 Program Management/MPLM_SAP/MPLM SAP ITA Charge Number N96P24000030_1.msg",
+          "IGS/5.0 Logistics/SAP - MPLM/Baseline Updates-Nomenclature (Bolts  Screws) (2025-08-21)_1.xlsx",
+          "IGS/5.0 Logistics/SAP - MPLM/Baseline Updates-Nomenclature (Ground Lugs)_1.xlsx"
+        ]
+      }
+    ]
+  },
+  "notes": [
+    "Counts reflect path-level matches, not content. A file path containing DD1149 likely IS the form.",
+    "BOM_general includes BOMGAR false positives (remote access tool). Filter BOMGAR separately.",
+    "CDRL A045B (Trip Reports) is the most common CDRL type.",
+    "ASV (Annual Service Visit) and RTS (Return to Service) dominate the acronym space."
+  ]
+}

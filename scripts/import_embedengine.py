@@ -756,6 +756,9 @@ def run_import(
 
     metadata_db = resolve_retrieval_metadata_db_path(config.paths.lance_db)
     metadata_summary = store.metadata_store.upsert_from_chunks(chunks)
+    chunk_meta_summary = store.metadata_store.upsert_chunk_metadata(chunks)
+    if chunk_meta_summary.get("chunks_with_metadata", 0) > 0:
+        print(f"  Chunk metadata sidecar: {chunk_meta_summary['chunks_with_metadata']:,} chunks with extended fields")
 
     after_count = store.count()
     vector_index_stats = store.vector_index_stats()

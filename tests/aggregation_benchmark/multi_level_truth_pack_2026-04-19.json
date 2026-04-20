@@ -1,0 +1,144 @@
+{
+  "truth_pack_id": "multi_level_aggregation_truth_pack_2026-04-19",
+  "generated_by": "R3",
+  "repo": "HybridRAG_V2",
+  "benchmark_lane": "deterministic exactness benchmark",
+  "schema_compatibility": "failure_truth_pack_2026-04-18",
+  "description": "Cross-substrate deterministic truth pack for multi-level aggregation questions spanning failure events plus pricing, lead-time, installed-base, retrieval metadata, and site-visit surfaces. Draft starts with schema-compatible items and explicit substrate blockers.",
+  "evidence_sources": {
+    "failure_events": "C:\\HybridRAG_V2\\data\\index\\failure_events.sqlite3",
+    "retrieval_metadata": "C:\\HybridRAG_V2\\data\\index\\retrieval_metadata.sqlite3",
+    "entities": "C:\\HybridRAG_V2\\data\\index\\entities.sqlite3",
+    "relationships": "C:\\HybridRAG_V2\\data\\index\\relationships.sqlite3"
+  },
+  "notes": {
+    "left_join_rule": "When secondary substrates land, use LEFT JOINs so the same items still execute on partial coverage.",
+    "current_state": "As of 2026-04-19, failure_events and retrieval_metadata are confirmed. Dedicated pricing, lead-time, installed-base, and normalized site_visits substrates are not yet confirmed in data/index.",
+    "authoring_slice": "Initial slice seeds four draft multi-level questions and captures blocker language before corpus mining."
+  },
+  "scouting_counts": {
+    "retrieval_metadata_po_number_rows": 4129,
+    "retrieval_metadata_priced_bom_like_paths": 32,
+    "retrieval_metadata_receiving_like_paths": 5142,
+    "retrieval_metadata_shipping_like_paths": 5028,
+    "retrieval_metadata_visit_like_paths": 19844,
+    "entities_extracted_tables_rows": 0,
+    "relationships_shipped_to_rows": 26337,
+    "relationships_manufactured_by_rows": 4834,
+    "relationships_charged_to_rows": 2936
+  },
+  "items": [
+    {
+      "id": "MAGG-01",
+      "query": "What were the highest failing part numbers in the NEXION system in 2024, along with unit price where available?",
+      "tier_expected": "YELLOW",
+      "expected_shape": "top_n_by_part_with_price",
+      "expected_filters": {
+        "system": "NEXION",
+        "year_from": 2024,
+        "year_to": 2024
+      },
+      "expected_params": {
+        "top_n": 5,
+        "include_price": true
+      },
+      "ground_truth_sql": "SELECT f.part_number, COUNT(*) AS failure_count FROM failure_events f WHERE f.system='NEXION' AND f.event_year=2024 AND f.part_number!='' GROUP BY f.part_number ORDER BY failure_count DESC LIMIT 5",
+      "requires_chunk_pass": true,
+      "requires_denominator": false,
+      "required_substrates": [
+        "failure_events",
+        "pricing_substrate"
+      ],
+      "join_keys": [
+        "part_number"
+      ],
+      "blocked_on_substrate": "No dedicated pricing substrate is confirmed in data/index; current exact answer can only return failure counts by part.",
+      "why_yellow_only": "The failure cohort is deterministic, but price enrichment is blocked until a normalized pricing surface lands."
+    },
+    {
+      "id": "MAGG-02",
+      "query": "Which ISTO parts failed most often from 2022 to 2025 in Djibouti, and what is the lead time for those parts?",
+      "tier_expected": "YELLOW",
+      "expected_shape": "top_n_by_part_with_lead_time",
+      "expected_filters": {
+        "system": "ISTO",
+        "site_token": "djibouti",
+        "year_from": 2022,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "top_n": 5,
+        "include_lead_time": true
+      },
+      "ground_truth_sql": "SELECT f.part_number, COUNT(*) AS failure_count FROM failure_events f WHERE f.system='ISTO' AND f.site_token='djibouti' AND f.event_year BETWEEN 2022 AND 2025 AND f.part_number!='' GROUP BY f.part_number ORDER BY failure_count DESC LIMIT 5",
+      "requires_chunk_pass": true,
+      "requires_denominator": false,
+      "required_substrates": [
+        "failure_events",
+        "lead_time_substrate"
+      ],
+      "join_keys": [
+        "part_number"
+      ],
+      "blocked_on_substrate": "No dedicated lead-time substrate is confirmed in data/index; the join surface is still being mined from procurement evidence.",
+      "why_yellow_only": "Lead-time enrichment is not yet deterministic even though the failure cohort is."
+    },
+    {
+      "id": "MAGG-03",
+      "query": "What are the top 5 failure-rate parts in NEXION for 2024 when ranked by failures per installed unit?",
+      "tier_expected": "YELLOW",
+      "expected_shape": "top_n_by_failure_rate",
+      "expected_filters": {
+        "system": "NEXION",
+        "year_from": 2024,
+        "year_to": 2024
+      },
+      "expected_params": {
+        "top_n": 5,
+        "is_rate": true,
+        "requires_installed_base": true
+      },
+      "ground_truth_sql": "SELECT f.part_number, COUNT(*) AS failure_count FROM failure_events f WHERE f.system='NEXION' AND f.event_year=2024 AND f.part_number!='' GROUP BY f.part_number ORDER BY failure_count DESC LIMIT 5",
+      "requires_chunk_pass": true,
+      "requires_denominator": true,
+      "required_substrates": [
+        "failure_events",
+        "installed_base_substrate"
+      ],
+      "join_keys": [
+        "part_number",
+        "system",
+        "site_token"
+      ],
+      "blocked_on_substrate": "Installed-base denominator substrate is not yet confirmed; current deterministic output can only provide numerator rankings.",
+      "why_yellow_only": "True failure rate remains blocked on denominator extraction."
+    },
+    {
+      "id": "MAGG-04",
+      "query": "Which sites had both the highest failure volume and a documented maintenance or site visit in 2024?",
+      "tier_expected": "YELLOW",
+      "expected_shape": "top_sites_with_visit_overlay",
+      "expected_filters": {
+        "year_from": 2024,
+        "year_to": 2024
+      },
+      "expected_params": {
+        "top_n": 5,
+        "include_site_visits": true
+      },
+      "ground_truth_sql": "SELECT f.site_token, COUNT(*) AS failure_count FROM failure_events f WHERE f.event_year=2024 AND f.site_token!='' GROUP BY f.site_token ORDER BY failure_count DESC LIMIT 5",
+      "requires_chunk_pass": false,
+      "requires_denominator": false,
+      "required_substrates": [
+        "failure_events",
+        "site_visits_substrate"
+      ],
+      "join_keys": [
+        "site_token",
+        "event_year"
+      ],
+      "blocked_on_substrate": "A normalized site_visits substrate is not yet confirmed in data/index; only generic visit-related retrieval/path evidence exists today.",
+      "why_yellow_only": "Failure ranking is deterministic, but visit corroboration is blocked until site-visit rows are normalized."
+    }
+  ]
+}

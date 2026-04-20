@@ -31,13 +31,27 @@ logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
-# Canonical system detection (aligned with config/canonical_aliases.yaml)
+# Canonical system detection (loaded from config/canonical_aliases.yaml)
 # ---------------------------------------------------------------------------
 
-_SYSTEM_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
-    ("monitoring system", re.compile(r"\bnexion\b", re.IGNORECASE)),
-    ("legacy monitoring system",   re.compile(r"\bisto\b",   re.IGNORECASE)),
-)
+def _load_system_patterns() -> tuple[tuple[str, re.Pattern[str]], ...]:
+    """Build system detection patterns from canonical_aliases.yaml."""
+    from pathlib import Path
+    import yaml as _yaml
+    aliases_path = Path(__file__).resolve().parents[2] / "config" / "canonical_aliases.yaml"
+    if not aliases_path.exists():
+        logger.warning("canonical_aliases.yaml not found at %s — using empty system patterns", aliases_path)
+        return ()
+    with aliases_path.open("r", encoding="utf-8") as f:
+        data = _yaml.safe_load(f) or {}
+    patterns = []
+    for canonical, info in (data.get("systems") or {}).items():
+        all_names = [canonical] + list(info.get("aliases", []))
+        for name in all_names:
+            patterns.append((canonical, re.compile(rf"\b{re.escape(name)}\b", re.IGNORECASE)))
+    return tuple(patterns)
+
+_SYSTEM_PATTERNS = _load_system_patterns()
 
 
 def detect_system(text: str) -> str:

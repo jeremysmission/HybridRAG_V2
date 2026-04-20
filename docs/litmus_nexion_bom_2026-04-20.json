@@ -1,0 +1,175 @@
+{
+  "scan_date": "2026-04-20",
+  "scanner": "Miner-Agent",
+  "source": "E:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\NEXION BOM",
+  "xlsx_files_parsed": 6,
+  "total_data_rows": 2320,
+  "distinct_parts": 1282,
+  "sample_parts": [
+    "0006-7200",
+    "001-PRF-04P",
+    "001-PRF-05P",
+    "001-PRF-07P",
+    "001-ROD-03P",
+    "001-RTV-01P",
+    "001-SKL-01P",
+    "001-SKL-02P",
+    "001-SKL-03P",
+    "001-SKL-06P",
+    "001-THM-02P",
+    "001-TNB-02P",
+    "001-TNB-03P",
+    "001-WRP-02P",
+    "002-TNB-01P",
+    "002-TNB-02P",
+    "002-WSH-01P",
+    "002-WSH-03P",
+    "003-BLT-03P",
+    "003-BLT-05P",
+    "003-BLT-14P",
+    "003-WSH-01P",
+    "004-ANC-08A",
+    "004-ANC-13A",
+    "004-WSH-07P",
+    "005-CLA-01P",
+    "005-CLA-02P",
+    "005-CLV-01P",
+    "005-CLV-03P",
+    "005-INS-01P"
+  ],
+  "sheets": [
+    {
+      "file": "Azores NEXION Installation Master List (2023-11-02).xlsx",
+      "sheet": "PART DETAIL",
+      "headers": [
+        "PART NUMBER",
+        "HWCI",
+        "SYSTEM",
+        "SUB-SYSTEM",
+        "STATE",
+        "ITEM TYPE",
+        "OEM",
+        "UM",
+        "NOMENCLATURE",
+        "DOC TYPE",
+        "DRAWING NUMBER",
+        "FIND NO"
+      ],
+      "data_rows": 497,
+      "distinct_parts": 497
+    },
+    {
+      "file": "Azores NEXION Installation Master List (2023-11-02).xlsx",
+      "sheet": "PART DETAIL (2)",
+      "headers": [
+        "PART NUMBER",
+        "HWCI",
+        "SYSTEM",
+        "SUB-SYSTEM",
+        "STATE",
+        "ITEM TYPE",
+        "OEM",
+        "UM",
+        "NOMENCLATURE",
+        "DOC TYPE",
+        "DRAWING NUMBER",
+        "FIND NO"
+      ],
+      "data_rows": 499,
+      "distinct_parts": 498
+    },
+    {
+      "file": "Azores NEXION Installation Master List (2023-11-02).xlsx",
+      "sheet": "NEXION Installation List",
+      "headers": [
+        "NEED",
+        "Qty",
+        "SUB-SYSTEM",
+        "ASSEMBLY",
+        "PART NUMBER",
+        "NOMENCLATURE",
+        "NOTES",
+        "OEM",
+        "UOM",
+        "MODEL NUMBER",
+        "PURCHASE ORDEER",
+        "JCR PART NUMBER"
+      ],
+      "data_rows": 448,
+      "distinct_parts": 395
+    },
+    {
+      "file": "NEXION Estimates (base on Azores Parts List) (2025-06-25).xlsx",
+      "sheet": "Materials",
+      "headers": [
+        "PART NUMBER",
+        "QTY.",
+        "DESCRIPTION",
+        "MANUFACTURER",
+        "ASSEMBLY"
+      ],
+      "data_rows": 445,
+      "distinct_parts": 333
+    },
+    {
+      "file": "NEXION Estimates (base on Azores Parts List) (2025-06-25).xlsx",
+      "sheet": "Tools & Test Equipment",
+      "headers": [
+        "FIND NO.",
+        "ON-HAND",
+        "IN CONNEX",
+        "BOX",
+        "ON ORDER",
+        "QTY.",
+        "PART NUMBER",
+        "DESCRIPTION",
+        "MANUFACTURER",
+        "ASSEMBLY",
+        "Maj/Sub/Cable",
+        "WT 1"
+      ],
+      "data_rows": 39,
+      "distinct_parts": 33
+    },
+    {
+      "file": "NEXION Estimates (base on Azores Parts List) (2025-06-25).xlsx",
+      "sheet": "Allied Support-Contractors",
+      "headers": [
+        "FIND NO.",
+        "ON-HAND",
+        "IN CONNEX",
+        "BOX",
+        "ON ORDER",
+        "QTY.",
+        "PART NUMBER",
+        "DESCRIPTION",
+        "MANUFACTURER",
+        "ASSEMBLY",
+        "Maj/Sub/Cable",
+        "WT 1"
+      ],
+      "data_rows": 10,
+      "distinct_parts": 8
+    },
+    {
+      "file": "200811018 Lajes Field Azores Parts List (2024-02-22) (Colored Version).xlsx",
+      "sheet": "Sheet1",
+      "headers": [
+        "FIND NO.",
+        "ON-HAND",
+        "EBOM",
+        "BOX",
+        "PRICE",
+        "QTY.",
+        "PART NUMBER",
+        "DESCRIPTION",
+        "MANUFACTURER",
+        "ASSEMBLY",
+        "Maj/Sub/Cable",
+        "WT 1"
+      ],
+      "data_rows": 382,
+      "distinct_parts": 297
+    }
+  ]
+}

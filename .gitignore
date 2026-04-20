@@ -145,3 +145,30 @@ tmp_*.txt
 /docs/AGENT_PROMPTS_*.md
 /docs/COORDINATOR_CONTINUITY_NOTES_*.md
 /docs/LATEST_READABLE_NOTE_*.md
+
+# War room boards, backlog boards, QA discussion boards (local-only, contain agent talk)
+*_Warroom.txt
+*_warroom.txt
+*_BackLogWork.txt
+*_backlogwork.txt
+QA Coding Results and Discussion.txt
+*Prestart*.txt
+
+# Multi-agent playbooks, onboarding, role dispatch docs (contain agent names)
+*MultiAgent*Playbook*.md
+*multiagent*playbook*.md
+/docs/TEAM_PLAN.md
+/docs/AGGREGATION_ROLE_DISPATCHES_*.md
+/docs/AGGREGATION_WARROOM_ONBOARDING_*.md
+
+# Breakthrough / research memos from Researcher or Miner (may name agents)
+/docs/breakthrough_candidate_*.md
+/docs/mining_breakthrough_*.md
+/docs/demo_pack_*.md
+/docs/ragas_frontier_targets_*.md
+/docs/aggregation_demo_frontier_*.md
+/docs/rag_failure_modes_*.md
+
+# Local mining staging
+/mining_stage/
+/D_mining_stage/

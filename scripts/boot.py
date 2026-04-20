@@ -111,6 +111,16 @@ def boot_system(config: V2Config | str | Path | None = None) -> SimpleNamespace:
     except Exception as agg_exc:
         print(f"[WARN] Aggregation executor init failed: {agg_exc}")
 
+    cross_substrate_executor = None
+    try:
+        from src.query.aggregation_executor import CrossSubstrateExecutor
+        cross_substrate_executor = CrossSubstrateExecutor(data_dir="data")
+        has_po = cross_substrate_executor._po_pricing_conn is not None
+        has_ib = cross_substrate_executor._installed_base_conn is not None
+        print(f"[OK] CrossSubstrateExecutor attached (po_pricing={'LIVE' if has_po else 'NONE'}, installed_base={'LIVE' if has_ib else 'NONE'})")
+    except Exception as cs_exc:
+        print(f"[WARN] CrossSubstrateExecutor init failed: {cs_exc}")
+
     # Pipeline assembles when core retrieval is present. Generator is optional:
     # aggregation queries work without an LLM; non-aggregation queries return
     # a retrieval-only response.
@@ -124,6 +134,7 @@ def boot_system(config: V2Config | str | Path | None = None) -> SimpleNamespace:
             generator=generator,
             crag_verifier=crag_verifier,
             aggregation_executor=aggregation_executor,
+            cross_substrate_executor=cross_substrate_executor,
         )
         if generator is None:
             print("[OK] Query pipeline assembled in aggregation-only mode (no LLM)")

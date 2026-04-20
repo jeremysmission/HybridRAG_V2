@@ -1,0 +1,89 @@
+{
+  "scan_date": "2026-04-19",
+  "scanner": "Miner-Agent",
+  "file_type": "As-Built xlsx",
+  "total_as_built_xlsx": 349,
+  "files_sampled": 20,
+  "sheets_parsed": 27,
+  "distinct_raw_signatures": 16,
+  "collapsed_template_groups": 3,
+  "templates": [
+    {
+      "name": "parts_list",
+      "sheet_count": "~22 of 27",
+      "core_columns": [
+        "FIND NO. / NO. / Reference",
+        "QTY. / QTY",
+        "PART NUMBER",
+        "DESCRIPTION",
+        "MANUFACTURER"
+      ],
+      "optional_columns": [
+        "CONTAINER",
+        "IN STOCK",
+        "QTY. ON-HAND",
+        "ASSEMBLY",
+        "Maj/Sub/Cable",
+        "SERIAL NO.",
+        "Notes",
+        "Serial Number",
+        "FAB/MOD"
+      ],
+      "part_number_col": "PART NUMBER (position varies: col 3-5)",
+      "qty_col": "QTY. or QTY (position varies: col 2-3)",
+      "notes": "Dominant template. 16 raw signatures but all share QTY + PART NUMBER + DESCRIPTION + MANUFACTURER core. Variations are column order and optional columns.",
+      "example_files": [
+        "Wake Parts List (For ECU)(2022-08-16)_1.xlsx",
+        "201811090-- Niger Parts List (2023-02-07) (Colored Version)_1.xlsx",
+        "Curacao Parts List (For Re-Installation)(2022-08-01)_1.xlsx",
+        "201811050 Kwajalein Parts List (2024-12-02) (Colored Version)_1.xlsx",
+        "Parts List-Singapore (2020-05-02) (Colored Version)(Marcs Edits)_1.xlsx",
+        "201811060-A Parts List_Singapore (2020-05-11)_1.xlsx"
+      ]
+    },
+    {
+      "name": "cable_table",
+      "sheet_count": "~3 of 27",
+      "core_columns": [
+        "EQUIP.",
+        "EQUIP. DESCRIPTION",
+        "SOCKET",
+        "SOCKET TYPE",
+        "FROM",
+        "TO"
+      ],
+      "part_number_col": "None (infrastructure wiring, no part_number)",
+      "qty_col": "None",
+      "notes": "Cable interconnect tables. No part/qty data useful for installed_base. SKIP for denominator extraction.",
+      "example_files": [
+        "Cable Table (2019-05-08)_1.xlsx",
+        "Guam Cable Table (NR) (2021-01-26)_1.xlsx"
+      ]
+    },
+    {
+      "name": "drawing_index",
+      "sheet_count": "~2 of 27",
+      "core_columns": [
+        "Sheet number",
+        "Drawing title"
+      ],
+      "part_number_col": "None (drawing list, not parts)",
+      "qty_col": "None",
+      "notes": "Index of as-built drawing sheets. No part/qty data. SKIP for denominator extraction.",
+      "example_files": [
+        "As-Built Sheets (2021-10-28)_1.xlsx"
+      ]
+    }
+  ],
+  "parser_recommendation": {
+    "strategy": "Header-sniff dispatch with 2 active templates + 2 skip rules",
+    "detect_parts_list": "Row contains PART NUMBER AND (QTY or QTY.)",
+    "detect_cable_table": "Row contains SOCKET or CABLE DESCRIPTION -> skip",
+    "detect_drawing_index": "Row contains AS-BUILT DRAWINGS -> skip",
+    "part_number_extraction": "Find column named PART NUMBER (case-insensitive)",
+    "qty_extraction": "Find column named QTY or QTY. (case-insensitive)",
+    "manufacturer_extraction": "Find column named MANUFACTURER (case-insensitive)",
+    "serial_extraction": "Find column named SERIAL NO. or SERIAL NUMBER or Serial Number"
+  },
+  "key_finding": "As-Built xlsx files are 80%+ Parts Lists with a universal QTY + PART NUMBER + DESCRIPTION + MANUFACTURER core. Only 2 outlier types (cable tables, drawing indexes) need skip rules. Agent-C can reuse the same header-sniff approach from Site Inventory with minor column-name variations."
+}

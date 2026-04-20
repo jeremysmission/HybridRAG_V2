@@ -1,0 +1,146 @@
+{
+  "scan_date": "2026-04-20",
+  "scanner": "Miner-Agent",
+  "source": "E:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Shipments",
+  "forward_resilience_anchor": true,
+  "years": {
+    "2025": {
+      "total_files": 230,
+      "distinct_shipment_folders": 19,
+      "destinations": {
+        "Alpena": 1,
+        "Curacao": 1,
+        "Diego Garcia": 1,
+        "Djibouti": 1,
+        "Eareckson": 1,
+        "Eglin": 1,
+        "Eielson": 1,
+        "Fairford": 1,
+        "Learmonth": 1,
+        "Misawa": 1,
+        "Okinawa": 1,
+        "Singapore": 1,
+        "Vandenberg": 1,
+        "Wake": 1
+      },
+      "shipments": [
+        {
+          "folder": "Alpena",
+          "files": 14
+        },
+        {
+          "folder": "Curacao",
+          "files": 8
+        },
+        {
+          "folder": "Diego Garcia",
+          "files": 2
+        },
+        {
+          "folder": "Djibouti",
+          "files": 4
+        },
+        {
+          "folder": "Eareckson",
+          "files": 18
+        },
+        {
+          "folder": "Eglin",
+          "files": 6
+        },
+        {
+          "folder": "Eielson",
+          "files": 8
+        },
+        {
+          "folder": "Fairford",
+          "files": 14
+        },
+        {
+          "folder": "Kwaj",
+          "files": 6
+        },
+        {
+          "folder": "Learmonth",
+          "files": 6
+        },
+        {
+          "folder": "LLL",
+          "files": 38
+        },
+        {
+          "folder": "Misawa",
+          "files": 26
+        },
+        {
+          "folder": "Misc",
+          "files": 38
+        },
+        {
+          "folder": "Okinawa",
+          "files": 12
+        },
+        {
+          "folder": "San Vito",
+          "files": 10
+        },
+        {
+          "folder": "Singapore",
+          "files": 2
+        },
+        {
+          "folder": "Tobyhanna",
+          "files": 10
+        },
+        {
+          "folder": "Vandenberg",
+          "files": 2
+        },
+        {
+          "folder": "Wake",
+          "files": 6
+        }
+      ]
+    },
+    "2026": {
+      "total_files": 128,
+      "distinct_shipment_folders": 5,
+      "destinations": {
+        "American Samoa": 1,
+        "Ascension": 1,
+        "Azores": 1,
+        "Guam": 1
+      },
+      "shipments": [
+        {
+          "folder": "American Samoa",
+          "files": 2
+        },
+        {
+          "folder": "Ascension",
+          "files": 12
+        },
+        {
+          "folder": "Azores",
+          "files": 10
+        },
+        {
+          "folder": "Guam",
+          "files": 40
+        },
+        {
+          "folder": "Misc",
+          "files": 64
+        }
+      ]
+    },
+    "Poland_2025_separate": {
+      "files": 4
+    }
+  },
+  "notes": [
+    "2025 + 2026 shipments confirm ongoing logistics activity.",
+    "Forward-resilience: demo can show the system handles current-year data.",
+    "Distinct destinations confirm multi-site operational footprint is active."
+  ]
+}

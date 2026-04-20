@@ -65,7 +65,7 @@ def run_pass2(
     """
     Populate failure_events from LanceDB chunk sample.
 
-    Samples chunks whose source_path references monitoring system or legacy monitoring system (the two
+    Samples chunks whose source_path references NEXION or ISTO (the two
     systems in canonical_aliases.yaml) and runs failure-signal + part_number
     regex against chunk text.
     """
@@ -97,7 +97,7 @@ def run_pass2(
                 for cid, txt, sp in zip(chunk_ids, texts, source_paths):
                     scanned += 1
                     sp_lower = (sp or "").lower()
-                    if "monitoring system" not in sp_lower and "legacy monitoring system" not in sp_lower:
+                    if "nexion" not in sp_lower and "isto" not in sp_lower:
                         continue
                     matched += 1
                     if limit and matched > int(limit):
@@ -127,8 +127,8 @@ def run_pass2(
                     rows = (
                         tbl.search()
                         .where(
-                            "lower(source_path) LIKE '%monitoring system%' "
-                            "OR lower(source_path) LIKE '%legacy monitoring system%'"
+                            "lower(source_path) LIKE '%nexion%' "
+                            "OR lower(source_path) LIKE '%isto%'"
                         )
                         .select(["chunk_id", "text", "source_path"])
                         .limit(batch_size)
@@ -149,7 +149,7 @@ def run_pass2(
                 for row in rows:
                     sp = row.get("source_path") or ""
                     sp_lower = sp.lower()
-                    if "monitoring system" not in sp_lower and "legacy monitoring system" not in sp_lower:
+                    if "nexion" not in sp_lower and "isto" not in sp_lower:
                         continue
                     matched += 1
                     if limit and matched > int(limit):

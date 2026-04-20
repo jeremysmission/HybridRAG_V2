@@ -578,6 +578,40 @@ def _summarize_metric(name: str, values: list[float], errors: int) -> MetricSumm
     )
 
 
+def compute_family_splits(
+    queries: list[QueryDefinition],
+    readiness: list[ReadinessRecord],
+    metric_values_by_family: dict[str, dict[str, list[float]]],
+) -> dict[str, dict[str, MetricSummary]]:
+    """Compute per-family metric summaries (ENTITY/SEMANTIC/TABULAR/AGGREGATE/UNKNOWN)."""
+    result: dict[str, dict[str, MetricSummary]] = {}
+    for family, metric_dict in sorted(metric_values_by_family.items()):
+        result[family] = {}
+        for metric_name, values in sorted(metric_dict.items()):
+            result[family][metric_name] = _summarize_metric(metric_name, values, 0)
+    return result
+
+
+def print_family_splits(family_splits: dict[str, dict[str, MetricSummary]]) -> None:
+    """Render per-family metric breakdown."""
+    if not family_splits:
+        return
+    print("=" * 72)
+    print("  PER-FAMILY BREAKDOWN")
+    print("=" * 72)
+    print("  NOTE: text-overlap metrics may under-report quality on ENTITY /")
+    print("  TABULAR slices while reference_contexts are path-anchored.")
+    print("  ID-based migration is planned.")
+    print()
+    for family, metrics in family_splits.items():
+        count = max((m.count for m in metrics.values()), default=0)
+        print(f"  {family} ({count} queries)")
+        for name, summary in metrics.items():
+            mean_str = f"{summary.mean:.3f}" if summary.mean is not None else "n/a"
+            print(f"    {name}: mean={mean_str} (n={summary.count})")
+        print()
+
+
 def execute_metrics(
     queries: list[QueryDefinition],
     readiness: list[ReadinessRecord],
@@ -616,6 +650,7 @@ def execute_metrics(
         log_cb(f"Reranker configured: {pipeline_info['reranker_enabled']}")
 
     metric_values: dict[str, list[float]] = defaultdict(list)
+    metric_values_by_family: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
     metric_errors: Counter[str] = Counter()
     skip_reasons: Counter[str] = Counter()
 
@@ -663,19 +698,21 @@ def execute_metrics(
 
         sample = SingleTurnSample(**sample_kwargs)
 
+        family = query.expected_query_type.upper() if query.expected_query_type else "UNKNOWN"
+
         for metric_name, metric_path in supported_paths.items():
             try:
                 metric = _instantiate_metric(metric_path)
                 score = _score_metric(metric=metric, sample=sample, sample_kwargs=sample_kwargs)
                 metric_values[metric_name].append(score)
+                metric_values_by_family[family][metric_name].append(score)
             except Exception:
                 metric_errors[metric_name] += 1
 
-        # NDCG@k: non-LLM, position-weighted retrieval quality metric.
-        # Runs alongside RAGAS metrics with zero extra dependencies.
         try:
             ndcg = _compute_ndcg(retrieved_contexts, query.reference_contexts)
             metric_values["ndcg_at_k"].append(ndcg)
+            metric_values_by_family[family]["ndcg_at_k"].append(ndcg)
         except Exception:
             metric_errors["ndcg_at_k"] += 1
         if log_cb:
@@ -693,11 +730,16 @@ def execute_metrics(
         _summarize_metric(name, metric_values.get(name, []), metric_errors.get(name, 0))
         for name in sorted(supported_paths)
     ]
-    # Add NDCG@k summary (always computed, no RAGAS dependency)
     if "ndcg_at_k" in metric_values:
         summaries.append(
             _summarize_metric("ndcg_at_k", metric_values["ndcg_at_k"], metric_errors.get("ndcg_at_k", 0))
         )
+
+    family_splits = compute_family_splits(queries, readiness, dict(metric_values_by_family))
+    pipeline_info["family_splits"] = {
+        fam: {m: asdict(s) for m, s in metrics.items()}
+        for fam, metrics in family_splits.items()
+    }
     return summaries, skip_reasons, pipeline_info
 
 
@@ -773,6 +815,10 @@ def main() -> int:
     print_readiness_summary(queries, readiness, metadata_blocks, args.queries)
     print_dependency_summary(probe)
 
+    run_label = "readiness-only" if args.analysis_only else "executed-metrics"
+    print(f"Run label: {run_label}")
+    print()
+
     if args.analysis_only:
         return 0
 
@@ -797,6 +843,16 @@ def main() -> int:
         skip_reasons=skip_reasons,
         evaluated_limit=args.limit,
     )
+
+    family_splits = _pipeline_info.get("family_splits", {})
+    if family_splits:
+        family_split_typed = {}
+        for fam, metrics in family_splits.items():
+            family_split_typed[fam] = {
+                m: MetricSummary(**s) for m, s in metrics.items()
+            }
+        print_family_splits(family_split_typed)
+
     return 0
 
 

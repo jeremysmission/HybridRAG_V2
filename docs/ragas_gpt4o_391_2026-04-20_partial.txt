@@ -1,0 +1,98 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+<All keys matched successfully>
+========================================================================
+  RAGAS READINESS ANALYSIS
+========================================================================
+Query file: production_queries_400_2026-04-12.json
+Loaded query rows: 391
+Skipped metadata blocks: 0
+Eligible now for retrieval-side RAGAS metrics: 391/391
+Fully Phase 2C enriched (reference + reference_contexts): 391/391
+Eligible for retrieval metrics but still missing `reference`: 0/391
+Blocked for retrieval-side metrics because `reference_contexts` are missing: 0/391
+Blocked on Phase 2C enrichment: 0/391
+
+Skipped / incomplete counts by reason:
+
+Eligible subset by expected_query_type:
+  - AGGREGATE: 102
+  - ENTITY: 117
+  - SEMANTIC: 98
+  - TABULAR: 74
+
+========================================================================
+  DEPENDENCY PROBE
+========================================================================
+ragas installed: yes
+ragas version: 0.4.3
+rapidfuzz installed: yes
+SingleTurnSample import path: ragas.SingleTurnSample
+Supported metric imports:
+  - nonllm_context_precision_with_reference: ragas.metrics._NonLLMContextPrecisionWithReference
+  - nonllm_context_recall: ragas.metrics._NonLLMContextRecall
+Execution blockers: none
+
+Run label: executed-metrics
+
+========================================================================
+  EXECUTION CONTEXT
+========================================================================
+Store chunks: 10,435,593
+Embedder device: cuda
+Retrieval mode: local_hybrid_search_only
+Reranker configured in app config: True
+
+[skip-signal] Press any key during a retry to skip the remaining retries after the current attempt. This message shows once per process.
+========================================================================
+  METRIC OUTPUT
+========================================================================
+Evaluation limit applied: 50
+- nonllm_context_precision_with_reference
+    count=50
+    mean=0.0
+    median=0.0
+    min=0.0
+    max=0.0
+    errors=0
+- nonllm_context_recall
+    count=50
+    mean=0.0
+    median=0.0
+    min=0.0
+    max=0.0
+    errors=0
+- ndcg_at_k
+    count=50
+    mean=0.7763807415187887
+    median=0.9053713325108788
+    min=0.0
+    max=1.0
+    errors=0
+
+========================================================================
+  PER-FAMILY BREAKDOWN
+========================================================================
+  NOTE: text-overlap metrics may under-report quality on ENTITY /
+  TABULAR slices while reference_contexts are path-anchored.
+  ID-based migration is planned.
+
+  AGGREGATE (14 queries)
+    ndcg_at_k: mean=0.799 (n=14)
+    nonllm_context_precision_with_reference: mean=0.000 (n=14)
+    nonllm_context_recall: mean=0.000 (n=14)
+
+  ENTITY (12 queries)
+    ndcg_at_k: mean=0.657 (n=12)
+    nonllm_context_precision_with_reference: mean=0.000 (n=12)
+    nonllm_context_recall: mean=0.000 (n=12)
+
+  SEMANTIC (19 queries)
+    ndcg_at_k: mean=0.792 (n=19)
+    nonllm_context_precision_with_reference: mean=0.000 (n=19)
+    nonllm_context_recall: mean=0.000 (n=19)
+
+  TABULAR (5 queries)
+    ndcg_at_k: mean=0.940 (n=5)
+    nonllm_context_precision_with_reference: mean=0.000 (n=5)
+    nonllm_context_recall: mean=0.000 (n=5)
+

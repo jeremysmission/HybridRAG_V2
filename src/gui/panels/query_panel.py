@@ -32,6 +32,10 @@ _PATH_COLORS = {
     "SEMANTIC": "accent",
     "ENTITY": "green",
     "AGGREGATE": "orange",
+    "AGGREGATION_GREEN": "green",
+    "AGGREGATION_YELLOW": "orange",
+    "AGGREGATION_RED": "red",
+    "LOGISTICS_GUARD": "orange",
     "TABULAR": "orange",
     "COMPLEX": "red",
 }
@@ -41,6 +45,11 @@ _CONFIDENCE_COLORS = {
     "HIGH": "green",
     "PARTIAL": "orange",
     "NOT_FOUND": "red",
+    "GREEN": "green",
+    "YELLOW": "orange",
+    "RED": "red",
+    "LLM_UNAVAILABLE": "orange",
+    "NOT_SUPPORTED": "orange",
 }
 
 # Evidence basis classification for aggregation-capable answers
@@ -130,7 +139,7 @@ class QueryPanel(tk.LabelFrame):
         # -- Row 0: Badge row (query path + confidence) -- HIDDEN from user surface
         # Widgets still exist for internal code references but not packed (visible in Advanced only)
         badge_row = tk.Frame(self, bg=t["panel_bg"])
-        # badge_row.pack(fill=tk.X, pady=(0, 8))  # Hidden from main surface
+        badge_row.pack(fill=tk.X, pady=(0, 8))
 
         self._path_badge = tk.Label(
             badge_row, text="", font=FONT_BOLD,
@@ -155,6 +164,22 @@ class QueryPanel(tk.LabelFrame):
             bg=t["panel_bg"], fg=t["gray"],
         )
         self._elapsed_label.pack(side=tk.RIGHT)
+
+        # -- IBIT Readiness Strip --
+        self._ibit_frame = tk.Frame(self, bg=t["panel_bg"])
+        self._ibit_frame.pack(fill=tk.X, pady=(0, 6))
+
+        self._ibit_label = tk.Label(
+            self._ibit_frame, text="IBIT: checking...",
+            font=FONT_SMALL, bg=t["panel_bg"], fg=t["orange"],
+            anchor=tk.W, cursor="hand2",
+        )
+        self._ibit_label.pack(side=tk.LEFT)
+        self._ibit_label.bind("<Button-1>", self._show_ibit_detail)
+        self._ibit_dots: dict[str, tk.Label] = {}
+        self._ibit_results: dict | None = None
+
+        self.after(1500, self._run_ibit_async)
 
         # -- Row 1: Question + Ask + Stop --
         q_label = tk.Label(
@@ -195,6 +220,36 @@ class QueryPanel(tk.LabelFrame):
             activeforeground=t["accent_fg"],
         )
         self.stop_btn.pack(side=tk.LEFT, padx=(8, 0))
+
+        # -- Demo query picker --
+        demo_row = tk.Frame(self, bg=t["panel_bg"])
+        demo_row.pack(fill=tk.X, pady=(0, 6))
+
+        tk.Label(
+            demo_row, text="Demo:", bg=t["panel_bg"],
+            fg=t["fg"], font=FONT_SMALL,
+        ).pack(side=tk.LEFT)
+
+        self._demo_queries = [
+            ("Q1 - Top failing NEXION 2024", "What were the highest failing part numbers in the NEXION systems in 2024?"),
+            ("Q2 - Top failing ISTO Djibouti", "What were the highest failing part numbers in the ISTO systems in Djibouti from 2022-2025?"),
+            ("Q3 - Failure rate 7yr", "What are the top 5 failure rate parts ranked each year for the past 7 years?"),
+            ("Q-DEMO-A - Top ordered parts", "What are the top ordered parts across all purchase orders?"),
+            ("Q-DEMO-B - Longest lead time", "Which parts have the longest lead time in the purchase order history?"),
+            ("Q-DEMO-C - Top by volume", "What are the top ordered parts by volume?"),
+            ("Q-DEMO-D - Reorder point", "What should our reorder point be for SEMS3D-40536 at Learmonth in NEXION?"),
+            ("Q-DEMO-E - Replacement cost", "What is the replacement cost for SEMS3D-40536 at American Samoa?"),
+            ("Q-DEMO-F - Most expensive", "What are the most expensive items ordered?"),
+            ("Q-DEMO-G - Days at site", "How many days was part SEMS3D-40536 at Guam from 2022 to 2025?"),
+        ]
+        self._demo_var = tk.StringVar(value="")
+        demo_labels = [""] + [q[0] for q in self._demo_queries]
+        self._demo_combo = ttk.Combobox(
+            demo_row, textvariable=self._demo_var,
+            values=demo_labels, state="readonly", width=35, font=FONT_SMALL,
+        )
+        self._demo_combo.pack(side=tk.LEFT, padx=(8, 0))
+        self._demo_combo.bind("<<ComboboxSelected>>", self._on_demo_select)
 
         # -- Endpoint switch (GPT-4o / phi4) --
         endpoint_row = tk.Frame(self, bg=t["panel_bg"])
@@ -291,6 +346,12 @@ class QueryPanel(tk.LabelFrame):
         self._reranker_enabled_var = tk.BooleanVar(value=retrieval.reranker_enabled if retrieval else True)
         tk.Checkbutton(rt_row, text="Reranker Enabled", variable=self._reranker_enabled_var, bg=t["panel_bg"], fg=t["fg"], font=FONT_SMALL, selectcolor=t["input_bg"], activebackground=t["panel_bg"]).pack(side=tk.LEFT)
 
+        # Grounding mode
+        gnd_row = tk.Frame(self._adv_frame, bg=t["panel_bg"])
+        gnd_row.pack(fill=tk.X, pady=1)
+        self._grounded_only_var = tk.BooleanVar(value=True)
+        tk.Checkbutton(gnd_row, text="Grounded Only (corpus answers only, no open knowledge)", variable=self._grounded_only_var, bg=t["panel_bg"], fg=t["fg"], font=FONT_SMALL, selectcolor=t["input_bg"], activebackground=t["panel_bg"]).pack(side=tk.LEFT)
+
         # -- Network/status indicator --
         self._status_label = tk.Label(
             self, text="", fg=t["gray"], anchor=tk.W,
@@ -314,6 +375,14 @@ class QueryPanel(tk.LabelFrame):
         scrollbar.config(command=self.answer_text.yview)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.answer_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        self.answer_text.tag_configure("tier_green", foreground="#4caf50", font=FONT_BOLD)
+        self.answer_text.tag_configure("tier_yellow", foreground="#ff9800", font=FONT_BOLD)
+        self.answer_text.tag_configure("tier_red", foreground="#f44336", font=FONT_BOLD)
+        self.answer_text.tag_configure("table_header", foreground="#0078d4", font=FONT_BOLD)
+        self.answer_text.tag_configure("section_header", foreground="#ffffff", font=FONT_BOLD)
+        self.answer_text.tag_configure("evidence_dim", foreground="#a0a0a0")
+        self.answer_text.tag_configure("substrate_footer", foreground="#777777", font=FONT_SMALL)
 
         # -- Feedback buttons --
         self._feedback_frame = tk.Frame(self, bg=t["panel_bg"])
@@ -417,6 +486,17 @@ class QueryPanel(tk.LabelFrame):
     # ------------------------------------------------------------------
     # Placeholder handling
     # ------------------------------------------------------------------
+
+    def _on_demo_select(self, event=None):
+        """Pre-fill the question entry with the selected demo query."""
+        label = self._demo_var.get()
+        if not label:
+            return
+        for name, query_text in self._demo_queries:
+            if name == label:
+                self.question_entry.delete(0, tk.END)
+                self.question_entry.insert(0, query_text)
+                break
 
     def _on_entry_focus(self, event=None):
         """Clear placeholder text on first focus."""
@@ -693,12 +773,25 @@ class QueryPanel(tk.LabelFrame):
             )
         self.answer_text.config(state=tk.NORMAL)
         self.answer_text.delete("1.0", tk.END)
-        self.answer_text.insert("1.0", answer)
+        is_aggregation = path.startswith("AGGREGATION_")
+        if is_aggregation:
+            self._insert_formatted_aggregation(answer)
+        else:
+            self.answer_text.insert("1.0", answer)
         self.answer_text.config(state=tk.DISABLED)
 
         # Set evidence basis badge
         question = self.question_entry.get().strip()
-        evidence_type = _classify_evidence_basis(question, answer, path)
+        if is_aggregation:
+            tier = confidence
+            if tier == "GREEN":
+                evidence_type = "EXACT_COUNT"
+            elif tier == "YELLOW":
+                evidence_type = "BOUNDED_COUNT"
+            else:
+                evidence_type = "QUALITATIVE"
+        else:
+            evidence_type = _classify_evidence_basis(question, answer, path)
         ev_label, ev_color_key = _EVIDENCE_LABELS.get(evidence_type, ("", "gray"))
         self._evidence_badge.config(
             text=" {} ".format(ev_label),
@@ -742,6 +835,37 @@ class QueryPanel(tk.LabelFrame):
             text="Done ({:.1f}s) — {} chunks retrieved".format(elapsed, chunks),
             fg=t["green"],
         )
+
+    def _insert_formatted_aggregation(self, text: str):
+        """Insert aggregation answer with colored tier, bold headers, and formatted tables."""
+        tier_tag_map = {
+            "GREEN": "tier_green",
+            "YELLOW": "tier_yellow",
+            "RED": "tier_red",
+        }
+        for line in text.split("\n"):
+            stripped = line.strip()
+            if stripped.startswith("**Confidence tier:**"):
+                for tier, tag in tier_tag_map.items():
+                    if tier in stripped:
+                        self.answer_text.insert(tk.END, line + "\n", tag)
+                        break
+                else:
+                    self.answer_text.insert(tk.END, line + "\n")
+            elif stripped.startswith("## ") or stripped.startswith("### "):
+                self.answer_text.insert(tk.END, line + "\n", "section_header")
+            elif stripped.startswith("| Rank") or stripped.startswith("| ---"):
+                self.answer_text.insert(tk.END, line + "\n", "table_header")
+            elif stripped.startswith("| ") and "|" in stripped[1:]:
+                self.answer_text.insert(tk.END, line + "\n")
+            elif stripped.startswith("*Substrate coverage:*") or stripped.startswith("*This answer was"):
+                self.answer_text.insert(tk.END, line + "\n", "substrate_footer")
+            elif stripped.startswith("- ") and any(k in stripped for k in ("year=", "incident=", "confidence=")):
+                self.answer_text.insert(tk.END, line + "\n", "evidence_dim")
+            elif stripped.startswith("**Tier:** RED") or stripped.startswith("**Reason:**"):
+                self.answer_text.insert(tk.END, line + "\n", "tier_red")
+            else:
+                self.answer_text.insert(tk.END, line + "\n")
 
     def _on_query_error(self, exc):
         """Handle query error with operator-friendly messages."""
@@ -986,6 +1110,112 @@ class QueryPanel(tk.LabelFrame):
                     text="Export Session Log", fg=t["accent"]))
         except Exception as e:
             logger.warning("Failed to export session log: %s", e)
+
+    # ------------------------------------------------------------------
+    # IBIT Readiness
+    # ------------------------------------------------------------------
+
+    def _run_ibit_async(self):
+        """Run IBIT checks in background thread and update the strip."""
+        if self._model is None:
+            t = current_theme()
+            self._ibit_label.config(text="IBIT: no model", fg=t["red"])
+            return
+
+        def _run():
+            try:
+                results = self._model.run_ibit()
+                safe_after(self, 0, self._update_ibit_display, results)
+            except Exception as e:
+                logger.warning("IBIT failed: %s", e)
+                safe_after(self, 0, lambda: self._ibit_label.config(
+                    text="IBIT: error", fg=current_theme()["red"]))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _update_ibit_display(self, results: dict):
+        """Update the IBIT strip with check results."""
+        self._ibit_results = results
+        t = current_theme()
+
+        for w in list(self._ibit_dots.values()):
+            w.destroy()
+        self._ibit_dots.clear()
+
+        passed = sum(1 for v in results.values() if v[0])
+        total = len(results)
+
+        if passed == total:
+            summary_text = "IBIT: {}/{} OK".format(passed, total)
+            summary_fg = t["green"]
+        elif passed > 0:
+            summary_text = "IBIT: {}/{} PARTIAL".format(passed, total)
+            summary_fg = t["orange"]
+        else:
+            summary_text = "IBIT: {}/{} FAIL".format(passed, total)
+            summary_fg = t["red"]
+
+        self._ibit_label.config(text=summary_text, fg=summary_fg)
+
+        for name, (ok, detail, ms) in results.items():
+            dot_color = t["green"] if ok else t["red"]
+            short = name.replace(" Store", "").replace(" Connection", "").replace(" Index", "")
+            dot = tk.Label(
+                self._ibit_frame, text=" {} ".format(short),
+                font=FONT_SMALL, bg=dot_color, fg=t["accent_fg"],
+                padx=4, pady=0,
+            )
+            dot.pack(side=tk.LEFT, padx=(4, 0))
+            self._ibit_dots[name] = dot
+
+    def _show_ibit_detail(self, event=None):
+        """Show popup with full IBIT details on click."""
+        if not self._ibit_results:
+            return
+        t = current_theme()
+
+        popup = tk.Toplevel(self)
+        popup.overrideredirect(True)
+        popup.configure(bg=t["border"])
+
+        inner = tk.Frame(popup, bg=t["panel_bg"], padx=12, pady=8)
+        inner.pack(padx=1, pady=1)
+
+        tk.Label(
+            inner, text="Initial Built-In Test",
+            font=FONT_BOLD, bg=t["panel_bg"], fg=t["fg"],
+        ).pack(anchor="w", pady=(0, 6))
+
+        for name, (ok, detail, ms) in self._ibit_results.items():
+            row = tk.Frame(inner, bg=t["panel_bg"])
+            row.pack(fill=tk.X, pady=1)
+            icon = "\u2714" if ok else "\u2718"
+            color = t["green"] if ok else t["red"]
+            tk.Label(
+                row, text="{} {}".format(icon, name),
+                font=FONT_SMALL, bg=t["panel_bg"], fg=color, width=18, anchor=tk.W,
+            ).pack(side=tk.LEFT)
+            tk.Label(
+                row, text=detail, font=FONT_SMALL,
+                bg=t["panel_bg"], fg=t["fg"], anchor=tk.W,
+            ).pack(side=tk.LEFT, padx=(4, 0))
+            tk.Label(
+                row, text="{}ms".format(ms), font=FONT_SMALL,
+                bg=t["panel_bg"], fg=t["gray"],
+            ).pack(side=tk.RIGHT)
+
+        total_ms = sum(v[2] for v in self._ibit_results.values())
+        tk.Label(
+            inner, text="Total: {}ms".format(total_ms),
+            font=FONT_SMALL, bg=t["panel_bg"], fg=t["gray"],
+        ).pack(anchor="e", pady=(6, 0))
+
+        popup.update_idletasks()
+        x = self._ibit_label.winfo_rootx()
+        y = self._ibit_label.winfo_rooty() + self._ibit_label.winfo_height() + 4
+        popup.geometry("+{}+{}".format(x, y))
+        popup.bind("<Leave>", lambda e: popup.destroy())
+        popup.bind("<FocusOut>", lambda e: popup.destroy())
 
     # ------------------------------------------------------------------
     # Theme

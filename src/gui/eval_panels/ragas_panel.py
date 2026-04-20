@@ -325,6 +325,7 @@ class RagasPanel(tk.Frame):
         readiness = summary.get("readiness") or {}
         dependency = summary.get("dependencies") or {}
         metrics = summary.get("metric_summaries") or []
+        run_label = "readiness-only" if summary.get("analysis_only") else "executed-metrics"
         mode = "analysis-only" if summary.get("analysis_only") else "execute"
         metric_line = "metrics:    none executed"
         if metrics:
@@ -333,17 +334,35 @@ class RagasPanel(tk.Frame):
                 for item in metrics
             )
             metric_line = f"metrics:    {rendered}"
+
+        family_splits = summary.get("family_splits") or {}
+        family_lines = []
+        if family_splits:
+            family_lines.append("--- per-family breakdown ---")
+            for fam, fam_metrics in sorted(family_splits.items()):
+                parts = []
+                for m_name, m_data in sorted(fam_metrics.items()):
+                    mean = m_data.get("mean")
+                    n = m_data.get("count", 0)
+                    mean_str = f"{mean:.3f}" if mean is not None else "n/a"
+                    parts.append(f"{m_name}={mean_str}(n={n})")
+                family_lines.append(f"  {fam}: {', '.join(parts)}")
+            family_lines.append("")
+            family_lines.append("NOTE: text-overlap metrics may under-report on ENTITY/TABULAR")
+            family_lines.append("slices (reference_contexts are path-anchored, not chunk text).")
+
         self._var_summary.set(
             "\n".join(
                 [
                     f"queries:    {summary.get('queries_pack_name') or Path(summary.get('queries_path') or '').name or '?'}",
+                    f"run_label:  {run_label}",
                     f"mode:       {mode}",
                     f"eligible:   {readiness.get('eligible_for_retrieval_metrics', 0)}/{readiness.get('total_queries', 0)}",
                     f"phase2c:    {readiness.get('fully_phase2c_enriched', 0)}/{readiness.get('total_queries', 0)}",
                     f"ragas:      {'installed' if dependency.get('ragas_installed') else 'missing'}",
                     metric_line,
                     f"elapsed_s:  {payload.get('elapsed_s', '?')}",
-                ]
+                ] + family_lines
             )
         )
         self._append_log(

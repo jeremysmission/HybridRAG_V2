@@ -1,0 +1,89 @@
+{
+  "scan_date": "2026-04-19",
+  "scanner": "Agent-B",
+  "corpus_root": "E:\\CorpusTransfr",
+  "total_files_scanned": 430542,
+  "total_po_hits": 19719,
+  "family_counts": {
+    "purchase_order_path": 529,
+    "purchases_dir": 15338,
+    "procurement_dir": 3381,
+    "contract_path": 196,
+    "po_token_path": 12999,
+    "vendor_invoice": 1285
+  },
+  "sample_paths_per_family": {
+    "purchase_order_path": [
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\P907 (Blanket Purchase Orders).docx",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\P907 (Blanket Purchase Orders)_1.docx",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2012 PRs\\PR 148033 (R) (DISS Removal) (ODW & Son Construction)\\PR 148033 (DISS Removal) (Purchase Order 7500105341) (5084.00).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2012 PRs\\PR 148033 (R) (DISS Removal) (ODW & Son Construction)\\PR 148033 (DISS Removal) (Purchase Order 7500105341) (5084.00)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2011 PRs\\PR 129595 (R) (KVA Supply) (4-Bolt Connector)\\purchase_order_terms_and_conditions.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2011 PRs\\PR 129595 (R) (KVA Supply) (4-Bolt Connector)\\purchase_order_terms_and_conditions_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000342321)(Tripods)(Sokkia)(95.00 each)(Rcvd 2018-03-12)\\Purchase Order 7000342321 Email (2018-02-21).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000342321)(Tripods)(Sokkia)(95.00 each)(Rcvd 2018-03-12)\\Purchase Order 7000342321 Email (2018-02-21)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000364819)(Pasternack)(BNC Male Crimp)($81.48)Rcvd 2018-12-20\\Purchase Order 7000364819.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\WX29 (PO 7000364819)(Pasternack)(BNC Male Crimp)($81.48)Rcvd 2018-12-20\\Purchase Order 7000364819_1.pdf"
+    ],
+    "purchases_dir": [
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Approved_USB_Devices (2018-07-25).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Approved_USB_Devices (2018-07-25)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\ChartOfAccounts.xlsx",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\ChartOfAccounts_1.xlsx",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\3-Pending Purchases\\12-Cable-8 AWG-Exterior (Southwire-50-ft-8-Green-Stranded-CU).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\3-Pending Purchases\\12-Cable-8 AWG-Exterior (Southwire-50-ft-8-Green-Stranded-CU)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\3-Pending Purchases\\3080-Quote (Tower Climbing Safety) (Safety-One) (2001) (995.00).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\3-Pending Purchases\\3080-Quote (Tower Climbing Safety) (Safety-One) (2001) (995.00)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\3-Pending Purchases\\3080-Quote (Transit Tripod) (CST Berger) (60-ALQR120) (100.00).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\3-Pending Purchases\\3080-Quote (Transit Tripod) (CST Berger) (60-ALQR120) (100.00)_1.pdf"
+    ],
+    "procurement_dir": [
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\001_Project_Management\\02 Labor Charge Authorizations\\WX52\\Procurement\\WX52_Charge_Authorization_Procurementpdf.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\001_Project_Management\\02 Labor Charge Authorizations\\WX52\\Procurement\\WX52_Charge_Authorization_Procurementpdf_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\001_Project_Management\\02 Labor Charge Authorizations\\WX52\\Procurement\\WX52_Charge_Authorization_ProcurementR1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\001_Project_Management\\02 Labor Charge Authorizations\\WX52\\Procurement\\WX52_Charge_Authorization_ProcurementR1_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\Emailing_ Copy of IS iBuy GL List_xlsx.msg",
+      "E:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\Emailing_ Copy of IS iBuy GL List_xlsx_1.msg",
+      "E:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\iBuy GL List.xlsx",
+      "E:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\iBuy GL List_1.xlsx",
+      "E:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\S4 HANA Procurement Checklist - Template.docx",
+      "E:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\S4 HANA Procurement Checklist - Template_1.docx"
+    ],
+    "contract_path": [
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Log_Training\\Contractor AcquiredProperty_JAN_2016.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Log_Training\\Contractor AcquiredProperty_JAN_2016_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2009 PRs\\PR 105258 (R) (DLT Solutions) (AutoCAD 2010 with Subscription)\\Contract Award (downloaded from Hill AFB webpage) (AFD-070705-070).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2009 PRs\\PR 105258 (R) (DLT Solutions) (AutoCAD 2010 with Subscription)\\Contract Award (downloaded from Hill AFB webpage) (AFD-070705-070)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2009 PRs\\PR 105258 (R) (DLT Solutions) (AutoCAD 2010 with Subscription)\\Contract FA8222-05-D-0002.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2009 PRs\\PR 105258 (R) (DLT Solutions) (AutoCAD 2010 with Subscription)\\Contract FA8222-05-D-0002_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Government_Property\\NEXION GFP_GFE\\GP Movement Forms\\BECO02-036 NEXION (BAH to NG) (Mult Items)\\Contract Mod (AESNEXIONS256821M17) (004).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Government_Property\\NEXION GFP_GFE\\GP Movement Forms\\BECO02-036 NEXION (BAH to NG) (Mult Items)\\Contract Mod (AESNEXIONS256821M17) (004)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Government_Property\\NEXION GFP_GFE\\GP Movement Forms\\BECO02-037 NEXION (BAH to NG) (Mult Items)\\Contract Mod (AESNEXIONS256821M17) (004).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Government_Property\\NEXION GFP_GFE\\GP Movement Forms\\BECO02-037 NEXION (BAH to NG) (Mult Items)\\Contract Mod (AESNEXIONS256821M17) (004)_1.pdf"
+    ],
+    "po_token_path": [
+      "E:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\Packing List (PO 7201051336)(MM-C No 5307058-01)(Enclosures)(Rcvd 2023-07-03).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\Packing List (PO 7201051336)(MM-C No 5307058-01)(Enclosures)(Rcvd 2023-07-03)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Labels\\Label (WX29O1)(PO 7000351521)(G2 Mini).pptx",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Labels\\Label (WX29O1)(PO 7000351521)(G2 Mini)_1.pptx",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2013 Shipping Completed\\2013-12-02 (LDI to BAH) (Fixed Guam Parts)\\Packing List (PO D179329) (2013-12-02).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2013 Shipping Completed\\2013-12-02 (LDI to BAH) (Fixed Guam Parts)\\Packing List (PO D179329) (2013-12-02)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2019_Shipments\\2019-09-11 (NG to Avery Weigh-Tronix)(Tension Meter Recal)\\PO 7000384219 (b19dce0_1322smart).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\2019_Shipments\\2019-09-11 (NG to Avery Weigh-Tronix)(Tension Meter Recal)\\PO 7000384219 (b19dce0_1322smart)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\TO 5017 Hawaii Install & Error Boundaries Bars\\TO 5017 RECEIVED\\TO 5017-(PO 7000340407) (Safety Climbing Gear-Position Lanyard) (Rcvd 2018-02-02)\\FedEx Trk 789548044159 (Adj Rope Position Lanyards) (Rcvd 2018-02-02).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\TO 5017 Hawaii Install & Error Boundaries Bars\\TO 5017 RECEIVED\\TO 5017-(PO 7000340407) (Safety Climbing Gear-Position Lanyard) (Rcvd 2018-02-02)\\FedEx Trk 789548044159 (Adj Rope Position Lanyards) (Rcvd 2018-02-02)_1.pdf"
+    ],
+    "vendor_invoice": [
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2015 Shipping Completed\\2015-09-22 (BAH to Learmonth) (ASV Equip)\\Customs Docs (Commercial Invoice).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2015 Shipping Completed\\2015-09-22 (BAH to Learmonth) (ASV Equip)\\Customs Docs (Commercial Invoice)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2015 Shipping Completed\\2015-09-22 (BAH to Learmonth) (ASV Equip)\\Dual-use BES Invoice (jwd).pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2015 Shipping Completed\\2015-09-22 (BAH to Learmonth) (ASV Equip)\\Dual-use BES Invoice (jwd).xlsx",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2015 Shipping Completed\\2015-09-22 (BAH to Learmonth) (ASV Equip)\\Dual-use BES Invoice (jwd)_1.pdf",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2015 Shipping Completed\\2015-09-22 (BAH to Learmonth) (ASV Equip)\\Dual-use BES Invoice (jwd)_1.xlsx",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2015 Shipping Completed\\2015-10-25 (BAH to Ascension)\\Dual-use BES Invoice (lab).xlsx",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2015 Shipping Completed\\2015-10-25 (BAH to Ascension)\\Dual-use BES Invoice (lab)_1.xlsx",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2014 Shipping Completed\\2014-04-24 (Alpena to BAH) (Greenlee Return)\\Invoice 6008108673.jpg",
+      "E:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Shipping\\NEXION (Historical ARINC-BAH)\\Shipping Completed\\2014 Shipping Completed\\2014-04-24 (Alpena to BAH) (Greenlee Return)\\Invoice 6008108673_1.jpg"
+    ]
+  }
+}

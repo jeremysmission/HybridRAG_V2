@@ -1,0 +1,370 @@
+{
+  "scan_date": "2026-04-20",
+  "scanner": "Miner-Agent",
+  "source": "E:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Calibration",
+  "distinct_equipment_types": 40,
+  "total_files": 366,
+  "year_coverage": [
+    "2022",
+    "2023",
+    "2024",
+    "2025"
+  ],
+  "equipment_list": [
+    {
+      "type": "2075004_Multimeter",
+      "file_count": 24,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "36310-9018-2K_Tension Meter",
+      "file_count": 24,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "LT8-300P_Transit Level",
+      "file_count": 20,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "37XR-A_Multimeter",
+      "file_count": 18,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "DET4TD2_Megger",
+      "file_count": 18,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "TDS2012C_O-Scope",
+      "file_count": 18,
+      "years": [
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "82141_Multimeter",
+      "file_count": 16,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "N9913_RF Analyzer",
+      "file_count": 16,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "SSA3021X_Spectrum Analyzer",
+      "file_count": 14,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "1250-3607_Calibration Kit",
+      "file_count": 14,
+      "years": [
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "19228_Monitor",
+      "file_count": 12,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "Multimeter (83V)",
+      "file_count": 10,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 5
+    },
+    {
+      "type": "Oscilloscope (TDS2012C)",
+      "file_count": 10,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 5
+    },
+    {
+      "type": "TDS2012C_Oscilloscope",
+      "file_count": 10,
+      "years": [
+        "2023"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "Calibration Kit (1250-3605)",
+      "file_count": 8,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 4
+    },
+    {
+      "type": "1250-3605_Calibration Kit_Keysight",
+      "file_count": 8,
+      "years": [
+        "2023"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "1250-3607_Calibration Kit_Keysight",
+      "file_count": 8,
+      "years": [
+        "2023"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "1250-3605_Open Short Load",
+      "file_count": 8,
+      "years": [
+        "2024"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "OSLN50A_8_Calibration Kit Coax",
+      "file_count": 8,
+      "years": [
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "S331E_Anritsu",
+      "file_count": 8,
+      "years": [
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "444A57_Tester Clamp",
+      "file_count": 8,
+      "years": [
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "Calibration Kit (1250-3607)",
+      "file_count": 6,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 3
+    },
+    {
+      "type": "Earth Tester (DET4TD2)",
+      "file_count": 6,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 3
+    },
+    {
+      "type": "Multimeter (37XR-A)",
+      "file_count": 6,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 3
+    },
+    {
+      "type": "Multimeter (82141)",
+      "file_count": 6,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 3
+    },
+    {
+      "type": "AWT05-508202_Tension Meter",
+      "file_count": 6,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "GP-2A_Earth Ground Tester",
+      "file_count": 6,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "MAS830B_Multimeter",
+      "file_count": 6,
+      "years": [
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "Antenna Analyzer (S331E)",
+      "file_count": 4,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 2
+    },
+    {
+      "type": "Calibration Kit (OSLN50A-8)",
+      "file_count": 4,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 2
+    },
+    {
+      "type": "ESD Monitor (19228)",
+      "file_count": 4,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 2
+    },
+    {
+      "type": "FieldFox RF Analyzer (N9913A)",
+      "file_count": 4,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 2
+    },
+    {
+      "type": "Tension Meter (36310-9018)",
+      "file_count": 4,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 2
+    },
+    {
+      "type": "Tension Meter (36310-90182K)",
+      "file_count": 4,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 2
+    },
+    {
+      "type": "OSLN50A-8_ Calibration Kit Anritsu",
+      "file_count": 4,
+      "years": [
+        "2023"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "S331E_Analyzer Anritsu",
+      "file_count": 4,
+      "years": [
+        "2023"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "1250-3605_Calibration Kit",
+      "file_count": 4,
+      "years": [
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "OSLNF50A-8_Calibration Kit Coax F",
+      "file_count": 4,
+      "years": [
+        "2025"
+      ],
+      "serial_count": 0
+    },
+    {
+      "type": "Load, Open Short Cal Kit",
+      "file_count": 2,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 1
+    },
+    {
+      "type": "Multimeter (MAS830B)",
+      "file_count": 2,
+      "years": [
+        "2022"
+      ],
+      "serial_count": 0
+    }
+  ],
+  "notes": [
+    "Calibration records organized by year, then by equipment model/serial.",
+    "Each equipment folder contains calibration certificates, checklists, and tracking docs.",
+    "Consistent naming: ModelNo_EquipmentType or EquipmentType (ModelNo)(SN - XXXXX).",
+    "Serial numbers provide traceability to specific instruments across years.",
+    "Useful for a calibration_tracking substrate if needed for demo."
+  ]
+}

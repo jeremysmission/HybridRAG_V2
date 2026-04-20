@@ -13,6 +13,7 @@ For COMPLEX queries, decomposes into sub-queries and fans out.
 from __future__ import annotations
 
 import logging
+import re
 import time
 from collections import OrderedDict
 from dataclasses import replace
@@ -24,10 +25,39 @@ from src.query.entity_retriever import EntityRetriever, StructuredResult
 from src.query.context_builder import ContextBuilder, GeneratorContext
 from src.query.generator import Generator, QueryResponse
 from src.query.crag_verifier import CRAGVerifier
-from src.query.aggregation_executor import AggregationExecutor, AggregationResult
+from src.query.aggregation_executor import AggregationExecutor, AggregationResult, CrossSubstrateExecutor
 from src.store.lance_store import ChunkResult
 
 logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Unsupported logistics/PO aggregation guard (fail-closed)
+# ---------------------------------------------------------------------------
+# Queries requesting exact counts of POs, orders, receipts, or outstanding
+# items don't yet have a deterministic substrate. Without this guard, the
+# LLM would generate plausible-sounding but fabricated numbers.
+
+_PO_LOGISTICS_TRIGGERS = re.compile(
+    r"\b(?:how\s+many|count\s+(?:of|the)|total\s+(?:number|count|amount)"
+    r"|number\s+of|how\s+much|tally|sum\s+of)\b",
+    re.IGNORECASE,
+)
+_PO_LOGISTICS_AXIS = re.compile(
+    r"\b(?:purchase\s+orders?|(?:open\s+)?POs?\b|orders?\s+(?:outstanding|received|placed)"
+    r"|outstanding\s+(?:orders?|POs?|items?)|not\s+received"
+    r"|open\s+PO|receive\s+lag|as[\s-]+of[\s-]+date"
+    r"|shipments?\s+(?:received|outstanding|pending))\b",
+    re.IGNORECASE,
+)
+
+def _detect_unsupported_logistics_count(query: str) -> bool:
+    """Return True if query asks for exact counts of PO/logistics items.
+
+    Requires BOTH an explicit counting trigger (how many, count of, total)
+    AND a logistics-specific axis term. Pure semantic questions about
+    logistics topics (policies, documents, procedures) pass through to RAG.
+    """
+    return bool(_PO_LOGISTICS_TRIGGERS.search(query) and _PO_LOGISTICS_AXIS.search(query))
 
 # ---------------------------------------------------------------------------
 # Adaptive top-k per query type (2026 production pattern)
@@ -86,6 +116,7 @@ class QueryPipeline:
         generator: Generator | None,
         crag_verifier: CRAGVerifier | None = None,
         aggregation_executor: AggregationExecutor | None = None,
+        cross_substrate_executor: CrossSubstrateExecutor | None = None,
     ):
         # generator is Optional to support aggregation-only mode when no LLM is
         # configured. The deterministic aggregation branch (SAG) returns its
@@ -98,6 +129,7 @@ class QueryPipeline:
         self.generator = generator
         self.crag_verifier = crag_verifier
         self.aggregation_executor = aggregation_executor
+        self.cross_substrate_executor = cross_substrate_executor
         self._query_cache: OrderedDict[str, QueryResponse] = OrderedDict()
         self._cache_max = 128
 
@@ -147,6 +179,58 @@ class QueryPipeline:
                     self._query_cache.popitem(last=False)
                 self._query_cache[cache_key] = response
                 return response
+
+        # Cross-substrate join queries (cost_per_failure, top_vendors, etc.)
+        if self.cross_substrate_executor is not None:
+            cs_start = time.perf_counter()
+            cs_result = self.cross_substrate_executor.try_execute(query_text)
+            cs_ms = int((time.perf_counter() - cs_start) * 1000)
+            if cs_result is not None:
+                elapsed = int((time.perf_counter() - start) * 1000)
+                response = QueryResponse(
+                    answer=cs_result.context_text,
+                    confidence=cs_result.tier,
+                    query_path=f"CROSS_SUBSTRATE_{cs_result.tier}",
+                    sources=cs_result.sources,
+                    chunks_used=len(cs_result.ranked_rows),
+                    latency_ms=elapsed,
+                    stage_timings_ms={
+                        "cross_substrate": cs_ms,
+                        "total": elapsed,
+                    },
+                )
+                return response
+
+        # Fail-closed guard: intercept logistics/PO count queries that
+        # don't have a deterministic substrate yet. Prevents the LLM from
+        # generating fabricated counts.
+        if _detect_unsupported_logistics_count(query_text):
+            elapsed = int((time.perf_counter() - start) * 1000)
+            response = QueryResponse(
+                answer=(
+                    "## Logistics / PO Aggregation -- NOT YET SUPPORTED\n\n"
+                    "This query requests exact counts for purchase orders, "
+                    "receipts, or outstanding items.\n\n"
+                    "The deterministic PO-lifecycle substrate has not been "
+                    "populated yet. Without it, any numbers would be "
+                    "LLM-generated estimates, not exact counts.\n\n"
+                    "**Status:** PO-lifecycle substrate is in development.\n\n"
+                    "**What you can ask now:**\n"
+                    "- Failure-related aggregation (top failing parts, "
+                    "failure counts by system/site/year)\n"
+                    "- Semantic search about PO-related documents\n"
+                    "- Entity lookup for specific PO numbers\n\n"
+                    "*This guard ensures the system never presents "
+                    "fabricated logistics counts as facts.*"
+                ),
+                confidence="NOT_SUPPORTED",
+                query_path="LOGISTICS_GUARD",
+                sources=[],
+                chunks_used=0,
+                latency_ms=elapsed,
+                stage_timings_ms={"logistics_guard": elapsed, "total": elapsed},
+            )
+            return response
 
         classification, context, stage_timings = self.retrieve_context(query_text, top_k)
 
@@ -223,6 +307,23 @@ class QueryPipeline:
         step_start = time.perf_counter()
         classification = self.router.classify(query_text)
         stage_timings["router"] = int((time.perf_counter() - step_start) * 1000)
+
+        # Vocab-pack enrichment: tag recognized forms, sites, acronyms
+        try:
+            from src.vocab.tagging import build_tagging_result
+            from pathlib import Path
+            vocab_dir = Path(__file__).resolve().parents[2] / "config" / "vocab_packs"
+            if vocab_dir.exists():
+                vocab_result = build_tagging_result(str(vocab_dir), query_text)
+                classification.vocab_tags = {
+                    "doc_family": vocab_result.get("doc_family", []),
+                    "matched_terms": [
+                        {"canonical": t["canonical"], "kind": t["kind"], "domain": t["domain"]}
+                        for t in vocab_result.get("matched_terms", [])
+                    ],
+                }
+        except Exception as e:
+            logger.debug("Vocab tagging skipped: %s", e)
 
         # Adaptive top-k: override caller's top_k with query-type-specific value
         retrieve_k, rerank_k = _resolve_adaptive_top_k(classification.query_type)

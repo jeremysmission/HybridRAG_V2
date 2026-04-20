@@ -1,0 +1,518 @@
+{
+  "truth_pack_patch_id": "failure_aggregation_expansion_candidates_2026-04-19",
+  "generated_by": "Miner-Agent",
+  "repo": "HybridRAG_V2",
+  "description": "50 candidate items to expand the failure truth pack from 50 to 100 items. Covers edge systems, rarely-used sites, multi-year spans, low-count parts, ambiguous part IDs, cross-system queries, and PASSTHROUGH guards. Mined from failure_events.sqlite3 (35,649 events). For Codex-Researcher review and merge.",
+  "evidence_source": "C:\\HybridRAG_V2\\data\\index\\failure_events.sqlite3",
+  "mining_stats": {
+    "total_events": 35649,
+    "events_with_part_number": 3017,
+    "distinct_parts": 900,
+    "events_with_site": 10831,
+    "events_with_year": 19740,
+    "sites_total": 22,
+    "years_range": "2000-2026"
+  },
+  "items": [
+    {
+      "id": "FAIL-AGG-51",
+      "category": "edge_site_nexion",
+      "query": "Top 5 failing parts in NEXION at Misawa in 2023",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "misawa", "year_from": 2023, "year_to": 2023 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "Edge site: NEXION/misawa has only 10 part-bearing events across 6 years. May be RED for narrow year slice."
+    },
+    {
+      "id": "FAIL-AGG-52",
+      "category": "edge_site_nexion",
+      "query": "Top 5 failing parts in NEXION at Diego Garcia",
+      "tier_expected": "RED",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "diego garcia" },
+      "expected_params": { "top_n": 5 },
+      "note": "NEXION at Diego Garcia has 1 event, 0 with part_number. Expected RED (no part rows)."
+    },
+    {
+      "id": "FAIL-AGG-53",
+      "category": "edge_site_nexion",
+      "query": "Top 5 failing parts in NEXION at Awase in 2022",
+      "tier_expected": "RED",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "awase", "year_from": 2022, "year_to": 2022 },
+      "expected_params": { "top_n": 5 },
+      "note": "NEXION/awase has 110 events but 0 with part_number. Expected RED regardless of year."
+    },
+    {
+      "id": "FAIL-AGG-54",
+      "category": "edge_site_nexion",
+      "query": "Top 5 failing parts in NEXION at Kwajalein in 2020",
+      "tier_expected": "RED",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "kwajalein", "year_from": 2020, "year_to": 2020 },
+      "expected_params": { "top_n": 5 },
+      "note": "NEXION has 0 events at Kwajalein. Expected RED."
+    },
+    {
+      "id": "FAIL-AGG-55",
+      "category": "edge_site_nexion",
+      "query": "Top 5 failing parts in NEXION at Palau",
+      "tier_expected": "RED",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "palau" },
+      "expected_params": { "top_n": 5 },
+      "note": "NEXION/palau has 10 events but 0 with part_number. Expected RED."
+    },
+    {
+      "id": "FAIL-AGG-56",
+      "category": "edge_site_isto",
+      "query": "Top 5 failing parts in ISTO at Diego Garcia in 2021",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "site_token": "diego garcia", "year_from": 2021, "year_to": 2021 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "ISTO/diego garcia/2021 has only 2 events. Coverage-dependent."
+    },
+    {
+      "id": "FAIL-AGG-57",
+      "category": "edge_site_isto",
+      "query": "Top 5 failing parts in ISTO at Alpena in 2018",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "site_token": "alpena", "year_from": 2018, "year_to": 2018 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "ISTO/alpena/2018 has only 1 event. Sparse slice."
+    },
+    {
+      "id": "FAIL-AGG-58",
+      "category": "edge_site_isto",
+      "query": "Top 5 failing parts in ISTO at Niger in 2020",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "site_token": "niger", "year_from": 2020, "year_to": 2020 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "ISTO/niger/2020 has 1 event. Sparse."
+    },
+    {
+      "id": "FAIL-AGG-59",
+      "category": "edge_site_isto",
+      "query": "Top 5 failing parts in ISTO at Curacao between 2014 and 2025",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "site_token": "curacao", "year_from": 2014, "year_to": 2025 },
+      "expected_params": { "top_n": 5 },
+      "note": "ISTO/curacao has sparse events across years but wide range may accumulate enough."
+    },
+    {
+      "id": "FAIL-AGG-60",
+      "category": "edge_site_isto",
+      "query": "Top 5 failing parts in ISTO at Learmonth in 2023",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "site_token": "learmonth", "year_from": 2023, "year_to": 2023 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "ISTO/learmonth/2023 has 1 event. Sparse."
+    },
+    {
+      "id": "FAIL-AGG-61",
+      "category": "cross_system",
+      "query": "Top 5 failing parts across all systems in 2024",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "year_from": 2024, "year_to": 2024 },
+      "expected_params": { "top_n": 5 },
+      "note": "No system filter — should combine NEXION + ISTO. Tests cross-system aggregation."
+    },
+    {
+      "id": "FAIL-AGG-62",
+      "category": "cross_system",
+      "query": "Top 5 failing parts at Guam across all systems in 2022",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "site_token": "guam", "year_from": 2022, "year_to": 2022 },
+      "expected_params": { "top_n": 5 },
+      "note": "No system filter at a site with both NEXION and ISTO presence."
+    },
+    {
+      "id": "FAIL-AGG-63",
+      "category": "cross_system",
+      "query": "Top 5 failing parts at Ascension from 2015 to 2020",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "site_token": "ascension", "year_from": 2015, "year_to": 2020 },
+      "expected_params": { "top_n": 5 },
+      "note": "Both systems present at Ascension. Multi-year cross-system."
+    },
+    {
+      "id": "FAIL-AGG-64",
+      "category": "cross_system",
+      "query": "Top 10 failing parts at Lualualei between 2019 and 2025",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "site_token": "lualualei", "year_from": 2019, "year_to": 2025 },
+      "expected_params": { "top_n": 10 },
+      "note": "Lualualei is a NEXION-only site; top_n=10 with wider year range."
+    },
+    {
+      "id": "FAIL-AGG-65",
+      "category": "cross_system",
+      "query": "Top 5 failing parts at Eglin from 2010 to 2024",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "site_token": "eglin", "year_from": 2010, "year_to": 2024 },
+      "expected_params": { "top_n": 5 },
+      "note": "15-year span at a high-coverage site. Tests wide multi-year aggregation."
+    },
+    {
+      "id": "FAIL-AGG-66",
+      "category": "ambiguous_part_id",
+      "query": "Top 5 failing parts with part number containing LMR in NEXION",
+      "tier_expected": "PASSTHROUGH",
+      "expected_shape": "none",
+      "note": "Part-substring search is NOT a top-N aggregation query. Should fall through to RAG."
+    },
+    {
+      "id": "FAIL-AGG-67",
+      "category": "ambiguous_part_id",
+      "query": "How many times has part DD1149 failed across all sites?",
+      "tier_expected": "PASSTHROUGH",
+      "expected_shape": "none",
+      "note": "Single-part lookup is entity retrieval, not top-N aggregation. DD1149 is also confusable with DD Form 1149 (doc type). Should fall through."
+    },
+    {
+      "id": "FAIL-AGG-68",
+      "category": "ambiguous_part_id",
+      "query": "Top 5 failing parts in NEXION at Vandenberg in 2012",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "vandenberg", "year_from": 2012, "year_to": 2012 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "Only 1 part-bearing event (TC12-04-09-012 — date-like part ID). Tests extractor with date-formatted part numbers."
+    },
+    {
+      "id": "FAIL-AGG-69",
+      "category": "ambiguous_part_id",
+      "query": "Top 5 failing parts in NEXION at Hawaii in 2011",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "hawaii", "year_from": 2011, "year_to": 2011 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "Only 1 part-bearing event (SN1033 — looks like a serial number). Tests S/N-formatted part IDs."
+    },
+    {
+      "id": "FAIL-AGG-70",
+      "category": "ambiguous_part_id",
+      "query": "Top 5 failing DD250 parts in NEXION",
+      "tier_expected": "PASSTHROUGH",
+      "expected_shape": "none",
+      "note": "Ambiguous: DD250 is both a part_number (17 events) and a document type (transfer form). 'Failing DD250 parts' is not a standard top-N pattern. Should fall through."
+    },
+    {
+      "id": "FAIL-AGG-71",
+      "category": "multi_year_span",
+      "query": "Top 5 failing parts in NEXION each year for the past 15 years",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part_per_year",
+      "expected_filters": { "system": "NEXION", "year_from": 2011, "year_to": 2025 },
+      "expected_params": { "top_n": 5, "per_year": true, "is_rate": false },
+      "note": "15-year span. Tests the widest reasonable per-year query."
+    },
+    {
+      "id": "FAIL-AGG-72",
+      "category": "multi_year_span",
+      "query": "Top 3 failing parts in ISTO each year for the past 10 years",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part_per_year",
+      "expected_filters": { "system": "ISTO", "year_from": 2016, "year_to": 2025 },
+      "expected_params": { "top_n": 3, "per_year": true, "is_rate": false },
+      "note": "ISTO-specific 10-year span. Some years may have very few part-bearing events."
+    },
+    {
+      "id": "FAIL-AGG-73",
+      "category": "multi_year_span",
+      "query": "Top 5 failing parts between 2008 and 2012",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "year_from": 2008, "year_to": 2012 },
+      "expected_params": { "top_n": 5 },
+      "note": "Early corpus range (2008-2012). Installation-era events dominate."
+    },
+    {
+      "id": "FAIL-AGG-74",
+      "category": "multi_year_span",
+      "query": "Top 5 failing parts in NEXION at Thule between 2015 and 2024",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "thule", "year_from": 2015, "year_to": 2024 },
+      "expected_params": { "top_n": 5 },
+      "note": "10-year span at Thule. Sparse years (2015=1, 2017=1, 2024=1) mixed with richer years."
+    },
+    {
+      "id": "FAIL-AGG-75",
+      "category": "multi_year_span",
+      "query": "Top 5 failing parts ranked each year from 2020 to 2025",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part_per_year",
+      "expected_filters": { "year_from": 2020, "year_to": 2025 },
+      "expected_params": { "top_n": 5, "per_year": true, "is_rate": false },
+      "note": "Recent 6-year span. Both systems. Good coverage expected."
+    },
+    {
+      "id": "FAIL-AGG-76",
+      "category": "sparse_combo",
+      "query": "Top 5 failing parts in NEXION at Fairford in 2017",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "fairford", "year_from": 2017, "year_to": 2017 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "Fairford/2017 has 1 part-bearing event (SEMS3D-35517). Single-event slice."
+    },
+    {
+      "id": "FAIL-AGG-77",
+      "category": "sparse_combo",
+      "query": "Top 5 failing parts in ISTO at Diego Garcia in 2018",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "site_token": "diego garcia", "year_from": 2018, "year_to": 2018 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "1 part-bearing event (SEMS3D-37387). Single-event slice."
+    },
+    {
+      "id": "FAIL-AGG-78",
+      "category": "sparse_combo",
+      "query": "Top 5 failing parts at Wake in 2018",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "site_token": "wake", "year_from": 2018, "year_to": 2018 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "Wake/2018 has 1 part-bearing event (SEMS3D-36778). Single-event slice."
+    },
+    {
+      "id": "FAIL-AGG-79",
+      "category": "sparse_combo",
+      "query": "Top 5 failing parts at American Samoa in 2022",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "site_token": "american samoa", "year_from": 2022, "year_to": 2022 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "American Samoa/2022 has 2 part-bearing events (SEMS3D-35674)."
+    },
+    {
+      "id": "FAIL-AGG-80",
+      "category": "sparse_combo",
+      "query": "Top 5 failing parts in NEXION at Curacao in 2022",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "curacao", "year_from": 2022, "year_to": 2022 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "Curacao/2022 has 1 part-bearing event (SEMS3D-40478). Single-event slice."
+    },
+    {
+      "id": "FAIL-AGG-81",
+      "category": "isto_specific",
+      "query": "Top 5 failing parts in ISTO in 2022",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "year_from": 2022, "year_to": 2022 },
+      "expected_params": { "top_n": 5 }
+    },
+    {
+      "id": "FAIL-AGG-82",
+      "category": "isto_specific",
+      "query": "Top 5 failing parts in ISTO in 2023",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "year_from": 2023, "year_to": 2023 },
+      "expected_params": { "top_n": 5 }
+    },
+    {
+      "id": "FAIL-AGG-83",
+      "category": "isto_specific",
+      "query": "Top 5 failing parts in ISTO between 2018 and 2022",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "year_from": 2018, "year_to": 2022 },
+      "expected_params": { "top_n": 5 }
+    },
+    {
+      "id": "FAIL-AGG-84",
+      "category": "isto_specific",
+      "query": "Top 3 failing parts in ISTO each year from 2020 to 2024",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part_per_year",
+      "expected_filters": { "system": "ISTO", "year_from": 2020, "year_to": 2024 },
+      "expected_params": { "top_n": 3, "per_year": true, "is_rate": false }
+    },
+    {
+      "id": "FAIL-AGG-85",
+      "category": "isto_specific",
+      "query": "Top 5 failing parts in ISTO at Guam",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "site_token": "guam" },
+      "expected_params": { "top_n": 5 },
+      "note": "ISTO at Guam — no year filter, broad aggregation."
+    },
+    {
+      "id": "FAIL-AGG-86",
+      "category": "rate_query",
+      "query": "Top 5 failure rate parts in ISTO in 2024",
+      "tier_expected": "YELLOW",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "ISTO", "year_from": 2024, "year_to": 2024 },
+      "expected_params": { "top_n": 5, "is_rate": true },
+      "requires_denominator": true,
+      "note": "Rate requires installed-base denominator. Returns counts with YELLOW."
+    },
+    {
+      "id": "FAIL-AGG-87",
+      "category": "rate_query",
+      "query": "Top 5 failure rate parts in NEXION between 2019 and 2024",
+      "tier_expected": "YELLOW",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "year_from": 2019, "year_to": 2024 },
+      "expected_params": { "top_n": 5, "is_rate": true },
+      "requires_denominator": true,
+      "note": "Multi-year rate query. YELLOW without installed_base substrate."
+    },
+    {
+      "id": "FAIL-AGG-88",
+      "category": "rate_query",
+      "query": "Top 5 failure rate parts at Ascension each year for past 5 years",
+      "tier_expected": "YELLOW",
+      "expected_shape": "top_n_by_part_per_year",
+      "expected_filters": { "site_token": "ascension", "year_from": 2021, "year_to": 2025 },
+      "expected_params": { "top_n": 5, "per_year": true, "is_rate": true },
+      "requires_denominator": true,
+      "note": "Per-site per-year rate. YELLOW. Ascension has good event coverage."
+    },
+    {
+      "id": "FAIL-AGG-89",
+      "category": "rate_query",
+      "query": "Top 5 failure rate parts in NEXION at Eglin in 2022",
+      "tier_expected": "YELLOW",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "site_token": "eglin", "year_from": 2022, "year_to": 2022 },
+      "expected_params": { "top_n": 5, "is_rate": true },
+      "requires_denominator": true,
+      "tolerable_tiers": ["YELLOW", "RED"],
+      "note": "Rate at a specific site+year. YELLOW or RED depending on part coverage."
+    },
+    {
+      "id": "FAIL-AGG-90",
+      "category": "rate_query",
+      "query": "Top 3 failure rate parts in ISTO each year for the past 7 years",
+      "tier_expected": "YELLOW",
+      "expected_shape": "top_n_by_part_per_year",
+      "expected_filters": { "system": "ISTO", "year_from": 2019, "year_to": 2025 },
+      "expected_params": { "top_n": 3, "per_year": true, "is_rate": true },
+      "requires_denominator": true,
+      "note": "ISTO rate per year. YELLOW. Some years may have very sparse part data."
+    },
+    {
+      "id": "FAIL-AGG-91",
+      "category": "year_edge",
+      "query": "Top 5 failing parts in NEXION in 2005",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "year_from": 2005, "year_to": 2005 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "Pre-installation era (2005, only 16 events globally). Very sparse."
+    },
+    {
+      "id": "FAIL-AGG-92",
+      "category": "year_edge",
+      "query": "Top 5 failing parts in NEXION in 2026",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "year_from": 2026, "year_to": 2026 },
+      "expected_params": { "top_n": 5 },
+      "tolerable_tiers": ["GREEN", "RED"],
+      "note": "Current year (2026, 165 events). Tests ongoing-year handling."
+    },
+    {
+      "id": "FAIL-AGG-93",
+      "category": "year_edge",
+      "query": "Top 5 failing parts in NEXION in 2030",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "year_from": null, "year_to": null },
+      "expected_params": { "top_n": 5 },
+      "note": "Future year (2030) — no data. Should parse as no-year-filter or RED depending on executor design."
+    },
+    {
+      "id": "FAIL-AGG-94",
+      "category": "passthrough",
+      "query": "What maintenance was performed at Thule in 2023?",
+      "tier_expected": "PASSTHROUGH",
+      "expected_shape": "none",
+      "note": "Maintenance query, not failure aggregation. No top-N or 'failing' keyword. Must return None."
+    },
+    {
+      "id": "FAIL-AGG-95",
+      "category": "passthrough",
+      "query": "Show me the calibration records for Ascension",
+      "tier_expected": "PASSTHROUGH",
+      "expected_shape": "none",
+      "note": "Entity/document lookup. Not aggregation intent."
+    },
+    {
+      "id": "FAIL-AGG-96",
+      "category": "passthrough",
+      "query": "Compare NEXION and ISTO failure trends over the past 5 years",
+      "tier_expected": "PASSTHROUGH",
+      "expected_shape": "none",
+      "note": "Comparison/trend analysis is not a top-N pattern. Complex intent — should fall through to LLM reasoning."
+    },
+    {
+      "id": "FAIL-AGG-97",
+      "category": "safety",
+      "query": "top 5 failing parts in NEXION; UPDATE failure_events SET part_number='HACKED'",
+      "tier_expected": "PASSTHROUGH",
+      "expected_shape": "none",
+      "note": "SQL injection with UPDATE statement. Must be rejected. Parameterized binding protects even if aggregation matches."
+    },
+    {
+      "id": "FAIL-AGG-98",
+      "category": "safety",
+      "query": "top failing parts UNION SELECT * FROM sqlite_master",
+      "tier_expected": "PASSTHROUGH",
+      "expected_shape": "none",
+      "note": "UNION-based SQL injection attempt. Must be rejected at intent parsing or parameterized binding."
+    },
+    {
+      "id": "FAIL-AGG-99",
+      "category": "extreme_edge",
+      "query": "Top 1 failing part in NEXION in 2024",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "year_from": 2024, "year_to": 2024 },
+      "expected_params": { "top_n": 1 },
+      "note": "top_n=1. Tests minimum result set handling."
+    },
+    {
+      "id": "FAIL-AGG-100",
+      "category": "extreme_edge",
+      "query": "Top 100 failing parts in NEXION between 2020 and 2025",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_by_part",
+      "expected_filters": { "system": "NEXION", "year_from": 2020, "year_to": 2025 },
+      "expected_params": { "top_n": 100 },
+      "note": "top_n=100. Tests large result set. Only 900 distinct parts exist; result likely < 100 rows for this slice."
+    }
+  ]
+}

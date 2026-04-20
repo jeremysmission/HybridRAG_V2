@@ -1,0 +1,469 @@
+{
+  "scan_date": "2026-04-19",
+  "scanner": "Miner-Agent",
+  "corpus_source": "E:\\CorpusTransfr\file_state.sqlite3 + relationships.sqlite3",
+  "distinct_vendors_from_po_folders": 370,
+  "total_po_vendor_files": 2313,
+  "top_vendors": [
+    {
+      "vendor_name": "Safety Climbing Gear-Fall Protection",
+      "po_file_count": 81,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/5017 (PO 7000341447) (Safety Climbing Gear-Fall Protection) (",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/5017 (PO 7000341447) (Safety Climbing Gear-Fall Protection) ("
+      ]
+    },
+    {
+      "vendor_name": "PCPC",
+      "po_file_count": 67,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000351521)(PCPC)(VARIOUS)(9,119.59)/FedEx Trk 06131",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000351521)(PCPC)(VARIOUS)(9,119.59)/FedEx Trk 06131"
+      ]
+    },
+    {
+      "vendor_name": "Cable RG-213",
+      "po_file_count": 46,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000334670) (Cable RG-213) (0014361833) (6363.48)/20",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000334670) (Cable RG-213) (0014361833) (6363.48)/20"
+      ]
+    },
+    {
+      "vendor_name": "Server-UPS-KVM",
+      "po_file_count": 44,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX28 (PO 7000325121) (Server-UPS-KVM)/Archive/100416-DL160 Ru",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX28 (PO 7000325121) (Server-UPS-KVM)/Archive/DL160RS-Single "
+      ]
+    },
+    {
+      "vendor_name": "LDI",
+      "po_file_count": 43,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/5012 (PO 7000298452) (LDI) (Systems 13 & 14) (Santiago & Aere",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/5012 (PO 7000298452) (LDI) (Systems 13 & 14) (Santiago & Aere"
+      ]
+    },
+    {
+      "vendor_name": "Grainger",
+      "po_file_count": 39,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7200754902)(Grainger)(Wall Calendar)($43.40)Rcvd 201",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7200754902)(Grainger)(Wall Calendar)($43.40)Rcvd 201"
+      ]
+    },
+    {
+      "vendor_name": "Various",
+      "po_file_count": 38,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000346522)(Various)(Anixter)(4377.95)/2393ebe8_5519",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000346522)(Various)(Anixter)(4377.95)/T100-001 - Cr"
+      ]
+    },
+    {
+      "vendor_name": "Safety Climbing Gear-Safety Bag",
+      "po_file_count": 36,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000325468)(Safety Climbing Gear-Safety Bag)(899.00)",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000325468)(Safety Climbing Gear-Safety Bag)(899.00)"
+      ]
+    },
+    {
+      "vendor_name": "Newark",
+      "po_file_count": 35,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000372377)(Newark)(RG-58 Cable)($388.24)Rcvd 2019-0",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000372377)(Newark)(RG-58 Cable)($388.24)Rcvd 2019-0"
+      ]
+    },
+    {
+      "vendor_name": "Autodialer",
+      "po_file_count": 34,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX28 (PO 7000326519) (Autodialer) (CottageSitter) (FGD-0800)/",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX28 (PO 7000326519) (Autodialer) (CottageSitter) (FGD-0800)/"
+      ]
+    },
+    {
+      "vendor_name": "Devel-Upgrade Kits",
+      "po_file_count": 31,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX28 (PO 7500137184) (Devel-Upgrade Kits)/FedEx Trk 771322821",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX28 (PO 7500137184) (Devel-Upgrade Kits)/FedEx Trk 771322821"
+      ]
+    },
+    {
+      "vendor_name": "Tower-Ant 2ea",
+      "po_file_count": 30,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000336715)(Tower-Ant 2ea)(PCPC)(93107.96)(Rcvd 2018",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000336715)(Tower-Ant 2ea)(PCPC)(93107.96)(Rcvd 2018"
+      ]
+    },
+    {
+      "vendor_name": "Calibration",
+      "po_file_count": 29,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O2 (PO 7000393631)(Calibration)(Mtn Metrology)($4,453.00)",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O2 (PO 7000393631)(Calibration)(Mtn Metrology)($4,453.00)"
+      ]
+    },
+    {
+      "vendor_name": "Server Racks",
+      "po_file_count": 27,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX28 (PO 7000330988) (Server Racks) ($13,206.97)/Archive/Quot",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX28 (PO 7000330988) (Server Racks) ($13,206.97)/Archive/Quot"
+      ]
+    },
+    {
+      "vendor_name": "Theodolite",
+      "po_file_count": 25,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX25 (PO 7000323104) (Theodolite) (CST-Berger) (Model 56-DGT1",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX25 (PO 7000323104) (Theodolite) (CST-Berger) (Model 56-DGT1"
+      ]
+    },
+    {
+      "vendor_name": "Tension Meter Calibration",
+      "po_file_count": 23,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 5000144332)(Tension Meter Calibration)(PBJ Partner",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 5000144332)(Tension Meter Calibration)(PBJ Partner"
+      ]
+    },
+    {
+      "vendor_name": "TESSCO",
+      "po_file_count": 21,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7000353352)(TESSCO)(5-Busbar)(WSGB-2X10-IS)(129.80",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7000353352)(TESSCO)(5-Busbar)(WSGB-2X10-IS)(129.80"
+      ]
+    },
+    {
+      "vendor_name": "Arrow Moving & Storage",
+      "po_file_count": 19,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7500163791) (Arrow Moving & Storage)($1300.00)/11D",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7500163791) (Arrow Moving & Storage)($1300.00)/App"
+      ]
+    },
+    {
+      "vendor_name": "Stresscon-Conrete Structures",
+      "po_file_count": 19,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000341394)(Stresscon-Conrete Structures)(Tx, Shelte",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000341394)(Stresscon-Conrete Structures)(Tx, Shelte"
+      ]
+    },
+    {
+      "vendor_name": "Fan Pr-Bckplns-CPU Fans",
+      "po_file_count": 18,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)/B",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000327416)(Fan Pr-Bckplns-CPU Fans)(LDI)(3980.91)/B"
+      ]
+    },
+    {
+      "vendor_name": "Staples",
+      "po_file_count": 17,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7200698512)(Staples)(Document Protectors)(2018-03-21",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7200698512)(Staples)(Document Protectors)(2018-03-21"
+      ]
+    },
+    {
+      "vendor_name": "500 Ft Rolls Rg-213-Thule",
+      "po_file_count": 17,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/4-Returns/TO WX31 Returns-(PO 7000334670) (500 Ft Rolls Rg-213-Thule) (4 ea)/Return",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/4-Returns/TO WX31 Returns-(PO 7000334670) (500 Ft Rolls Rg-213-Thule) (4 ea)/SCATS "
+      ]
+    },
+    {
+      "vendor_name": "Office Supplies",
+      "po_file_count": 16,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 7200887457)(Office Supplies)(Guy Brown)($XX.XX)/15",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 7200887457)(Office Supplies)(Guy Brown)($XX.XX)/Gu"
+      ]
+    },
+    {
+      "vendor_name": "Sterling",
+      "po_file_count": 15,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000351413)(Sterling)(Climbing Bag 200Ft Rope)(399.0",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000351413)(Sterling)(Climbing Bag 200Ft Rope)(399.0"
+      ]
+    },
+    {
+      "vendor_name": "CDW",
+      "po_file_count": 15,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7200734977)(CDW)(UPS-HPE R1500)(PN 3746364)(686.77",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7200734977)(CDW)(UPS-HPE R1500)(PN 3746364)(686.77"
+      ]
+    },
+    {
+      "vendor_name": "Software-AutoCad 2017",
+      "po_file_count": 14,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX25 (PO 7000321585) (Software-AutoCad 2017) (3488.00)/2017-0",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX25 (PO 7000321585) (Software-AutoCad 2017) (3488.00)/2017-0"
+      ]
+    },
+    {
+      "vendor_name": "ULINE",
+      "po_file_count": 14,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000354180)(ULINE)(VARIOUS)(5824.00)/Email(PO 700035",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000354180)(ULINE)(VARIOUS)(5824.00)/FedEx Trk 46601"
+      ]
+    },
+    {
+      "vendor_name": "Novatel",
+      "po_file_count": 14,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7000352485)(Novatel)(GPS Receiver RMA)(960.00)(Rcv",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7000352485)(Novatel)(GPS Receiver RMA)(960.00)(Rcv"
+      ]
+    },
+    {
+      "vendor_name": "Shelters",
+      "po_file_count": 14,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000333969) (Shelters) (49552.00) (Rcvd 2018-03-02)/",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000333969) (Shelters) (49552.00) (Rcvd 2018-03-02)/"
+      ]
+    },
+    {
+      "vendor_name": "Mult Items",
+      "po_file_count": 13,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/MISC (PO 7200682931) (Mult Items) (LO) (Rcvd 2018-01-12)/FedE",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/MISC (PO 7200682931) (Mult Items) (LO) (Rcvd 2018-01-12)/Pack"
+      ]
+    },
+    {
+      "vendor_name": "Loaner Server",
+      "po_file_count": 13,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX28 (PO 7000321358) (Loaner Server) (Build No. 21087-1U001-M",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX28 (PO 7000321358) (Loaner Server) (Build No. 21087-1U001-M"
+      ]
+    },
+    {
+      "vendor_name": "Server",
+      "po_file_count": 13,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7000353424)(Server)(Sterling)(11,143.21)(Rcvd 2018",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7000353424)(Server)(Sterling)(11,143.21)(Rcvd 2018"
+      ]
+    },
+    {
+      "vendor_name": "CDW-G",
+      "po_file_count": 13,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7200723986)(CDW-G)(Sliding Shelves)(3 Each)(867.21",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7200723986)(CDW-G)(Sliding Shelves)(3 Each)(867.21"
+      ]
+    },
+    {
+      "vendor_name": "Tension Meter Calibrations",
+      "po_file_count": 13,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 5300025880)(Tension Meter Calibrations)(PBJ Partne",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 5300025880)(Tension Meter Calibrations)(PBJ Partne"
+      ]
+    },
+    {
+      "vendor_name": "Rcks-Fans-Sldng Shlvs-UPSs",
+      "po_file_count": 13,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000332841) (Rcks-Fans-Sldng Shlvs-UPSs) (2466.30)/2",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000332841) (Rcks-Fans-Sldng Shlvs-UPSs) (2466.30)/F"
+      ]
+    },
+    {
+      "vendor_name": "Multiple Items-Fiber Optic",
+      "po_file_count": 13,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000333356) (Multiple Items-Fiber Optic) (9604.56)/E",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7000333356) (Multiple Items-Fiber Optic) (9604.56)/F"
+      ]
+    },
+    {
+      "vendor_name": "Arrow",
+      "po_file_count": 13,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7500158564)(Arrow)(Storage Trailer for WX31)(1480.00",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX31 (PO 7500158564)(Arrow)(Storage Trailer for WX31)(1480.00"
+      ]
+    },
+    {
+      "vendor_name": "DATAWEST",
+      "po_file_count": 12,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/1-Open_Purchases/BOM Archive/WX39 (PO 7000364111)(DATAWEST)($3,062.55)Rcvd 2019-03-",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/1-Open_Purchases/BOM Archive/WX39 (PO 7000364111)(DATAWEST)($3,062.55)Rcvd 2019-03-"
+      ]
+    },
+    {
+      "vendor_name": "USRP PS",
+      "po_file_count": 12,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000336105)(USRP PS)(SMI18-5.9-V-P)(121.08)(Rcvd 201",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000336105)(USRP PS)(SMI18-5.9-V-P)(121.08)(Rcvd 201"
+      ]
+    },
+    {
+      "vendor_name": "Calibrations",
+      "po_file_count": 12,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000346084)(Calibrations)(FieldFox)(2 ea)(1300.00)/1",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000346084)(Calibrations)(FieldFox)(2 ea)(1300.00)/P"
+      ]
+    },
+    {
+      "vendor_name": "Safety Bag Minus Rope",
+      "po_file_count": 12,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000351459)(Safety Bag Minus Rope)(1170.00)/24860508",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000351459)(Safety Bag Minus Rope)(1170.00)/Cart# 14"
+      ]
+    },
+    {
+      "vendor_name": "Mountain Metrology and repair",
+      "po_file_count": 12,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000365842)(Mountain Metrology and repair)($2924.00)",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000365842)(Mountain Metrology and repair)($2924.00)"
+      ]
+    },
+    {
+      "vendor_name": "Pelican Cases",
+      "po_file_count": 12,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7200691317)(Pelican Cases)(1615)(0014443978)(235.03 ",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7200691317)(Pelican Cases)(1615)(0014443978)(235.03 "
+      ]
+    },
+    {
+      "vendor_name": "LDI Parts Evaluated",
+      "po_file_count": 12,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7500137184)(LDI Parts Evaluated)(Repair-Replace)(467",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7500137184)(LDI Parts Evaluated)(Repair-Replace)(467"
+      ]
+    },
+    {
+      "vendor_name": "NEWARK",
+      "po_file_count": 12,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7200740756)(NEWARK)(Encl-Drain)(844.98)(Received 2",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O1 (PO 7200740756)(NEWARK)(Encl-Drain)(844.98)(Received 2"
+      ]
+    },
+    {
+      "vendor_name": "ASV Materials",
+      "po_file_count": 12,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 5000014319)(ASV Materials)(PBJ Partners)($2,283.80",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 5000014319)(ASV Materials)(PBJ Partners)($2,283.80"
+      ]
+    },
+    {
+      "vendor_name": "LLL Soil Survey",
+      "po_file_count": 12,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 5300022111)(LLL Soil Survey)(Fewell)($12,700.00)/1",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 5300022111)(LLL Soil Survey)(Fewell)($12,700.00)/3"
+      ]
+    },
+    {
+      "vendor_name": "Tripods",
+      "po_file_count": 11,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000342321)(Tripods)(Sokkia)(95.00 each)(Rcvd 2018-0",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29 (PO 7000342321)(Tripods)(Sokkia)(95.00 each)(Rcvd 2018-0"
+      ]
+    },
+    {
+      "vendor_name": "ISTO SSE Parts",
+      "po_file_count": 11,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O2 (PO 7000381029)(ISTO SSE Parts)(Data West)($5,194.00)/",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O2 (PO 7000381029)(ISTO SSE Parts)(Data West)($5,194.00)/"
+      ]
+    },
+    {
+      "vendor_name": "Replacement Parts",
+      "po_file_count": 11,
+      "sample_paths": [
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 7200909920)(Replacement Parts)(Newark)($571.65)/15",
+        "IGS/zzSEMS ARCHIVE/005_ILS/Purchases/2-Received/1-Received/WX29O3 (PO 7200909920)(Replacement Parts)(Newark)($571.65)/EX"
+      ]
+    }
+  ],
+  "vendor_file_patterns": [
+    {
+      "name": "quote",
+      "count": 1755,
+      "description": "Price quotes and vendor quotes"
+    },
+    {
+      "name": "proposal",
+      "count": 409,
+      "description": "Vendor proposals"
+    },
+    {
+      "name": "catalog",
+      "count": 154,
+      "description": "Product catalogs"
+    },
+    {
+      "name": "warranty",
+      "count": 152,
+      "description": "Warranty documentation"
+    },
+    {
+      "name": "vendor_folder",
+      "count": 136,
+      "description": "Vendor-tagged folders/files"
+    },
+    {
+      "name": "subcontractor",
+      "count": 52,
+      "description": "Subcontractor documentation"
+    },
+    {
+      "name": "supplier",
+      "count": 31,
+      "description": "Supplier documentation"
+    },
+    {
+      "name": "sole_source",
+      "count": 21,
+      "description": "Sole source justifications"
+    },
+    {
+      "name": "rma_real",
+      "count": 15,
+      "description": "Return Merchandise Authorization"
+    }
+  ],
+  "relationships_db_vendor_coverage": {
+    "MANUFACTURED_BY": 4834,
+    "SHIPPED_TO": 26337,
+    "CHARGED_TO": 2936,
+    "note": "Relationships DB has vendor data but is noisy from automated extraction. PO folder extraction is cleaner."
+  },
+  "notes": [
+    "370 distinct vendor names extracted from PO folder naming pattern: (PO XXXXXXXXXX)(VendorName)(...)",
+    "Many 'vendor' names are actually product descriptions (e.g., 'Cable RG-213', 'Server-UPS-KVM')",
+    "True vendor names include: LDI, Grainger, PCPC, Newark, TESSCO, CDW, Arrow Moving & Storage, Staples, Sterling",
+    "Real RMA files = 15 (not 7,546 — broad pattern had substring false positives)",
+    "Quote files (1,755) are the richest vendor-interaction family"
+  ]
+}

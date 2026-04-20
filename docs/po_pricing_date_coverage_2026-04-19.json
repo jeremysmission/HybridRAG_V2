@@ -1,0 +1,104 @@
+{
+  "scan_date": "2026-04-19",
+  "scanner": "Miner-Agent",
+  "corpus_source": "E:\\CorpusTransfr\file_state.sqlite3 (214,751 files) + C:\\HybridRAG_V2\\data\\index\retrieval_metadata.sqlite3 (93,636 rows)",
+  "agent_b_populate_range": {
+    "start": "2015-10-29",
+    "end": "2022-02-28"
+  },
+  "per_year_counts": {
+    "2015": 1210,
+    "2016": 378,
+    "2017": 1319,
+    "2018": 2331,
+    "2019": 657,
+    "2020": 64,
+    "2021": 46,
+    "2022": 57,
+    "2023": 66,
+    "2024": 141,
+    "2025": 164
+  },
+  "2023_2025_breakdown": {
+    "purchases_dir": {
+      "2023": 3,
+      "2024": 7,
+      "2025": 14
+    },
+    "procurement_dir": {
+      "2023": 20,
+      "2024": 15,
+      "2025": 25
+    },
+    "po_token_path": {
+      "2023": 14,
+      "2024": 17,
+      "2025": 24
+    },
+    "vendor_invoice": {
+      "2023": 11,
+      "2024": 43,
+      "2025": 28
+    },
+    "contract_path": {
+      "2023": 18,
+      "2024": 59,
+      "2025": 73
+    },
+    "purchase_order_path": {
+      "2023": 0,
+      "2024": 0,
+      "2025": 0
+    },
+    "pr_and_po_xlsx": {
+      "2023": 6,
+      "2024": 19,
+      "2025": 8
+    }
+  },
+  "retrieval_metadata_po_number_by_year": {
+    "2020": 24,
+    "2021": 12,
+    "2022": 8,
+    "2023": 13,
+    "2024": 16,
+    "2025": 18
+  },
+  "sample_paths_2023_2025": [
+    "IGS/10.0 Program Management/1.0 FEP/Matl/2024 01 PR & PO_1.xlsx",
+    "IGS/10.0 Program Management/1.0 FEP/Matl/2024 06 PR & PO_1.xlsx",
+    "IGS/10.0 Program Management/1.0 FEP/Matl/2024 12 PR & PO_1.xlsx",
+    "IGS/10.0 Program Management/1.0 FEP/Matl/2025.02 PR & PO_R2_1.xlsx",
+    "IGS/5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300168054, PR 3000188283 Tweezer Set.pdf",
+    "IGS/5.0 Logistics/Procurement/002 - Received/NEXION Sustainment OY1 (1 Aug 23 - 31 Jul 24)/PO - 5000453984.pdf",
+    "IGS/5.0 Logistics/Procurement/002 - Received/NEXION Sustainment OY2 (1 Aug 24 - 31 Jul 25)/PO - 5300137494.pdf",
+    "IGS/5.0 Logistics/Procurement/002 - Received/NEXION Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)/PO - 5000646999.pdf",
+    "IGS/5.0 Logistics/Procurement/002 - Received/Azores NEXION Install/PO - 5000436557, PR 31433830.pdf",
+    "IGS/10.0 Program Management/#GSA_OASIS/3.0 Travel Approval Forms/T&M Expense Reports/ITD Actuals/ITD Actuals Thru 03152024.xlsx"
+  ],
+  "po_number_format_shift": {
+    "pre_2020": "70xx/72xx/75xx (10-digit, e.g., 7000342321)",
+    "post_2020": "50xx/53xx (9-10 digit, e.g., 5000453984, 5300168054)",
+    "note": "PO numbering system changed. Old 7xxx series dominant 2015-2019. New 5xxx series dominant 2020-2025."
+  },
+  "folder_structure_shift": {
+    "pre_2020_primary": "zzSEMS ARCHIVE/005_ILS/Purchases/ (bulk of 2010-2019 data)",
+    "post_2020_primary": [
+      "5.0 Logistics/Procurement/ (received POs, open purchases)",
+      "10.0 Program Management/1.0 FEP/Matl/ (monthly PR & PO xlsx)",
+      "10.0 Program Management/#GSA_OASIS/ (contracts, invoices, T&M)"
+    ]
+  },
+  "diagnosis": "extractor_missing_pattern",
+  "diagnosis_detail": {
+    "root_cause": "Agent-B's populate script processed source_metadata rows correctly, but the po_date extraction logic is tuned for the zzSEMS ARCHIVE folder/filename date patterns (YYYY-MM-DD in path). The newer 2020-2025 procurement uses different date embedding: contract period labels ('1 Aug 23 - 31 Jul 24'), monthly file naming ('2024 01 PR & PO'), and MM.DD.YYYY receipt dates. The extractor runs but leaves po_date null for these rows, so they don't appear in the date-filtered output.",
+    "evidence": [
+      "retrieval_metadata has 47 rows with po_number for 2023-2025 paths",
+      "file_state has 371 PO-family files with 2023-2025 path dates",
+      "Monthly PR & PO xlsx for all 12 months of 2024 exist but produced no po_date rows",
+      "PO number format shifted from 7xxx to 5xxx around 2020 — extractor may have PO-number regex bias",
+      "populate output has po_date max = 2022-02-28 despite newer files existing"
+    ],
+    "not_genuine_absence": "2023-2025 PO documents exist in both the raw corpus (E:) and the indexed metadata (C:). The gap is extraction, not data."
+  }
+}

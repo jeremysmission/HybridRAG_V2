@@ -1,0 +1,102 @@
+[
+  {
+    "id": "Q1",
+    "query": "What were the highest failing part numbers in the NEXION systems in 2024?",
+    "expected_tier": "GREEN",
+    "actual_tier": "GREEN",
+    "query_path": "AGGREGATION_GREEN",
+    "elapsed_s": 0.06,
+    "answer_preview": "## Deterministic Failure Aggregation  **Query:** What were the highest failing part numbers in the NEXION systems in 2024? **Confidence tier:** GREEN **Filters applied:** - system: `NEXION` - site:   ",
+    "passed": true
+  },
+  {
+    "id": "Q2",
+    "query": "What were the highest failing part numbers in the ISTO systems in Djibouti from 2022-2025?",
+    "expected_tier": "GREEN",
+    "actual_tier": "GREEN",
+    "query_path": "AGGREGATION_GREEN",
+    "elapsed_s": 0.05,
+    "answer_preview": "## Deterministic Failure Aggregation  **Query:** What were the highest failing part numbers in the ISTO systems in Djibouti from 2022-2025? **Confidence tier:** GREEN **Filters applied:** - system: `I",
+    "passed": true
+  },
+  {
+    "id": "Q3",
+    "query": "What are the top 5 failure rate parts ranked each year for the past 7 years?",
+    "expected_tier": "YELLOW",
+    "actual_tier": "YELLOW",
+    "query_path": "AGGREGATION_YELLOW",
+    "elapsed_s": 0.09,
+    "answer_preview": "## Deterministic Failure Aggregation \u2014 Per-Year Ranking  **Query:** What are the top 5 failure rate parts ranked each year for the past 7 years? **Confidence tier:** YELLOW **Filters applied:** - syst",
+    "passed": true
+  },
+  {
+    "id": "Q-DEMO-A",
+    "query": "What are the top ordered parts across all purchase orders?",
+    "expected_tier": "YELLOW",
+    "actual_tier": "NOT_FOUND",
+    "query_path": "AGGREGATE",
+    "elapsed_s": 12.51,
+    "answer_preview": "[NOT_FOUND] The provided context does not contain specific information about the top ordered parts across all purchase orders. The context includes general instructions for invoicing and purchase orde",
+    "passed": false
+  },
+  {
+    "id": "Q-DEMO-B",
+    "query": "Which parts have the longest lead time in the purchase order history?",
+    "expected_tier": "YELLOW",
+    "actual_tier": "NOT_FOUND",
+    "query_path": "AGGREGATE",
+    "elapsed_s": 12.03,
+    "answer_preview": "[NOT_FOUND] The provided context does not contain specific information about parts with the longest lead time in the purchase order history. The context includes general information about electronic c",
+    "passed": false
+  },
+  {
+    "id": "Q-DEMO-C",
+    "query": "What are the top ordered parts by volume?",
+    "expected_tier": "YELLOW",
+    "actual_tier": "NOT_FOUND",
+    "query_path": "AGGREGATE",
+    "elapsed_s": 18.43,
+    "answer_preview": "[NOT_FOUND] The provided context does not contain specific information about the top ordered parts by volume. The context includes references to ordered equipment and parts, but it does not specify wh",
+    "passed": false
+  },
+  {
+    "id": "Q-DEMO-D",
+    "query": "What should our reorder point be for SEMS3D-40536 at Learmonth in NEXION?",
+    "expected_tier": "GREEN",
+    "actual_tier": "NOT_FOUND",
+    "query_path": "TABULAR",
+    "elapsed_s": 9.25,
+    "answer_preview": "[NOT_FOUND] The provided sources do not contain information regarding the reorder point for SEMS3D-40536 at Learmonth in NEXION. The context includes maintenance actions and part replacements but does",
+    "passed": true
+  },
+  {
+    "id": "Q-DEMO-E",
+    "query": "What is the replacement cost for SEMS3D-40536 at American Samoa?",
+    "expected_tier": "YELLOW",
+    "actual_tier": "NOT_FOUND",
+    "query_path": "TABULAR",
+    "elapsed_s": 6.81,
+    "answer_preview": "[NOT_FOUND] The provided sources do not contain information about the replacement cost for SEMS3D-40536 at American Samoa.",
+    "passed": true
+  },
+  {
+    "id": "Q-DEMO-F",
+    "query": "What are the most expensive items ordered?",
+    "expected_tier": "YELLOW",
+    "actual_tier": "PARTIAL",
+    "query_path": "AGGREGATE",
+    "elapsed_s": 13.65,
+    "answer_preview": "[PARTIAL] The context provides some information about expensive items ordered, but it is not comprehensive. Here are the details found:  1. **Allied Support**: Quantity Ordered: 1, Unit of Measure: Ea",
+    "passed": false
+  },
+  {
+    "id": "Q-DEMO-G",
+    "query": "How many days was part SEMS3D-40536 at Guam from 2022 to 2025?",
+    "expected_tier": "YELLOW",
+    "actual_tier": "NOT_FOUND",
+    "query_path": "AGGREGATE",
+    "elapsed_s": 20.56,
+    "answer_preview": "[NOT_FOUND] The provided context does not contain information about the duration of time that part SEMS3D-40536 was at Guam from 2022 to 2025. The context includes details about the part's occurrences",
+    "passed": false
+  }
+]

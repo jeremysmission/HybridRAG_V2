@@ -1,0 +1,44 @@
+[
+  {
+    "query_id": "Q1",
+    "query": "What were the highest failing part numbers in the monitoring systems in 2024?",
+    "expected_tier": "GREEN",
+    "actual_tiers": [
+      "GREEN"
+    ],
+    "deterministic": true,
+    "unique_hashes": 1,
+    "runs": 10,
+    "avg_latency_ms": 50.4,
+    "max_latency_ms": 57,
+    "result": "PASS"
+  },
+  {
+    "query_id": "Q2",
+    "query": "What were the highest failing part numbers in the legacy monitoring systems in Djibouti from 2022-2025?",
+    "expected_tier": "GREEN",
+    "actual_tiers": [
+      "GREEN"
+    ],
+    "deterministic": true,
+    "unique_hashes": 1,
+    "runs": 10,
+    "avg_latency_ms": 43.6,
+    "max_latency_ms": 57,
+    "result": "PASS"
+  },
+  {
+    "query_id": "Q3",
+    "query": "What are the top 5 failure rate parts ranked each year for the past 7 years?",
+    "expected_tier": "YELLOW",
+    "actual_tiers": [
+      "YELLOW"
+    ],
+    "deterministic": true,
+    "unique_hashes": 1,
+    "runs": 10,
+    "avg_latency_ms": 135.4,
+    "max_latency_ms": 197,
+    "result": "PASS"
+  }
+]

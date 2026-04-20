@@ -1,0 +1,299 @@
+{
+  "coverage": {
+    "total_events": 35990,
+    "with_part_number": 3021,
+    "with_system": 35649,
+    "with_site": 10882,
+    "with_year": 19941,
+    "distinct_parts": 900,
+    "distinct_systems": 2,
+    "distinct_sites": 22
+  },
+  "queries": [
+    {
+      "query": "What were the highest failing part numbers in the NEXION system in 2024?",
+      "tier": "GREEN",
+      "parsed": {
+        "top_n": 5,
+        "year_from": 2024,
+        "year_to": 2024,
+        "system": "NEXION",
+        "site_token": "",
+        "per_year": false,
+        "is_rate": false
+      },
+      "top_3": [
+        {
+          "part_number": "EC11612",
+          "failure_count": 4,
+          "distinct_docs": 4,
+          "first_year": 2024,
+          "last_year": 2024
+        },
+        {
+          "part_number": "RFA-4005",
+          "failure_count": 3,
+          "distinct_docs": 3,
+          "first_year": 2024,
+          "last_year": 2024
+        },
+        {
+          "part_number": "SEMS3D-41785",
+          "failure_count": 3,
+          "distinct_docs": 3,
+          "first_year": 2024,
+          "last_year": 2024
+        }
+      ],
+      "per_year_years": [],
+      "sources_count": 10,
+      "message": ""
+    },
+    {
+      "query": "What were the highest failing part numbers in the ISTO system in Djibouti from 2022-2025?",
+      "tier": "GREEN",
+      "parsed": {
+        "top_n": 5,
+        "year_from": 2022,
+        "year_to": 2025,
+        "system": "ISTO",
+        "site_token": "djibouti",
+        "per_year": false,
+        "is_rate": false
+      },
+      "top_3": [
+        {
+          "part_number": "SEMS3D-35674",
+          "failure_count": 2,
+          "distinct_docs": 2,
+          "first_year": 2022,
+          "last_year": 2022
+        },
+        {
+          "part_number": "TA00122",
+          "failure_count": 2,
+          "distinct_docs": 2,
+          "first_year": 2024,
+          "last_year": 2024
+        }
+      ],
+      "per_year_years": [],
+      "sources_count": 4,
+      "message": ""
+    },
+    {
+      "query": "What are the top 5 failure rate parts ranked each year for the past 7 years?",
+      "tier": "YELLOW",
+      "parsed": {
+        "top_n": 5,
+        "year_from": 2019,
+        "year_to": 2025,
+        "system": "",
+        "site_token": "",
+        "per_year": true,
+        "is_rate": true
+      },
+      "top_3": [],
+      "per_year_years": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "sources_count": 11,
+      "message": "failure rate requires installed-base denominator (not yet populated) \u2014 showing failure counts only"
+    },
+    {
+      "query": "Top 10 failing parts in NEXION at Vandenberg in 2022",
+      "tier": "GREEN",
+      "parsed": {
+        "top_n": 10,
+        "year_from": 2022,
+        "year_to": 2022,
+        "system": "NEXION",
+        "site_token": "vandenberg",
+        "per_year": false,
+        "is_rate": false
+      },
+      "top_3": [
+        {
+          "part_number": "SEMS3D-40540",
+          "failure_count": 3,
+          "distinct_docs": 3,
+          "first_year": 2022,
+          "last_year": 2022
+        }
+      ],
+      "per_year_years": [],
+      "sources_count": 2,
+      "message": ""
+    },
+    {
+      "query": "Who is the POC for Thule?",
+      "tier": "PASSTHROUGH",
+      "fall_through_to_rag": true
+    },
+    {
+      "query": "Top 5 failing parts in ISTO in 2024",
+      "tier": "GREEN",
+      "parsed": {
+        "top_n": 5,
+        "year_from": 2024,
+        "year_to": 2024,
+        "system": "ISTO",
+        "site_token": "",
+        "per_year": false,
+        "is_rate": false
+      },
+      "top_3": [
+        {
+          "part_number": "IGS-2461",
+          "failure_count": 2,
+          "distinct_docs": 2,
+          "first_year": 2024,
+          "last_year": 2024
+        },
+        {
+          "part_number": "TA00122",
+          "failure_count": 2,
+          "distinct_docs": 2,
+          "first_year": 2024,
+          "last_year": 2024
+        },
+        {
+          "part_number": "RFN-1005",
+          "failure_count": 1,
+          "distinct_docs": 1,
+          "first_year": 2024,
+          "last_year": 2024
+        }
+      ],
+      "per_year_years": [],
+      "sources_count": 5,
+      "message": ""
+    },
+    {
+      "query": "Highest failing parts at Thule in 2022",
+      "tier": "RED",
+      "parsed": {
+        "top_n": 5,
+        "year_from": 2022,
+        "year_to": 2022,
+        "system": "",
+        "site_token": "thule",
+        "per_year": false,
+        "is_rate": false
+      },
+      "top_3": [],
+      "per_year_years": [],
+      "sources_count": 0,
+      "message": "no failure events match the requested filters"
+    },
+    {
+      "query": "Which part numbers are the most failing in NEXION at Ascension in 2024?",
+      "tier": "GREEN",
+      "parsed": {
+        "top_n": 5,
+        "year_from": 2024,
+        "year_to": 2024,
+        "system": "NEXION",
+        "site_token": "ascension",
+        "per_year": false,
+        "is_rate": false
+      },
+      "top_3": [
+        {
+          "part_number": "SEMS3D-41785",
+          "failure_count": 3,
+          "distinct_docs": 3,
+          "first_year": 2024,
+          "last_year": 2024
+        },
+        {
+          "part_number": "SEMS3D-41786",
+          "failure_count": 3,
+          "distinct_docs": 3,
+          "first_year": 2024,
+          "last_year": 2024
+        },
+        {
+          "part_number": "SEMS3D-42184",
+          "failure_count": 2,
+          "distinct_docs": 2,
+          "first_year": 2024,
+          "last_year": 2024
+        }
+      ],
+      "per_year_years": [],
+      "sources_count": 6,
+      "message": ""
+    },
+    {
+      "query": "Top 7 failing parts ranked each year for the past 7 years",
+      "tier": "GREEN",
+      "parsed": {
+        "top_n": 7,
+        "year_from": 2019,
+        "year_to": 2025,
+        "system": "",
+        "site_token": "",
+        "per_year": true,
+        "is_rate": false
+      },
+      "top_3": [],
+      "per_year_years": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "sources_count": 11,
+      "message": ""
+    },
+    {
+      "query": "Top 5 failing parts in NEXION between 2022-2024",
+      "tier": "GREEN",
+      "parsed": {
+        "top_n": 5,
+        "year_from": 2022,
+        "year_to": 2024,
+        "system": "NEXION",
+        "site_token": "",
+        "per_year": false,
+        "is_rate": false
+      },
+      "top_3": [
+        {
+          "part_number": "SEMS3D-35674",
+          "failure_count": 12,
+          "distinct_docs": 12,
+          "first_year": 2022,
+          "last_year": 2022
+        },
+        {
+          "part_number": "SEMS3D-40507",
+          "failure_count": 8,
+          "distinct_docs": 8,
+          "first_year": 2022,
+          "last_year": 2022
+        },
+        {
+          "part_number": "SEMS3D-40536",
+          "failure_count": 8,
+          "distinct_docs": 8,
+          "first_year": 2022,
+          "last_year": 2022
+        }
+      ],
+      "per_year_years": [],
+      "sources_count": 10,
+      "message": ""
+    }
+  ]
+}

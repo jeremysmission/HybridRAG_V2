@@ -1,0 +1,398 @@
+{
+  "scan_date": "2026-04-19",
+  "scanner": "Miner-Agent",
+  "corpus_source": "E:\\CorpusTransfr\file_state.sqlite3",
+  "total_files_scanned": 214751,
+  "family_patterns": [
+    {
+      "pattern_name": "cdrl",
+      "pattern": "%cdrl%",
+      "description": "All CDRL-tagged documents",
+      "count": 3009,
+      "system_breakdown": {
+        "NEXION": 1314,
+        "ISTO": 1128
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)/1_Site Selection/Reports/Cover Letter_SMC_(13-0021)_Trip Report (CDRL A045B)_Michigan_Jun13_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)/1_Site Selection/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)/1_Site Selection/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)/2013 July/Reports/Cover Letter_AES_(13-0029)_SiteSurveyReport_Alpena(CDRL A090)_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)/2013 July/Reports/Cover Letter_SMC_(13-0029)_SiteSurveyReport_Alpena(CDRL A090)_1.docx"
+      ]
+    },
+    {
+      "pattern_name": "monthly_audit",
+      "pattern": "%monthly%audit%",
+      "description": "Monthly security audit reports",
+      "count": 2616,
+      "system_breakdown": {
+        "NEXION": 1558,
+        "ISTO": 779
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/IGSCC/A027 - RMF– Security Plan/Monthly Audit Reports/FA881525FB002_IGSCC-685_IGS-Monthly-Audit-Report_Aug-2025_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/IGSCC/A027 - RMF– Security Plan/Monthly Audit Reports/FA881525FB002_IGSCC-686_IGS-Monthly-Audit-Report_Sept-2025_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/IGSCC/A027 - RMF– Security Plan/Monthly Audit Reports/FA881525FB002_IGSCC-687_IGS-Monthly-Audit-Report_Oct-2025_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/IGSCC/A027 - RMF– Security Plan/Monthly Audit Reports/FA881525FB002_IGSCC-688_IGS-Monthly-Audit-Report_Nov-2025_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/IGSCC/A027 - RMF– Security Plan/Monthly Audit Reports/FA881525FB002_IGSCC-689_IGS-Monthly-Audit-Report_Dec-2025_1.xlsx"
+      ]
+    },
+    {
+      "pattern_name": "outage_all",
+      "pattern": "%outage%",
+      "description": "All outage-tagged files (includes photos)",
+      "count": 2352,
+      "system_breakdown": {
+        "NEXION": 895,
+        "ISTO": 70
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2017-03-05 thru 03-09 (NEXION_ASV)(ISTO_ASV)(Heineman)/2017 March/11 Mar 17_Outage/1_20170311_123717_resized_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2017-03-05 thru 03-09 (NEXION_ASV)(ISTO_ASV)(Heineman)/2017 March/11 Mar 17_Outage/2_20170311_123905_resized_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2017-03-05 thru 03-09 (NEXION_ASV)(ISTO_ASV)(Heineman)/2017 March/11 Mar 17_Outage/3_20170311_123939_resized_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2017-03-05 thru 03-09 (NEXION_ASV)(ISTO_ASV)(Heineman)/2017 March/11 Mar 17_Outage/4_20170311_124411_resized_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2017-03-05 thru 03-09 (NEXION_ASV)(ISTO_ASV)(Heineman)/2017 March/11 Mar 17_Outage/5_20170311_124504_resized_1.jpg"
+      ]
+    },
+    {
+      "pattern_name": "deliverable_report",
+      "pattern": "%deliverables%report%",
+      "description": "CDRL deliverable reports",
+      "count": 1953,
+      "system_breakdown": {
+        "NEXION": 701,
+        "ISTO": 1257
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/Deliverables Report IGSI-812 Installation Acceptance Test Plan and Procedures - American Samoa ISTO_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Awase (Okinawa JP)/2023-08-18 thru 09-09 (Install 5 - FP)/(Revised) Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006)_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Curacao/2023-11-12 thru 17 (ASV)(Seagren-Dettler)/Deliverables/Configuration Audit Report/Deliverables Report IGSI-1205 Curacao-ISTO Configuration Audit Report (A011)/Deliverables Report IGSI-1205 Curacao-ISTO Configuration Audit Report (A011)_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Curacao/2023-11-12 thru 17 (ASV)(Seagren-Dettler)/Deliverables/MSR/Deliverables Report IGSI-1204 Curacao-ISTO Maintenance Service Report (A002)_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Curacao/2024-01-07 thru 13 (ASV-RTS)(Seagren-Randall)/Deliverables/CAP/Deliverables Report IGSI-1372 Corrective Action Plan (A001)_1.docx"
+      ]
+    },
+    {
+      "pattern_name": "outage_report",
+      "pattern": "%outage%report%",
+      "description": "NEXION/ISTO outage reports",
+      "count": 1649,
+      "system_breakdown": {
+        "NEXION": 845,
+        "ISTO": 8
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Learmonth/2010 Install/John's drive/CENTON USB (E)/NEXION Outage/NEXION OUTAGE REPORT INSTRUCTION_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Learmonth/2010 Install/John's drive/CENTON USB (E)/NEXION Outage/NEXION Outage Reporting Procedures_Draft_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/19.0_Work_Notes/Systems Engineering/Outage Reporting and RTS/Outage Reporting and RTS Work Note_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/3.0 Cybersecurity/archive/NEXION Cybersecurity - Archive/2015 Annual IA Docs/Information Assurance/C&A Support/- Collection for SLWE 20120725/Eglin/Maintenance Logs/NEXION Outage ReportEGL120590008_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/3.0 Cybersecurity/archive/NEXION Cybersecurity - Archive/2015 Annual IA Docs/Information Assurance/C&A Support/- Collection for SLWE 20120725/Eglin/Maintenance Logs/NEXION Outage ReportEGL121120013_1.doc"
+      ]
+    },
+    {
+      "pattern_name": "repair",
+      "pattern": "%repair%",
+      "description": "Repair activities",
+      "count": 994,
+      "system_breakdown": {
+        "NEXION": 230,
+        "ISTO": 128
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/American Samoa Test Plan and procedures Addendum_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/Deliverables Report IGSI-812 Installation Acceptance Test Plan and Procedures - American Samoa ISTO_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/ITRIP/Locations changed during itinerary edits. The following location(s) were added_ American Samoa.  The return date changed from 01_16_2024 to 01_19_2024. _1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/Itinerary/Travel Receipt Communication Attachment - MEUETE - January 7 2024 - Pitts - Am Sam Too_1.PDF",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/LOI/LOI - Am Sam ISTO GPS Repair (Pitts) 14 thru 19 Jan 2024_1.doc"
+      ]
+    },
+    {
+      "pattern_name": "restoral",
+      "pattern": "%restoral%",
+      "description": "System restoral events",
+      "count": 789,
+      "system_breakdown": {
+        "NEXION": 66,
+        "ISTO": 386
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2017-08-13 thru 08-18 (NEXION_ASV)(Brukardt-Pitts)/Pitts/Alpena, Michigan NEXION Restoral and Annual Service Visit_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2015-10-25 thru 11-05 (NEXION_ASV)(ISTO_ASV-RTS)(Brukardt-Dettler)/Ascension Restoral and Maintenance_25Oct-5Nov2015/15-0048_Trip Report_(CDRL A045B)_Ascension Restoral-Maintenence_(25 Oct - 5 Nov 15)_Final_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2015-10-25 thru 11-05 (NEXION_ASV)(ISTO_ASV-RTS)(Brukardt-Dettler)/Ascension Restoral and Maintenance_25Oct-5Nov2015/15-0056_Cover Letter_Trip Report (CDRL A045B)_Ascension Restoral-Maintenance_(25Oct-5Nov15)_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2015-10-25 thru 11-05 (NEXION_ASV)(ISTO_ASV-RTS)(Brukardt-Dettler)/Ascension Restoral and Maintenance_25Oct-5Nov2015/15-0056_Cover Letter_Trip Report (CDRL A045B)_Ascension Restoral-Maintenance_(25Oct-5Nov15)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2015-10-25 thru 11-05 (NEXION_ASV)(ISTO_ASV-RTS)(Brukardt-Dettler)/Ascension Restoral and Maintenance_25Oct-5Nov2015/15-0056_DCS_Trip Report_(CDRL A045B)_Ascension Restoral-Maint_(25 Oct - 5 Nov 15)_ISO_1.docx"
+      ]
+    },
+    {
+      "pattern_name": "replace",
+      "pattern": "%replace%",
+      "description": "Component replacement events",
+      "count": 774,
+      "system_breakdown": {
+        "NEXION": 460,
+        "ISTO": 232
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2016-07-15 thru 07-18 (NEXION_RTS)/ScreenCaps/2016-08-16_222728_TrackerCal_afterHDDReplacement_1.png",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2022-06-06 thru 06-09 (NEXION-ASV)(Seagren-Vinh)/Site Pictures/Installed/UPS_Replace Battery Date_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/InstallationFiles_Data/ScreenCaps/Eglin/PostUPSbatReplacement/Eglin Desktop Diary30Sep11_2345Z_1.txt",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/InstallationFiles_Data/ScreenCaps/Eglin/PostUPSbatReplacement/FinalSpecialFiles093011/DCART_1.ini",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/InstallationFiles_Data/ScreenCaps/Eglin/PostUPSbatReplacement/FinalSpecialFiles093011/welcome_1.html"
+      ]
+    },
+    {
+      "pattern_name": "trip_report",
+      "pattern": "%trip%report%",
+      "description": "Trip reports (CDRL A045B)",
+      "count": 513,
+      "system_breakdown": {
+        "NEXION": 197,
+        "ISTO": 95
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)/1_Site Selection/Reports/Cover Letter_SMC_(13-0021)_Trip Report (CDRL A045B)_Michigan_Jun13_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)/1_Site Selection/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)/1_Site Selection/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)/2013 July/Reports/Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)/2013 July/Reports/Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_Corrected Copy_1.pdf"
+      ]
+    },
+    {
+      "pattern_name": "troubleshoot",
+      "pattern": "%troubleshoot%",
+      "description": "Troubleshooting sessions",
+      "count": 290,
+      "system_breakdown": {
+        "NEXION": 177,
+        "ISTO": 36
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Troubleshooting23Apr14/AL945_2014114050830_BIT_1.XML",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Troubleshooting23Apr14/Allowed_1.png",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Troubleshooting23Apr14/BIT/AL945_2014113125150_BIT_1.XML",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Troubleshooting23Apr14/BIT/AL945_2014113130650_BIT_1.XML",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Troubleshooting23Apr14/BIT/AL945_2014113132150_BIT_1.XML"
+      ]
+    },
+    {
+      "pattern_name": "daily_status",
+      "pattern": "%daily%status%",
+      "description": "Daily installation status updates",
+      "count": 175,
+      "system_breakdown": {
+        "NEXION": 175,
+        "ISTO": 0
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Install Prep/10_Daily Installation Status Updates/Brice Updates/Archive/Nexion Tower daily report 7.14.18_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Install Prep/10_Daily Installation Status Updates/Brice Updates/DSCF1134_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Install Prep/10_Daily Installation Status Updates/Brice Updates/DSCF1136_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Install Prep/10_Daily Installation Status Updates/Brice Updates/Nexion Tower daily report 7.11.18_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Install Prep/10_Daily Installation Status Updates/Brice Updates/Nexion Tower daily report 7.12.18_1.pdf"
+      ]
+    },
+    {
+      "pattern_name": "corrective_action",
+      "pattern": "%corrective%action%",
+      "description": "Corrective Action Plans (CAP)",
+      "count": 83,
+      "system_breakdown": {
+        "NEXION": 48,
+        "ISTO": 32
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Curacao/2024-01-07 thru 13 (ASV-RTS)(Seagren-Randall)/Deliverables/CAP/Deliverables Report IGSI-1372 Corrective Action Plan (A001)_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Eareckson/2025-06 (ASV-RTS)(FS-JR)/Deliverables/CAP/47QFRA22F0009_IGSI-2657_Corrective-Action-Plan_Eareckson-NEXION_2025-03-25_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2024-05-09 thru 05-17 (NEXION-RTS)(CF-GH-Ryan)/Deliverables/CAP/Archive/Canceled_Deliverables Report IGSI-2076 Corrective Action Plan Guam-NEXION (A001)_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2024-05-09 thru 05-17 (NEXION-RTS)(CF-GH-Ryan)/Deliverables/CAP/Archive/Deliverables Report IGSI-2076 Corrective Action Plan Guam-NEXION (A001)_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2024-10-7 thru 10-15 (NEXION RTS-ASV & ISTO ASV)(Seagren-Sepp)/Deliverables/CAP/47QFRA22F0009_IGSI-2726_Corrective-Action-Plan_Guam-NEXION_2024-10-01_1.docx"
+      ]
+    },
+    {
+      "pattern_name": "weekly_status",
+      "pattern": "%weekly%status%",
+      "description": "Bi-weekly / weekly status meetings",
+      "count": 64,
+      "system_breakdown": {
+        "NEXION": 24,
+        "ISTO": 0
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Bi-Weekly Status Meetings_Thule-Eareckson/Archive - Bi-Weekly Status Meetings/THL_EAS Bi-Weekly Meeting 01Feb2018_1.ppt",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Bi-Weekly Status Meetings_Thule-Eareckson/Archive - Bi-Weekly Status Meetings/THL_EAS Bi-Weekly Meeting 15Feb2018_1.ppt",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Bi-Weekly Status Meetings_Thule-Eareckson/Archive - Bi-Weekly Status Meetings/THL_EAS Bi-Weekly Meeting 15Mar2018_1.ppt",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Bi-Weekly Status Meetings_Thule-Eareckson/Archive - Bi-Weekly Status Meetings/THL_EAS Bi-Weekly Meeting 17Jan2018_1.ppt",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Bi-Weekly Status Meetings_Thule-Eareckson/Archive - Bi-Weekly Status Meetings/THL_EAS Bi-Weekly Meeting 29Mar2018_1.ppt"
+      ]
+    },
+    {
+      "pattern_name": "swap",
+      "pattern": "%swap%",
+      "description": "Component swap events",
+      "count": 38,
+      "system_breakdown": {
+        "NEXION": 20,
+        "ISTO": 1
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/ScreenCaptures/ProgramScreenCaps/ScreenCaps18Apr14/2014-04-18_194231 (XMTR Orientation 2-2nd Run-Tx Swapped)_1.png",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/ScreenCaptures/ProgramScreenCaps/ScreenCaps18Apr14/2014-04-18_200052 (XMTR Orientation - Cables Swapped)_1.png",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/ScreenCaptures/ProgramScreenCaps/ScreenCaps18Apr14/OrientTest from Guam - TX_Swapped_1.png",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/ScreenCaptures/ScreenCaps21April14/TxOrientation-TX_Swapped_1.png",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2016-07-15 thru 07-18 (NEXION_RTS)/ScreenCaps/2016-08-16_135222_TrackerCAl_Rx3-4Swapped_1.png"
+      ]
+    },
+    {
+      "pattern_name": "maintenance_task",
+      "pattern": "%maintenance%task%",
+      "description": "Maintenance task documentation",
+      "count": 31,
+      "system_breakdown": {
+        "NEXION": 30,
+        "ISTO": 30
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Maintenance Tasks/Cables/Anritsu Cable and Antenna Analysis Troubleshooting Guide with S331L (11410-00674B)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Maintenance Tasks/Cables/Anritsu Measurement Guide - Cable and Antenna Analyzer (10580-00241C)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Maintenance Tasks/Cables/Anritsu Quick Reference Cards - Site Master (10580-00191)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Maintenance Tasks/Cables/Anritsu Site Master User Guide (10580-00252T) (Edited)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Maintenance Tasks/Cables/Anritsu Site Master User Guide (10580-00252T)_1.pdf"
+      ]
+    },
+    {
+      "pattern_name": "incident_report",
+      "pattern": "%incident%report%",
+      "description": "Cyber incident reports",
+      "count": 30,
+      "system_breakdown": {
+        "NEXION": 18,
+        "ISTO": 8
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/OASIS/A027 - RMF Authorization Documentation – Security Plan/Monthly Site Audit Reports/Base Year/Deliverables Report IGSI-381 IGS Monthly Audit Report 2022-Oct (A027)/Cyber Incident Report - Unsuccessful Login Attempt Eglin_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.5 IGS CDRLS/A027 - RMF– Security Plan/Monthly Audit Reports/OASIS/Base Year/Deliverables Report IGSI-381 IGS Monthly Audit Report 2022-Oct (A027)/Cyber Incident Report - Unsuccessful Login Attempt Eglin_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/Final/IR - Incident Response/ISTO-NEXION IR Table Top After Action Report - 2019-10-03_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/3.0 Cybersecurity/ATO-ATC Package Changes/2019-06-15_ISTO_Re-Authorization/Final/IR - Incident Response/archive/ISTO IR Table Top After Action Report - 2019-10-03_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/3.0 Cybersecurity/ISSO/Continuous_Monitoring/ISTO/Annua Incident Response Testing/2019-Oct/ISTO-NEXION IR Table Top After Action Report - 2019-10-03_1.docx"
+      ]
+    },
+    {
+      "pattern_name": "work_order",
+      "pattern": "%work%order%",
+      "description": "Work orders",
+      "count": 20,
+      "system_breakdown": {
+        "NEXION": 3,
+        "ISTO": 0
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Learmonth/2018-09-30 thru 10-11 (ASV)(Kyle-Seagren)/Seagren/Work Visa-Sub Class 400/EXT Order Confirmation_Records Request_1.msg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/004_Drawings/3-NEXION/Eareckson AS - Alaska, US (200811015)/3- As-Built/200811015-A (NEXION As-Built Drawings)(Eareckson AK)(Working)/Eareckson Hardware-Tools Order_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/19.0_Work_Notes/Systems Administration/Kickstart/NEXION RHEL 8/5_Change Boot Order_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300171743, PR 3000188215 Sponge for Workstations/Purchase Order 5300171743_1.msg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/002 - Received/Azores NEXION Install/PO - 5000439664, PR 31436140, C 16117324 Azores Work Bench(PBJ)($1,670.00)/Purchase Order 5000439664_1.msg"
+      ]
+    },
+    {
+      "pattern_name": "maintenance_log",
+      "pattern": "%maintenance%log%",
+      "description": "Maintenance logs",
+      "count": 11,
+      "system_breakdown": {
+        "NEXION": 10,
+        "ISTO": 1
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/3.0 Cybersecurity/archive/NEXION Cybersecurity - Archive/2015 Annual IA Docs/Information Assurance/C&A Support/- Collection for SLWE 20120725/Eglin/Maintenance Logs/Eglin_Desktop_Log_1.txt",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/3.0 Cybersecurity/archive/NEXION Cybersecurity - Archive/2015 Annual IA Docs/Information Assurance/C&A Support/- Collection for SLWE 20120725/Eglin/Maintenance Logs/NEXION Outage ReportEGL120590008_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/3.0 Cybersecurity/archive/NEXION Cybersecurity - Archive/2015 Annual IA Docs/Information Assurance/C&A Support/- Collection for SLWE 20120725/Eglin/Maintenance Logs/NEXION Outage ReportEGL121120013_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/3.0 Cybersecurity/archive/NEXION Cybersecurity - Archive/2015 Annual IA Docs/Information Assurance/C&A Support/- Collection for SLWE 20120725/RAF Fairford/Maintenance Logs/Fairford_Desktop_Log_1.txt",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/3.0 Cybersecurity/archive/NEXION Cybersecurity - Archive/2015 Annual IA Docs/Information Assurance/C&A Support/- Collection for SLWE 20120725/RAF Fairford/Maintenance Logs/NEXION Outage Report FAI120150003_1.doc"
+      ]
+    },
+    {
+      "pattern_name": "bit_report",
+      "pattern": "%bit%report%",
+      "description": "Built-in test (BIT) reports",
+      "count": 5,
+      "system_breakdown": {
+        "NEXION": 0,
+        "ISTO": 0
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Fairford/2025-08-25 thru 08-29 (ASV)(FS-CF)/Pictures/BIT reports (1)_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Fairford/2025-08-25 thru 08-29 (ASV)(FS-CF)/Pictures/BIT reports (2)_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Fairford/2025-08-25 thru 08-29 (ASV)(FS-CF)/Pictures/BIT reports (3)_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Learmonth/2024-09-08 thru 09-17 (RTS)(Fuierer-Canada)/Pictures/BIT report (1)_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Learmonth/2024-09-08 thru 09-17 (RTS)(Fuierer-Canada)/Pictures/BIT report (2)_1.jpg"
+      ]
+    },
+    {
+      "pattern_name": "failure_analysis",
+      "pattern": "%failure%analysis%",
+      "description": "Failure analysis reports (NFAR)",
+      "count": 2,
+      "system_breakdown": {
+        "NEXION": 1,
+        "ISTO": 0
+      },
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/Archive/IGS/A001, Failure Summary & Analysis Report DID_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/NEXION/Reportable Outage Reports/N02_Eglin/NEXION Failure Analysis Report_2011_(JL)/NFAR_00001_1.doc"
+      ]
+    }
+  ],
+  "core_service_year_coverage": {
+    "2008": 5,
+    "2009": 30,
+    "2010": 85,
+    "2011": 84,
+    "2012": 328,
+    "2013": 501,
+    "2014": 550,
+    "2015": 703,
+    "2016": 273,
+    "2017": 145,
+    "2018": 152,
+    "2019": 27,
+    "2020": 15,
+    "2021": 7,
+    "2022": 6,
+    "2023": 428,
+    "2024": 257,
+    "2025": 23,
+    "2026": 23
+  },
+  "site_service_coverage": {
+    "Eielson": 283,
+    "San Vito": 87,
+    "Ascension": 67,
+    "Guam": 61,
+    "1_Sites": 55,
+    "Learmonth": 36,
+    "Vandenberg": 35,
+    "Eglin": 29,
+    "Fairford": 23,
+    "Lualualei": 23,
+    "Alpena": 20,
+    "Eareckson": 10,
+    "5_Software": 8,
+    "Thule": 5,
+    "Curacao": 3,
+    "Diego Garcia": 3,
+    "Kwajalein": 2,
+    "Singapore": 2,
+    "Wake": 1,
+    "2_Drawings": 1,
+    "Archive": 1,
+    "General Information": 1
+  },
+  "total_service_files_matched": 15398,
+  "notes": [
+    "Counts overlap: a single file can match multiple patterns.",
+    "Core service patterns (outage, trip_report, corrective_action, restoral, repair) = 4,028 files.",
+    "NEXION dominates service events; ISTO is sparser.",
+    "outage_all (2,352) includes many photos; outage_report (1,649) is document-only.",
+    "CDRL deliverables (3,009) span all CDRL types, not just service events."
+  ]
+}

@@ -465,6 +465,25 @@ class RetrievalMetadataStore:
             CREATE INDEX IF NOT EXISTS idx_source_metadata_document_type ON source_metadata(document_type);
             CREATE INDEX IF NOT EXISTS idx_source_metadata_document_category ON source_metadata(document_category);
         """)
+        self._conn.executescript("""
+            CREATE TABLE IF NOT EXISTS chunk_metadata (
+                chunk_id TEXT PRIMARY KEY,
+                source_path TEXT NOT NULL DEFAULT '',
+                document_id TEXT NOT NULL DEFAULT '',
+                canonical_doc_id TEXT NOT NULL DEFAULT '',
+                version_id TEXT NOT NULL DEFAULT '',
+                parent_chunk_id TEXT NOT NULL DEFAULT '',
+                section_path TEXT NOT NULL DEFAULT '',
+                page_number INTEGER,
+                table_id TEXT NOT NULL DEFAULT '',
+                document_family TEXT NOT NULL DEFAULT '',
+                effective_date TEXT NOT NULL DEFAULT '',
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE INDEX IF NOT EXISTS idx_chunk_metadata_source ON chunk_metadata(source_path);
+            CREATE INDEX IF NOT EXISTS idx_chunk_metadata_doc_id ON chunk_metadata(document_id);
+            CREATE INDEX IF NOT EXISTS idx_chunk_metadata_family ON chunk_metadata(document_family);
+        """)
 
     def upsert_from_chunks(self, chunks: list[dict]) -> dict[str, int]:
         """Derive and upsert one metadata row per unique source_path."""
@@ -555,6 +574,67 @@ class RetrievalMetadataStore:
             "with_document_type": sum(1 for row in values if row.document_type),
             "with_document_category": sum(1 for row in values if row.document_category),
         }
+
+    _CHUNK_META_FIELDS = (
+        "document_id", "canonical_doc_id", "version_id",
+        "parent_chunk_id", "section_path", "page_number",
+        "table_id", "document_family", "effective_date",
+    )
+
+    def upsert_chunk_metadata(self, chunks: list[dict]) -> dict[str, int]:
+        """Persist optional per-chunk metadata from enriched exports.
+
+        Only writes rows for chunks that carry at least one of the optional
+        fields. Old exports without these fields produce zero inserts.
+        """
+        rows = []
+        for chunk in chunks:
+            chunk_id = chunk.get("chunk_id", "")
+            if not chunk_id:
+                continue
+            has_any = any(chunk.get(f) for f in self._CHUNK_META_FIELDS)
+            if not has_any:
+                continue
+            rows.append((
+                chunk_id,
+                str(chunk.get("source_path", "")),
+                str(chunk.get("document_id", "")),
+                str(chunk.get("canonical_doc_id", "")),
+                str(chunk.get("version_id", "")),
+                str(chunk.get("parent_chunk_id", "")),
+                str(chunk.get("section_path", "")),
+                chunk.get("page_number"),
+                str(chunk.get("table_id", "")),
+                str(chunk.get("document_family", "")),
+                str(chunk.get("effective_date", "")),
+            ))
+
+        if not rows:
+            return {"chunks_with_metadata": 0}
+
+        self._conn.executemany(
+            """
+            INSERT INTO chunk_metadata (
+                chunk_id, source_path, document_id, canonical_doc_id,
+                version_id, parent_chunk_id, section_path, page_number,
+                table_id, document_family, effective_date
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(chunk_id) DO UPDATE SET
+                document_id = excluded.document_id,
+                canonical_doc_id = excluded.canonical_doc_id,
+                version_id = excluded.version_id,
+                parent_chunk_id = excluded.parent_chunk_id,
+                section_path = excluded.section_path,
+                page_number = excluded.page_number,
+                table_id = excluded.table_id,
+                document_family = excluded.document_family,
+                effective_date = excluded.effective_date,
+                updated_at = CURRENT_TIMESTAMP
+            """,
+            rows,
+        )
+        self._conn.commit()
+        return {"chunks_with_metadata": len(rows)}
 
     def find_source_paths(
         self,

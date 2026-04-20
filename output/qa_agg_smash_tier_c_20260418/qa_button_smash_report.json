@@ -1,0 +1,1014 @@
+{
+  "tool": "tools/qa/gui_button_smash_harness",
+  "version": "1.0.0",
+  "started_utc": "2026-04-19T06:00:39+00:00",
+  "finished_utc": "2026-04-19T06:01:42+00:00",
+  "mode": "mock",
+  "tiers_run": [
+    "C"
+  ],
+  "widget_catalog": [
+    {
+      "widget_type": "button",
+      "widget_path": ".!frame.!button",
+      "label": "Info",
+      "state": "normal",
+      "panel": "",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!overviewpanel.!frame.!button",
+      "label": "Refresh",
+      "state": "normal",
+      "panel": "OverviewPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!overviewpanel.!frame.!button2",
+      "label": "Save as .md",
+      "state": "normal",
+      "panel": "OverviewPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!overviewpanel.!frame2.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "OverviewPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry2",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button2",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry3",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button3",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!entry4",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!button4",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe.!frame.!entry2",
+      "label": "",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button",
+      "label": "Start",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button2",
+      "label": "Stop",
+      "state": "disabled",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button3",
+      "label": "Clear log",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button4",
+      "label": "Save as defaults",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!frame.!button5",
+      "label": "Reset defaults",
+      "state": "normal",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe3.!frame.!button",
+      "label": "Open results JSON",
+      "state": "disabled",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe3.!frame.!button2",
+      "label": "Open report MD",
+      "state": "disabled",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!launchpanel.!frame.!labelframe4.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "LaunchPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame.!button2",
+      "label": "Load Results",
+      "state": "normal",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox",
+      "label": "PY_VAR13",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {
+        "values": [
+          "All",
+          "PASS",
+          "PARTIAL",
+          "MISS"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox",
+      "label": "",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox2",
+      "label": "PY_VAR14",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {
+        "values": [
+          "All"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox2",
+      "label": "",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox3",
+      "label": "PY_VAR15",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {
+        "values": [
+          "All"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox3",
+      "label": "",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox4",
+      "label": "PY_VAR16",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {
+        "values": [
+          "All"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!combobox4",
+      "label": "",
+      "state": "readonly",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!frame4.!button",
+      "label": "Clear filters",
+      "state": "normal",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "treeview",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!panedwindow.!frame.!treeview",
+      "label": "",
+      "state": "",
+      "panel": "ResultsPanel",
+      "details": {
+        "columns": [
+          "query_id",
+          "persona",
+          "verdict",
+          "routing",
+          "ms"
+        ]
+      }
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!resultspanel.!panedwindow.!frame2.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "ResultsPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame.!frame.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame2.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame.!frame2.!frame.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame2.!button",
+      "label": "Compare",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!combobox",
+      "label": "PY_VAR29",
+      "state": "readonly",
+      "panel": "ComparePanel",
+      "details": {
+        "values": [
+          "Changed only",
+          "Gains",
+          "Losses",
+          "Unchanged",
+          "All"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!combobox",
+      "label": "",
+      "state": "readonly",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "combobox",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!combobox2",
+      "label": "PY_VAR30",
+      "state": "readonly",
+      "panel": "ComparePanel",
+      "details": {
+        "values": [
+          "All"
+        ]
+      }
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!combobox2",
+      "label": "",
+      "state": "readonly",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame4.!button",
+      "label": "Clear",
+      "state": "normal",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "treeview",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame5.!treeview",
+      "label": "",
+      "state": "",
+      "panel": "ComparePanel",
+      "details": {
+        "columns": [
+          "query_id",
+          "persona",
+          "before",
+          "after",
+          "delta"
+        ]
+      }
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!comparepanel.!frame6.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "ComparePanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!frame.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!frame.!button2",
+      "label": "Refresh",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "treeview",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!panedwindow.!frame.!frame.!treeview",
+      "label": "",
+      "state": "",
+      "panel": "HistoryPanel",
+      "details": {
+        "columns": [
+          "run_id",
+          "timestamp",
+          "label",
+          "total",
+          "pass",
+          "partial",
+          "miss",
+          "routing",
+          "p50",
+          "strongest",
+          "weakest",
+          "filename"
+        ]
+      }
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!baselineworkbenchpanel.!frame.!notebook.!historypanel.!panedwindow.!frame2.!frame.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!entry2",
+      "label": "",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!button2",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!entry3",
+      "label": "",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!button3",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button",
+      "label": "Start",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button2",
+      "label": "Stop",
+      "state": "disabled",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button3",
+      "label": "Clear log",
+      "state": "normal",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!frame.!button4",
+      "label": "Open output",
+      "state": "disabled",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!aggregationpanel.!frame.!labelframe3.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "AggregationPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry2",
+      "label": "",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button2",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry3",
+      "label": "",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button3",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry4",
+      "label": "",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button4",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!entry5",
+      "label": "",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!button5",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton",
+      "label": "Include deferred targets",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton2",
+      "label": "raw_mentions",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton3",
+      "label": "unique_documents",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton4",
+      "label": "unique_chunks",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe.!frame.!checkbutton5",
+      "label": "unique_rows",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button",
+      "label": "Start",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button2",
+      "label": "Stop",
+      "state": "disabled",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button3",
+      "label": "Clear log",
+      "state": "normal",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button4",
+      "label": "Open JSON",
+      "state": "disabled",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!frame.!button5",
+      "label": "Open MD",
+      "state": "disabled",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!countpanel.!frame.!labelframe3.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "CountPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "checkbutton",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe.!frame.!checkbutton",
+      "label": "Analysis only",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button",
+      "label": "Start",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button2",
+      "label": "Stop",
+      "state": "disabled",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button3",
+      "label": "Clear log",
+      "state": "normal",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!frame.!button4",
+      "label": "Open artifact",
+      "state": "disabled",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!ragaspanel.!frame.!labelframe3.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "RagasPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!frame.!button",
+      "label": "Browse",
+      "state": "normal",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!frame.!button2",
+      "label": "Run Regression",
+      "state": "normal",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!frame.!button3",
+      "label": "Stop",
+      "state": "disabled",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "treeview",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!frame2.!treeview",
+      "label": "",
+      "state": "",
+      "panel": "RegressionPanel",
+      "details": {
+        "columns": [
+          "family",
+          "passed",
+          "total",
+          "rate"
+        ]
+      }
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!regressionpanel.!text2",
+      "label": "",
+      "state": "disabled",
+      "panel": "RegressionPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "entry",
+      "widget_path": ".!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!frame.!entry",
+      "label": "",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!frame.!button",
+      "label": "Browse...",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "button",
+      "widget_path": ".!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!frame.!button2",
+      "label": "Refresh",
+      "state": "normal",
+      "panel": "HistoryPanel",
+      "details": {}
+    },
+    {
+      "widget_type": "treeview",
+      "widget_path": ".!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!panedwindow.!frame.!frame.!treeview",
+      "label": "",
+      "state": "",
+      "panel": "HistoryPanel",
+      "details": {
+        "columns": [
+          "run_id",
+          "timestamp",
+          "label",
+          "total",
+          "pass",
+          "partial",
+          "miss",
+          "routing",
+          "p50",
+          "strongest",
+          "weakest",
+          "filename"
+        ]
+      }
+    },
+    {
+      "widget_type": "text",
+      "widget_path": ".!canvas.!frame.!notebook.!historyledgerpanel.!frame.!historypanel.!panedwindow.!frame2.!frame.!text",
+      "label": "",
+      "state": "disabled",
+      "panel": "HistoryPanel",
+      "details": {}
+    }
+  ],
+  "tier_a_results": [],
+  "tier_b_results": [],
+  "tier_c_results": [
+    {
+      "test_id": "C_dumb_monkey",
+      "tier": "C",
+      "panel": "All",
+      "description": "Dumb monkey: 1752 actions in 60.0s",
+      "passed": true,
+      "error": "",
+      "traceback_str": "",
+      "duration_ms": 60032.19329999956,
+      "details": {
+        "actions_taken": 1752,
+        "duration_s": 60.0,
+        "crashes": [],
+        "action_log_lines": 1215
+      }
+    }
+  ],
+  "tier_d_status": "PENDING_NON_AUTHOR",
+  "summary": {
+    "verdict": "PASS",
+    "tiers_run": [
+      "C"
+    ],
+    "tier_a": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0
+    },
+    "tier_b": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0
+    },
+    "tier_c": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0
+    },
+    "tier_d": "PENDING_NON_AUTHOR",
+    "total_tests": 1,
+    "total_passed": 1,
+    "total_failed": 0,
+    "widgets_discovered": 107,
+    "panels_built": [
+      "Overview",
+      "Baseline",
+      "Aggregation",
+      "Count",
+      "RAGAS",
+      "Regression",
+      "History / Ledger",
+      "Launch",
+      "Results",
+      "Compare",
+      "History"
+    ],
+    "output_dir": "output\\qa_agg_smash_tier_c_20260418",
+    "callback_errors_total": 0
+  }
+}

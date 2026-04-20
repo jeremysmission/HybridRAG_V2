@@ -7,29 +7,29 @@
   "items": [
     {
       "id": "FAIL-AGG-01",
-      "query": "What were the highest failing part numbers in the monitoring systems in 2024?",
+      "query": "What were the highest failing part numbers in the NEXION system in 2024?",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "year_from": 2024,
         "year_to": 2024
       },
       "expected_params": {
         "top_n": 5
       },
-      "ground_truth_sql": "SELECT part_number, COUNT(*) AS failure_count FROM failure_events WHERE system='monitoring system' AND event_year=2024 AND part_number!='' GROUP BY part_number ORDER BY failure_count DESC LIMIT 5",
+      "ground_truth_sql": "SELECT part_number, COUNT(*) AS failure_count FROM failure_events WHERE system='NEXION' AND event_year=2024 AND part_number!='' GROUP BY part_number ORDER BY failure_count DESC LIMIT 5",
       "requires_chunk_pass": true,
       "requires_denominator": false,
       "why_green_possible": "part_number requires chunk-derived extraction pass; without pass 2, this is YELLOW (doc-level failure counts only)."
     },
     {
       "id": "FAIL-AGG-02",
-      "query": "What were the highest failing part numbers in the legacy monitoring systems in Djibouti from 2022-2025?",
+      "query": "What were the highest failing part numbers in the ISTO system in Djibouti from 2022-2025?",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "legacy monitoring system",
+        "system": "ISTO",
         "site_token": "djibouti",
         "year_from": 2022,
         "year_to": 2025
@@ -37,7 +37,7 @@
       "expected_params": {
         "top_n": 5
       },
-      "ground_truth_sql": "SELECT part_number, COUNT(*) AS failure_count FROM failure_events WHERE system='legacy monitoring system' AND site_token='djibouti' AND event_year BETWEEN 2022 AND 2025 AND part_number!='' GROUP BY part_number ORDER BY failure_count DESC LIMIT 5",
+      "ground_truth_sql": "SELECT part_number, COUNT(*) AS failure_count FROM failure_events WHERE system='ISTO' AND site_token='djibouti' AND event_year BETWEEN 2022 AND 2025 AND part_number!='' GROUP BY part_number ORDER BY failure_count DESC LIMIT 5",
       "requires_chunk_pass": true,
       "requires_denominator": false,
       "why_green_possible": "Same as FAIL-AGG-01 \u00e2\u20ac\u201d requires chunk pass for part_number population."
@@ -48,8 +48,8 @@
       "tier_expected": "YELLOW",
       "expected_shape": "top_n_by_part_per_year",
       "expected_filters": {
-        "year_from": 2019,
-        "year_to": 2025
+        "year_from": 2020,
+        "year_to": 2026
       },
       "expected_params": {
         "top_n": 5,
@@ -63,11 +63,11 @@
     },
     {
       "id": "FAIL-AGG-04",
-      "query": "Top 5 failing parts in monitoring system in 2023",
+      "query": "Top 5 failing parts in NEXION in 2023",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "year_from": 2023,
         "year_to": 2023
       },
@@ -78,11 +78,11 @@
     },
     {
       "id": "FAIL-AGG-05",
-      "query": "Highest failing part numbers in legacy monitoring system in 2024",
+      "query": "Highest failing part numbers in ISTO in 2024",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "legacy monitoring system",
+        "system": "ISTO",
         "year_from": 2024,
         "year_to": 2024
       },
@@ -93,11 +93,11 @@
     },
     {
       "id": "FAIL-AGG-06",
-      "query": "Top 10 failing parts in monitoring system in Guam in 2023",
+      "query": "Top 10 failing parts in NEXION in Guam in 2023",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "guam",
         "year_from": 2023,
         "year_to": 2023
@@ -114,11 +114,11 @@
     },
     {
       "id": "FAIL-AGG-07",
-      "query": "Top 5 failing parts in legacy monitoring system between 2020 and 2023",
+      "query": "Top 5 failing parts in ISTO between 2020 and 2023",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "legacy monitoring system",
+        "system": "ISTO",
         "year_from": 2020,
         "year_to": 2023
       },
@@ -129,11 +129,11 @@
     },
     {
       "id": "FAIL-AGG-08",
-      "query": "Highest failing parts in monitoring system in Djibouti in 2024",
+      "query": "Highest failing parts in NEXION in Djibouti in 2024",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "djibouti",
         "year_from": 2024,
         "year_to": 2024
@@ -154,8 +154,8 @@
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part_per_year",
       "expected_filters": {
-        "year_from": 2021,
-        "year_to": 2025
+        "year_from": 2022,
+        "year_to": 2026
       },
       "expected_params": {
         "top_n": 5,
@@ -167,13 +167,13 @@
     },
     {
       "id": "FAIL-AGG-10",
-      "query": "Top 3 failing parts in monitoring system each year for the past 3 years",
+      "query": "Top 3 failing parts in NEXION each year for the past 3 years",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part_per_year",
       "expected_filters": {
-        "system": "monitoring system",
-        "year_from": 2023,
-        "year_to": 2025
+        "system": "NEXION",
+        "year_from": 2024,
+        "year_to": 2026
       },
       "expected_params": {
         "top_n": 3,
@@ -183,13 +183,13 @@
     },
     {
       "id": "FAIL-AGG-11",
-      "query": "Top 5 failure rate parts each year for monitoring systems past 5 years",
+      "query": "Top 5 failure rate parts each year for NEXION system past 5 years",
       "tier_expected": "YELLOW",
       "expected_shape": "top_n_by_part_per_year",
       "expected_filters": {
-        "system": "monitoring system",
-        "year_from": 2021,
-        "year_to": 2025
+        "system": "NEXION",
+        "year_from": 2022,
+        "year_to": 2026
       },
       "expected_params": {
         "top_n": 5,
@@ -201,11 +201,11 @@
     },
     {
       "id": "FAIL-AGG-12",
-      "query": "Top 5 failing parts in monitoring system at Vandenberg in 2024",
+      "query": "Top 5 failing parts in NEXION at Vandenberg in 2024",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "vandenberg",
         "year_from": 2024,
         "year_to": 2024
@@ -240,11 +240,11 @@
     },
     {
       "id": "FAIL-AGG-14",
-      "query": "Top 10 most failing parts in legacy monitoring system at Camp Lemonnier",
+      "query": "Top 10 most failing parts in ISTO at Camp Lemonnier",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "legacy monitoring system",
+        "system": "ISTO",
         "site_token": "djibouti"
       },
       "expected_params": {
@@ -254,11 +254,11 @@
     },
     {
       "id": "FAIL-AGG-15",
-      "query": "What are the highest failing parts in legacy monitoring system in 2025?",
+      "query": "What are the highest failing parts in ISTO in 2025?",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "legacy monitoring system",
+        "system": "ISTO",
         "year_from": 2025,
         "year_to": 2025
       },
@@ -268,11 +268,11 @@
     },
     {
       "id": "FAIL-AGG-16",
-      "query": "Which part numbers are the most failing in monitoring system at Ascension in 2024?",
+      "query": "Which part numbers are the most failing in NEXION at Ascension in 2024?",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "ascension",
         "year_from": 2024,
         "year_to": 2024
@@ -283,11 +283,11 @@
     },
     {
       "id": "FAIL-AGG-17",
-      "query": "Top 5 failing parts in monitoring system between 2022-2024",
+      "query": "Top 5 failing parts in NEXION between 2022-2024",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "year_from": 2022,
         "year_to": 2024
       },
@@ -301,8 +301,8 @@
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part_per_year",
       "expected_filters": {
-        "year_from": 2019,
-        "year_to": 2025
+        "year_from": 2020,
+        "year_to": 2026
       },
       "expected_params": {
         "top_n": 7,
@@ -326,11 +326,11 @@
     },
     {
       "id": "FAIL-AGG-21",
-      "query": "Top 10 failing parts in monitoring system in 2015",
+      "query": "Top 10 failing parts in NEXION in 2015",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "year_from": 2015,
         "year_to": 2015
       },
@@ -341,11 +341,11 @@
     },
     {
       "id": "FAIL-AGG-22",
-      "query": "Highest failing parts in monitoring system at Guam in 2013",
+      "query": "Highest failing parts in NEXION at Guam in 2013",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "guam",
         "year_from": 2013,
         "year_to": 2013
@@ -356,11 +356,11 @@
     },
     {
       "id": "FAIL-AGG-23",
-      "query": "Top 5 failing parts in monitoring system at Thule in 2019",
+      "query": "Top 5 failing parts in NEXION at Thule in 2019",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "thule",
         "year_from": 2019,
         "year_to": 2019
@@ -371,11 +371,11 @@
     },
     {
       "id": "FAIL-AGG-24",
-      "query": "Top 5 failing parts in monitoring system at Eglin in 2018",
+      "query": "Top 5 failing parts in NEXION at Eglin in 2018",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "eglin",
         "year_from": 2018,
         "year_to": 2018
@@ -386,11 +386,11 @@
     },
     {
       "id": "FAIL-AGG-25",
-      "query": "Top 5 failing parts in monitoring system at Alpena in 2020",
+      "query": "Top 5 failing parts in NEXION at Alpena in 2020",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "alpena",
         "year_from": 2020,
         "year_to": 2020
@@ -401,11 +401,11 @@
     },
     {
       "id": "FAIL-AGG-26",
-      "query": "Highest failing parts in legacy monitoring system in 2021",
+      "query": "Highest failing parts in ISTO in 2021",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "legacy monitoring system",
+        "system": "ISTO",
         "year_from": 2021,
         "year_to": 2021
       },
@@ -415,11 +415,11 @@
     },
     {
       "id": "FAIL-AGG-27",
-      "query": "Top 5 failing parts in legacy monitoring system in 2020",
+      "query": "Top 5 failing parts in ISTO in 2020",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "legacy monitoring system",
+        "system": "ISTO",
         "year_from": 2020,
         "year_to": 2020
       },
@@ -429,11 +429,11 @@
     },
     {
       "id": "FAIL-AGG-28",
-      "query": "Top 5 failing parts in legacy monitoring system between 2020 and 2022",
+      "query": "Top 5 failing parts in ISTO between 2020 and 2022",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "legacy monitoring system",
+        "system": "ISTO",
         "year_from": 2020,
         "year_to": 2022
       },
@@ -443,13 +443,13 @@
     },
     {
       "id": "FAIL-AGG-29",
-      "query": "Top 3 failing parts in monitoring system each year for the past 5 years",
+      "query": "Top 3 failing parts in NEXION each year for the past 5 years",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part_per_year",
       "expected_filters": {
-        "system": "monitoring system",
-        "year_from": 2021,
-        "year_to": 2025
+        "system": "NEXION",
+        "year_from": 2022,
+        "year_to": 2026
       },
       "expected_params": {
         "top_n": 3,
@@ -463,8 +463,8 @@
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part_per_year",
       "expected_filters": {
-        "year_from": 2016,
-        "year_to": 2025
+        "year_from": 2017,
+        "year_to": 2026
       },
       "expected_params": {
         "top_n": 5,
@@ -474,11 +474,11 @@
     },
     {
       "id": "FAIL-AGG-31",
-      "query": "Top 5 failing parts in monitoring system at Hawaii in 2017",
+      "query": "Top 5 failing parts in NEXION at Hawaii in 2017",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "hawaii",
         "year_from": 2017,
         "year_to": 2017
@@ -494,11 +494,11 @@
     },
     {
       "id": "FAIL-AGG-32",
-      "query": "Top 5 failing parts in monitoring system at Wake in 2016",
+      "query": "Top 5 failing parts in NEXION at Wake in 2016",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "wake",
         "year_from": 2016,
         "year_to": 2016
@@ -514,11 +514,11 @@
     },
     {
       "id": "FAIL-AGG-33",
-      "query": "Top 5 failing parts in monitoring system at Azores in 2014",
+      "query": "Top 5 failing parts in NEXION at Azores in 2014",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "azores",
         "year_from": 2014,
         "year_to": 2014
@@ -534,11 +534,11 @@
     },
     {
       "id": "FAIL-AGG-34",
-      "query": "Top 5 failing parts in monitoring system at Fairford in 2022",
+      "query": "Top 5 failing parts in NEXION at Fairford in 2022",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "fairford",
         "year_from": 2022,
         "year_to": 2022
@@ -554,11 +554,11 @@
     },
     {
       "id": "FAIL-AGG-35",
-      "query": "Top 5 failing parts in monitoring system at Ascension in 2012",
+      "query": "Top 5 failing parts in NEXION at Ascension in 2012",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "ascension",
         "year_from": 2012,
         "year_to": 2012
@@ -574,13 +574,13 @@
     },
     {
       "id": "FAIL-AGG-36",
-      "query": "Top 3 failing parts in monitoring system ranked each year for the past 7 years",
+      "query": "Top 3 failing parts in NEXION ranked each year for the past 7 years",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part_per_year",
       "expected_filters": {
-        "system": "monitoring system",
-        "year_from": 2019,
-        "year_to": 2025
+        "system": "NEXION",
+        "year_from": 2020,
+        "year_to": 2026
       },
       "expected_params": {
         "top_n": 3,
@@ -590,11 +590,11 @@
     },
     {
       "id": "FAIL-AGG-37",
-      "query": "Top failing part numbers in CY2024 for monitoring system",
+      "query": "Top failing part numbers in CY2024 for NEXION",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "year_from": 2024,
         "year_to": 2024
       },
@@ -605,11 +605,11 @@
     },
     {
       "id": "FAIL-AGG-38",
-      "query": "Top failing part numbers in FY23 for monitoring system",
+      "query": "Top failing part numbers in FY23 for NEXION",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "year_from": 2023,
         "year_to": 2023
       },
@@ -620,11 +620,11 @@
     },
     {
       "id": "FAIL-AGG-39",
-      "query": "Top failing parts in monitoring system at Camp Lemonnier in 2024",
+      "query": "Top failing parts in NEXION at Camp Lemonnier in 2024",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "djibouti",
         "year_from": 2024,
         "year_to": 2024
@@ -640,11 +640,11 @@
     },
     {
       "id": "FAIL-AGG-40",
-      "query": "Top failing parts in monitoring system at Pituffik in 2020",
+      "query": "Top failing parts in NEXION at Pituffik in 2020",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "thule",
         "year_from": 2020,
         "year_to": 2020
@@ -660,11 +660,11 @@
     },
     {
       "id": "FAIL-AGG-41",
-      "query": "Top 5 failure rate parts in monitoring system at Guam in 2024",
+      "query": "Top 5 failure rate parts in NEXION at Guam in 2024",
       "tier_expected": "YELLOW",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "guam",
         "year_from": 2024,
         "year_to": 2024
@@ -681,11 +681,11 @@
     },
     {
       "id": "FAIL-AGG-42",
-      "query": "Top 5 failure rate parts in legacy monitoring system between 2020 and 2022",
+      "query": "Top 5 failure rate parts in ISTO between 2020 and 2022",
       "tier_expected": "YELLOW",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "legacy monitoring system",
+        "system": "ISTO",
         "year_from": 2020,
         "year_to": 2022
       },
@@ -700,8 +700,8 @@
       "tier_expected": "YELLOW",
       "expected_shape": "top_n_by_part_per_year",
       "expected_filters": {
-        "year_from": 2023,
-        "year_to": 2025
+        "year_from": 2024,
+        "year_to": 2026
       },
       "expected_params": {
         "top_n": 5,
@@ -726,11 +726,11 @@
     },
     {
       "id": "FAIL-AGG-45",
-      "query": "Top 5 failing parts in monitoring system at Antarctica in 2024",
+      "query": "Top 5 failing parts in NEXION at Antarctica in 2024",
       "tier_expected": "RED",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "site_token": "",
         "year_from": 2024,
         "year_to": 2024
@@ -742,11 +742,11 @@
     },
     {
       "id": "FAIL-AGG-46",
-      "query": "Top 5 failing parts in monitoring system in 1999",
+      "query": "Top 5 failing parts in NEXION in 1999",
       "tier_expected": "GREEN",
       "expected_shape": "top_n_by_part",
       "expected_filters": {
-        "system": "monitoring system",
+        "system": "NEXION",
         "year_from": null,
         "year_to": null
       },
@@ -764,7 +764,7 @@
     },
     {
       "id": "FAIL-AGG-48",
-      "query": "How many failures did monitoring system have in 2024?",
+      "query": "How many failures did NEXION have in 2024?",
       "tier_expected": "PASSTHROUGH",
       "expected_shape": "none",
       "note": "'How many' is an AGGREGATE count question but NOT a top-N intent. Current executor only handles top-N + failure; this is intentionally passthrough. Flag for future: might add a simple count shape."

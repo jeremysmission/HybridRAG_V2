@@ -1,0 +1,48 @@
+{
+  "scan_date": "2026-04-20",
+  "scanner": "Miner-Agent",
+  "bom_parts": 1280,
+  "installed_base_parts": 1152,
+  "overlap": 639,
+  "bom_only": 641,
+  "ib_only": 513,
+  "sample_size": 50,
+  "classification": {
+    "real_not_installed_structured": {
+      "count": 15,
+      "pct": 30.0,
+      "sample": [
+        "1346-ANT-01T",
+        "PAR-PRL0022S",
+        "115-CABLE GUARD",
+        "S-3053-AL-\n07X10-C",
+        "120532-BLK-GEO"
+      ]
+    },
+    "real_not_installed_fabrication": {
+      "count": 5,
+      "pct": 10.0,
+      "sample": [
+        "007-SPC-01A",
+        "011-NUT-01P",
+        "010-TWR-09P",
+        "007-SPC-58A",
+        "002-WSH-01P"
+      ]
+    },
+    "real_not_installed_other": {
+      "count": 30,
+      "pct": 60.0,
+      "sample": [
+        "29FH98",
+        "22MP410",
+        "201812026",
+        "1754T521",
+        "132"
+      ]
+    }
+  },
+  "extractor_miss_rate_pct": 0.0,
+  "verdict": "DEFENSIBLE",
+  "verdict_detail": "<10% extractor miss rate. Gap is defensible."
+}

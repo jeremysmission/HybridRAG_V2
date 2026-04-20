@@ -1,0 +1,154 @@
+{
+  "scan_date": "2026-04-20",
+  "scanner": "Miner-Agent",
+  "source": "E:\\CorpusTransfr\u000berified\\IGS\u0005.0 Logistics\\IPT Slides - Site Inventories",
+  "files_parsed": 12,
+  "sites_covered": [
+    "Curacao",
+    "Eglin",
+    "Fairford",
+    "Kwaj",
+    "Learmonth",
+    "Misawa",
+    "Niger",
+    "Okinawa",
+    "Vandenberg",
+    "Wake"
+  ],
+  "L1_D_total_inventory_parts": {
+    "total_part_entries": 772,
+    "total_qpa_qty_sum": 885
+  },
+  "L1_E_distinct_part_numbers": {
+    "union_distinct_count": 149,
+    "sample_20": [
+      "090-RES-01A",
+      "09362-F/45",
+      "09362-F/45 OR 09362-M/30 OR MC32707?",
+      "09362-M/30",
+      "106406-00 92626-00",
+      "123GM1215A-XN-1",
+      "1330-ANT-00T",
+      "1960053207N001",
+      "201812014-01",
+      "201812017-01",
+      "201812018-01",
+      "210-AQUB",
+      "210-AZDS",
+      "22256-2U002-01",
+      "22C689",
+      "2486 MAYBE FOAMX/HF1?",
+      "271-75-RC",
+      "2744-ASY-01A",
+      "2744-ASY-01A (442-BAL-01T)",
+      "2744-ASY-01A 442-BAL-01T"
+    ]
+  },
+  "L1_F_vandenberg": {
+    "part_entries": 89,
+    "distinct_parts": 55,
+    "total_qty": 106,
+    "sample_parts": [
+      "DBZH-101",
+      "SMX2200RMLV2U",
+      "SLA12-9F2",
+      "40453",
+      "AS-7020103",
+      "HPS3S2",
+      "PCA-COM485-00A1E",
+      "9696412900E PCE-4129",
+      "AS-5021108",
+      "AS-5021105",
+      "AS-7031102",
+      "AS-7031102",
+      "AS-5021301",
+      "AS-5021107",
+      "AS-5021107"
+    ]
+  },
+  "per_site": {
+    "Curacao": {
+      "part_entries": 53,
+      "total_qty": 61,
+      "distinct_parts": 30,
+      "files": [
+        "Curacao Site Inventory 16 Jan 24.xlsx",
+        "Curacao Site Inventory Dec 23.xlsx"
+      ]
+    },
+    "Eglin": {
+      "part_entries": 83,
+      "total_qty": 98,
+      "distinct_parts": 52,
+      "files": [
+        "Site Inventory (Eglin 09 Sep 2022).xlsx"
+      ]
+    },
+    "Fairford": {
+      "part_entries": 81,
+      "total_qty": 89,
+      "distinct_parts": 47,
+      "files": [
+        "Fairford-NEXION Site Inventory 25 Jun 24.xlsx"
+      ]
+    },
+    "Kwaj": {
+      "part_entries": 29,
+      "total_qty": 36,
+      "distinct_parts": 19,
+      "files": [
+        "Kwajalein-ISTO Site Inventory Oct 2023.xlsx"
+      ]
+    },
+    "Learmonth": {
+      "part_entries": 80,
+      "total_qty": 100,
+      "distinct_parts": 47,
+      "files": [
+        "Learmonth NEXION (Updated Feb 2023).xlsx"
+      ]
+    },
+    "Misawa": {
+      "part_entries": 89,
+      "total_qty": 97,
+      "distinct_parts": 59,
+      "files": [
+        "Site Inventory Sheet (Misawa-NEXION)-Dettler-Pitts (2023-11-20).xlsx"
+      ]
+    },
+    "Niger": {
+      "part_entries": 20,
+      "total_qty": 21,
+      "distinct_parts": 17,
+      "files": [
+        "Returned Items from Niger (2024-09-11).xlsx"
+      ]
+    },
+    "Okinawa": {
+      "part_entries": 77,
+      "total_qty": 84,
+      "distinct_parts": 51,
+      "files": [
+        "Site Inventory Sheet (Okinawa-NEXION)-Seagren-Pitts (8-20-23).xlsx"
+      ]
+    },
+    "Vandenberg": {
+      "part_entries": 89,
+      "total_qty": 106,
+      "distinct_parts": 55,
+      "files": [
+        "Site Inventory Sheet (Vandenberg-NEXION) 2023-Feb-21.xlsx"
+      ]
+    },
+    "Wake": {
+      "part_entries": 171,
+      "total_qty": 193,
+      "distinct_parts": 66,
+      "files": [
+        "Site Inventory (Wake 10 Apr 2023).xlsx",
+        "Site Inventory (Wake 21 Oct 2022).xlsx"
+      ]
+    }
+  },
+  "errors": []
+}

@@ -125,6 +125,7 @@ class QueryClassification:
     text_pattern: str = ""
     site_filter: str = ""
     reasoning: str = ""
+    vocab_tags: dict = field(default_factory=dict)
 
 
 @dataclass

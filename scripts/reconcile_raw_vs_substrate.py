@@ -31,7 +31,7 @@ logger = logging.getLogger("reconcile")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 
-SYSTEM_RE = re.compile(r"\b(monitoring system|legacy monitoring system)\b", re.IGNORECASE)
+SYSTEM_RE = re.compile(r"\b(nexion|isto)\b", re.IGNORECASE)
 YEAR_RE = re.compile(r"\b(20[0-3]\d)\b")
 SITE_RE = re.compile(
     r"\b(vandenberg|guam|learmonth|ascension|thule|eglin|alpena|fairford|wake|"
@@ -131,10 +131,10 @@ def count_substrate(lance_db_path: str | Path) -> dict:
             conn.execute("SELECT COUNT(*) FROM source_metadata").fetchone()[0] or 0
         )
         out["source_metadata_nexion"] = int(
-            conn.execute("SELECT COUNT(*) FROM source_metadata WHERE lower(source_path) LIKE '%monitoring system%'").fetchone()[0] or 0
+            conn.execute("SELECT COUNT(*) FROM source_metadata WHERE lower(source_path) LIKE '%nexion%'").fetchone()[0] or 0
         )
         out["source_metadata_isto"] = int(
-            conn.execute("SELECT COUNT(*) FROM source_metadata WHERE lower(source_path) LIKE '%legacy monitoring system%'").fetchone()[0] or 0
+            conn.execute("SELECT COUNT(*) FROM source_metadata WHERE lower(source_path) LIKE '%isto%'").fetchone()[0] or 0
         )
         conn.close()
     return out

@@ -1,0 +1,199 @@
+{
+  "scan_date": "2026-04-19",
+  "scanner": "Miner-Agent",
+  "purpose": "25 actual corpus document samples for Researcher demo pack",
+  "demo_questions_covered": [
+    "Q1",
+    "Q2",
+    "Q3",
+    "Q-DEMO-A",
+    "Q-DEMO-B",
+    "Q-DEMO-C",
+    "Q-DEMO-E",
+    "Q-DEMO-F",
+    "Q-DEMO-G"
+  ],
+  "total_samples": 30,
+  "samples": [
+    {
+      "demo_question": "Q1 (top failing parts NEXION 2024)",
+      "doc_type": "failure_event_source",
+      "corpus_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\EEMS\\NEXION Jurisdiction and Classification Requests\\2024\\SP-JC-24-00747\\POL-21006-1F-R-34B-D2.pdf",
+      "evidence": "part=POL-21006, system=NEXION, site=, year=2024, events=1"
+    },
+    {
+      "demo_question": "Q1 (top failing parts NEXION 2024)",
+      "doc_type": "failure_event_source",
+      "corpus_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\EEMS\\NEXION Jurisdiction and Classification Requests\\2024\\SP-JC-24-00747\\L85SA-R-AC-200.pdf",
+      "evidence": "part=AC-200, system=NEXION, site=, year=2024, events=1"
+    },
+    {
+      "demo_question": "Q1 (top failing parts NEXION 2024)",
+      "doc_type": "failure_event_source",
+      "corpus_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\EEMS\\NEXION Jurisdiction and Classification Requests\\2024\\SP-JC-24-00653\\ZE142.pdf",
+      "evidence": "part=ZE142, system=NEXION, site=, year=2024, events=1"
+    },
+    {
+      "demo_question": "Q1 (top failing parts NEXION 2024)",
+      "doc_type": "failure_event_source",
+      "corpus_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\EEMS\\NEXION Jurisdiction and Classification Requests\\2024\\SP-JC-24-00653\\ZE142 Questionnaire.pdf",
+      "evidence": "part=ZE142, system=NEXION, site=, year=2024, events=1"
+    },
+    {
+      "demo_question": "Q1 (top failing parts NEXION 2024)",
+      "doc_type": "failure_event_source",
+      "corpus_path": "D:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\EEMS\\NEXION Jurisdiction and Classification Requests\\2024\\SP-JC-24-00653\\NX29747.pdf",
+      "evidence": "part=NX29747, system=NEXION, site=, year=2024, events=1"
+    },
+    {
+      "demo_question": "Q3 (failure rate — denominator source)",
+      "doc_type": "site_inventory_xlsx",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Copy of Alpena Inventory  Spares Report_1.xlsx",
+      "evidence": "Tabular site inventory report with part counts per site"
+    },
+    {
+      "demo_question": "Q3 (failure rate — denominator source)",
+      "doc_type": "site_inventory_xlsx",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Site Inventory Report_Alpena (2-8 Jun 2021)_1.xlsx",
+      "evidence": "Tabular site inventory report with part counts per site"
+    },
+    {
+      "demo_question": "Q3 (failure rate — denominator source)",
+      "doc_type": "site_inventory_xlsx",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Eglin/2021-12-13 thru 12-17 (ASV)(Seagren-Dexter)/Site Inventory/Site Inventory and Spares Report_1.xlsx",
+      "evidence": "Tabular site inventory report with part counts per site"
+    },
+    {
+      "demo_question": "Q3 (failure rate — denominator source)",
+      "doc_type": "site_inventory_xlsx",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Eglin/2021-12-13 thru 12-17 (ASV)(Seagren-Dexter)/Site Inventory/Working Copy (Site Inventory and Spares Report)_1.xlsx",
+      "evidence": "Tabular site inventory report with part counts per site"
+    },
+    {
+      "demo_question": "Q3 (failure rate — denominator source)",
+      "doc_type": "site_inventory_xlsx",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2021-11-03 thru 11-13 (NEXION-ISTO ASV)(HW-CF)/Site Inventory/Guam ISTO & NEXION Inventory & Spare Reports_1.xlsx",
+      "evidence": "Tabular site inventory report with part counts per site"
+    },
+    {
+      "demo_question": "Q-DEMO-A/B/C (PO orders, lead time, volume)",
+      "doc_type": "po_received",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5000665726, PR 3000187518 Solvents/1610-G4_1.pdf",
+      "evidence": "Received PO with vendor, price, receipt date"
+    },
+    {
+      "demo_question": "Q-DEMO-A/B/C (PO orders, lead time, volume)",
+      "doc_type": "po_received",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5000665726, PR 3000187518 Solvents/LC267504_1.pdf",
+      "evidence": "Received PO with vendor, price, receipt date"
+    },
+    {
+      "demo_question": "Q-DEMO-A/B/C (PO orders, lead time, volume)",
+      "doc_type": "po_received",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5000665726, PR 3000187518 Solvents/PO 5000665726 - 01.27.2026 - Lines 1-2 (P)_1.pdf",
+      "evidence": "Received PO with vendor, price, receipt date"
+    },
+    {
+      "demo_question": "Q-DEMO-A/B/C (PO orders, lead time, volume)",
+      "doc_type": "po_received",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300168054, PR 3000188283 Tweezer Set for Electronics/10.16.2025 - PO 5300168054 - IGS_1.pdf",
+      "evidence": "Received PO with vendor, price, receipt date"
+    },
+    {
+      "demo_question": "Q-DEMO-A/B/C (PO orders, lead time, volume)",
+      "doc_type": "po_received",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/001 - Open Purchases/Soldering Material COCO1/Received/PO - 5300168054, PR 3000188283 Tweezer Set for Electronics/LUOHAI0006_1.pdf",
+      "evidence": "Received PO with vendor, price, receipt date"
+    },
+    {
+      "demo_question": "Q-DEMO-A/C (top ordered parts, volume)",
+      "doc_type": "pr_po_monthly_xlsx",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/10.0 Program Management/1.0 FEP/Matl/2024 01 PR & PO_1.xlsx",
+      "evidence": "Monthly structured PO spreadsheet with part numbers and quantities"
+    },
+    {
+      "demo_question": "Q-DEMO-A/C (top ordered parts, volume)",
+      "doc_type": "pr_po_monthly_xlsx",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/10.0 Program Management/1.0 FEP/Matl/2024 02 PR & PO_1.xlsx",
+      "evidence": "Monthly structured PO spreadsheet with part numbers and quantities"
+    },
+    {
+      "demo_question": "Q-DEMO-A/C (top ordered parts, volume)",
+      "doc_type": "pr_po_monthly_xlsx",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/10.0 Program Management/1.0 FEP/Matl/2024 03 PR & PO_1.xlsx",
+      "evidence": "Monthly structured PO spreadsheet with part numbers and quantities"
+    },
+    {
+      "demo_question": "Q-DEMO-A/C (top ordered parts, volume)",
+      "doc_type": "pr_po_monthly_xlsx",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/10.0 Program Management/1.0 FEP/Matl/2024 04 PR & PO_1.xlsx",
+      "evidence": "Monthly structured PO spreadsheet with part numbers and quantities"
+    },
+    {
+      "demo_question": "Q-DEMO-A/C (top ordered parts, volume)",
+      "doc_type": "pr_po_monthly_xlsx",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/10.0 Program Management/1.0 FEP/Matl/2024 05 PR & PO_1.xlsx",
+      "evidence": "Monthly structured PO spreadsheet with part numbers and quantities"
+    },
+    {
+      "demo_question": "Q-DEMO-E/F (replacement cost, most expensive)",
+      "doc_type": "invoice",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Azores/2024-05-25 thru 06-16 (Install)(SF)/Receipts/Hotel Moxy Invoice 1_1.pdf",
+      "evidence": "Invoice document with pricing information"
+    },
+    {
+      "demo_question": "Q-DEMO-E/F (replacement cost, most expensive)",
+      "doc_type": "invoice",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Azores/2024-05-25 thru 06-16 (Install)(SF)/Receipts/Hotel Moxy Invoice 2_1.pdf",
+      "evidence": "Invoice document with pricing information"
+    },
+    {
+      "demo_question": "Q-DEMO-E/F (replacement cost, most expensive)",
+      "doc_type": "invoice",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Djibouti/2024-10-6 thru 10-11 (ISTO-ASV )(Randall-Dettler)/Receipts/Dettler/Sent to MJ/Invoice_Order_GX00624171949_1.pdf",
+      "evidence": "Invoice document with pricing information"
+    },
+    {
+      "demo_question": "Q-DEMO-E/F (replacement cost, most expensive)",
+      "doc_type": "invoice",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Djibouti/2024-10-6 thru 10-11 (ISTO-ASV )(Randall-Dettler)/Shipping/2024-10-11 Return Hand-Carry/PGS-24-I-016 Invoice (jjr)_1.pdf",
+      "evidence": "Invoice document with pricing information"
+    },
+    {
+      "demo_question": "Q-DEMO-E/F (replacement cost, most expensive)",
+      "doc_type": "invoice",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Djibouti/2024-10-6 thru 10-11 (ISTO-ASV )(Randall-Dettler)/Shipping/2024-10-11 Return Hand-Carry/PGS-24-I-017 Invoice with tool bag list (jwd)_1.pdf",
+      "evidence": "Invoice document with pricing information"
+    },
+    {
+      "demo_question": "Q-DEMO-G (days part at site)",
+      "doc_type": "trip_report",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)/1_Site Selection/Reports/Cover Letter_SMC_(13-0021)_Trip Report (CDRL A045B)_Michigan_Jun13_1.docx",
+      "evidence": "Trip report with site visit dates and activities"
+    },
+    {
+      "demo_question": "Q-DEMO-G (days part at site)",
+      "doc_type": "trip_report",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-06-09 thru 06-14 (NEXION_Site Selection)(Brukardt)/1_Site Selection/Reports/Trip Report_(13-0021)_(CDRL A045B)_Michigan Site Selection Trip_9-14Jun13_Final(ISO)_1.pdf",
+      "evidence": "Trip report with site visit dates and activities"
+    },
+    {
+      "demo_question": "Q-DEMO-G (days part at site)",
+      "doc_type": "trip_report",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)/2013 July/Reports/Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_1.pdf",
+      "evidence": "Trip report with site visit dates and activities"
+    },
+    {
+      "demo_question": "Q-DEMO-G (days part at site)",
+      "doc_type": "trip_report",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-07-08 thru 07-12 (NEXION_Site Survey)(Brukardt-Heineman)/2013 July/Reports/Trip Report (13-0027)_Trip Report (CDRL A045B)_Alpena CRTC (8-12 Jul 13)_Corrected Copy_1.pdf",
+      "evidence": "Trip report with site visit dates and activities"
+    },
+    {
+      "demo_question": "Q-DEMO-G (days part at site)",
+      "doc_type": "trip_report",
+      "corpus_path": "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Reports/AlpenaAlliedSupportVerification/DCS (14-0001)_Trip Report (CDRL A045B)_Alpena Allied Support Verification Trip (15-18 Dec 13)_1.docx",
+      "evidence": "Trip report with site visit dates and activities"
+    }
+  ]
+}

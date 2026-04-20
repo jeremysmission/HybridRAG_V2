@@ -1,0 +1,494 @@
+{
+  "scan_date": "2026-04-19",
+  "scanner": "Miner-Agent",
+  "file_type": "Site Inventory Report xlsx",
+  "sheets_parsed": 26,
+  "results": [
+    {
+      "file": "Copy of Alpena Inventory  Spares Report_1.xlsx",
+      "site": "Alpena",
+      "sheet": "ALPENA SITE INVENTORY REPORT",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "SUB-SYSTEM",
+        "NOMENCLATURE",
+        "QPA",
+        "MODEL NUMBER",
+        "SERIAL NUMBER"
+      ],
+      "col_count": 6
+    },
+    {
+      "file": "Copy of Alpena Inventory  Spares Report_1.xlsx",
+      "site": "Alpena",
+      "sheet": "ALPENA SITE SPARES REPORT",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "SUB-SYSTEM",
+        "NOMENCLATURE",
+        "QPA",
+        "MODEL NUMBER",
+        "SERIAL NUMBER"
+      ],
+      "col_count": 6
+    },
+    {
+      "file": "Site Inventory Report_Alpena (2-8 Jun 2021)_1.xlsx",
+      "site": "Alpena",
+      "sheet": "ALPENA SITE INVENTORY REPORT",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "SUB-SYSTEM",
+        "NOMENCLATURE",
+        "QPA",
+        "MODEL NUMBER",
+        "SERIAL NUMBER",
+        "Actual Serial Number"
+      ],
+      "col_count": 7
+    },
+    {
+      "file": "Site Inventory Report_Alpena (2-8 Jun 2021)_1.xlsx",
+      "site": "Alpena",
+      "sheet": "ALPENA SITE SPARES REPORT",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "SUB-SYSTEM",
+        "NOMENCLATURE",
+        "QPA",
+        "MODEL NUMBER",
+        "SERIAL NUMBER",
+        "Actual Serial Number"
+      ],
+      "col_count": 7
+    },
+    {
+      "file": "Alpena Inventory & Spares (Pre-inventory)_1.xlsx",
+      "site": "Alpena",
+      "sheet": "Sheet1",
+      "header_row": 1,
+      "headers": [
+        "SUB-SYSTEM",
+        "ITEM TYPE",
+        "NOMENCLATURE",
+        "REVISION",
+        "PART NUMBER",
+        "OEM",
+        "MODEL NUMBER",
+        "SERIAL NUMBER",
+        "QTY",
+        "UM",
+        "REMARKS"
+      ],
+      "col_count": 11
+    },
+    {
+      "file": "Alpena Inventory & Spares - 2022-Jun-7_1.xlsx",
+      "site": "Alpena",
+      "sheet": "Sheet1",
+      "header_row": 1,
+      "headers": [
+        "SUB-SYSTEM",
+        "ITEM TYPE",
+        "NOMENCLATURE",
+        "REVISION",
+        "PART NUMBER",
+        "OEM",
+        "MODEL NUMBER",
+        "SERIAL NUMBER",
+        "QTY",
+        "UM",
+        "REMARKS"
+      ],
+      "col_count": 11
+    },
+    {
+      "file": "Spares Inventory (Ascension) (2018-10-08)_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Spares",
+      "header_row": 3,
+      "headers": [
+        "Description",
+        "PN",
+        "Rev",
+        "SN",
+        "Firm",
+        "IUID?",
+        "Qty",
+        "Notes"
+      ],
+      "col_count": 8
+    },
+    {
+      "file": "Spares Inventory (Ascension) (2018-10-08)_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Miscellaneous",
+      "header_row": 1,
+      "headers": [
+        "Description",
+        "PN",
+        "Rev",
+        "SN",
+        "Firm",
+        "IUID?",
+        "Qty",
+        "Notes"
+      ],
+      "col_count": 8
+    },
+    {
+      "file": "NG Packing List - ISTO Server_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Parts List",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "HWCI",
+        "SYSTEM",
+        "SUB-SYSTEM",
+        "STATE",
+        "ITEM TYPE",
+        "OEM",
+        "UM",
+        "NOMENCLATURE",
+        "DOC TYPE",
+        "DRAWING NUMBER",
+        "FIND NO",
+        "DOC REVISION",
+        "MODEL NUMBER",
+        "ALT P/N"
+      ],
+      "col_count": 74
+    },
+    {
+      "file": "NG Packing List - ISTO Server_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Property List",
+      "header_row": 1,
+      "headers": [
+        "SERIAL NUMBER",
+        "PART NUMBER",
+        "SYSTEM",
+        "NOMENCLATURE",
+        "OEM",
+        "MODEL NUMBER",
+        "UM",
+        "QTY",
+        "LOCATION",
+        "ALT LOCATION",
+        "INVT",
+        "BARCODE",
+        "GFE/CAP",
+        "CFO",
+        "UNIT PRICE"
+      ],
+      "col_count": 19
+    },
+    {
+      "file": "NG Packing List - ISTO Server_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Packing List",
+      "header_row": 1,
+      "headers": [
+        "Ship From:",
+        "Northrop Grumman Corp / IGS\n3535 Northrop Grumman Point\nColorado Springs, CO 80916",
+        "Ship To:",
+        "FB2520 45 LRS/LGRDDC\nATTN: ASCENSION AIRCRAFT\n972 S. PATRICK DRIVE, BLDG 822\nPATRICK AFB, FL 32925\n----------------------------------------\nFB2520 45 LRS/LGRDDC\nATTN; ASCENSION VESSEL\n972 S. PATRICK DR., BLDG 822\nPATRICK AFB, FL 32925\n321-494-7877/7878/4797"
+      ],
+      "col_count": 4
+    },
+    {
+      "file": "NG Packing List - PALLET_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Parts List",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "HWCI",
+        "SYSTEM",
+        "SUB-SYSTEM",
+        "STATE",
+        "ITEM TYPE",
+        "OEM",
+        "UM",
+        "NOMENCLATURE",
+        "DOC TYPE",
+        "DRAWING NUMBER",
+        "FIND NO",
+        "DOC REVISION",
+        "MODEL NUMBER",
+        "ALT P/N"
+      ],
+      "col_count": 74
+    },
+    {
+      "file": "NG Packing List - PALLET_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Property List",
+      "header_row": 1,
+      "headers": [
+        "SERIAL NUMBER",
+        "PART NUMBER",
+        "SYSTEM",
+        "NOMENCLATURE",
+        "OEM",
+        "MODEL NUMBER",
+        "UM",
+        "QTY",
+        "LOCATION",
+        "ALT LOCATION",
+        "INVT",
+        "BARCODE",
+        "GFE/CAP",
+        "CFO",
+        "UNIT PRICE"
+      ],
+      "col_count": 19
+    },
+    {
+      "file": "NG Packing List - PALLET_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Packing List",
+      "header_row": 1,
+      "headers": [
+        "Ship From:",
+        "FB2500 21 SW LGRDDC                                                                                                                      CP 719 556 8316                                                                                                                               955 PAINE ST BLDG 660                                                                                                                     PETERSON AFB           CO 80914",
+        "Ship To:",
+        "FB2520 45 LRS/LGRDDC\nATTN: ASCENSION AIRCRAFT\n972 S. PATRICK DRIVE, BLDG 822\nPATRICK AFB, FL 32925\n----------------------------------------\nFB2520 45 LRS/LGRDDC\nATTN; ASCENSION VESSEL\n972 S. PATRICK DR., BLDG 822\nPATRICK AFB, FL 32925\n321-494-7877/7878/4797"
+      ],
+      "col_count": 4
+    },
+    {
+      "file": "NG Packing List - GPS Antenna_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Parts List",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "HWCI",
+        "SYSTEM",
+        "SUB-SYSTEM",
+        "STATE",
+        "ITEM TYPE",
+        "OEM",
+        "UM",
+        "NOMENCLATURE",
+        "DOC TYPE",
+        "DRAWING NUMBER",
+        "FIND NO",
+        "DOC REVISION",
+        "MODEL NUMBER",
+        "ALT P/N"
+      ],
+      "col_count": 74
+    },
+    {
+      "file": "NG Packing List - GPS Antenna_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Property List",
+      "header_row": 1,
+      "headers": [
+        "SERIAL NUMBER",
+        "PART NUMBER",
+        "SYSTEM",
+        "NOMENCLATURE",
+        "OEM",
+        "MODEL NUMBER",
+        "UM",
+        "QTY",
+        "LOCATION",
+        "ALT LOCATION",
+        "INVT",
+        "BARCODE",
+        "GFE/CAP",
+        "CFO",
+        "UNIT PRICE"
+      ],
+      "col_count": 19
+    },
+    {
+      "file": "NG Packing List - GPS Antenna_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Packing List",
+      "header_row": 1,
+      "headers": [
+        "Ship From:",
+        "Northrop Grumman Corp / IGS\n3535 Northrop Grumman Point\nColorado Springs, CO 80916",
+        "Ship To:",
+        "FB2520 45 LRS/LGRDDC\nATTN: ASCENSION AIRCRAFT\n972 S. PATRICK DRIVE, BLDG 822\nPATRICK AFB, FL 32925\n----------------------------------------\nFB2520 45 LRS/LGRDDC\nATTN; ASCENSION VESSEL\n972 S. PATRICK DR., BLDG 822\nPATRICK AFB, FL 32925\n321-494-7877/7878/4797"
+      ],
+      "col_count": 4
+    },
+    {
+      "file": "NG Packing List - MultiItems_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Parts List",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "HWCI",
+        "SYSTEM",
+        "SUB-SYSTEM",
+        "STATE",
+        "ITEM TYPE",
+        "OEM",
+        "UM",
+        "NOMENCLATURE",
+        "DOC TYPE",
+        "DRAWING NUMBER",
+        "FIND NO",
+        "DOC REVISION",
+        "MODEL NUMBER",
+        "ALT P/N"
+      ],
+      "col_count": 74
+    },
+    {
+      "file": "NG Packing List - MultiItems_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Property List",
+      "header_row": 1,
+      "headers": [
+        "SERIAL NUMBER",
+        "PART NUMBER",
+        "SYSTEM",
+        "NOMENCLATURE",
+        "OEM",
+        "MODEL NUMBER",
+        "UM",
+        "QTY",
+        "LOCATION",
+        "ALT LOCATION",
+        "INVT",
+        "BARCODE",
+        "GFE/CAP",
+        "CFO",
+        "UNIT PRICE"
+      ],
+      "col_count": 19
+    },
+    {
+      "file": "NG Packing List - MultiItems_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Packing List",
+      "header_row": 1,
+      "headers": [
+        "Ship From:",
+        "Northrop Grumman Corp / IGS\n3535 Northrop Grumman Point\nColorado Springs, CO 80916",
+        "Ship To:",
+        "FB2520 45 LRS/LGRDDC\nATTN: ASCENSION AIRCRAFT\n972 S. PATRICK DRIVE, BLDG 822\nPATRICK AFB, FL 32925\n----------------------------------------\nFB2520 45 LRS/LGRDDC\nATTN; ASCENSION VESSEL\n972 S. PATRICK DR., BLDG 822\nPATRICK AFB, FL 32925\n321-494-7877/7878/4797"
+      ],
+      "col_count": 4
+    },
+    {
+      "file": "Ascension Island Inventory List (2021-10-25)_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Sheet1",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "SUB-SYSTEM",
+        "NOMENCLATURE",
+        "QPA",
+        "MODEL NUMBER",
+        "SERIAL NUMBER"
+      ],
+      "col_count": 6
+    },
+    {
+      "file": "Ascension Island Inventory List (2021-11-08)_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Sheet1",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "SUB-SYSTEM",
+        "NOMENCLATURE",
+        "QPA",
+        "MODEL NUMBER",
+        "SERIAL NUMBER"
+      ],
+      "col_count": 6
+    },
+    {
+      "file": "Ascension Island Inventory List (2021-11-10)_1.xlsx",
+      "site": "Ascension",
+      "sheet": "Sheet1",
+      "header_row": 1,
+      "headers": [
+        "PART NUMBER",
+        "SUB-SYSTEM",
+        "NOMENCLATURE",
+        "QPA",
+        "MODEL NUMBER",
+        "SERIAL NUMBER"
+      ],
+      "col_count": 6
+    },
+    {
+      "file": "Site Inventory Sheet (Okinawa-NEXION)-Seagren-Pitts (8-20-23)_1.xlsx",
+      "site": "Awase (Okinawa JP)",
+      "sheet": "Sheet1",
+      "header_row": 1,
+      "headers": [
+        "SUB-SYSTEM",
+        "ITEM TYPE",
+        "NOMENCLATURE",
+        "REVISION",
+        "PART NUMBER",
+        "OEM",
+        "MODEL NUMBER",
+        "SERIAL NUMBER",
+        "QTY",
+        "UM",
+        "REMARKS"
+      ],
+      "col_count": 11
+    },
+    {
+      "file": "Inventory - Curacao ISTO (2022-09-15)_1.xlsx",
+      "site": "Curacao",
+      "sheet": "Sheet1",
+      "header_row": 1,
+      "headers": [
+        "SUB-SYSTEM",
+        "ITEM TYPE",
+        "NOMENCLATURE",
+        "REVISION",
+        "PART NUMBER",
+        "OEM",
+        "MODEL NUMBER",
+        "SERIAL NUMBER",
+        "QTY",
+        "UM",
+        "REMARKS",
+        "PHOTO"
+      ],
+      "col_count": 12
+    },
+    {
+      "file": "Inventory from Samantha (2022-08-09)_1.xlsx",
+      "site": "Curacao",
+      "sheet": "Sheet1",
+      "header_row": 1,
+      "headers": [
+        "SUB-SYSTEM",
+        "ITEM TYPE",
+        "NOMENCLATURE",
+        "REVISION",
+        "PART NUMBER",
+        "OEM",
+        "MODEL NUMBER",
+        "SERIAL NUMBER",
+        "QTY",
+        "UM",
+        "REMARKS"
+      ],
+      "col_count": 11
+    }
+  ]
+}

@@ -310,13 +310,13 @@ class CRAGVerifier:
             if match:
                 data = json.loads(match.group(1))
             else:
-                logger.warning("CRAG grading returned non-JSON, defaulting to CORRECT")
+                logger.warning("CRAG grading returned non-JSON, failing closed to AMBIGUOUS")
                 return GradingResult(
-                    relevance_score=1.0,
+                    relevance_score=0.0,
                     supported_claims=[],
                     unsupported_claims=[],
-                    reasoning="Grading parse failure — defaulting to pass-through",
-                    outcome=CRAGOutcome.CORRECT,
+                    reasoning="Grading parse failure -- fail closed to AMBIGUOUS",
+                    outcome=CRAGOutcome.AMBIGUOUS,
                 )
 
         score = float(data.get("relevance_score", 1.0))

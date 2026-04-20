@@ -1,0 +1,141 @@
+{
+  "scan_date": "2026-04-20",
+  "scanner": "Miner-Agent",
+  "procurement": {
+    "source": "E:\\CorpusTransfr\u000berified\\IGS\u0005.0 Logistics\\Procurement",
+    "total_files": {
+      "open_purchases": 310,
+      "received": 2935,
+      "subcontracts": 80,
+      "fep_recon": 28,
+      "ncaj": 16
+    },
+    "distinct_po_numbers": 61,
+    "distinct_pr_numbers": 1,
+    "sample_pos": [
+      "1246002",
+      "5000381112",
+      "5000436557",
+      "5000489252",
+      "5000492911",
+      "5000507069",
+      "5000509112",
+      "5000524149",
+      "5000629092",
+      "5000646999",
+      "5000658042",
+      "5000665726",
+      "5000682276",
+      "5000684414",
+      "5000685241",
+      "5000685459",
+      "5000686170",
+      "5000686383",
+      "5000687591",
+      "5000688472"
+    ],
+    "received_contract_periods": [
+      {
+        "folder": "American Samoa ISTO Installation",
+        "file_count": 20
+      },
+      {
+        "folder": "Azores NEXION Install",
+        "file_count": 292
+      },
+      {
+        "folder": "DMEA NEXION Installation (1 Jul 25 - 31 Dec 25)",
+        "file_count": 83
+      },
+      {
+        "folder": "DPS4D-SN17, SN18 Packing List",
+        "file_count": 2
+      },
+      {
+        "folder": "ISTO & NEXION Sustainment Base Year (1 Aug 22 - 31 Jul 23)",
+        "file_count": 54
+      },
+      {
+        "folder": "ISTO Sustainment Base Year (1 Aug 22 - 31 Jul 23)",
+        "file_count": 108
+      },
+      {
+        "folder": "ISTO Sustainment NEW BASE YR (1Aug 25 - 31 Jul 26)",
+        "file_count": 60
+      },
+      {
+        "folder": "ISTO Sustainment OY1 (1 Aug 23 - 31 Jul 24)",
+        "file_count": 46
+      },
+      {
+        "folder": "ISTO Sustainment OY2 (1 Aug 24 - 31 Jul 25)",
+        "file_count": 88
+      },
+      {
+        "folder": "NEXION Sustainment Base Year (1 Aug 22 - 31 Jul 23)",
+        "file_count": 450
+      },
+      {
+        "folder": "NEXION Sustainment NEW BASE YR (1 Aug 25 - 31 Jul 26)",
+        "file_count": 320
+      },
+      {
+        "folder": "NEXION Sustainment OY1 (1 Aug 23 - 31 Jul 24)",
+        "file_count": 436
+      },
+      {
+        "folder": "NEXION Sustainment OY2 (1 Aug 24 - 31 Jul 25)",
+        "file_count": 202
+      },
+      {
+        "folder": "Niger ISTO Installation",
+        "file_count": 188
+      },
+      {
+        "folder": "Okinawa Installation",
+        "file_count": 364
+      },
+      {
+        "folder": "Palau ISTO Installation",
+        "file_count": 200
+      },
+      {
+        "folder": "PO - 5300052607, PR 31409455, C 15920483 LLL Surveyor (PBJ)($11,410.00)",
+        "file_count": 12
+      },
+      {
+        "folder": "PR - 31414382, C 15958683 NG Australia Custorms Entries GEODIS ($1,012.33)",
+        "file_count": 10
+      }
+    ],
+    "year_coverage": {}
+  },
+  "shipments": {
+    "source": "E:\\CorpusTransfr\u000berified\\IGS\u0005.0 Logistics\\Shipments",
+    "per_year": {
+      "2022": 41,
+      "2023": 298,
+      "2024": 319,
+      "2025": 230,
+      "2026": 128
+    },
+    "total_shipment_files": 1016,
+    "top_destinations": {
+      "American Samoa": 3,
+      "Curacao": 3,
+      "Diego Garcia": 3,
+      "Eareckson": 3,
+      "Eielson": 3,
+      "Fairford": 3,
+      "Guam": 3,
+      "Kwaj": 3,
+      "Learmonth": 3,
+      "Misawa": 3,
+      "Wake": 3,
+      "Misc": 3,
+      "Okinawa": 2,
+      "Singapore": 2,
+      "Ascension": 2
+    }
+  }
+}

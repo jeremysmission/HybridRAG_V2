@@ -1,0 +1,55 @@
+{
+  "scan_date": "2026-04-20",
+  "scanner": "Miner-Agent",
+  "source": "E:\\CorpusTransfr (Site Visits section)",
+  "total_distinct_visit_folders": 331,
+  "visit_type_counts": {
+    "Other": 136,
+    "ASV": 95,
+    "RTS": 48,
+    "Install": 40,
+    "Survey": 23,
+    "Upgrade": 7,
+    "Selection": 4,
+    "Repair": 3,
+    "Flyaway": 1
+  },
+  "files_by_type": {
+    "ASV": 32419,
+    "RTS": 10140,
+    "Install": 38715,
+    "Survey": 7668,
+    "Upgrade": 179
+  },
+  "trip_report_deliverables": {
+    "pdf_docx": 336,
+    "cdrl_a045b": 302
+  },
+  "sample_asv_visits": [
+    "Alpena/2015-08 (NEXION_ASV)",
+    "Alpena/2017-08-13 thru 08-18 (NEXION_ASV)(Brukardt-Pitts)",
+    "Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)",
+    "Alpena/2022-06-06 thru 06-09 (NEXION-ASV)(Seagren-Vinh)",
+    "Alpena/2025-06-15 thru 06-20 (NEXION -ASV) (Randall-Womelsdorff-London)",
+    "Ascension/2015-10-25 thru 11-05 (NEXION_ASV)(ISTO_ASV-RTS)(Brukardt-Dettler)",
+    "Guam/2023-04-24 thru 05-05 (NEXION RTS-ASV and ISTO ASV)(Pitts-Seagren-Sepp)",
+    "Vandenberg/2010/2010 ASV Tech Report"
+  ],
+  "sample_rts_visits": [
+    "Alpena/2016-07-15 thru 07-18 (NEXION_RTS)",
+    "Alpena/2017-10-24 thru 10-27 (NEXION_RTS)(Pitts-Nachbar)",
+    "Ascension/2018-05-27 thru 05-30 (NEXION_RTS)(Hayden)",
+    "Ascension/2022-04-11 thru 04-29 (NEXION-RTS)(Dexter-Claire)",
+    "Eglin/2019-10 thru (NEXION_ASV-RTS)",
+    "Thule/2019-06-06 thru 09-07 (Thule NEXION Install)"
+  ],
+  "notes": [
+    "331 distinct visit folders across 31 sites.",
+    "ASV (95 visits, 32K files) is the dominant recurring maintenance type.",
+    "RTS (48 visits, 10K files) is the second most common.",
+    "Install visits (40, 39K files) dominate early years (2008-2014), high file count due to installation documentation.",
+    "Many visits are dual-tagged ASV-RTS.",
+    "Trip Reports (336 PDF/DOCX, 302 CDRL A045B tagged) are the primary structured deliverable.",
+    "136 \"Other\" visits include data collection, cable replacement, GPS repair, decommissioning."
+  ]
+}

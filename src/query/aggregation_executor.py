@@ -85,14 +85,14 @@ def parse_top_n(query: str, default: int = 5) -> int:
     return default
 
 
-def parse_year_range(query: str) -> tuple[int | None, int | None]:
+def parse_year_range(query: str, anchor_year: int | None = None) -> tuple[int | None, int | None]:
     """
     Accepts shapes like:
       - "in 2024"                    → (2024, 2024)
       - "from 2022-2025"             → (2022, 2025)
       - "between 2022 and 2025"      → (2022, 2025)
-      - "past 7 years"               → (current-6, current) — current assumed 2025
-      - "each year for the past 7"   → (2019, 2025)
+      - "past 7 years"               → (anchor-6, anchor) — anchor = provided or today
+      - "each year for the past 7"   → (anchor-6, anchor)
     """
     if not query:
         return (None, None)
@@ -108,8 +108,10 @@ def parse_year_range(query: str) -> tuple[int | None, int | None]:
     m = re.search(r"\bpast\s+(\d+)\s+years?\b", query, re.IGNORECASE)
     if m:
         span = int(m.group(1))
-        # Anchor to 2025 as "current" (corpus latest year is 2025)
-        return (2025 - span + 1, 2025)
+        from datetime import date as _date
+        if anchor_year is None:
+            anchor_year = _date.today().year
+        return (anchor_year - span + 1, anchor_year)
 
     m = re.search(r"\bin\s+(20[0-3]\d)\b", query, re.IGNORECASE)
     if m:
@@ -247,9 +249,22 @@ class AggregationExecutor:
             return None
         return self.execute(query)
 
+    def _max_substrate_year(self) -> int | None:
+        """Return MAX(event_year) from the attached failure_events store."""
+        try:
+            row = self.store._conn.execute(
+                "SELECT MAX(event_year) FROM failure_events WHERE event_year IS NOT NULL"
+            ).fetchone()
+            if row and row[0]:
+                from datetime import date as _date
+                return min(int(row[0]), _date.today().year)
+        except Exception:
+            pass
+        return None
+
     def execute(self, query: str) -> AggregationResult:
         top_n = parse_top_n(query)
-        year_from, year_to = parse_year_range(query)
+        year_from, year_to = parse_year_range(query, anchor_year=self._max_substrate_year())
         system = self.aliases.resolve_system(query)
         site = self.aliases.resolve_site(query)
         # Narrow substrate-fallback path: the aliases YAML is known to be loaded
@@ -626,6 +641,318 @@ def _detect_unresolved_site_reference(
             continue
         return token  # first unresolved site-looking hit, original casing
     return ""
+
+
+# ---------------------------------------------------------------------------
+# Cross-substrate join executors
+# ---------------------------------------------------------------------------
+
+_COST_TRIGGERS = re.compile(
+    r"\b(?:cost\s+per\s+failure|replacement\s+cost|cost\s+of\s+failure|failure\s+cost)\b",
+    re.IGNORECASE,
+)
+_VENDOR_TRIGGERS = re.compile(
+    r"\b(?:top\s+vendors?|highest\s+spend|vendor\s+spend|most\s+spent)\b",
+    re.IGNORECASE,
+)
+_TURNOVER_TRIGGERS = re.compile(
+    r"\b(?:inventory\s+turnover|turnover\s+rate|stock\s+turnover)\b",
+    re.IGNORECASE,
+)
+_EXPOSURE_TRIGGERS = re.compile(
+    r"\b(?:exposure\s+per\s+site|site\s+exposure|quantity\s+at\s+site|deployed\s+count)\b",
+    re.IGNORECASE,
+)
+_SPARES_TRIGGERS = re.compile(
+    r"\b(?:spares\s+on\s+hand|spares\s+vs|spares\s+needed|spares\s+gap)\b",
+    re.IGNORECASE,
+)
+
+
+def detect_cross_substrate_intent(query: str) -> str | None:
+    """Return the cross-substrate executor name if query matches, else None."""
+    if _COST_TRIGGERS.search(query):
+        return "cost_per_failure"
+    if _VENDOR_TRIGGERS.search(query):
+        return "top_vendors_by_spend"
+    if _TURNOVER_TRIGGERS.search(query):
+        return "inventory_turnover"
+    if _EXPOSURE_TRIGGERS.search(query):
+        return "exposure_per_site"
+    if _SPARES_TRIGGERS.search(query):
+        return "spares_on_hand_vs_needed"
+    return None
+
+
+class CrossSubstrateExecutor:
+    """Deterministic cross-substrate join queries.
+
+    Joins failure_events with po_pricing and/or installed_base substrates
+    when both are available. Falls through gracefully when substrates are
+    missing (returns None, pipeline continues to RAG).
+    """
+
+    def __init__(self, data_dir: str | Path = "data"):
+        self._data_dir = Path(data_dir)
+        self._po_pricing_conn = None
+        self._installed_base_conn = None
+        self._failure_conn = None
+        self._attach()
+
+    def _attach(self):
+        import sqlite3
+        fe_path = self._data_dir / "index" / "failure_events.sqlite3"
+        if fe_path.exists():
+            self._failure_conn = sqlite3.connect(str(fe_path), check_same_thread=False)
+            self._failure_conn.row_factory = sqlite3.Row
+
+        po_path = self._data_dir / "index" / "po_pricing.sqlite3"
+        if po_path.exists():
+            self._po_pricing_conn = sqlite3.connect(str(po_path), check_same_thread=False)
+            self._po_pricing_conn.row_factory = sqlite3.Row
+
+        ib_path = self._data_dir / "index" / "installed_base.sqlite3"
+        if ib_path.exists():
+            self._installed_base_conn = sqlite3.connect(str(ib_path), check_same_thread=False)
+            self._installed_base_conn.row_factory = sqlite3.Row
+
+    _SQL_INJECTION_PAT = re.compile(
+        r"\b(?:DROP\s+TABLE|DELETE\s+FROM|INSERT\s+INTO|UPDATE\s+\w+\s+SET"
+        r"|UNION\s+SELECT|;\s*--|ALTER\s+TABLE|EXEC\s*\(|xp_)\b",
+        re.IGNORECASE,
+    )
+
+    def try_execute(self, query: str) -> AggregationResult | None:
+        intent = detect_cross_substrate_intent(query)
+        if intent is None:
+            return None
+
+        if self._SQL_INJECTION_PAT.search(query):
+            return self._red_result(query, intent, "hostile input detected -- query rejected")
+
+        unresolved = self._check_unresolved_references(query)
+        if unresolved:
+            return self._red_result(query, intent, unresolved)
+
+        handler = getattr(self, f"_exec_{intent}", None)
+        if handler is None:
+            return None
+        try:
+            return handler(query)
+        except Exception as e:
+            logger.warning("CrossSubstrateExecutor %s failed: %s", intent, e)
+            return None
+
+    def _exec_cost_per_failure(self, query: str) -> AggregationResult | None:
+        if not self._failure_conn or not self._po_pricing_conn:
+            return self._substrate_missing("cost_per_failure", "po_pricing")
+        part = self._extract_part(query)
+        year_from, year_to = parse_year_range(query)
+        sql = """
+            SELECT fe.part_number, fe.cnt as failure_count,
+                   COALESCE(pp.avg_price, 0) as avg_unit_price,
+                   fe.cnt * COALESCE(pp.avg_price, 0) as total_cost
+            FROM (SELECT part_number, COUNT(*) as cnt FROM failure_events
+                  WHERE part_number != '' {year_filter} GROUP BY part_number) fe
+            LEFT JOIN (SELECT part_number, AVG(unit_price) as avg_price
+                       FROM po_pricing WHERE unit_price > 0 GROUP BY part_number) pp
+            ON fe.part_number = pp.part_number
+            ORDER BY total_cost DESC LIMIT ?
+        """
+        top_n = parse_top_n(query, default=10)
+        year_filter = ""
+        params: list = []
+        if year_from and year_to:
+            year_filter = "AND event_year >= ? AND event_year <= ?"
+            params = [year_from, year_to]
+        params.append(top_n)
+
+        try:
+            self._failure_conn.execute("ATTACH DATABASE ? AS po", (str(self._data_dir / "index" / "po_pricing.sqlite3"),))
+            rows = self._failure_conn.execute(
+                sql.replace("{year_filter}", year_filter).replace("po_pricing", "po.po_pricing"),
+                params,
+            ).fetchall()
+            self._failure_conn.execute("DETACH DATABASE po")
+        except Exception as e:
+            logger.warning("cost_per_failure SQL failed: %s", e)
+            try:
+                self._failure_conn.execute("DETACH DATABASE po")
+            except Exception:
+                pass
+            return self._substrate_missing("cost_per_failure", f"SQL error: {e}")
+
+        if not rows:
+            return self._red_result(query, "cost_per_failure", "no matching rows")
+
+        substrate_sources = {
+            "failure_events": str(self._data_dir / "index" / "failure_events.sqlite3"),
+            "po_pricing": str(self._data_dir / "index" / "po_pricing.sqlite3"),
+        }
+        lines = [
+            "## Cost Per Failure Analysis",
+            "",
+            f"**Query:** {query}",
+            f"**Confidence tier:** GREEN",
+            f"**Substrates:** failure_events + po_pricing (cross-join)",
+            "",
+            "| Rank | Part Number | Failures | Avg Unit Price | Total Cost |",
+            "|------|-------------|----------|----------------|------------|",
+        ]
+        for i, r in enumerate(rows, 1):
+            lines.append(f"| {i} | `{r['part_number']}` | {r['failure_count']} | ${r['avg_unit_price']:,.2f} | ${r['total_cost']:,.2f} |")
+
+        return AggregationResult(
+            tier="GREEN", query=query,
+            parsed_params={"intent": "cost_per_failure", "year_from": year_from, "year_to": year_to, "substrate_sources": substrate_sources},
+            ranked_rows=[dict(r) for r in rows], per_year_rows={},
+            evidence_by_part={}, substrate_coverage={},
+            context_text="\n".join(lines), sources=list(substrate_sources.values()),
+        )
+
+    def _exec_top_vendors_by_spend(self, query: str) -> AggregationResult | None:
+        if not self._po_pricing_conn:
+            return self._substrate_missing("top_vendors_by_spend", "po_pricing")
+        top_n = parse_top_n(query, default=10)
+        year_from, year_to = parse_year_range(query)
+
+        params: list = []
+        where_parts = ["vendor != ''"]
+        if year_from:
+            where_parts.append("po_date >= ?")
+            params.append(f"{year_from}-01-01")
+        if year_to:
+            where_parts.append("po_date <= ?")
+            params.append(f"{year_to}-12-31")
+        where_clause = " AND ".join(where_parts)
+
+        sql = f"""
+            SELECT vendor, COUNT(*) as po_count,
+                   SUM(unit_price * COALESCE(qty, 1)) as total_spend,
+                   COUNT(DISTINCT part_number) as distinct_parts
+            FROM po_pricing WHERE {where_clause}
+            GROUP BY vendor ORDER BY total_spend DESC LIMIT ?
+        """
+        params.append(top_n)
+
+        rows = self._po_pricing_conn.execute(sql, params).fetchall()
+        if not rows:
+            return self._red_result(query, "top_vendors_by_spend", "no matching vendor rows")
+
+        lines = [
+            "## Top Vendors by Spend",
+            "",
+            f"**Query:** {query}",
+            f"**Confidence tier:** GREEN",
+            "",
+            "| Rank | Vendor | PO Count | Distinct Parts | Total Spend |",
+            "|------|--------|----------|----------------|-------------|",
+        ]
+        for i, r in enumerate(rows, 1):
+            lines.append(f"| {i} | {r['vendor']} | {r['po_count']} | {r['distinct_parts']} | ${r['total_spend']:,.2f} |")
+
+        return AggregationResult(
+            tier="GREEN", query=query,
+            parsed_params={"intent": "top_vendors_by_spend", "top_n": top_n},
+            ranked_rows=[dict(r) for r in rows], per_year_rows={},
+            evidence_by_part={}, substrate_coverage={},
+            context_text="\n".join(lines), sources=[],
+        )
+
+    def _exec_inventory_turnover(self, query: str) -> AggregationResult | None:
+        if not self._failure_conn or not self._installed_base_conn:
+            return self._substrate_missing("inventory_turnover", "installed_base")
+        return self._substrate_missing("inventory_turnover", "cross-join not yet wired")
+
+    def _exec_exposure_per_site(self, query: str) -> AggregationResult | None:
+        if not self._installed_base_conn:
+            return self._substrate_missing("exposure_per_site", "installed_base")
+        return self._substrate_missing("exposure_per_site", "installed_base query not yet wired")
+
+    def _exec_spares_on_hand_vs_needed(self, query: str) -> AggregationResult | None:
+        if not self._installed_base_conn or not self._po_pricing_conn:
+            return self._substrate_missing("spares_on_hand_vs_needed", "installed_base + po_pricing")
+        return self._substrate_missing("spares_on_hand_vs_needed", "cross-join not yet wired")
+
+    def _check_unresolved_references(self, query: str) -> str:
+        """Return error message if query references unknown system/site, else ''."""
+        try:
+            aliases_path = self._data_dir.parent / "config" / "canonical_aliases.yaml"
+            if not aliases_path.exists():
+                aliases_path = Path("config/canonical_aliases.yaml")
+            aliases = AliasTables.load(aliases_path)
+
+            known_systems = {c.upper() for c in aliases.system_to_aliases}
+            if self._failure_conn:
+                try:
+                    rows = self._failure_conn.execute(
+                        "SELECT DISTINCT system FROM failure_events WHERE system != ''"
+                    ).fetchall()
+                    known_systems |= {r[0].upper() for r in rows if r[0]}
+                except Exception:
+                    pass
+
+            known_sites = set(aliases.site_alias_lookup.keys())
+            substrate_sites: set[str] = set()
+            if self._failure_conn:
+                try:
+                    rows = self._failure_conn.execute(
+                        "SELECT DISTINCT site_token FROM failure_events WHERE site_token != ''"
+                    ).fetchall()
+                    substrate_sites = {r[0].lower() for r in rows if r[0]}
+                except Exception:
+                    pass
+
+            system = aliases.resolve_system(query)
+            site = aliases.resolve_site(query)
+
+            unresolved_sys = _detect_unresolved_system_reference(
+                query, system, aliases.system_to_aliases, known_systems,
+            )
+            if unresolved_sys:
+                return f"unknown system '{unresolved_sys}' -- not in canonical aliases or substrate"
+
+            unresolved_site = _detect_unresolved_site_reference(
+                query, site, aliases.site_alias_lookup, substrate_sites,
+                known_systems=known_systems,
+            )
+            if unresolved_site:
+                return f"unknown site '{unresolved_site}' -- not in canonical aliases or substrate"
+        except Exception as e:
+            logger.debug("Unresolved reference check failed: %s", e)
+        return ""
+
+    def _extract_part(self, query: str) -> str:
+        m = re.search(r"\b([A-Z]{2,}-\d{3,}|SEMS3D-\d+|[A-Z]\d{4,})\b", query)
+        return m.group(1) if m else ""
+
+    def _substrate_missing(self, intent: str, missing: str) -> AggregationResult:
+        return AggregationResult(
+            tier="YELLOW", query="",
+            parsed_params={"intent": intent},
+            ranked_rows=[], per_year_rows={},
+            evidence_by_part={}, substrate_coverage={},
+            context_text=(
+                f"## {intent.replace('_', ' ').title()} -- SUBSTRATE PENDING\n\n"
+                f"This query requires the `{missing}` substrate which is not yet "
+                f"available on Lane 1.\n\n"
+                f"**Status:** Substrate is being built on Lane 2/3. "
+                f"When mirrored, this query will return deterministic results.\n\n"
+                f"*The system refuses to estimate cross-substrate joins without "
+                f"the underlying data.*"
+            ),
+            sources=[], message=f"waiting on {missing} substrate",
+        )
+
+    def _red_result(self, query: str, intent: str, reason: str) -> AggregationResult:
+        return AggregationResult(
+            tier="RED", query=query,
+            parsed_params={"intent": intent},
+            ranked_rows=[], per_year_rows={},
+            evidence_by_part={}, substrate_coverage={},
+            context_text=f"## {intent} -- NO DATA\n\n**Reason:** {reason}",
+            sources=[], message=reason,
+        )
 
 
 # ---------------------------------------------------------------------------

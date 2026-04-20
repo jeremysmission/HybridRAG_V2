@@ -1,0 +1,364 @@
+{
+  "scan_date": "2026-04-19",
+  "corpus_root": "E:\\CorpusTransfr\u000berified\\IGS",
+  "corpus_metadata_source": "E:\\CorpusTransfr\file_state.sqlite3",
+  "family_patterns": [
+    {
+      "pattern": "%as-built%",
+      "pattern_name": "as_built_all",
+      "description": "All as-built documents",
+      "count": 4095,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Installation Summary Documents/Attachments/Ascension Island_As-Built_20081010 RevA_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2012-08-04 thru 08-25 (NEXION_Install)(ARINC_Heineman-Brukardt-Dettler)/Sys 08 Install 09-Guam/Installation Summary Documents/Archive/San Vito_As-Built Drawings_200811005 RevA_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2012-08-04 thru 08-25 (NEXION_Install)(ARINC_Heineman-Brukardt-Dettler)/Sys 08 Install 09-Guam/Installation Summary Documents/Attachments/Guam_As-Built Drawings_200811009_RevA_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Kwajalein/2025-1-19 thru 28 (RTS-ASV)(JR-CF)/Drawings/201811050-- ISTO As-Built Drawings (Kwajalein) (2025-01-17)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Wake/2025-10-02 thru 10-19 (ASV)(FS-JR)/SEMS3D-37637 NEXION As-Built Drawings Wake Island (200811016--) (CDRL A033)_1.pdf"
+      ]
+    },
+    {
+      "pattern": "%inventory%",
+      "pattern_name": "inventory_broad",
+      "description": "All inventory-tagged documents",
+      "count": 1870,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Misc/Additional Inventory_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2017-08-13 thru 08-18 (NEXION_ASV)(Brukardt-Pitts)/Spares Inventory (Alpena)_(2017-08-16)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Copy of Alpena Inventory  Spares Report_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Site Inventory Report_Alpena (2-8 Jun 2021)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Site Inventory Report_Alpena (2-8 Jun 2021)_1.xlsx"
+      ]
+    },
+    {
+      "pattern": "%equipment%",
+      "pattern_name": "equipment_list_docs",
+      "description": "Equipment lists and packing lists",
+      "count": 1630,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2015-08 (NEXION_ASV)/Equipment shipped (1)_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2015-08 (NEXION_ASV)/Equipment shipped (2)_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2017-08-13 thru 08-18 (NEXION_ASV)(Brukardt-Pitts)/Photographs/Franks/Shipped Equipment (1)_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2017-08-13 thru 08-18 (NEXION_ASV)(Brukardt-Pitts)/Photographs/Franks/Shipped Equipment (2)_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 08 - SITE MAPS, PICTURES, and DIAGRAMS/Site Install Photos/ISTOrackviewofequipment_1.JPG"
+      ]
+    },
+    {
+      "pattern": "%as-built%",
+      "pattern_name": "as_built_pdf",
+      "description": "As-built drawings and documents (PDF)",
+      "count": 949,
+      "ext_filter": ".pdf",
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Installation Summary Documents/Attachments/Ascension Island_As-Built_20081010 RevA_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2012-08-04 thru 08-25 (NEXION_Install)(ARINC_Heineman-Brukardt-Dettler)/Sys 08 Install 09-Guam/Installation Summary Documents/Archive/San Vito_As-Built Drawings_200811005 RevA_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2012-08-04 thru 08-25 (NEXION_Install)(ARINC_Heineman-Brukardt-Dettler)/Sys 08 Install 09-Guam/Installation Summary Documents/Attachments/Guam_As-Built Drawings_200811009_RevA_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Kwajalein/2025-1-19 thru 28 (RTS-ASV)(JR-CF)/Drawings/201811050-- ISTO As-Built Drawings (Kwajalein) (2025-01-17)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Wake/2025-10-02 thru 10-19 (ASV)(FS-JR)/SEMS3D-37637 NEXION As-Built Drawings Wake Island (200811016--) (CDRL A033)_1.pdf"
+      ]
+    },
+    {
+      "pattern": "%calibration%",
+      "pattern_name": "calibration_records",
+      "description": "Calibration records",
+      "count": 782,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/ScreenCaptures/DCARTScreenCaps/ProgramScreenCaps/033TrackerCalibrationEvaluation_1.png",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Tracker Calibration/Archive/TrackerCalibration_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Tracker Calibration/Image Captures/Echogram Option_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Tracker Calibration/Image Captures/Ionogram Tab_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Tracker Calibration/Image Captures/Program 33_1.jpg"
+      ]
+    },
+    {
+      "pattern": "%site%inventory%",
+      "pattern_name": "site_inventory_all",
+      "description": "All site inventory docs (includes PDF, photos)",
+      "count": 594,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Misc/Additional Inventory_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2017-08-13 thru 08-18 (NEXION_ASV)(Brukardt-Pitts)/Spares Inventory (Alpena)_(2017-08-16)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Copy of Alpena Inventory  Spares Report_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Site Inventory Report_Alpena (2-8 Jun 2021)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Site Inventory Report_Alpena (2-8 Jun 2021)_1.xlsx"
+      ]
+    },
+    {
+      "pattern": "%installation%summary%",
+      "pattern_name": "installation_summary",
+      "description": "Installation summary documentation",
+      "count": 456,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Installation Summary Report/AES_(14-0019)_Technical Report_(CDRL A045B and A012)_Installation Summary Documentation_AlpenaNEXION_WithCoverLtr_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Installation Summary Report/SMC_(14-0019)_Technical Report_(CDRL A045B and A012)_Installation Summary Documentation_AlpenaNEXION_WithCoverLtrf_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Installation Summary Report/SupportingDocs/200811012 Alpena 5-6-2014_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Installation Summary Report/SupportingDocs/ATPAtch3_Alpena_Signed_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2013-09-06 thru 09-10 (NEXION_System Install Prep Verification)(Brukardt)/5_Install/Sys 11 Install 10-Alpena/Installation Summary Report/SupportingDocs/COS-037 DCS (14-0019)_Technical Report, Installation Summary Documentation, Alpena NEXION (CDRL A045B and A012)_1.docx"
+      ]
+    },
+    {
+      "pattern": "%acceptance%test%",
+      "pattern_name": "acceptance_test",
+      "description": "Acceptance test plans and procedures",
+      "count": 357,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/American Samoa/2024.01.14-2024.01.19 (GPS Repair) Pitts/Deliverables Report IGSI-812 Installation Acceptance Test Plan and Procedures - American Samoa ISTO_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Maintenance Tasks/Cables/Site Acceptance Test Plan (LLL)_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Maintenance Tasks/DPS-4D Testing/Site Acceptance Test Plan for NEXION (Original Installation)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Awase (Okinawa JP)/2023-08-18 thru 09-09 (Install 5 - FP)/(Revised) Deliverables Report IGSI-103 Okinawa NEXION Installation Acceptance Test Plan and Procedures (A006)_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2012-08-04 thru 08-25 (NEXION_Install)(ARINC_Heineman-Brukardt-Dettler)/Sys 08 Install 09-Guam/Installation Summary Documents/Archive/Attachments/Atch 2_Test Document/Site Acceptance Test Plan_Rev 1_1  Nov 09_1.doc"
+      ]
+    },
+    {
+      "pattern": "%as-built%",
+      "pattern_name": "as_built_xlsx",
+      "description": "As-built spreadsheet variants",
+      "count": 348,
+      "ext_filter": ".xlsx",
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/004_Drawings/3-NEXION/2_As Built Drawings (Sites)/As-Built Sheets (2021-10-28)_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/004_Drawings/3-NEXION/Ascension Island - AAF (200811010)/3- As-Built/200811010-C (NEXION As-Built Drawings)(Ascension Island)(Working)/NEXION As-Built Drawings, Ascension Changes-Edits (Rev B to Rev C) (2024-03-17)_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/004_Drawings/3-NEXION/Eareckson AS - Alaska, US (200811015)/3- As-Built/200811015-A (NEXION As-Built Drawings)(Eareckson AK)(Working)/Eareckson Hardware-Tools Order_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/004_Drawings/3-NEXION/Eareckson AS - Alaska, US (200811015)/3- As-Built/Eareckson OB Light HW_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/004_Drawings/3-NEXION/Guam - US Territory (200811009)/3- As-Built/200811001-I SHT 05E Tensioning Reading Table (TYAD Guam Conversion) (2023-04-27)_1.xlsx"
+      ]
+    },
+    {
+      "pattern": "%site%inventory%",
+      "pattern_name": "site_inventory_xlsx",
+      "description": "Tabular site inventory reports — HIGHEST YIELD for installed-base",
+      "count": 86,
+      "ext_filter": ".xlsx",
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Copy of Alpena Inventory  Spares Report_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Site Inventory/Site Inventory Report_Alpena (2-8 Jun 2021)_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2022-06-06 thru 06-09 (NEXION-ASV)(Seagren-Vinh)/Site Inventory/Alpena Inventory & Spares (Pre-inventory)_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2022-06-06 thru 06-09 (NEXION-ASV)(Seagren-Vinh)/Site Inventory/Alpena Inventory & Spares - 2022-Jun-7_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2018-09-29 thru 10-18 (NEXION_ASV-OS Upgrade)(ISTO_ASV)(Pitts-Womelsdorff)/Spares Inventory (Ascension) (2018-10-08)_1.xlsx"
+      ]
+    },
+    {
+      "pattern": "%test%card%",
+      "pattern_name": "test_cards",
+      "description": "Pre/post deployment test cards",
+      "count": 71,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 12 - TEST PLAN, TEST REPORT, TEST CARDS/POST-DEPLOYMENT/Ascension install cable continuity test cards_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 12 - TEST PLAN, TEST REPORT, TEST CARDS/POST-DEPLOYMENT/Ascension install checklist_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 12 - TEST PLAN, TEST REPORT, TEST CARDS/POST-DEPLOYMENT/Ascension install test cards_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 12 - TEST PLAN, TEST REPORT, TEST CARDS/PRE-DEPLOYMENT/SCINDA Suite Test Cards_v1.0.5_post-baseline_updates_Site5_laptop_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 12 - TEST PLAN, TEST REPORT, TEST CARDS/PRE-DEPLOYMENT/Site 5 Novatel Receiver_1.txt"
+      ]
+    },
+    {
+      "pattern": "%serial%number%",
+      "pattern_name": "serial_number",
+      "description": "Serial number photos and docs",
+      "count": 69,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2021-06-02 thru 06-08 (NEXION_ASV-RTS)(Seagren-Pitts)/Pictures/UPS_Serial Number_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2022-06-06 thru 06-09 (NEXION-ASV)(Seagren-Vinh)/Site Pictures/Installed/UPS_Serial Number_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Pictures/NEXION (Serial Number Photos)(2021-10)/IMG_5014_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Pictures/NEXION (Serial Number Photos)(2021-10)/IMG_5015_1.JPG",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Pictures/NEXION (Serial Number Photos)(2021-10)/NEXION Antenna Switch 20211011_112714_1.jpg"
+      ]
+    },
+    {
+      "pattern": "%commissioning%",
+      "pattern_name": "commissioning",
+      "description": "Commissioning / decommissioning docs",
+      "count": 59,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/3_Archive/Goose Bay Labrador CFB - Canada (Decommissioned)/5_Install/Sys 05 Install 05-Goose Bay (Decommissioned)/Decommissioning/200811001-F, Sheet 9B_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/3_Archive/Goose Bay Labrador CFB - Canada (Decommissioned)/5_Install/Sys 05 Install 05-Goose Bay (Decommissioned)/Decommissioning/200811008 Sheets 1-14_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/3_Archive/Goose Bay Labrador CFB - Canada (Decommissioned)/5_Install/Sys 05 Install 05-Goose Bay (Decommissioned)/Decommissioning/MSDS_For_UPS-Batteries_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/3_Archive/Goose Bay Labrador CFB - Canada (Decommissioned)/5_Install/Sys 05 Install 05-Goose Bay (Decommissioned)/Decommissioning/SOW Goose Bay Decom - Draft - lab - 16Jun16_1.doc",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/3_Archive/Goose Bay Labrador CFB - Canada (Decommissioned)/5_Install/Sys 05 Install 05-Goose Bay (Decommissioned)/Decommissioning/TCI Tx Antenna Installation (Rev J) (1330-ANT-00T) (Combined)_1.pdf"
+      ]
+    },
+    {
+      "pattern": "%dd250%",
+      "pattern_name": "dd250_transfer",
+      "description": "DD250 transfer forms",
+      "count": 53,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/#  NEXION Sites/1_Sites/Eareckson AS - Alaska,US/Install Prep/10_Daily Installation Status Updates/Other Email Traffic/Eareckson DD250_1.msg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/OASIS/A004 - Technical Report – DD250 (Transfer Equipment to Government)/47QFRA22F0009_IGSI-1806_DD250_Azores-NEXION_2024-07-12_1.zip",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/OASIS/A004 - Technical Report – DD250 (Transfer Equipment to Government)/Deliverables Report IGSI-106 DD250 Okinawa_1.zip",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/OASIS/A004 - Technical Report – DD250 (Transfer Equipment to Government)/Deliverables Report IGSI-443 A004 Technical Report DD250 (Transfer Equipment to Government) Niger_1.zip",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/OASIS/A004 - Technical Report – DD250 (Transfer Equipment to Government)/Deliverables Report IGSI-814 American Samoa DD 250 (A004)_1.zip"
+      ]
+    },
+    {
+      "pattern": "%deployment%",
+      "pattern_name": "deployment_docs",
+      "description": "Deployment documentation",
+      "count": 40,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 12 - TEST PLAN, TEST REPORT, TEST CARDS/POST-DEPLOYMENT/Ascension install cable continuity test cards_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 12 - TEST PLAN, TEST REPORT, TEST CARDS/POST-DEPLOYMENT/Ascension install checklist_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 12 - TEST PLAN, TEST REPORT, TEST CARDS/POST-DEPLOYMENT/Ascension install test cards_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 12 - TEST PLAN, TEST REPORT, TEST CARDS/PRE-DEPLOYMENT/SCINDA Suite Test Cards_v1.0.5_post-baseline_updates_Site5_laptop_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2011-10-31 thru 11-19 (NEXION_System Install)(Brukardt-Dettler-Lutz)/Install/TAB 12 - TEST PLAN, TEST REPORT, TEST CARDS/PRE-DEPLOYMENT/Site 5 Novatel Receiver_1.txt"
+      ]
+    },
+    {
+      "pattern": "%bill%material%",
+      "pattern_name": "bill_of_materials",
+      "description": "Bill of materials / PBOM",
+      "count": 35,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/DMEA/A013_Priced-Bill-of-Materials_PBOM/TO 25FE035 CET 25-523 IGSEP CDRL A013 PBOM due 20250930/IGSPE-25_DMEA-Priced-Bill-of-Materials_A013_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/DMEA/A013_Priced-Bill-of-Materials_PBOM/TO 25FE035 CET 25-523 IGSEP CDRL A013 PBOM due 20250930/TO 25FE035 CET 25-523 IGSEP CDRL A013 PBOM due 20250930_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/OASIS/A014 - Priced Bill of Materials/47QFRA22F0009_IGSI-2233_IGS_EMSI_PBOM_2024-04-22_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/OASIS/A014 - Priced Bill of Materials/Deliverables Report IGSI-257 IGS EMSI PBOM (A014)_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/1.0 IGS DM - Restricted/OASIS/A014 - Priced Bill of Materials/Deliverables Report IGSI-477 IGS EMSI PBOM (A014) 20230713_1.pdf"
+      ]
+    },
+    {
+      "pattern": "%nomenclature%",
+      "pattern_name": "nomenclature",
+      "description": "Nomenclature sheets",
+      "count": 15,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2021-09-27 thru 10-15 (NEXION_ASV)(ISTO_ASV)(Dexter_Dettler)/Maintenance Tasks/W12a2a Installation Instructions (Highlighted Nomenclature)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Parts (Downloaded Information)/NEXION Parts/ECU (Bard W12A1-A05XPXXXJ 1.0 Ton Air Conditioner)/W12a2a Installation Instructions (Highlighted Nomenclature)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/Procurement/002 - Received/NEXION Sustainment Base Year (1 Aug 22 - 31 Jul 23)/PO - 5000406196, PR 31426827, C 16049663 NEXION-UAE ECU (PBJ)($4,870.00)/S3586 (Nomenclature Sheet)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/SAP - MPLM/Baseline Updates-Nomenclature (Bolts  Screws) (2025-08-21)_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/SAP - MPLM/Baseline Updates-Nomenclature (Ground Lugs)_1.xlsx"
+      ]
+    },
+    {
+      "pattern": "%spares%inventory%",
+      "pattern_name": "spares_inventory",
+      "description": "Spares inventory reports per site visit",
+      "count": 14,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2017-08-13 thru 08-18 (NEXION_ASV)(Brukardt-Pitts)/Spares Inventory (Alpena)_(2017-08-16)_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Alpena/2022-06-06 thru 06-09 (NEXION-ASV)(Seagren-Vinh)/Site Inventory/Alpena Inventory & Spares (Pre-inventory)_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Ascension/2018-09-29 thru 10-18 (NEXION_ASV-OS Upgrade)(ISTO_ASV)(Pitts-Womelsdorff)/Spares Inventory (Ascension) (2018-10-08)_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2013-11 RTS/Guam Restoral Trip Spares Inventory (2013-11-16)_1.docx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Learmonth/2015-09-27/2015-10 Spares Inventory_1.pdf"
+      ]
+    },
+    {
+      "pattern": "%baseline%drawing%",
+      "pattern_name": "config_baseline",
+      "description": "Configuration baseline drawings",
+      "count": 6,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/4.0 Configuration_Management - Restricted/CM_Drawings/IGS Baseline Drawings_1.xlsx",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/4.0 Configuration_Management - Restricted/CM_Drawings/ISTO Baseline Drawings/2_Site Drawings/Ascension/201811010--_Ascension-ISTO_As-Built.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/4.0 Configuration_Management - Restricted/CM_Drawings/ISTO Baseline Drawings/2_Site Drawings/Palau/200811100-01_Palau-ISTO_SIP-Initial_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/4.0 Configuration_Management - Restricted/CM_Drawings/ISTO Baseline Drawings/3_Assembly and Modification Drawings/201812005--_ISTO-GPS-Mast-Cap-Assembly_1.pdf",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/4.0 Configuration_Management - Restricted/CM_Drawings/NEXION Baseline Drawings/1_System Drawings/200811001-J_NEXION-System_1.pdf"
+      ]
+    },
+    {
+      "pattern": "%asset%tag%",
+      "pattern_name": "asset_tag",
+      "description": "Asset tag photos",
+      "count": 5,
+      "ext_filter": null,
+      "sample_paths": [
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2023-04-24 thru 05-05 (NEXION RTS-ASV and ISTO ASV)(Pitts-Seagren-Sepp)/Pictures/_ISTO/FP/ISTO Server Smart Asset Tag - 1_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2023-04-24 thru 05-05 (NEXION RTS-ASV and ISTO ASV)(Pitts-Seagren-Sepp)/Pictures/_ISTO/FP/ISTO Server Smart Asset Tag - 2_1.jpg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2023-04-24 thru 05-05 (NEXION RTS-ASV and ISTO ASV)(Pitts-Seagren-Sepp)/Pictures/_ISTO/FP/Large/ISTO Server Smart Asset Tag - 1_1.jpeg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/! Site Visits/(01) Sites/Guam/2023-04-24 thru 05-05 (NEXION RTS-ASV and ISTO ASV)(Pitts-Seagren-Sepp)/Pictures/_ISTO/FP/Large/ISTO Server Smart Asset Tag - 2_1.jpeg",
+        "C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/5.0 Logistics/AssetSmart/Tag Inventory_5-25-23_1.xlsx"
+      ]
+    }
+  ],
+  "system_breakdown": {
+    "NEXION": 96974,
+    "ISTO": 33407,
+    "SCINDA": 762,
+    "other": 83608
+  },
+  "site_breakdown": {
+    "1_Sites": 22950,
+    "Vandenberg": 16231,
+    "Ascension": 15650,
+    "Learmonth": 11872,
+    "Guam": 10123,
+    "San Vito": 9047,
+    "Fairford": 7489,
+    "Alpena": 6055,
+    "Eielson": 5173,
+    "Lualualei": 4850,
+    "Eglin": 3297,
+    "Wake": 2181,
+    "Eareckson": 1923,
+    "Curacao": 1897,
+    "Thule": 1453,
+    "5_Software": 1272,
+    "Kwajalein": 1248,
+    "Misawa": 1204,
+    "Singapore": 796,
+    "Diego Garcia": 734,
+    "UAE": 560,
+    "Azores": 559,
+    "Awase (Okinawa JP)": 392,
+    "Archive": 330,
+    "American Samoa": 308,
+    "Loring": 186,
+    "Djibouti": 145,
+    "Niger": 122,
+    "2_Drawings": 104,
+    "z Other": 92,
+    "Puerto Rico": 50,
+    "Poland": 48,
+    "3_System_Performance": 46,
+    "General Information": 40,
+    "Palau": 21,
+    "4_Certification Test and Evaluation (CTE)": 21,
+    "NEXION Site_Survey Training": 16,
+    "Kirtland": 14,
+    "LDI": 10,
+    "Japan": 9,
+    "raw": 7,
+    "Afghanistan": 4,
+    "Dijibouti": 4,
+    "6_RFBR-RFI Documents": 3,
+    "Colorado Springs,CO": 3,
+    "Kuwait": 3,
+    "7_Monthly Status Meetings": 2,
+    "Spectrum Analysis": 2,
+    "Honduras": 2,
+    "Colorado Springs, COCO1": 1,
+    "Korea": 1,
+    "RFAs": 1,
+    "French Guiana": 1,
+    "Turkey": 1
+  },
+  "date_coverage": {
+    "oldest": "2000-01-01",
+    "newest": "2029-12-31",
+    "years_covered": 27
+  },
+  "total_files_matched": 11534,
+  "total_files_scanned": 214751,
+  "notes": [
+    "Counts may overlap — a single file can match multiple family patterns.",
+    "All paths reference original source location (C:/Users/randaje/Documents/HybridRAG3/data/source/verified/IGS/).",
+    "Corpus on E: is deduplicated — all 214,751 records have status=duplicate.",
+    "Site inventory xlsx files (86) are highest-yield for tabular extraction.",
+    "As-built documents (4,188) provide deployment anchor dates.",
+    "NEXION dominates (96,974 files, 45%) vs ISTO (33,407, 16%)."
+  ]
+}

@@ -1,0 +1,500 @@
+double-click button: Clear log
+focus: button Browse...
+double-click button: Browse...
+switch to tab: Compare
+focus: button Save as .md
+double-click button: Clear log
+click button: Browse...
+type garbage into entry: 2yh@6!evni8*#7gutrsud^$$b#9%vk
+double-click button: Browse...
+toggle checkbutton: Analysis only
+focus: button Save as defaults
+click button: Load Results
+switch to tab: Regression
+type garbage into entry: e*eq&h@pc7w!
+double-click button: Run Regression
+focus: button Compare
+type garbage into entry: ^t(hw)pw*1
+focus: entry 
+click button: Clear log
+focus: entry 
+double-click button: Browse...
+focus: button Reset defaults
+switch to tab: History
+double-click button: Browse...
+type garbage into entry: i($4g6@^%z(k1@r(
+type garbage into entry: zn*!%38vx5s0s0o*0mu%&aoz(^lsk#
+double-click button: Clear
+focus: button Start
+double-click button: Browse...
+set combobox: PY_VAR15
+focus: entry 
+focus: entry 
+click button: Save as defaults
+switch to tab: Launch
+double-click button: Browse...
+switch to tab: History
+focus: button Clear filters
+switch to tab: History / Ledger
+switch to tab: Launch
+type garbage into entry: c%z1b
+double-click button: Save as defaults
+focus: entry 
+double-click button: Browse...
+type garbage into entry: t*#jorf5n@wggt3l#kp$%xv60v
+toggle checkbutton: Include deferred targets
+switch to tab: History
+switch to tab: Regression
+focus: button Clear filters
+type garbage into entry: l4th39xm0
+switch to tab: Compare
+click button: Browse...
+switch to tab: Results
+switch to tab: Count
+switch to tab: Overview
+set combobox: PY_VAR29
+set combobox: PY_VAR30
+double-click button: Browse...
+focus: button Browse...
+click button: Browse...
+switch to tab: Baseline
+focus: entry 
+focus: entry 
+switch to tab: History
+focus: button Browse...
+set combobox: PY_VAR15
+focus: entry 
+double-click button: Browse...
+focus: entry 
+focus: button Load Results
+switch to tab: Results
+type garbage into entry: (92t^aggr(kr@f
+focus: button Browse...
+click button: Clear log
+switch to tab: Count
+click button: Browse...
+click button: Browse...
+click button: Browse...
+focus: button Refresh
+focus: entry 
+focus: button Refresh
+focus: entry 
+type garbage into entry: d5fkgf2boqp931de)6a2nb^^)yz^v3
+click button: Refresh
+focus: button Clear log
+focus: button Browse...
+switch to tab: Results
+switch to tab: Regression
+switch to tab: Regression
+focus: entry 
+focus: entry 
+switch to tab: History
+switch to tab: Count
+click button: Save as .md
+focus: entry 
+click button: Browse...
+double-click button: Refresh
+click button: Start
+focus: button Compare
+type garbage into entry: ky!(245naj5y930xai1
+switch to tab: Compare
+type garbage into entry: p%uu3*wjiv@wl#64!!w1i4jzh$%8oj
+double-click button: Clear log
+type garbage into entry: vgl7z3tt2wfr
+focus: checkbutton raw_mentions
+focus: entry 
+click button: Save as .md
+double-click button: Browse...
+focus: checkbutton unique_chunks
+focus: button Run Regression
+focus: button Browse...
+double-click button: Browse...
+click button: Start
+double-click button: Clear log
+switch to tab: Regression
+switch to tab: Results
+click button: Browse...
+click button: Browse...
+switch to tab: History
+focus: entry 
+switch to tab: Launch
+focus: entry 
+switch to tab: Regression
+switch to tab: Results
+click button: Browse...
+switch to tab: RAGAS
+double-click button: Browse...
+type garbage into entry: !k8d4*8x93kzkqem8%*kk3
+switch to tab: Baseline
+switch to tab: RAGAS
+double-click button: Run Regression
+double-click button: Browse...
+focus: checkbutton Analysis only
+switch to tab: Results
+type garbage into entry: sc*w
+switch to tab: History / Ledger
+focus: button Browse...
+focus: button Browse...
+switch to tab: Regression
+type garbage into entry: &zizof376yt$gj$fq36u
+double-click button: Clear
+focus: entry 
+focus: entry 
+switch to tab: Count
+focus: button Reset defaults
+switch to tab: Launch
+focus: button Start
+switch to tab: Overview
+set combobox: PY_VAR29
+focus: entry 
+type garbage into entry: 3f^ele*l9ayqqj7h3z94z3$21hs$gi
+focus: button Browse...
+switch to tab: Count
+type garbage into entry: x$1m*&vbwzbp9mi37kg!n$o22xvv1f
+focus: button Browse...
+switch to tab: Compare
+focus: entry 
+focus: button Browse...
+switch to tab: Overview
+focus: button Browse...
+type garbage into entry: yf9(w*qax2sh%za04n#1kgr4*jv&z8
+focus: combobox PY_VAR13
+click button: Browse...
+double-click button: Browse...
+type garbage into entry: @3fxe658kcu!n1%^jkzm*6$l3!w75j
+focus: entry 
+switch to tab: Launch
+double-click button: Browse...
+switch to tab: Baseline
+focus: button Browse...
+focus: entry 
+switch to tab: Launch
+focus: entry 
+focus: entry 
+switch to tab: RAGAS
+switch to tab: History / Ledger
+switch to tab: Results
+click button: Start
+double-click button: Browse...
+double-click button: Browse...
+switch to tab: Results
+type garbage into entry: hb0m%rx*7sbq6zw)u$rus$oa@20xr^
+click button: Save as defaults
+type garbage into entry: gk0sa
+focus: entry 
+switch to tab: Aggregation
+switch to tab: Compare
+focus: entry 
+switch to tab: History / Ledger
+double-click button: Browse...
+set combobox: PY_VAR30
+focus: checkbutton raw_mentions
+focus: entry 
+switch to tab: Launch
+switch to tab: Aggregation
+switch to tab: Results
+toggle checkbutton: unique_documents
+type garbage into entry: rku8e6y)z5!g)h7c9%$#!zo43(v!b)
+switch to tab: Count
+switch to tab: Overview
+click button: Clear filters
+switch to tab: Baseline
+focus: entry 
+focus: button Browse...
+double-click button: Clear log
+switch to tab: Results
+focus: combobox PY_VAR15
+switch to tab: Overview
+focus: entry 
+type garbage into entry: m3*45)ru&)3&qnom#e7$drk^!@vw%t
+switch to tab: History / Ledger
+focus: button Start
+switch to tab: Baseline
+click button: Start
+double-click button: Browse...
+toggle checkbutton: Include deferred targets
+focus: button Browse...
+type garbage into entry: ry)(cm!c*v4s14)#g@c9cb021u3us*
+click button: Clear filters
+focus: entry 
+switch to tab: RAGAS
+focus: button Info
+type garbage into entry: j#!9un&1@3*7wqw)ix6b(08f39^1f7
+switch to tab: History / Ledger
+switch to tab: Count
+focus: button Info
+switch to tab: History / Ledger
+double-click button: Browse...
+type garbage into entry: %wx16#bm195m@lcjr$w8z^5b*grc1w
+double-click button: Save as defaults
+click button: Browse...
+type garbage into entry: f72tszi6ctq5(sxht2s
+switch to tab: Results
+focus: button Browse
+focus: checkbutton raw_mentions
+type garbage into entry: d!pgnyg2e
+double-click button: Start
+switch to tab: History
+focus: button Run Regression
+switch to tab: Launch
+type garbage into entry: xn$38mu93t7*02nrwm2n6jcbr2nw5)
+set combobox: PY_VAR14
+focus: button Clear log
+double-click button: Clear log
+switch to tab: History
+double-click button: Clear
+switch to tab: Baseline
+type garbage into entry: *m36dcgsx(1l#3)#(e%$d)s#e*s)*a
+click button: Refresh
+click button: Browse...
+switch to tab: Launch
+type garbage into entry: xb7t$m@!3wm)%6fw29n(ws^dq%)jdm
+click button: Browse...
+double-click button: Browse...
+double-click button: Start
+focus: entry 
+click button: Browse...
+switch to tab: Count
+focus: button Clear filters
+click button: Load Results
+focus: entry 
+click button: Browse...
+double-click button: Browse...
+switch to tab: Compare
+switch to tab: Regression
+switch to tab: Launch
+focus: button Start
+click button: Browse...
+type garbage into entry: %yykg@@r0q^lzsyw3l*(t(ik*nxa(5
+focus: button Refresh
+switch to tab: Compare
+double-click button: Browse...
+type garbage into entry: n9@d6zouux)e%de$*24
+switch to tab: History
+type garbage into entry: ^&2$3k2ungfvm5ecpe^5ddtb54uf7x
+type garbage into entry: &2gfurkpymm
+click button: Browse...
+double-click button: Browse...
+type garbage into entry: e%mh*v79hg*1yqy2b%g4$wvo09*(9h
+double-click button: Clear log
+click button: Run Regression
+switch to tab: Results
+focus: button Browse...
+switch to tab: RAGAS
+type garbage into entry: 7(ki4mhl#*hs*6&95&^3r*36wufc5x
+switch to tab: Regression
+focus: entry 
+focus: button Run Regression
+switch to tab: Aggregation
+focus: entry 
+double-click button: Browse...
+focus: button Browse...
+set combobox: PY_VAR16
+double-click button: Clear log
+double-click button: Browse...
+focus: button Save as .md
+click button: Browse...
+switch to tab: Results
+switch to tab: History / Ledger
+double-click button: Run Regression
+focus: entry 
+type garbage into entry: yghzu3g%yimpu0gej&$(
+double-click button: Browse...
+double-click button: Browse...
+focus: button Save as .md
+switch to tab: Baseline
+switch to tab: RAGAS
+type garbage into entry: a3*emdeymjuj&@^)nfft@g!)%tn7bj
+click button: Browse...
+double-click button: Browse...
+click button: Clear log
+type garbage into entry: z&n1io3spd#x0nq**g3nkx)#q&p005
+switch to tab: Results
+switch to tab: Overview
+click button: Start
+focus: entry 
+click button: Browse
+click button: Clear log
+type garbage into entry: a@!069!e@@i3h&92#z!6&p7ang21mf
+focus: entry 
+switch to tab: Overview
+focus: button Save as defaults
+focus: button Refresh
+focus: entry 
+click button: Start
+focus: button Start
+switch to tab: Results
+type garbage into entry: p4^q8)gp!#qagf#@$t1u
+switch to tab: Count
+double-click button: Browse...
+click button: Run Regression
+switch to tab: Baseline
+switch to tab: Regression
+switch to tab: Aggregation
+type garbage into entry: d(1yok@p6qet6
+type garbage into entry: #!#5u0md*hbut0n!l&sxulx$k56v5
+focus: entry 
+switch to tab: Baseline
+switch to tab: Aggregation
+double-click button: Browse...
+switch to tab: Launch
+focus: checkbutton Include deferred targets
+click button: Browse...
+double-click button: Browse...
+focus: button Clear
+focus: button Browse...
+double-click button: Load Results
+focus: entry 
+click button: Browse...
+focus: button Browse...
+switch to tab: Launch
+focus: button Browse...
+click button: Load Results
+focus: entry 
+switch to tab: History
+switch to tab: Regression
+double-click button: Info
+switch to tab: RAGAS
+focus: button Browse...
+focus: entry 
+switch to tab: RAGAS
+click button: Browse...
+focus: button Start
+switch to tab: History
+switch to tab: Baseline
+switch to tab: Count
+switch to tab: Results
+switch to tab: Launch
+focus: entry 
+click button: Save as .md
+switch to tab: Launch
+switch to tab: RAGAS
+focus: button Start
+switch to tab: History
+double-click button: Browse
+switch to tab: Regression
+click button: Browse...
+switch to tab: Overview
+click button: Browse...
+click button: Browse...
+double-click button: Browse...
+type garbage into entry: fndfbji1j7bsjs2!ghet(^e$p)r7h1
+switch to tab: Overview
+focus: entry 
+switch to tab: Aggregation
+focus: entry 
+focus: entry 
+click button: Browse...
+double-click button: Info
+double-click button: Browse...
+focus: button Browse...
+switch to tab: Launch
+focus: checkbutton unique_chunks
+set combobox: PY_VAR14
+focus: entry 
+switch to tab: Results
+focus: checkbutton unique_rows
+switch to tab: Baseline
+type garbage into entry: 8$)awc
+switch to tab: Count
+focus: button Run Regression
+switch to tab: History
+double-click button: Load Results
+switch to tab: Baseline
+double-click button: Browse...
+click button: Browse...
+switch to tab: Count
+focus: button Compare
+focus: button Compare
+switch to tab: Compare
+switch to tab: Overview
+switch to tab: Count
+toggle checkbutton: raw_mentions
+switch to tab: Compare
+switch to tab: Compare
+toggle checkbutton: unique_rows
+type garbage into entry: %h9q(wl%07gbgjqqt87e008yhjs1
+focus: button Browse...
+double-click button: Browse...
+click button: Refresh
+click button: Browse...
+double-click button: Browse...
+double-click button: Browse...
+type garbage into entry: y@4drwj*niz2ibjuc5%yquie&ou#)s
+focus: checkbutton raw_mentions
+click button: Browse...
+double-click button: Browse...
+set combobox: PY_VAR14
+double-click button: Refresh
+type garbage into entry: l4wmo9gy4yyeje5fzgsb
+double-click button: Browse...
+click button: Browse...
+switch to tab: Count
+switch to tab: Regression
+click button: Info
+switch to tab: Regression
+focus: button Browse...
+toggle checkbutton: raw_mentions
+type garbage into entry: v#4e%%uh00qmevl)05ubmr6zm*tb)c
+click button: Browse...
+type garbage into entry: 9z)el0ekub28u@)3iq511#48prlkg@
+switch to tab: RAGAS
+double-click button: Browse...
+type garbage into entry: ^9w284v2z34l0c0)4n!nobznz0f%cq
+set combobox: PY_VAR13
+focus: button Browse...
+click button: Browse
+double-click button: Browse...
+double-click button: Browse...
+focus: button Run Regression
+focus: entry 
+double-click button: Clear log
+focus: entry 
+switch to tab: Aggregation
+focus: entry 
+switch to tab: Results
+click button: Run Regression
+type garbage into entry: &bk
+focus: button Clear log
+switch to tab: Launch
+switch to tab: Overview
+click button: Load Results
+switch to tab: Baseline
+double-click button: Clear log
+type garbage into entry: jhe@9f
+click button: Browse...
+focus: entry 
+focus: button Browse...
+focus: combobox PY_VAR29
+click button: Start
+focus: entry 
+switch to tab: Results
+switch to tab: Launch
+focus: checkbutton unique_rows
+focus: checkbutton unique_chunks
+click button: Browse...
+switch to tab: Results
+click button: Browse...
+switch to tab: Aggregation
+double-click button: Browse...
+focus: button Run Regression
+focus: combobox PY_VAR29
+click button: Load Results
+switch to tab: Regression
+double-click button: Clear log
+double-click button: Browse...
+focus: entry 
+type garbage into entry: 5fd0%!p&08pe67(kb2qx1&lcwwowh7
+switch to tab: Launch
+switch to tab: Regression
+click button: Refresh
+switch to tab: History
+type garbage into entry: 7%o@$^p%uwb1u4aq291gy^f7kj
+focus: button Browse...
+click button: Clear log
+click button: Browse...
+switch to tab: Launch
+double-click button: Browse...
+click button: Browse...
+click button: Clear log
+click button: Browse...

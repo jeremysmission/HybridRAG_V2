@@ -3,20 +3,20 @@
 # Used by src/query/aggregation_executor.py to normalize query filters.
 
 systems:
-  monitoring system:
-    canonical: monitoring system
+  NEXION:
+    canonical: NEXION
     aliases:
-      - monitoring system
-      - monitoring system
-      - monitoring system
+      - nexion
+      - NEXION
+      - Nexion
       - NXN
       - nxn
-  legacy monitoring system:
-    canonical: legacy monitoring system
+  ISTO:
+    canonical: ISTO
     aliases:
-      - legacy monitoring system
-      - legacy monitoring system
-      - legacy monitoring system
+      - isto
+      - ISTO
+      - Isto
 
 # Sites populated from source_metadata.site_token (covers 29,659 tokened docs).
 sites:

@@ -1,0 +1,85 @@
+{
+  "truth_pack_id": "cross_sub_truth_pack_2026-04-20",
+  "generated_by": "Agent-C",
+  "repo": "HybridRAG_V2_Dev2",
+  "description": "Deterministic truth pack for Lane 3 cross-substrate queries spanning installed_base, po_pricing, and MSR substrates.",
+  "evidence_sources": [
+    "C:\\HybridRAG_V2_Dev2\\data_isolated\\installed_base_end_to_end.sqlite3",
+    "C:\\HybridRAG_V2_Dev2\\data_isolated\\msr_substrate.sqlite3",
+    "C:\\HybridRAG_V2\\data\\index\\po_pricing.sqlite3"
+  ],
+  "items": [
+    {
+      "id": "XSUB-001",
+      "query": "top 5 vendors by spend on installed parts in NEXION",
+      "expected_tier": "GREEN",
+      "expected_shape": "vendor_spend",
+      "ground_truth_sql": "WITH latest_parts AS (SELECT DISTINCT part_number FROM installed_base WHERE system='NEXION' AND part_number!='') SELECT vendor, SUM(COALESCE(unit_price,0) * COALESCE(NULLIF(qty,0),1)) AS total_spend FROM po_pricing WHERE system='NEXION' AND part_number IN latest_parts GROUP BY vendor ORDER BY total_spend DESC LIMIT 5;",
+      "tolerable_tiers": ["GREEN"]
+    },
+    {
+      "id": "XSUB-002",
+      "query": "top 3 vendors by spend on installed parts in NEXION in 2024",
+      "expected_tier": "GREEN",
+      "expected_shape": "vendor_spend",
+      "ground_truth_sql": "WITH latest_parts AS (SELECT DISTINCT part_number FROM installed_base WHERE system='NEXION' AND part_number!='') SELECT vendor, SUM(COALESCE(unit_price,0) * COALESCE(NULLIF(qty,0),1)) AS total_spend FROM po_pricing WHERE system='NEXION' AND CAST(substr(po_date,1,4) AS INTEGER)=2024 AND part_number IN latest_parts GROUP BY vendor ORDER BY total_spend DESC LIMIT 3;",
+      "tolerable_tiers": ["GREEN"]
+    },
+    {
+      "id": "XSUB-003",
+      "query": "first install date per site in NEXION",
+      "expected_tier": "GREEN",
+      "expected_shape": "site_history_first_install",
+      "ground_truth_sql": "SELECT site_token, MIN(COALESCE(NULLIF(install_date,''), NULLIF(snapshot_date,''))) AS first_install_date FROM installed_base WHERE system='NEXION' AND site_token!='' GROUP BY site_token ORDER BY first_install_date ASC LIMIT 25;",
+      "tolerable_tiers": ["GREEN"]
+    },
+    {
+      "id": "XSUB-004",
+      "query": "first install date per site in ISTO",
+      "expected_tier": "GREEN",
+      "expected_shape": "site_history_first_install",
+      "ground_truth_sql": "SELECT site_token, MIN(COALESCE(NULLIF(install_date,''), NULLIF(snapshot_date,''))) AS first_install_date FROM installed_base WHERE system='ISTO' AND site_token!='' GROUP BY site_token ORDER BY first_install_date ASC LIMIT 25;",
+      "tolerable_tiers": ["GREEN"]
+    },
+    {
+      "id": "XSUB-005",
+      "query": "ASV completions per site per year in NEXION from 2024-2024",
+      "expected_tier": "GREEN",
+      "expected_shape": "msr_asv_per_site_per_year",
+      "ground_truth_sql": "SELECT site_token, visit_year, COUNT(*) AS completion_count FROM msr_asv WHERE system='NEXION' AND visit_year BETWEEN 2024 AND 2024 AND site_token!='' GROUP BY site_token, visit_year ORDER BY visit_year ASC, completion_count DESC, site_token ASC;",
+      "tolerable_tiers": ["GREEN"]
+    },
+    {
+      "id": "XSUB-006",
+      "query": "ASV completions per site per year in ISTO from 2024-2024",
+      "expected_tier": "GREEN",
+      "expected_shape": "msr_asv_per_site_per_year",
+      "ground_truth_sql": "SELECT site_token, visit_year, COUNT(*) AS completion_count FROM msr_asv WHERE system='ISTO' AND visit_year BETWEEN 2024 AND 2024 AND site_token!='' GROUP BY site_token, visit_year ORDER BY visit_year ASC, completion_count DESC, site_token ASC;",
+      "tolerable_tiers": ["GREEN"]
+    },
+    {
+      "id": "XSUB-007",
+      "query": "cost per failure for top parts",
+      "expected_tier": "GREEN",
+      "expected_shape": "cost_per_failure",
+      "ground_truth_sql": "SELECT fe.part_number, fe.cnt as failure_count, COALESCE(pp.avg_price,0) as avg_unit_price, fe.cnt * COALESCE(pp.avg_price,0) as total_cost FROM (SELECT part_number, COUNT(*) as cnt FROM failure_events WHERE part_number!='' GROUP BY part_number) fe LEFT JOIN (SELECT part_number, AVG(unit_price) as avg_price FROM po_pricing WHERE unit_price>0 GROUP BY part_number) pp ON fe.part_number=pp.part_number ORDER BY total_cost DESC LIMIT 10;",
+      "tolerable_tiers": ["GREEN"]
+    },
+    {
+      "id": "XSUB-008",
+      "query": "cost per failure for top parts in GOTHAM",
+      "expected_tier": "RED",
+      "expected_shape": "cost_per_failure_adversarial",
+      "ground_truth_sql": null,
+      "tolerable_tiers": ["RED"]
+    },
+    {
+      "id": "XSUB-009",
+      "query": "top vendors by spend",
+      "expected_tier": "GREEN",
+      "expected_shape": "vendor_spend",
+      "ground_truth_sql": "SELECT vendor, COUNT(*) as po_count, SUM(unit_price * COALESCE(qty,1)) as total_spend, COUNT(DISTINCT part_number) as distinct_parts FROM po_pricing WHERE vendor!='' GROUP BY vendor ORDER BY total_spend DESC LIMIT 10;",
+      "tolerable_tiers": ["GREEN"]
+    }
+  ]
+}

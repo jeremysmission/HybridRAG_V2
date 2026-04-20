@@ -1,0 +1,249 @@
+{
+  "scan_date": "2026-04-20",
+  "scanner": "Miner-Agent",
+  "source": "E:\\CorpusTransfr\\verified\\IGS\\5.0 Logistics\\Procurement\\002 - Received",
+  "distinct_vendor_entries": 443,
+  "total_files": 2935,
+  "top_vendors_by_files": [
+    {
+      "vendor": "Hardware Jim NEXION (McMaster)",
+      "file_count": 24,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment NEW BASE YR (1 Aug 25"
+      ]
+    },
+    {
+      "vendor": "First Aid and CPR Training NEXION(PBJ)($1,177.00)",
+      "file_count": 22,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "Calibration (Micro Precision)($12,720.00)",
+      "file_count": 22,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment NEW BASE YR (1 Aug 25"
+      ]
+    },
+    {
+      "vendor": "NEXION Wire Assembly (TCI)($4,000.00)",
+      "file_count": 18,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "NEXION-UAE ECU (PBJ)($4,870.00)",
+      "file_count": 18,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "Tension Meter Calibration(PBJ)($680.00)",
+      "file_count": 18,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "Secure CRT and FX NEXION(PBJ)($700.00)",
+      "file_count": 18,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment OY2 (1 Aug 24 - 31 Ju"
+      ]
+    },
+    {
+      "vendor": "DPS4D Azores(LDI)($298,855.00)",
+      "file_count": 16,
+      "po_count": 1,
+      "contract_periods": [
+        "Azores NEXION Install"
+      ]
+    },
+    {
+      "vendor": "NEXION Sustainment My Safety Signs(PBJ)($940.00)",
+      "file_count": 16,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "(NEXION Desk)(Okinawa Installation)(PBJ Partners)($941.00)(E",
+      "file_count": 16,
+      "po_count": 1,
+      "contract_periods": [
+        "Okinawa Installation"
+      ]
+    },
+    {
+      "vendor": "AND 5000357580,  OLD31408943,  OLD15916380 Okinawa Nexion In",
+      "file_count": 16,
+      "po_count": 1,
+      "contract_periods": [
+        "Okinawa Installation"
+      ]
+    },
+    {
+      "vendor": "Hardware Palau ISTO(McMaster)Jim",
+      "file_count": 14,
+      "po_count": 1,
+      "contract_periods": [
+        "ISTO Sustainment NEW BASE YR (1Aug 25 - "
+      ]
+    },
+    {
+      "vendor": "REJECTED  Hardware ISTO GSC Order(McMaster)($220.10)",
+      "file_count": 14,
+      "po_count": 1,
+      "contract_periods": [
+        "ISTO Sustainment OY2 (1 Aug 24 - 31 Jul "
+      ]
+    },
+    {
+      "vendor": "Tension Meter Calibration (PBJ)($360.00)",
+      "file_count": 14,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "TCI Model 656L Tower Antenna Azores(NASCO)($$59,797.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "Azores NEXION Install"
+      ]
+    },
+    {
+      "vendor": "DPS4D DMEA NEXION(LDI)($298,855.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "DMEA NEXION Installation (1 Jul 25 - 31 "
+      ]
+    },
+    {
+      "vendor": "Trimble Software Update(PBJ)($1,955.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "DMEA NEXION Installation (1 Jul 25 - 31 "
+      ]
+    },
+    {
+      "vendor": "(NG Magnetic Decals)(PB&J)($220.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "ISTO & NEXION Sustainment Base Year (1 A"
+      ]
+    },
+    {
+      "vendor": "PR NEW 31413294 - O 31411748, NEW  O 15937901 Tower Climbing",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "NEXION Tower Safety Course Jeremy May 31st(PBJ Partners)($1,",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "Equipment Calibration (PBJ)($1,445.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "Tension Meters Calibration (PBJ-Micro Precision)($633.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "NEXION Learmonth Power Supply(Newark)($38.66)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment Base Year (1 Aug 22 -"
+      ]
+    },
+    {
+      "vendor": "NEXION Hardware(McMaster)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment NEW BASE YR (1 Aug 25"
+      ]
+    },
+    {
+      "vendor": "Wires (McMaster)($200.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment NEW BASE YR (1 Aug 25"
+      ]
+    },
+    {
+      "vendor": "Warning Radio Frequency Sign NEXION(PBJ)($375.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment NEW BASE YR (1 Aug 25"
+      ]
+    },
+    {
+      "vendor": "Dell Server R740 NEXION(Future Tech)($29,251.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment OY1 (1 Aug 23 - 31 Ju"
+      ]
+    },
+    {
+      "vendor": "Safety Course (Sepp and Guillermo)(PBJ)($2,090.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment OY1 (1 Aug 23 - 31 Ju"
+      ]
+    },
+    {
+      "vendor": "Safety Tower Climbing Course Jeremy NEXION(PBJ)($1,100.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "NEXION Sustainment OY1 (1 Aug 23 - 31 Ju"
+      ]
+    },
+    {
+      "vendor": "Niger ISTO Non-Pen and Misc Materials (PBJ)($1,089.00)",
+      "file_count": 12,
+      "po_count": 1,
+      "contract_periods": [
+        "Niger ISTO Installation"
+      ]
+    }
+  ]
+}

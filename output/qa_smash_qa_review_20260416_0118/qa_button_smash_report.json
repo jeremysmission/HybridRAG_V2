@@ -1,0 +1,19 @@
+{
+  "tool": "tools/qa/gui_button_smash_harness",
+  "version": "1.0.0",
+  "started_utc": "2026-04-16T07:18:26+00:00",
+  "finished_utc": "2026-04-16T07:18:26+00:00",
+  "mode": "mock",
+  "tiers_run": [
+    "D"
+  ],
+  "widget_catalog": [],
+  "tier_a_results": [],
+  "tier_b_results": [],
+  "tier_c_results": [],
+  "tier_d_status": "CHECKLIST_GENERATED",
+  "summary": {
+    "tier_d": "checklist generated",
+    "output_dir": "output\\qa_smash_qa_review_20260416_0118"
+  }
+}
