@@ -20,14 +20,13 @@ When you add new capability, append to the relevant section here in the SAME PR.
 |-------|------|---------------|---------|
 | Entity / TableRow | `src/store/entity_store.py` | Generic entities + table rows of any kind. Has `Entity`, `TableRow`, `EntityResult`, `TableResult` classes. | `insert_entities`, `insert_table_rows`, `lookup_entities`, `query_tables`, `aggregate_entity`, `count_entities`, `count_table_rows`, `entity_type_summary` |
 | Failure events | `src/store/failure_events_store.py` | Specialized substrate for failure events (system, site, part, year, source attribution). UNIQUE on (source_path, chunk_id, part_number). | `top_n_parts`, `top_n_parts_per_year`, `evidence_for_part` |
+| PO pricing | `src/store/po_pricing_store.py` | Deterministic procurement / price substrate for replacement-cost and vendor-spend queries. | `top_vendors_by_spend`, `replacement_cost`, `po_line_lookup` |
+| Installed base | `src/store/installed_base_store.py` | Deterministic denominator substrate for installed parts, site history, and rate-normalized methods. Current landed populate: `40,599` rows. | `insert_rows`, `site_history`, `vendor_aggregation`, `installed_count` |
+| MSR | `src/store/msr_substrate.py` | Maintenance site visit / ASV / RTS substrate for visit-completion rollups. | `insert_asv_rows`, `insert_rts_rows`, `completions_per_site_per_year` |
 | Relationship | `src/store/relationship_store.py` | Entity-entity relationships for graph-style retrieval | (see file) |
 | Retrieval metadata | `src/store/retrieval_metadata_store.py` | Metadata for retrieved chunks | (see file) |
 | Vector | `src/store/vector_store.py` | Vector embeddings (abstract layer) | (see file) |
 | LanceDB | `src/store/lance_store.py` | LanceDB-backed vector store implementation | (see file) |
-
-**Lane-specific add-ons (do NOT exist in V2 root):**
-- `po_pricing_store.py` — V2_Dev (Agent-B's lane), Lane 2 substrate
-- `installed_base_store.py` — V2_Dev2 (Agent-C's lane), Lane 3 substrate
 
 **Architectural note:** V2 root has unified entity_store with generic TableRow. Lane clones built standalone substrate files (po_pricing.sqlite3, installed_base.sqlite3) for clean ownership during sprint. Post-demo: consider consolidating into entity_store.TableRow with `table_kind` column.
 
@@ -94,6 +93,14 @@ Storage target: `entity_store.TableRow` via `insert_table_rows`.
 - Fail-closed alias gate (returns None when canonical config missing)
 - Unresolved-reference RED guard (Antarctica/GOTHAM hallucination prevention)
 - `_PO_LOGISTICS_TRIGGERS` + `_PO_LOGISTICS_AXIS` regex for fail-closed PO guard
+
+**Cross-substrate executor surface now live in root:**
+- failure top-N / failure counts
+- vendor aggregation
+- site history
+- failure-rate helpers backed by installed base
+- MSR ASV / RTS site-year rollups
+- inventory / replacement-cost query families via pricing + installed-base inputs
 
 **`AliasTables` class:**
 - Loads from `config/canonical_aliases.yaml`
@@ -230,6 +237,8 @@ Storage target: `entity_store.TableRow` via `insert_table_rows`.
 | `docs/installed_base_denominator_scouting_2026-04-19.md` | Lane 3 architecture scouting |
 | `po_lifecycle_source_scouting_2026-04-19.md` (top-level) | Lane 2 PO source-family scouting |
 | `docs/aggregation_evidence_contract.md` | GREEN/YELLOW/RED tier doctrine |
+| `docs/capability_roadmap_2026-04-20.md` | Five-pillar forward roadmap after the merged push |
+| `docs/competitive_benchmark_2026-04-20.md` | External-analysis synthesis of the near-term quality/perception gaps |
 
 **Before mining a new family:** check if the family was already mapped. Build on the existing map.
 
@@ -276,15 +285,27 @@ Known landmarks:
 
 ---
 
-## 12. What does NOT exist yet (real gaps)
+## 12. Delivery patterns worth reusing
 
-- MSR / service_events substrate (Miner mining MSR family map post-logistics)
-- Cross-substrate join executors (cost_per_failure, inventory_turnover, exposure_per_site, top_vendors_by_spend) — Agent-A's mega-task Phase A6
-- Real-mode inventory recommender wiring (Agent-D's Phase 2A/2B in flight, real-mode awaits Lane 3 ship)
+| Pattern | What it is | File path / anchor | When to reuse | Origin |
+|---------|------------|--------------------|---------------|--------|
+| SAG deterministic substrate | Exact counts and rankings come from a structured substrate; the LLM presents, it does not compute. | `src/query/aggregation_executor.py`, `docs/aggregation_evidence_contract.md` | Any query that counts, ranks, groups, or compares | Failure aggregation sprint slice |
+| CRAG fail-closed-to-AMBIGUOUS / RED | Unresolved filters or hostile input must downgrade instead of widening silently. | `src/query/aggregation_executor.py` unresolved-filter guards | Any deterministic executor with canonical filter inputs | Aggregation QA hardening |
+| 5-gate BANKED promotion | Capability is not banked until truth pack, wiring, adversarial, provenance, and QA gates all pass. | `docs/qa/SPRINT_SLICE_AGGREGATION_QA_REPORT_2026-04-19.md` and the promotion flow in the main war room | Any future substrate or executor landing | Aggregation delivery process |
+| Multi-agent triangulation | Cross-model review plus live runtime verification beats single-lane certainty. | `docs/lessons_learned_2026-04-20.md` | Push gates, regression diagnosis, risky promotions | 2026-04-20 merged push |
+
+---
+
+## 13. What does NOT exist yet (real gaps)
+
+- Comparative / time-windowed aggregation executor family beyond the current landed top-N and cross-sub slices
+- Program-level portfolio / health rollup executor and benchmark pack
+- Shipment / in-transit visibility substrate
+- Deterministic maintenance x logistics join executor (`failure_events` + `po_pricing` + `installed_base` + `msr_substrate`)
 - Schema discovery tool for new corpora (post-demo capability)
-- Forward-resilience test suite (idempotent populate, additive ingestion, schema drift) — partial in po_pricing tests, not yet in installed_base or failure_events
+- Forward-resilience test suite parity across all substrates (better in some lanes than others, not yet uniform)
 - Embedding-based column-header fuzzy matcher (currently config-only via vocab packs; embedding similarity is post-demo upgrade)
-- ABC classification in inventory recommender (Agent-D Phase D5)
+- Sanitizer staging-mode workflow encoded in code rather than operator memory
 
 ---
 
