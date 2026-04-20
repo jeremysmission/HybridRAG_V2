@@ -338,7 +338,7 @@ def _stream_tier1(
     extractor: RegexPreExtractor,
     event_parser: EventBlockParser,
     rel_extractor: RegexRelationshipExtractor,
-    phrase_extractor: RelationshipPhraseExtractor,
+    phrase_extractor: RelationshipPhraseExtractor | None = None,
     *,
     limit: int = 0,
     batch_size: int = 10000,
@@ -354,6 +354,7 @@ def _stream_tier1(
     and relationship objects are flushed incrementally instead of being
     retained until the end of the scan.
     """
+    phrase_extractor = phrase_extractor or RelationshipPhraseExtractor()
 
     seen_entities: set[tuple[str, str, str]] = set()
     seen_rels: set[tuple[str, str, str, str]] = set()

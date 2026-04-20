@@ -551,6 +551,12 @@ class VectorRetriever:
             groups.append([site, "shipments"])
             groups.append([site, "packing list"])
 
+        if temporal_hints:
+            for temporal in temporal_hints[:4]:
+                groups.append([temporal])
+                for system_hint in system_hints[:2]:
+                    groups.append([system_hint, temporal])
+
         deduped: list[list[str]] = []
         seen: set[tuple[str, ...]] = set()
         for group in groups:
@@ -605,18 +611,13 @@ class VectorRetriever:
     def _extract_contract_periods(self, query: str) -> list[str]:
         query = query.lower()
         periods: list[str] = []
-        if re.search(r"\boy1\b", query):
-            periods.append("OY1")
-        if "option year 1" in query:
-            periods.append("OY1")
-        if re.search(r"\boy2\b", query):
-            periods.append("OY2")
-        if "option year 2" in query:
-            periods.append("OY2")
-        if "base year" in query:
-            periods.append("Base Year")
         if "new base yr" in query or "new base year" in query:
+            periods.append("New Base Year")
+        elif "base year" in query:
             periods.append("Base Year")
+        for number in range(1, 6):
+            if re.search(rf"\boy{number}\b", query) or f"option year {number}" in query:
+                periods.append(f"OY{number}")
         deduped: list[str] = []
         seen: set[str] = set()
         for period in periods:
@@ -629,11 +630,12 @@ class VectorRetriever:
     def _extract_program_names(self, query: str) -> list[str]:
         query = query.lower()
         programs: list[str] = []
-        if "legacy monitoring system" in query:
+        has_legacy_monitoring = "legacy monitoring system" in query
+        if has_legacy_monitoring:
             programs.append("legacy monitoring system")
-        if "monitoring system" in query and "legacy monitoring system" not in query:
+        if "monitoring system" in query and not has_legacy_monitoring:
             programs.append("monitoring system")
-        for program_name in ("monitoring system", "legacy monitoring system", "sems3d", "oasis", "igscc"):
+        for program_name in ("legacy monitoring system", "sems3d", "oasis", "igscc"):
             if re.search(rf"\b{re.escape(program_name)}\b", query):
                 programs.append(program_name)
         deduped: list[str] = []
@@ -945,6 +947,16 @@ class VectorRetriever:
 
     def _temporal_path_terms(self, query: str) -> list[str]:
         terms: list[str] = []
+        lower = query.lower()
+        if "sustainment oy2" in lower or "option year 2" in lower:
+            terms.append("Sustainment OY2 (1 Aug 24 - 31 Jul 25)")
+        if "new base yr" in lower or "new base year" in lower:
+            terms.extend(
+                [
+                    "NEW BASE YR",
+                    "Sustainment NEW BASE YR (1Aug 25 - 31 Jul 26)",
+                ]
+            )
         for match in re.finditer(r"\b(20\d{2})-(\d{2})-(\d{2})\b", query):
             year, month, day = match.groups()
             terms.extend([f"{year}_{month}_{day}", f"{year}-{month}-{day}", f"{year}_{month}", f"{year}-{month}"])

@@ -1,0 +1,924 @@
+{
+  "truth_pack_id": "inventory_recommender_truth_pack_2026-04-19",
+  "generated_by": "Agent D",
+  "repo": "HybridRAG_V2_Dev3",
+  "description": "Deterministic ground-truth pack for Lane 4 stub-mode inventory recommender queries. Expected answers come from SQL against failure_events plus the classical reorder-point formula with lead_time_days=90 and Z=1.65. expected_tier uses INVENTORY_GREEN/YELLOW/RED. Expanded in bridge-work mode to 25 items with site-family coverage for SEMS3D-35674.",
+  "evidence_source": "C:\\HybridRAG_V2\\data\\index\\failure_events.sqlite3",
+  "formula": {
+    "reorder_point": "demand_rate * lead_time_days + safety_stock",
+    "safety_stock": "service_level_z * monthly_sigma * sqrt(lead_time_days)",
+    "lead_time_days": 90,
+    "service_level_z": 1.65
+  },
+  "items": [
+    {
+      "id": "INV-AGG-01",
+      "category": "reorder_point",
+      "scenario_tag": "baseline_green",
+      "query": "What should our reorder point be for SEMS3D-40536 at Learmonth in NEXION?",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-40536",
+        "system": "NEXION",
+        "site_token": "learmonth"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-40536' AND system='NEXION' AND site_token='learmonth'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 27,
+        "reorder_point": 26.547991,
+        "safety_stock": 25.56169,
+        "daily_demand_rate": 0.010958904,
+        "monthly_sigma": 1.632993,
+        "history_months": 37,
+        "window_months": 24,
+        "total_failures": 8,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Learmonth 2022 (21 Apr to 2 May) ASV-TX Tensions\\SEMS3D-40536 Learmonth NEXION MSR CDRL A001(26 May 2022) - Final.docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Learmonth 2022 (21 Apr to 2 May) ASV-TX Tensions\\SEMS3D-40536 Learmonth NEXION MSR CDRL A001(26 May 2022) - Final.pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Learmonth\\2022-04-16 thru 25 (ASV-RTS - Pitts-Dettler)\\MSR\\SEMS3D-40536 Learmonth NEXION MSR CDRL A001 (30 May 2022).docx"
+      ],
+      "why_green_possible": "Deterministic reorder-point stub is computable from 37 months of failure history for SEMS3D-40536 at learmonth in NEXION."
+    },
+    {
+      "id": "INV-AGG-02",
+      "category": "reorder_point",
+      "scenario_tag": "baseline_green",
+      "query": "What should our reorder point be for SEMS3D-35674 at Eglin in NEXION?",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "system": "NEXION",
+        "site_token": "eglin"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND system='NEXION' AND site_token='eglin'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 8,
+        "reorder_point": 7.389217,
+        "safety_stock": 7.019354,
+        "daily_demand_rate": 0.004109589,
+        "monthly_sigma": 0.448427,
+        "history_months": 37,
+        "window_months": 24,
+        "total_failures": 3,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Eglin\\2021-03-16 thru 20 (Eglin NEXION)(Fuierer)\\Travel Approval Form SEMS3D-35674 Fuierer 14 Mar-20 Mar 2021 Ft Walton Beach, FL.xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Eglin\\2020-11-16 thru 11-20 (Eglin NEXION ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Eglin NEXION ASV) (16-20 Nov 2020)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Eglin\\2020-11-16 thru 11-20 (Eglin NEXION ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Eglin NEXION ASV) (16-20 Nov 2020)(Dexter).xlsx"
+      ],
+      "why_green_possible": "Deterministic reorder-point stub is computable from 37 months of failure history for SEMS3D-35674 at eglin in NEXION."
+    },
+    {
+      "id": "INV-AGG-03",
+      "category": "reorder_point",
+      "scenario_tag": "baseline_green",
+      "query": "What should our reorder point be for SEMS3D-40539 at Thule in NEXION?",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-40539",
+        "system": "NEXION",
+        "site_token": "thule"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-40539' AND system='NEXION' AND site_token='thule'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 4,
+        "reorder_point": 3.318499,
+        "safety_stock": 3.195211,
+        "daily_demand_rate": 0.001369863,
+        "monthly_sigma": 0.204124,
+        "history_months": 37,
+        "window_months": 24,
+        "total_failures": 1,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Thule\\2024-08-13 thru 08-23 (ASV)(FS-JD)\\Deliverables\\MSR\\SEMS3D-40539 Thule NEXION MSR CDRL A0001 (24 SEP 2021)CUI.docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Thule 2021 (26 Aug - 3 Sep) ASV\\_Pre-Review\\SEMS3D-40539 Thule NEXION MSR CDRL A0001 (DD MMM YYYY)CUI.docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Thule 2021 (26 Aug - 3 Sep) ASV\\SEMS3D-40539 Thule NEXION MSR CDRL A0001 (24 SEP 2021)CUI.pdf"
+      ],
+      "why_green_possible": "Deterministic reorder-point stub is computable from 37 months of failure history for SEMS3D-40539 at thule in NEXION."
+    },
+    {
+      "id": "INV-AGG-04",
+      "category": "reorder_point",
+      "scenario_tag": "baseline_green",
+      "query": "What should our reorder point be for SEMS3D-34947 at Misawa in NEXION?",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-34947",
+        "system": "NEXION",
+        "site_token": "misawa"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-34947' AND system='NEXION' AND site_token='misawa'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 4,
+        "reorder_point": 3.318499,
+        "safety_stock": 3.195211,
+        "daily_demand_rate": 0.001369863,
+        "monthly_sigma": 0.204124,
+        "history_months": 73,
+        "window_months": 24,
+        "total_failures": 1,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Misawa\\2023-10-17 thru 10-28 (Install Acceptance)(FP-JD)\\Miscellaneous\\Draft SEMS3D-34947 NEXION Site Selection Report Misawa (07-16 Dec 2017).pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Misawa AB - Japan\\1_Site Selection\\2017 December\\Reports\\Draft2(Final) SEMS3D-34947 NEXION Site Selection Report Misawa (07-16 Dec 2017).docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\#  NEXION Sites\\1_Sites\\Misawa AB - Japan\\1_Site Selection\\2017 December\\Reports\\Draft1 SEMS3D-34947 NEXION Site Selection Report Misawa (07-16 Dec 2017).docx"
+      ],
+      "why_green_possible": "Deterministic reorder-point stub is computable from 73 months of failure history for SEMS3D-34947 at misawa in NEXION."
+    },
+    {
+      "id": "INV-AGG-05",
+      "category": "reorder_point",
+      "scenario_tag": "baseline_yellow",
+      "query": "What should our reorder point be for SEMS3D-41107 at Eglin in NEXION?",
+      "tier_expected": "YELLOW",
+      "expected_tier": "INVENTORY_YELLOW",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-41107",
+        "system": "NEXION",
+        "site_token": "eglin"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-41107' AND system='NEXION' AND site_token='eglin'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 33,
+        "reorder_point": 32.159197,
+        "safety_stock": 30.338333,
+        "daily_demand_rate": 0.020231823,
+        "monthly_sigma": 1.938146,
+        "history_months": 13,
+        "window_months": 13,
+        "total_failures": 8,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Eglin\\2021-12-13 thru 12-17 (ASV)(Seagren-Dexter)\\MSR\\Previous MSRs\\Copy of SEMS3D-41107 Eglin NEXION MSR CDRL A001 (18 Dec 2020).docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Eglin 2020-11-(16-21) ASV\\Review Comments\\SEMS3D-41107 Eglin NEXION MSR CDRL A001 (21 Dec 2020).docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Eglin 2020-11-(16-21) ASV\\SEMS3D-41107 Eglin NEXION MSR CDRL A001 (18 Dec 2020).pdf"
+      ],
+      "why_yellow": "Usable failure history exists, but only 13 months are available, so the answer is provisional."
+    },
+    {
+      "id": "INV-AGG-06",
+      "category": "what_should_we_stock",
+      "scenario_tag": "baseline_green",
+      "query": "What should we stock for SEMS3D-35674 at Vandenberg in NEXION?",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "system": "NEXION",
+        "site_token": "vandenberg"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND system='NEXION' AND site_token='vandenberg'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 10,
+        "reorder_point": 9.955497,
+        "safety_stock": 9.585634,
+        "daily_demand_rate": 0.004109589,
+        "monthly_sigma": 0.612372,
+        "history_months": 37,
+        "window_months": 24,
+        "total_failures": 3,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2021-01-18 thru 22 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Vandenberg NEXION ASV) (11-15 Jan 2021)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2021-01-18 thru 22 (ASV)(Pitts-Dexter)\\TAForm SEMS3D-35674 (Vandenberg NEXION ASV) (11-15 Jan 2021)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2021-01-18 thru 22 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Vandenberg NEXION ASV) (11-15 Jan 2021)(Dexter).xlsx"
+      ],
+      "why_green_possible": "Deterministic reorder-point stub is computable from 37 months of failure history for SEMS3D-35674 at vandenberg in NEXION."
+    },
+    {
+      "id": "INV-AGG-07",
+      "category": "what_should_we_stock",
+      "scenario_tag": "baseline_yellow",
+      "query": "What should we stock for ES-3202 at Guam in NEXION?",
+      "tier_expected": "YELLOW",
+      "expected_tier": "INVENTORY_YELLOW",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "ES-3202",
+        "system": "NEXION",
+        "site_token": "guam"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='ES-3202' AND system='NEXION' AND site_token='guam'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 13,
+        "reorder_point": 12.6671,
+        "safety_stock": 11.756668,
+        "daily_demand_rate": 0.010115911,
+        "monthly_sigma": 0.751068,
+        "history_months": 13,
+        "window_months": 13,
+        "total_failures": 4,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2014 PRs\\PR 408525 (LDI) (Guam Preamp Repair)\\ES-3202 (LDI) (PR 408525) (Preamp Repair).pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2014 PRs\\PR 408525 (LDI) (Guam Preamp Repair)\\ES-3202 (LDI) (Preamp Repair).docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\Archive\\NEXION Purchases Rcvd (PO Type) (ARINC-BAH)\\2013 PRs\\PR 380638 (R) (LDI) (Guam Items Repair-Replace)\\PR 380638 (ES-3202) (Signed).pdf"
+      ],
+      "why_yellow": "Usable failure history exists, but only 13 months are available, so the answer is provisional."
+    },
+    {
+      "id": "INV-AGG-08",
+      "category": "what_should_we_stock",
+      "scenario_tag": "baseline_yellow",
+      "query": "What should we stock for AGB9835 at Thule in NEXION?",
+      "tier_expected": "YELLOW",
+      "expected_tier": "INVENTORY_YELLOW",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "AGB9835",
+        "system": "NEXION",
+        "site_token": "thule"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='AGB9835' AND system='NEXION' AND site_token='thule'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 11,
+        "reorder_point": 10.0614,
+        "safety_stock": 9.378576,
+        "daily_demand_rate": 0.007586934,
+        "monthly_sigma": 0.599145,
+        "history_months": 13,
+        "window_months": 13,
+        "total_failures": 3,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\3-NEXION\\6_NEXION Shelters (Thermobond Drawings)\\THULE (AGB9835 NGC 1705-271Arev1) (Thule) (Rcvd 2018-02-02).pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\3-NEXION\\Thule AB - Greenland (200811014)\\3- As-Built\\Shelter (AGB9835 NGC 1705-271Arev1) (Thule) (Rcvd 2018-02-02).pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\004_Drawings\\3-NEXION\\Thule AB - Greenland (200811014)\\1- Pre-Install\\Thule ECU Outline Page (from AGB9835 NGC 1705-271A (Shelter 12-21-2017)).pdf"
+      ],
+      "why_yellow": "Usable failure history exists, but only 13 months are available, so the answer is provisional."
+    },
+    {
+      "id": "INV-AGG-09",
+      "category": "inventory_for",
+      "scenario_tag": "baseline_green",
+      "query": "Inventory for SEMS3D-42184 at Ascension in NEXION",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-42184",
+        "system": "NEXION",
+        "site_token": "ascension"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-42184' AND system='NEXION' AND site_token='ascension'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 7,
+        "reorder_point": 6.636998,
+        "safety_stock": 6.390423,
+        "daily_demand_rate": 0.002739726,
+        "monthly_sigma": 0.408248,
+        "history_months": 25,
+        "window_months": 24,
+        "total_failures": 2,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2024-03-11 thru 03-29 (NEXION-AVS)(ISTO-ASV)(Pitts, Randall, Herrera)\\MSR\\Last MSR and RTS reports\\ISTO\\SEMS3D-42184 Ascension Island NEXION MSR (April 11-29) CDRL A001.docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Ascension\\2024-03-11 thru 03-29 (NEXION-AVS)(ISTO-ASV)(Pitts, Randall, Herrera)\\MSR\\Last MSR and RTS reports\\SEMS3D-42184 Ascension Island NEXION MSR (April 11-29) CDRL A001.pdf",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Ascension 2022 (11 Apr - 29 Apr) RTS\\SEMS3D-42184 Ascension Island NEXION MSR (April 11-29) CDRL A001 - (FP Re-review 9 May 2022).docx"
+      ],
+      "why_green_possible": "Deterministic reorder-point stub is computable from 25 months of failure history for SEMS3D-42184 at ascension in NEXION."
+    },
+    {
+      "id": "INV-AGG-10",
+      "category": "inventory_for",
+      "scenario_tag": "baseline_yellow",
+      "query": "Inventory for SEMS3D-40540 at Vandenberg in NEXION",
+      "tier_expected": "YELLOW",
+      "expected_tier": "INVENTORY_YELLOW",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-40540",
+        "system": "NEXION",
+        "site_token": "vandenberg"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-40540' AND system='NEXION' AND site_token='vandenberg'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 15,
+        "reorder_point": 14.29164,
+        "safety_stock": 13.381208,
+        "daily_demand_rate": 0.010115911,
+        "monthly_sigma": 0.85485,
+        "history_months": 13,
+        "window_months": 13,
+        "total_failures": 4,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2023-02-19 thru 02-23 (ASV)(FS-VN)\\Deliverables\\MSR\\Old MSRs\\SEMS3D-40540 Vandenberg NEXION MSR CDRL A001 (22 Feb 2022).docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Vandenberg 2022 (01-24 to 01-28) ASV\\To Be Deleted\\SEMS3D-40540 Vandenberg NEXION MSR CDRL A001 (28 Feb 2022).docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Vandenberg 2022 (01-24 to 01-28) ASV\\SEMS3D-40540 Vandenberg NEXION MSR CDRL A001 (22 Feb 2022).pdf"
+      ],
+      "why_yellow": "Usable failure history exists, but only 13 months are available, so the answer is provisional."
+    },
+    {
+      "id": "INV-AGG-11",
+      "category": "inventory_for",
+      "scenario_tag": "baseline_green",
+      "query": "Inventory for SEMS3D-35674 at Curacao in ISTO",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "system": "ISTO",
+        "site_token": "curacao"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND system='ISTO' AND site_token='curacao'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 7,
+        "reorder_point": 6.636998,
+        "safety_stock": 6.390423,
+        "daily_demand_rate": 0.002739726,
+        "monthly_sigma": 0.408248,
+        "history_months": 25,
+        "window_months": 24,
+        "total_failures": 2,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Curacao\\2021-02-21 thru 02-27 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Curacao ISTO ASV) (21-27 Feb 2021)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Curacao\\2021-02-21 thru 02-27 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Curacao ISTO ASV) (21-27 Feb 2021)(Dexter).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Curacao\\2019-01-7 thru 01-12 (ASV-RTS)(Seagren-Nachbar)\\2019-1-7 thru 12 (Curacao ISTO ASV & RTS, WX29)(Nachbar-Seagren)\\Approvals\\SEMS3D-35674 (Nachbar) Curacao 7-12 Jan 2019 WX29.xlsx"
+      ],
+      "why_green_possible": "Deterministic reorder-point stub is computable from 25 months of failure history for SEMS3D-35674 at curacao in ISTO."
+    },
+    {
+      "id": "INV-AGG-12",
+      "category": "abstention",
+      "scenario_tag": "history_lt_12",
+      "query": "What should our reorder point be for FA2528 at Ascension in NEXION?",
+      "tier_expected": "RED",
+      "expected_tier": "INVENTORY_RED",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "FA2528",
+        "system": "NEXION",
+        "site_token": "ascension"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='FA2528' AND system='NEXION' AND site_token='ascension'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "history_months": 1,
+        "reason": "inventory recommender needs at least 12 months of history; found 1"
+      },
+      "why_red": "This part/site/system slice only has 1 month(s) of observable history in failure_events, so Lane 4 must abstain rather than fabricate a stocking recommendation."
+    },
+    {
+      "id": "INV-AGG-13",
+      "category": "abstention",
+      "scenario_tag": "history_lt_12",
+      "query": "Inventory for SEMS3D-38546 at Fairford in NEXION",
+      "tier_expected": "RED",
+      "expected_tier": "INVENTORY_RED",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-38546",
+        "system": "NEXION",
+        "site_token": "fairford"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-38546' AND system='NEXION' AND site_token='fairford'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "history_months": 1,
+        "reason": "inventory recommender needs at least 12 months of history; found 1"
+      },
+      "why_red": "This part/site/system slice only has 1 month(s) of observable history in failure_events, so Lane 4 must abstain rather than fabricate a stocking recommendation."
+    },
+    {
+      "id": "INV-AGG-14",
+      "category": "edge_case",
+      "scenario_tag": "very_low_demand",
+      "query": "What should our reorder point be for SEMS3D-40332 at Vandenberg in NEXION?",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-40332",
+        "system": "NEXION",
+        "site_token": "vandenberg"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-40332' AND system='NEXION' AND site_token='vandenberg'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "recommended_units": 4,
+        "reorder_point": 3.318499,
+        "safety_stock": 3.195211,
+        "daily_demand_rate": 0.001369863,
+        "monthly_sigma": 0.204124,
+        "history_months": 37,
+        "window_months": 24,
+        "total_failures": 1,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2023-02-19 thru 02-23 (ASV)(FS-VN)\\Deliverables\\MSR\\Old MSRs\\SEMS3D-40332 NEXION ASV MSR (26-30 May 2020).docx",
+        "D:\\CorpusTransfr\\verified\\IGS\\1.0 IGS DM - Restricted\\SEMS3D\\A001-MSR\\Vandenberg 2020 (05-26 to 05-30) ASV\\SEMS3D-40332 NEXION ASV MSR (26-30 May 2020).pdf"
+      ],
+      "why_green_possible": "Deterministic reorder-point stub is computable from 37 months of failure history for SEMS3D-40332 at vandenberg in NEXION."
+    },
+    {
+      "id": "INV-AGG-15",
+      "category": "edge_case",
+      "scenario_tag": "very_high_demand_short_history",
+      "query": "What should our reorder point be for SEMS3D-40507 at Azores in NEXION?",
+      "tier_expected": "RED",
+      "expected_tier": "INVENTORY_RED",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-40507",
+        "system": "NEXION",
+        "site_token": "azores"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-40507' AND system='NEXION' AND site_token='azores'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "expected_result": {
+        "history_months": 1,
+        "reason": "inventory recommender needs at least 12 months of history; found 1"
+      },
+      "why_red": "This part/site/system slice only has 1 month(s) of observable history in failure_events, so Lane 4 must abstain rather than fabricate a stocking recommendation."
+    },
+    {
+      "id": "INV-AGG-16",
+      "category": "reorder_point",
+      "scenario_tag": "multi_site_family",
+      "query": "What should our reorder point be for SEMS3D-35674 at Vandenberg in NEXION?",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "site_token": "vandenberg",
+        "system": "NEXION"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND site_token='vandenberg' AND system='NEXION'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "note": "Bridge-work expansion row. Uses the same part across multiple sites/systems to validate site sensitivity and no-system fallback behavior.",
+      "expected_result": {
+        "recommended_units": 10,
+        "reorder_point": 9.955497,
+        "safety_stock": 9.585634,
+        "daily_demand_rate": 0.004109589,
+        "monthly_sigma": 0.612372,
+        "history_months": 37,
+        "window_months": 24,
+        "total_failures": 3,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2021-01-18 thru 22 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Vandenberg NEXION ASV) (11-15 Jan 2021)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2021-01-18 thru 22 (ASV)(Pitts-Dexter)\\TAForm SEMS3D-35674 (Vandenberg NEXION ASV) (11-15 Jan 2021)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2021-01-18 thru 22 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Vandenberg NEXION ASV) (11-15 Jan 2021)(Dexter).xlsx"
+      ],
+      "why_green_possible": "This site-specific slice has 37 months of history for SEMS3D-35674, so the stub reorder-point formula is fully deterministic."
+    },
+    {
+      "id": "INV-AGG-17",
+      "category": "reorder_point",
+      "scenario_tag": "multi_site_family",
+      "query": "What should our reorder point be for SEMS3D-35674 at Alpena in NEXION?",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "site_token": "alpena",
+        "system": "NEXION"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND site_token='alpena' AND system='NEXION'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "note": "Bridge-work expansion row. Uses the same part across multiple sites/systems to validate site sensitivity and no-system fallback behavior.",
+      "expected_result": {
+        "recommended_units": 7,
+        "reorder_point": 6.636998,
+        "safety_stock": 6.390423,
+        "daily_demand_rate": 0.002739726,
+        "monthly_sigma": 0.408248,
+        "history_months": 25,
+        "window_months": 24,
+        "total_failures": 2,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2022-06-06 thru 06-09 (NEXION-ASV)(Seagren-Vinh)\\Travel Approval Forms\\Travel Approval Form SEMS3D-35674 (Nguyen).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2022-06-06 thru 06-09 (NEXION-ASV)(Seagren-Vinh)\\Travel Approval Forms\\Travel Approval Form SEMS3D-35674 (Seagren).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Alpena\\2020-05-25 thru 05-29 (NEXION_ASV)(Pitts-Dexter)\\Travel Approval Forms\\Travel Approval Form SEMS3D-35674 (Alpena NEXION ASV (25-29 May 2020)(Pitts).xlsx"
+      ],
+      "why_green_possible": "This site-specific slice has 25 months of history for SEMS3D-35674, so the stub reorder-point formula is fully deterministic."
+    },
+    {
+      "id": "INV-AGG-18",
+      "category": "reorder_point",
+      "scenario_tag": "multi_site_family",
+      "query": "What should our reorder point be for SEMS3D-35674 at Curacao in ISTO?",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "site_token": "curacao",
+        "system": "ISTO"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND site_token='curacao' AND system='ISTO'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "note": "Bridge-work expansion row. Uses the same part across multiple sites/systems to validate site sensitivity and no-system fallback behavior.",
+      "expected_result": {
+        "recommended_units": 7,
+        "reorder_point": 6.636998,
+        "safety_stock": 6.390423,
+        "daily_demand_rate": 0.002739726,
+        "monthly_sigma": 0.408248,
+        "history_months": 25,
+        "window_months": 24,
+        "total_failures": 2,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Curacao\\2021-02-21 thru 02-27 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Curacao ISTO ASV) (21-27 Feb 2021)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Curacao\\2021-02-21 thru 02-27 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Curacao ISTO ASV) (21-27 Feb 2021)(Dexter).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Curacao\\2019-01-7 thru 01-12 (ASV-RTS)(Seagren-Nachbar)\\2019-1-7 thru 12 (Curacao ISTO ASV & RTS, WX29)(Nachbar-Seagren)\\Approvals\\SEMS3D-35674 (Nachbar) Curacao 7-12 Jan 2019 WX29.xlsx"
+      ],
+      "why_green_possible": "This site-specific slice has 25 months of history for SEMS3D-35674, so the stub reorder-point formula is fully deterministic."
+    },
+    {
+      "id": "INV-AGG-19",
+      "category": "reorder_point",
+      "scenario_tag": "multi_site_family",
+      "query": "What should our reorder point be for SEMS3D-35674 at Djibouti in ISTO?",
+      "tier_expected": "YELLOW",
+      "expected_tier": "INVENTORY_YELLOW",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "site_token": "djibouti",
+        "system": "ISTO"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND site_token='djibouti' AND system='ISTO'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "note": "Bridge-work expansion row. Uses the same part across multiple sites/systems to validate site sensitivity and no-system fallback behavior.",
+      "expected_result": {
+        "recommended_units": 13,
+        "reorder_point": 12.6671,
+        "safety_stock": 11.756668,
+        "daily_demand_rate": 0.010115911,
+        "monthly_sigma": 0.751068,
+        "history_months": 13,
+        "window_months": 13,
+        "total_failures": 4,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Djibouti\\2022-02-19 thru 03-12 (ISTO Install)(Pitts-Dexter)\\Travel Approval Forms\\Travel Approval Form SEMS3D-35674 (Djibouti ISTO Installation)(Dexter).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Djibouti\\2022-02-19 thru 03-12 (ISTO Install)(Pitts-Dexter)\\Travel Approval Forms\\Travel Approval Form SEMS3D-35674 (Djibouti ISTO Installation)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Djibouti\\2021-03-25 thru 04-10 (ISTO Site Survey)(Pitts-Dexter)\\Travel Approval Forms\\Travel Approval Form SEMS3D-35674 (Djibouti ISTO Site Survey) (25 Mar - 10 Apr 2021)(Pitts).xlsx"
+      ],
+      "why_yellow": "The site-specific slice is computable but only has 13 months of history, so the recommendation stays provisional."
+    },
+    {
+      "id": "INV-AGG-20",
+      "category": "inventory_for",
+      "scenario_tag": "multi_site_family",
+      "query": "Inventory for SEMS3D-35674 at Guam in ISTO",
+      "tier_expected": "RED",
+      "expected_tier": "INVENTORY_RED",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "site_token": "guam",
+        "system": "ISTO"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND site_token='guam' AND system='ISTO'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "note": "Bridge-work expansion row. Uses the same part across multiple sites/systems to validate site sensitivity and no-system fallback behavior.",
+      "expected_result": {
+        "history_months": 1,
+        "reason": "inventory recommender needs at least 12 months of history; found 1"
+      },
+      "why_red": "The requested SEMS3D-35674 + guam slice has only 1 month(s) of history, so the executor must abstain."
+    },
+    {
+      "id": "INV-AGG-21",
+      "category": "inventory_for",
+      "scenario_tag": "multi_site_family",
+      "query": "Inventory for SEMS3D-35674 at Ascension in NEXION",
+      "tier_expected": "RED",
+      "expected_tier": "INVENTORY_RED",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "site_token": "ascension",
+        "system": "NEXION"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND site_token='ascension' AND system='NEXION'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "note": "Bridge-work expansion row. Uses the same part across multiple sites/systems to validate site sensitivity and no-system fallback behavior.",
+      "expected_result": {
+        "history_months": 1,
+        "reason": "inventory recommender needs at least 12 months of history; found 1"
+      },
+      "why_red": "The requested SEMS3D-35674 + ascension slice has only 1 month(s) of history, so the executor must abstain."
+    },
+    {
+      "id": "INV-AGG-22",
+      "category": "what_should_we_stock",
+      "scenario_tag": "multi_site_family",
+      "query": "What should we stock for SEMS3D-35674 at Fairford in NEXION?",
+      "tier_expected": "RED",
+      "expected_tier": "INVENTORY_RED",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "site_token": "fairford",
+        "system": "NEXION"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND site_token='fairford' AND system='NEXION'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "note": "Bridge-work expansion row. Uses the same part across multiple sites/systems to validate site sensitivity and no-system fallback behavior.",
+      "expected_result": {
+        "history_months": 1,
+        "reason": "inventory recommender needs at least 12 months of history; found 1"
+      },
+      "why_red": "The requested SEMS3D-35674 + fairford slice has only 1 month(s) of history, so the executor must abstain."
+    },
+    {
+      "id": "INV-AGG-23",
+      "category": "reorder_point",
+      "scenario_tag": "multi_site_family_no_system",
+      "query": "What should our reorder point be for SEMS3D-35674 at Vandenberg?",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "site_token": "vandenberg"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND site_token='vandenberg'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "note": "Bridge-work expansion row. Uses the same part across multiple sites/systems to validate site sensitivity and no-system fallback behavior.",
+      "expected_result": {
+        "recommended_units": 10,
+        "reorder_point": 9.955497,
+        "safety_stock": 9.585634,
+        "daily_demand_rate": 0.004109589,
+        "monthly_sigma": 0.612372,
+        "history_months": 37,
+        "window_months": 24,
+        "total_failures": 3,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2021-01-18 thru 22 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Vandenberg NEXION ASV) (11-15 Jan 2021)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2021-01-18 thru 22 (ASV)(Pitts-Dexter)\\TAForm SEMS3D-35674 (Vandenberg NEXION ASV) (11-15 Jan 2021)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Vandenberg\\2021-01-18 thru 22 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Vandenberg NEXION ASV) (11-15 Jan 2021)(Dexter).xlsx"
+      ],
+      "why_green_possible": "This site-specific slice has 37 months of history for SEMS3D-35674, so the stub reorder-point formula is fully deterministic."
+    },
+    {
+      "id": "INV-AGG-24",
+      "category": "inventory_for",
+      "scenario_tag": "multi_site_family_no_system",
+      "query": "Inventory for SEMS3D-35674 at Curacao",
+      "tier_expected": "GREEN",
+      "expected_tier": "INVENTORY_GREEN",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "site_token": "curacao"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND site_token='curacao'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "note": "Bridge-work expansion row. Uses the same part across multiple sites/systems to validate site sensitivity and no-system fallback behavior.",
+      "expected_result": {
+        "recommended_units": 7,
+        "reorder_point": 6.636998,
+        "safety_stock": 6.390423,
+        "daily_demand_rate": 0.002739726,
+        "monthly_sigma": 0.408248,
+        "history_months": 25,
+        "window_months": 24,
+        "total_failures": 2,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Curacao\\2021-02-21 thru 02-27 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Curacao ISTO ASV) (21-27 Feb 2021)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Curacao\\2021-02-21 thru 02-27 (ASV)(Pitts-Dexter)\\Travel Approval Form SEMS3D-35674 (Curacao ISTO ASV) (21-27 Feb 2021)(Dexter).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Curacao\\2019-01-7 thru 01-12 (ASV-RTS)(Seagren-Nachbar)\\2019-1-7 thru 12 (Curacao ISTO ASV & RTS, WX29)(Nachbar-Seagren)\\Approvals\\SEMS3D-35674 (Nachbar) Curacao 7-12 Jan 2019 WX29.xlsx"
+      ],
+      "why_green_possible": "This site-specific slice has 25 months of history for SEMS3D-35674, so the stub reorder-point formula is fully deterministic."
+    },
+    {
+      "id": "INV-AGG-25",
+      "category": "what_should_we_stock",
+      "scenario_tag": "multi_site_family_no_system",
+      "query": "What should we stock for SEMS3D-35674 at Djibouti?",
+      "tier_expected": "YELLOW",
+      "expected_tier": "INVENTORY_YELLOW",
+      "expected_shape": "inventory_reorder_point",
+      "expected_filters": {
+        "part_number": "SEMS3D-35674",
+        "site_token": "djibouti"
+      },
+      "expected_params": {
+        "lead_time_days": 90,
+        "service_level_z": 1.65,
+        "trailing_months_cap": 24
+      },
+      "ground_truth_sql": "SELECT event_date, event_year FROM failure_events WHERE part_number='SEMS3D-35674' AND site_token='djibouti'",
+      "requires_pricing_substrate": false,
+      "requires_installed_base": false,
+      "note": "Bridge-work expansion row. Uses the same part across multiple sites/systems to validate site sensitivity and no-system fallback behavior.",
+      "expected_result": {
+        "recommended_units": 13,
+        "reorder_point": 12.6671,
+        "safety_stock": 11.756668,
+        "daily_demand_rate": 0.010115911,
+        "monthly_sigma": 0.751068,
+        "history_months": 13,
+        "window_months": 13,
+        "total_failures": 4,
+        "lead_time_days": 90
+      },
+      "top_evidence_paths": [
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Djibouti\\2022-02-19 thru 03-12 (ISTO Install)(Pitts-Dexter)\\Travel Approval Forms\\Travel Approval Form SEMS3D-35674 (Djibouti ISTO Installation)(Dexter).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Djibouti\\2022-02-19 thru 03-12 (ISTO Install)(Pitts-Dexter)\\Travel Approval Forms\\Travel Approval Form SEMS3D-35674 (Djibouti ISTO Installation)(Pitts).xlsx",
+        "D:\\CorpusTransfr\\verified\\IGS\\! Site Visits\\(01) Sites\\Djibouti\\2021-03-25 thru 04-10 (ISTO Site Survey)(Pitts-Dexter)\\Travel Approval Forms\\Travel Approval Form SEMS3D-35674 (Djibouti ISTO Site Survey) (25 Mar - 10 Apr 2021)(Pitts).xlsx"
+      ],
+      "why_yellow": "The site-specific slice is computable but only has 13 months of history, so the recommendation stays provisional."
+    }
+  ]
+}

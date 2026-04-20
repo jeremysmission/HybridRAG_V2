@@ -291,7 +291,7 @@ class EntityRetriever:
             parts.append("\n## Relationship Results\n")
             for r in rels:
                 parts.append(
-                    f"- {r.subject_text} —[{r.predicate}]→ {r.object_text} "
+                    f"- {r.subject_text} --[{r.predicate}]-> {r.object_text} "
                     f"(confidence: {r.confidence:.1f}, source: {r.source_path})\n"
                     f"  Context: {r.context}\n"
                 )
@@ -386,7 +386,7 @@ class EntityRetriever:
             parts.append("\n## Cross-Document Relationships\n\n")
             for r in rels:
                 parts.append(
-                    f"- {r.subject_text} —[{r.predicate}]→ {r.object_text} "
+                    f"- {r.subject_text} --[{r.predicate}]-> {r.object_text} "
                     f"(confidence: {r.confidence:.1f}, source: {r.source_path})\n"
                 )
                 sources.add(r.source_path)

@@ -15,6 +15,7 @@ from __future__ import annotations
 import logging
 import sqlite3
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -286,8 +287,102 @@ class FailureEventsStore:
             for r in rows
         ]
 
+    def monthly_failure_history(
+        self,
+        part_number: str,
+        *,
+        system: str | None = None,
+        site_token: str | None = None,
+        trailing_months: int = 24,
+    ) -> dict[str, object]:
+        """
+        Return a zero-filled monthly failure history for the requested part.
+
+        Uses event_date month precision when present and falls back to January
+        of event_year when only year precision exists.
+        """
+        clauses = ["part_number = ?"]
+        params: list[object] = [part_number]
+        if system:
+            clauses.append("system = ?")
+            params.append(system)
+        if site_token:
+            clauses.append("site_token = ?")
+            params.append(site_token)
+        where = " AND ".join(clauses)
+        rows = self._conn.execute(
+            f"""
+            SELECT event_date, event_year
+            FROM failure_events
+            WHERE {where}
+            """,
+            params,
+        ).fetchall()
+
+        bucket_counts: dict[date, int] = {}
+        for raw_event_date, raw_event_year in rows:
+            month_start = _month_start_from_event(raw_event_date, raw_event_year)
+            if month_start is None:
+                continue
+            bucket_counts[month_start] = bucket_counts.get(month_start, 0) + 1
+
+        if not bucket_counts:
+            return {
+                "month_labels": [],
+                "month_counts": [],
+                "span_months": 0,
+                "window_months": 0,
+                "total_failures": 0,
+                "first_month": "",
+                "last_month": "",
+            }
+
+        first_month = min(bucket_counts)
+        last_month = max(bucket_counts)
+        span_months = _month_diff(first_month, last_month) + 1
+        window_months = min(max(1, int(trailing_months)), span_months)
+        window_start = _add_months(last_month, -(window_months - 1))
+        months = [_add_months(window_start, offset) for offset in range(window_months)]
+        month_counts = [int(bucket_counts.get(month_start, 0)) for month_start in months]
+
+        return {
+            "month_labels": [m.strftime("%Y-%m") for m in months],
+            "month_counts": month_counts,
+            "span_months": span_months,
+            "window_months": window_months,
+            "total_failures": int(sum(month_counts)),
+            "first_month": first_month.strftime("%Y-%m"),
+            "last_month": last_month.strftime("%Y-%m"),
+        }
+
     def close(self) -> None:
         try:
             self._conn.close()
         except Exception:
             logger.debug("Failed closing failure events store", exc_info=True)
+
+
+def _month_start_from_event(raw_event_date: object, raw_event_year: object) -> date | None:
+    text = str(raw_event_date or "").strip()
+    if len(text) >= 7 and text[4] == "-" and text[7:8] in {"", "-"}:
+        try:
+            return date(int(text[0:4]), int(text[5:7]), 1)
+        except ValueError:
+            pass
+    try:
+        year = int(raw_event_year) if raw_event_year is not None else None
+    except (TypeError, ValueError):
+        year = None
+    if year is not None and 1900 <= year <= 2100:
+        return date(year, 1, 1)
+    return None
+
+
+def _month_diff(start: date, end: date) -> int:
+    return (end.year - start.year) * 12 + (end.month - start.month)
+
+
+def _add_months(value: date, delta: int) -> date:
+    year = value.year + (value.month - 1 + delta) // 12
+    month = (value.month - 1 + delta) % 12 + 1
+    return date(year, month, 1)

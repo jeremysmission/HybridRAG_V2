@@ -159,7 +159,7 @@ class QueryPipeline:
             agg_start = time.perf_counter()
             agg_result = self.aggregation_executor.try_execute(query_text)
             agg_ms = int((time.perf_counter() - agg_start) * 1000)
-            if agg_result is not None and agg_result.tier != "RED":
+            if agg_result is not None:
                 elapsed = int((time.perf_counter() - start) * 1000)
                 response = QueryResponse(
                     answer=agg_result.context_text,

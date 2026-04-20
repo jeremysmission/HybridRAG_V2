@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -351,3 +352,71 @@ def load_all_packs(directory: str | Path) -> list[VocabPack]:
         packs.append(load_pack(pack_file))
     packs.sort(key=lambda p: p.pack_id)
     return packs
+
+
+def _normalize_column_token(value: str) -> str:
+    text = str(value or "").strip().lower()
+    if not text:
+        return ""
+    text = " ".join(text.replace("_", " ").split())
+    return text
+
+
+def _column_token_variants(value: str) -> set[str]:
+    normalized = _normalize_column_token(value)
+    if not normalized:
+        return set()
+    compact = "".join(ch for ch in normalized if ch.isalnum())
+    return {normalized, compact}
+
+
+@lru_cache(maxsize=4)
+def load_column_aliases(path: str | Path) -> dict[str, tuple[str, ...]]:
+    alias_path = Path(path)
+    if not alias_path.exists():
+        raise VocabPackError(f"column alias file not found: {alias_path}")
+    try:
+        with open(alias_path, encoding="utf-8") as f:
+            raw = yaml.safe_load(f) or {}
+    except yaml.YAMLError as exc:
+        raise VocabPackError(f"YAML parse error in {alias_path}: {exc}") from exc
+
+    concepts = raw.get("concepts")
+    if not isinstance(concepts, dict) or not concepts:
+        raise VocabPackError(f"column alias file missing non-empty concepts map: {alias_path}")
+
+    resolved: dict[str, tuple[str, ...]] = {}
+    for concept, aliases in concepts.items():
+        if not isinstance(aliases, list) or not aliases:
+            raise VocabPackError(f"column alias concept {concept!r} must map to a non-empty list")
+        normalized_aliases = []
+        for alias in aliases:
+            alias_text = str(alias or "").strip()
+            if alias_text:
+                normalized_aliases.append(alias_text)
+        if not normalized_aliases:
+            raise VocabPackError(f"column alias concept {concept!r} has no usable aliases")
+        resolved[str(concept)] = tuple(normalized_aliases)
+    return resolved
+
+
+def resolve_column(
+    header: str,
+    concept: str,
+    aliases_path: str | Path = "config/column_aliases.yaml",
+) -> str:
+    """Return ``concept`` when a header maps to it via the column-alias file.
+
+    This is a lightweight portability helper for structured workbook parsing.
+    It intentionally lives in ``pack_loader`` so callers can stay on one
+    deterministic vocabulary interface instead of hardcoding ad-hoc header maps.
+    """
+    header_variants = _column_token_variants(header)
+    if not header_variants:
+        return ""
+    concepts = load_column_aliases(Path(aliases_path))
+    aliases = concepts.get(concept, ())
+    for alias in aliases:
+        if header_variants & _column_token_variants(alias):
+            return concept
+    return ""

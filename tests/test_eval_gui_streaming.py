@@ -463,7 +463,10 @@ def test_eval_gui_tab_switch_during_active_run_keeps_runner_live_and_close_stops
     except tk.TclError:
         pytest.skip("no Tk display available")
 
-    app = EvalGUI()
+    try:
+        app = EvalGUI()
+    except tk.TclError:
+        pytest.skip("Tk bootstrap unavailable in this environment")
 
     class FakeRunner:
         def __init__(self) -> None:

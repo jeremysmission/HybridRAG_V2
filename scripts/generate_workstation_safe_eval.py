@@ -59,6 +59,21 @@ class ReplacementRule:
 
 PROGRAM_REPLACEMENTS = (
     ReplacementRule(
+        name="igs_token",
+        pattern=re.compile(r"(?<![A-Za-z0-9])IGS(?=[ _-])"),
+        replacement="enterprise program",
+    ),
+    ReplacementRule(
+        name="nexion_token",
+        pattern=re.compile(r"(?<![A-Za-z0-9])NEXION(?![A-Za-z0-9-])", re.IGNORECASE),
+        replacement="monitoring system",
+    ),
+    ReplacementRule(
+        name="isto_token",
+        pattern=re.compile(r"(?<![A-Za-z0-9])ISTO(?![A-Za-z0-9-])", re.IGNORECASE),
+        replacement="legacy monitoring system",
+    ),
+    ReplacementRule(
         name="igs_nexion",
         pattern=re.compile(r"(?<![A-Za-z0-9])enterprise program[/ ]monitoring system(?![A-Za-z0-9])", re.IGNORECASE),
         replacement="enterprise program / monitoring system",
@@ -158,14 +173,14 @@ CLEANUP_REPLACEMENTS = (
 )
 
 DISALLOWED_TOKEN_PATTERNS = {
-    "enterprise program": re.compile(r"(?<![A-Za-z0-9])enterprise program(?![A-Za-z0-9-])", re.IGNORECASE),
-    "legacy monitoring system": re.compile(r"(?<![A-Za-z0-9])legacy monitoring system(?![A-Za-z0-9-])", re.IGNORECASE),
-    "monitoring system": re.compile(r"(?<![A-Za-z0-9])monitoring system(?![A-Za-z0-9-])", re.IGNORECASE),
-    "NVIDIA workstation GPU": re.compile(
-        r"(?<![A-Za-z0-9])(?:NVIDIA\s+GeForce\s+)?RTX\s*NVIDIA workstation GPU(?![A-Za-z0-9])"
+    "IGS": re.compile(r"(?<![A-Za-z0-9])IGS(?![A-Za-z0-9])"),
+    "NEXION": re.compile(r"(?<![A-Za-z0-9])NEXION(?![A-Za-z0-9-])", re.IGNORECASE),
+    "ISTO": re.compile(r"(?<![A-Za-z0-9])ISTO(?![A-Za-z0-9-])", re.IGNORECASE),
+    "RTX 3090": re.compile(
+        r"(?<![A-Za-z0-9])(?:NVIDIA\s+GeForce\s+)?RTX\s*3090(?![A-Za-z0-9])"
         r"|(?<![A-Za-z0-9])dual[- ]3090s?(?![A-Za-z0-9])"
-        r"|(?<![A-Za-z0-9])single\s+NVIDIA workstation GPU(?![A-Za-z0-9])"
-        r"|(?<![A-Za-z0-9])NVIDIA workstation GPU(?![A-Za-z0-9])",
+        r"|(?<![A-Za-z0-9])single\s+3090(?![A-Za-z0-9])"
+        r"|(?<![A-Za-z0-9])3090(?![A-Za-z0-9])",
         re.IGNORECASE,
     ),
 }

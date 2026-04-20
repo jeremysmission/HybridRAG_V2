@@ -91,7 +91,7 @@ def test_validate_only_fails_when_sanitized_field_has_banned_token(tmp_path: Pat
     payload = [
         {
             "query_id": "PQ-901",
-            "user_input": "Show me the monitoring system scan report.",
+            "user_input": "Show me the NEXION scan report.",
             "reference": "Safe reference.",
             "reference_contexts": [],
             "persona": "Cybersecurity",

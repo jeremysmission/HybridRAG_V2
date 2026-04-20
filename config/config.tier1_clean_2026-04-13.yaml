@@ -1,0 +1,3 @@
+paths:
+  lance_db: data/index/lancedb
+  entity_db: data/index/clean/tier1_clean_20260413/entities.sqlite3

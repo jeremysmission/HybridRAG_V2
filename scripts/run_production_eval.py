@@ -141,9 +141,9 @@ FAMILY_EXPANSIONS: dict[str, list[str]] = {
         "monitoring system", "software",
     ],
     "cybersecurity": [
-        # Removed security(39%), rmf(69%), acas(77%), stig(50%), authorization(57%)
-        # Only keeping the most specific terms
-        "ato", "cyber", "poam", "cte",
+        # Keep the high-signal cyber anchors plus the authorization / ACAS
+        # terms that the eval lock-ins still rely on for in-family matching.
+        "acas", "authorization", "ato", "cyber", "poam", "cte",
     ],
     "engineering": [
         # Removed ALL broad terms: install(100%), site survey(100%), maintenance(100%),

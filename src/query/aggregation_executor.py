@@ -28,6 +28,9 @@ from typing import Any
 import yaml
 
 from src.store.failure_events_store import FailureEventsStore
+from src.store.installed_base_store import InstalledBaseStore
+from src.store.msr_substrate import MSRSubstrateStore
+from src.store.po_pricing_store import POPricingStore
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +60,16 @@ _PER_YEAR_SHAPE = re.compile(
     re.IGNORECASE,
 )
 
+_RATE_AXIS = re.compile(
+    r"\b(failure\s+rate|rate|percent(?:age)?)\b",
+    re.IGNORECASE,
+)
+
+_PER_RATE_SHAPE = re.compile(
+    r"\b(?:fail(?:ure|ing|ed)?s?)\b.*\bper\b.*\b(installed|base|asset|site|system|unit)s?\b",
+    re.IGNORECASE,
+)
+
 
 def detect_aggregation_intent(query: str) -> bool:
     """Return True if query looks like failure-aggregation intent."""
@@ -65,6 +78,19 @@ def detect_aggregation_intent(query: str) -> bool:
     has_trigger = any(p.search(query) for p in _AGG_TRIGGERS)
     has_failure = bool(_FAILURE_AXIS.search(query))
     return has_trigger and has_failure
+
+
+def detect_rate_intent(query: str) -> bool:
+    """Return True when the query is asking for denominator-aware failure rates."""
+    if not query:
+        return False
+    has_failure = bool(_FAILURE_AXIS.search(query))
+    if re.search(r"\bfailure\s+rate\b", query, re.IGNORECASE):
+        return True
+    has_rate_axis = bool(_RATE_AXIS.search(query))
+    if has_failure and has_rate_axis:
+        return True
+    return bool(_PER_RATE_SHAPE.search(query))
 
 
 # ---------------------------------------------------------------------------
@@ -227,9 +253,18 @@ class AggregationExecutor:
         self,
         failure_store: FailureEventsStore,
         aliases: AliasTables,
+        installed_store=None,
+        po_store=None,
+        po_pricing_store=None,
+        msr_store=None,
     ):
         self.store = failure_store
         self.aliases = aliases
+        self.installed_store = installed_store
+        # Backward-compatible alias for Lane 2 tests / callers.
+        self.po_pricing_store = po_pricing_store or po_store
+        self.po_store = self.po_pricing_store
+        self.msr_store = msr_store
 
     def try_execute(self, query: str) -> AggregationResult | None:
         """Return AggregationResult if query matches, else None (fall through to RAG).
@@ -238,6 +273,16 @@ class AggregationExecutor:
         aggregation is a contract-bound feature, and without the canonical
         source of truth we refuse to run rather than silently substituting.
         """
+        from src.query.inventory_aggregation_executor import (
+            detect_inventory_intent as _detect_inventory_intent,
+            detect_inventory_rollup_intent as _detect_inventory_rollup_intent,
+        )
+        from src.query.po_aggregation_executor import detect_po_intent as _detect_po_intent
+
+        if _detect_inventory_intent(query) or _detect_inventory_rollup_intent(query):
+            return self._inventory_delegate().try_execute(query)
+        if _detect_po_intent(query):
+            return self._po_delegate().try_execute(query)
         if not detect_aggregation_intent(query):
             return None
         if not self.aliases.has_systems_configured():
@@ -309,7 +354,7 @@ class AggregationExecutor:
                           | {s.upper() for s in self.store.distinct_systems() if s},
         )
         per_year = bool(_PER_YEAR_SHAPE.search(query))
-        is_rate = bool(re.search(r"\bfailure\s+rate\b", query, re.IGNORECASE))
+        is_rate = detect_rate_intent(query)
 
         parsed = {
             "top_n": top_n,
@@ -322,7 +367,10 @@ class AggregationExecutor:
         }
 
         coverage = self.store.coverage_summary()
-        parsed_params = {**parsed, "coverage": coverage}
+        installed_coverage = (
+            self.installed_store.coverage_summary() if self.installed_store is not None else {}
+        )
+        parsed_params = {**parsed, "coverage": coverage, "installed_coverage": installed_coverage}
 
         # RED — substrate empty
         if coverage.get("total_events", 0) == 0:
@@ -346,6 +394,31 @@ class AggregationExecutor:
 
         # Per-year top-N shape
         if per_year and year_from is not None and year_to is not None:
+            if is_rate and self.installed_store is not None:
+                per_year_rate_rows = self._top_failure_rate_parts_per_year(
+                    system=system or None,
+                    site_token=site or None,
+                    year_from=year_from,
+                    year_to=year_to,
+                    limit_per_year=top_n,
+                )
+                if per_year_rate_rows:
+                    evidence = self._collect_evidence_per_year(per_year_rate_rows, system, site)
+                    text, sources = self._render_per_year(
+                        query, per_year_rate_rows, evidence, parsed_params, "GREEN"
+                    )
+                    return AggregationResult(
+                        tier="GREEN",
+                        query=query,
+                        parsed_params=parsed_params,
+                        ranked_rows=[],
+                        per_year_rows=per_year_rate_rows,
+                        evidence_by_part=evidence,
+                        substrate_coverage=coverage,
+                        context_text=text,
+                        sources=sources,
+                        message="",
+                    )
             per_year_rows = self.store.top_n_parts_per_year(
                 system=system or None,
                 site_token=site or None,
@@ -373,6 +446,36 @@ class AggregationExecutor:
             )
 
         # Single-slice top-N
+        if is_rate and self.installed_store is not None:
+            rate_rows = self._top_failure_rate_parts(
+                system=system or None,
+                site_token=site or None,
+                year_from=year_from,
+                year_to=year_to,
+                limit=top_n,
+            )
+            if rate_rows:
+                evidence = {
+                    r["part_number"]: self.store.evidence_for_part(
+                        r["part_number"],
+                        system=system or None, site_token=site or None,
+                        year_from=year_from, year_to=year_to, limit=3,
+                    )
+                    for r in rate_rows
+                }
+                text, sources = self._render_top_n(query, rate_rows, evidence, parsed_params, "GREEN")
+                return AggregationResult(
+                    tier="GREEN",
+                    query=query,
+                    parsed_params=parsed_params,
+                    ranked_rows=rate_rows,
+                    per_year_rows={},
+                    evidence_by_part=evidence,
+                    substrate_coverage=coverage,
+                    context_text=text,
+                    sources=sources,
+                    message="",
+                )
         rows = self.store.top_n_parts(
             system=system or None,
             site_token=site or None,
@@ -424,10 +527,101 @@ class AggregationExecutor:
                     )
         return seen
 
+    def _top_failure_rate_parts(
+        self,
+        *,
+        system: str | None = None,
+        site_token: str | None = None,
+        year_from: int | None = None,
+        year_to: int | None = None,
+        limit: int = 5,
+    ) -> list[dict]:
+        if self.installed_store is None:
+            return []
+        distinct_parts = int(self.store.coverage_summary().get("distinct_parts", 0) or 0)
+        failure_rows = self.store.top_n_parts(
+            system=system,
+            site_token=site_token,
+            year_from=year_from,
+            year_to=year_to,
+            limit=max(1, distinct_parts or 1000),
+        )
+        rated_rows = self._enrich_with_failure_rates(
+            failure_rows,
+            system=system,
+            site_token=site_token,
+            year=year_to if year_from == year_to else year_to,
+        )
+        return rated_rows[: max(1, int(limit))]
+
+    def _top_failure_rate_parts_per_year(
+        self,
+        *,
+        system: str | None = None,
+        site_token: str | None = None,
+        year_from: int,
+        year_to: int,
+        limit_per_year: int = 5,
+    ) -> dict[int, list[dict]]:
+        if self.installed_store is None:
+            return {}
+        distinct_parts = int(self.store.coverage_summary().get("distinct_parts", 0) or 0)
+        out: dict[int, list[dict]] = {}
+        for year in range(int(year_from), int(year_to) + 1):
+            failure_rows = self.store.top_n_parts(
+                system=system,
+                site_token=site_token,
+                year_from=year,
+                year_to=year,
+                limit=max(1, distinct_parts or 1000),
+            )
+            if not failure_rows:
+                continue
+            rated_rows = self._enrich_with_failure_rates(
+                failure_rows,
+                system=system,
+                site_token=site_token,
+                year=year,
+            )
+            if not rated_rows:
+                return {}
+            out[year] = rated_rows[: max(1, int(limit_per_year))]
+        return out
+
+    def _enrich_with_failure_rates(
+        self,
+        rows: list[dict],
+        *,
+        system: str | None,
+        site_token: str | None,
+        year: int | None,
+    ) -> list[dict]:
+        if self.installed_store is None:
+            return []
+        rated_rows: list[dict] = []
+        for row in rows:
+            installed_qty = self.installed_store.latest_quantity_for_part(
+                row["part_number"],
+                system=system,
+                site_token=site_token,
+                year=year,
+            )
+            if not installed_qty or installed_qty <= 0:
+                continue
+            rated = dict(row)
+            rated["installed_qty"] = installed_qty
+            rated["failure_rate"] = float(row["failure_count"]) / float(installed_qty)
+            rated_rows.append(rated)
+        rated_rows.sort(
+            key=lambda r: (-r["failure_rate"], -r["failure_count"], r["part_number"])
+        )
+        return rated_rows
+
     def _render_top_n(
         self, query: str, rows: list[dict], evidence: dict[str, list[dict]],
         parsed: dict[str, Any], tier: str,
     ) -> tuple[str, list[str]]:
+        rate_mode = bool(rows and "failure_rate" in rows[0])
         lines = [
             "## Deterministic Failure Aggregation",
             "",
@@ -442,15 +636,34 @@ class AggregationExecutor:
             "",
             "### Ranked Results (deterministic SQL, not LLM-computed)",
             "",
-            "| Rank | Part Number | Failure Count | Distinct Docs | First→Last Year |",
-            "|------|-------------|---------------|---------------|-----------------|",
         ]
+        if rate_mode:
+            lines.extend(
+                [
+                    "| Rank | Part Number | Failure Count | Installed Qty | Failure Rate | Distinct Docs | First->Last Year |",
+                    "|------|-------------|---------------|---------------|--------------|---------------|-----------------|",
+                ]
+            )
+        else:
+            lines.extend(
+                [
+                    "| Rank | Part Number | Failure Count | Distinct Docs | First->Last Year |",
+                    "|------|-------------|---------------|---------------|-----------------|",
+                ]
+            )
         sources: list[str] = []
         for i, r in enumerate(rows, 1):
-            lines.append(
-                f"| {i} | `{r['part_number']}` | {r['failure_count']} | "
-                f"{r['distinct_docs']} | {r['first_year'] or '-'}→{r['last_year'] or '-'} |"
-            )
+            if rate_mode:
+                lines.append(
+                    f"| {i} | `{r['part_number']}` | {r['failure_count']} | "
+                    f"{r['installed_qty']} | {r['failure_rate']:.4f} | "
+                    f"{r['distinct_docs']} | {r['first_year'] or '-'}->{r['last_year'] or '-'} |"
+                )
+            else:
+                lines.append(
+                    f"| {i} | `{r['part_number']}` | {r['failure_count']} | "
+                    f"{r['distinct_docs']} | {r['first_year'] or '-'}->{r['last_year'] or '-'} |"
+                )
         lines.append("")
         lines.append("### Evidence")
         lines.append("")
@@ -473,6 +686,7 @@ class AggregationExecutor:
         self, query: str, per_year_rows: dict[int, list[dict]],
         evidence: dict[str, list[dict]], parsed: dict[str, Any], tier: str,
     ) -> tuple[str, list[str]]:
+        rate_mode = any(rows and "failure_rate" in rows[0] for rows in per_year_rows.values())
         lines = [
             "## Deterministic Failure Aggregation — Per-Year Ranking",
             "",
@@ -490,12 +704,22 @@ class AggregationExecutor:
             rows = per_year_rows[year]
             lines.append(f"### {year}")
             lines.append("")
-            lines.append("| Rank | Part Number | Failure Count | Distinct Docs |")
-            lines.append("|------|-------------|---------------|---------------|")
+            if rate_mode:
+                lines.append("| Rank | Part Number | Failure Count | Installed Qty | Failure Rate | Distinct Docs |")
+                lines.append("|------|-------------|---------------|---------------|--------------|---------------|")
+            else:
+                lines.append("| Rank | Part Number | Failure Count | Distinct Docs |")
+                lines.append("|------|-------------|---------------|---------------|")
             for i, r in enumerate(rows, 1):
-                lines.append(
-                    f"| {i} | `{r['part_number']}` | {r['failure_count']} | {r['distinct_docs']} |"
-                )
+                if rate_mode and "failure_rate" in r:
+                    lines.append(
+                        f"| {i} | `{r['part_number']}` | {r['failure_count']} | "
+                        f"{r['installed_qty']} | {r['failure_rate']:.4f} | {r['distinct_docs']} |"
+                    )
+                else:
+                    lines.append(
+                        f"| {i} | `{r['part_number']}` | {r['failure_count']} | {r['distinct_docs']} |"
+                    )
             lines.append("")
             for r in rows[:2]:
                 for ev in evidence.get(r["part_number"], [])[:1]:
@@ -507,6 +731,15 @@ class AggregationExecutor:
 
     def _substrate_footer(self, parsed: dict[str, Any]) -> str:
         cov = parsed.get("coverage", {})
+        ib_cov = parsed.get("installed_coverage", {})
+        rate_note = ""
+        if parsed.get("is_rate"):
+            rate_note = (
+                "\n*Failure rate is computed as failure_count / installed_qty, using the "
+                "latest installed-base quantity at or before the requested year.*"
+                if ib_cov else
+                "\n*Failure rate denominator unavailable: installed_base substrate not attached for this executor.*"
+            )
         return (
             "\n---\n"
             "*Substrate coverage:*\n"
@@ -515,8 +748,11 @@ class AggregationExecutor:
             f"- With system label: `{cov.get('with_system', 0):,}`\n"
             f"- With site label:   `{cov.get('with_site', 0):,}`\n"
             f"- With year label:   `{cov.get('with_year', 0):,}`\n"
+            f"- Installed-base rows: `{ib_cov.get('total_rows', 0):,}`\n"
+            f"- Installed-base parts: `{ib_cov.get('distinct_parts', 0):,}`\n"
             "\n*This answer was produced by deterministic SQL against the failure_events "
             "substrate. The LLM narrates the numbers but does not compute them.*"
+            f"{rate_note}"
         )
 
     def _distinct_sites(self) -> list[str]:
@@ -549,6 +785,64 @@ class AggregationExecutor:
             context_text=text,
             sources=[],
             message=reason,
+        )
+
+    def _inventory_delegate(self):
+        from src.query.inventory_aggregation_executor import AggregationExecutor as InventoryAggregationExecutor
+
+        return InventoryAggregationExecutor(
+            self.store,
+            self.aliases,
+            po_db_path=getattr(self.po_pricing_store, "db_path", None),
+            installed_base_db_path=getattr(self.installed_store, "db_path", None),
+        )
+
+    def _po_delegate(self):
+        from src.query.po_aggregation_executor import AggregationExecutor as POAggregationExecutor
+
+        return POAggregationExecutor(
+            self.store,
+            self.aliases,
+            po_store=self.po_pricing_store,
+        )
+
+    def recommend_reorder_point(self, part_number: str, site: str, system: str = "", *, query: str | None = None):
+        return self._inventory_delegate().recommend_reorder_point(
+            part_number,
+            site,
+            system,
+            query=query,
+        )
+
+    def recommend_reorder_point_live(
+        self,
+        part_number: str,
+        *,
+        site: str,
+        system: str = "",
+        inventory_scope: str = "site_total",
+        query: str | None = None,
+    ):
+        return self._inventory_delegate().recommend_reorder_point_live(
+            part_number,
+            site=site,
+            system=system,
+            inventory_scope=inventory_scope,
+            query=query,
+        )
+
+    def exposure_per_site(self, part_number: str, *, system: str = "", query: str | None = None):
+        return self._inventory_delegate().exposure_per_site(
+            part_number,
+            system=system,
+            query=query,
+        )
+
+    def parts_at_risk(self, site: str, *, system: str = "", query: str | None = None):
+        return self._inventory_delegate().parts_at_risk(
+            site,
+            system=system,
+            query=query,
         )
 
 
@@ -965,7 +1259,74 @@ def build_default_executor(
 ) -> AggregationExecutor:
     """Build an executor against the default V2 substrate paths."""
     from src.store.failure_events_store import resolve_failure_events_db_path
+    from src.store.installed_base_store import resolve_installed_base_db_path
+    from src.store.msr_substrate import resolve_msr_db_path
+    from src.store.po_pricing_store import resolve_po_pricing_db_path
+
+    repo_root = Path(__file__).resolve().parents[2]
+
+    def _first_existing(*candidates: Path) -> Path | None:
+        for candidate in candidates:
+            try:
+                if candidate.exists() and candidate.stat().st_size > 0:
+                    return candidate
+            except OSError:
+                continue
+        return None
+
     db_path = resolve_failure_events_db_path(data_dir)
     store = FailureEventsStore(db_path)
+    installed_db_path = _first_existing(
+        repo_root.parent / "HybridRAG_V2_Dev2" / "data_isolated" / "installed_base_end_to_end.sqlite3",
+        repo_root.parent / "HybridRAG_V2_Dev2" / "data_isolated" / "installed_base_xlsx_full.sqlite3",
+        repo_root.parent / "HybridRAG_V2_Dev2" / "data_isolated" / "installed_base.sqlite3",
+        resolve_installed_base_db_path(data_dir),
+    )
+    installed_store = InstalledBaseStore(installed_db_path or resolve_installed_base_db_path(data_dir))
+    po_db_path = _first_existing(
+        resolve_po_pricing_db_path(data_dir),
+        repo_root.parent / "HybridRAG_V2_Dev" / "data" / "index" / "po_pricing.sqlite3",
+    )
+    po_pricing_store = POPricingStore(po_db_path or resolve_po_pricing_db_path(data_dir))
+    msr_db_path = _first_existing(
+        resolve_msr_db_path(data_dir),
+        repo_root.parent / "HybridRAG_V2_Dev2" / "data_isolated" / "msr_substrate.sqlite3",
+    )
+    msr_store = MSRSubstrateStore(msr_db_path or resolve_msr_db_path(data_dir))
     aliases = AliasTables.load(aliases_yaml)
-    return AggregationExecutor(store, aliases)
+    return AggregationExecutor(
+        store,
+        aliases,
+        installed_store=installed_store,
+        po_pricing_store=po_pricing_store,
+        msr_store=msr_store,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Re-exports from lane-specific executor modules (preserves test imports)
+# ---------------------------------------------------------------------------
+
+def detect_po_intent(query: str) -> bool:
+    from src.query.po_aggregation_executor import detect_po_intent as _f
+    return _f(query)
+
+def detect_inventory_intent(query: str) -> bool:
+    from src.query.inventory_aggregation_executor import detect_inventory_intent as _f
+    return _f(query)
+
+def detect_inventory_rollup_intent(query: str) -> bool:
+    from src.query.inventory_aggregation_executor import detect_inventory_rollup_intent as _f
+    return _f(query)
+
+def parse_po_metric(query: str) -> str:
+    from src.query.po_aggregation_executor import parse_po_metric as _f
+    return _f(query)
+
+def parse_query_part_number(query: str) -> str:
+    from src.query.po_aggregation_executor import parse_query_part_number as _f
+    return _f(query)
+
+def parse_query_part_prefix(query: str) -> str:
+    from src.query.po_aggregation_executor import parse_query_part_prefix as _f
+    return _f(query)

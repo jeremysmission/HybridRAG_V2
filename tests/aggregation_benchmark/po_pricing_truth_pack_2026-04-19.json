@@ -1,0 +1,547 @@
+{
+  "truth_pack_id": "po_pricing_truth_pack_2026-04-19",
+  "generated_by": "Agent-B",
+  "repo": "HybridRAG_V2_Dev",
+  "benchmark_lane": "Lane 2 deterministic exactness benchmark",
+  "schema_compatibility": "failure_truth_pack_2026-04-18 plus query_id/query_text aliases",
+  "description": "Deterministic ground-truth pack for po_pricing-backed aggregation questions. Covers Q-DEMO-A/B/C/E/F patterns using the normalized po_pricing substrate, with YELLOW allowed where populate coverage or lead-time backfill can remain partial on the first pass.",
+  "evidence_sources": {
+    "po_pricing": "C:\\HybridRAG_V2_Dev\\data\\index\\po_pricing.sqlite3 (after populate)",
+    "retrieval_metadata": "C:\\HybridRAG_V2_Dev\\data\\index\\retrieval_metadata.sqlite3",
+    "raw_source": "E:\\CorpusTransfr"
+  },
+  "notes": {
+    "quantity_rule": "For order-volume and total-spend SQL, rows with NULL/0 qty use a conservative fallback of 1.0 so pricing-only purchase orders still count as one ordered unit.",
+    "lead_time_rule": "lead_time_days comes from chunk-derived purchase-order dates when present and can be backfilled from po_lifecycle order/receipt joins.",
+    "replacement_cost_rule": "Replacement-cost questions use the latest available unit-price row when a current dated row exists; YELLOW is tolerated when only historical average/max price can be recovered."
+  },
+  "source_family_scan": {
+    "root": "E:\\CorpusTransfr",
+    "scanned_files": 430542,
+    "unique_union_hits": 19719,
+    "counts": {
+      "purchase_order_path": 529,
+      "purchases_dir": 15338,
+      "procurement_dir": 3381,
+      "contract_path": 196,
+      "po_token_path": 12999,
+      "vendor_invoice": 1285
+    }
+  },
+  "items": [
+    {
+      "id": "PO-AGG-01",
+      "query_id": "PO-AGG-01",
+      "query": "What are the top ordered parts?",
+      "query_text": "What are the top ordered parts?",
+      "demo_pattern": "Q-DEMO-A",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_parts_by_order_count",
+      "expected_filters": {},
+      "expected_params": {
+        "top_n": 5,
+        "metric": "order_count"
+      },
+      "ground_truth_sql": "SELECT part_number, COUNT(*) AS order_count, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty FROM po_pricing WHERE part_number != '' GROUP BY part_number ORDER BY order_count DESC, total_qty DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["\\5.0 Logistics\\Procurement\\001 - Open Purchases\\", "\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\", "purchase order"]
+    },
+    {
+      "id": "PO-AGG-02",
+      "query_id": "PO-AGG-02",
+      "query": "What are the top ordered parts in NEXION?",
+      "query_text": "What are the top ordered parts in NEXION?",
+      "demo_pattern": "Q-DEMO-A",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_parts_by_order_count",
+      "expected_filters": {
+        "system": "NEXION"
+      },
+      "expected_params": {
+        "top_n": 5,
+        "metric": "order_count"
+      },
+      "ground_truth_sql": "SELECT part_number, COUNT(*) AS order_count, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty FROM po_pricing WHERE system = 'NEXION' AND part_number != '' GROUP BY part_number ORDER BY order_count DESC, total_qty DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["\\#  NEXION Sites\\", "\\Purchases\\", "purchase order"]
+    },
+    {
+      "id": "PO-AGG-03",
+      "query_id": "PO-AGG-03",
+      "query": "Top 10 ordered parts in ISTO from 2023-2025",
+      "query_text": "Top 10 ordered parts in ISTO from 2023-2025",
+      "demo_pattern": "Q-DEMO-A",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_parts_by_order_count",
+      "expected_filters": {
+        "system": "ISTO",
+        "year_from": 2023,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "top_n": 10,
+        "metric": "order_count"
+      },
+      "ground_truth_sql": "SELECT part_number, COUNT(*) AS order_count, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty FROM po_pricing WHERE system = 'ISTO' AND po_date != '' AND substr(po_date, 1, 4) BETWEEN '2023' AND '2025' AND part_number != '' GROUP BY part_number ORDER BY order_count DESC, total_qty DESC, part_number ASC LIMIT 10",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["\\#  ISTO Sites\\", "\\Purchases\\", "\\Procurement\\"]
+    },
+    {
+      "id": "PO-AGG-04",
+      "query_id": "PO-AGG-04",
+      "query": "What are the top ordered parts in Guam from 2022-2025?",
+      "query_text": "What are the top ordered parts in Guam from 2022-2025?",
+      "demo_pattern": "Q-DEMO-A",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_parts_by_order_count",
+      "expected_filters": {
+        "site_token": "guam",
+        "year_from": 2022,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "top_n": 5,
+        "metric": "order_count"
+      },
+      "ground_truth_sql": "SELECT part_number, COUNT(*) AS order_count, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty FROM po_pricing WHERE site_token = 'guam' AND po_date != '' AND substr(po_date, 1, 4) BETWEEN '2022' AND '2025' AND part_number != '' GROUP BY part_number ORDER BY order_count DESC, total_qty DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["\\Guam\\", "\\Purchases\\", "\\Procurement\\"],
+      "note": "Coverage-dependent narrow site slice; RED is acceptable when no matched Guam pricing rows exist after populate."
+    },
+    {
+      "id": "PO-AGG-05",
+      "query_id": "PO-AGG-05",
+      "query": "Top 3 ordered parts in Djibouti in 2024",
+      "query_text": "Top 3 ordered parts in Djibouti in 2024",
+      "demo_pattern": "Q-DEMO-A",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_parts_by_order_count",
+      "expected_filters": {
+        "site_token": "djibouti",
+        "year_from": 2024,
+        "year_to": 2024
+      },
+      "expected_params": {
+        "top_n": 3,
+        "metric": "order_count"
+      },
+      "ground_truth_sql": "SELECT part_number, COUNT(*) AS order_count, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty FROM po_pricing WHERE site_token = 'djibouti' AND po_date != '' AND substr(po_date, 1, 4) = '2024' AND part_number != '' GROUP BY part_number ORDER BY order_count DESC, total_qty DESC, part_number ASC LIMIT 3",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["Djibouti", "\\Purchases\\", "\\Procurement\\"],
+      "note": "Coverage-dependent narrow site-year slice; RED is acceptable when no matched Djibouti pricing rows exist after populate."
+    },
+    {
+      "id": "PO-AGG-06",
+      "query_id": "PO-AGG-06",
+      "query": "Which parts had the longest lead time?",
+      "query_text": "Which parts had the longest lead time?",
+      "demo_pattern": "Q-DEMO-B",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_longest_lead_time",
+      "expected_filters": {},
+      "expected_params": {
+        "top_n": 5,
+        "metric": "lead_time_days"
+      },
+      "ground_truth_sql": "SELECT part_number, MAX(lead_time_days) AS max_lead_time_days, AVG(lead_time_days) AS avg_lead_time_days FROM po_pricing WHERE part_number != '' AND lead_time_days IS NOT NULL GROUP BY part_number ORDER BY max_lead_time_days DESC, avg_lead_time_days DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["PR & PO.xlsx", "\\5.0 Logistics\\Procurement\\002 - Received\\", "\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\2-Received\\1-Received\\"]
+    },
+    {
+      "id": "PO-AGG-07",
+      "query_id": "PO-AGG-07",
+      "query": "Which NEXION parts had the longest lead time?",
+      "query_text": "Which NEXION parts had the longest lead time?",
+      "demo_pattern": "Q-DEMO-B",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_longest_lead_time",
+      "expected_filters": {
+        "system": "NEXION"
+      },
+      "expected_params": {
+        "top_n": 5,
+        "metric": "lead_time_days"
+      },
+      "ground_truth_sql": "SELECT part_number, MAX(lead_time_days) AS max_lead_time_days, AVG(lead_time_days) AS avg_lead_time_days FROM po_pricing WHERE system = 'NEXION' AND part_number != '' AND lead_time_days IS NOT NULL GROUP BY part_number ORDER BY max_lead_time_days DESC, avg_lead_time_days DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["\\#  NEXION Sites\\", "PR & PO.xlsx", "\\002 - Received\\"]
+    },
+    {
+      "id": "PO-AGG-08",
+      "query_id": "PO-AGG-08",
+      "query": "Which parts had the longest lead time in Guam from 2022-2025?",
+      "query_text": "Which parts had the longest lead time in Guam from 2022-2025?",
+      "demo_pattern": "Q-DEMO-B",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_longest_lead_time",
+      "expected_filters": {
+        "site_token": "guam",
+        "year_from": 2022,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "top_n": 5,
+        "metric": "lead_time_days"
+      },
+      "ground_truth_sql": "SELECT part_number, MAX(lead_time_days) AS max_lead_time_days, AVG(lead_time_days) AS avg_lead_time_days FROM po_pricing WHERE site_token = 'guam' AND po_date != '' AND substr(po_date, 1, 4) BETWEEN '2022' AND '2025' AND part_number != '' AND lead_time_days IS NOT NULL GROUP BY part_number ORDER BY max_lead_time_days DESC, avg_lead_time_days DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["\\Guam\\", "PR & PO.xlsx", "\\002 - Received\\"],
+      "note": "Coverage-dependent narrow site slice; RED is acceptable when no matched Guam lead-time rows exist after populate."
+    },
+    {
+      "id": "PO-AGG-09",
+      "query_id": "PO-AGG-09",
+      "query": "Which ISTO parts had the longest lead time in Djibouti from 2022-2025?",
+      "query_text": "Which ISTO parts had the longest lead time in Djibouti from 2022-2025?",
+      "demo_pattern": "Q-DEMO-B",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_longest_lead_time",
+      "expected_filters": {
+        "system": "ISTO",
+        "site_token": "djibouti",
+        "year_from": 2022,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "top_n": 5,
+        "metric": "lead_time_days"
+      },
+      "ground_truth_sql": "SELECT part_number, MAX(lead_time_days) AS max_lead_time_days, AVG(lead_time_days) AS avg_lead_time_days FROM po_pricing WHERE system = 'ISTO' AND site_token = 'djibouti' AND po_date != '' AND substr(po_date, 1, 4) BETWEEN '2022' AND '2025' AND part_number != '' AND lead_time_days IS NOT NULL GROUP BY part_number ORDER BY max_lead_time_days DESC, avg_lead_time_days DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["\\#  ISTO Sites\\", "Djibouti", "\\2-Received\\1-Received\\"],
+      "note": "Coverage-dependent narrow system+site slice; RED is acceptable when no matched rows exist after populate."
+    },
+    {
+      "id": "PO-AGG-10",
+      "query_id": "PO-AGG-10",
+      "query": "Top 3 longest lead time parts in NEXION in 2024",
+      "query_text": "Top 3 longest lead time parts in NEXION in 2024",
+      "demo_pattern": "Q-DEMO-B",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_longest_lead_time",
+      "expected_filters": {
+        "system": "NEXION",
+        "year_from": 2024,
+        "year_to": 2024
+      },
+      "expected_params": {
+        "top_n": 3,
+        "metric": "lead_time_days"
+      },
+      "ground_truth_sql": "SELECT part_number, MAX(lead_time_days) AS max_lead_time_days, AVG(lead_time_days) AS avg_lead_time_days FROM po_pricing WHERE system = 'NEXION' AND po_date != '' AND substr(po_date, 1, 4) = '2024' AND part_number != '' AND lead_time_days IS NOT NULL GROUP BY part_number ORDER BY max_lead_time_days DESC, avg_lead_time_days DESC, part_number ASC LIMIT 3",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["\\#  NEXION Sites\\", "2024", "PR & PO.xlsx"],
+      "note": "Coverage-dependent year slice; RED is acceptable when no matched NEXION 2024 lead-time rows exist after populate."
+    },
+    {
+      "id": "PO-AGG-11",
+      "query_id": "PO-AGG-11",
+      "query": "What are the top ordered parts by volume?",
+      "query_text": "What are the top ordered parts by volume?",
+      "demo_pattern": "Q-DEMO-C",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_parts_by_volume",
+      "expected_filters": {},
+      "expected_params": {
+        "top_n": 5,
+        "metric": "total_qty"
+      },
+      "ground_truth_sql": "SELECT part_number, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty, COUNT(*) AS row_count FROM po_pricing WHERE part_number != '' GROUP BY part_number ORDER BY total_qty DESC, row_count DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["\\5.0 Logistics\\Procurement\\001 - Open Purchases\\", "\\zzSEMS ARCHIVE\\005_ILS\\Purchases\\", "(PO "]
+    },
+    {
+      "id": "PO-AGG-12",
+      "query_id": "PO-AGG-12",
+      "query": "Top 10 ordered parts by volume in NEXION from 2022-2025",
+      "query_text": "Top 10 ordered parts by volume in NEXION from 2022-2025",
+      "demo_pattern": "Q-DEMO-C",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_parts_by_volume",
+      "expected_filters": {
+        "system": "NEXION",
+        "year_from": 2022,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "top_n": 10,
+        "metric": "total_qty"
+      },
+      "ground_truth_sql": "SELECT part_number, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty, COUNT(*) AS row_count FROM po_pricing WHERE system = 'NEXION' AND po_date != '' AND substr(po_date, 1, 4) BETWEEN '2022' AND '2025' AND part_number != '' GROUP BY part_number ORDER BY total_qty DESC, row_count DESC, part_number ASC LIMIT 10",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["\\#  NEXION Sites\\", "\\Purchases\\", "\\Procurement\\"]
+    },
+    {
+      "id": "PO-AGG-13",
+      "query_id": "PO-AGG-13",
+      "query": "What are the top ordered parts by volume in Guam?",
+      "query_text": "What are the top ordered parts by volume in Guam?",
+      "demo_pattern": "Q-DEMO-C",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_parts_by_volume",
+      "expected_filters": {
+        "site_token": "guam"
+      },
+      "expected_params": {
+        "top_n": 5,
+        "metric": "total_qty"
+      },
+      "ground_truth_sql": "SELECT part_number, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty, COUNT(*) AS row_count FROM po_pricing WHERE site_token = 'guam' AND part_number != '' GROUP BY part_number ORDER BY total_qty DESC, row_count DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["\\Guam\\", "\\Purchases\\", "\\Procurement\\"],
+      "note": "Coverage-dependent site slice; RED is acceptable when no matched Guam rows exist after populate."
+    },
+    {
+      "id": "PO-AGG-14",
+      "query_id": "PO-AGG-14",
+      "query": "Top 5 ordered parts by volume in ISTO from 2023-2025",
+      "query_text": "Top 5 ordered parts by volume in ISTO from 2023-2025",
+      "demo_pattern": "Q-DEMO-C",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_parts_by_volume",
+      "expected_filters": {
+        "system": "ISTO",
+        "year_from": 2023,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "top_n": 5,
+        "metric": "total_qty"
+      },
+      "ground_truth_sql": "SELECT part_number, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty, COUNT(*) AS row_count FROM po_pricing WHERE system = 'ISTO' AND po_date != '' AND substr(po_date, 1, 4) BETWEEN '2023' AND '2025' AND part_number != '' GROUP BY part_number ORDER BY total_qty DESC, row_count DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["\\#  ISTO Sites\\", "\\Purchases\\", "\\Procurement\\"]
+    },
+    {
+      "id": "PO-AGG-15",
+      "query_id": "PO-AGG-15",
+      "query": "Top 3 ordered parts by volume in Djibouti in 2024",
+      "query_text": "Top 3 ordered parts by volume in Djibouti in 2024",
+      "demo_pattern": "Q-DEMO-C",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_parts_by_volume",
+      "expected_filters": {
+        "site_token": "djibouti",
+        "year_from": 2024,
+        "year_to": 2024
+      },
+      "expected_params": {
+        "top_n": 3,
+        "metric": "total_qty"
+      },
+      "ground_truth_sql": "SELECT part_number, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty, COUNT(*) AS row_count FROM po_pricing WHERE site_token = 'djibouti' AND po_date != '' AND substr(po_date, 1, 4) = '2024' AND part_number != '' GROUP BY part_number ORDER BY total_qty DESC, row_count DESC, part_number ASC LIMIT 3",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["Djibouti", "\\Purchases\\", "\\Procurement\\"],
+      "note": "Coverage-dependent site-year slice; RED is acceptable when no matched Djibouti 2024 rows exist after populate."
+    },
+    {
+      "id": "PO-AGG-16",
+      "query_id": "PO-AGG-16",
+      "query": "How much did we spend on ARC-4471?",
+      "query_text": "How much did we spend on ARC-4471?",
+      "demo_pattern": "Q-DEMO-E",
+      "tier_expected": "GREEN",
+      "expected_shape": "total_spend_on_part",
+      "expected_filters": {
+        "part_number": "ARC-4471"
+      },
+      "expected_params": {
+        "metric": "total_spend",
+        "top_n": 5
+      },
+      "ground_truth_sql": "SELECT part_number, COALESCE(SUM(COALESCE(unit_price, 0.0) * CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_spend, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty FROM po_pricing WHERE part_number = 'ARC-4471' AND unit_price IS NOT NULL GROUP BY part_number",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["ARC-4471", "\\Purchases\\", "purchase order"],
+      "note": "Exact-part query; RED is acceptable when the requested part is not present in the populated slice."
+    },
+    {
+      "id": "PO-AGG-17",
+      "query_id": "PO-AGG-17",
+      "query": "How much did we spend on ARC-4471 in Guam?",
+      "query_text": "How much did we spend on ARC-4471 in Guam?",
+      "demo_pattern": "Q-DEMO-E",
+      "tier_expected": "GREEN",
+      "expected_shape": "total_spend_on_part",
+      "expected_filters": {
+        "part_number": "ARC-4471",
+        "site_token": "guam"
+      },
+      "expected_params": {
+        "metric": "total_spend",
+        "top_n": 5
+      },
+      "ground_truth_sql": "SELECT part_number, COALESCE(SUM(COALESCE(unit_price, 0.0) * CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_spend, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty FROM po_pricing WHERE part_number = 'ARC-4471' AND site_token = 'guam' AND unit_price IS NOT NULL GROUP BY part_number",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["ARC-4471", "\\Guam\\", "\\Purchases\\"],
+      "note": "Exact-part site query; RED is acceptable when the requested part/site pair is not present in the populated slice."
+    },
+    {
+      "id": "PO-AGG-18",
+      "query_id": "PO-AGG-18",
+      "query": "What is the cost of PS-909 in ISTO from 2023-2025?",
+      "query_text": "What is the cost of PS-909 in ISTO from 2023-2025?",
+      "demo_pattern": "Q-DEMO-E",
+      "tier_expected": "GREEN",
+      "expected_shape": "total_spend_on_part",
+      "expected_filters": {
+        "part_number": "PS-909",
+        "system": "ISTO",
+        "year_from": 2023,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "metric": "total_spend",
+        "top_n": 5
+      },
+      "ground_truth_sql": "SELECT part_number, COALESCE(SUM(COALESCE(unit_price, 0.0) * CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_spend, COALESCE(SUM(CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_qty FROM po_pricing WHERE part_number = 'PS-909' AND system = 'ISTO' AND po_date != '' AND substr(po_date, 1, 4) BETWEEN '2023' AND '2025' AND unit_price IS NOT NULL GROUP BY part_number",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["PS-909", "\\#  ISTO Sites\\", "\\Purchases\\"],
+      "note": "Exact-part system query; RED is acceptable when the requested part/system pair is not present in the populated slice."
+    },
+    {
+      "id": "PO-AGG-19",
+      "query_id": "PO-AGG-19",
+      "query": "What is the replacement cost for WR-200 in Guam?",
+      "query_text": "What is the replacement cost for WR-200 in Guam?",
+      "demo_pattern": "Q-DEMO-E",
+      "tier_expected": "YELLOW",
+      "expected_shape": "replacement_cost_estimate_by_latest_unit_price",
+      "expected_filters": {
+        "part_number": "WR-200",
+        "site_token": "guam"
+      },
+      "expected_params": {
+        "metric": "replacement_cost_estimate",
+        "price_stat": "latest_or_avg"
+      },
+      "ground_truth_sql": "SELECT part_number, site_token, MAX(po_date) AS last_price_date, AVG(unit_price) AS avg_unit_price, MAX(unit_price) AS max_unit_price FROM po_pricing WHERE part_number = 'WR-200' AND site_token = 'guam' AND unit_price IS NOT NULL GROUP BY part_number, site_token",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["WR-200", "\\Guam\\", "purchase order"],
+      "note": "Replacement cost is an estimate; YELLOW is acceptable when only historical price statistics exist. RED is acceptable when the requested part/site pair is absent."
+    },
+    {
+      "id": "PO-AGG-20",
+      "query_id": "PO-AGG-20",
+      "query": "What is the replacement cost for ARC-4471 in NEXION in 2024-2025?",
+      "query_text": "What is the replacement cost for ARC-4471 in NEXION in 2024-2025?",
+      "demo_pattern": "Q-DEMO-E",
+      "tier_expected": "YELLOW",
+      "expected_shape": "replacement_cost_estimate_by_latest_unit_price",
+      "expected_filters": {
+        "part_number": "ARC-4471",
+        "system": "NEXION",
+        "year_from": 2024,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "metric": "replacement_cost_estimate",
+        "price_stat": "latest_or_avg"
+      },
+      "ground_truth_sql": "SELECT part_number, system, MAX(po_date) AS last_price_date, AVG(unit_price) AS avg_unit_price, MAX(unit_price) AS max_unit_price FROM po_pricing WHERE part_number = 'ARC-4471' AND system = 'NEXION' AND po_date != '' AND substr(po_date, 1, 4) BETWEEN '2024' AND '2025' AND unit_price IS NOT NULL GROUP BY part_number, system",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["ARC-4471", "\\#  NEXION Sites\\", "purchase order"],
+      "note": "Replacement cost is an estimate; YELLOW is acceptable when only historical price statistics exist. RED is acceptable when the requested part/system slice is absent."
+    },
+    {
+      "id": "PO-AGG-21",
+      "query_id": "PO-AGG-21",
+      "query": "What are the most expensive items ordered?",
+      "query_text": "What are the most expensive items ordered?",
+      "demo_pattern": "Q-DEMO-F",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_most_expensive_parts",
+      "expected_filters": {},
+      "expected_params": {
+        "top_n": 5,
+        "metric": "max_unit_price"
+      },
+      "ground_truth_sql": "SELECT part_number, MAX(unit_price) AS max_unit_price, AVG(unit_price) AS avg_unit_price, COALESCE(SUM(COALESCE(unit_price, 0.0) * CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_cost FROM po_pricing WHERE part_number != '' AND unit_price IS NOT NULL GROUP BY part_number ORDER BY max_unit_price DESC, avg_unit_price DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["purchase order", "\\Procurement\\", "\\Purchases\\"]
+    },
+    {
+      "id": "PO-AGG-22",
+      "query_id": "PO-AGG-22",
+      "query": "What are the most expensive items ordered in NEXION?",
+      "query_text": "What are the most expensive items ordered in NEXION?",
+      "demo_pattern": "Q-DEMO-F",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_most_expensive_parts",
+      "expected_filters": {
+        "system": "NEXION"
+      },
+      "expected_params": {
+        "top_n": 5,
+        "metric": "max_unit_price"
+      },
+      "ground_truth_sql": "SELECT part_number, MAX(unit_price) AS max_unit_price, AVG(unit_price) AS avg_unit_price, COALESCE(SUM(COALESCE(unit_price, 0.0) * CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_cost FROM po_pricing WHERE system = 'NEXION' AND part_number != '' AND unit_price IS NOT NULL GROUP BY part_number ORDER BY max_unit_price DESC, avg_unit_price DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["\\#  NEXION Sites\\", "purchase order", "\\Purchases\\"]
+    },
+    {
+      "id": "PO-AGG-23",
+      "query_id": "PO-AGG-23",
+      "query": "What are the most expensive items ordered in ISTO from 2023-2025?",
+      "query_text": "What are the most expensive items ordered in ISTO from 2023-2025?",
+      "demo_pattern": "Q-DEMO-F",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_most_expensive_parts",
+      "expected_filters": {
+        "system": "ISTO",
+        "year_from": 2023,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "top_n": 5,
+        "metric": "max_unit_price"
+      },
+      "ground_truth_sql": "SELECT part_number, MAX(unit_price) AS max_unit_price, AVG(unit_price) AS avg_unit_price, COALESCE(SUM(COALESCE(unit_price, 0.0) * CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_cost FROM po_pricing WHERE system = 'ISTO' AND po_date != '' AND substr(po_date, 1, 4) BETWEEN '2023' AND '2025' AND part_number != '' AND unit_price IS NOT NULL GROUP BY part_number ORDER BY max_unit_price DESC, avg_unit_price DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW"],
+      "source_path_hints": ["\\#  ISTO Sites\\", "purchase order", "\\Purchases\\"]
+    },
+    {
+      "id": "PO-AGG-24",
+      "query_id": "PO-AGG-24",
+      "query": "What are the most expensive items ordered in Guam from 2022-2025?",
+      "query_text": "What are the most expensive items ordered in Guam from 2022-2025?",
+      "demo_pattern": "Q-DEMO-F",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_most_expensive_parts",
+      "expected_filters": {
+        "site_token": "guam",
+        "year_from": 2022,
+        "year_to": 2025
+      },
+      "expected_params": {
+        "top_n": 5,
+        "metric": "max_unit_price"
+      },
+      "ground_truth_sql": "SELECT part_number, MAX(unit_price) AS max_unit_price, AVG(unit_price) AS avg_unit_price, COALESCE(SUM(COALESCE(unit_price, 0.0) * CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_cost FROM po_pricing WHERE site_token = 'guam' AND po_date != '' AND substr(po_date, 1, 4) BETWEEN '2022' AND '2025' AND part_number != '' AND unit_price IS NOT NULL GROUP BY part_number ORDER BY max_unit_price DESC, avg_unit_price DESC, part_number ASC LIMIT 5",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["\\Guam\\", "purchase order", "\\Purchases\\"],
+      "note": "Coverage-dependent site slice; RED is acceptable when no matched Guam priced rows exist after populate."
+    },
+    {
+      "id": "PO-AGG-25",
+      "query_id": "PO-AGG-25",
+      "query": "Top 3 most expensive items ordered in Djibouti in 2024",
+      "query_text": "Top 3 most expensive items ordered in Djibouti in 2024",
+      "demo_pattern": "Q-DEMO-F",
+      "tier_expected": "GREEN",
+      "expected_shape": "top_n_most_expensive_parts",
+      "expected_filters": {
+        "site_token": "djibouti",
+        "year_from": 2024,
+        "year_to": 2024
+      },
+      "expected_params": {
+        "top_n": 3,
+        "metric": "max_unit_price"
+      },
+      "ground_truth_sql": "SELECT part_number, MAX(unit_price) AS max_unit_price, AVG(unit_price) AS avg_unit_price, COALESCE(SUM(COALESCE(unit_price, 0.0) * CASE WHEN qty IS NULL OR qty <= 0 THEN 1.0 ELSE qty END), 0.0) AS total_cost FROM po_pricing WHERE site_token = 'djibouti' AND po_date != '' AND substr(po_date, 1, 4) = '2024' AND part_number != '' AND unit_price IS NOT NULL GROUP BY part_number ORDER BY max_unit_price DESC, avg_unit_price DESC, part_number ASC LIMIT 3",
+      "tolerable_tiers": ["GREEN", "YELLOW", "RED"],
+      "source_path_hints": ["Djibouti", "purchase order", "\\Purchases\\"],
+      "note": "Coverage-dependent site-year slice; RED is acceptable when no matched Djibouti 2024 priced rows exist after populate."
+    }
+  ]
+}

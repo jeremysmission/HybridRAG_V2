@@ -683,7 +683,7 @@ class RetrievalMetadataStore:
             clauses.append("contract_period = ?")
             params.append(str(contract_period).strip())
         if program_name:
-            clauses.append("program_name = ?")
+            clauses.append("UPPER(program_name) = ?")
             params.append(str(program_name).strip().upper())
         if document_type:
             clauses.append("document_type = ?")

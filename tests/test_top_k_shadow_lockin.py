@@ -30,6 +30,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import pytest
@@ -37,7 +38,7 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ADDENDUM_PATH = (
-    Path("C:/Users/{USERNAME}/HYBRIDRAG_LOCAL_ONLY")
+    Path(f"C:/Users/{os.environ.get('USERNAME') or Path.home().name}/HYBRIDRAG_LOCAL_ONLY")
     / "RETRIEVAL_KNOB_WIRING_AUDIT_ADDENDUM_2026-04-15.md"
 )
 

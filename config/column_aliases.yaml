@@ -1,0 +1,30 @@
+_meta:
+  description: Portable column aliases for installed-base workbook parsing
+  built_by: Agent-C
+  built_date: "2026-04-20"
+  notes:
+    - Lane 3 portability contract for workbook header resolution
+    - Used via src.vocab.pack_loader.resolve_column(header, concept)
+
+concepts:
+  part_number:
+    - PART NUMBER
+    - P/N
+    - PN
+    - PartNo
+    - Part No
+    - Part #
+  quantity:
+    - QPA
+    - QTY
+    - QTY.
+    - Quantity
+    - Qty Per
+  serial_number:
+    - S/N
+    - SN
+    - Serial Number
+    - Serial#
+    - SERIAL NO.
+    - SERIAL NO
+    - Actual Serial Number
