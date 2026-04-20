@@ -66,21 +66,26 @@
 ## Sprint 2 — Quality Hardening + Commercial-Tier Perception
 
 ### SP2-01 — Router accuracy lift
-- Scope: raise routing accuracy from the current ~75% band to 90%+ on the 400-query eval.
+- Scope: raise routing accuracy from the current ~75% band to 90%+, build a locked router gold set by family, and add deterministic pre-router rules for obvious structured intents.
 - Why it matters: wrong routes generate bad answers even when the correct subsystem already exists.
 - Acceptance:
-  - router accuracy >= 90% on the next 400-query eval.
-  - ambiguous-intent regression tests exist.
-  - routing confusion matrix is published with before/after.
+  - router accuracy >= 90% on the locked router set.
+  - confusion matrix is published by family: `SEMANTIC`, `ENTITY`, `AGGREGATE`, `TABULAR`, `cross-sub`, `inventory`, `PO`.
+  - deterministic pre-router rules catch obvious structured intents before LLM routing.
+  - every miss is classified as rules, aliases, or prompt-model issue.
+  - routing is treated as a release gate.
 - Dependencies: current router traces, ambiguous-intent audit set.
 - Tier: A
 - Target sprint: 2
 
-### SP2-02 — p95 latency reduction
-- Scope: reduce p95 wall-clock latency from the current ~30-44s band to <= 15s on a representative query mix.
+### SP2-02 — Stage-budget latency discipline
+- Scope: instrument route, retrieve, rerank, aggregate, and generate stages; define budgets by path; short-circuit deterministic paths; cache repeated demo/benchmark queries.
 - Why it matters: users disengage on slow responses even when quality is high.
 - Acceptance:
-  - p95 <= 15s on a representative mix.
+  - stage budgets are documented and enforced.
+  - deterministic aggregate and cross-sub paths are sub-second.
+  - semantic path has a documented bounded budget.
+  - p50 and p95 are reported by query family on every run.
   - no regression on benchmark accuracy.
   - latency note documents batching/packing/OOM-backoff choices.
 - Dependencies: current latency traces, query-path profiling.
@@ -99,13 +104,39 @@
 - Target sprint: 2
 
 ### SP2-04 — Semantic consistency lift
-- Scope: lift weak semantic/ENTITY consistency, currently anchored by the weakest RAGAS family score.
+- Scope: lift weak semantic/ENTITY consistency, currently anchored by the weakest RAGAS family score, using an explicit retrieval error taxonomy.
 - Why it matters: uneven quality across query families creates the “serious homegrown” perception gap.
 - Acceptance:
   - ENTITY-family benchmark rises to >= 0.75.
+  - each eval run reports retrieval error buckets: wrong family, wrong doc type, wrong time slice, right doc low rank, no useful evidence.
+  - bucket-level regression tests exist.
   - no regression on TABULAR / AGGREGATE.
   - hybrid entity+vector scoring and/or relationship-aware retrieval is benchmarked.
 - Dependencies: RAGAS full-run contract, entity-retriever tuning.
+- Tier: A
+- Target sprint: 2
+
+### SP2-05 — Canonical release scoreboard
+- Scope: define one canonical release scoreboard with router, semantic retrieval, deterministic aggregation exactness, and UX/CLI/GUI smoke sections.
+- Why it matters: multiple eval artifacts currently tell different stories; releases need one trusted scoreboard.
+- Acceptance:
+  - `python scripts/run_release_scoreboard.py` produces one artifact under one path.
+  - any team member can reproduce the same numbers.
+  - truth packs used by the scoreboard are SHA-locked.
+  - RAGAS remains supporting evidence until stable IDs land.
+- Dependencies: benchmark doctrine, truth-pack freeze discipline.
+- Tier: A
+- Target sprint: 2
+
+### SP2-06 — Merge / integration discipline
+- Scope: treat lane-specific executors and store contracts as versioned interfaces and require green merged-tree CI plus a permanent push-gate smoke panel before push-ready claims.
+- Why it matters: merged-tree gaps should fail loud before human QA discovers them.
+- Acceptance:
+  - merged-tree CI is required before push-ready.
+  - versioned contract breaks fail loud.
+  - push-gate smoke panel includes the six critical checks from the latest merged push.
+  - CLI output is ASCII-safe by default.
+- Dependencies: merged-tree smoke suite, CI entrypoint.
 - Tier: A
 - Target sprint: 2
 
@@ -306,7 +337,7 @@
 ## Sprint Audit Summary
 
 - Planned sprints: 7
-- Planned slices: 24
+- Planned slices: 26
 - Themes:
   - Sprint 1: demo integrity + push-gate hygiene
   - Sprint 2: quality hardening + commercial-tier perception

@@ -22,9 +22,11 @@
 | Program management / rollups | Program filters | Partial | Program-aware filtering exists in routing and substrate selection. |
 | Program management / rollups | Program-level portfolio views | Missing | No dedicated PM rollup benchmark or portfolio surface is live today. |
 | Quality hardening | Router accuracy | Partial | Routing is serviceable but still around the mid-70% band, which is below commercial-grade expectations. |
-| Quality hardening | Latency | Partial | p95 wall clock remains roughly 30-44s on older eval evidence; too slow for strong operator perception. |
+| Quality hardening | Latency stage budgets | Partial | p95 wall clock remains roughly 30-44s on older eval evidence, and stage-level budgets are not yet first-class release gates. |
 | Quality hardening | Decision-grade RAGAS coverage | Partial | RAGAS exists and is useful, but still needs a credible full-run contract. |
 | Quality hardening | Semantic consistency | Partial | ENTITY / semantic-heavy questions remain noticeably weaker than deterministic structured lanes. |
+| Quality hardening | Canonical release scoreboard | Missing | Multiple eval artifacts still tell different stories; there is no single trusted release scoreboard artifact. |
+| Quality hardening | Merge / integration discipline | Partial | Merged-tree push discipline improved today, but versioned interface checks and merged-tree CI are not yet formalized. |
 
 ## 2. Gap Inventory By Pillar
 
@@ -133,23 +135,31 @@
 
 ### Pillar 6 — Quality hardening
 
+> QA strategic framing: do not spend the next sprint inventing a new retrieval trick. Spend it making routing, semantic retrieval, latency, and eval trustworthy enough that the already-strong structured architecture consistently shows through.
+>
+> Practical planning implication: Pillar 6 should lead the next 2-3 sprints before Pillars 1-5 compete for priority.
+
 **Shipped today**
 - strong architecture baseline: hybrid retrieval, deterministic substrates, fail-closed tiering, QA gates
 
 **Partially shipped**
 - router, latency, RAGAS, and semantic consistency all have measurable evidence and active diagnostics
+- merged-tree push discipline improved materially during the final push gate
 
 **Missing**
 - commercial-tier routing accuracy
-- sub-15s p95 latency
+- stage-budgeted latency discipline by path and family
 - full decision-grade 391/391 RAGAS contract
 - semantic quality lift on ENTITY-heavy asks
+- one canonical release scoreboard
+- versioned interface discipline plus merged-tree CI gate
 
 **Dependencies**
 - benchmark doctrine
 - stable-ID RAGAS migration
 - query-path profiling
 - entity/relationship tuning
+- merged-tree smoke panel and versioned substrate contracts
 
 ## 3. Sprint Slice Proposals By Pillar
 
@@ -237,16 +247,26 @@
 
 #### QLT-01 — Router accuracy lift
 - Tier: A
-- Scope: raise router accuracy from roughly 75% to 90%+ and cover ambiguous intents explicitly.
+- Scope: raise router accuracy from roughly 75% to 90%+, build a locked router gold set by family, and add deterministic pre-router rules for obvious structured intents.
 - Why: wrong routing causes bad answers even when the right subsystem already exists.
-- Acceptance: router accuracy >= 90% on the next 400-query eval; ambiguous-intent regression set added.
+- Acceptance:
+  - router accuracy >= 90% on the locked router set.
+  - confusion matrix is reported by family: `SEMANTIC`, `ENTITY`, `AGGREGATE`, `TABULAR`, `cross-sub`, `inventory`, `PO`.
+  - deterministic pre-router rules catch obvious structured intents before LLM routing.
+  - every miss is classified as rules, aliases, or prompt-model issue.
+  - routing becomes a release gate rather than a background metric.
 - Dependencies: routing confusion matrix, ambiguous-intent review set.
 
-#### QLT-02 — p95 latency reduction
+#### QLT-02 — Stage-budget latency discipline
 - Tier: A
-- Scope: reduce p95 wall-clock latency from the current ~30-44s band to <= 15s.
+- Scope: instrument route, retrieve, rerank, aggregate, and generate stages; define budgets by path; short-circuit deterministic paths; cache repeated benchmark/demo queries aggressively.
 - Why: latency is a perception barrier that keeps V2 below commercial-grade experience.
-- Acceptance: representative query mix shows p95 <= 15s with no regression on quality.
+- Acceptance:
+  - stage budgets are documented and enforced.
+  - deterministic aggregate and cross-sub paths are sub-second.
+  - semantic path has a documented bounded budget.
+  - p50 and p95 are reported by query family on every run.
+  - no regression on benchmark quality.
 - Dependencies: query-path profiling, batching/packing work, OOM-backoff tuning.
 
 #### QLT-03 — Full decision-grade RAGAS run
@@ -258,10 +278,37 @@
 
 #### QLT-04 — Semantic consistency lift
 - Tier: A
-- Scope: raise ENTITY/semantic performance from the current weak point to at least 0.75-equivalent quality.
+- Scope: raise ENTITY/semantic performance from the current weak point to at least 0.75-equivalent quality, with explicit retrieval error taxonomy.
 - Why: semantic-heavy queries underperform structured lanes and create uneven UX.
-- Acceptance: ENTITY-family lift to >= 0.75 with no regression to TABULAR/AGGREGATE cohorts.
+- Acceptance:
+  - retrieval error buckets are reported every eval run: wrong family, wrong doc type, wrong time slice, right doc low rank, no useful evidence.
+  - tuning decisions are made against bucket counts, not only headline score.
+  - per-family reporting prevents structured-lane strength from masking semantic weakness.
+  - ENTITY-family lift to >= 0.75 with no regression to TABULAR / AGGREGATE.
+  - bucket-level regression tests exist.
 - Dependencies: entity retriever tuning, relationship-aware retrieval, hybrid scoring review.
+
+#### QLT-05 — Canonical release scoreboard
+- Tier: A
+- Scope: declare one canonical release scoreboard with four sections: router, semantic retrieval, deterministic aggregation exactness, and UX/CLI/GUI smoke.
+- Why: today’s push showed that multiple evals can tell different stories; a release needs one trusted scoreboard.
+- Acceptance:
+  - `python scripts/run_release_scoreboard.py` produces one artifact under one path.
+  - any team member can reproduce the same scoreboard numbers.
+  - banked truth packs are SHA-locked.
+  - RAGAS is supporting evidence until stable IDs land, not the only story.
+- Dependencies: benchmark doctrine, truth-pack freeze discipline, stable artifact pathing.
+
+#### QLT-06 — Merge / integration discipline
+- Tier: A
+- Scope: treat lane-specific executors and store contracts as versioned interfaces and add a merged-tree CI gate before push-ready claims.
+- Why: today’s near-miss class would have been caught earlier by a merged-tree gate and permanent smoke panel.
+- Acceptance:
+  - push-ready requires green merged-tree CI.
+  - versioned contract breaks fail loud.
+  - a push-gate smoke panel always runs on the merged tree, starting with the six known critical checks.
+  - CLI output is ASCII-safe by default to avoid the Unicode / codepage crash class.
+- Dependencies: merged-tree smoke suite, CI entrypoint, CLI output hygiene.
 
 ## 4. Cross-Pillar Dependency Map
 
@@ -281,12 +328,15 @@
 | QLT-02 | latency profiling | better demo trust across all pillars |
 | QLT-03 | stable-ID context references | trustworthy benchmark ladder |
 | QLT-04 | entity/relationship tuning, QLT-03 | stronger semantic lane and PM queries |
+| QLT-05 | truth-pack freeze discipline, benchmark doctrine | one trusted release gate for all pillars |
+| QLT-06 | merged-tree CI, versioned interfaces | safer promotions across all pillars |
 
 ## 5. Proposed Sprint Order
 
 1. **Quality hardening first**
-   - competitive positioning is limited more by route/latency/benchmark trust than by one more niche aggregation type
+   - competitive positioning is limited more by route, latency, benchmark trust, and merge discipline than by one more niche aggregation type
    - improvements here help every already-landed capability feel stronger
+   - this pillar should lead the next 2-3 sprints before broader expansion work competes for priority
 2. **Aggregation completion second**
    - highest immediate demo value
    - smallest dependency surface
